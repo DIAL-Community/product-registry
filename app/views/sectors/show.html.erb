@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sector.name %>
+</p>
+
+<p>
+  <strong>Slug:</strong>
+  <%= @sector.slug %>
+</p>
+
+<%= link_to 'Edit', edit_sector_path(@sector) %> |
+<%= link_to 'Back', sectors_path %>

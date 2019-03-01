@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  slug: MyString
+  when_endorsed: 2018-11-16 08:26:18
+  website: MyString
+  is_endorser: false
+
+two:
+  name: MyString
+  slug: MyString
+  when_endorsed: 2018-11-16 08:26:18
+  website: MyString
+  is_endorser: false

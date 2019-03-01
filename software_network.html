@@ -1,0 +1,80 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        #mynetwork {
+            width: 1200px;
+            height: 600px;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+    // create an array with nodes
+    var nodes = new vis.DataSet([
+        {id: 1, label: 'Ushahidi'},
+        {id: 2, label: 'ODK'},
+        {id: 3, label: 'Mifos'},
+        {id: 4, label: 'OpenSRP'}, //
+        {id: 5, label: 'MedicMobile'}, //
+        {id: 6, label: 'OpenLMIS'}, //
+        {id: 7, label: 'RapidPro'}, //
+        {id: 8, label: 'Moodle'}, //
+        {id: 9, label: 'iHRIS'}, //
+        {id: 10, label: 'OpenMRS'}, //
+        {id: 11, label: 'Bahmni'}, //
+        {id: 12, label: 'DHIS2'}, //
+        {id: 13, label: 'OpenELIS'}, //
+        {id: 14, label: 'OpenCRVS'}, //
+        {id: 15, label: 'CommCare'}, //
+        {id: 16, label: 'mHero'}, //
+        {id: 17, label: 'Odoo/OpenERP'}, //
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+        {from: 4, to: 12},
+        {from: 4, to: 7},
+        {from: 4, to: 6},
+        {from: 4, to: 10},
+        {from: 5, to: 2},
+        {from: 6, to: 12},
+        {from: 6, to: 10},
+        {from: 6, to: 15},
+        {from: 9, to: 12},
+        {from: 9, to: 10},
+        {from: 10, to: 12},
+        {from: 11, to: 10},
+        {from: 11, to: 17},
+        {from: 11, to: 13},
+        {from: 14, to: 10},
+        {from: 14, to: 12},
+        {from: 15, to: 2},
+        {from: 16, to: 9},
+        {from: 16, to: 12},
+        {from: 16, to: 7},
+    ]);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+      edges: { arrows: { to: { enabled: true } } },
+      physics: { repulsion: { nodeDistance: 10 } },
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @organization.name %>
+</p>
+
+<p>
+  <strong>Slug:</strong>
+  <%= @organization.slug %>
+</p>
+
+<p>
+  <strong>When endorsed:</strong>
+  <%= @organization.when_endorsed %>
+</p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @organization.website %>
+</p>
+
+<p>
+  <strong>Is endorser:</strong>
+  <%= @organization.is_endorser %>
+</p>
+
+<%= link_to 'Edit', edit_organization_path(@organization) %> |
+<%= link_to 'Back', organizations_path %>
