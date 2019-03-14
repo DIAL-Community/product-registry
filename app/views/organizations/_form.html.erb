@@ -1,48 +1,55 @@
-<%= form_with(model: organization, local: true) do |form| %>
-  <% if organization.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(organization.errors.count, "error") %> prohibited this organization from being saved:</h2>
+<div class="card">
+  <div class="card-header">
+    Create new organization
+  </div>
+  <div class="card-body">
 
-      <ul>
-      <% organization.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <%= form_with(model: organization, local: true) do |form| %>
+    <% if organization.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(organization.errors.count, "error") %>
+          prohibited this organization from being saved:</h2>
+
+        <ul>
+          <% organization.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name, id: :organization_name, :class => "form-control"%>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :slug %>
+      <%= form.text_field :slug, id: :organization_slug, :class => "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :when_endorsed %>
+      <%= form.datetime_select :when_endorsed, id: :organization_when_endorsed %>
+    </div>
+
+    <div class="field">
+      <%= form.label :website %>
+      <%= form.text_field :website, id: :organization_website %>
+    </div>
+
+    <div class="field">
+      <%= form.label :is_endorser %>
+      <%= form.check_box :is_endorser, id: :organization_is_endorser %>
+    </div>
+
+    <div class="field">
+      <%= form.label :organization_sectors %>
+      <select multiple="multiple" id="organization_sectors_selector" name="organization_sectors"></select>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :organization_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :slug %>
-    <%= form.text_field :slug, id: :organization_slug %>
-  </div>
-
-  <div class="field">
-    <%= form.label :when_endorsed %>
-    <%= form.datetime_select :when_endorsed, id: :organization_when_endorsed %>
-  </div>
-
-  <div class="field">
-    <%= form.label :website %>
-    <%= form.text_field :website, id: :organization_website %>
-  </div>
-
-  <div class="field">
-    <%= form.label :is_endorser %>
-    <%= form.check_box :is_endorser, id: :organization_is_endorser %>
-  </div>
-
-  <div class="field">
-    <%= form.label :organization_sectors %>
-    <select multiple="multiple" id="organization_sectors_selector" name="organization_sectors">
-    </select>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
