@@ -28,28 +28,33 @@
       <%= form.text_field :slug, id: :organization_slug, :class => "form-control" %>
     </div>
 
-    <div class="field">
+    <div class="form-group">
       <%= form.label :when_endorsed %>
-      <%= form.datetime_select :when_endorsed, id: :organization_when_endorsed %>
+      <div class="form-row">
+        <div class="col-6">
+          <%= form.text_field :when_endorsed, id: :organization_when_endorsed, :class => "form-control datepicker" %>
+        </div>
+      </div>
     </div>
 
-    <div class="field">
+    <div class="form-group">
       <%= form.label :website %>
-      <%= form.text_field :website, id: :organization_website %>
+      <%= form.text_field :website, id: :organization_website, :class => "form-control" %>
     </div>
 
-    <div class="field">
-      <%= form.label :is_endorser %>
-      <%= form.check_box :is_endorser, id: :organization_is_endorser %>
+    <div class="form-group form-check">
+      <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
+      <%= form.label :is_endorser, :class => "form-check-label" %>
     </div>
 
-    <div class="field">
+    <div class="form-group">
       <%= form.label :organization_sectors %>
-      <select multiple="multiple" id="organization_sectors_selector" name="organization_sectors"></select>
+      <select size="8" class="form-control" multiple="multiple" id="organization_sectors_selector" name="organization_sectors"></select>
     </div>
 
-    <div class="actions">
-      <%= form.submit %>
+    <div class="float-right">
+      <%= form.submit 'Submit', :class => "btn btn-primary" %>
+      <%= link_to 'Back', organizations_path, :class => 'btn btn-outline-secondary' %>
     </div>
   <% end %>
 </div>

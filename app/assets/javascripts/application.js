@@ -10,15 +10,15 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
+//= require jquery
+//= require jquery_ujs
 //= require turbolinks
 //= require_tree ./v5.3.0-dist
-//= require bootstrap
 //= require map
 //= require map-style
 //= require map-year-control
 //= require map-click-control
-//= require jquery3
+//= require jquery-ui/widgets/datepicker
 //= require popper
 //= require bootstrap
 //= require_tree .
