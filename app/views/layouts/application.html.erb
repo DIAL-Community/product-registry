@@ -4,12 +4,12 @@
     <title>Product Registry</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <style>
       .rotate-north {
         top: 65px;
-        left: .5em;
+        left: 0.5em;
       }
       .ol-touch .rotate-north {
         top: 80px;
@@ -17,9 +17,14 @@
     </style>
   </head>
 
-  <body class="container">
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
+  <body>
+    <div id="header-space" style="min-height: 150px"></div>
+    <%= render '/shared/header' %>
+    <div id="#content" class="container" style="flex-shrink: 0">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <%= yield %>
+    </div>
+    <%= render '/shared/footer' %>
   </body>
 </html>
