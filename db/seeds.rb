@@ -4369,5 +4369,7 @@ o.locations << Location.where(slug: 'iraq').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 
 f = File.join(Rails.root, 'db', 'contacts.rb')
-load f
+if File.exists?(f)
+  load f
+end
 
