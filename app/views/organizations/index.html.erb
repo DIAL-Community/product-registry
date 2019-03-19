@@ -1,36 +1,47 @@
 <p id="notice"><%= notice %></p>
 
-<div class="container">
-
-</div>
+  <div class="float-right">
+    <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
+      <%= text_field_tag :search, params[:search], placeholder: "Search organization ...", :class => "form-control" %>
+      <div class="input-group-append">
+        <%= submit_tag "Search", :class => "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
 <table class="table">
-  <caption>List of organizations</caption>
-  <thead class="thead-light">
-    <tr>
-      <th>Name</th>
-      <th>When endorsed</th>
-      <th>Website</th>
-      <th></th>
-    </tr>
-  </thead>
+<caption>List of organizations</caption>
+<thead class="thead-light">
+  <tr>
+    <th>Name</th>
+    <th>When endorsed</th>
+    <th>Website</th>
+    <th></th>
+  </tr>
+</thead>
 
-  <tbody>
+<tbody>
+  <% if @organizations.count > 0 %>
     <% @organizations.each do |organization| %>
       <tr>
         <td><%= organization.name %></td>
         <td><%= organization.when_endorsed.strftime("%m/%d/%Y") %></td>
-        <td><%= link_to organization.website.downcase.strip.sub('https://', '').sub('http://', ''),  organization.website.downcase.strip %></td>
+        <td><%= link_to organization.website.downcase.strip.sub('https://', '').sub('http://', ''), organization.website.downcase.strip %></td>
         <td class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
           <div class="dropdown-menu">
             <%= link_to 'View', organization, :class =>"dropdown-item" %>
-            <%= link_to 'Edit', edit_organization_path(organization), :class =>"dropdown-item"  %>
+            <%= link_to 'Edit', edit_organization_path(organization), :class =>"dropdown-item" %>
             <div class="dropdown-divider"></div>
-            <%= link_to 'Remove', organization, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+            <%= link_to 'Remove', organization, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
           </div>
         </td>
       </tr>
     <% end %>
-  </tbody>
+  <% else %>
+    <tr>
+      <td colspan="4"><%= link_to 'Create new organization', new_organization_path %></td>
+    </tr>
+  <% end %>
+</tbody>
 </table>
 <%= will_paginate @organizations, :class => "apple-pagination" %>

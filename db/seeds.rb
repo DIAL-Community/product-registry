@@ -4367,3 +4367,12 @@ o.locations << Location.where(slug: 'turkey').limit(1)[0]
 o.locations << Location.create(name: "Gaza", slug: 'gaza', :location_type => :country)
 o.locations << Location.where(slug: 'iraq').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
+<<<<<<< HEAD
+=======
+
+f = File.join(Rails.root, 'db', 'contacts.rb')
+if File.exists?(f)
+  load f
+end
+
+>>>>>>> upstream/master

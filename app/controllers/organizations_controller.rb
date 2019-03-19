@@ -6,12 +6,16 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    if params[:include_locations]
-      @organizations = Organization.paginate(page: params[:page], per_page: 20)
-      @include_locations = true
+    if params[:search]
+      @organizations = Organization.where(nil).starts_with(params[:search]).paginate(page: params[:page], per_page: 20)
     else
-      @organizations = Organization.paginate(page: params[:page], per_page: 20)
-      @include_locations = false
+      if params[:include_locations]
+        @organizations = Organization.paginate(page: params[:page], per_page: 20)
+        @include_locations = true
+      else
+        @organizations = Organization.paginate(page: params[:page], per_page: 20)
+        @include_locations = false
+      end
     end
   end
 
@@ -32,7 +36,7 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
-    @organization = Organization.new
+    @organization = Organization.new(organization_params)
 
     respond_to do |format|
       if @organization.save
@@ -77,6 +81,10 @@ class OrganizationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
       @organization = Organization.find(params[:id])
+    end
+
+    def filtering_params(params)
+      params.slice(:starts_with)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
