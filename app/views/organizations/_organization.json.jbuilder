@@ -1,4 +1,4 @@
-json.extract! organization, :id, :id, :name, :when_endorsed, :is_endorser, :website, :created_at, :updated_at
+json.extract! organization, :id, :id, :name, :when_endorsed, :is_endorser, :website, :created_at, :updated_at, :contacts
 json.url organization_url(organization, format: :json)
 # if include_locations
   json.offices organization.locations do |location|

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Name:</strong>
   <%= @organization.name %>
@@ -25,5 +23,25 @@
   <%= @organization.is_endorser %>
 </p>
 
-<%= link_to 'Edit', edit_organization_path(@organization) %> |
+<%= link_to 'Edit', edit_organization_path(@organization) %>
+|
 <%= link_to 'Back', organizations_path %>
+
+<div class="container">
+  <% if @organization.contacts.count > 0 %>
+    <% @organization.contacts.each do |contact| %>
+      <p>
+        <strong>Name:</strong>
+        <%= contact.name %>
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <%= contact.email %>
+      </p>
+      <%= link_to 'Edit contact', edit_contact_path(contact) %>
+    <% end %>
+  <% end %>
+</div>
+
+<!-- # In the show organization, we will show list of contacts for that organization. # * Display contact information (maybe just the basic info?). # * Add link to edit or delete the contact. # * Editing a contact will take them to the contact edit
+form. # * Add link to add new contact which will take them to the contact add form. -->

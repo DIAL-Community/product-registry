@@ -2,7 +2,7 @@
   <%= notice %>
 </p>
 
-<div class="float-right">
+<div class="float-right" style="padding-bottom: 1rem; ">
   <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search organization ...", :class => "form-control" %>
   <div class="input-group-append">
