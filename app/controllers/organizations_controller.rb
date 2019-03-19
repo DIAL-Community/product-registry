@@ -1,19 +1,27 @@
 class OrganizationsController < ApplicationController
-  before_action :authenticate_user!, only: [:edit, :update, :destroy]
+  # before_action :authenticate_user!, only: [:edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
-  before_action :set_relations, only: [:edit]
+  # before_action :set_relations, only: [:edit]
 
   # GET /organizations
   # GET /organizations.json
   def index
     if params[:search]
-      @organizations = Organization.where(nil).starts_with(params[:search]).paginate(page: params[:page], per_page: 20)
+      @organizations = Organization
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
     else
       if params[:include_locations]
-        @organizations = Organization.paginate(page: params[:page], per_page: 20)
+        @organizations = Organization
+            .order(:name)
+            .paginate(page: params[:page], per_page: 20)
         @include_locations = true
       else
-        @organizations = Organization.paginate(page: params[:page], per_page: 20)
+        @organizations = Organization
+            .order(:name)
+            .paginate(page: params[:page], per_page: 20)
         @include_locations = false
       end
     end
@@ -72,7 +80,7 @@ class OrganizationsController < ApplicationController
       format.json { head :no_content }
     end
   end
-``
+
   def map
     @organizations = Organization.eager_load(:locations)
   end
@@ -89,6 +97,7 @@ class OrganizationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
+      console
       params
         .require(:organization)
         .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)

@@ -1,13 +1,16 @@
-<p id="notice"><%= notice %></p>
+<p id="notice">
+  <%= notice %>
+</p>
 
-  <div class="float-right">
-    <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
-      <%= text_field_tag :search, params[:search], placeholder: "Search organization ...", :class => "form-control" %>
-      <div class="input-group-append">
-        <%= submit_tag "Search", :class => "btn btn-primary" %>
-      </div>
-    <% end %>
+<div class="float-right">
+  <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search organization ...", :class => "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag "Search", :class => "btn btn-primary" %>
   </div>
+<% end %>
+</div>
+
 <table class="table">
 <caption>List of organizations</caption>
 <thead class="thead-light">
@@ -32,7 +35,7 @@
             <%= link_to 'View', organization, :class =>"dropdown-item" %>
             <%= link_to 'Edit', edit_organization_path(organization), :class =>"dropdown-item" %>
             <div class="dropdown-divider"></div>
-            <%= link_to 'Remove', organization, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+            <%= link_to "Remove", organization, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
           </div>
         </td>
       </tr>
