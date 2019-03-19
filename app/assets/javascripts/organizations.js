@@ -8,5 +8,5 @@ $('document').ready(function() {
     });
   }
 
-  $('.datepicker').datepicker();
+  $('#organization_when_endorsed').datepicker();
 });

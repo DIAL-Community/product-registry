@@ -7,10 +7,10 @@ class OrganizationsController < ApplicationController
   # GET /organizations.json
   def index
     if params[:include_locations]
-      @organizations = Organization.eager_load(:locations)
+      @organizations = Organization.paginate(page: params[:page], per_page: 20)
       @include_locations = true
     else
-      @organizations = Organization.all
+      @organizations = Organization.paginate(page: params[:page], per_page: 20)
       @include_locations = false
     end
   end
@@ -32,7 +32,7 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
-    @organization = Organization.new(organization_params)
+    @organization = Organization.new
 
     respond_to do |format|
       if @organization.save
@@ -68,7 +68,7 @@ class OrganizationsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+``
   def map
     @organizations = Organization.eager_load(:locations)
   end
@@ -81,6 +81,11 @@ class OrganizationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
-      params.require(:organization).permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
+      params
+        .require(:organization)
+        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
+        .tap do |attr|
+          attr[:when_endorsed] = Date.parse(attr[:when_endorsed], "%m/%d/%Y")
+        end
     end
 end

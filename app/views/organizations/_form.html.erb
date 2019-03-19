@@ -3,58 +3,54 @@
     Create new organization
   </div>
   <div class="card-body">
-
     <%= form_with(model: organization, local: true) do |form| %>
-    <% if organization.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(organization.errors.count, "error") %>
-          prohibited this organization from being saved:</h2>
+      <% if organization.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(organization.errors.count, "error") %>
+            prohibited this organization from being saved:</h2>
 
-        <ul>
-          <% organization.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-    <div class="form-group">
-      <%= form.label :name %>
-      <%= form.text_field :name, id: :organization_name, :class => "form-control"%>
-    </div>
-
-    <div class="form-group">
-      <%= form.label :slug %>
-      <%= form.text_field :slug, id: :organization_slug, :class => "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= form.label :when_endorsed %>
-      <div class="form-row">
-        <div class="col-6">
-          <%= form.text_field :when_endorsed, id: :organization_when_endorsed, :class => "form-control datepicker" %>
+          <ul>
+            <% organization.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>`
+          </ul>
         </div>
-      </div>
-    </div>
+      <% end %>
 
-    <div class="form-group">
-      <%= form.label :website %>
-      <%= form.text_field :website, id: :organization_website, :class => "form-control" %>
-    </div>
+      <fieldset class="form-label-group">
+        <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => "Name" %>
+        <%= form.label :name %>
+      </fieldset>
 
-    <div class="form-group form-check">
-      <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
-      <%= form.label :is_endorser, :class => "form-check-label" %>
-    </div>
+      <fieldset class="form-label-group">
+        <%= form.text_field :slug, id: :organization_slug, :class => "form-control", :placeholder => "Slug" %>
+        <%= form.label :slug %>
+      </fieldset>
 
-    <div class="form-group">
-      <%= form.label :organization_sectors %>
-      <select size="8" class="form-control" multiple="multiple" id="organization_sectors_selector" name="organization_sectors"></select>
-    </div>
+      <fieldset class="form-label-group">
+        <%= form.text_field :when_endorsed, id: :organization_when_endorsed, :class => "form-control", :placeholder => "When endorsed" %>
+        <%= form.label :when_endorsed %>
+      </fieldset>
 
-    <div class="float-right">
-      <%= form.submit 'Submit', :class => "btn btn-primary" %>
-      <%= link_to 'Back', organizations_path, :class => 'btn btn-outline-secondary' %>
-    </div>
-  <% end %>
+      <fieldset class="form-label-group">
+        <%= form.text_field :website, id: :organization_website, :class => "form-control", :placeholder => "Website" %>
+        <%= form.label :website %>
+      </fieldset>
+
+      <fieldset class="form-group form-check">
+        <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
+        <%= form.label :is_endorser, :class => "form-check-label" %>
+      </fieldset>
+
+      <fieldset class="form-group">
+        <%= form.label :organization_sectors %>
+        <select size="8" class="form-control" multiple="multiple" id="organization_sectors_selector" name="organization_sectors"></select>
+      </fieldset>
+
+      <fieldset class="float-right">
+        <%= form.submit 'Submit', :class => "btn btn-primary" %>
+        <%= link_to 'Back', organizations_path, :class => 'btn btn-outline-secondary' %>
+      </fieldset>
+    <% end %>
+  </div>
 </div>
