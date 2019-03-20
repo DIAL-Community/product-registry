@@ -1,14 +1,12 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @sector.name %>
-</p>
-
-<p>
-  <strong>Slug:</strong>
-  <%= @sector.slug %>
-</p>
-
-<%= link_to 'Edit', edit_sector_path(@sector) %> |
-<%= link_to 'Back', sectors_path %>
+<div class="card">
+  <h5 class="card-header"><%= @sector.name %></h5>
+  <div class="card-body">
+    <h6 class="card-subtitle text-muted mb-2">
+      <strong>Slug: </strong><%= @sector.slug %>
+    </h6>
+    <%= link_to 'Back', locations_path, :class => "card-link float-left" %>
+    <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link float-right" %>
+  </div>
+</div>

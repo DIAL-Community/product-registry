@@ -4,7 +4,7 @@
 
 <div class="float-right" style="padding-bottom: 1rem; ">
   <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search organization ...", :class => "form-control" %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
   <div class="input-group-append">
     <%= submit_tag "Search", :class => "btn btn-primary" %>
   </div>
@@ -43,7 +43,7 @@
     <tr>
       <td colspan="4">
         <small class="text-muted">
-          We couldn't find anyone matching to the search phrase. Do you want to <%= link_to 'create new organization?', new_organization_path %>
+          We couldn't find organization matching to the search phrase. Do you want to <%= link_to 'create new organization?', new_organization_path %>
         </small>
       </td>
     </tr>

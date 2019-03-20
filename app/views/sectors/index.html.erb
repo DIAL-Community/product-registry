@@ -1,9 +1,16 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Sectors</h1>
+<div class="float-right" style="padding-bottom: 1rem; ">
+  <%= form_tag(sectors_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search sectors ...", :class => "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag "Search", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+</div>
 
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-light">
     <tr>
       <th>Name</th>
       <th>Slug</th>
@@ -12,18 +19,31 @@
   </thead>
 
   <tbody>
-    <% @sectors.each do |sector| %>
+    <% if @sectors.count > 0 %>
+      <% @sectors.each do |sector| %>
+        <tr>
+          <td><%= sector.name %></td>
+          <td><%= sector.slug %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'Show', sector, :class =>"dropdown-item" %>
+              <%= link_to 'Edit', edit_sector_path(sector), :class =>"dropdown-item" %>
+              <div class="dropdown-divider"></div>
+              <%= link_to 'Destroy', sector, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
       <tr>
-        <td><%= sector.name %></td>
-        <td><%= sector.slug %></td>
-        <td><%= link_to 'Show', sector %></td>
-        <td><%= link_to 'Edit', edit_sector_path(sector) %></td>
-        <td><%= link_to 'Destroy', sector, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td colspan="4">
+          <small class="text-muted">
+            We couldn't find sector matching to the search phrase. Do you want to <%= link_to 'create new sector?', new_sector_path %>
+          </small>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Sector', new_sector_path %>
+<%= will_paginate @locations, :class => "apple-pagination" %>

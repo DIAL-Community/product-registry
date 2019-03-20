@@ -1,9 +1,16 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Locations</h1>
+<div class="float-right" style="padding-bottom: 1rem; ">
+  <%= form_tag(locations_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search locations ...", :class => "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag "Search", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+</div>
 
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-light">
     <tr>
       <th>Name</th>
       <th>Slug</th>
@@ -12,18 +19,31 @@
   </thead>
 
   <tbody>
-    <% @locations.each do |location| %>
+    <% if @locations.count > 0 %>
+      <% @locations.each do |location| %>
+        <tr>
+          <td><%= location.name %></td>
+          <td><%= location.slug %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'Show', location, :class =>"dropdown-item"  %>
+              <%= link_to 'Edit', edit_location_path(location), :class =>"dropdown-item"  %>
+              <div class="dropdown-divider"></div>
+              <%= link_to 'Destroy', location, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
       <tr>
-        <td><%= location.name %></td>
-        <td><%= location.slug %></td>
-        <td><%= link_to 'Show', location %></td>
-        <td><%= link_to 'Edit', edit_location_path(location) %></td>
-        <td><%= link_to 'Destroy', location, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td colspan="4">
+          <small class="text-muted">
+            We couldn't find location matching to the search phrase. Do you want to <%= link_to 'create new location?', new_location_path %>
+          </small>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Location', new_location_path %>
+<%= will_paginate @locations, :class => "apple-pagination" %>
