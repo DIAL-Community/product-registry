@@ -4,6 +4,13 @@ class SectorsController < ApplicationController
   # GET /sectors
   # GET /sectors.json
   def index
+    if params[:without_paging]
+      @sectors = Sector
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
     if params[:search]
       @sectors = Sector
           .where(nil)

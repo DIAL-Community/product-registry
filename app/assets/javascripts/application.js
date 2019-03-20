@@ -19,6 +19,7 @@
 //= require map-year-control
 //= require map-click-control
 //= require jquery-ui/widgets/datepicker
+//= require jquery-ui/widgets/autocomplete
 //= require popper
 //= require bootstrap
 //= require_tree .

@@ -1,53 +1,63 @@
+<div class="card-body">
+  <%= form_with(model: organization, local: true) do |form| %>
+  <% if organization.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(organization.errors.count, "error") %>
+        prohibited this organization from being saved:
+      </h2>
 
-  <div class="card-body">
-    <%= form_with(model: organization, local: true) do |form| %>
-      <% if organization.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(organization.errors.count, "error") %>
-            prohibited this organization from being saved:
-          </h2>
+      <ul>
+        <% organization.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>`
+      </ul>
+    </div>
+  <% end %>
 
-          <ul>
-            <% organization.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>`
-          </ul>
-        </div>
-      <% end %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :name %>
+  </fieldset>
 
-      <fieldset class="form-label-group">
-        <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => "Name" %>
-        <%= form.label :name %>
-      </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :slug, id: :organization_slug, :class => "form-control", :placeholder => "Slug" %>
+    <%= form.label :slug %>
+  </fieldset>
 
-      <fieldset class="form-label-group">
-        <%= form.text_field :slug, id: :organization_slug, :class => "form-control", :placeholder => "Slug" %>
-        <%= form.label :slug %>
-      </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :when_endorsed, id: :organization_when_endorsed, :class => "form-control", :placeholder => "When endorsed" %>
+    <%= form.label :when_endorsed %>
+  </fieldset>
 
-      <fieldset class="form-label-group">
-        <%= form.text_field :when_endorsed, id: :organization_when_endorsed, :class => "form-control", :placeholder => "When endorsed" %>
-        <%= form.label :when_endorsed %>
-      </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :website, id: :organization_website, :class => "form-control", :placeholder => "Website" %>
+    <%= form.label :website %>
+  </fieldset>
 
-      <fieldset class="form-label-group">
-        <%= form.text_field :website, id: :organization_website, :class => "form-control", :placeholder => "Website" %>
-        <%= form.label :website %>
-      </fieldset>
+  <fieldset class="form-group form-check">
+    <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
+    <%= form.label :is_endorser, :class => "form-check-label" %>
+  </fieldset>
 
-      <fieldset class="form-group form-check">
-        <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
-        <%= form.label :is_endorser, :class => "form-check-label" %>
-      </fieldset>
-
-      <fieldset class="form-group">
-        <%= form.label :organization_sectors %>
-        <select size="8" class="form-control" multiple="multiple" id="organization_sectors_selector" name="organization_sectors"></select>
-      </fieldset>
-
-      <fieldset class="float-right">
-        <%= form.submit 'Submit', :class => "btn btn-primary" %>
-        <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
-      </fieldset>
-    <% end %>
+  <div class="form-label-group">
+    <%= form.text_field :organization_sectors, id: :organization_sectors, :class => "form-control", :placeholder => "Search for sectors ..." %>
+    <%= form.label :organization_sectors, "Search for sectors ..." %>
   </div>
+
+  <fieldset id="selected-sectors" class="d-flex flex-wrap">
+    <div id="base-selected-sectors" class="card mr-2" style="max-width: 20rem;">
+      <div class="card-body p-1 d-flex">
+        <p class="card-text p-1 m-0" style="flex: 1"></p>
+        <a class="card-link p-1" onclick="remove(this);">
+          <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+        </a>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="float-right">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+</div>
