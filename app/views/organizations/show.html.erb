@@ -24,9 +24,13 @@
 
 <div class="container">
   <div class="card">
-    <h5 class="card-header">Contacts</h5>
+    <div class="card-header clearfix">
+      <h5 class="float-left">Contacts</h5>
+      <a class="float-right" href="#">Add</a>
+    </div>
     <div class="card-body">
       <% if @organization.contacts.count > 0 %>
+        <div class="card-columns">
         <% @organization.contacts.each do |contact| %>
           <div class="card" style="width: 30rem;">
             <div class="card-body">
@@ -39,6 +43,7 @@
             </div>
           </div>
         <% end %>
+        </div>
       <% else %>
         <p class="card-text text-muted">We don't have any contact information for this organization.</p>
       <% end %>
