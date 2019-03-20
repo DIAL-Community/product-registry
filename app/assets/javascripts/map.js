@@ -90,7 +90,7 @@ var mapObject = {
         zoom: 2.5,
       })
     });
-    $.getJSON('/organizations.json?include_locations=true', function(organizations) {
+    $.getJSON('/organizations.json?without_paging=true', function(organizations) {
       organizations.forEach(function(o) {
         o.offices.forEach(function(of) {
           var iconFeature = new ol.Feature({

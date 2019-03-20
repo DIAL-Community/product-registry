@@ -6,9 +6,10 @@ mapObject.YearSelectorControl = function YearSelectorControl(selectElement) {
       yearHTML += '<option value="' + iy + '">' + iy + '</option>'
     }
     selectElement.innerHTML = yearHTML;
+    selectElement.className = "custom-select"
 
     var element = document.createElement('div');
-    element.className = 'select-year ol-unselectable ol-control';
+    element.className = 'float-right';
     element.appendChild(selectElement);
 
     ol.control.Control.call(this, {
@@ -21,13 +22,13 @@ mapObject.YearSelectorControl = function YearSelectorControl(selectElement) {
 
   mapObject.handleYearSelection = function() {
     $(mapObject.popup.element).popover('hide');
-    mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
+    mapObject.countryHightlightLayer.getSource().forEachFeature(function(feature) {
       mapObject.countryLayer.getSource().addFeature(feature);
     });
     mapObject.countryHightlightLayer.getSource().clear();
 
     var isAll = $(mapObject.yearSelector).val() == 'All';
-    mapObject.markerHoldingLayer.getSource().forEachFeature(function(iFeature)  {
+    mapObject.markerHoldingLayer.getSource().forEachFeature(function(iFeature) {
       mapObject.markerLayer.getSource().addFeature(iFeature);
     });
     mapObject.markerHoldingLayer.getSource().clear();

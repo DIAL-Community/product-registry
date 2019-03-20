@@ -6,6 +6,11 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
+    if params[:without_paging]
+      @organizations = Organization.all
+      @include_locations = true
+      return
+    end
     if params[:search]
       @organizations = Organization
           .where(nil)
@@ -13,17 +18,9 @@ class OrganizationsController < ApplicationController
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
-      if params[:include_locations]
-        @organizations = Organization
-            .order(:name)
-            .paginate(page: params[:page], per_page: 20)
-        @include_locations = true
-      else
-        @organizations = Organization
-            .order(:name)
-            .paginate(page: params[:page], per_page: 20)
-        @include_locations = false
-      end
+      @organizations = Organization
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
     end
   end
 
