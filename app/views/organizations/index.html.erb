@@ -12,7 +12,6 @@
 </div>
 
 <table class="table">
-<caption>List of organizations</caption>
 <thead class="thead-light">
   <tr>
     <th>Name</th>
@@ -42,7 +41,11 @@
     <% end %>
   <% else %>
     <tr>
-      <td colspan="4"><%= link_to 'Create new organization', new_organization_path %></td>
+      <td colspan="4">
+        <small class="text-muted">
+          We couldn't find anyone matching to the search phrase. Do you want to <%= link_to 'create new organization?', new_organization_path %>
+        </small>
+      </td>
     </tr>
   <% end %>
 </tbody>

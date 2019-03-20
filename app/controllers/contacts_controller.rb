@@ -4,7 +4,17 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.all
+    if params[:search]
+      @contacts = Contact
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    else
+      @contacts = Contact
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    end
   end
 
   # GET /contacts/1

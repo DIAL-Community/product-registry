@@ -4,7 +4,8 @@
       <% if organization.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(organization.errors.count, "error") %>
-            prohibited this organization from being saved:</h2>
+            prohibited this organization from being saved:
+          </h2>
 
           <ul>
             <% organization.errors.full_messages.each do |message| %>
@@ -46,7 +47,7 @@
 
       <fieldset class="float-right">
         <%= form.submit 'Submit', :class => "btn btn-primary" %>
-        <%= link_to 'Back', organizations_path, :class => 'btn btn-outline-secondary' %>
+        <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
       </fieldset>
     <% end %>
   </div>
