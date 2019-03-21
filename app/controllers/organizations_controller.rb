@@ -31,7 +31,6 @@ class OrganizationsController < ApplicationController
   # GET /organizations/new
   def new
     @organization = Organization.new
-    @organization.sectors.build
   end
 
   # GET /organizations/1/edit
@@ -41,7 +40,12 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
+
     @organization = Organization.new(organization_params)
+    params[:selected_sector].keys.each do |sector_id|
+      @sector = Sector.find(sector_id)
+      @organization.sectors.push(@sector)
+    end
 
     respond_to do |format|
       if @organization.save
@@ -57,6 +61,12 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
+    @organization.sectors.clear();
+    params[:selected_sector].keys.each do |sector_id|
+      @sector = Sector.find(sector_id)
+      @organization.sectors.push(@sector)
+    end
+
     respond_to do |format|
       if @organization.update(organization_params)
         format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }

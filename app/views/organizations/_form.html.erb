@@ -25,7 +25,7 @@
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :when_endorsed, id: :organization_when_endorsed, :class => "form-control", :placeholder => "When endorsed" %>
+    <%= form.text_field :when_endorsed, value: organization.when_endorsed.strftime("%m/%d/%Y"), id: :organization_when_endorsed, :class => "form-control data-date", :placeholder => "When endorsed" %>
     <%= form.label :when_endorsed %>
   </fieldset>
 
@@ -64,3 +64,9 @@
   </fieldset>
 <% end %>
 </div>
+
+<script>
+  <% organization.sectors.each do |sector| %>
+    addSector('<%= sector.id %>', '<%= sector.name %>');
+  <% end %>
+</script>

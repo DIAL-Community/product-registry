@@ -11,7 +11,22 @@
         <strong>Endorsed on:</strong>
         <%= @organization.when_endorsed.strftime("%m/%d/%Y") %>.
       </p>
-      <p class="card-text"><%= @organization.website.downcase.strip %></p>
+      <p class="card-text">
+        <strong>Website:</strong>
+        <%= @organization.website.downcase.strip %>
+      </p>
+
+      <% if @organization.sectors.count > 0 %>
+        <p class="card-text">
+          <strong>Sectors: </strong>
+          <ul>
+          <% @organization.sectors.each do |sector| %>
+            <li><%= sector.name %></li>
+          <% end %>
+          </ul>
+        </p>
+      <% end %>
+
       <p>
         <%= link_to 'Back', organizations_path, :class => "card-link float-left" %>
         <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link float-right" %>
