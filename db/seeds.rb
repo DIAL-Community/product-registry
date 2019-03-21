@@ -158,14 +158,14 @@ Sector.create(name: "Food Assistance", slug: "food_assistance")
 
 o = Organization.create(name: "Abt Associates", slug: "abt_associates", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://abtassociates.com/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economics').limit(1)[0] 
-o.sectors << Sector.where(slug: 'food_security').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agircutlure').limit(1)[0] 
-o.sectors << Sector.where(slug: 'data_security').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'justice').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'economics').limit(1)[0]
+o.sectors << Sector.where(slug: 'food_security').limit(1)[0]
+o.sectors << Sector.where(slug: 'agircutlure').limit(1)[0]
+o.sectors << Sector.where(slug: 'data_security').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'justice').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 o.locations << Location.create(name: "Australia", slug: 'australia', :location_type => :country)
 o.locations << Location.create(name: "Cambodia", slug: 'cambodia', :location_type => :country)
 o.locations << Location.create(name: "Indonesia", slug: 'indonesia', :location_type => :country)
@@ -226,18 +226,18 @@ o.locations << Location.create(name: "Zambia", slug: 'zambia', :location_type =>
 o.locations << Location.create(name: "Zimbabwe", slug: 'zimbabwe', :location_type => :country)
 o = Organization.create(name: "Aerian", slug: "aerian", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.aerian.com")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
-o.sectors << Sector.where(slug: 'platform_creation').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
+o.sectors << Sector.where(slug: 'platform_creation').limit(1)[0]
 l = Location.create(name: "The Old Malthouse, Mill Lane, UK", slug: 'the_old_malthouse_mill_lane_uk', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.41965159999999, -2.253189) ] WHERE slug = 'the_old_malthouse_mill_lane_uk'")
 o.locations << l
 o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 o = Organization.create(name: "Akros", slug: "akros", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.akros.com")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'information_systems').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'information_systems').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
 o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.create(name: "Malawi", slug: 'malawi', :location_type => :country)
 o.locations << Location.where(slug: 'mozambique').limit(1)[0]
@@ -249,7 +249,7 @@ o.locations << Location.where(slug: 'botswana').limit(1)[0]
 o.locations << Location.where(slug: 'namibia').limit(1)[0]
 o = Organization.create(name: "Akryl", slug: "akryl", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.akryl.net ")
 
-o.sectors << Sector.where(slug: 'communication').limit(1)[0] 
+o.sectors << Sector.where(slug: 'communication').limit(1)[0]
 l = Location.create(name: "Beijing, China", slug: 'beijing_china', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.90419989999999, 116.4073963) ] WHERE slug = 'beijing_china'")
 o.locations << l
@@ -262,37 +262,37 @@ o.locations << Location.create(name: "(might have other clients in other Europea
 o.locations << Location.create(name: "based on what their website says)", slug: 'based_on_what_their_website_says', :location_type => :country)
 o = Organization.create(name: "Aptivate", slug: "aptivate", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.aptivate.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
 o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 o = Organization.create(name: "Avallain Foundation, inc.", slug: "avallain_foundation_inc", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.avallainfoundation.org")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o = Organization.create(name: "Awaaz.De", slug: "awaazde", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.awaaz.de/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'finance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'finance').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
 l = Location.create(name: "Ahmedabad, Gujrat, India", slug: 'ahmedabad_gujrat_india', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.022505, 72.5713621) ] WHERE slug = 'ahmedabad_gujrat_india'")
 o.locations << l
 o.locations << Location.where(slug: 'india').limit(1)[0]
 o = Organization.create(name: "Belgian Development Agency", slug: "belgian_development_agency", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "WWW.BTCCTB.ORG")
 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'employment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environemnt').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'employment').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'environemnt').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
 l = Location.create(name: "Brussels, Belgium", slug: 'brussels_belgium', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussels_belgium'")
 o.locations << l
@@ -316,15 +316,15 @@ o.locations << Location.where(slug: 'senegal').limit(1)[0]
 o.locations << Location.where(slug: 'south_africa').limit(1)[0]
 o = Organization.create(name: "Bill and Melinda Gates Foundation", slug: "bill_and_melinda_gates_foundatio", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.gatesfoundation.org/")
 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'employment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environemnt').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'employment').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'environemnt').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
 l = Location.create(name: "Seattle, WA", slug: 'seattle_wa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.6062095, -122.3320708) ] WHERE slug = 'seattle_wa'")
 o.locations << l
@@ -342,39 +342,39 @@ o.locations << Location.create(name: "Netherlands", slug: 'netherlands', :locati
 o.locations << Location.create(name: "(Middle East: Partnerships)", slug: 'middle_east_partnerships', :location_type => :country)
 o = Organization.create(name: "Bivee", slug: "bivee", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.bivee.co")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o.locations << Location.create(name: "Hong Kong", slug: 'hong_kong', :location_type => :country)
 o = Organization.create(name: "Build Up", slug: "build_up", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://howtobuildup.org/projects/ ")
 
 o = Organization.create(name: "Caktus Group", slug: "caktus_group", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.caktusgroup.com/")
 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'finance_and_insurance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'media').limit(1)[0] 
-o.sectors << Sector.where(slug: 'entertainment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'travel_and_hospitality').limit(1)[0] 
-o.sectors << Sector.where(slug: 'membership_associations').limit(1)[0] 
-o.sectors << Sector.where(slug: 'higher_education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'research_collaborations').limit(1)[0] 
-o.sectors << Sector.where(slug: 'engineering').limit(1)[0] 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
-o.sectors << Sector.where(slug: 'ngo').limit(1)[0] 
-o.sectors << Sector.where(slug: 'government').limit(1)[0] 
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'finance_and_insurance').limit(1)[0]
+o.sectors << Sector.where(slug: 'media').limit(1)[0]
+o.sectors << Sector.where(slug: 'entertainment').limit(1)[0]
+o.sectors << Sector.where(slug: 'travel_and_hospitality').limit(1)[0]
+o.sectors << Sector.where(slug: 'membership_associations').limit(1)[0]
+o.sectors << Sector.where(slug: 'higher_education').limit(1)[0]
+o.sectors << Sector.where(slug: 'research_collaborations').limit(1)[0]
+o.sectors << Sector.where(slug: 'engineering').limit(1)[0]
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
+o.sectors << Sector.where(slug: 'ngo').limit(1)[0]
+o.sectors << Sector.where(slug: 'government').limit(1)[0]
 l = Location.create(name: "Durham, NC", slug: 'durham_nc', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.9940329, -78.898619) ] WHERE slug = 'durham_nc'")
 o.locations << l
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o = Organization.create(name: "Catholic Relief Services (CRS)", slug: "catholic_relief_services_crs", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.crs.org/")
 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'microfinance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
-o.sectors << Sector.where(slug: 'justice__peacebuilding').limit(1)[0] 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'microfinance').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
+o.sectors << Sector.where(slug: 'justice__peacebuilding').limit(1)[0]
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
 l = Location.create(name: "Baltimore, MD", slug: 'baltimore_md', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.2903848, -76.6121893) ] WHERE slug = 'baltimore_md'")
 o.locations << l
@@ -470,12 +470,12 @@ o.locations << Location.where(slug: 'jordan').limit(1)[0]
 o.locations << Location.create(name: "Lebanon", slug: 'lebanon', :location_type => :country)
 o = Organization.create(name: "Center for International Private Enterprise (CIPE)", slug: "center_for_international_private", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.cipe.org/")
 
-o.sectors << Sector.where(slug: 'anticorruption__ethics').limit(1)[0] 
-o.sectors << Sector.where(slug: 'enterprise_ecosystems').limit(1)[0] 
-o.sectors << Sector.where(slug: 'business_advocacy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'democratic_governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'trade').limit(1)[0] 
-o.sectors << Sector.where(slug: 'centers_of_excellence').limit(1)[0] 
+o.sectors << Sector.where(slug: 'anticorruption__ethics').limit(1)[0]
+o.sectors << Sector.where(slug: 'enterprise_ecosystems').limit(1)[0]
+o.sectors << Sector.where(slug: 'business_advocacy').limit(1)[0]
+o.sectors << Sector.where(slug: 'democratic_governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'trade').limit(1)[0]
+o.sectors << Sector.where(slug: 'centers_of_excellence').limit(1)[0]
 l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
 o.locations << l
@@ -517,13 +517,13 @@ o = Organization.create(name: "Chamilo", slug: "chamilo", when_endorsed: DateTim
 
 o = Organization.create(name: "Charlie Goldsmith Associates", slug: "charlie_goldsmith_associates", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://charliegoldsmithassociates.co.uk/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'food').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'income__local_markets').limit(1)[0] 
-o.sectors << Sector.where(slug: 'financial').limit(1)[0] 
-o.sectors << Sector.where(slug: 'management').limit(1)[0] 
-o.sectors << Sector.where(slug: 'protection').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'food').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'income__local_markets').limit(1)[0]
+o.sectors << Sector.where(slug: 'financial').limit(1)[0]
+o.sectors << Sector.where(slug: 'management').limit(1)[0]
+o.sectors << Sector.where(slug: 'protection').limit(1)[0]
 l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
 o.locations << l
@@ -535,21 +535,21 @@ o.locations << Location.where(slug: 'nigeria').limit(1)[0]
 o.locations << Location.where(slug: 'somalia').limit(1)[0]
 o = Organization.create(name: "Chemonics", slug: "chemonics", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.chemonics.com")
 
-o.sectors << Sector.where(slug: 'agriculture_and_food_security').limit(1)[0] 
-o.sectors << Sector.where(slug: 'corporate_partnerships').limit(1)[0] 
-o.sectors << Sector.where(slug: 'democracy_and_governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic_growth_and_trade').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education_and_youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment_and_natural_resource').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender_equality_and_social_inclu').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'peace').limit(1)[0] 
-o.sectors << Sector.where(slug: 'stability').limit(1)[0] 
-o.sectors << Sector.where(slug: 'and_transition').limit(1)[0] 
-o.sectors << Sector.where(slug: 'supply_chain_solutions').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'and_sustainable_cities').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture_and_food_security').limit(1)[0]
+o.sectors << Sector.where(slug: 'corporate_partnerships').limit(1)[0]
+o.sectors << Sector.where(slug: 'democracy_and_governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic_growth_and_trade').limit(1)[0]
+o.sectors << Sector.where(slug: 'education_and_youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment_and_natural_resource').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender_equality_and_social_inclu').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'peace').limit(1)[0]
+o.sectors << Sector.where(slug: 'stability').limit(1)[0]
+o.sectors << Sector.where(slug: 'and_transition').limit(1)[0]
+o.sectors << Sector.where(slug: 'supply_chain_solutions').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'and_sustainable_cities').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'somalia').limit(1)[0]
 o.locations << Location.where(slug: 'mozambique').limit(1)[0]
@@ -565,9 +565,9 @@ o.locations << Location.where(slug: 'haiti').limit(1)[0]
 o.locations << Location.where(slug: 'palestinian_territories').limit(1)[0]
 o = Organization.create(name: "CODE Innovation", slug: "code_innovation", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://codeinnovation.com/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'finance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'finance').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
 l = Location.create(name: "Silicon Valley?", slug: 'silicon_valley', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.387474, -122.0575434) ] WHERE slug = 'silicon_valley'")
 o.locations << l
@@ -579,24 +579,24 @@ o = Organization.create(name: "Congo in the Picture", slug: "congo_in_the_pictur
 o.locations << Location.where(slug: 'dr_congo').limit(1)[0]
 o = Organization.create(name: "Cooper/Smith", slug: "coopersmith", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "coopersmith.org")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o = Organization.create(name: "Creative Associates International", slug: "creative_associates_internationa", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.creativeassociatesinternational.com/")
 
-o.sectors << Sector.where(slug: 'capacity_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'citizen_security').limit(1)[0] 
-o.sectors << Sector.where(slug: 'cve_and_pve').limit(1)[0] 
-o.sectors << Sector.where(slug: 'digital_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education_in_conflict').limit(1)[0] 
-o.sectors << Sector.where(slug: 'elections').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'instructional_systems').limit(1)[0] 
-o.sectors << Sector.where(slug: 'livelihoods').limit(1)[0] 
-o.sectors << Sector.where(slug: 'political_transitions').limit(1)[0] 
-o.sectors << Sector.where(slug: 'stabilization').limit(1)[0] 
-o.sectors << Sector.where(slug: 'workforce').limit(1)[0] 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
+o.sectors << Sector.where(slug: 'capacity_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'citizen_security').limit(1)[0]
+o.sectors << Sector.where(slug: 'cve_and_pve').limit(1)[0]
+o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'education_in_conflict').limit(1)[0]
+o.sectors << Sector.where(slug: 'elections').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'instructional_systems').limit(1)[0]
+o.sectors << Sector.where(slug: 'livelihoods').limit(1)[0]
+o.sectors << Sector.where(slug: 'political_transitions').limit(1)[0]
+o.sectors << Sector.where(slug: 'stabilization').limit(1)[0]
+o.sectors << Sector.where(slug: 'workforce').limit(1)[0]
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'indonesia').limit(1)[0]
 o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
@@ -691,7 +691,7 @@ o.locations << Location.create(name: "Slovenia", slug: 'slovenia', :location_typ
 o.locations << Location.create(name: "Portugal", slug: 'portugal', :location_type => :country)
 o = Organization.create(name: "Democracy International", slug: "democracy_international", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://democracyinternational.com/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 l = Location.create(name: "Bethesda, MD", slug: 'bethesda_md', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.984652, -77.0947092) ] WHERE slug = 'bethesda_md'")
 o.locations << l
@@ -762,13 +762,13 @@ o.locations << Location.where(slug: 'kosovo').limit(1)[0]
 o.locations << Location.create(name: "Macedonia", slug: 'macedonia', :location_type => :country)
 o = Organization.create(name: "Development Alternatives Incorporated (DAI)", slug: "development_alternatives_incorpo", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.dai.com/")
 
-o.sectors << Sector.where(slug: 'digital_acceleration').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic_growth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment__energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'fragile_states').limit(1)[0] 
-o.sectors << Sector.where(slug: 'global_health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'sustainable_business').limit(1)[0] 
+o.sectors << Sector.where(slug: 'digital_acceleration').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic_growth').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment__energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'fragile_states').limit(1)[0]
+o.sectors << Sector.where(slug: 'global_health').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'sustainable_business').limit(1)[0]
 o.locations << Location.where(slug: 'bethesda_md').limit(1)[0]
 o.locations << Location.create(name: "Offices: Belgium", slug: 'offices_belgium', :location_type => :country)
 o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
@@ -840,7 +840,7 @@ o.locations << Location.create(name: "Fiji", slug: 'fiji', :location_type => :co
 o.locations << Location.create(name: "American Samoa", slug: 'american_samoa', :location_type => :country)
 o = Organization.create(name: "Development Gateway", slug: "development_gateway", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.developmentgateway.org")
 
-o.sectors << Sector.where(slug: 'data_management__policy').limit(1)[0] 
+o.sectors << Sector.where(slug: 'data_management__policy').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
 o.locations << Location.where(slug: 'madagascar').limit(1)[0]
@@ -886,13 +886,13 @@ o.locations << Location.where(slug: 'jordan').limit(1)[0]
 o.locations << Location.where(slug: 'thailand').limit(1)[0]
 o = Organization.create(name: "Digital Campus", slug: "digital_campus", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://digital-campus.org/")
 
-o.sectors << Sector.where(slug: 'health__consultancy').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health__consultancy').limit(1)[0]
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
 o.locations << Location.where(slug: 'india').limit(1)[0]
 o.locations << Location.where(slug: 'nigeria').limit(1)[0]
 o = Organization.create(name: "Digital Green", slug: "digital_green", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.digitalgreen.org/")
 
-o.sectors << Sector.where(slug: 'agriculturepoverty').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculturepoverty').limit(1)[0]
 l = Location.create(name: "San Francisco, CA", slug: 'san_francisco_ca', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.7749295, -122.4194155) ] WHERE slug = 'san_francisco_ca'")
 o.locations << l
@@ -905,8 +905,8 @@ o = Organization.create(name: "Digital Impact Alliance (DIAL)", slug: "digital_i
 
 o = Organization.create(name: "Digital Opportunity Trust (DOT)", slug: "digital_opportunity_trust_dot", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "https://www.dotrust.org/")
 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
 l = Location.create(name: "Ottawa, Canada", slug: 'ottawa_canada', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.4215296, -75.69719309999999) ] WHERE slug = 'ottawa_canada'")
 o.locations << l
@@ -936,8 +936,8 @@ o.locations << Location.create(name: "Turkey", slug: 'turkey', :location_type =>
 o.locations << Location.where(slug: 'china').limit(1)[0]
 o = Organization.create(name: "Dimagi", slug: "dimagi", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.dimagi.com")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'communications').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'communications').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o.locations << Location.where(slug: 'senegal').limit(1)[0]
 o.locations << Location.where(slug: 'india').limit(1)[0]
@@ -949,8 +949,8 @@ o = Organization.create(name: "Ecorys", slug: "ecorys", when_endorsed: DateTime.
 
 o = Organization.create(name: "Education Development Center (EDC)", slug: "education_development_center_edc", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.edc.org/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Waltham (Boston), MA", slug: 'waltham_boston_ma', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3764852, -71.2356113) ] WHERE slug = 'waltham_boston_ma'")
 o.locations << l
@@ -962,16 +962,16 @@ o.locations << Location.create(name: "Latin America", slug: 'latin_america', :lo
 o.locations << Location.create(name: "(Countries are not listed)", slug: 'countries_are_not_listed', :location_type => :country)
 o = Organization.create(name: "Enabel", slug: "enabel", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.enabel.be")
 
-o.sectors << Sector.where(slug: 'agriculture__rural_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'digitalization').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'training__employment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment__climate').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water__sanitation').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture__rural_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'digitalization').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'training__employment').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment__climate').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'water__sanitation').limit(1)[0]
 o.locations << Location.where(slug: 'brussels_belgium').limit(1)[0]
 o.locations << Location.where(slug: 'algeria').limit(1)[0]
 o.locations << Location.where(slug: 'belgium').limit(1)[0]
@@ -1002,18 +1002,18 @@ o.locations << l
 o.locations << Location.create(name: "Norway and Denmark", slug: 'norway_and_denmark', :location_type => :country)
 o = Organization.create(name: "FHI 360", slug: "fhi_", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.fhi360.org/")
 
-o.sectors << Sector.where(slug: 'civil_society').limit(1)[0] 
-o.sectors << Sector.where(slug: 'communication_and_social_marketi').limit(1)[0] 
-o.sectors << Sector.where(slug: 'crisis_response').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'nutrition').limit(1)[0] 
-o.sectors << Sector.where(slug: 'research').limit(1)[0] 
-o.sectors << Sector.where(slug: 'technology').limit(1)[0] 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
+o.sectors << Sector.where(slug: 'civil_society').limit(1)[0]
+o.sectors << Sector.where(slug: 'communication_and_social_marketi').limit(1)[0]
+o.sectors << Sector.where(slug: 'crisis_response').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'nutrition').limit(1)[0]
+o.sectors << Sector.where(slug: 'research').limit(1)[0]
+o.sectors << Sector.where(slug: 'technology').limit(1)[0]
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
 o.locations << Location.where(slug: 'durham_nc').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o.locations << Location.where(slug: 'guatemala').limit(1)[0]
@@ -1058,7 +1058,7 @@ o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 o.locations << Location.where(slug: 'indonesia').limit(1)[0]
 o = Organization.create(name: "Fio", slug: "fio", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.fio.com")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Toronto, ON, Canada", slug: 'toronto_on_canada', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (43.653226, -79.3831843) ] WHERE slug = 'toronto_on_canada'")
 o.locations << l
@@ -1067,20 +1067,20 @@ o.locations << Location.create(name: "DRC", slug: 'drc', :location_type => :coun
 o.locations << Location.where(slug: 'ghana').limit(1)[0]
 o = Organization.create(name: "Forum One", slug: "forum_one", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://forumone.com/")
 
-o.sectors << Sector.where(slug: 'humanitarian__poverty').limit(1)[0] 
-o.sectors << Sector.where(slug: 'hunger').limit(1)[0] 
+o.sectors << Sector.where(slug: 'humanitarian__poverty').limit(1)[0]
+o.sectors << Sector.where(slug: 'hunger').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o = Organization.create(name: "Foundation Botnar", slug: "foundation_botnar", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.fondationbotnar.org/en")
 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
 o.locations << Location.where(slug: 'tanzania').limit(1)[0]
 o.locations << Location.where(slug: 'romania').limit(1)[0]
 o.locations << Location.create(name: "Switzerland", slug: 'switzerland', :location_type => :country)
 o.locations << Location.create(name: "Israel", slug: 'israel', :location_type => :country)
 o = Organization.create(name: "Girl Effect Mobile - Springster ", slug: "girl_effect_mobile__springster", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "girleffect.org")
 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
 o.locations << Location.where(slug: 'london_uk').limit(1)[0]
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
 o.locations << Location.where(slug: 'nigeria').limit(1)[0]
@@ -1092,7 +1092,7 @@ o.locations << Location.where(slug: 'indonesia').limit(1)[0]
 o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o = Organization.create(name: "GIZ", slug: "giz", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.giz.de/en/html/index.html")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 o.locations << Location.where(slug: 'egypt').limit(1)[0]
 o.locations << Location.where(slug: 'algeria').limit(1)[0]
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
@@ -1197,7 +1197,7 @@ o.locations << Location.where(slug: 'peru').limit(1)[0]
 o.locations << Location.where(slug: 'germany').limit(1)[0]
 o = Organization.create(name: "Global Integrity", slug: "global_integrity", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.globalintegrity.org/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'albania').limit(1)[0]
 o.locations << Location.where(slug: 'argentina').limit(1)[0]
@@ -1341,14 +1341,14 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "Good Business", slug: "good_business", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.good.business")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
 o.locations << Location.where(slug: 'london_uk').limit(1)[0]
 o.locations << Location.where(slug: 'botswana').limit(1)[0]
 o.locations << Location.create(name: "Europe (UK?)", slug: 'europe_uk', :location_type => :country)
 o = Organization.create(name: "Grameen Foundation", slug: "grameen_foundation", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.grameenfoundation.org/")
 
-o.sectors << Sector.where(slug: 'finance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'finance').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'india').limit(1)[0]
 o.locations << Location.where(slug: 'indonesia').limit(1)[0]
@@ -1375,7 +1375,7 @@ o.locations << l
 o.locations << Location.where(slug: 'switzerland').limit(1)[0]
 o = Organization.create(name: "HealthEnabled", slug: "healthenabled", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://healthenabled.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Cape Town, South Africa", slug: 'cape_town_south_africa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.9248685, 18.4240553) ] WHERE slug = 'cape_town_south_africa'")
 o.locations << l
@@ -1392,7 +1392,7 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'ghana').limit(1)[0]
 o = Organization.create(name: "Human Network International (HNI)", slug: "human_network_international_hni", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://hni.org/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o.locations << Location.where(slug: 'dr_congo').limit(1)[0]
@@ -1412,7 +1412,7 @@ o = Organization.create(name: "Humanitarian Open Street Map Team ", slug: "human
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o = Organization.create(name: "InSTEDD", slug: "instedd", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://instedd.org/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "Sunnyvale, CA, USA", slug: 'sunnyvale_ca_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.36883, -122.0363496) ] WHERE slug = 'sunnyvale_ca_usa'")
 o.locations << l
@@ -1450,14 +1450,14 @@ o.locations << Location.where(slug: 'sri_lanka').limit(1)[0]
 o.locations << Location.where(slug: 'myanmar').limit(1)[0]
 o = Organization.create(name: "IntelliSOFT", slug: "intellisoft", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.intellisoftkenya.com")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Nairobi, Kenya", slug: 'nairobi_kenya', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-1.2920659, 36.8219462) ] WHERE slug = 'nairobi_kenya'")
 o.locations << l
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o = Organization.create(name: "International Foundation for Electoral Systems (IFES)", slug: "international_foundation_for_ele", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.ifes.org/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 l = Location.create(name: "Arlington, VA", slug: 'arlington_va', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.8816208, -77.09098089999999) ] WHERE slug = 'arlington_va'")
 o.locations << l
@@ -1647,12 +1647,12 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "International Initiative for Impact Evaluation (3ie)", slug: "international_initiative_for_imp", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://3ieimpact.org/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 o.locations << Location.where(slug: 'india').limit(1)[0]
 o = Organization.create(name: "International Rescue Committee (IRC)", slug: "international_rescue_committee_i", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.rescue.org/")
 
-o.sectors << Sector.where(slug: 'humanitarian__emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'humanitarian__emergency').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
 o.locations << Location.where(slug: 'colombia').limit(1)[0]
@@ -1760,7 +1760,7 @@ o.locations << Location.where(slug: 'west_bankgaza').limit(1)[0]
 o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o = Organization.create(name: "IntraHealth International", slug: "intrahealth_international", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.intrahealth.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'benin').limit(1)[0]
 o.locations << Location.where(slug: 'botswana').limit(1)[0]
 o.locations << Location.where(slug: 'dr_congo').limit(1)[0]
@@ -1794,7 +1794,7 @@ o.locations << Location.where(slug: 'west_bank').limit(1)[0]
 o.locations << Location.where(slug: 'laos').limit(1)[0]
 o = Organization.create(name: "IREX", slug: "irex", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.irex.org/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'angola').limit(1)[0]
 o.locations << Location.where(slug: 'benin').limit(1)[0]
@@ -1938,13 +1938,13 @@ o = Organization.create(name: "IST Uganda", slug: "ist_uganda", when_endorsed: D
 
 o = Organization.create(name: "iTech Mission Private Limited (iTM)", slug: "itech_mission_private_limited_it", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.itechmission.org/ ")
 
-o.sectors << Sector.where(slug: 'socioeconomic').limit(1)[0] 
+o.sectors << Sector.where(slug: 'socioeconomic').limit(1)[0]
 o.locations << Location.where(slug: 'new_delhi_india').limit(1)[0]
 o.locations << Location.create(name: "Over 100 Countries", slug: 'over__countries', :location_type => :country)
 o = Organization.create(name: "Jhpiego", slug: "jhpiego", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.jhpiego.org/")
 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'baltimore_md').limit(1)[0]
 o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
 o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
@@ -1986,7 +1986,7 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "John Snow, Inc. (JSI)", slug: "john_snow_inc_jsi", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.jsi.com/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "HQ: Boston, MA", slug: 'hq_boston_ma', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.328326, -71.07021999999999) ] WHERE slug = 'hq_boston_ma'")
 o.locations << l
@@ -2068,7 +2068,7 @@ o.locations << Location.where(slug: 'ghana').limit(1)[0]
 o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o = Organization.create(name: "Kimetrica", slug: "kimetrica", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://kimetrica.com")
 
-o.sectors << Sector.where(slug: 'poverty').limit(1)[0] 
+o.sectors << Sector.where(slug: 'poverty').limit(1)[0]
 o.locations << Location.where(slug: 'angola').limit(1)[0]
 o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
 o.locations << Location.where(slug: 'botswana').limit(1)[0]
@@ -2114,8 +2114,8 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "Kingship Digital Inc. ", slug: "kingship_digital_inc", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.kingshipdigital.com")
 
-o.sectors << Sector.where(slug: 'media_production').limit(1)[0] 
-o.sectors << Sector.where(slug: 'consulting').limit(1)[0] 
+o.sectors << Sector.where(slug: 'media_production').limit(1)[0]
+o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
 l = Location.create(name: "Kampala, Uganda", slug: 'kampala_uganda', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (0.3475964, 32.5825197) ] WHERE slug = 'kampala_uganda'")
 o.locations << l
@@ -2131,9 +2131,9 @@ o.locations << l
 o.locations << Location.create(name: "50 Nations", slug: '_nations', :location_type => :country)
 o = Organization.create(name: "Lutheran World Relief", slug: "lutheran_world_relief", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "programs.lwr.org")
 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
-o.sectors << Sector.where(slug: 'climate').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
+o.sectors << Sector.where(slug: 'climate').limit(1)[0]
 o.locations << Location.where(slug: 'baltimore_md').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o.locations << Location.where(slug: 'tanzania').limit(1)[0]
@@ -2160,7 +2160,7 @@ o.locations << Location.where(slug: 'nepal').limit(1)[0]
 o.locations << Location.create(name: "the Philippines", slug: 'the_philippines', :location_type => :country)
 o = Organization.create(name: "Main Level", slug: "main_level", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.mainlevel.de")
 
-o.sectors << Sector.where(slug: 'consulting').limit(1)[0] 
+o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
 l = Location.create(name: "Eschborn, Germany", slug: 'eschborn_germany', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.1467469, 8.561455500000001) ] WHERE slug = 'eschborn_germany'")
 o.locations << l
@@ -2201,8 +2201,8 @@ o.locations << l
 o.locations << Location.where(slug: 'colombia').limit(1)[0]
 o = Organization.create(name: "Medic Mobile", slug: "medic_mobile", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://medicmobile.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
 l = Location.create(name: "San Francisco, CA, USA", slug: 'san_francisco_ca_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.7749295, -122.4194155) ] WHERE slug = 'san_francisco_ca_usa'")
 o.locations << l
@@ -2222,7 +2222,7 @@ o.locations << Location.where(slug: 'nepal').limit(1)[0]
 o.locations << Location.where(slug: 'indonesia').limit(1)[0]
 o = Organization.create(name: "Mercy Corps", slug: "mercy_corps", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.mercycorps.org")
 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
 l = Location.create(name: "Portland, OR, USA", slug: 'portland_or_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.5122308, -122.6587185) ] WHERE slug = 'portland_or_usa'")
 o.locations << l
@@ -2266,7 +2266,7 @@ o.locations << Location.where(slug: 'yemen').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "Moonshot Global Consulting", slug: "moonshot_global_consulting", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://moonshotglobal.com/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'africa').limit(1)[0]
 o.locations << Location.where(slug: 'europe').limit(1)[0]
@@ -2275,7 +2275,7 @@ o.locations << Location.create(name: "Southeast Asia", slug: 'southeast_asia', :
 o.locations << Location.create(name: "and the United States (Network of Consultants)", slug: 'and_the_united_states_network_of', :location_type => :country)
 o = Organization.create(name: "mPower Social Enterprises Ltd.", slug: "mpower_social_enterprises_ltd", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.mpower-social.com/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "Dhaka, Bangladesh", slug: 'dhaka_bangladesh', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.810332, 90.4125181) ] WHERE slug = 'dhaka_bangladesh'")
 o.locations << l
@@ -2293,7 +2293,7 @@ o.locations << Location.where(slug: 'myanmar').limit(1)[0]
 o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o = Organization.create(name: "mPowering Frontline Health Workers", slug: "mpowering_frontline_health_worke", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://mpoweringhealth.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.create(name: "Platform used in North America", slug: 'platform_used_in_north_america', :location_type => :country)
 o.locations << Location.where(slug: 'south_america').limit(1)[0]
@@ -2303,7 +2303,7 @@ o.locations << Location.where(slug: 'europe').limit(1)[0]
 o.locations << Location.where(slug: 'oceania').limit(1)[0]
 o = Organization.create(name: "Nafundi", slug: "nafundi", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://nafundi.com/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "San Diego, CA, USA", slug: 'san_diego_ca_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (32.715738, -117.1610838) ] WHERE slug = 'san_diego_ca_usa'")
 o.locations << l
@@ -2312,7 +2312,7 @@ o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o.locations << Location.create(name: "ISS", slug: 'iss', :location_type => :country)
 o = Organization.create(name: "National Democratic Institute (NDI)", slug: "national_democratic_institute_nd", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.ndi.org/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'mexico').limit(1)[0]
 o.locations << Location.where(slug: 'guatemala').limit(1)[0]
@@ -2357,10 +2357,10 @@ o.locations << Location.where(slug: 'thailand').limit(1)[0]
 o.locations << Location.where(slug: 'timorleste').limit(1)[0]
 o = Organization.create(name: "Norwegian People''s Aid", slug: "norwegian_peoples_aid", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.npaid.org")
 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance_').limit(1)[0] 
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance_').limit(1)[0]
 l = Location.create(name: "Stockholm, Sweden", slug: 'stockholm_sweden', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (59.32932349999999, 18.0685808) ] WHERE slug = 'stockholm_sweden'")
 o.locations << l
@@ -2385,13 +2385,13 @@ o.locations << Location.where(slug: 'cambodia').limit(1)[0]
 o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 o = Organization.create(name: "Ona", slug: "ona", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://ona.io/home/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o = Organization.create(name: "Open Data Kit", slug: "open_data_kit", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://opendatakit.org/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 o = Organization.create(name: "OpenHIE", slug: "openhie", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://ohie.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
 o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
 o.locations << Location.where(slug: 'rawanda').limit(1)[0]
@@ -2400,7 +2400,7 @@ o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o.locations << Location.where(slug: 'south_africa').limit(1)[0]
 o = Organization.create(name: "OpenLMIS", slug: "openlmis", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://openlmis.org/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o.locations << Location.where(slug: 'benin').limit(1)[0]
 o.locations << Location.where(slug: 'ivory_coast').limit(1)[0]
 o.locations << Location.where(slug: 'guinea').limit(1)[0]
@@ -2409,7 +2409,7 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'mozambique').limit(1)[0]
 o = Organization.create(name: "OpenMRS", slug: "openmrs", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://openmrs.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Carmel, IN, USA", slug: 'carmel_in_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.978371, -86.1180435) ] WHERE slug = 'carmel_in_usa'")
 o.locations << l
@@ -2449,7 +2449,7 @@ o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o = Organization.create(name: "Oxfam", slug: "oxfam", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.oxfam.org/ ")
 
-o.sectors << Sector.where(slug: 'poverty').limit(1)[0] 
+o.sectors << Sector.where(slug: 'poverty').limit(1)[0]
 l = Location.create(name: "Boston, MA, USA", slug: 'boston_ma_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3600825, -71.0588801) ] WHERE slug = 'boston_ma_usa'")
 o.locations << l
@@ -2559,12 +2559,12 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "Palladium", slug: "palladium", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://thepalladiumgroup.com/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'work_force').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'logisitcs').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+o.sectors << Sector.where(slug: 'work_force').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'logisitcs').limit(1)[0]
 o.locations << Location.where(slug: 'london_uk').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 l = Location.create(name: "Brisbane, Austrailia", slug: 'brisbane_austrailia', :location_type => :point)
@@ -2653,7 +2653,7 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "PATH", slug: "path", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.path.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'dr_congo').limit(1)[0]
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
 o.locations << Location.where(slug: 'ghana').limit(1)[0]
@@ -2667,7 +2667,7 @@ o.locations << Location.where(slug: 'uganda').limit(1)[0]
 o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o = Organization.create(name: "Pathfinder International", slug: "pathfinder_international", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.pathfinder.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Watertown, MA, USA", slug: 'watertown_ma_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3709299, -71.1828321) ] WHERE slug = 'watertown_ma_usa'")
 o.locations << l
@@ -2693,7 +2693,7 @@ o.locations << Location.where(slug: 'togo').limit(1)[0]
 o.locations << Location.where(slug: 'uganda').limit(1)[0]
 o = Organization.create(name: "People in Need", slug: "people_in_need", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.peopleinneed.cz")
 
-o.sectors << Sector.where(slug: 'humanitarian_emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'humanitarian_emergency').limit(1)[0]
 l = Location.create(name: "Prague, Czech Republic", slug: 'prague_czech_republic', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.0755381, 14.4378005) ] WHERE slug = 'prague_czech_republic'")
 o.locations << l
@@ -2724,9 +2724,9 @@ o.locations << Location.where(slug: 'ukraine').limit(1)[0]
 o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o = Organization.create(name: "Plan International", slug: "plan_international", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://plan-international.org")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
 l = Location.create(name: "Dukes Court, UK", slug: 'dukes_court_uk', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.3206581, -0.554314) ] WHERE slug = 'dukes_court_uk'")
 o.locations << l
@@ -2808,7 +2808,7 @@ o.locations << Location.where(slug: 'uk').limit(1)[0]
 o.locations << Location.where(slug: 'usa').limit(1)[0]
 o = Organization.create(name: "Praekelt.org", slug: "praekeltorg", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.praekelt.org/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o.locations << Location.create(name: "Wokring with Girl Effect in over 65 countries", slug: 'wokring_with_girl_effect_in_over', :location_type => :country)
 o.locations << Location.create(name: "Working in countries in Sub-Saharan Africa and South Africa", slug: 'working_in_countries_in_subsahar', :location_type => :country)
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
@@ -2821,7 +2821,7 @@ o.locations << Location.where(slug: 'indonesia').limit(1)[0]
 o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o = Organization.create(name: "Reboot", slug: "reboot", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://reboot.org/")
 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
 l = Location.create(name: "NYC, USA", slug: 'nyc_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'nyc_usa'")
 o.locations << l
@@ -2859,7 +2859,7 @@ o.locations << Location.where(slug: 'south_korea').limit(1)[0]
 o.locations << Location.where(slug: 'indonesia').limit(1)[0]
 o = Organization.create(name: "Relief Applications", slug: "relief_applications", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://reliefapplications.org")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "Madrid, Spain", slug: 'madrid_spain', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.4167754, -3.7037902) ] WHERE slug = 'madrid_spain'")
 o.locations << l
@@ -2885,18 +2885,18 @@ o.locations << Location.where(slug: 'thailand').limit(1)[0]
 o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o = Organization.create(name: "Resolve to Save Lives", slug: "resolve_to_save_lives", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "resolvetosavelives.org")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'nyc_usa').limit(1)[0]
 o = Organization.create(name: "RTI International", slug: "rti_international", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.rti.org/")
 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'workforce_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'food_security_and_agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'social_and_justice_poilcy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'innovation_ecosystem').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'workforce_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+o.sectors << Sector.where(slug: 'food_security_and_agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'social_and_justice_poilcy').limit(1)[0]
+o.sectors << Sector.where(slug: 'innovation_ecosystem').limit(1)[0]
 l = Location.create(name: "Research Triangle Park, NC, USA", slug: 'research_triangle_park_nc_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.8991678, -78.86364019999999) ] WHERE slug = 'research_triangle_park_nc_usa'")
 o.locations << l
@@ -2941,20 +2941,20 @@ o.locations << Location.where(slug: 'suriname').limit(1)[0]
 o.locations << Location.where(slug: 'uruguay').limit(1)[0]
 o = Organization.create(name: "Search for Common Ground", slug: "search_for_common_ground", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.sfcg.org")
 
-o.sectors << Sector.where(slug: 'conflict_sensativity').limit(1)[0] 
-o.sectors << Sector.where(slug: 'natural_resource_conflicts').limit(1)[0] 
-o.sectors << Sector.where(slug: 'disarmament').limit(1)[0] 
-o.sectors << Sector.where(slug: 'demobilization__reintegration').limit(1)[0] 
-o.sectors << Sector.where(slug: 'reconciliation').limit(1)[0] 
-o.sectors << Sector.where(slug: 'fair__responsibile_media').limit(1)[0] 
-o.sectors << Sector.where(slug: 'refugee__internal_displacement_i').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0] 
-o.sectors << Sector.where(slug: 'security_sector_reform').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'democracy__elections').limit(1)[0] 
-o.sectors << Sector.where(slug: 'sexual__gender_based_violence').limit(1)[0] 
-o.sectors << Sector.where(slug: 'religious_engagement').limit(1)[0] 
-o.sectors << Sector.where(slug: 'violent_exteremism').limit(1)[0] 
+o.sectors << Sector.where(slug: 'conflict_sensativity').limit(1)[0]
+o.sectors << Sector.where(slug: 'natural_resource_conflicts').limit(1)[0]
+o.sectors << Sector.where(slug: 'disarmament').limit(1)[0]
+o.sectors << Sector.where(slug: 'demobilization__reintegration').limit(1)[0]
+o.sectors << Sector.where(slug: 'reconciliation').limit(1)[0]
+o.sectors << Sector.where(slug: 'fair__responsibile_media').limit(1)[0]
+o.sectors << Sector.where(slug: 'refugee__internal_displacement_i').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0]
+o.sectors << Sector.where(slug: 'security_sector_reform').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'democracy__elections').limit(1)[0]
+o.sectors << Sector.where(slug: 'sexual__gender_based_violence').limit(1)[0]
+o.sectors << Sector.where(slug: 'religious_engagement').limit(1)[0]
+o.sectors << Sector.where(slug: 'violent_exteremism').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 l = Location.create(name: "Brussles, Belgium", slug: 'brussles_belgium', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussles_belgium'")
@@ -2996,14 +2996,14 @@ o.locations << Location.create(name: "Indoonesia", slug: 'indoonesia', :location
 o.locations << Location.create(name: "East Timor", slug: 'east_timor', :location_type => :country)
 o = Organization.create(name: "SlashRoots Foundation", slug: "slashroots_foundation", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.slashroots.org/#/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "Kingston, Jamaica", slug: 'kingston_jamaica', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (18.0178743, -76.8099041) ] WHERE slug = 'kingston_jamaica'")
 o.locations << l
 o.locations << Location.create(name: "The Caribbean", slug: 'the_caribbean', :location_type => :country)
 o = Organization.create(name: "SMART Resultancy", slug: "smart_resultancy", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.smartresultancy.nl/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o.locations << Location.where(slug: 'netherlands').limit(1)[0]
 o.locations << Location.where(slug: 'ghana').limit(1)[0]
 o.locations << Location.where(slug: 'mali').limit(1)[0]
@@ -3014,20 +3014,20 @@ o.locations << Location.where(slug: 'togo').limit(1)[0]
 o.locations << Location.create(name: "Uganda and Zambia.", slug: 'uganda_and_zambia', :location_type => :country)
 o = Organization.create(name: "Somali Disaster Resilience Institute (SDRI)", slug: "somali_disaster_resilience_insti", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.sdri.so/")
 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
 l = Location.create(name: "Mogadishu, Somalia", slug: 'mogadishu_somalia', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (2.0469343, 45.3181623) ] WHERE slug = 'mogadishu_somalia'")
 o.locations << l
 o.locations << Location.where(slug: 'somalia').limit(1)[0]
 o = Organization.create(name: "Souktel", slug: "souktel", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.souktel.org/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education__youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'democracy__governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic_growth__employment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0] 
-o.sectors << Sector.where(slug: 'women__gender_equality').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
+o.sectors << Sector.where(slug: 'education__youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'democracy__governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic_growth__employment').limit(1)[0]
+o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
+o.sectors << Sector.where(slug: 'women__gender_equality').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 l = Location.create(name: "Ramallah, Palestine", slug: 'ramallah_palestine', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (31.9037641, 35.2034184) ] WHERE slug = 'ramallah_palestine'")
@@ -3068,19 +3068,19 @@ o.locations << Location.where(slug: 'vanuatu').limit(1)[0]
 o.locations << Location.where(slug: 'yemen').limit(1)[0]
 o = Organization.create(name: "SurveyCTO", slug: "surveycto", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.surveycto.com/index.html")
 
-o.sectors << Sector.where(slug: 'data_collection').limit(1)[0] 
+o.sectors << Sector.where(slug: 'data_collection').limit(1)[0]
 o = Organization.create(name: "Swedish International Development Cooperation Agency (SIDA)", slug: "swedish_international_developmen", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.sida.se/English/")
 
-o.sectors << Sector.where(slug: 'humaitarian_aid').limit(1)[0] 
-o.sectors << Sector.where(slug: 'human_rights').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0] 
-o.sectors << Sector.where(slug: 'climate').limit(1)[0] 
-o.sectors << Sector.where(slug: 'helath').limit(1)[0] 
-o.sectors << Sector.where(slug: 'market_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture_and_food_security').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'sustainable_social_development').limit(1)[0] 
-o.sectors << Sector.where(slug: 'conflict_resolution__peace__secu').limit(1)[0] 
+o.sectors << Sector.where(slug: 'humaitarian_aid').limit(1)[0]
+o.sectors << Sector.where(slug: 'human_rights').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0]
+o.sectors << Sector.where(slug: 'climate').limit(1)[0]
+o.sectors << Sector.where(slug: 'helath').limit(1)[0]
+o.sectors << Sector.where(slug: 'market_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture_and_food_security').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'sustainable_social_development').limit(1)[0]
+o.sectors << Sector.where(slug: 'conflict_resolution__peace__secu').limit(1)[0]
 o.locations << Location.where(slug: 'stockholm_sweden').limit(1)[0]
 o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
 o.locations << Location.where(slug: 'dr_congo').limit(1)[0]
@@ -3121,10 +3121,10 @@ o.locations << Location.where(slug: 'cuba').limit(1)[0]
 o.locations << Location.where(slug: 'guatemala').limit(1)[0]
 o = Organization.create(name: "SweetSense, Inc.", slug: "sweetsense_inc", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.sweetsensors.com")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'sanitation').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'sanitation').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o.locations << Location.where(slug: 'rwanda').limit(1)[0]
 o.locations << Location.where(slug: 'uganda').limit(1)[0]
@@ -3133,7 +3133,7 @@ o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
 o.locations << Location.where(slug: 'us').limit(1)[0]
 o = Organization.create(name: "TechChange", slug: "techchange", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.techchange.org/")
 
-o.sectors << Sector.where(slug: 'education__training').limit(1)[0] 
+o.sectors << Sector.where(slug: 'education__training').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o = Organization.create(name: "TecSalud", slug: "tecsalud", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.tecsalud.io/")
 
@@ -3144,7 +3144,7 @@ o.locations << Location.where(slug: 'guatemala').limit(1)[0]
 o.locations << Location.where(slug: 'united_states').limit(1)[0]
 o = Organization.create(name: "Terre des Hommes", slug: "terre_des_hommes", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.ieda-project.org ")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Lausanne, 15 Avenue Montchoisi Lausanne 1006, Switzerland", slug: 'lausanne__avenue_montchoisi_laus', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.5134439, 6.6338339) ] WHERE slug = 'lausanne__avenue_montchoisi_laus'")
 o.locations << l
@@ -3188,11 +3188,11 @@ o.locations << Location.where(slug: 'togo').limit(1)[0]
 o.locations << Location.where(slug: 'ukraine').limit(1)[0]
 o = Organization.create(name: "Tetra Tech", slug: "tetra_tech", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.tetratech.com/")
 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'infrastructure').limit(1)[0] 
-o.sectors << Sector.where(slug: 'resource_marangement').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+o.sectors << Sector.where(slug: 'infrastructure').limit(1)[0]
+o.sectors << Sector.where(slug: 'resource_marangement').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
 o.locations << Location.create(name: "Africa (No Specific countries listed)", slug: 'africa_no_specific_countries_lis', :location_type => :country)
 o.locations << Location.where(slug: 'india').limit(1)[0]
 o.locations << Location.where(slug: 'korea').limit(1)[0]
@@ -3210,15 +3210,15 @@ o.locations << Location.where(slug: 'mexico').limit(1)[0]
 o.locations << Location.where(slug: 'uae').limit(1)[0]
 o = Organization.create(name: "The Swedish Program for ICT in Developing Regions (SPIDER)", slug: "the_swedish_program_for_ict_in_d", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://spidercenter.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'transparency__accountability').limit(1)[0] 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'transparency__accountability').limit(1)[0]
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 o.locations << Location.where(slug: 'cambodia').limit(1)[0]
 o.locations << Location.create(name: "East Africa", slug: 'east_africa', :location_type => :country)
 o = Organization.create(name: "Tropical Health and Education Trust (THET)", slug: "tropical_health_and_education_tr", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.thet.org")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 o.locations << Location.where(slug: 'london_uk').limit(1)[0]
 o.locations << Location.where(slug: 'myanmar').limit(1)[0]
 o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
@@ -3227,7 +3227,7 @@ o.locations << Location.where(slug: 'tanzania').limit(1)[0]
 o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o = Organization.create(name: "ThinkMD", slug: "thinkmd", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.thinkmd.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Burlington, VA, USA", slug: 'burlington_va_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (44.4758825, -73.21207199999999) ] WHERE slug = 'burlington_va_usa'")
 o.locations << l
@@ -3238,7 +3238,7 @@ o.locations << Location.where(slug: 'ecuador').limit(1)[0]
 o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
 o = Organization.create(name: "TolaData", slug: "toladata", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://toladata.com/")
 
-o.sectors << Sector.where(slug: 'software').limit(1)[0] 
+o.sectors << Sector.where(slug: 'software').limit(1)[0]
 l = Location.create(name: "Berlin, Germany", slug: 'berlin_germany', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (52.52000659999999, 13.404954) ] WHERE slug = 'berlin_germany'")
 o.locations << l
@@ -3248,10 +3248,10 @@ o = Organization.create(name: "UK Department for International Development (DFID
 o.locations << Location.create(name: "DOES NOT HAVE A REAL SITE", slug: 'does_not_have_a_real_site', :location_type => :country)
 o = Organization.create(name: "United Nations Children’s Fund (UNICEF)", slug: "united_nations_childrens_fund_un", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "https://www.unicef.org/")
 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0] 
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0]
 o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
 o.locations << Location.where(slug: 'albania').limit(1)[0]
 o.locations << Location.where(slug: 'algeria').limit(1)[0]
@@ -3446,29 +3446,29 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "UN Climate Change Secretariat", slug: "un_climate_change_secretariat", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "unfccc.int")
 
-o.sectors << Sector.where(slug: 'environment__cllimate_change').limit(1)[0] 
+o.sectors << Sector.where(slug: 'environment__cllimate_change').limit(1)[0]
 o.locations << Location.create(name: "Not Listed", slug: 'not_listed', :location_type => :country)
 o = Organization.create(name: "United Nations Development Programme (UNDP)", slug: "united_nations_development_progr", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.undp.org/en")
 
-o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0] 
-o.sectors << Sector.where(slug: 'crisis_response').limit(1)[0] 
-o.sectors << Sector.where(slug: 'development_impact').limit(1)[0] 
+o.sectors << Sector.where(slug: 'gender_equality').limit(1)[0]
+o.sectors << Sector.where(slug: 'crisis_response').limit(1)[0]
+o.sectors << Sector.where(slug: 'development_impact').limit(1)[0]
 o.locations << Location.create(name: "170 Countries", slug: '_countries', :location_type => :country)
 o.locations << Location.create(name: "not specified", slug: 'not_specified', :location_type => :country)
 o = Organization.create(name: "United Nations Foundation (UNF)", slug: "united_nations_foundation_unf", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.unfoundation.org")
 
-o.sectors << Sector.where(slug: 'energy__climate').limit(1)[0] 
-o.sectors << Sector.where(slug: 'global_health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'energy__climate').limit(1)[0]
+o.sectors << Sector.where(slug: 'global_health').limit(1)[0]
 l = Location.create(name: "DC", slug: 'dc', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.09024, -95.712891) ] WHERE slug = 'dc'")
 o.locations << l
 o = Organization.create(name: "United Nations Global Pulse", slug: "united_nations_global_pulse", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.unglobalpulse.org/")
 
-o.sectors << Sector.where(slug: 'big_data').limit(1)[0] 
+o.sectors << Sector.where(slug: 'big_data').limit(1)[0]
 o = Organization.create(name: "United Nations Office for the Coordination of Humanitarian Affairs (OCHA)", slug: "united_nations_office_for_the_co", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "https://www.unocha.org/")
 
-o.sectors << Sector.where(slug: 'humaitarian').limit(1)[0] 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'humaitarian').limit(1)[0]
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
 l = Location.create(name: "NYC", slug: 'nyc', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'nyc'")
 o.locations << l
@@ -3538,7 +3538,7 @@ o.locations << Location.where(slug: 'japan').limit(1)[0]
 o.locations << Location.where(slug: 'philippines').limit(1)[0]
 o = Organization.create(name: "United Nations Population Fund (UNFPA)", slug: "united_nations_population_fund_u", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.unfpa.org")
 
-o.sectors << Sector.where(slug: 'adolescent_and_youth_female_gent').limit(1)[0] 
+o.sectors << Sector.where(slug: 'adolescent_and_youth_female_gent').limit(1)[0]
 o.locations << Location.where(slug: 'us').limit(1)[0]
 o.locations << Location.where(slug: 'belgium').limit(1)[0]
 l = Location.create(name: "Denamrk", slug: 'denamrk', :location_type => :point)
@@ -3596,16 +3596,16 @@ o.locations << Location.where(slug: 'japan').limit(1)[0]
 o.locations << Location.create(name: "Figi", slug: 'figi', :location_type => :country)
 o = Organization.create(name: "United States Agency for International Development (USAID)", slug: "united_states_agency_for_interna", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "https://www.usaid.gov/")
 
-o.sectors << Sector.where(slug: 'agriculture_and_food_security').limit(1)[0] 
-o.sectors << Sector.where(slug: 'democracy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'human_rights_and_governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic_growth_and_trade').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment_and_global_climate_c').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender_equality_and_womens_empow').limit(1)[0] 
-o.sectors << Sector.where(slug: 'global_health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water_and_sanitation').limit(1)[0] 
-o.sectors << Sector.where(slug: 'working_in_crises_and_conflict').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture_and_food_security').limit(1)[0]
+o.sectors << Sector.where(slug: 'democracy').limit(1)[0]
+o.sectors << Sector.where(slug: 'human_rights_and_governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic_growth_and_trade').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment_and_global_climate_c').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender_equality_and_womens_empow').limit(1)[0]
+o.sectors << Sector.where(slug: 'global_health').limit(1)[0]
+o.sectors << Sector.where(slug: 'water_and_sanitation').limit(1)[0]
+o.sectors << Sector.where(slug: 'working_in_crises_and_conflict').limit(1)[0]
 o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
 o.locations << Location.where(slug: 'albania').limit(1)[0]
 o.locations << Location.where(slug: 'angola').limit(1)[0]
@@ -3709,7 +3709,7 @@ o.locations << Location.create(name: " | Jordan", slug: '__jordan', :location_ty
 o.locations << Location.create(name: " | Egypt", slug: '__egypt', :location_type => :country)
 o = Organization.create(name: "VillageReach", slug: "villagereach", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.villagereach.org/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Seattle, WA, USA", slug: 'seattle_wa_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.6062095, -122.3320708) ] WHERE slug = 'seattle_wa_usa'")
 o.locations << l
@@ -3729,14 +3729,14 @@ o.locations << Location.where(slug: 'togo').limit(1)[0]
 o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o = Organization.create(name: "VitalWave", slug: "vitalwave", when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.vitalwave.com")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
-o.sectors << Sector.where(slug: 'finacial_services').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
+o.sectors << Sector.where(slug: 'finacial_services').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "Paolo Alto, CA, USA", slug: 'paolo_alto_ca_usa', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.4418834, -122.1430195) ] WHERE slug = 'paolo_alto_ca_usa'")
 o.locations << l
@@ -3761,7 +3761,7 @@ o.locations << Location.where(slug: 'europe').limit(1)[0]
 o.locations << Location.create(name: "Latin America: All countries were not listed)", slug: 'latin_america_all_countries_were', :location_type => :country)
 o = Organization.create(name: "VOTO Mobile", slug: "voto_mobile", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.votomobile.org/")
 
-o.sectors << Sector.where(slug: 'ictd').limit(1)[0] 
+o.sectors << Sector.where(slug: 'ictd').limit(1)[0]
 l = Location.create(name: "Current Offices:", slug: 'current_offices', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (36.8506952, -95.63566569999999) ] WHERE slug = 'current_offices'")
 o.locations << l
@@ -3771,14 +3771,14 @@ o.locations << l
 o.locations << Location.create(name: "All Countries", slug: 'all_countries', :location_type => :country)
 o = Organization.create(name: "Welthungerhilfe", slug: "welthungerhilfe", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.welthungerhilfe.de")
 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
-o.sectors << Sector.where(slug: 'nutrition').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
-o.sectors << Sector.where(slug: 'sanitation').limit(1)[0] 
-o.sectors << Sector.where(slug: 'economic').limit(1)[0] 
-o.sectors << Sector.where(slug: 'advocacy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'refugees').limit(1)[0] 
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+o.sectors << Sector.where(slug: 'nutrition').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
+o.sectors << Sector.where(slug: 'sanitation').limit(1)[0]
+o.sectors << Sector.where(slug: 'economic').limit(1)[0]
+o.sectors << Sector.where(slug: 'advocacy').limit(1)[0]
+o.sectors << Sector.where(slug: 'refugees').limit(1)[0]
 l = Location.create(name: "Germany (maybe)", slug: 'germany_maybe', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.165691, 10.451526) ] WHERE slug = 'germany_maybe'")
 o.locations << l
@@ -3817,7 +3817,7 @@ o.locations << Location.where(slug: 'north_korea').limit(1)[0]
 o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
 o = Organization.create(name: "World Agroforestry Center (ICRAF)", slug: "world_agroforestry_center_icraf", when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://worldagroforestry.org/")
 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
 o.locations << Location.where(slug: 'kenya').limit(1)[0]
 o.locations << Location.where(slug: 'angola').limit(1)[0]
 o.locations << Location.where(slug: 'burundi').limit(1)[0]
@@ -3854,14 +3854,14 @@ o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 o.locations << Location.where(slug: 'thailand').limit(1)[0]
 o = Organization.create(name: "World Bank", slug: "world_bank", when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.worldbank.org/")
 
-o.sectors << Sector.where(slug: 'finance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'gender').limit(1)[0] 
-o.sectors << Sector.where(slug: 'governance').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'water').limit(1)[0] 
-o.sectors << Sector.where(slug: 'agriculture').limit(1)[0] 
-o.sectors << Sector.where(slug: 'energy').limit(1)[0] 
-o.sectors << Sector.where(slug: 'environment').limit(1)[0] 
+o.sectors << Sector.where(slug: 'finance').limit(1)[0]
+o.sectors << Sector.where(slug: 'gender').limit(1)[0]
+o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'water').limit(1)[0]
+o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+o.sectors << Sector.where(slug: 'environment').limit(1)[0]
 o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
 o.locations << Location.where(slug: 'albania').limit(1)[0]
@@ -4041,8 +4041,8 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "World Food Programme (WFP)", slug: "world_food_programme_wfp", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www1.wfp.org/")
 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
-o.sectors << Sector.where(slug: 'food_assistance').limit(1)[0] 
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
+o.sectors << Sector.where(slug: 'food_assistance').limit(1)[0]
 l = Location.create(name: "Rome, Italy", slug: 'rome_italy', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (41.9027835, 12.4963655) ] WHERE slug = 'rome_italy'")
 o.locations << l
@@ -4132,7 +4132,7 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "World Health Organization (WHO)", slug: "world_health_organization_who", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.who.int/en/")
 
-o.sectors << Sector.where(slug: 'health').limit(1)[0] 
+o.sectors << Sector.where(slug: 'health').limit(1)[0]
 l = Location.create(name: "Geneva", slug: 'geneva', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.2043907, 6.1431577) ] WHERE slug = 'geneva'")
 o.locations << l
@@ -4333,9 +4333,9 @@ o.locations << Location.where(slug: 'zambia').limit(1)[0]
 o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 o = Organization.create(name: "World Vision International", slug: "world_vision_international", when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.wvi.org/")
 
-o.sectors << Sector.where(slug: 'youth').limit(1)[0] 
-o.sectors << Sector.where(slug: 'education').limit(1)[0] 
-o.sectors << Sector.where(slug: 'emergency').limit(1)[0] 
+o.sectors << Sector.where(slug: 'youth').limit(1)[0]
+o.sectors << Sector.where(slug: 'education').limit(1)[0]
+o.sectors << Sector.where(slug: 'emergency').limit(1)[0]
 o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
 o.locations << Location.where(slug: 'cambodia').limit(1)[0]
 o.locations << Location.where(slug: 'china').limit(1)[0]
@@ -4372,4 +4372,3 @@ f = File.join(Rails.root, 'db', 'contacts.rb')
 if File.exists?(f)
   load f
 end
-

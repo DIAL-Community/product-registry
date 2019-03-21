@@ -1,0 +1,33 @@
+<div id="header-outer">
+  <div id="header-widget">
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-light fixed-top bg-white">
+        <a class="navbar-brand" href="#">
+          <%= image_tag "logo-dial.png", :alt => "DIAL Logo", :width => "199px", :height => "124px" %>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <%= link_to 'Organization', organizations_path, :class => 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Contacts', contacts_path, :class => 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Sectors', sectors_path, :class => 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Locations', locations_path, :class => 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Products', products_path, :class => 'nav-link' %>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>

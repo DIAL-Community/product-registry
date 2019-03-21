@@ -1,12 +1,18 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Contacts</h1>
+<div class="float-right" style="padding-bottom: 1rem; ">
+  <%= form_tag(contacts_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search contacts ...", :class => "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag "Search", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+</div>
 
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-light">
     <tr>
       <th>Name</th>
-      <th>Slug</th>
       <th>Email</th>
       <th>Title</th>
       <th colspan="3"></th>
@@ -14,20 +20,32 @@
   </thead>
 
   <tbody>
-    <% @contacts.each do |contact| %>
+    <% if @contacts.count > 0 %>
+      <% @contacts.each do |contact| %>
+        <tr>
+          <td><%= contact.name %></td>
+          <td><%= contact.email %></td>
+          <td><%= contact.title %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'Show', contact, :class =>"dropdown-item"  %>
+              <%= link_to 'Edit', edit_contact_path(contact), :class =>"dropdown-item"  %>
+              <div class="dropdown-divider"></div>
+              <%= link_to 'Destroy', contact, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
       <tr>
-        <td><%= contact.name %></td>
-        <td><%= contact.slug %></td>
-        <td><%= contact.email %></td>
-        <td><%= contact.title %></td>
-        <td><%= link_to 'Show', contact %></td>
-        <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
-        <td><%= link_to 'Destroy', contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td colspan="4">
+          <small class="text-muted">
+            We couldn't find anyone matching to the search phrase. Do you want to <%= link_to 'create new contact?', new_contact_path %>
+          </small>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Contact', new_contact_path %>
+<%= will_paginate @contacts, :class => "apple-pagination" %>

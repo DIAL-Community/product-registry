@@ -1,24 +1,13 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @contact.name %>
-</p>
-
-<p>
-  <strong>Slug:</strong>
-  <%= @contact.slug %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @contact.email %>
-</p>
-
-<p>
-  <strong>Title:</strong>
-  <%= @contact.title %>
-</p>
-
-<%= link_to 'Edit', edit_contact_path(@contact) %> |
-<%= link_to 'Back', contacts_path %>
+<div class="card">
+  <h5 class="card-header"><%= @contact.name %></h5>
+  <div class="card-body">
+    <h6 class="card-subtitle text-muted mb-2"><%= @contact.email %></h6>
+    <% if @contact.title %>
+      <p class="card-text"><%= @contact.title %></p>
+    <% end %>
+    <%= link_to 'Back', contacts_path, :class => "card-link float-left" %>
+    <%= link_to 'Edit', edit_contact_path(@contact), :class => "card-link float-right" %>
+  </div>
+</div>

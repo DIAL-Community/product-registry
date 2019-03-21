@@ -1,17 +1,25 @@
 class OrganizationsController < ApplicationController
-  before_action :authenticate_user!, only: [:edit, :update, :destroy]
+  # before_action :authenticate_user!, only: [:edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
-  before_action :set_relations, only: [:edit]
+  # before_action :set_relations, only: [:edit]
 
   # GET /organizations
   # GET /organizations.json
   def index
-    if params[:include_locations]
-      @organizations = Organization.eager_load(:locations)
-      @include_locations = true
-    else
+    if params[:without_paging]
       @organizations = Organization.all
-      @include_locations = false
+      return
+    end
+    if params[:search]
+      @organizations = Organization
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    else
+      @organizations = Organization
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
     end
   end
 
@@ -32,7 +40,12 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
+
     @organization = Organization.new(organization_params)
+    params[:selected_sector].keys.each do |sector_id|
+      @sector = Sector.find(sector_id)
+      @organization.sectors.push(@sector)
+    end
 
     respond_to do |format|
       if @organization.save
@@ -48,6 +61,12 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
+    @organization.sectors.clear();
+    params[:selected_sector].keys.each do |sector_id|
+      @sector = Sector.find(sector_id)
+      @organization.sectors.push(@sector)
+    end
+
     respond_to do |format|
       if @organization.update(organization_params)
         format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
@@ -81,6 +100,11 @@ class OrganizationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
-      params.require(:organization).permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
+      params
+        .require(:organization)
+        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors)
+        .tap do |attr|
+          attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+        end
     end
 end

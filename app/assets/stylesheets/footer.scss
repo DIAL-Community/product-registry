@@ -1,0 +1,43 @@
+#footer-outer {
+  background-color: #214d63;
+  color: #fff;
+  font-size: 14px;
+  z-index: 10;
+
+  a {
+    color: #fbab18;
+  }
+
+  h4 {
+    color: #ffb743;
+    font-size: 18px;
+    font-family: 'Arial';
+    margin-bottom: 2px;
+  }
+
+  .widget {
+    border-left: 1px solid #4d7b92;
+    min-height: 125px;
+    padding-left: 15px;
+    line-height: 18px;
+  }
+
+  #copyright {
+    background-color: #193a4a;
+    padding: 20px 0;
+
+    p {
+      line-height: 24px;
+      margin-top: 3px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  .row {
+    padding: 30px 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

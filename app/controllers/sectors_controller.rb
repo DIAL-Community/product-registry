@@ -4,7 +4,24 @@ class SectorsController < ApplicationController
   # GET /sectors
   # GET /sectors.json
   def index
-    @sectors = Sector.all
+    if params[:without_paging]
+      @sectors = Sector
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
+    if params[:search]
+      @sectors = Sector
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    else
+      @sectors = Sector
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    end
   end
 
   # GET /sectors/1

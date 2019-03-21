@@ -25,7 +25,7 @@ mapObject.clickHandler = function(evt) {
     mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
       mapObject.countryLayer.getSource().removeFeature(feature);
     });
-    $(element).popover('destroy');
+    $(element).popover('dispose');
     $(element).popover({
       placement: 'top',
       animation: false,

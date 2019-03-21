@@ -1,27 +1,29 @@
-<%= form_with(model: location, local: true) do |form| %>
-  <% if location.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(location.errors.count, "error") %> prohibited this location from being saved:</h2>
+<div class="card-body">
+  <%= form_with(model: location, local: true) do |form| %>
+    <% if location.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(location.errors.count, "error") %> prohibited this location from being saved:</h2>
+        <ul>
+        <% location.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-      <ul>
-      <% location.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+    <fieldset class="form-label-group">
+      <%= form.text_field :name, id: :location_name, :class => "form-control", :placeholder => "Name" %>
+      <%= form.label :name %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :slug, id: :location_slug, :class => "form-control", :placeholder => "Slug"  %>
+      <%= form.label :slug %>
+    </fieldset>
+
+    <fieldset class="float-right">
+      <%= form.submit 'Submit', :class => "btn btn-primary" %>
+      <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
   <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :location_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :slug %>
-    <%= form.text_field :slug, id: :location_slug %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

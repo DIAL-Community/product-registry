@@ -4,7 +4,17 @@ class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.all
+    if params[:search]
+      @locations = Location
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    else
+      @locations = Location
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    end
   end
 
   # GET /locations/1

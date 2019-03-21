@@ -1,29 +1,70 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <div class="card">
+    <h5 class="card-header">
+      <%= @organization.name %>
+      <% if @organization.is_endorser %>
+        <i class="fas fa-check-square" style="color: #28a745; margin-left: 0.5rem;"></i>
+      <% end %>
+    </h5>
+    <div class="card-body">
+      <p class="card-text">
+        <strong>Endorsed on:</strong>
+        <%= @organization.when_endorsed.strftime("%m/%d/%Y") %>.
+      </p>
+      <p class="card-text">
+        <strong>Website:</strong>
+        <%= @organization.website.downcase.strip %>
+      </p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @organization.name %>
-</p>
+      <% if @organization.sectors.count > 0 %>
+        <p class="card-text">
+          <strong>Sectors: </strong>
+          <ul>
+          <% @organization.sectors.each do |sector| %>
+            <li><%= sector.name %></li>
+          <% end %>
+          </ul>
+        </p>
+      <% end %>
 
-<p>
-  <strong>Slug:</strong>
-  <%= @organization.slug %>
-</p>
+      <p>
+        <%= link_to 'Back', organizations_path, :class => "card-link float-left" %>
+        <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link float-right" %>
+      </p>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>When endorsed:</strong>
-  <%= @organization.when_endorsed %>
-</p>
+<br/>
 
-<p>
-  <strong>Website:</strong>
-  <%= @organization.website %>
-</p>
+<div class="container">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Contacts</h5>
+      <%= link_to 'Add', new_contact_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @organization.contacts.count > 0 %>
+        <div class="card-columns">
+        <% @organization.contacts.each do |contact| %>
+          <div class="card" style="width: 30rem;">
+            <div class="card-body">
+              <h5 class="card-title"><%= contact.name %></h5>
+              <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
+              <% if contact.title %>
+                <p class="card-text"><%= contact.title %></p>
+              <% end %>
+              <%= link_to 'Edit', edit_contact_path(contact), :class => "card-link float-right" %>
+            </div>
+          </div>
+        <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Is endorser:</strong>
-  <%= @organization.is_endorser %>
-</p>
-
-<%= link_to 'Edit', edit_organization_path(@organization) %> |
-<%= link_to 'Back', organizations_path %>
+  <!-- # In the show organization, we will show list of contacts for that organization. # * Display contact information (maybe just the basic info?). # * Add link to edit or delete the contact. # * Editing a contact will take them to the contact edit
+  form. # * Add link to add new contact which will take them to the contact add form. # Do the same for sectors, locations and products. -->
