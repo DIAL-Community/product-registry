@@ -3,7 +3,7 @@ function remove(self) {
   $(baseCard).remove();
 }
 
-$('document').ready(function() {
+var ready = function() {
   if ($('#organization_sectors_selector').length) {
     $.getJSON('/sectors.json', function(sectors) {
       var selector = $('#organization_sectors_selector');
@@ -40,10 +40,15 @@ $('document').ready(function() {
         $(copy).attr("data-value", ui.item.value);
         $(copy).attr("data-label", ui.item.label);
         $(copy).find("p").text(ui.item.label);
+        $(copy).find("input").val(ui.item.value);
         $(copy).appendTo($("#base-selected-sectors").parent());
         $(copy).show();
-        $(this).val('')
+        $(this).val("")
         return false;
       }
     });
-});
+};
+
+$(document).ready(ready)
+$(document).on('page:load', ready)
+$(document).on('turbolinks:load', ready)
