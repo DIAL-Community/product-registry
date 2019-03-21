@@ -22,7 +22,7 @@ function addSector(value, label) {
   $(copy).removeAttr("id");
 
   // Display the value of the selection.
-  $(copy).find("p").text(label);
+  $(copy).find("p").html(label);
 
   // Find the hidden input element and assign some values to it.
   // Make sure:
