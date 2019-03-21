@@ -8,7 +8,6 @@ class OrganizationsController < ApplicationController
   def index
     if params[:without_paging]
       @organizations = Organization.all
-      @include_locations = true
       return
     end
     if params[:search]
@@ -32,6 +31,7 @@ class OrganizationsController < ApplicationController
   # GET /organizations/new
   def new
     @organization = Organization.new
+    @organization.sectors.build
   end
 
   # GET /organizations/1/edit
@@ -41,6 +41,10 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
+    puts "***PARAMS"
+    puts params
+    puts "PARAMS***"
+
     @organization = Organization.new(organization_params)
 
     respond_to do |format|
@@ -88,18 +92,13 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find(params[:id])
     end
 
-    def filtering_params(params)
-      params.slice(:starts_with)
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
-      console
       params
         .require(:organization)
-        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
+        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors)
         .tap do |attr|
-          attr[:when_endorsed] = Date.parse(attr[:when_endorsed], "%m/%d/%Y")
+          attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
         end
     end
 end

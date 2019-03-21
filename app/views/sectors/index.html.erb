@@ -1,14 +1,14 @@
 <p id="notice"><%= notice %></p>
 
-<div class="float-right" style="padding-bottom: 1rem; ">
-  <%= form_tag(sectors_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search sectors ...", :class => "form-control" %>
-  <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-primary" %>
+  <div class="form-group float-right">
+    <%= form_tag(sectors_path, :method => "get", id: "search-form", class: "form-inline") do %>
+      <%= text_field_tag :search, params[:search], placeholder: "Search sectors ...", :class => "form-control" %>
+      <div class="input-group-append">
+        <%= submit_tag "Search", :class => "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
-</div>
-
+  
 <table class="table">
   <thead class="thead-light">
     <tr>

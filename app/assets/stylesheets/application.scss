@@ -15,10 +15,10 @@
  *= require_tree .
  *= require_self
  */
-
 @import 'bootstrap';
 
-html, body {
+body,
+html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -27,4 +27,14 @@ html, body {
 #content {
   flex: 1;
   padding-bottom: 1rem;
+}
+
+.form-inline {
+  .form-control {
+    width: auto;
+  }
+
+  .form-group {
+    display: inline-block;
+  }
 }

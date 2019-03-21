@@ -3,6 +3,21 @@ function remove(self) {
   $(baseCard).remove();
 }
 
+function addSector(value, label) {
+
+  var copy = $("#base-selected-sectors").clone();
+  $(copy).removeAttr("id");
+  $(copy).attr("data-id", "selected-sectors");
+  $(copy).find("p").text(label);
+
+  var input = $(copy).find("input");
+  $(input).attr("name", "selected_sector[" + value + "]");
+  $(input).val(value);
+
+  $(copy).appendTo($("#base-selected-sectors").parent());
+  $(copy).show();
+}
+
 var ready = function() {
   if ($('#organization_sectors_selector').length) {
     $.getJSON('/sectors.json', function(sectors) {
@@ -16,7 +31,7 @@ var ready = function() {
   $('#base-selected-sectors').hide();
   $('#organization_when_endorsed').datepicker();
 
-  $("#organization_sectors")
+  $("#sector-search")
     .autocomplete({
       source: function(request, response) {
         $.getJSON(
@@ -34,15 +49,7 @@ var ready = function() {
         );
       },
       select: function(event, ui) {
-        var copy = $("#base-selected-sectors").clone();
-        $(copy).removeAttr("id");
-        $(copy).attr("data-id", "selected-sectors");
-        $(copy).attr("data-value", ui.item.value);
-        $(copy).attr("data-label", ui.item.label);
-        $(copy).find("p").text(ui.item.label);
-        $(copy).find("input").val(ui.item.value);
-        $(copy).appendTo($("#base-selected-sectors").parent());
-        $(copy).show();
+        addSector(ui.item.value, ui.item.label)
         $(this).val("")
         return false;
       }
