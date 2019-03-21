@@ -41,10 +41,6 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
-    puts "***PARAMS"
-    puts params
-    puts "PARAMS***"
-
     @organization = Organization.new(organization_params)
 
     respond_to do |format|
