@@ -146,6 +146,7 @@ var ready = function() {
   // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
   $("#office").empty();
+  console.log("Setting office map ...");
   map = new ol.Map({
     target: "office",
     layers: [
@@ -156,7 +157,7 @@ var ready = function() {
     ],
     view: new ol.View({
       center: markerCoordinate ? markerCoordinate : [0, 0],
-      zoom: 8
+      zoom: 12
     })
   });
 };
