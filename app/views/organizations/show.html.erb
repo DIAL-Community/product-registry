@@ -16,16 +16,7 @@
         <%= @organization.website.downcase.strip %>
       </p>
 
-      <% if @organization.sectors.count > 0 %>
-        <p class="card-text">
-          <strong>Sectors: </strong>
-          <ul>
-          <% @organization.sectors.each do |sector| %>
-            <li><%= sector.name %></li>
-          <% end %>
-          </ul>
-        </p>
-      <% end %>
+      <div id="office" style="width: 400px; height: 250px;"></div>
 
       <p>
         <%= link_to 'Back', organizations_path, :class => "card-link float-left" %>
@@ -47,7 +38,7 @@
       <% if @organization.contacts.count > 0 %>
         <div class="card-columns">
         <% @organization.contacts.each do |contact| %>
-          <div class="card" style="width: 30rem;">
+          <div class="card">
             <div class="card-body">
               <h5 class="card-title"><%= contact.name %></h5>
               <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
@@ -66,5 +57,39 @@
   </div>
 </div>
 
-  <!-- # In the show organization, we will show list of contacts for that organization. # * Display contact information (maybe just the basic info?). # * Add link to edit or delete the contact. # * Editing a contact will take them to the contact edit
-  form. # * Add link to add new contact which will take them to the contact add form. # Do the same for sectors, locations and products. -->
+<br/>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Sectors</h5>
+      <%= link_to 'Add', new_sector_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @organization.sectors.count > 0 %>
+        <div class="card-columns">
+        <% @organization.sectors.each do |sector| %>
+          <div class="card">
+            <div class="card-body">
+              <p class="card-subtitle text-muted"><%= sector.name %></p>
+              <%= link_to 'Edit', edit_sector_path(sector), :class => "card-link float-right" %>
+            </div>
+          </div>
+        <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  <%
+    office = @organization.locations.find{|location| location.location_type == 'point'}
+    if (office)
+  %>
+    setMarker('<%= @organization.name %>', '<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
+  <% end %>
+</script>

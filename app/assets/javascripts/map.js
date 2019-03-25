@@ -67,6 +67,8 @@ var mapObject = {
 
   initMap : function() {
 
+    $("#map").empty();
+
     mapObject.YearSelectorControl.prototype = Object.create(ol.control.Control.prototype);
     mapObject.YearSelectorControl.prototype.constructor = mapObject.YearSelectorControl;
 

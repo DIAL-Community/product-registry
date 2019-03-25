@@ -1,9 +1,75 @@
 /*
+ * Global variables
+ */
+var map;
+
+var markerLayer = new ol.layer.Vector({
+  source: new ol.source.Vector(),
+  style: new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [11, 29],
+      anchorXUnits: 'pixels',
+      anchorYUnits: 'pixels',
+      opacity: 1,
+      src: '/assets/marker.png'
+    })
+  })
+});
+
+var countryLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: '/assets/countries.geojson',
+    format: new ol.format.GeoJSON()
+  }),
+  style: function(feature) {
+    return new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: 'rgba(45,115,199, 0.5)',
+      }),
+      stroke: new ol.style.Stroke({
+        color: 'rgba(45,115,199, 1.0)',
+        width: 2
+      }),
+      text: new ol.style.Text({
+        font: '12px Calibri,sans-serif',
+        fill: new ol.style.Fill({
+          color: '#fff'
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#000',
+          width: 3
+        }),
+        text: feature.get('name')
+      })
+    });
+  }
+});
+
+function setMapCenter(lon, lat) {
+  if (typeof map !== "undefined") {
+    map.getView().setCenter(ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'));
+  } else {
+    setTimeout(function() { setMapCenter(lon, lat); }, 500);
+  }
+}
+
+function setMarker(name, lon, lat) {
+  if (typeof map !== "undefined") {
+    var iconFeature = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
+      name: name
+    });
+    markerLayer.getSource().addFeature(iconFeature);
+  } else {
+    setTimeout(function() { setMarker(name, lon, lat); }, 500);
+  }
+}
+
+/*
  * The function to remove grandparent element from the DOM. This will be called
  * when the user click on the delete button on the tag like object. In the future
  * this will be called on sectors, locations, and contacts.
  */
-
 function remove(self) {
   var baseCard = $(self).parent().parent();
   $(baseCard).remove();
@@ -46,31 +112,46 @@ var ready = function() {
   $('#base-selected-sectors').hide();
 
   // Init the autocomplete for the sector field.
-  $("#sector-search")
-    .autocomplete({
-      source: function(request, response) {
-        $.getJSON(
-          "/sectors.json?without_paging=true", {
-            search: request.term
-          },
-          function(sectors) {
-            response($.map(sectors, function(sector) {
-              return {
-                id: sector.id,
-                label: sector.name,
-                value: sector.name
-              }
-            }));
-          }
-        );
-      },
-      select: function(event, ui) {
-        addSector(ui.item.id, ui.item.label)
-        $(this).val("")
-        return false;
-      }
-    });
+  $("#sector-search").autocomplete({
+    source: function(request, response) {
+      $.getJSON(
+        "/sectors.json?without_paging=true", {
+          search: request.term
+        },
+        function(sectors) {
+          response($.map(sectors, function(sector) {
+            return {
+              id: sector.id,
+              label: sector.name,
+              value: sector.name
+            }
+          }));
+        }
+      );
+    },
+    select: function(event, ui) {
+      addSector(ui.item.id, ui.item.label)
+      $(this).val("")
+      return false;
+    }
+  });
+
+  // Clean the map holder.
+  // Might need to find another way to prevent duplicate maps.
+  $("#office").empty();
+  map = new ol.Map({
+    target: "office",
+    layers: [
+      countryLayer,
+      markerLayer
+    ],
+    view: new ol.View({
+      center: [-250823.8521410053, -4661737.097295996],
+      zoom: 2
+    })
+  });
 };
+
 
 // Attach all of them to the browser, page, and turbolinks event.
 $(document).ready(ready)
