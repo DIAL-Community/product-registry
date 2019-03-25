@@ -16,11 +16,13 @@
         <%= @organization.website.downcase.strip %>
       </p>
 
-      <div id="office" style="width: 400px; height: 250px;"></div>
+      <% if @organization.locations.find{|location| location.location_type == 'point'} %>
+        <div id="office" style="max-width: 42rem; max-height: 28rem;"></div>
+      <% end %>
 
-      <p>
-        <%= link_to 'Back', organizations_path, :class => "card-link float-left" %>
-        <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link float-right" %>
+      <p class="float-right" >
+        <%= link_to 'Back', organizations_path, :class => "card-link" %>
+        <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
       </p>
     </div>
   </div>
@@ -90,6 +92,7 @@
     office = @organization.locations.find{|location| location.location_type == 'point'}
     if (office)
   %>
+    setMapCenter('<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
     setMarker('<%= @organization.name %>', '<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
   <% end %>
 </script>

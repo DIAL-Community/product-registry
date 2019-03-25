@@ -2,6 +2,7 @@
  * Global variables
  */
 var map;
+var markerCoordinate;
 
 var markerLayer = new ol.layer.Vector({
   source: new ol.source.Vector(),
@@ -46,22 +47,28 @@ var countryLayer = new ol.layer.Vector({
 });
 
 function setMapCenter(lon, lat) {
-  if (typeof map !== "undefined") {
-    map.getView().setCenter(ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'));
-  } else {
-    setTimeout(function() { setMapCenter(lon, lat); }, 500);
+  if (typeof map === "undefined" || typeof map.getView() === "undefined") {
+    setTimeout(function() {
+      setMapCenter(lon, lat);
+    }, 500);
+    return;
   }
+
+  markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
+  map.getView().setCenter(markerCoordinate);
 }
 
 function setMarker(name, lon, lat) {
   if (typeof map !== "undefined") {
+    markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857')),
-      name: name
+      geometry: new ol.geom.Point(markerCoordinate)
     });
     markerLayer.getSource().addFeature(iconFeature);
   } else {
-    setTimeout(function() { setMarker(name, lon, lat); }, 500);
+    setTimeout(function() {
+      setMarker(name, lon, lat);
+    }, 500);
   }
 }
 
@@ -142,12 +149,14 @@ var ready = function() {
   map = new ol.Map({
     target: "office",
     layers: [
-      countryLayer,
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      }),
       markerLayer
     ],
     view: new ol.View({
-      center: [-250823.8521410053, -4661737.097295996],
-      zoom: 2
+      center: markerCoordinate ? markerCoordinate : [0, 0],
+      zoom: 8
     })
   });
 };
