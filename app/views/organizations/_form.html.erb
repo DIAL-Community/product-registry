@@ -25,7 +25,7 @@
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :when_endorsed, value: organization.when_endorsed.strftime("%m/%d/%Y"), id: :organization_when_endorsed, :class => "form-control data-date", :placeholder => "When endorsed" %>
+    <%= form.text_field :when_endorsed, :value => organization.when_endorsed.blank? ? '' : organization.when_endorsed.strftime("%m/%d/%Y"), id: :organization_when_endorsed, :class => "form-control data-date", :placeholder => "When endorsed" %>
     <%= form.label :when_endorsed %>
   </fieldset>
 
