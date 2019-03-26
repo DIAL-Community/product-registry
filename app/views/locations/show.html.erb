@@ -1,12 +1,43 @@
 <p id="notice"><%= notice %></p>
 
-<div class="card">
-  <h5 class="card-header"><%= @location.name %></h5>
-  <div class="card-body">
-    <h6 class="card-subtitle text-muted mb-2">
-      <strong>Slug: </strong><%= @location.slug %>
-    </h6>
-    <%= link_to 'Back', locations_path, :class => "card-link float-left" %>
-    <%= link_to 'Edit', edit_location_path(@location), :class => "card-link float-right" %>
+<div class="container">
+  <div class="card">
+    <h5 class="card-header"><%= @location.name %></h5>
+    <div class="card-body">
+      <h6 class="card-subtitle text-muted mb-2">
+        <strong>Slug:
+        </strong><%= @location.slug %>
+      </h6>
+      <%= link_to 'Back', locations_path, :class => "card-link float-left" %>
+      <%= link_to 'Edit', edit_location_path(@location), :class => "card-link float-right" %>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Organization</h5>
+      <%= link_to 'Add', new_organization_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @location.organizations.count > 0 %>
+        <div class="card-columns">
+          <% @location.organizations.each do |organization| %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to organization.name, organization %></h5>
+                <h6 class="card-subtitle text-muted mb-2"><%= organization.website %></h6>
+                <%= link_to 'Edit', edit_organization_path(organization), :class => "card-link float-right mb-2" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+      <% end %>
+    </div>
   </div>
 </div>

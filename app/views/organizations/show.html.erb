@@ -45,7 +45,7 @@
         <% @organization.contacts.each do |contact| %>
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title"><%= contact.name %></h5>
+              <h5 class="card-title"><%= link_to contact.name, contact %></h5>
               <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
               <% if contact.title %>
                 <p class="card-text"><%= contact.title %></p>
@@ -76,8 +76,8 @@
         <% @organization.sectors.each do |sector| %>
           <div class="card">
             <div class="card-body d-flex">
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= sector.name %></p>
-              <%= link_to 'Edit', edit_sector_path(sector), :class => "card-link float-right" %>
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to sector.name, sector %></p>
+              <small><%= link_to 'Edit', edit_sector_path(sector), :class => "card-link float-right" %></small>
             </div>
           </div>
         <% end %>
@@ -103,8 +103,8 @@
         <% @organization.locations.select{|location| location.location_type != 'point'}.each do |country| %>
           <div class="card">
             <div class="card-body d-flex">
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= country.name %></p>
-              <%= link_to 'Edit', edit_location_path(country), :class => "card-link float-right" %>
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to country.name, country %></p>
+              <small><%= link_to 'Edit', edit_location_path(country), :class => "card-link float-right" %></small>
             </div>
           </div>
         <% end %>
@@ -122,6 +122,10 @@
     office = @organization.locations.find{|location| location.location_type == 'point'}
     if (office)
   %>
-    setOfficeMarker('<%= @organization.name %>', '<%= office.name %>', '<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
+    function updateMapMarker() {
+      setOfficeMarker('<%= @organization.name %>', '<%= office.name %>', '<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
+    }
+
+    $(document).on('turbolinks:load', updateMapMarker)
   <% end %>
 </script>

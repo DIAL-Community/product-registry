@@ -3,10 +3,17 @@
  */
 var map;
 var tooltip;
+var feature;
 var markerCoordinate;
 
+feature = new ol.Feature({
+  name: "Organization Marker"
+})
+
 var markerLayer = new ol.layer.Vector({
-  source: new ol.source.Vector(),
+  source: new ol.source.Vector({
+    features: [feature]
+  }),
   style: new ol.style.Style({
     image: new ol.style.Icon({
       anchor: [11, 29],
@@ -15,49 +22,21 @@ var markerLayer = new ol.layer.Vector({
       opacity: 1,
       src: '/assets/marker.png'
     })
-  })
-});
-
-var countryLayer = new ol.layer.Vector({
-  source: new ol.source.Vector({
-    url: '/assets/countries.geojson',
-    format: new ol.format.GeoJSON()
   }),
-  style: function(feature) {
-    return new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(45,115,199, 0.5)',
-      }),
-      stroke: new ol.style.Stroke({
-        color: 'rgba(45,115,199, 1.0)',
-        width: 2
-      }),
-      text: new ol.style.Text({
-        font: '12px Calibri,sans-serif',
-        fill: new ol.style.Fill({
-          color: '#fff'
-        }),
-        stroke: new ol.style.Stroke({
-          color: '#000',
-          width: 3
-        }),
-        text: feature.get('name')
-      })
-    });
-  }
 });
 
 /*
  * Prepare the office marker on the map and center the map on the office location.
  */
 function setOfficeMarker(organization, location, lon, lat) {
-  var popover = document.getElementById('popover');
-  if (typeof map === "undefined" || typeof map.getView() === "undefined" || typeof popover === "undefined") {
+  if (typeof map === "undefined" || typeof map.getView() === "undefined" || typeof tooltip === "undefined") {
     setTimeout(function() {
       setOfficeMarker(organization, location, lon, lat);
     }, 500);
     return;
   }
+
+  console.log("Setting up the office marker ...");
 
   // Project the lon lat to the map.
   markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
@@ -65,25 +44,18 @@ function setOfficeMarker(organization, location, lon, lat) {
   // Center the map to the coordinate
   map.getView().setCenter(markerCoordinate);
 
-  // Add the feature to the marker layer.
-  var iconFeature = new ol.Feature({
-    geometry: new ol.geom.Point(markerCoordinate)
-  });
-  markerLayer.getSource().addFeature(iconFeature);
+  // Set the feature geometry.
+  feature.setGeometry(new ol.geom.Point(markerCoordinate));
 
-  // Prepare the tooltip of the location. For now we will just display the name.
-  tooltip = new ol.Overlay({
-    element: popover,
-    position: markerCoordinate
-  });
-  map.addOverlay(tooltip);
-
-  $(popover).popover({
+  // Set the tooltip structure and location.
+  tooltip.setPosition(markerCoordinate);
+  var element = tooltip.getElement();
+  $(element).popover('dispose');
+  $(element).popover({
     placement: 'bottom',
     animation: false,
     html: true,
-    content:
-      "<h5 class='text-muted'>" + organization +"</h5>" +
+    content: "<h5 class='text-muted'>" + organization + "</h5>" +
       "<h6 class='text-muted'>" + location + "</h6>"
   });
 }
@@ -160,29 +132,34 @@ var ready = function() {
 
   // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
-  $("#office").empty();
-  map = new ol.Map({
-    target: "office",
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
-      }),
-      markerLayer
-    ],
-    view: new ol.View({
-      center: markerCoordinate ? markerCoordinate : [0, 0],
-      zoom: 12
-    })
-  });
+  console.log("Setting map view ...");
+
+    tooltip = new ol.Overlay({
+      element: document.getElementById('popover')
+    });
+    map = new ol.Map({
+      target: "office",
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        }),
+        markerLayer
+      ],
+      overlays: [tooltip],
+      view: new ol.View({
+        center: markerCoordinate ? markerCoordinate : [0, 0],
+        zoom: 5
+      })
+    });
 
   // Display tooltip when the user click on the office marker.
   map.on("click", function(e) {
-      map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-        if (layer === markerLayer && tooltip) {
-          var element = tooltip.getElement();
-          $(element).popover("show");
-        }
-      })
+    map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+      if (layer === markerLayer && tooltip) {
+        var element = tooltip.getElement();
+        $(element).popover("show");
+      }
+    })
   });
 
   // Remove tooltip when the map is zoomed or dragged.
@@ -207,11 +184,8 @@ var ready = function() {
       ticking = true;
     }
   });
-
 };
 
 
 // Attach all of them to the browser, page, and turbolinks event.
-$(document).ready(ready)
-$(document).on('page:load', ready)
-$(document).on('turbolinks:load', ready)
+$(document).on('turbolinks:load', ready);
