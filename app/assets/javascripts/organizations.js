@@ -2,6 +2,7 @@
  * Global variables
  */
 var map;
+var tooltip;
 var markerCoordinate;
 
 var markerLayer = new ol.layer.Vector({
@@ -46,32 +47,46 @@ var countryLayer = new ol.layer.Vector({
   }
 });
 
-function setMapCenter(lon, lat) {
-  if (typeof map === "undefined" || typeof map.getView() === "undefined") {
+/*
+ * Prepare the office marker on the map and center the map on the office location.
+ */
+function setOfficeMarker(organization, location, lon, lat) {
+  var popover = document.getElementById('popover');
+  if (typeof map === "undefined" || typeof map.getView() === "undefined" || typeof popover === "undefined") {
     setTimeout(function() {
-      setMapCenter(lon, lat);
+      setOfficeMarker(organization, location, lon, lat);
     }, 500);
     return;
   }
 
+  // Project the lon lat to the map.
   markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
+
+  // Center the map to the coordinate
   map.getView().setCenter(markerCoordinate);
-}
 
-function setMarker(name, lon, lat) {
-  if (typeof map !== "undefined") {
-    markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
-    var iconFeature = new ol.Feature({
-      geometry: new ol.geom.Point(markerCoordinate)
-    });
-    markerLayer.getSource().addFeature(iconFeature);
-  } else {
-    setTimeout(function() {
-      setMarker(name, lon, lat);
-    }, 500);
-  }
-}
+  // Add the feature to the marker layer.
+  var iconFeature = new ol.Feature({
+    geometry: new ol.geom.Point(markerCoordinate)
+  });
+  markerLayer.getSource().addFeature(iconFeature);
 
+  // Prepare the tooltip of the location. For now we will just display the name.
+  tooltip = new ol.Overlay({
+    element: popover,
+    position: markerCoordinate
+  });
+  map.addOverlay(tooltip);
+
+  $(popover).popover({
+    placement: 'bottom',
+    animation: false,
+    html: true,
+    content:
+      "<h5 class='text-muted'>" + organization +"</h5>" +
+      "<h6 class='text-muted'>" + location + "</h6>"
+  });
+}
 /*
  * The function to remove grandparent element from the DOM. This will be called
  * when the user click on the delete button on the tag like object. In the future
@@ -146,7 +161,6 @@ var ready = function() {
   // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
   $("#office").empty();
-  console.log("Setting office map ...");
   map = new ol.Map({
     target: "office",
     layers: [
@@ -160,6 +174,40 @@ var ready = function() {
       zoom: 12
     })
   });
+
+  // Display tooltip when the user click on the office marker.
+  map.on("click", function(e) {
+      map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+        if (layer === markerLayer && tooltip) {
+          var element = tooltip.getElement();
+          $(element).popover("show");
+        }
+      })
+  });
+
+  // Remove tooltip when the map is zoomed or dragged.
+  map.on("movestart", function(e) {
+    if (tooltip) {
+      var element = tooltip.getElement();
+      $(element).popover("hide");
+    }
+  })
+
+  // Remove tooltip when the page is scrolled.
+  window.addEventListener('scroll', function(e) {
+    var ticking = false;
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        if (tooltip) {
+          var element = tooltip.getElement();
+          $(element).popover("hide");
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
 };
 
 
