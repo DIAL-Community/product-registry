@@ -15,7 +15,7 @@
       </p>
       <p class="card-text">
         <strong>Website:</strong>
-        <%= @organization.website.downcase.strip %>
+        <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip %>
       </p>
 
       <% if @organization.locations.find{|location| location.location_type == 'point'} %>
