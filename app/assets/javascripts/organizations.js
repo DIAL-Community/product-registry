@@ -148,7 +148,7 @@ var ready = function() {
       overlays: [tooltip],
       view: new ol.View({
         center: markerCoordinate ? markerCoordinate : [0, 0],
-        zoom: 5
+        zoom: 8
       })
     });
 

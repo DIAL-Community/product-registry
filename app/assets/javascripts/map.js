@@ -28,7 +28,7 @@ var mapObject = {
 
   countryLayer : new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: 'assets/countries.geojson',
+      url: 'assets/countries.json',
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
@@ -96,6 +96,7 @@ var mapObject = {
       organizations.forEach(function(o) {
         o.offices.forEach(function(of) {
           var iconFeature = new ol.Feature({
+            id: o.id,
             geometry: new ol.geom.Point(ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857')),
             name: o.name,
             website: o.website,

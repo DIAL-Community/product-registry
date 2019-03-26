@@ -14,7 +14,12 @@ mapObject.clickHandler = function(evt) {
       mapObject.countryLayer.getSource().addFeature(feature);
     });
     mapObject.countryHightlightLayer.getSource().clear();
-    var content = '<p><a href="http://' + feature.get('website') + '">' + feature.get('website') + '</a><br/>Endorser since ' + feature.get('when_endorsed') + '</p>';
+
+    var content =
+    '<p class="mb-2"><strong><a href="http://' + feature.get("website") + '">' + feature.get('website') + '</a></strong></p>' +
+    '<p class="text-muted mb-2">Endorser since ' + feature.get("when_endorsed") + '</p>' +
+    '<p class="float-right mb-2"><a href="/organizations/' + feature.get("id") + '"><small>View organization</small></a></p>';
+
     feature.get('countries').forEach(function(cLabel) {
       mapObject.countryLayer.getSource().forEachFeature(function(cFeature) {
         if (cLabel == cFeature.get('name')) {
