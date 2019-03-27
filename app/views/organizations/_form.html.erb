@@ -34,6 +34,14 @@
     <%= form.label :website %>
   </fieldset>
 
+  <fieldset class="form-label-group">
+    <input type="text" id="office-label" name="office_label" class="form-control" placeholder="Office Location" />
+    <label for="office-label">
+      Office Location
+    </label>
+    <input type="hidden" id="office-id" name="office_id" />
+  </fieldset>
+
   <fieldset class="form-group form-check">
     <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
     <%= form.label :is_endorser, :class => "form-check-label" %>
@@ -90,5 +98,9 @@
   <% end %>
   <% organization.locations.where.not(location_type: 'point').order("name").each do |location| %>
     addLocation('<%= location.id %>', '<%= location.name %>');
+  <% end %>
+  <% organization.locations.where(location_type: 'point').order("name").each do |location| %>
+    $("#office-id").val('<%= location.id %>');
+    $("#office-label").val('<%= location.name %>');
   <% end %>
 </script>

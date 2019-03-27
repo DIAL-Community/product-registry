@@ -11,6 +11,15 @@ class LocationsController < ApplicationController
           .order(:name)
       return
     end
+
+    if params[:office_only]
+      @locations = Location
+          .where(location_type: 'point')
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
+
     if params[:search]
       @locations = Location
           .where.not(location_type: 'point')

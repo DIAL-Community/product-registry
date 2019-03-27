@@ -147,6 +147,28 @@ var ready = function() {
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
 
+  $("#office-label").autocomplete({
+    source: function(request, response) {
+      $.getJSON(
+        "/locations.json?office_only=true", {
+          search: request.term
+        },
+        function(sectors) {
+          response($.map(sectors, function(sector) {
+            return {
+              id: sector.id,
+              label: sector.name,
+              value: sector.name
+            }
+          }));
+        }
+      );
+    },
+    select: function(event, ui) {
+      $("#office-id").val(ui.item.id);
+    }
+  });
+
   // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
   console.log("Setting map view ...");

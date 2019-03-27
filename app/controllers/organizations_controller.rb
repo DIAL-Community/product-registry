@@ -51,6 +51,11 @@ class OrganizationsController < ApplicationController
       @organization.locations.push(location)
     end
 
+    office = Location.find(params[:office_id])
+    if (office)
+      @organization.locations.push(office)
+    end
+
     respond_to do |format|
       if @organization.save
         format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
@@ -78,6 +83,11 @@ class OrganizationsController < ApplicationController
       locations.add(location);
     end
     @organization.locations = locations.to_a;
+    
+    office = Location.find(params[:office_id])
+    if (office)
+      @organization.locations.push(office)
+    end
 
     respond_to do |format|
       if @organization.update(organization_params)
@@ -114,7 +124,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office)
+        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office_id)
         .tap do |attr|
           attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
         end
