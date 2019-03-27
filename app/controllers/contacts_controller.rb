@@ -35,6 +35,10 @@ class ContactsController < ApplicationController
   # POST /contacts.json
   def create
     @contact = Contact.new(contact_params)
+    params[:selected_organizations].keys.each do |organization_id|
+      organization = Organization.find(organization_id)
+      @contact.organizations.push(organization)
+    end
 
     respond_to do |format|
       if @contact.save
@@ -50,6 +54,13 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
+    organizations = Set.new
+    params[:selected_organizations].keys.each do |organization_id|
+      organization = Organization.find(organization_id)
+      organizations.add(organization);
+    end
+    @contact.organizations = organizations.to_a;
+
     respond_to do |format|
       if @contact.update(contact_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
@@ -79,6 +90,6 @@ class ContactsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
-      params.require(:contact).permit(:name, :slug, :email, :title)
+      params.require(:contact).permit(:name, :slug, :email, :title, :selected_organizations)
     end
 end

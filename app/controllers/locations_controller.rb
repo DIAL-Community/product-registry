@@ -52,6 +52,10 @@ class LocationsController < ApplicationController
   # POST /locations.json
   def create
     @location = Location.new(location_params)
+    params[:selected_organizations].keys.each do |organization_id|
+      organization = Organization.find(organization_id)
+      @location.organizations.push(organization)
+    end
 
     respond_to do |format|
       if @location.save
@@ -67,6 +71,13 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1
   # PATCH/PUT /locations/1.json
   def update
+    organizations = Set.new
+    params[:selected_organizations].keys.each do |organization_id|
+      organization = Organization.find(organization_id)
+      organizations.add(organization);
+    end
+    @location.organizations = organizations.to_a;
+
     respond_to do |format|
       if @location.update(location_params)
         format.html { redirect_to @location, notice: 'Location was successfully updated.' }

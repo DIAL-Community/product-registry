@@ -42,6 +42,10 @@ class SectorsController < ApplicationController
   # POST /sectors.json
   def create
     @sector = Sector.new(sector_params)
+    params[:selected_organizations].keys.each do |organization_id|
+      organization = Organization.find(organization_id)
+      @sector.organizations.push(organization)
+    end
 
     respond_to do |format|
       if @sector.save
@@ -57,6 +61,13 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1
   # PATCH/PUT /sectors/1.json
   def update
+    organizations = Set.new
+    params[:selected_organizations].keys.each do |organization_id|
+      organization = Organization.find(organization_id)
+      organizations.add(organization);
+    end
+    @sector.organizations = organizations.to_a;
+    
     respond_to do |format|
       if @sector.update(sector_params)
         format.html { redirect_to @sector, notice: 'Sector was successfully updated.' }

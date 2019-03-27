@@ -7,7 +7,10 @@ class OrganizationsController < ApplicationController
   # GET /organizations.json
   def index
     if params[:without_paging]
-      @organizations = Organization.all
+      @organizations = Organization
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
       return
     end
     if params[:search]
@@ -83,7 +86,7 @@ class OrganizationsController < ApplicationController
       locations.add(location);
     end
     @organization.locations = locations.to_a;
-    
+
     office = Location.find(params[:office_id])
     if (office)
       @organization.locations.push(office)

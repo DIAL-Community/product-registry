@@ -59,15 +59,6 @@ function setOfficeMarker(organization, location, lon, lat) {
       "<h6 class='text-muted'>" + location + "</h6>"
   });
 }
-/*
- * The function to remove grandparent element from the DOM. This will be called
- * when the user click on the delete button on the tag like object. In the future
- * this will be called on sectors, locations, and contacts.
- */
-function remove(self) {
-  var baseCard = $(self).parent().parent();
-  $(baseCard).remove();
-}
 
 function addSector(value, label) {
   addElement("base-selected-sectors", "selected_sectors", value, label);
@@ -77,63 +68,7 @@ function addLocation(value, label) {
   addElement("base-selected-countries", "selected_countries", value, label);
 }
 
-// Create autocomplete configuration for searches.
-function autoComplete(source, callback) {
-  return {
-    source: function(request, response) {
-      $.getJSON(
-        source, {
-          search: request.term
-        },
-        function(sectors) {
-          response($.map(sectors, function(sector) {
-            return {
-              id: sector.id,
-              label: sector.name,
-              value: sector.name
-            }
-          }));
-        }
-      );
-    },
-    select: function(event, ui) {
-      callback(ui.item.id, ui.item.label)
-      $(this).val("")
-      return false;
-    }
-  }
-}
-
-/*
- * Create a new sector section and assign the value of the sector to the hidden
- * input field. The hidden input field will be used to define the child objects.
- */
-function addElement(baseElementId, inputElementName, value, label) {
-
-  // Find the hidden based element and clone it.
-  var copy = $("#" + baseElementId).clone();
-
-  // Remove the id so it won't have the same id with the hidden element.
-  $(copy).removeAttr("id");
-
-  // Display the value of the selection.
-  $(copy).find("p").html(label);
-
-  // Find the hidden input element and assign some values to it.
-  // Make sure:
-  // * The name for each hidden input will be different (or it won't work).
-  var input = $(copy).find("input");
-  $(input).attr("name",  inputElementName + "[" + value + "]");
-  $(input).val(value);
-
-  // Attach the copy to the parent of the hidden element.
-  $(copy).appendTo($("#" + baseElementId).parent());
-
-  // Toggle the show to show it to the user. Yay!
-  $(copy).show();
-}
-
-var ready = function() {
+var organizationsReady = function() {
   // Init the datepicker field.
   $('#organization_when_endorsed').datepicker();
 
@@ -227,4 +162,4 @@ var ready = function() {
 
 
 // Attach all of them to the browser, page, and turbolinks event.
-$(document).on('turbolinks:load', ready);
+$(document).on('turbolinks:load', organizationsReady);
