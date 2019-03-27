@@ -37,7 +37,7 @@
   <div class="card">
     <div class="card-header clearfix">
       <h5 class="float-left">Contacts</h5>
-      <%= link_to 'Add', new_contact_path, :class => "card-link float-right" %>
+      <%= link_to 'Add', new_organization_contact_path(@organization) , :class => "card-link float-right" %>
     </div>
     <div class="card-body">
       <% if @organization.contacts.count > 0 %>
@@ -50,7 +50,7 @@
               <% if contact.title %>
                 <p class="card-text"><%= contact.title %></p>
               <% end %>
-              <%= link_to 'Edit', edit_contact_path(contact), :class => "card-link float-right mb-2" %>
+              <%= link_to 'Edit', edit_organization_contact_path(@organization, contact), :class => "card-link float-right mb-2" %>
             </div>
           </div>
         <% end %>
@@ -68,7 +68,7 @@
   <div class="card">
     <div class="card-header clearfix">
       <h5 class="float-left">Sectors</h5>
-      <%= link_to 'Add', new_sector_path, :class => "card-link float-right" %>
+      <%= link_to 'Add', new_organization_sector_path(@organization), :class => "card-link float-right" %>
     </div>
     <div class="card-body">
       <% if @organization.sectors.count > 0 %>
@@ -77,7 +77,7 @@
           <div class="card">
             <div class="card-body d-flex">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to sector.name, sector %></p>
-              <small><%= link_to 'Edit', edit_sector_path(sector), :class => "card-link float-right" %></small>
+              <small><%= link_to 'Edit', edit_organization_sector_path(@organization, sector), :class => "card-link float-right" %></small>
             </div>
           </div>
         <% end %>
@@ -95,7 +95,7 @@
   <div class="card">
     <div class="card-header clearfix">
       <h5 class="float-left">Countries</h5>
-      <%= link_to 'Add', new_location_path, :class => "card-link float-right" %>
+      <%= link_to 'Add', new_organization_location_path(@organization), :class => "card-link float-right" %>
     </div>
     <div class="card-body">
       <% if @organization.locations.select{|location| location.location_type != 'point'}.count > 0 %>
@@ -104,7 +104,7 @@
           <div class="card">
             <div class="card-body d-flex">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to country.name, country %></p>
-              <small><%= link_to 'Edit', edit_location_path(country), :class => "card-link float-right" %></small>
+              <small><%= link_to 'Edit', edit_organization_location_path(@organization, country), :class => "card-link float-right" %></small>
             </div>
           </div>
         <% end %>
