@@ -14,6 +14,7 @@ development:
   # database: db/development.sqlite3
   pool: 5
   timeout: 5000
+  host: localhost
   adapter: postgresql
   encoding: unicode
   database: registry_development

@@ -4,14 +4,22 @@ class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
   def index
+    if params[:without_paging]
+      @locations = Location
+          .where.not(location_type: 'point')
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
     if params[:search]
       @locations = Location
-          .where(nil)
+          .where.not(location_type: 'point')
           .starts_with(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
       @locations = Location
+          .where.not(location_type: 'point')
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     end

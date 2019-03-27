@@ -1,4 +1,5 @@
 <div class="container">
+  <p id="notice"><%= notice %></p>
   <div class="card">
     <h5 class="card-header">
       <%= @organization.name %>
@@ -13,23 +14,17 @@
       </p>
       <p class="card-text">
         <strong>Website:</strong>
-        <%= @organization.website.downcase.strip %>
+        <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip %>
       </p>
 
-      <% if @organization.sectors.count > 0 %>
-        <p class="card-text">
-          <strong>Sectors: </strong>
-          <ul>
-          <% @organization.sectors.each do |sector| %>
-            <li><%= sector.name %></li>
-          <% end %>
-          </ul>
-        </p>
+      <% if @organization.locations.find{|location| location.location_type == 'point'} %>
+        <div id="office" style="max-height: 28rem;"></div>
+        <div id="popover"></div>
       <% end %>
 
-      <p>
-        <%= link_to 'Back', organizations_path, :class => "card-link float-left" %>
-        <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link float-right" %>
+      <p class="float-right mb-0" >
+        <%= link_to 'Back', organizations_path, :class => "card-link" %>
+        <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
       </p>
     </div>
   </div>
@@ -41,20 +36,20 @@
   <div class="card">
     <div class="card-header clearfix">
       <h5 class="float-left">Contacts</h5>
-      <%= link_to 'Add', new_contact_path, :class => "card-link float-right" %>
+      <%= link_to 'Add', new_organization_contact_path(@organization) , :class => "card-link float-right" %>
     </div>
     <div class="card-body">
       <% if @organization.contacts.count > 0 %>
         <div class="card-columns">
-        <% @organization.contacts.each do |contact| %>
-          <div class="card" style="width: 30rem;">
+        <% @organization.contacts.order("name").each do |contact| %>
+          <div class="card">
             <div class="card-body">
-              <h5 class="card-title"><%= contact.name %></h5>
+              <h5 class="card-title"><%= link_to contact.name, contact %></h5>
               <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
               <% if contact.title %>
                 <p class="card-text"><%= contact.title %></p>
               <% end %>
-              <%= link_to 'Edit', edit_contact_path(contact), :class => "card-link float-right" %>
+              <%= link_to 'Edit', edit_organization_contact_path(@organization, contact), :class => "card-link float-right mb-2" %>
             </div>
           </div>
         <% end %>
@@ -66,5 +61,70 @@
   </div>
 </div>
 
-  <!-- # In the show organization, we will show list of contacts for that organization. # * Display contact information (maybe just the basic info?). # * Add link to edit or delete the contact. # * Editing a contact will take them to the contact edit
-  form. # * Add link to add new contact which will take them to the contact add form. # Do the same for sectors, locations and products. -->
+<br/>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Sectors</h5>
+      <%= link_to 'Add', new_organization_sector_path(@organization), :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @organization.sectors.count > 0 %>
+        <div class="card-columns">
+        <% @organization.sectors.order("name").each do |sector| %>
+          <div class="card">
+            <div class="card-body d-flex">
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to sector.name, sector %></p>
+              <small><%= link_to 'Edit', edit_organization_sector_path(@organization, sector), :class => "card-link float-right" %></small>
+            </div>
+          </div>
+        <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Countries</h5>
+      <%= link_to 'Add', new_organization_location_path(@organization), :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @organization.locations.select{|location| location.location_type != 'point'}.count > 0 %>
+        <div class="card-columns">
+        <% @organization.locations.where.not(location_type: 'point').order("name").each do |country| %>
+          <div class="card">
+            <div class="card-body d-flex">
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to country.name, country %></p>
+              <small><%= link_to 'Edit', edit_organization_location_path(@organization, country), :class => "card-link float-right" %></small>
+            </div>
+          </div>
+        <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  <%
+    office = @organization.locations.find{|location| location.location_type == 'point'}
+    if (office)
+  %>
+    function updateMapMarker() {
+      setOfficeMarker('<%= @organization.name %>', '<%= office.name %>', '<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
+    }
+
+    $(document).on('turbolinks:load', updateMapMarker)
+  <% end %>
+</script>
