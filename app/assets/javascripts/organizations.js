@@ -69,47 +69,20 @@ function remove(self) {
   $(baseCard).remove();
 }
 
-/*
- * Create a new sector section and assign the value of the sector to the hidden
- * input field. The hidden input field will be used to define the child objects.
- */
 function addSector(value, label) {
-
-  // Find the hidden based element and clone it.
-  var copy = $("#base-selected-sectors").clone();
-
-  // Remove the id so it won't have the same id with the hidden element.
-  $(copy).removeAttr("id");
-
-  // Display the value of the selection.
-  $(copy).find("p").html(label);
-
-  // Find the hidden input element and assign some values to it.
-  // Make sure:
-  // * The name for each hidden input will be different (or it won't work).
-  var input = $(copy).find("input");
-  $(input).attr("name", "selected_sector[" + value + "]");
-  $(input).val(value);
-
-  // Attach the copy to the parent of the hidden element.
-  $(copy).appendTo($("#base-selected-sectors").parent());
-
-  // Toggle the show to show it to the user. Yay!
-  $(copy).show();
+  addElement("base-selected-sectors", "selected_sectors", value, label);
 }
 
-var ready = function() {
-  // Init the datepicker field.
-  $('#organization_when_endorsed').datepicker();
+function addLocation(value, label) {
+  addElement("base-selected-countries", "selected_countries", value, label);
+}
 
-  // Hide the base sectors tag element.
-  $('#base-selected-sectors').hide();
-
-  // Init the autocomplete for the sector field.
-  $("#sector-search").autocomplete({
+// Create autocomplete configuration for searches.
+function autoComplete(source, callback) {
+  return {
     source: function(request, response) {
       $.getJSON(
-        "/sectors.json?without_paging=true", {
+        source, {
           search: request.term
         },
         function(sectors) {
@@ -124,33 +97,77 @@ var ready = function() {
       );
     },
     select: function(event, ui) {
-      addSector(ui.item.id, ui.item.label)
+      callback(ui.item.id, ui.item.label)
       $(this).val("")
       return false;
     }
-  });
+  }
+}
+
+/*
+ * Create a new sector section and assign the value of the sector to the hidden
+ * input field. The hidden input field will be used to define the child objects.
+ */
+function addElement(baseElementId, inputElementName, value, label) {
+
+  // Find the hidden based element and clone it.
+  var copy = $("#" + baseElementId).clone();
+
+  // Remove the id so it won't have the same id with the hidden element.
+  $(copy).removeAttr("id");
+
+  // Display the value of the selection.
+  $(copy).find("p").html(label);
+
+  // Find the hidden input element and assign some values to it.
+  // Make sure:
+  // * The name for each hidden input will be different (or it won't work).
+  var input = $(copy).find("input");
+  $(input).attr("name",  inputElementName + "[" + value + "]");
+  $(input).val(value);
+
+  // Attach the copy to the parent of the hidden element.
+  $(copy).appendTo($("#" + baseElementId).parent());
+
+  // Toggle the show to show it to the user. Yay!
+  $(copy).show();
+}
+
+var ready = function() {
+  // Init the datepicker field.
+  $('#organization_when_endorsed').datepicker();
+
+  // Init the autocomplete for the sector field.
+  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
+  $('#base-selected-sectors').hide();
+  $("#sector-search").autocomplete(sectorAutoComplete);
+
+  // Init the autocomplete for the country field.
+  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
+  $('#base-selected-countries').hide();
+  $("#country-search").autocomplete(countryAutoComplete);
 
   // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
   console.log("Setting map view ...");
 
-    tooltip = new ol.Overlay({
-      element: document.getElementById('popover')
-    });
-    map = new ol.Map({
-      target: "office",
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        }),
-        markerLayer
-      ],
-      overlays: [tooltip],
-      view: new ol.View({
-        center: markerCoordinate ? markerCoordinate : [0, 0],
-        zoom: 8
-      })
-    });
+  tooltip = new ol.Overlay({
+    element: document.getElementById('popover')
+  });
+  map = new ol.Map({
+    target: "office",
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      }),
+      markerLayer
+    ],
+    overlays: [tooltip],
+    view: new ol.View({
+      center: markerCoordinate ? markerCoordinate : [0, 0],
+      zoom: 8
+    })
+  });
 
   // Display tooltip when the user click on the office marker.
   map.on("click", function(e) {

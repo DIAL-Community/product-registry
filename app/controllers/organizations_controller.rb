@@ -42,9 +42,13 @@ class OrganizationsController < ApplicationController
   def create
 
     @organization = Organization.new(organization_params)
-    params[:selected_sector].keys.each do |sector_id|
+    params[:selected_sectors].keys.each do |sector_id|
       @sector = Sector.find(sector_id)
       @organization.sectors.push(@sector)
+    end
+    params[:selected_countries].keys.each do |location_id|
+      location = Location.find(location_id)
+      @organization.locations.push(location)
     end
 
     respond_to do |format|
@@ -61,11 +65,19 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
-    @organization.sectors.clear();
-    params[:selected_sector].keys.each do |sector_id|
-      @sector = Sector.find(sector_id)
-      @organization.sectors.push(@sector)
+    sectors = Set.new
+    params[:selected_sectors].keys.each do |sector_id|
+      sector = Sector.find(sector_id)
+      sectors.add(sector);
     end
+    @organization.sectors = sectors.to_a;
+
+    locations = Set.new
+    params[:selected_countries].keys.each do |location_id|
+      location = Location.find(location_id)
+      locations.add(location);
+    end
+    @organization.locations = locations.to_a;
 
     respond_to do |format|
       if @organization.update(organization_params)
@@ -102,7 +114,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors)
+        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office)
         .tap do |attr|
           attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
         end

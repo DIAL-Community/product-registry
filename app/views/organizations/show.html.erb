@@ -1,6 +1,5 @@
-<p id="notice"><%= notice %></p>
-
 <div class="container">
+  <p id="notice"><%= notice %></p>
   <div class="card">
     <h5 class="card-header">
       <%= @organization.name %>
@@ -42,7 +41,7 @@
     <div class="card-body">
       <% if @organization.contacts.count > 0 %>
         <div class="card-columns">
-        <% @organization.contacts.each do |contact| %>
+        <% @organization.contacts.order("name").each do |contact| %>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"><%= link_to contact.name, contact %></h5>
@@ -73,7 +72,7 @@
     <div class="card-body">
       <% if @organization.sectors.count > 0 %>
         <div class="card-columns">
-        <% @organization.sectors.each do |sector| %>
+        <% @organization.sectors.order("name").each do |sector| %>
           <div class="card">
             <div class="card-body d-flex">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to sector.name, sector %></p>
@@ -100,7 +99,7 @@
     <div class="card-body">
       <% if @organization.locations.select{|location| location.location_type != 'point'}.count > 0 %>
         <div class="card-columns">
-        <% @organization.locations.select{|location| location.location_type != 'point'}.each do |country| %>
+        <% @organization.locations.where.not(location_type: 'point').order("name").each do |country| %>
           <div class="card">
             <div class="card-body d-flex">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to country.name, country %></p>
