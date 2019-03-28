@@ -59,6 +59,7 @@ class LocationsController < ApplicationController
   # POST /locations.json
   def create
     @location = Location.new(location_params)
+    @location.location_type = 'country'
     params[:selected_organizations].keys.each do |organization_id|
       organization = Organization.find(organization_id)
       @location.organizations.push(organization)
