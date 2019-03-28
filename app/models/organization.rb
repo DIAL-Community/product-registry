@@ -4,5 +4,5 @@ class Organization < ApplicationRecord
   has_and_belongs_to_many :contacts, join_table: :organizations_contacts
   has_and_belongs_to_many :sectors, join_table: :organizations_sectors
 
-  scope :starts_with, -> (name) { where("LOWER(name) like LOWER(?)", "#{name}%")}
+  scope :starts_with, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
 end
