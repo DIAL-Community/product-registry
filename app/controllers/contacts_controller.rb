@@ -25,19 +25,28 @@ class ContactsController < ApplicationController
   # GET /contacts/new
   def new
     @contact = Contact.new
+    if (params[:organization_id])
+      @organization = Organization.find(params[:organization_id])
+      @contact.organizations.push(@organization)
+    end
   end
 
   # GET /contacts/1/edit
   def edit
+    if (params[:organization_id])
+      @organization = Organization.find(params[:organization_id])
+    end
   end
 
   # POST /contacts
   # POST /contacts.json
   def create
     @contact = Contact.new(contact_params)
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      @contact.organizations.push(organization)
+    if (params[:selected_organizations])
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        @contact.organizations.push(organization)
+      end
     end
 
     respond_to do |format|
@@ -54,12 +63,14 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
-    organizations = Set.new
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      organizations.add(organization);
+    if (params[:selected_organizations])
+      organizations = Set.new
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        organizations.add(organization);
+      end
+      @contact.organizations = organizations.to_a;
     end
-    @contact.organizations = organizations.to_a;
 
     respond_to do |format|
       if @contact.update(contact_params)
@@ -90,6 +101,6 @@ class ContactsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
-      params.require(:contact).permit(:name, :slug, :email, :title, :selected_organizations)
+      params.require(:contact).permit(:name, :slug, :email, :title, :selected_organizations, organizations_attributes: [:id])
     end
 end
