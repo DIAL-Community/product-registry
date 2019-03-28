@@ -42,10 +42,17 @@ class LocationsController < ApplicationController
   # GET /locations/new
   def new
     @location = Location.new
+    if (params[:organization_id])
+      @organization = Organization.find(params[:organization_id])
+      @location.organizations.push(@organization)
+    end
   end
 
   # GET /locations/1/edit
   def edit
+    if (params[:organization_id])
+      @organization = Organization.find(params[:organization_id])
+    end
   end
 
   # POST /locations

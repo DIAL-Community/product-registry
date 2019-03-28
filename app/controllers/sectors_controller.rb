@@ -32,10 +32,17 @@ class SectorsController < ApplicationController
   # GET /sectors/new
   def new
     @sector = Sector.new
+    if (params[:organization_id])
+      @organization = Organization.find(params[:organization_id])
+      @sector.organizations.push(@organization)
+    end
   end
 
   # GET /sectors/1/edit
   def edit
+    if (params[:organization_id])
+      @organization = Organization.find(params[:organization_id])
+    end
   end
 
   # POST /sectors
@@ -67,7 +74,7 @@ class SectorsController < ApplicationController
       organizations.add(organization);
     end
     @sector.organizations = organizations.to_a;
-    
+
     respond_to do |format|
       if @sector.update(sector_params)
         format.html { redirect_to @sector, notice: 'Sector was successfully updated.' }
