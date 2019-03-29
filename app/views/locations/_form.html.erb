@@ -21,9 +21,47 @@
       <%= form.label :slug %>
     </fieldset>
 
+    <% if !@organization %>
+      <fieldset class="form-label-group">
+        <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
+        <label for="country-organization">
+          Search and assign organizations ...
+        </label>
+      </fieldset>
+    <% end %>
+
+    <div class="card">
+      <h6 class="card-header">Assigned Organizations</h6>
+      <div class="card-body">
+        <fieldset id="selected-organizations">
+          <div class="card-columns">
+            <div id="base-selected-organizations" class="card" style="max-width: 20rem;">
+              <div class="card-body p-1 d-flex">
+                <p class="card-text p-1 m-0" style="flex: 1"></p>
+                <% if !@organization %>
+                  <a class="card-link p-1" onclick="remove(this);">
+                    <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                  </a>
+                <% end %>
+                <input type="hidden"/>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <br />
+
     <fieldset class="float-right">
       <%= form.submit 'Submit', :class => "btn btn-primary" %>
       <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
 </div>
+
+<script>
+  <% location.organizations.sort_by{|organization| organization.name }.each do |organization| %>
+    addOrganization('<%= organization.id %>', '<%= organization.name %>');
+  <% end %>
+</script>
