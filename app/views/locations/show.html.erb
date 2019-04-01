@@ -7,8 +7,11 @@
         <strong>Slug:
         </strong><%= @location.slug %>
       </h6>
-      <%= link_to 'Back', locations_path, :class => "card-link float-left" %>
-      <%= link_to 'Edit', edit_location_path(@location), :class => "card-link float-right" %>
+
+      <p class="float-right mb-0" >
+        <%= link_to 'Back', locations_path, :class => "card-link" %>
+        <%= link_to 'Edit', edit_location_path(@location), :class => "card-link" %>
+      </p>
     </div>
   </div>
 </div>
