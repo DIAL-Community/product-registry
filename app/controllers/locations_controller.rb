@@ -87,9 +87,9 @@ class LocationsController < ApplicationController
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
-        organizations.add(organization);
+        organizations.add(organization)
       end
-      @location.organizations = organizations.to_a;
+      @location.organizations = organizations.to_a
     end
 
     respond_to do |format|

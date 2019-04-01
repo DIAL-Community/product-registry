@@ -71,12 +71,15 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1
   # PATCH/PUT /sectors/1.json
   def update
-    organizations = Set.new
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      organizations.add(organization);
+
+    if (params[:selected_organizations])
+      organizations = Set.new
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        organizations.add(organization)
+      end
+      @sector.organizations = organizations.to_a
     end
-    @sector.organizations = organizations.to_a;
 
     respond_to do |format|
       if @sector.update(sector_params)

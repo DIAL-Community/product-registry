@@ -67,9 +67,9 @@ class ContactsController < ApplicationController
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
-        organizations.add(organization);
+        organizations.add(organization)
       end
-      @contact.organizations = organizations.to_a;
+      @contact.organizations = organizations.to_a
     end
 
     respond_to do |format|
