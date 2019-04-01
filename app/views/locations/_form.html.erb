@@ -1,15 +1,5 @@
 <div class="card-body">
   <%= form_with(model: location, local: true) do |form| %>
-    <% if location.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(location.errors.count, "error") %> prohibited this location from being saved:</h2>
-        <ul>
-        <% location.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
 
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :location_name, :class => "form-control", :placeholder => "Name" %>

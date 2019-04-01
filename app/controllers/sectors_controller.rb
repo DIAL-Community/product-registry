@@ -49,9 +49,12 @@ class SectorsController < ApplicationController
   # POST /sectors.json
   def create
     @sector = Sector.new(sector_params)
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      @sector.organizations.push(organization)
+
+    if (params[:selected_organizations])
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        @sector.organizations.push(organization)
+      end
     end
 
     respond_to do |format|

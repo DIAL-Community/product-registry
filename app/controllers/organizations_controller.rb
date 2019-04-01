@@ -129,7 +129,9 @@ class OrganizationsController < ApplicationController
         .require(:organization)
         .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office_id)
         .tap do |attr|
-          attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+          if (attr[:when_endorsed].present?)
+            attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+          end
         end
     end
 end
