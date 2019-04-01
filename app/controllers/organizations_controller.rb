@@ -60,7 +60,7 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    if (params[:office_id])
+    if (params[:office_id].present?)
       office = Location.find(params[:office_id])
       if (office)
         @organization.locations.push(office)
