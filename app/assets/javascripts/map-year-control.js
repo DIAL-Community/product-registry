@@ -1,4 +1,5 @@
 mapObject.yearSelector = document.createElement('select');
+mapObject.yearSelector.id = "year";
 
 mapObject.YearSelectorControl = function YearSelectorControl(selectElement) {
     var yearHTML = '<option value="All">All Years</option>';
