@@ -7,8 +7,10 @@
         <strong>Slug:
         </strong><%= @sector.slug %>
       </h6>
-      <%= link_to 'Back', sectors_path, :class => "card-link float-left" %>
-      <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link float-right" %>
+      <p class="float-right mb-0" >
+        <%= link_to 'Back', sectors_path, :class => "card-link" %>
+        <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+      </p>
     </div>
   </div>
 </div>

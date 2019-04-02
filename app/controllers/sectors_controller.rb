@@ -1,4 +1,5 @@
 class SectorsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_sector, only: [:show, :edit, :update, :destroy]
 
   # GET /sectors
@@ -49,9 +50,12 @@ class SectorsController < ApplicationController
   # POST /sectors.json
   def create
     @sector = Sector.new(sector_params)
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      @sector.organizations.push(organization)
+
+    if (params[:selected_organizations])
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        @sector.organizations.push(organization)
+      end
     end
 
     respond_to do |format|
@@ -68,12 +72,15 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1
   # PATCH/PUT /sectors/1.json
   def update
-    organizations = Set.new
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      organizations.add(organization);
+
+    if (params[:selected_organizations])
+      organizations = Set.new
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        organizations.add(organization)
+      end
+      @sector.organizations = organizations.to_a
     end
-    @sector.organizations = organizations.to_a;
 
     respond_to do |format|
       if @sector.update(sector_params)

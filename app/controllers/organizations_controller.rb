@@ -1,7 +1,6 @@
 class OrganizationsController < ApplicationController
-  # before_action :authenticate_user!, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
-  # before_action :set_relations, only: [:edit]
 
   # GET /organizations
   # GET /organizations.json
@@ -45,18 +44,26 @@ class OrganizationsController < ApplicationController
   def create
 
     @organization = Organization.new(organization_params)
-    params[:selected_sectors].keys.each do |sector_id|
-      @sector = Sector.find(sector_id)
-      @organization.sectors.push(@sector)
-    end
-    params[:selected_countries].keys.each do |location_id|
-      location = Location.find(location_id)
-      @organization.locations.push(location)
+
+    if (params[:selected_sectors])
+      params[:selected_sectors].keys.each do |sector_id|
+        @sector = Sector.find(sector_id)
+        @organization.sectors.push(@sector)
+      end
     end
 
-    office = Location.find(params[:office_id])
-    if (office)
-      @organization.locations.push(office)
+    if (params[:selected_countries])
+      params[:selected_countries].keys.each do |location_id|
+        location = Location.find(location_id)
+        @organization.locations.push(location)
+      end
+    end
+
+    if (params[:office_id].present?)
+      office = Location.find(params[:office_id])
+      if (office)
+        @organization.locations.push(office)
+      end
     end
 
     respond_to do |format|
@@ -73,23 +80,30 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
-    sectors = Set.new
-    params[:selected_sectors].keys.each do |sector_id|
-      sector = Sector.find(sector_id)
-      sectors.add(sector);
-    end
-    @organization.sectors = sectors.to_a;
 
-    locations = Set.new
-    params[:selected_countries].keys.each do |location_id|
-      location = Location.find(location_id)
-      locations.add(location);
+    if (params[:selected_countries])
+      sectors = Set.new
+      params[:selected_sectors].keys.each do |sector_id|
+        sector = Sector.find(sector_id)
+        sectors.add(sector)
+      end
+      @organization.sectors = sectors.to_a
     end
-    @organization.locations = locations.to_a;
 
-    office = Location.find(params[:office_id])
-    if (office)
-      @organization.locations.push(office)
+    if (params[:selected_countries])
+      locations = Set.new
+      params[:selected_countries].keys.each do |location_id|
+        location = Location.find(location_id)
+        locations.add(location)
+      end
+      @organization.locations = locations.to_a
+    end
+
+    if (params[:office_id])
+      office = Location.find(params[:office_id])
+      if (office)
+        @organization.locations.push(office)
+      end
     end
 
     respond_to do |format|
@@ -129,7 +143,9 @@ class OrganizationsController < ApplicationController
         .require(:organization)
         .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office_id)
         .tap do |attr|
-          attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+          if (attr[:when_endorsed].present?)
+            attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+          end
         end
     end
 end

@@ -25,6 +25,22 @@
             <li class="nav-item">
               <%= link_to 'Products', products_path, :class => 'nav-link' %>
             </li>
+            <% if user_signed_in? %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                  <strong>
+                    <%= current_user.email %>
+                  </strong>
+                </a>
+                <div class="dropdown-menu">
+                  <%= link_to 'Logout', destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+                </div>
+              </li>
+            <% else %>
+              <li>
+                <%= link_to 'Login', new_user_session_path, :class => 'nav-link' %>
+              </li>
+            <% end %>
           </ul>
         </div>
       </nav>

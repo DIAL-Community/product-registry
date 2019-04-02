@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_location, only: [:show, :edit, :update, :destroy]
 
   # GET /locations
@@ -60,9 +61,12 @@ class LocationsController < ApplicationController
   def create
     @location = Location.new(location_params)
     @location.location_type = 'country'
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      @location.organizations.push(organization)
+
+    if (params[:selected_organizations])
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        @location.organizations.push(organization)
+      end
     end
 
     respond_to do |format|
@@ -79,12 +83,15 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1
   # PATCH/PUT /locations/1.json
   def update
-    organizations = Set.new
-    params[:selected_organizations].keys.each do |organization_id|
-      organization = Organization.find(organization_id)
-      organizations.add(organization);
+
+    if (params[:selected_organizations])
+      organizations = Set.new
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        organizations.add(organization)
+      end
+      @location.organizations = organizations.to_a
     end
-    @location.organizations = organizations.to_a;
 
     respond_to do |format|
       if @location.update(location_params)
