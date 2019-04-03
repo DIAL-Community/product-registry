@@ -1,4 +1,4 @@
-json.extract! organization, :id, :id, :name, :when_endorsed, :is_endorser, :website, :created_at, :updated_at, :sectors
+json.extract! organization, :id, :id, :name, :when_endorsed, :is_endorser, :website, :created_at, :updated_at
 json.url organization_url(organization, format: :json)
 json.offices organization.locations do |location|
   if location.location_type == 'point'
@@ -8,4 +8,8 @@ json.offices organization.locations do |location|
 end
 json.countries organization.locations do |location|
   json.merge! location.name if location.location_type == 'country'
+end
+
+json.sectors organization.sectors do | sector |
+  json.merge! sector.id
 end

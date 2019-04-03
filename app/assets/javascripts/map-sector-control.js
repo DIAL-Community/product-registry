@@ -15,27 +15,22 @@ var mapReady = function() {
     if (mapObject) {
       var sectorId = $(this).val();
 
-      var popoverElement = mapObject.popup.element;
-      $(popoverElement).popover('hide');
+      $(mapObject.popup.element).popover('hide');
 
-      mapObject.markerLayer.getSource().clear();
+      mapObject.countryHightlightLayer.getSource().forEachFeature(function(feature) {
+        mapObject.countryLayer.getSource().addFeature(feature);
+      });
+      mapObject.countryHightlightLayer.getSource().clear();
 
-      $.getJSON('/organizations.json?without_paging=true&sector_id=' + sectorId, function(organizations) {
-        organizations.forEach(function(o) {
-          o.offices.forEach(function(of) {
-            var iconFeature = new ol.Feature({
-              id: o.id,
-              geometry: new ol.geom.Point(ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857')),
-              name: o.name,
-              website: o.website,
-              when_endorsed: o.when_endorsed.substr(0,4),
-              countries: o.countries
-            });
-            mapObject.markerLayer.getSource().addFeature(iconFeature);
-          });
-        });
-
-        $("#year").trigger('change');
+      mapObject.markerHoldingLayer.getSource().forEachFeature(function(iFeature) {
+        mapObject.markerLayer.getSource().addFeature(iFeature);
+      });
+      mapObject.markerHoldingLayer.getSource().clear();
+      mapObject.markerLayer.getSource().forEachFeature(function(iFeature) {
+        if ($.inArray(parseInt(sectorId), iFeature.get('sectors')) < 0 && parseInt(sectorId) !== -1) {
+          mapObject.markerLayer.getSource().removeFeature(iFeature);
+          mapObject.markerHoldingLayer.getSource().addFeature(iFeature);
+        }
       });
     }
   });

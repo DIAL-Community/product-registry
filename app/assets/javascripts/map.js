@@ -101,7 +101,8 @@ var mapObject = {
             name: o.name,
             website: o.website,
             when_endorsed: o.when_endorsed.substr(0,4),
-            countries: o.countries
+            countries: o.countries,
+            sectors: o.sectors
           });
           mapObject.markerLayer.getSource().addFeature(iconFeature);
         });
