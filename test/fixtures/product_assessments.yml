@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: one
+  osc_cd10: false
+  digisquare_country_utilization: 1
+
+two:
+  product: two
+  osc_cd10: false
+  digisquare_country_utilization: 1
