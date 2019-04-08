@@ -1,7 +1,7 @@
 var mapReady = function() {
 
   $.getJSON(
-    '/sectors.json?without_paging=true',
+    '/sectors.json?display_only=true&without_paging=true',
     function(sectors) {
       sectors.forEach(function(sector) {
         var option = new Option(sector.name, sector.id);
