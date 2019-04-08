@@ -146,6 +146,9 @@ class OrganizationsController < ApplicationController
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
           end
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
         end
     end
 end
