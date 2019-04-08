@@ -298,6 +298,132 @@ Location.create(name: "Western Sahara", slug: 'western_sahara', :location_type =
 Location.create(name: "Yemen", slug: 'yemen', :location_type => :country) if Location.where(slug: 'yemen').empty?
 Location.create(name: "Zambia", slug: 'zambia', :location_type => :country) if Location.where(slug: 'zambia').empty?
 Location.create(name: "Zimbabwe", slug: 'zimbabwe', :location_type => :country) if Location.where(slug: 'zimbabwe').empty?
+Location.create(name: "Abuja, Nigeria", slug: 'abuja_nigeria', :location_type => :point) if Location.where(slug: 'abuja_nigeria').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (9.0764785, 7.398574) ] WHERE slug = 'abuja_nigeria'")
+Location.create(name: "Ahmedabad, Gujrat, India", slug: 'ahmedabad_gujrat_india', :location_type => :point) if Location.where(slug: 'ahmedabad_gujrat_india').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.022505, 72.5713621) ] WHERE slug = 'ahmedabad_gujrat_india'")
+Location.create(name: "Arlington, VA", slug: 'arlington_va', :location_type => :point) if Location.where(slug: 'arlington_va').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.8816208, -77.0909809) ] WHERE slug = 'arlington_va'")
+Location.create(name: "Baltimore, MD", slug: 'baltimore_md', :location_type => :point) if Location.where(slug: 'baltimore_md').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.2903848, -76.6121893) ] WHERE slug = 'baltimore_md'")
+Location.create(name: "Bangkok, Thailand", slug: 'bangkok_thailand', :location_type => :point) if Location.where(slug: 'bangkok_thailand').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (13.7563309, 100.5017651) ] WHERE slug = 'bangkok_thailand'")
+Location.create(name: "Beijing, China", slug: 'beijing_china', :location_type => :point) if Location.where(slug: 'beijing_china').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.9041999, 116.4073963) ] WHERE slug = 'beijing_china'")
+Location.create(name: "Berlin, Germany", slug: 'berlin_germany', :location_type => :point) if Location.where(slug: 'berlin_germany').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (52.5200066, 13.404954) ] WHERE slug = 'berlin_germany'")
+Location.create(name: "Bethesda, MD", slug: 'bethesda_md', :location_type => :point) if Location.where(slug: 'bethesda_md').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.984652, -77.0947092) ] WHERE slug = 'bethesda_md'")
+Location.create(name: "Boston, MA", slug: 'boston_ma', :location_type => :point) if Location.where(slug: 'boston_ma').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3600825, -71.0588801) ] WHERE slug = 'boston_ma'")
+Location.create(name: "Brisbane, Austrailia", slug: 'brisbane_austrailia', :location_type => :point) if Location.where(slug: 'brisbane_austrailia').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-27.4697707, 153.0251235) ] WHERE slug = 'brisbane_austrailia'")
+Location.create(name: "Brussels, Belgium", slug: 'brussels_belgium', :location_type => :point) if Location.where(slug: 'brussels_belgium').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussels_belgium'")
+Location.create(name: "Brussles, Belgium", slug: 'brussles_belgium', :location_type => :point) if Location.where(slug: 'brussles_belgium').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussles_belgium'")
+Location.create(name: "Burlington, VA, USA", slug: 'burlington_va_usa', :location_type => :point) if Location.where(slug: 'burlington_va_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (44.4758825, -73.212072) ] WHERE slug = 'burlington_va_usa'")
+Location.create(name: "California, USA", slug: 'california_usa', :location_type => :point) if Location.where(slug: 'california_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (36.778261, -119.4179324) ] WHERE slug = 'california_usa'")
+Location.create(name: "Canada, US, UK, Senegal, Mali, Burkina Faso, Ghana, Niger, Nigeria, Ethiopia, Kenya, Uganda, Rawanda, DRC, Tanzania, Zambia, Malwai, Mozambique, Zimbabwe, Botswana, South Africa, Madagascar, Afghanistan, Pakistan, Nepal, India, Cambodia, Indonesia,", slug: 'canada_us_uk_senegal_mali_burkin', :location_type => :point) if Location.where(slug: 'canada_us_uk_senegal_mali_burkin').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (56.130366, -106.346771) ] WHERE slug = 'canada_us_uk_senegal_mali_burkin'")
+Location.create(name: "Canberra, Austrailia", slug: 'canberra_austrailia', :location_type => :point) if Location.where(slug: 'canberra_austrailia').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-35.2809368, 149.1300092) ] WHERE slug = 'canberra_austrailia'")
+Location.create(name: "Cape Town, South Africa", slug: 'cape_town_south_africa', :location_type => :point) if Location.where(slug: 'cape_town_south_africa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.9248685, 18.4240553) ] WHERE slug = 'cape_town_south_africa'")
+Location.create(name: "Carmel, IN, USA", slug: 'carmel_in_usa', :location_type => :point) if Location.where(slug: 'carmel_in_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.978371, -86.1180435) ] WHERE slug = 'carmel_in_usa'")
+Location.create(name: "Copenhagen, Denmark", slug: 'copenhagen_denmark', :location_type => :point) if Location.where(slug: 'copenhagen_denmark').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (55.6760968, 12.5683372) ] WHERE slug = 'copenhagen_denmark'")
+Location.create(name: "Current Offices:", slug: 'current_offices', :location_type => :point) if Location.where(slug: 'current_offices').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (36.8506952, -95.6356657) ] WHERE slug = 'current_offices'")
+Location.create(name: "Denamrk", slug: 'denamrk', :location_type => :point) if Location.where(slug: 'denamrk').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (56.26392, 9.501785) ] WHERE slug = 'denamrk'")
+Location.create(name: "Dhaka, Bangladesh", slug: 'dhaka_bangladesh', :location_type => :point) if Location.where(slug: 'dhaka_bangladesh').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.810332, 90.4125181) ] WHERE slug = 'dhaka_bangladesh'")
+Location.create(name: "Dhakar, Senegal", slug: 'dhakar_senegal', :location_type => :point) if Location.where(slug: 'dhakar_senegal').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (14.716677, -17.4676861) ] WHERE slug = 'dhakar_senegal'")
+Location.create(name: "Dubai, United Arab Emirates", slug: 'dubai_united_arab_emirates', :location_type => :point) if Location.where(slug: 'dubai_united_arab_emirates').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (25.2048493, 55.2707828) ] WHERE slug = 'dubai_united_arab_emirates'")
+Location.create(name: "Dukes Court, UK", slug: 'dukes_court_uk', :location_type => :point) if Location.where(slug: 'dukes_court_uk').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.3206581, -0.554314) ] WHERE slug = 'dukes_court_uk'")
+Location.create(name: "Durham, NC", slug: 'durham_nc', :location_type => :point) if Location.where(slug: 'durham_nc').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.9940329, -78.898619) ] WHERE slug = 'durham_nc'")
+Location.create(name: "Eschborn, Germany", slug: 'eschborn_germany', :location_type => :point) if Location.where(slug: 'eschborn_germany').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.1467469, 8.5614555) ] WHERE slug = 'eschborn_germany'")
+Location.create(name: "Geneva, Switzerland", slug: 'geneva_switzerland', :location_type => :point) if Location.where(slug: 'geneva_switzerland').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.2043907, 6.1431577) ] WHERE slug = 'geneva_switzerland'")
+Location.create(name: "Germany", slug: 'germany_office', :location_type => :point) if Location.where(slug: 'germany_office').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.165691, 10.451526) ] WHERE slug = 'germany_office'")
+Location.create(name: "Hamburg, Germany", slug: 'hamburg_germany', :location_type => :point) if Location.where(slug: 'hamburg_germany').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (53.5510846, 9.9936819) ] WHERE slug = 'hamburg_germany'")
+Location.create(name: "Jakarta, Indonesia", slug: 'jakarta_indonesia', :location_type => :point) if Location.where(slug: 'jakarta_indonesia').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-6.180495, 106.8283415) ] WHERE slug = 'jakarta_indonesia'")
+Location.create(name: "Kampala, Uganda", slug: 'kampala_uganda', :location_type => :point) if Location.where(slug: 'kampala_uganda').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (0.3475964, 32.5825197) ] WHERE slug = 'kampala_uganda'")
+Location.create(name: "Kingston, Jamaica", slug: 'kingston_jamaica', :location_type => :point) if Location.where(slug: 'kingston_jamaica').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (18.0178743, -76.8099041) ] WHERE slug = 'kingston_jamaica'")
+Location.create(name: "Lausanne, 15 Avenue Montchoisi Lausanne 1006, Switzerland", slug: 'lausanne__avenue_montchoisi_laus', :location_type => :point) if Location.where(slug: 'lausanne__avenue_montchoisi_laus').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.5134439, 6.6338339) ] WHERE slug = 'lausanne__avenue_montchoisi_laus'")
+Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point) if Location.where(slug: 'london_uk').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
+Location.create(name: "Madrid, Spain", slug: 'madrid_spain', :location_type => :point) if Location.where(slug: 'madrid_spain').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.4167754, -3.7037902) ] WHERE slug = 'madrid_spain'")
+Location.create(name: "Medellín, Colombia", slug: 'medelln_colombia', :location_type => :point) if Location.where(slug: 'medelln_colombia').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (6.244203, -75.5812119) ] WHERE slug = 'medelln_colombia'")
+Location.create(name: "Mogadishu, Somalia", slug: 'mogadishu_somalia', :location_type => :point) if Location.where(slug: 'mogadishu_somalia').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (2.0469343, 45.3181623) ] WHERE slug = 'mogadishu_somalia'")
+Location.create(name: "Nairobi, Kenya", slug: 'nairobi_kenya', :location_type => :point) if Location.where(slug: 'nairobi_kenya').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-1.2920659, 36.8219462) ] WHERE slug = 'nairobi_kenya'")
+Location.create(name: "New Delhi, India", slug: 'new_delhi_india', :location_type => :point) if Location.where(slug: 'new_delhi_india').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (28.6139391, 77.2090212) ] WHERE slug = 'new_delhi_india'")
+Location.create(name: "NY, NY", slug: 'ny_ny', :location_type => :point) if Location.where(slug: 'ny_ny').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'ny_ny'")
+Location.create(name: "Office of Pacific Islands (near New Zealand)", slug: 'office_of_pacific_islands_near_n', :location_type => :point) if Location.where(slug: 'office_of_pacific_islands_near_n').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-41.282324, 174.774992) ] WHERE slug = 'office_of_pacific_islands_near_n'")
+Location.create(name: "Ottawa, Canada", slug: 'ottawa_canada', :location_type => :point) if Location.where(slug: 'ottawa_canada').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.4215296, -75.6971931) ] WHERE slug = 'ottawa_canada'")
+Location.create(name: "Paolo Alto, CA, USA", slug: 'paolo_alto_ca_usa', :location_type => :point) if Location.where(slug: 'paolo_alto_ca_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.4418834, -122.1430195) ] WHERE slug = 'paolo_alto_ca_usa'")
+Location.create(name: "Paris, France", slug: 'paris_france', :location_type => :point) if Location.where(slug: 'paris_france').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (48.856614, 2.3522219) ] WHERE slug = 'paris_france'")
+Location.create(name: "Portland, OR, USA", slug: 'portland_or_usa', :location_type => :point) if Location.where(slug: 'portland_or_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.5122308, -122.6587185) ] WHERE slug = 'portland_or_usa'")
+Location.create(name: "Prague, Czech Republic", slug: 'prague_czech_republic', :location_type => :point) if Location.where(slug: 'prague_czech_republic').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.0755381, 14.4378005) ] WHERE slug = 'prague_czech_republic'")
+Location.create(name: "Ramallah, Palestine", slug: 'ramallah_palestine', :location_type => :point) if Location.where(slug: 'ramallah_palestine').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (31.9037641, 35.2034184) ] WHERE slug = 'ramallah_palestine'")
+Location.create(name: "Research Triangle Park, NC, USA", slug: 'research_triangle_park_nc_usa', :location_type => :point) if Location.where(slug: 'research_triangle_park_nc_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.8991678, -78.8636402) ] WHERE slug = 'research_triangle_park_nc_usa'")
+Location.create(name: "Rome, Italy", slug: 'rome_italy', :location_type => :point) if Location.where(slug: 'rome_italy').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (41.9027835, 12.4963655) ] WHERE slug = 'rome_italy'")
+Location.create(name: "San Diego, CA, USA", slug: 'san_diego_ca_usa', :location_type => :point) if Location.where(slug: 'san_diego_ca_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (32.715738, -117.1610838) ] WHERE slug = 'san_diego_ca_usa'")
+Location.create(name: "San Francisco, CA", slug: 'san_francisco_ca', :location_type => :point) if Location.where(slug: 'san_francisco_ca').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.7749295, -122.4194155) ] WHERE slug = 'san_francisco_ca'")
+Location.create(name: "Seattle, WA", slug: 'seattle_wa', :location_type => :point) if Location.where(slug: 'seattle_wa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.6062095, -122.3320708) ] WHERE slug = 'seattle_wa'")
+Location.create(name: "Silicon Valley?", slug: 'silicon_valley', :location_type => :point) if Location.where(slug: 'silicon_valley').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.387474, -122.0575434) ] WHERE slug = 'silicon_valley'")
+Location.create(name: "Stockholm, Sweden", slug: 'stockholm_sweden', :location_type => :point) if Location.where(slug: 'stockholm_sweden').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (59.3293235, 18.0685808) ] WHERE slug = 'stockholm_sweden'")
+Location.create(name: "Sunnyvale, CA, USA", slug: 'sunnyvale_ca_usa', :location_type => :point) if Location.where(slug: 'sunnyvale_ca_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.36883, -122.0363496) ] WHERE slug = 'sunnyvale_ca_usa'")
+Location.create(name: "Sydney, Austrailia", slug: 'sydney_austrailia', :location_type => :point) if Location.where(slug: 'sydney_austrailia').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.8688197, 151.2092955) ] WHERE slug = 'sydney_austrailia'")
+Location.create(name: "The Old Malthouse, Mill Lane, UK", slug: 'the_old_malthouse_mill_lane_uk', :location_type => :point) if Location.where(slug: 'the_old_malthouse_mill_lane_uk').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.4196516, -2.253189) ] WHERE slug = 'the_old_malthouse_mill_lane_uk'")
+Location.create(name: "Toronto, Canada", slug: 'toronto_canada', :location_type => :point) if Location.where(slug: 'toronto_canada').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (43.653226, -79.3831843) ] WHERE slug = 'toronto_canada'")
+Location.create(name: "Waltham (Boston), MA", slug: 'waltham_boston_ma', :location_type => :point) if Location.where(slug: 'waltham_boston_ma').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3764852, -71.2356113) ] WHERE slug = 'waltham_boston_ma'")
+Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point) if Location.where(slug: 'washington_dc').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
+Location.create(name: "Watertown, MA, USA", slug: 'watertown_ma_usa', :location_type => :point) if Location.where(slug: 'watertown_ma_usa').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3709299, -71.1828321) ] WHERE slug = 'watertown_ma_usa'")
+Location.create(name: "Zurich, Switzerland", slug: 'zurich_switzerland', :location_type => :point) if Location.where(slug: 'zurich_switzerland').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.3768866, 8.541694) ] WHERE slug = 'zurich_switzerland'")
 if Organization.where(slug: 'abt_associates').empty?
   o = Organization.create(name: "Abt Associates", slug: 'abt_associates', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://abtassociates.com/")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
@@ -382,10 +508,8 @@ if Organization.where(slug: 'aerian').empty?
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'platform_creation').limit(1)[0]
+  o.locations << Location.where(slug: 'the_old_malthouse_mill_lane_uk').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
-  l = Location.create(name: "The Old Malthouse, Mill Lane, UK", slug: 'the_old_malthouse_mill_lane_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.4196516, -2.253189) ] WHERE slug = 'the_old_malthouse_mill_lane_uk'")
-  o.locations << l
 end
 if Organization.where(slug: 'akros').empty?
   o = Organization.create(name: "Akros", slug: 'akros', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.akros.com")
@@ -410,14 +534,10 @@ if Organization.where(slug: 'akryl').empty?
   o.sectors << Sector.where(slug: 'communication').limit(1)[0]
   o.sectors << Sector.where(slug: 'media').limit(1)[0]
   o.sectors << Sector.where(slug: 'media').limit(1)[0]
+  o.locations << Location.where(slug: 'beijing_china').limit(1)[0]
   o.locations << Location.where(slug: 'china').limit(1)[0]
   o.locations << Location.where(slug: 'germany').limit(1)[0]
-  l = Location.create(name: "Beijing, China", slug: 'beijing_china', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.9041999, 116.4073963) ] WHERE slug = 'beijing_china'")
-  o.locations << l
-  l = Location.create(name: "Hamburg, Germany", slug: 'hamburg_germany', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (53.5510846, 9.9936819) ] WHERE slug = 'hamburg_germany'")
-  o.locations << l
+  o.locations << Location.where(slug: 'hamburg_germany').limit(1)[0]
 end
 if Organization.where(slug: 'aptivate').empty?
   o = Organization.create(name: "Aptivate", slug: 'aptivate', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.aptivate.org/")
@@ -439,10 +559,8 @@ if Organization.where(slug: 'awaazde').empty?
   o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
   o.sectors << Sector.where(slug: 'education').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'ahmedabad_gujrat_india').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
-  l = Location.create(name: "Ahmedabad, Gujrat, India", slug: 'ahmedabad_gujrat_india', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.022505, 72.5713621) ] WHERE slug = 'ahmedabad_gujrat_india'")
-  o.locations << l
 end
 if Organization.where(slug: 'belgian_development_agency').empty?
   o = Organization.create(name: "Belgian Development Agency", slug: 'belgian_development_agency', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "WWW.BTCCTB.ORG")
@@ -463,6 +581,7 @@ if Organization.where(slug: 'belgian_development_agency').empty?
   o.locations << Location.where(slug: 'belgium').limit(1)[0]
   o.locations << Location.where(slug: 'benin').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'brussels_belgium').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
   o.locations << Location.where(slug: 'burundi').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
@@ -477,9 +596,6 @@ if Organization.where(slug: 'belgian_development_agency').empty?
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
-  l = Location.create(name: "Brussels, Belgium", slug: 'brussels_belgium', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussels_belgium'")
-  o.locations << l
 end
 if Organization.where(slug: 'bill_and_melinda_gates_foundatio').empty?
   o = Organization.create(name: "Bill and Melinda Gates Foundation", slug: 'bill_and_melinda_gates_foundatio', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.gatesfoundation.org/")
@@ -505,12 +621,10 @@ if Organization.where(slug: 'bill_and_melinda_gates_foundatio').empty?
   o.locations << Location.where(slug: 'netherlands').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'norway').limit(1)[0]
+  o.locations << Location.where(slug: 'seattle_wa').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
   o.locations << Location.where(slug: 'sweden').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
-  l = Location.create(name: "Seattle, WA", slug: 'seattle_wa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.6062095, -122.3320708) ] WHERE slug = 'seattle_wa'")
-  o.locations << l
 end
 if Organization.where(slug: 'bivee').empty?
   o = Organization.create(name: "Bivee", slug: 'bivee', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.bivee.co")
@@ -545,10 +659,8 @@ if Organization.where(slug: 'caktus_group').empty?
   o.sectors << Sector.where(slug: 'ngo').limit(1)[0]
   o.sectors << Sector.where(slug: 'research').limit(1)[0]
   o.sectors << Sector.where(slug: 'travel_and_hospitality').limit(1)[0]
+  o.locations << Location.where(slug: 'ahmedabad_gujrat_india').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
-  l = Location.create(name: "Durham, NC", slug: 'durham_nc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.9940329, -78.898619) ] WHERE slug = 'durham_nc'")
-  o.locations << l
 end
 if Organization.where(slug: 'catholic_relief_services_crs').empty?
   o = Organization.create(name: "Catholic Relief Services (CRS)", slug: 'catholic_relief_services_crs', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.crs.org/")
@@ -573,6 +685,7 @@ if Organization.where(slug: 'catholic_relief_services_crs').empty?
   o.locations << Location.where(slug: 'albania').limit(1)[0]
   o.locations << Location.where(slug: 'angola').limit(1)[0]
   o.locations << Location.where(slug: 'armenia').limit(1)[0]
+  o.locations << Location.where(slug: 'baltimore_md').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'benin').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
@@ -657,9 +770,6 @@ if Organization.where(slug: 'catholic_relief_services_crs').empty?
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Baltimore, MD", slug: 'baltimore_md', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.2903848, -76.6121893) ] WHERE slug = 'baltimore_md'")
-  o.locations << l
 end
 if Organization.where(slug: 'center_for_international_private').empty?
   o = Organization.create(name: "Center for International Private Enterprise (CIPE)", slug: 'center_for_international_private', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.cipe.org/")
@@ -713,10 +823,8 @@ if Organization.where(slug: 'center_for_international_private').empty?
   o.locations << Location.where(slug: 'tunisia').limit(1)[0]
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'chamilo').empty?
   o = Organization.create(name: "Chamilo", slug: 'chamilo', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.chamilo.org")
@@ -736,15 +844,13 @@ if Organization.where(slug: 'charlie_goldsmith_associates').empty?
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.sectors << Sector.where(slug: 'management').limit(1)[0]
   o.sectors << Sector.where(slug: 'security').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
   o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
-  l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
-  o.locations << l
 end
 if Organization.where(slug: 'chemonics').empty?
   o = Organization.create(name: "Chemonics", slug: 'chemonics', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.chemonics.com")
@@ -795,9 +901,7 @@ if Organization.where(slug: 'chemonics').empty?
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
   o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'code_innovation').empty?
   o = Organization.create(name: "CODE Innovation", slug: 'code_innovation', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://codeinnovation.com/")
@@ -807,9 +911,7 @@ if Organization.where(slug: 'code_innovation').empty?
   o.locations << Location.where(slug: 'liberia').limit(1)[0]
   o.locations << Location.where(slug: 'palestine').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
-  l = Location.create(name: "Silicon Valley?", slug: 'silicon_valley', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.387474, -122.0575434) ] WHERE slug = 'silicon_valley'")
-  o.locations << l
+  o.locations << Location.where(slug: 'silicon_valley').limit(1)[0]
 end
 if Organization.where(slug: 'congo_in_the_picture').empty?
   o = Organization.create(name: "Congo in the Picture", slug: 'congo_in_the_picture', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.facebook.com/CongoInThePicture/")
@@ -818,9 +920,7 @@ end
 if Organization.where(slug: 'coopersmith').empty?
   o = Organization.create(name: "Cooper/Smith", slug: 'coopersmith', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "coopersmith.org")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'creative_associates_internationa').empty?
   o = Organization.create(name: "Creative Associates International", slug: 'creative_associates_internationa', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.creativeassociatesinternational.com/")
@@ -945,11 +1045,9 @@ if Organization.where(slug: 'creative_associates_internationa').empty?
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'uzbekistan').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'democracy_international').empty?
   o = Organization.create(name: "Democracy International", slug: 'democracy_international', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://democracyinternational.com/")
@@ -961,6 +1059,7 @@ if Organization.where(slug: 'democracy_international').empty?
   o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'bethesda_md').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
   o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
   o.locations << Location.where(slug: 'brazil').limit(1)[0]
@@ -1023,9 +1122,6 @@ if Organization.where(slug: 'democracy_international').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Bethesda, MD", slug: 'bethesda_md', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.984652, -77.0947092) ] WHERE slug = 'bethesda_md'")
-  o.locations << l
 end
 if Organization.where(slug: 'development_alternatives_incorpo').empty?
   o = Organization.create(name: "Development Alternatives Incorporated (DAI)", slug: 'development_alternatives_incorpo', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.dai.com/")
@@ -1046,6 +1142,7 @@ if Organization.where(slug: 'development_alternatives_incorpo').empty?
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
   o.locations << Location.where(slug: 'american_samoa').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'bethesda_md').limit(1)[0]
   o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
   o.locations << Location.where(slug: 'botswana').limit(1)[0]
   o.locations << Location.where(slug: 'brunei').limit(1)[0]
@@ -1110,9 +1207,6 @@ if Organization.where(slug: 'development_alternatives_incorpo').empty?
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Bethesda, MD", slug: 'bethesda_md', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.984652, -77.0947092) ] WHERE slug = 'bethesda_md'")
-  o.locations << l
 end
 if Organization.where(slug: 'development_gateway').empty?
   o = Organization.create(name: "Development Gateway", slug: 'development_gateway', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.developmentgateway.org")
@@ -1163,10 +1257,8 @@ if Organization.where(slug: 'development_gateway').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'digital_campus').empty?
   o = Organization.create(name: "Digital Campus", slug: 'digital_campus', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://digital-campus.org/")
@@ -1180,12 +1272,8 @@ if Organization.where(slug: 'digital_green').empty?
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
-  l = Location.create(name: "San Francisco, CA", slug: 'san_francisco_ca', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.7749295, -122.4194155) ] WHERE slug = 'san_francisco_ca'")
-  o.locations << l
-  l = Location.create(name: "New Delhi, India", slug: 'new_delhi_india', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (28.6139391, 77.2090212) ] WHERE slug = 'new_delhi_india'")
-  o.locations << l
+  o.locations << Location.where(slug: 'new_delhi_india').limit(1)[0]
+  o.locations << Location.where(slug: 'san_francisco_ca').limit(1)[0]
 end
 if Organization.where(slug: 'digital_impact_alliance_dial').empty?
   o = Organization.create(name: "Digital Impact Alliance (DIAL)", slug: 'digital_impact_alliance_dial', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://digitalimpactalliance.org/")
@@ -1207,6 +1295,7 @@ if Organization.where(slug: 'digital_opportunity_trust_dot').empty?
   o.locations << Location.where(slug: 'lebanon').limit(1)[0]
   o.locations << Location.where(slug: 'mexico').limit(1)[0]
   o.locations << Location.where(slug: 'morocco').limit(1)[0]
+  o.locations << Location.where(slug: 'ottawa_canada').limit(1)[0]
   o.locations << Location.where(slug: 'panama').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
@@ -1219,9 +1308,6 @@ if Organization.where(slug: 'digital_opportunity_trust_dot').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Ottawa, Canada", slug: 'ottawa_canada', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.4215296, -75.6971931) ] WHERE slug = 'ottawa_canada'")
-  o.locations << l
 end
 if Organization.where(slug: 'dimagi').empty?
   o = Organization.create(name: "Dimagi", slug: 'dimagi', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.dimagi.com")
@@ -1246,9 +1332,7 @@ if Organization.where(slug: 'education_development_center_edc').empty?
   o.sectors << Sector.where(slug: 'education').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
-  l = Location.create(name: "Waltham (Boston), MA", slug: 'waltham_boston_ma', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3764852, -71.2356113) ] WHERE slug = 'waltham_boston_ma'")
-  o.locations << l
+  o.locations << Location.where(slug: 'waltham_boston_ma').limit(1)[0]
 end
 if Organization.where(slug: 'enabel').empty?
   o = Organization.create(name: "Enabel", slug: 'enabel', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.enabel.be")
@@ -1275,6 +1359,7 @@ if Organization.where(slug: 'enabel').empty?
   o.locations << Location.where(slug: 'belgium').limit(1)[0]
   o.locations << Location.where(slug: 'benin').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'brussels_belgium').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
   o.locations << Location.where(slug: 'burundi').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
@@ -1289,9 +1374,6 @@ if Organization.where(slug: 'enabel').empty?
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
-  l = Location.create(name: "Brussels, Belgium", slug: 'brussels_belgium', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussels_belgium'")
-  o.locations << l
 end
 if Organization.where(slug: 'everymobile').empty?
   o = Organization.create(name: "Every1Mobile", slug: 'everymobile', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.every1mobile.net/")
@@ -1299,11 +1381,9 @@ if Organization.where(slug: 'everymobile').empty?
 end
 if Organization.where(slug: 'fair_denmark').empty?
   o = Organization.create(name: "FAIR Denmark", slug: 'fair_denmark', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.fairdanmark.dk/en/")
+  o.locations << Location.where(slug: 'copenhagen_denmark').limit(1)[0]
   o.locations << Location.where(slug: 'denmark').limit(1)[0]
   o.locations << Location.where(slug: 'norway').limit(1)[0]
-  l = Location.create(name: "Copenhagen, Denmark", slug: 'copenhagen_denmark', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (55.6760968, 12.5683372) ] WHERE slug = 'copenhagen_denmark'")
-  o.locations << l
 end
 if Organization.where(slug: 'fhi_').empty?
   o = Organization.create(name: "FHI 360", slug: 'fhi_', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.fhi360.org/")
@@ -1337,6 +1417,7 @@ if Organization.where(slug: 'fhi_').empty?
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'durham_nc').limit(1)[0]
   o.locations << Location.where(slug: 'equatorial_guinea').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
@@ -1372,9 +1453,6 @@ if Organization.where(slug: 'fhi_').empty?
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Durham, NC", slug: 'durham_nc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.9940329, -78.898619) ] WHERE slug = 'durham_nc'")
-  o.locations << l
 end
 if Organization.where(slug: 'fio').empty?
   o = Organization.create(name: "Fio", slug: 'fio', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.fio.com")
@@ -1382,9 +1460,7 @@ if Organization.where(slug: 'fio').empty?
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
-  l = Location.create(name: "Toronto, ON, Canada", slug: 'toronto_on_canada', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (43.653226, -79.3831843) ] WHERE slug = 'toronto_on_canada'")
-  o.locations << l
+  o.locations << Location.where(slug: 'toronto_canada').limit(1)[0]
 end
 if Organization.where(slug: 'forum_one').empty?
   o = Organization.create(name: "Forum One", slug: 'forum_one', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://forumone.com/")
@@ -1409,14 +1485,12 @@ if Organization.where(slug: 'girl_effect_mobile__springster').empty?
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
   o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
   o.locations << Location.where(slug: 'malawi').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'philippines').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
-  l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
-  o.locations << l
 end
 if Organization.where(slug: 'giz').empty?
   o = Organization.create(name: "GIZ", slug: 'giz', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.giz.de/en/html/index.html")
@@ -1661,21 +1735,17 @@ if Organization.where(slug: 'global_integrity').empty?
   o.locations << Location.where(slug: 'vanuatu').limit(1)[0]
   o.locations << Location.where(slug: 'venezuela').limit(1)[0]
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'good_business').empty?
   o = Organization.create(name: "Good Business", slug: 'good_business', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.good.business")
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'botswana').limit(1)[0]
-  l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
-  o.locations << l
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
 end
 if Organization.where(slug: 'grameen_foundation').empty?
   o = Organization.create(name: "Grameen Foundation", slug: 'grameen_foundation', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.grameenfoundation.org/")
@@ -1697,21 +1767,18 @@ if Organization.where(slug: 'grameen_foundation').empty?
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'hack__climate').empty?
   o = Organization.create(name: "Hack 4 Climate", slug: 'hack__climate', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://cleantech21.org")
   o.locations << Location.where(slug: 'switzerland').limit(1)[0]
-  l = Location.create(name: "Zurich, Switzerland", slug: 'zurich_switzerland', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.3768866, 8.541694) ] WHERE slug = 'zurich_switzerland'")
-  o.locations << l
+  o.locations << Location.where(slug: 'zurich_switzerland').limit(1)[0]
 end
 if Organization.where(slug: 'healthenabled').empty?
   o = Organization.create(name: "HealthEnabled", slug: 'healthenabled', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://healthenabled.org/")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'cape_town_south_africa').limit(1)[0]
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
   o.locations << Location.where(slug: 'liberia').limit(1)[0]
@@ -1723,9 +1790,6 @@ if Organization.where(slug: 'healthenabled').empty?
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Cape Town, South Africa", slug: 'cape_town_south_africa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.9248685, 18.4240553) ] WHERE slug = 'cape_town_south_africa'")
-  o.locations << l
 end
 if Organization.where(slug: 'human_network_international_hni').empty?
   o = Organization.create(name: "Human Network International (HNI)", slug: 'human_network_international_hni', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://hni.org/")
@@ -1744,25 +1808,19 @@ if Organization.where(slug: 'human_network_international_hni').empty?
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'humanitarian_open_street_map_tea').empty?
   o = Organization.create(name: "Humanitarian Open Street Map Team ", slug: 'humanitarian_open_street_map_tea', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "")
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'instedd').empty?
   o = Organization.create(name: "InSTEDD", slug: 'instedd', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://instedd.org/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
-  l = Location.create(name: "Sunnyvale, CA, USA", slug: 'sunnyvale_ca_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.36883, -122.0363496) ] WHERE slug = 'sunnyvale_ca_usa'")
-  o.locations << l
+  o.locations << Location.where(slug: 'sunnyvale_ca_usa').limit(1)[0]
 end
 if Organization.where(slug: 'institute_of_development_studies').empty?
   o = Organization.create(name: "Institute of Development Studies (IDS)", slug: 'institute_of_development_studies', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.ids.ac.uk")
@@ -1798,9 +1856,7 @@ if Organization.where(slug: 'intellisoft').empty?
   o = Organization.create(name: "IntelliSOFT", slug: 'intellisoft', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.intellisoftkenya.com")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
-  l = Location.create(name: "Nairobi, Kenya", slug: 'nairobi_kenya', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-1.2920659, 36.8219462) ] WHERE slug = 'nairobi_kenya'")
-  o.locations << l
+  o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
 end
 if Organization.where(slug: 'international_foundation_for_ele').empty?
   o = Organization.create(name: "International Foundation for Electoral Systems (IFES)", slug: 'international_foundation_for_ele', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.ifes.org/")
@@ -1811,6 +1867,7 @@ if Organization.where(slug: 'international_foundation_for_ele').empty?
   o.locations << Location.where(slug: 'angola').limit(1)[0]
   o.locations << Location.where(slug: 'antigua_and_barbuda').limit(1)[0]
   o.locations << Location.where(slug: 'argentina').limit(1)[0]
+  o.locations << Location.where(slug: 'arlington_va').limit(1)[0]
   o.locations << Location.where(slug: 'armenia').limit(1)[0]
   o.locations << Location.where(slug: 'aruba').limit(1)[0]
   o.locations << Location.where(slug: 'australia').limit(1)[0]
@@ -1988,9 +2045,6 @@ if Organization.where(slug: 'international_foundation_for_ele').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Arlington, VA", slug: 'arlington_va', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.8816208, -77.0909809) ] WHERE slug = 'arlington_va'")
-  o.locations << l
 end
 if Organization.where(slug: 'international_initiative_for_imp').empty?
   o = Organization.create(name: "International Initiative for Impact Evaluation (3ie)", slug: 'international_initiative_for_imp', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://3ieimpact.org/")
@@ -2043,6 +2097,7 @@ if Organization.where(slug: 'internews').empty?
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'california_usa').limit(1)[0]
   o.locations << Location.where(slug: 'cambodia').limit(1)[0]
   o.locations << Location.where(slug: 'cameroon').limit(1)[0]
   o.locations << Location.where(slug: 'central_african_republic').limit(1)[0]
@@ -2064,6 +2119,7 @@ if Organization.where(slug: 'internews').empty?
   o.locations << Location.where(slug: 'kosovo').limit(1)[0]
   o.locations << Location.where(slug: 'kyrgystan').limit(1)[0]
   o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
   o.locations << Location.where(slug: 'macedonia').limit(1)[0]
   o.locations << Location.where(slug: 'malaysia').limit(1)[0]
   o.locations << Location.where(slug: 'mali').limit(1)[0]
@@ -2077,6 +2133,7 @@ if Organization.where(slug: 'internews').empty?
   o.locations << Location.where(slug: 'palestine').limit(1)[0]
   o.locations << Location.where(slug: 'papua_new_guinea').limit(1)[0]
   o.locations << Location.where(slug: 'paraguay').limit(1)[0]
+  o.locations << Location.where(slug: 'paris_france').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
   o.locations << Location.where(slug: 'philippines').limit(1)[0]
   o.locations << Location.where(slug: 'puerto_rico').limit(1)[0]
@@ -2100,19 +2157,8 @@ if Organization.where(slug: 'internews').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'vanuatu').limit(1)[0]
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "California, USA", slug: 'california_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (36.778261, -119.4179324) ] WHERE slug = 'california_usa'")
-  o.locations << l
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
-  l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
-  o.locations << l
-  l = Location.create(name: "Paris, France", slug: 'paris_france', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (48.856614, 2.3522219) ] WHERE slug = 'paris_france'")
-  o.locations << l
 end
 if Organization.where(slug: 'intrahealth_international').empty?
   o = Organization.create(name: "IntraHealth International", slug: 'intrahealth_international', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.intrahealth.org/")
@@ -2285,12 +2331,10 @@ if Organization.where(slug: 'irex').empty?
   o.locations << Location.where(slug: 'uzbekistan').limit(1)[0]
   o.locations << Location.where(slug: 'venezuela').limit(1)[0]
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'ist_uganda').empty?
   o = Organization.create(name: "IST Uganda", slug: 'ist_uganda', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "")
@@ -2298,15 +2342,14 @@ end
 if Organization.where(slug: 'itech_mission_private_limited_it').empty?
   o = Organization.create(name: "iTech Mission Private Limited (iTM)", slug: 'itech_mission_private_limited_it', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.itechmission.org/ ")
   o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
-  l = Location.create(name: "New Delhi, India", slug: 'new_delhi_india', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (28.6139391, 77.2090212) ] WHERE slug = 'new_delhi_india'")
-  o.locations << l
+  o.locations << Location.where(slug: 'new_delhi_india').limit(1)[0]
 end
 if Organization.where(slug: 'jhpiego').empty?
   o = Organization.create(name: "Jhpiego", slug: 'jhpiego', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.jhpiego.org/")
   o.sectors << Sector.where(slug: 'gender_and_minority_groups').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'baltimore_md').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'botswana').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
@@ -2344,9 +2387,6 @@ if Organization.where(slug: 'jhpiego').empty?
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Baltimore, MD", slug: 'baltimore_md', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.2903848, -76.6121893) ] WHERE slug = 'baltimore_md'")
-  o.locations << l
 end
 if Organization.where(slug: 'john_snow_inc_jsi').empty?
   o = Organization.create(name: "John Snow, Inc. (JSI)", slug: 'john_snow_inc_jsi', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.jsi.com/")
@@ -2358,6 +2398,7 @@ if Organization.where(slug: 'john_snow_inc_jsi').empty?
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'benin').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'boston_ma').limit(1)[0]
   o.locations << Location.where(slug: 'botswana').limit(1)[0]
   o.locations << Location.where(slug: 'brazil').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
@@ -2428,9 +2469,6 @@ if Organization.where(slug: 'john_snow_inc_jsi').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "HQ: Boston, MA", slug: 'hq_boston_ma', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.328326, -71.07022) ] WHERE slug = 'hq_boston_ma'")
-  o.locations << l
 end
 if Organization.where(slug: 'kimetrica').empty?
   o = Organization.create(name: "Kimetrica", slug: 'kimetrica', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://kimetrica.com")
@@ -2488,20 +2526,16 @@ if Organization.where(slug: 'kingship_digital_inc').empty?
   o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
   o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
   o.sectors << Sector.where(slug: 'media').limit(1)[0]
+  o.locations << Location.where(slug: 'kampala_uganda').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Kampala, Uganda", slug: 'kampala_uganda', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (0.3475964, 32.5825197) ] WHERE slug = 'kampala_uganda'")
-  o.locations << l
 end
 if Organization.where(slug: 'lingos').empty?
   o = Organization.create(name: "LINGOs", slug: 'lingos', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://lingos.org/")
 end
 if Organization.where(slug: 'logical_outcomes').empty?
   o = Organization.create(name: "Logical Outcomes", slug: 'logical_outcomes', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.logicaloutcomes.net/")
-  l = Location.create(name: "Toronto, Canada", slug: 'toronto_canada', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (43.653226, -79.3831843) ] WHERE slug = 'toronto_canada'")
-  o.locations << l
+  o.locations << Location.where(slug: 'toronto_canada').limit(1)[0]
 end
 if Organization.where(slug: 'lutheran_world_relief').empty?
   o = Organization.create(name: "Lutheran World Relief", slug: 'lutheran_world_relief', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "programs.lwr.org")
@@ -2512,6 +2546,7 @@ if Organization.where(slug: 'lutheran_world_relief').empty?
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
+  o.locations << Location.where(slug: 'baltimore_md').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
@@ -2537,9 +2572,6 @@ if Organization.where(slug: 'lutheran_world_relief').empty?
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Baltimore, MD", slug: 'baltimore_md', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.2903848, -76.6121893) ] WHERE slug = 'baltimore_md'")
-  o.locations << l
 end
 if Organization.where(slug: 'main_level').empty?
   o = Organization.create(name: "Main Level", slug: 'main_level', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.mainlevel.de")
@@ -2554,6 +2586,7 @@ if Organization.where(slug: 'main_level').empty?
   o.locations << Location.where(slug: 'china').limit(1)[0]
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'eschborn_germany').limit(1)[0]
   o.locations << Location.where(slug: 'germany').limit(1)[0]
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
@@ -2576,16 +2609,11 @@ if Organization.where(slug: 'main_level').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'uruguay').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Eschborn, Germany", slug: 'eschborn_germany', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.1467469, 8.5614555) ] WHERE slug = 'eschborn_germany'")
-  o.locations << l
 end
 if Organization.where(slug: 'makaia').empty?
   o = Organization.create(name: "Makaia", slug: 'makaia', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://makaia.org/en/home/")
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
-  l = Location.create(name: "Medellín, Colombia.", slug: 'medelln_colombia', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (6.244203, -75.5812119) ] WHERE slug = 'medelln_colombia'")
-  o.locations << l
+  o.locations << Location.where(slug: 'medelln_colombia').limit(1)[0]
 end
 if Organization.where(slug: 'medic_mobile').empty?
   o = Organization.create(name: "Medic Mobile", slug: 'medic_mobile', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://medicmobile.org/")
@@ -2603,13 +2631,11 @@ if Organization.where(slug: 'medic_mobile').empty?
   o.locations << Location.where(slug: 'mauritania').limit(1)[0]
   o.locations << Location.where(slug: 'nepal').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'san_francisco_ca').limit(1)[0]
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "San Francisco, CA, USA", slug: 'san_francisco_ca_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.7749295, -122.4194155) ] WHERE slug = 'san_francisco_ca_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'mercy_corps').empty?
   o = Organization.create(name: "Mercy Corps", slug: 'mercy_corps', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.mercycorps.org")
@@ -2643,6 +2669,7 @@ if Organization.where(slug: 'mercy_corps').empty?
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
   o.locations << Location.where(slug: 'palestine').limit(1)[0]
+  o.locations << Location.where(slug: 'portland_or_usa').limit(1)[0]
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
   o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
   o.locations << Location.where(slug: 'sudan').limit(1)[0]
@@ -2656,18 +2683,13 @@ if Organization.where(slug: 'mercy_corps').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Portland, OR, USA", slug: 'portland_or_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.5122308, -122.6587185) ] WHERE slug = 'portland_or_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'moonshot_global_consulting').empty?
   o = Organization.create(name: "Moonshot Global Consulting", slug: 'moonshot_global_consulting', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://moonshotglobal.com/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'mpower_social_enterprises_ltd').empty?
   o = Organization.create(name: "mPower Social Enterprises Ltd.", slug: 'mpower_social_enterprises_ltd', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.mpower-social.com/")
@@ -2676,6 +2698,7 @@ if Organization.where(slug: 'mpower_social_enterprises_ltd').empty?
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'botswana').limit(1)[0]
+  o.locations << Location.where(slug: 'dhaka_bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
   o.locations << Location.where(slug: 'guatemala').limit(1)[0]
   o.locations << Location.where(slug: 'haiti').limit(1)[0]
@@ -2686,16 +2709,11 @@ if Organization.where(slug: 'mpower_social_enterprises_ltd').empty?
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Dhaka, Bangladesh", slug: 'dhaka_bangladesh', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.810332, 90.4125181) ] WHERE slug = 'dhaka_bangladesh'")
-  o.locations << l
 end
 if Organization.where(slug: 'mpowering_frontline_health_worke').empty?
   o = Organization.create(name: "mPowering Frontline Health Workers", slug: 'mpowering_frontline_health_worke', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://mpoweringhealth.org/")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'nafundi').empty?
   o = Organization.create(name: "Nafundi", slug: 'nafundi', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://nafundi.com/")
@@ -2704,9 +2722,7 @@ if Organization.where(slug: 'nafundi').empty?
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
-  l = Location.create(name: "San Diego, CA, USA", slug: 'san_diego_ca_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (32.715738, -117.1610838) ] WHERE slug = 'san_diego_ca_usa'")
-  o.locations << l
+  o.locations << Location.where(slug: 'san_diego_ca_usa').limit(1)[0]
 end
 if Organization.where(slug: 'national_democratic_institute_nd').empty?
   o = Organization.create(name: "National Democratic Institute (NDI)", slug: 'national_democratic_institute_nd', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.ndi.org/")
@@ -2752,9 +2768,7 @@ if Organization.where(slug: 'national_democratic_institute_nd').empty?
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'venezuela').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'norwegian_peoples_aid').empty?
   o = Organization.create(name: "Norwegian People''s Aid", slug: 'norwegian_peoples_aid', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.npaid.org")
@@ -2778,13 +2792,11 @@ if Organization.where(slug: 'norwegian_peoples_aid').empty?
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
   o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'stockholm_sweden').limit(1)[0]
   o.locations << Location.where(slug: 'syria').limit(1)[0]
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Stockholm, Sweden", slug: 'stockholm_sweden', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (59.3293235, 18.0685808) ] WHERE slug = 'stockholm_sweden'")
-  o.locations << l
 end
 if Organization.where(slug: 'ona').empty?
   o = Organization.create(name: "Ona", slug: 'ona', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://ona.io/home/")
@@ -2829,6 +2841,7 @@ if Organization.where(slug: 'openmrs').empty?
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'brazil').limit(1)[0]
   o.locations << Location.where(slug: 'canada').limit(1)[0]
+  o.locations << Location.where(slug: 'carmel_in_usa').limit(1)[0]
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'ecuador').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
@@ -2852,16 +2865,11 @@ if Organization.where(slug: 'openmrs').empty?
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
-  l = Location.create(name: "Carmel, IN, USA", slug: 'carmel_in_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.978371, -86.1180435) ] WHERE slug = 'carmel_in_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'openwise').empty?
   o = Organization.create(name: "OpenWise", slug: 'openwise', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.openwise.co/")
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'oxfam').empty?
   o = Organization.create(name: "Oxfam", slug: 'oxfam', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.oxfam.org/ ")
@@ -2881,6 +2889,7 @@ if Organization.where(slug: 'oxfam').empty?
   o.locations << Location.where(slug: 'benin').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
   o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'boston_ma').limit(1)[0]
   o.locations << Location.where(slug: 'brazil').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
   o.locations << Location.where(slug: 'burundi').limit(1)[0]
@@ -2967,16 +2976,11 @@ if Organization.where(slug: 'oxfam').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'vanuatu').limit(1)[0]
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'western_sahara').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Boston, MA, USA", slug: 'boston_ma_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3600825, -71.0588801) ] WHERE slug = 'boston_ma_usa'")
-  o.locations << l
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'palladium').empty?
   o = Organization.create(name: "Palladium", slug: 'palladium', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://thepalladiumgroup.com/")
@@ -2990,6 +2994,7 @@ if Organization.where(slug: 'palladium').empty?
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.sectors << Sector.where(slug: 'logistics').limit(1)[0]
   o.sectors << Sector.where(slug: 'workforce').limit(1)[0]
+  o.locations << Location.where(slug: 'abuja_nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
   o.locations << Location.where(slug: 'andorra').limit(1)[0]
   o.locations << Location.where(slug: 'anguilla').limit(1)[0]
@@ -2997,13 +3002,16 @@ if Organization.where(slug: 'palladium').empty?
   o.locations << Location.where(slug: 'australia').limit(1)[0]
   o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'brisbane_austrailia').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
   o.locations << Location.where(slug: 'cambodia').limit(1)[0]
   o.locations << Location.where(slug: 'canada').limit(1)[0]
+  o.locations << Location.where(slug: 'canberra_austrailia').limit(1)[0]
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'congo').limit(1)[0]
   o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'dubai_united_arab_emirates').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'fiji').limit(1)[0]
@@ -3014,10 +3022,12 @@ if Organization.where(slug: 'palladium').empty?
   o.locations << Location.where(slug: 'haiti').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
   o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'jakarta_indonesia').limit(1)[0]
   o.locations << Location.where(slug: 'jamaica').limit(1)[0]
   o.locations << Location.where(slug: 'jordan').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
   o.locations << Location.where(slug: 'lebanon').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
   o.locations << Location.where(slug: 'macedonia').limit(1)[0]
   o.locations << Location.where(slug: 'madagascar').limit(1)[0]
   o.locations << Location.where(slug: 'malawi').limit(1)[0]
@@ -3025,11 +3035,13 @@ if Organization.where(slug: 'palladium').empty?
   o.locations << Location.where(slug: 'mauritania').limit(1)[0]
   o.locations << Location.where(slug: 'mexico').limit(1)[0]
   o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
   o.locations << Location.where(slug: 'nauru').limit(1)[0]
   o.locations << Location.where(slug: 'nepal').limit(1)[0]
   o.locations << Location.where(slug: 'netherlands').limit(1)[0]
   o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'ny_ny').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
   o.locations << Location.where(slug: 'papua_new_guinea').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
@@ -3042,6 +3054,7 @@ if Organization.where(slug: 'palladium').empty?
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
   o.locations << Location.where(slug: 'spain').limit(1)[0]
   o.locations << Location.where(slug: 'sweden').limit(1)[0]
+  o.locations << Location.where(slug: 'sydney_austrailia').limit(1)[0]
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
   o.locations << Location.where(slug: 'timor_leste').limit(1)[0]
   o.locations << Location.where(slug: 'togo').limit(1)[0]
@@ -3050,38 +3063,9 @@ if Organization.where(slug: 'palladium').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'vanuatu').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
-  o.locations << l
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
-  l = Location.create(name: "Brisbane, Austrailia", slug: 'brisbane_austrailia', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-27.4697707, 153.0251235) ] WHERE slug = 'brisbane_austrailia'")
-  o.locations << l
-  l = Location.create(name: "Dubai, United Arab Emirates", slug: 'dubai_united_arab_emirates', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (25.2048493, 55.2707828) ] WHERE slug = 'dubai_united_arab_emirates'")
-  o.locations << l
-  l = Location.create(name: "Abuja, Nigeria", slug: 'abuja_nigeria', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (9.0764785, 7.398574) ] WHERE slug = 'abuja_nigeria'")
-  o.locations << l
-  l = Location.create(name: "NY, NY", slug: 'ny_ny', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'ny_ny'")
-  o.locations << l
-  l = Location.create(name: "Canberra, Austrailia", slug: 'canberra_austrailia', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-35.2809368, 149.1300092) ] WHERE slug = 'canberra_austrailia'")
-  o.locations << l
-  l = Location.create(name: "Jakarta, Indonesia", slug: 'jakarta_indonesia', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-6.180495, 106.8283415) ] WHERE slug = 'jakarta_indonesia'")
-  o.locations << l
-  l = Location.create(name: "Nairobi, Kenya", slug: 'nairobi_kenya', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-1.2920659, 36.8219462) ] WHERE slug = 'nairobi_kenya'")
-  o.locations << l
-  l = Location.create(name: "Sydney, Austrailia", slug: 'sydney_austrailia', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.8688197, 151.2092955) ] WHERE slug = 'sydney_austrailia'")
-  o.locations << l
 end
 if Organization.where(slug: 'path').empty?
   o = Organization.create(name: "PATH", slug: 'path', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.path.org/")
@@ -3122,10 +3106,8 @@ if Organization.where(slug: 'pathfinder_international').empty?
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
   o.locations << Location.where(slug: 'togo').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'watertown_ma_usa').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Watertown, MA, USA", slug: 'watertown_ma_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3709299, -71.1828321) ] WHERE slug = 'watertown_ma_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'people_in_need').empty?
   o = Organization.create(name: "People in Need", slug: 'people_in_need', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.peopleinneed.cz")
@@ -3148,6 +3130,7 @@ if Organization.where(slug: 'people_in_need').empty?
   o.locations << Location.where(slug: 'myanmar').limit(1)[0]
   o.locations << Location.where(slug: 'nepal').limit(1)[0]
   o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'prague_czech_republic').limit(1)[0]
   o.locations << Location.where(slug: 'romania').limit(1)[0]
   o.locations << Location.where(slug: 'serbia').limit(1)[0]
   o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
@@ -3156,9 +3139,6 @@ if Organization.where(slug: 'people_in_need').empty?
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Prague, Czech Republic", slug: 'prague_czech_republic', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.0755381, 14.4378005) ] WHERE slug = 'prague_czech_republic'")
-  o.locations << l
 end
 if Organization.where(slug: 'plan_international').empty?
   o = Organization.create(name: "Plan International", slug: 'plan_international', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://plan-international.org")
@@ -3181,6 +3161,7 @@ if Organization.where(slug: 'plan_international').empty?
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'denmark').limit(1)[0]
   o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'dukes_court_uk').limit(1)[0]
   o.locations << Location.where(slug: 'ecuador').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
   o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
@@ -3238,9 +3219,6 @@ if Organization.where(slug: 'plan_international').empty?
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Dukes Court, UK", slug: 'dukes_court_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.3206581, -0.554314) ] WHERE slug = 'dukes_court_uk'")
-  o.locations << l
 end
 if Organization.where(slug: 'praekeltorg').empty?
   o = Organization.create(name: "Praekelt.org", slug: 'praekeltorg', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.praekelt.org/")
@@ -3280,6 +3258,7 @@ if Organization.where(slug: 'reboot').empty?
   o.locations << Location.where(slug: 'netherlands').limit(1)[0]
   o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'ny_ny').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
   o.locations << Location.where(slug: 'panama').limit(1)[0]
   o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
@@ -3293,9 +3272,6 @@ if Organization.where(slug: 'reboot').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "NYC, USA", slug: 'nyc_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'nyc_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'relief_applications').empty?
   o = Organization.create(name: "Relief Applications", slug: 'relief_applications', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://reliefapplications.org")
@@ -3311,6 +3287,7 @@ if Organization.where(slug: 'relief_applications').empty?
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
   o.locations << Location.where(slug: 'italy').limit(1)[0]
   o.locations << Location.where(slug: 'madagascar').limit(1)[0]
+  o.locations << Location.where(slug: 'madrid_spain').limit(1)[0]
   o.locations << Location.where(slug: 'mali').limit(1)[0]
   o.locations << Location.where(slug: 'mauritania').limit(1)[0]
   o.locations << Location.where(slug: 'mozambique').limit(1)[0]
@@ -3322,16 +3299,11 @@ if Organization.where(slug: 'relief_applications').empty?
   o.locations << Location.where(slug: 'thailand').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
-  l = Location.create(name: "Madrid, Spain", slug: 'madrid_spain', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.4167754, -3.7037902) ] WHERE slug = 'madrid_spain'")
-  o.locations << l
 end
 if Organization.where(slug: 'resolve_to_save_lives').empty?
   o = Organization.create(name: "Resolve to Save Lives", slug: 'resolve_to_save_lives', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "resolvetosavelives.org")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
-  l = Location.create(name: "NYC, USA", slug: 'nyc_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'nyc_usa'")
-  o.locations << l
+  o.locations << Location.where(slug: 'ny_ny').limit(1)[0]
 end
 if Organization.where(slug: 'rti_international').empty?
   o = Organization.create(name: "RTI International", slug: 'rti_international', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.rti.org/")
@@ -3378,6 +3350,7 @@ if Organization.where(slug: 'rti_international').empty?
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
   o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'research_triangle_park_nc_usa').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
@@ -3391,9 +3364,6 @@ if Organization.where(slug: 'rti_international').empty?
   o.locations << Location.where(slug: 'uruguay').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Research Triangle Park, NC, USA", slug: 'research_triangle_park_nc_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.8991678, -78.8636402) ] WHERE slug = 'research_triangle_park_nc_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'search_for_common_ground').empty?
   o = Organization.create(name: "Search for Common Ground", slug: 'search_for_common_ground', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.sfcg.org")
@@ -3432,6 +3402,7 @@ if Organization.where(slug: 'search_for_common_ground').empty?
   o.sectors << Sector.where(slug: 'security').limit(1)[0]
   o.sectors << Sector.where(slug: 'violent_extremism').limit(1)[0]
   o.locations << Location.where(slug: 'belgium').limit(1)[0]
+  o.locations << Location.where(slug: 'brussles_belgium').limit(1)[0]
   o.locations << Location.where(slug: 'burundi').limit(1)[0]
   o.locations << Location.where(slug: 'central_african_republic').limit(1)[0]
   o.locations << Location.where(slug: 'chad').limit(1)[0]
@@ -3464,15 +3435,10 @@ if Organization.where(slug: 'search_for_common_ground').empty?
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
-  l = Location.create(name: "Brussles, Belgium", slug: 'brussles_belgium', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.8503463, 4.3517211) ] WHERE slug = 'brussles_belgium'")
-  o.locations << l
 end
 if Organization.where(slug: 'slashroots_foundation').empty?
   o = Organization.create(name: "SlashRoots Foundation", slug: 'slashroots_foundation', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.slashroots.org/#/")
@@ -3480,9 +3446,7 @@ if Organization.where(slug: 'slashroots_foundation').empty?
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.locations << Location.where(slug: 'caribbean').limit(1)[0]
-  l = Location.create(name: "Kingston, Jamaica", slug: 'kingston_jamaica', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (18.0178743, -76.8099041) ] WHERE slug = 'kingston_jamaica'")
-  o.locations << l
+  o.locations << Location.where(slug: 'kingston_jamaica').limit(1)[0]
 end
 if Organization.where(slug: 'smart_resultancy').empty?
   o = Organization.create(name: "SMART Resultancy", slug: 'smart_resultancy', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.smartresultancy.nl/")
@@ -3503,10 +3467,8 @@ if Organization.where(slug: 'somali_disaster_resilience_insti').empty?
   o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
+  o.locations << Location.where(slug: 'mogadishu_somalia').limit(1)[0]
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
-  l = Location.create(name: "Mogadishu, Somalia", slug: 'mogadishu_somalia', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (2.0469343, 45.3181623) ] WHERE slug = 'mogadishu_somalia'")
-  o.locations << l
 end
 if Organization.where(slug: 'souktel').empty?
   o = Organization.create(name: "Souktel", slug: 'souktel', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.souktel.org/")
@@ -3543,6 +3505,7 @@ if Organization.where(slug: 'souktel').empty?
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
   o.locations << Location.where(slug: 'palestine').limit(1)[0]
+  o.locations << Location.where(slug: 'ramallah_palestine').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'saudi_arabia').limit(1)[0]
   o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
@@ -3556,14 +3519,9 @@ if Organization.where(slug: 'souktel').empty?
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'united_arab_emirates').limit(1)[0]
   o.locations << Location.where(slug: 'vanuatu').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
-  l = Location.create(name: "Ramallah, Palestine", slug: 'ramallah_palestine', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (31.9037641, 35.2034184) ] WHERE slug = 'ramallah_palestine'")
-  o.locations << l
 end
 if Organization.where(slug: 'surveycto').empty?
   o = Organization.create(name: "SurveyCTO", slug: 'surveycto', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.surveycto.com/index.html")
@@ -3617,6 +3575,7 @@ if Organization.where(slug: 'swedish_international_developmen').empty?
   o.locations << Location.where(slug: 'serbia').limit(1)[0]
   o.locations << Location.where(slug: 'somalia').limit(1)[0]
   o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'stockholm_sweden').limit(1)[0]
   o.locations << Location.where(slug: 'sudan').limit(1)[0]
   o.locations << Location.where(slug: 'syria').limit(1)[0]
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
@@ -3625,9 +3584,6 @@ if Organization.where(slug: 'swedish_international_developmen').empty?
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Stockholm, Sweden", slug: 'stockholm_sweden', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (59.3293235, 18.0685808) ] WHERE slug = 'stockholm_sweden'")
-  o.locations << l
 end
 if Organization.where(slug: 'sweetsense_inc').empty?
   o = Organization.create(name: "SweetSense, Inc.", slug: 'sweetsense_inc', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.sweetsensors.com")
@@ -3650,9 +3606,7 @@ end
 if Organization.where(slug: 'techchange').empty?
   o = Organization.create(name: "TechChange", slug: 'techchange', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.techchange.org/")
   o.sectors << Sector.where(slug: 'education').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'tecsalud').empty?
   o = Organization.create(name: "TecSalud", slug: 'tecsalud', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.tecsalud.io/")
@@ -3684,6 +3638,7 @@ if Organization.where(slug: 'terre_des_hommes').empty?
   o.locations << Location.where(slug: 'jordan').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
   o.locations << Location.where(slug: 'kosovo').limit(1)[0]
+  o.locations << Location.where(slug: 'lausanne__avenue_montchoisi_laus').limit(1)[0]
   o.locations << Location.where(slug: 'lebanon').limit(1)[0]
   o.locations << Location.where(slug: 'mali').limit(1)[0]
   o.locations << Location.where(slug: 'mauritania').limit(1)[0]
@@ -3704,9 +3659,6 @@ if Organization.where(slug: 'terre_des_hommes').empty?
   o.locations << Location.where(slug: 'togo').limit(1)[0]
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
-  l = Location.create(name: "Lausanne, 15 Avenue Montchoisi Lausanne 1006, Switzerland", slug: 'lausanne__avenue_montchoisi_laus', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.5134439, 6.6338339) ] WHERE slug = 'lausanne__avenue_montchoisi_laus'")
-  o.locations << l
 end
 if Organization.where(slug: 'tetra_tech').empty?
   o = Organization.create(name: "Tetra Tech", slug: 'tetra_tech', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.tetratech.com/")
@@ -3753,33 +3705,27 @@ if Organization.where(slug: 'thinkmd').empty?
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'burlington_va_usa').limit(1)[0]
   o.locations << Location.where(slug: 'ecuador').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
-  l = Location.create(name: "Burlington, VA, USA", slug: 'burlington_va_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (44.4758825, -73.212072) ] WHERE slug = 'burlington_va_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'toladata').empty?
   o = Organization.create(name: "TolaData", slug: 'toladata', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://toladata.com/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
-  l = Location.create(name: "Berlin, Germany", slug: 'berlin_germany', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (52.5200066, 13.404954) ] WHERE slug = 'berlin_germany'")
-  o.locations << l
+  o.locations << Location.where(slug: 'berlin_germany').limit(1)[0]
 end
 if Organization.where(slug: 'tropical_health_and_education_tr').empty?
   o = Organization.create(name: "Tropical Health and Education Trust (THET)", slug: 'tropical_health_and_education_tr', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.thet.org")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
   o.locations << Location.where(slug: 'myanmar').limit(1)[0]
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "London, UK", slug: 'london_uk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.5073509, -0.1277583) ] WHERE slug = 'london_uk'")
-  o.locations << l
 end
 if Organization.where(slug: 'uk_department_for_international').empty?
   o = Organization.create(name: "UK Department for International Development (DFID)", slug: 'uk_department_for_international', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.gov.uk/government/organisations/department-for-international-development")
@@ -4001,9 +3947,7 @@ if Organization.where(slug: 'united_nations_foundation_unf').empty?
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
-  l = Location.create(name: "DC", slug: 'dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.09024, -95.712891) ] WHERE slug = 'dc'")
-  o.locations << l
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'united_nations_global_pulse').empty?
   o = Organization.create(name: "United Nations Global Pulse", slug: 'united_nations_global_pulse', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.unglobalpulse.org/")
@@ -4018,6 +3962,7 @@ if Organization.where(slug: 'united_nations_office_for_the_co').empty?
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'bangkok_thailand').limit(1)[0]
   o.locations << Location.where(slug: 'bolivia').limit(1)[0]
   o.locations << Location.where(slug: 'burundi').limit(1)[0]
   o.locations << Location.where(slug: 'cameroon').limit(1)[0]
@@ -4025,11 +3970,13 @@ if Organization.where(slug: 'united_nations_office_for_the_co').empty?
   o.locations << Location.where(slug: 'chad').limit(1)[0]
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'dhakar_senegal').limit(1)[0]
   o.locations << Location.where(slug: 'ecuador').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
   o.locations << Location.where(slug: 'eritrea').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'geneva_switzerland').limit(1)[0]
   o.locations << Location.where(slug: 'guatemala').limit(1)[0]
   o.locations << Location.where(slug: 'haiti').limit(1)[0]
   o.locations << Location.where(slug: 'honduras').limit(1)[0]
@@ -4046,9 +3993,12 @@ if Organization.where(slug: 'united_nations_office_for_the_co').empty?
   o.locations << Location.where(slug: 'mali').limit(1)[0]
   o.locations << Location.where(slug: 'mexico').limit(1)[0]
   o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
   o.locations << Location.where(slug: 'niger').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'north_korea').limit(1)[0]
+  o.locations << Location.where(slug: 'ny_ny').limit(1)[0]
+  o.locations << Location.where(slug: 'office_of_pacific_islands_near_n').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
   o.locations << Location.where(slug: 'panama').limit(1)[0]
   o.locations << Location.where(slug: 'panama').limit(1)[0]
@@ -4068,24 +4018,6 @@ if Organization.where(slug: 'united_nations_office_for_the_co').empty?
   o.locations << Location.where(slug: 'united_arab_emirates').limit(1)[0]
   o.locations << Location.where(slug: 'venezuela').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
-  l = Location.create(name: "NYC", slug: 'nyc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'nyc'")
-  o.locations << l
-  l = Location.create(name: "Geneva, Switzerland", slug: 'geneva_switzerland', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.2043907, 6.1431577) ] WHERE slug = 'geneva_switzerland'")
-  o.locations << l
-  l = Location.create(name: "Bangkok, Thailand", slug: 'bangkok_thailand', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (13.7563309, 100.5017651) ] WHERE slug = 'bangkok_thailand'")
-  o.locations << l
-  l = Location.create(name: "Dhakar, Senegal", slug: 'dhakar_senegal', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (14.716677, -17.4676861) ] WHERE slug = 'dhakar_senegal'")
-  o.locations << l
-  l = Location.create(name: "Nairobi, Kenya", slug: 'nairobi_kenya', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-1.2920659, 36.8219462) ] WHERE slug = 'nairobi_kenya'")
-  o.locations << l
-  l = Location.create(name: "Office of Pacific Islands (near New Zealand)", slug: 'office_of_pacific_islands_near_n', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (-41.282324, 174.774992) ] WHERE slug = 'office_of_pacific_islands_near_n'")
-  o.locations << l
 end
 if Organization.where(slug: 'united_nations_population_fund_u').empty?
   o = Organization.create(name: "United Nations Population Fund (UNFPA)", slug: 'united_nations_population_fund_u', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.unfpa.org")
@@ -4116,6 +4048,7 @@ if Organization.where(slug: 'united_nations_population_fund_u').empty?
   o.locations << Location.where(slug: 'chad').limit(1)[0]
   o.locations << Location.where(slug: 'comoros').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'denamrk').limit(1)[0]
   o.locations << Location.where(slug: 'egypt').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
@@ -4156,12 +4089,6 @@ if Organization.where(slug: 'united_nations_population_fund_u').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
-  l = Location.create(name: "Denamrk", slug: 'denamrk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (56.26392, 9.501785) ] WHERE slug = 'denamrk'")
-  o.locations << l
-  l = Location.create(name: "Denamrk", slug: 'denamrk', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (56.26392, 9.501785) ] WHERE slug = 'denamrk'")
-  o.locations << l
 end
 if Organization.where(slug: 'united_states_agency_for_interna').empty?
   o = Organization.create(name: "United States Agency for International Development (USAID)", slug: 'united_states_agency_for_interna', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "https://www.usaid.gov/")
@@ -4295,14 +4222,12 @@ if Organization.where(slug: 'villagereach').empty?
   o.locations << Location.where(slug: 'mozambique').limit(1)[0]
   o.locations << Location.where(slug: 'nigeria').limit(1)[0]
   o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'seattle_wa').limit(1)[0]
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
   o.locations << Location.where(slug: 'togo').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Seattle, WA, USA", slug: 'seattle_wa_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (47.6062095, -122.3320708) ] WHERE slug = 'seattle_wa_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'vitalwave').empty?
   o = Organization.create(name: "VitalWave", slug: 'vitalwave', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.vitalwave.com")
@@ -4325,6 +4250,7 @@ if Organization.where(slug: 'vitalwave').empty?
   o.locations << Location.where(slug: 'mexico').limit(1)[0]
   o.locations << Location.where(slug: 'mongolia').limit(1)[0]
   o.locations << Location.where(slug: 'montenegro').limit(1)[0]
+  o.locations << Location.where(slug: 'paolo_alto_ca_usa').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
   o.locations << Location.where(slug: 'portugal').limit(1)[0]
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
@@ -4332,21 +4258,14 @@ if Organization.where(slug: 'vitalwave').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
-  l = Location.create(name: "Paolo Alto, CA, USA", slug: 'paolo_alto_ca_usa', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.4418834, -122.1430195) ] WHERE slug = 'paolo_alto_ca_usa'")
-  o.locations << l
 end
 if Organization.where(slug: 'voto_mobile').empty?
   o = Organization.create(name: "VOTO Mobile", slug: 'voto_mobile', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.votomobile.org/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
-  l = Location.create(name: "Current Offices:", slug: 'current_offices', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (36.8506952, -95.6356657) ] WHERE slug = 'current_offices'")
-  o.locations << l
-  l = Location.create(name: "Canada, US, UK, Senegal, Mali, Burkina Faso, Ghana, Niger, Nigeria, Ethiopia, Kenya, Uganda, Rawanda, DRC, Tanzania, Zambia, Malwai, Mozambique, Zimbabwe, Botswana, South Africa, Madagascar, Afghanistan, Pakistan, Nepal, India, Cambodia, Indonesia,", slug: 'canada_us_uk_senegal_mali_burkin', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (56.130366, -106.346771) ] WHERE slug = 'canada_us_uk_senegal_mali_burkin'")
-  o.locations << l
+  o.locations << Location.where(slug: 'canada_us_uk_senegal_mali_burkin').limit(1)[0]
+  o.locations << Location.where(slug: 'current_offices').limit(1)[0]
 end
 if Organization.where(slug: 'welthungerhilfe').empty?
   o = Organization.create(name: "Welthungerhilfe", slug: 'welthungerhilfe', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.welthungerhilfe.de")
@@ -4373,6 +4292,7 @@ if Organization.where(slug: 'welthungerhilfe').empty?
   o.locations << Location.where(slug: 'central_african_republic').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'germany_office').limit(1)[0]
   o.locations << Location.where(slug: 'haiti').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
   o.locations << Location.where(slug: 'iraq').limit(1)[0]
@@ -4399,9 +4319,6 @@ if Organization.where(slug: 'welthungerhilfe').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Germany (maybe)", slug: 'germany_maybe', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.165691, 10.451526) ] WHERE slug = 'germany_maybe'")
-  o.locations << l
 end
 if Organization.where(slug: 'world_agroforestry_center_icraf').empty?
   o = Organization.create(name: "World Agroforestry Center (ICRAF)", slug: 'world_agroforestry_center_icraf', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://worldagroforestry.org/")
@@ -4623,12 +4540,10 @@ if Organization.where(slug: 'world_bank').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'uruguay').limit(1)[0]
   o.locations << Location.where(slug: 'uzbekistan').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'world_food_programme_wfp').empty?
   o = Organization.create(name: "World Food Programme (WFP)", slug: 'world_food_programme_wfp', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www1.wfp.org/")
@@ -4698,6 +4613,7 @@ if Organization.where(slug: 'world_food_programme_wfp').empty?
   o.locations << Location.where(slug: 'palestine').limit(1)[0]
   o.locations << Location.where(slug: 'peru').limit(1)[0]
   o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'rome_italy').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'sao_tome_and_principe').limit(1)[0]
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
@@ -4716,15 +4632,10 @@ if Organization.where(slug: 'world_food_programme_wfp').empty?
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Rome, Italy", slug: 'rome_italy', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (41.9027835, 12.4963655) ] WHERE slug = 'rome_italy'")
-  o.locations << l
-  l = Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.9071923, -77.0368707) ] WHERE slug = 'washington_dc'")
-  o.locations << l
 end
 if Organization.where(slug: 'world_health_organization_who').empty?
   o = Organization.create(name: "World Health Organization (WHO)", slug: 'world_health_organization_who', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.who.int/en/")
@@ -4791,6 +4702,7 @@ if Organization.where(slug: 'world_health_organization_who').empty?
   o.locations << Location.where(slug: 'france').limit(1)[0]
   o.locations << Location.where(slug: 'gabon').limit(1)[0]
   o.locations << Location.where(slug: 'gambia').limit(1)[0]
+  o.locations << Location.where(slug: 'geneva_switzerland').limit(1)[0]
   o.locations << Location.where(slug: 'georgia').limit(1)[0]
   o.locations << Location.where(slug: 'germany').limit(1)[0]
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
@@ -4920,9 +4832,6 @@ if Organization.where(slug: 'world_health_organization_who').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
-  l = Location.create(name: "Geneva", slug: 'geneva', :location_type => :point)
-  connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.2043907, 6.1431577) ] WHERE slug = 'geneva'")
-  o.locations << l
 end
 if Organization.where(slug: 'world_vision_international').empty?
   o = Organization.create(name: "World Vision International", slug: 'world_vision_international', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.wvi.org/")

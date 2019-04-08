@@ -19,6 +19,10 @@ namespace :db do
       Location.where(:location_type => :country).order('slug').each do |country|
         orgfile.puts "Location.create(name: \"#{country.name}\", slug: '#{country.slug}', :location_type => :country) if Location.where(slug: '#{country.slug}').empty?"
       end
+      Location.where(:location_type => :point).order('slug').each do |office|
+        orgfile.puts "Location.create(name: \"#{office.name}\", slug: '#{office.slug}', :location_type => :point) if Location.where(slug: '#{office.slug}').empty?"
+        orgfile.puts "connection.execute(\"UPDATE locations SET points = ARRAY[ POINT (#{office.points[0][0]}, #{office.points[0][1]}) ] WHERE slug = '#{office.slug}'\")"
+      end
 
       Organization.all.order('slug').each do |org|
         orgfile.puts "if Organization.where(slug: '#{org.slug}').empty?"
@@ -27,13 +31,8 @@ namespace :db do
         org.sectors.order('slug').each do |sector|
           orgfile.puts "  o.sectors << Sector.where(slug: '#{sector.slug}').limit(1)[0]"
         end
-        org.locations.where(:location_type => :country).order('slug').each do |country|
-          orgfile.puts "  o.locations << Location.where(slug: '#{country.slug}').limit(1)[0]"
-        end
-        org.locations.where(:location_type => :point).each do |l|
-          orgfile.puts "  l = Location.create(name: \"#{l.name}\", slug: '#{l.slug}', :location_type => :point)"
-          orgfile.puts "  connection.execute(\"UPDATE locations SET points = ARRAY[ POINT (#{l.points[0][0]}, #{l.points[0][1]}) ] WHERE slug = '#{l.slug}'\")"
-          orgfile.puts "  o.locations << l"
+        org.locations.order('slug').each do |location|
+          orgfile.puts "  o.locations << Location.where(slug: '#{location.slug}').limit(1)[0]"
         end
         org.contacts.each do |c|
           contactfile.puts "Organization.where(slug: '#{org.slug}').limit(1)[0].contacts << Contact.create(name: \"#{c.name}\", email: \"#{c.email}\", slug: '#{c.slug}') if Contact.where(slug: '#{c.slug}').empty?"
