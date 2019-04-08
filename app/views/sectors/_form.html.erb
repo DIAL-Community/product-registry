@@ -5,11 +5,6 @@
       <%= form.label :name %>
     </fieldset>
 
-    <fieldset class="form-label-group">
-      <%= form.text_field :slug, id: :sector_slug, :class => "form-control", :placeholder => "Slug" %>
-      <%= form.label :slug %>
-    </fieldset>
-
     <% if !@organization %>
       <fieldset class="form-label-group">
         <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />

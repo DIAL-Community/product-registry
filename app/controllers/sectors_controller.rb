@@ -7,9 +7,12 @@ class SectorsController < ApplicationController
   def index
     if params[:without_paging]
       @sectors = Sector
-          .where(nil)
-          .starts_with(params[:search])
-          .order(:name)
+            .where(nil)
+            .starts_with(params[:search])
+            .order(:name)
+      if params[:display_only]
+        @sectors = @sectors.where(is_displayable: true)
+      end
       return
     end
     if params[:search]
@@ -111,6 +114,13 @@ class SectorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sector_params
-      params.require(:sector).permit(:name, :slug)
+      params
+        .require(:sector)
+        .permit(:name, :slug)
+        .tap do |attr|
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
+        end
     end
 end
