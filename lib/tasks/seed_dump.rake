@@ -1,29 +1,33 @@
 namespace :db do
   namespace :seed do
     task :dump => :environment do
-      orgfile = File.open(File.join(Rails.root, 'db', 'seeds.rb'), "w")
-      contactfile = File.open(File.join(Rails.root, 'db', 'contacts.rb'), "w")
-      orgfile.puts "connection = ActiveRecord::Base.connection()"
+      building_block_file = File.open(File.join(Rails.root, 'db', 'building_blocks.rb'), 'w')
+      BuildingBlock.all.order('slug').each do |bb|
+        building_block_file.puts "BuildingBlock.create(name: \"#{bb.name}\", slug: '#{bb.slug}') if BuildingBlock.where(slug: '#{bb.slug}').empty?"
+      end
 
+      sectorfile = File.open(File.join(Rails.root, 'db', 'sectors.rb'), "w")
       Sector.all.order('slug').each do |sector|
         # to_s isn't working right here
         disp = 'false'
         if sector.is_displayable
           disp = 'true'
         end
-        orgfile.puts "Sector.create(name: \"#{sector.name}\", slug: '#{sector.slug}', is_displayable: #{disp}) if Sector.where(slug: '#{sector.slug}').empty?"
+        sectorfile.puts "Sector.create(name: \"#{sector.name}\", slug: '#{sector.slug}', is_displayable: #{disp}) if Sector.where(slug: '#{sector.slug}').empty?"
       end
 
-      orgfile.puts "\n"
-
+      locfile = File.open(File.join(Rails.root, 'db', 'locations.rb'), "w")
+      locfile.puts "connection = ActiveRecord::Base.connection()"
       Location.where(:location_type => :country).order('slug').each do |country|
-        orgfile.puts "Location.create(name: \"#{country.name}\", slug: '#{country.slug}', :location_type => :country) if Location.where(slug: '#{country.slug}').empty?"
+        locfile.puts "Location.create(name: \"#{country.name}\", slug: '#{country.slug}', :location_type => :country) if Location.where(slug: '#{country.slug}').empty?"
       end
       Location.where(:location_type => :point).order('slug').each do |office|
-        orgfile.puts "Location.create(name: \"#{office.name}\", slug: '#{office.slug}', :location_type => :point) if Location.where(slug: '#{office.slug}').empty?"
-        orgfile.puts "connection.execute(\"UPDATE locations SET points = ARRAY[ POINT (#{office.points[0][0]}, #{office.points[0][1]}) ] WHERE slug = '#{office.slug}'\")"
+        locfile.puts "Location.create(name: \"#{office.name}\", slug: '#{office.slug}', :location_type => :point) if Location.where(slug: '#{office.slug}').empty?"
+        locfile.puts "connection.execute(\"UPDATE locations SET points = ARRAY[ POINT (#{office.points[0][0]}, #{office.points[0][1]}) ] WHERE slug = '#{office.slug}'\")"
       end
 
+      orgfile = File.open(File.join(Rails.root, 'db', 'organizations.rb'), "w")
+      contactfile = File.open(File.join(Rails.root, 'db', 'contacts.rb'), "w")
       Organization.all.order('slug').each do |org|
         orgfile.puts "if Organization.where(slug: '#{org.slug}').empty?"
         d = org.when_endorsed
@@ -39,10 +43,32 @@ namespace :db do
         end
         orgfile.puts "end"
       end
-      orgfile.puts "f = File.join(Rails.root, 'db', 'contacts.rb')"
-      orgfile.puts "if File.exists?(f)"
-      orgfile.puts "  load f"
-      orgfile.puts "end"
+
+      seedfile = File.open(File.join(Rails.root, 'db', 'seeds.rb'), "w")
+      seedfile.puts "f = File.join(Rails.root, 'db', 'locations.rb')"
+      seedfile.puts "if File.exists?(f)"
+      seedfile.puts "  load f"
+      seedfile.puts "end"
+
+      seedfile.puts "f = File.join(Rails.root, 'db', 'sectors.rb')"
+      seedfile.puts "if File.exists?(f)"
+      seedfile.puts "  load f"
+      seedfile.puts "end"
+
+      seedfile.puts "f = File.join(Rails.root, 'db', 'organizations.rb')"
+      seedfile.puts "if File.exists?(f)"
+      seedfile.puts "  load f"
+      seedfile.puts "end"
+
+      seedfile.puts "f = File.join(Rails.root, 'db', 'contacts.rb')"
+      seedfile.puts "if File.exists?(f)"
+      seedfile.puts "  load f"
+      seedfile.puts "end"
+
+      seedfile.puts "f = File.join(Rails.root, 'db', 'building_blocks.rb')"
+      seedfile.puts "if File.exists?(f)"
+      seedfile.puts "  load f"
+      seedfile.puts "end"
     end
   end
 end
