@@ -122,6 +122,13 @@ class LocationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
-      params.require(:location).permit(:name, :slug)
+      params
+        .require(:location)
+        .permit(:name, :slug)
+        .tap do |attr|
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
+        end
     end
 end

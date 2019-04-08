@@ -102,6 +102,13 @@ class ContactsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
-      params.require(:contact).permit(:name, :slug, :email, :title, :selected_organizations)
+      params
+        .require(:contact)
+        .permit(:name, :email, :title, :selected_organizations)
+        .tap do |attr|
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
+        end
     end
 end

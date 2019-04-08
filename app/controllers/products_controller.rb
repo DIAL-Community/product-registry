@@ -80,6 +80,13 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :slug, :website)
+      params
+        .require(:product)
+        .permit(:name, :slug, :website)
+        .tap do |attr|
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
+        end
     end
 end

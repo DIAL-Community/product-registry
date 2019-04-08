@@ -114,6 +114,13 @@ class SectorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sector_params
-      params.require(:sector).permit(:name, :slug)
+      params
+        .require(:sector)
+        .permit(:name, :slug)
+        .tap do |attr|
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
+        end
     end
 end
