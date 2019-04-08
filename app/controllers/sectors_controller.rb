@@ -7,9 +7,12 @@ class SectorsController < ApplicationController
   def index
     if params[:without_paging]
       @sectors = Sector
-          .where(nil)
-          .starts_with(params[:search])
-          .order(:name)
+            .where(nil)
+            .starts_with(params[:search])
+            .order(:name)
+      if params[:display_only]
+        @sectors = @sectors.where(is_displayable: true)
+      end
       return
     end
     if params[:search]

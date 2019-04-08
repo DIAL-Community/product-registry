@@ -160,6 +160,5 @@ var organizationsReady = function() {
   });
 };
 
-
 // Attach all of them to the browser, page, and turbolinks event.
 $(document).on('turbolinks:load', organizationsReady);

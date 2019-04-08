@@ -9,3 +9,7 @@ end
 json.countries organization.locations do |location|
   json.merge! location.name if location.location_type == 'country'
 end
+
+json.sectors organization.sectors do | sector |
+  json.merge! sector.id
+end
