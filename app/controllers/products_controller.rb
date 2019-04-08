@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :load_osc_maturity, only: [:show]
 
   # GET /products
   # GET /products.json
@@ -76,6 +77,10 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
+    end
+
+    def load_osc_maturity
+      @osc_maturity = YAML.load_file("config/osc_maturity.yml")
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

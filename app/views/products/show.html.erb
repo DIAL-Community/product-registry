@@ -1,5 +1,4 @@
 <p id="notice"><%= notice %></p>
-
 <div class="card">
   <h5 class="card-header"><%= @product.name %></h5>
   <div class="card-body">
@@ -7,89 +6,54 @@
       <strong>Website:
       </strong><%= @product.website %>
     </h6>
-
     <p class="float-right mb-0">
       <%= link_to 'Back', products_path, :class => "card-link" %>
       <%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %>
     </p>
   </div>
 </div>
-
-<div class="card mt-4">
+<div class="card mt-4 mb-4">
   <div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs pull-right" id="myTab" role="tablist">
+    <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+        <a class="nav-link active" id="osc-maturity-tab" data-toggle="tab" href="#osc-maturity"
+           role="tab" aria-controls="osc-maturity" aria-selected="true">
+          OSC Maturity
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+        <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digi-square"
+           role="tab" aria-controls="digi-square" aria-selected="false">
+          Digital Square Maturity
+        </a>
       </li>
     </ul>
   </div>
   <div class="card-body">
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small>3 days ago</small>
+    <div class="tab-content" id="maturity-content">
+      <div class="tab-pane fade show active" id="osc-maturity" role="tabpanel" aria-labelledby="osc-maturity-tab">
+          <% @osc_maturity.each do |osc_maturity| %>
+            <div class="list-group">
+              <div class="list-group-item list-group-item-action flex-column align-items-start active">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1"><%= osc_maturity["header"] %></h5>
+                </div>
+              </div>
+              <% osc_maturity["items"].each do |item| %>
+                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= item["code"] %></h5>
+                    <i class="far fa-check-circle text-success"></i>
+                  </div>
+                  <p class="mb-1"><%= item["desc"].html_safe %></p>
+                </div>
+              <% end %>
             </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small>Donec id elit non mi porta.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small class="text-muted">Donec id elit non mi porta.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small class="text-muted">Donec id elit non mi porta.</small>
-          </a>
-        </div>
-
-        <br />
-
-        <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small>Donec id elit non mi porta.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small class="text-muted">Donec id elit non mi porta.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small class="text-muted">Donec id elit non mi porta.</small>
-          </a>
-        </div>
+          <% end %>
       </div>
-      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+      <div class="tab-pane fade" id="digi-square-maturity" role="tabpanel" aria-labelledby="digi-square-tab">
+        BLE BLE BLE BLE
+      </div>
     </div>
   </div>
 </div>
