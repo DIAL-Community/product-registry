@@ -1,18 +1,19 @@
 <div class="card-body">
   <%= form_with(model: product, local: true) do |form| %>
 
-    <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :product_name, :class => "form-control", :placeholder => "Name" %>
-      <%= form.label :name %>
-    </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :product_name, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :name %>
+  </fieldset>
 
-    <fieldset class="form-label-group">
-      <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website" %>
-      <%= form.label :website %>
-    </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website" %>
+    <%= form.label :website %>
+  </fieldset>
 
+  <div id="osc-element">
     <% @osc_maturity.each do |maturity| %>
-      <div class="list-group">
+      <div class="list-group mb-2">
         <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
           <h4 class="mb-1"><%= maturity["header"] %></h4>
         </div>
@@ -29,51 +30,36 @@
         <% end %>
       </div>
     <% end %>
+  </div>
 
+  <div id="digisquare-element">
     <% @digisquare_maturity.each do |digisquare_maturity| %>
-      <div class="list-group">
-        <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
+      <div class="list-group mb-2">
+        <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
           <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
         </div>
         <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
           <div class="list-group-item">
-            <div class="list-group">
-              <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
-                <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
-              </div>
-              <div class="list-group-item align-items-start" style="background-color: #e6b8af;">
-                <div class="d-flex w-100 justify-content-between">
-                  <h6 class="mb-1">Low</h6>
-                  <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                </div>
-                <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
-              </div>
-              <div class="list-group-item align-items-start" style="background-color: #fff2cc;">
-                <div class="d-flex w-100 justify-content-between">
-                  <h6 class="mb-1">Medium</h6>
-                  <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                </div>
-                <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
-              </div>
-              <div class="list-group-item align-items-start" style="background-color: #b6d7a8;">
-                <div class="d-flex w-100 justify-content-between">
-                  <h6 class="mb-1">High</h6>
-                  <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                </div>
-                <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
+            <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="digisquare-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= sub_indicator["low"].html_safe %>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="digisquare-selector">
+                <div class="dropdown-item"><%= sub_indicator["low"].html_safe %></div>
+                <div class="dropdown-item"><%= sub_indicator["medium"].html_safe %></div>
+                <div class="dropdown-item"><%= sub_indicator["high"].html_safe %></div>
               </div>
             </div>
           </div>
         <% end %>
       </div>
     <% end %>
+  </div>
 
-    <fieldset class="float-right mt-4">
-      <%= form.submit 'Submit', :class => "btn btn-primary" %>
-      <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
-    </fieldset>
-  <% end %>
+  <fieldset class="float-right mt-4">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
 </div>

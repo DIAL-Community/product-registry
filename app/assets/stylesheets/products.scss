@@ -2,12 +2,22 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#maturity-content {
+.maturity-element {
   .list-group {
     margin-bottom: 1.5rem;
 
     &:last-child {
       margin-bottom: 0;
     }
+  }
+}
+
+#digisquare-element {
+  .dropdown-item {
+    white-space: normal !important;
+  }
+  .dropdown-toggle {
+    white-space: normal !important;
+    text-align: left;
   }
 }
