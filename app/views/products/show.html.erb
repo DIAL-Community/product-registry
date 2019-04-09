@@ -17,14 +17,12 @@
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="osc-maturity-tab" data-toggle="tab" href="#osc-maturity"
-           role="tab" aria-controls="osc-maturity" aria-selected="true">
+        <a class="nav-link active" id="osc-maturity-tab" data-toggle="tab" href="#osc-maturity" role="tab" aria-controls="osc-maturity" aria-selected="true">
           OSC Maturity
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digi-square-maturity"
-           role="tab" aria-controls="digi-square" aria-selected="false">
+        <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digi-square-maturity" role="tab" aria-controls="digi-square" aria-selected="false">
           Digital Square Maturity
         </a>
       </li>
@@ -33,32 +31,31 @@
   <div class="card-body">
     <div class="tab-content" id="maturity-content">
       <div class="tab-pane fade show active" id="osc-maturity" role="tabpanel" aria-labelledby="osc-maturity-tab">
-          <% @osc_maturity.each do |osc_maturity| %>
-            <div class="list-group">
-              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
-                <h4 class="mb-1"><%= osc_maturity["header"] %></h4>
-              </div>
-              <% osc_maturity["items"].each do |item| %>
-                <div class="list-group-item align-items-start">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1"><%= item["code"] %></h6>
-                    <i class="
-                       <%= @product.product_assessment.send('osc_' + item["code"].downcase) ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
-                    </i>
-                  </div>
-                  <p class="mb-1"><%= item["desc"].html_safe %></p>
-                </div>
-              <% end %>
+        <% @osc_maturity.each do |osc_maturity| %>
+          <div class="list-group">
+            <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
+              <h4 class="mb-1"><%= osc_maturity["header"] %></h4>
             </div>
-          <% end %>
+            <% osc_maturity["items"].each do |item| %>
+              <div class="list-group-item align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1"><%= item["code"] %></h6>
+                  <i class="
+                       <%= @product.product_assessment.send('osc_' + item["code"].downcase) ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
+                </div>
+                <p class="mb-1"><%= item["desc"].html_safe %></p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <div class="tab-pane fade" id="digi-square-maturity" role="tabpanel" aria-labelledby="digi-square-tab">
-          <% @digisquare_maturity.each do |digisquare_maturity| %>
-            <div class="list-group">
-              <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
-                <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
-              </div>
-              <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
+        <% @digisquare_maturity.each do |digisquare_maturity| %>
+          <div class="list-group">
+            <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
+              <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
+            </div>
+            <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
               <div class="list-group-item">
                 <div class="list-group">
                   <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
@@ -68,8 +65,7 @@
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">Low</h6>
                       <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
-                      </i>
+                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
                     </div>
                     <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
                   </div>
@@ -77,8 +73,7 @@
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">Medium</h6>
                       <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
-                      </i>
+                         <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
                     </div>
                     <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
                   </div>
@@ -86,16 +81,15 @@
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">High</h6>
                       <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
-                      </i>
+                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
                     </div>
                     <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
                   </div>
                 </div>
               </div>
-              <% end %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
