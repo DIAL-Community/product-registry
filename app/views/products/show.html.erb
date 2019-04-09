@@ -42,8 +42,8 @@
                 <div class="list-group-item align-items-start">
                   <div class="d-flex w-100 justify-content-between">
                     <h6 class="mb-1"><%= item["code"] %></h6>
-                    <i class="far fa-check-circle
-                       <%= 'text-success' if @product.product_assessment.send('osc_' + item["code"].downcase) %>">
+                    <i class="
+                       <%= @product.product_assessment.send('osc_' + item["code"].downcase) ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
                     </i>
                   </div>
                   <p class="mb-1"><%= item["desc"].html_safe %></p>
@@ -67,21 +67,27 @@
                   <div class="list-group-item align-items-start" style="background-color: #e6b8af;">
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">Low</h6>
-                      <i class="far fa-check-circle text-success"></i>
+                      <i class="
+                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
+                      </i>
                     </div>
                     <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
                   </div>
                   <div class="list-group-item align-items-start" style="background-color: #fff2cc;">
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">Medium</h6>
-                      <i class="far fa-check-circle text-success"></i>
+                      <i class="
+                         <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
+                      </i>
                     </div>
                     <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
                   </div>
                   <div class="list-group-item align-items-start" style="background-color: #b6d7a8;">
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">High</h6>
-                      <i class="far fa-check-circle text-success"></i>
+                      <i class="
+                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>">
+                      </i>
                     </div>
                     <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
                   </div>
