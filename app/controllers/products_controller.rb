@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :load_osc_maturity, only: [:show]
+  before_action :load_maturity, only: [:show]
 
   # GET /products
   # GET /products.json
@@ -79,8 +79,9 @@ class ProductsController < ApplicationController
       @product = Product.find(params[:id])
     end
 
-    def load_osc_maturity
-      @osc_maturity = YAML.load_file("config/osc_maturity.yml")
+    def load_maturity
+      @osc_maturity = YAML.load_file("config/maturity_osc.yml")
+      @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

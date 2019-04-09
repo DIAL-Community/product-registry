@@ -12,6 +12,7 @@
     </p>
   </div>
 </div>
+
 <div class="card mt-4 mb-4">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
@@ -22,7 +23,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digi-square"
+        <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digi-square-maturity"
            role="tab" aria-controls="digi-square" aria-selected="false">
           Digital Square Maturity
         </a>
@@ -34,16 +35,16 @@
       <div class="tab-pane fade show active" id="osc-maturity" role="tabpanel" aria-labelledby="osc-maturity-tab">
           <% @osc_maturity.each do |osc_maturity| %>
             <div class="list-group">
-              <div class="list-group-item list-group-item-action flex-column align-items-start active">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1"><%= osc_maturity["header"] %></h5>
-                </div>
+              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
+                <h4 class="mb-1"><%= osc_maturity["header"] %></h4>
               </div>
               <% osc_maturity["items"].each do |item| %>
-                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="list-group-item align-items-start">
                   <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1"><%= item["code"] %></h5>
-                    <i class="far fa-check-circle text-success"></i>
+                    <h6 class="mb-1"><%= item["code"] %></h6>
+                    <i class="far fa-check-circle
+                       <%= 'text-success' if @product.product_assessment.send('osc_' + item["code"].downcase) %>">
+                    </i>
                   </div>
                   <p class="mb-1"><%= item["desc"].html_safe %></p>
                 </div>
@@ -52,7 +53,43 @@
           <% end %>
       </div>
       <div class="tab-pane fade" id="digi-square-maturity" role="tabpanel" aria-labelledby="digi-square-tab">
-        BLE BLE BLE BLE
+          <% @digisquare_maturity.each do |digisquare_maturity| %>
+            <div class="list-group">
+              <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
+                <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
+              </div>
+              <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
+              <div class="list-group-item">
+                <div class="list-group">
+                  <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
+                    <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
+                  </div>
+                  <div class="list-group-item align-items-start" style="background-color: #e6b8af;">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Low</h6>
+                      <i class="far fa-check-circle text-success"></i>
+                    </div>
+                    <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
+                  </div>
+                  <div class="list-group-item align-items-start" style="background-color: #fff2cc;">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Medium</h6>
+                      <i class="far fa-check-circle text-success"></i>
+                    </div>
+                    <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
+                  </div>
+                  <div class="list-group-item align-items-start" style="background-color: #b6d7a8;">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">High</h6>
+                      <i class="far fa-check-circle text-success"></i>
+                    </div>
+                    <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
+                  </div>
+                </div>
+              </div>
+              <% end %>
+            </div>
+          <% end %>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   has_and_belongs_to_many :organizations
+  has_one :product_assessment
 
   validates :name,  presence: true, length: { maximum: 300 }
 
