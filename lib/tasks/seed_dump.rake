@@ -6,6 +6,20 @@ namespace :db do
         building_block_file.puts "BuildingBlock.create(name: \"#{bb.name}\", slug: '#{bb.slug}') if BuildingBlock.where(slug: '#{bb.slug}').empty?"
       end
 
+      productfile = File.open(File.join(Rails.root, 'db', 'producs.rb'), 'w')
+      Product.all.order('slug').each do |product|
+        if product.building_blocks.empty?
+          productfile.puts "Product.create(name: \"#{product.name}\", slug: '#{product.slug}') if Product.where(slug: '#{product.slug}').empty?"
+        else
+          productfile.puts "if Product.where(slug: '#{product.slug}').empty?"
+          productfile.puts "  p = Product.create(name: \"#{product.name}\", slug: '#{product.slug}') if Product.where(slug: '#{product.slug}').empty?"
+          product.building_blocks.each do |bb|
+            productfile.puts "  p.building_blocks << BuildingBlock.where(slug: '#{bb.slug}').limit(1)[0]"
+          end
+          productfile.puts "end"
+        end
+      end
+
       sectorfile = File.open(File.join(Rails.root, 'db', 'sectors.rb'), "w")
       Sector.all.order('slug').each do |sector|
         # to_s isn't working right here
@@ -45,30 +59,12 @@ namespace :db do
       end
 
       seedfile = File.open(File.join(Rails.root, 'db', 'seeds.rb'), "w")
-      seedfile.puts "f = File.join(Rails.root, 'db', 'locations.rb')"
-      seedfile.puts "if File.exists?(f)"
-      seedfile.puts "  load f"
-      seedfile.puts "end"
-
-      seedfile.puts "f = File.join(Rails.root, 'db', 'sectors.rb')"
-      seedfile.puts "if File.exists?(f)"
-      seedfile.puts "  load f"
-      seedfile.puts "end"
-
-      seedfile.puts "f = File.join(Rails.root, 'db', 'organizations.rb')"
-      seedfile.puts "if File.exists?(f)"
-      seedfile.puts "  load f"
-      seedfile.puts "end"
-
-      seedfile.puts "f = File.join(Rails.root, 'db', 'contacts.rb')"
-      seedfile.puts "if File.exists?(f)"
-      seedfile.puts "  load f"
-      seedfile.puts "end"
-
-      seedfile.puts "f = File.join(Rails.root, 'db', 'building_blocks.rb')"
-      seedfile.puts "if File.exists?(f)"
-      seedfile.puts "  load f"
-      seedfile.puts "end"
+      ['locations', 'sectors', 'organizations', 'contacts', 'building_blocks', 'products'].each do |f|
+        seedfile.puts "f = File.join(Rails.root, 'db', '#{f}.rb')"
+        seedfile.puts "if File.exists?(f)"
+        seedfile.puts "  load f"
+        seedfile.puts "end"
+      end
     end
   end
 end
