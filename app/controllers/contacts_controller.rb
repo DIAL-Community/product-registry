@@ -5,6 +5,13 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
+    if params[:without_paging]
+      @locations = Location
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
+
     if params[:search]
       @contacts = Contact
           .where(nil)

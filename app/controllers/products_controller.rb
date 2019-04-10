@@ -5,6 +5,13 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
+    if params[:without_paging]
+      @products = Product
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
+
     if params[:search]
       @products = Product
           .where(nil)

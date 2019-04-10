@@ -7,9 +7,8 @@ class OrganizationsController < ApplicationController
   def index
     if params[:without_paging]
       @organizations = Organization
-      if (params[:sector_id])
-        @organizations = @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
-      end
+      @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
+      @organizations = params[:search].nil? ? @organizations : @organizations.starts_with(params[:search])
       @organizations = @organizations.order(:name);
       return
     end
