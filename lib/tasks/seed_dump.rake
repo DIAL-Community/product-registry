@@ -6,7 +6,7 @@ namespace :db do
         building_block_file.puts "BuildingBlock.create(name: \"#{bb.name}\", slug: '#{bb.slug}') if BuildingBlock.where(slug: '#{bb.slug}').empty?"
       end
 
-      productfile = File.open(File.join(Rails.root, 'db', 'producs.rb'), 'w')
+      productfile = File.open(File.join(Rails.root, 'db', 'products.rb'), 'w')
       Product.all.order('slug').each do |product|
         if product.building_blocks.empty?
           productfile.puts "Product.create(name: \"#{product.name}\", slug: '#{product.slug}') if Product.where(slug: '#{product.slug}').empty?"
