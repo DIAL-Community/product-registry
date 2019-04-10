@@ -7,6 +7,7 @@ function productsReady() {
   $("#digisquare-element .dropdown-item").click(function() {
     $(this).parents(".dropdown").find(".btn").text($(this).text());
     $(this).parents(".dropdown").find(".btn").val($(this).text());
+    $(this).parents(".dropdown").find("input").val($(this).attr("data-sub-indicator"));
   });
 }
 

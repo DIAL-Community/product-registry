@@ -1,7 +1,8 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :load_maturity, only: [:show, :edit, :create]
+  before_action :assign_maturity, only: [:create, :update]
+  before_action :load_maturity, only: [:show, :new, :edit, :create]
 
   # GET /products
   # GET /products.json
@@ -27,6 +28,7 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
+    @product.product_assessment ||= ProductAssessment.new
   end
 
   # GET /products/1/edit
@@ -77,6 +79,7 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
+      @product.product_assessment ||= ProductAssessment.new
     end
 
     def load_maturity
@@ -84,11 +87,26 @@ class ProductsController < ApplicationController
       @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
     end
 
+    def assign_maturity
+      product_assessment = @product.product_assessment
+      if (params[:osc_maturity])
+        params[:osc_maturity].keys.each do |osc_maturity|
+          product_assessment[osc_maturity] = (params[:osc_maturity][osc_maturity] == "true")
+        end
+      end
+      if (params[:digisquare_maturity])
+        params[:digisquare_maturity].keys.each do |digisquare_maturity|
+          product_assessment[digisquare_maturity] = params[:digisquare_maturity][digisquare_maturity]
+        end
+      end
+      @product.product_assessment = product_assessment
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params
         .require(:product)
-        .permit(:name, :slug, :website)
+        .permit(:name, :website, :osc_maturity, :digisquare_maturity)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

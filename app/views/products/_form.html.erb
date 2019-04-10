@@ -18,11 +18,18 @@
           <h4 class="mb-1"><%= maturity["header"] %></h4>
         </div>
         <% maturity["items"].each do |item| %>
-          <div class="list-group-item align-items-start">
+          <div class="list-group-item align-items-start custom-control-lg">
             <div class="d-flex w-100 justify-content-between">
               <h6 class="mb-1"><%= item["code"] %></h6>
-              <fieldset class="form-group form-check">
-                <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
+              <fieldset>
+                <input type="hidden"
+                       name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
+                       value="false"
+                       <%= "checked" if product.product_assessment.send("osc_" + item["code"].downcase) %> />
+                <input type="checkbox"
+                       name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
+                       value="true"
+                       <%= "checked" if product.product_assessment.send("osc_" + item["code"].downcase) %> />
               </fieldset>
             </div>
             <p class="mb-1"><%= item["desc"].html_safe %></p>
@@ -42,13 +49,16 @@
           <div class="list-group-item">
             <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="digisquare-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <%= sub_indicator["low"].html_safe %>
+              <button class="btn btn-block btn-outline-secondary dropdown-toggle disable-hover" type="button"
+                      id="digisquare-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= digisquare_maturity_level_text(product.product_assessment, sub_indicator) %>
               </button>
+              <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
+                     value="<%= product.product_assessment.send(sub_indicator["code"]) %>"/>
               <div class="dropdown-menu" aria-labelledby="digisquare-selector">
-                <div class="dropdown-item"><%= sub_indicator["low"].html_safe %></div>
-                <div class="dropdown-item"><%= sub_indicator["medium"].html_safe %></div>
-                <div class="dropdown-item"><%= sub_indicator["high"].html_safe %></div>
+                <div class="dropdown-item" data-sub-indicator="1"><%= sub_indicator["low"].html_safe %></div>
+                <div class="dropdown-item" data-sub-indicator="2"><%= sub_indicator["medium"].html_safe %></div>
+                <div class="dropdown-item" data-sub-indicator="3"><%= sub_indicator["high"].html_safe %></div>
               </div>
             </div>
           </div>
