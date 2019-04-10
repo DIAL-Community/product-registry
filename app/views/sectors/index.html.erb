@@ -8,7 +8,7 @@
       </div>
     <% end %>
   </div>
-  
+
 <table class="table">
   <thead class="thead-light">
     <tr>
@@ -27,10 +27,10 @@
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
-              <%= link_to 'Show', sector, :class =>"dropdown-item" %>
+              <%= link_to 'View', sector, :class =>"dropdown-item" %>
               <%= link_to 'Edit', edit_sector_path(sector), :class =>"dropdown-item" %>
               <div class="dropdown-divider"></div>
-              <%= link_to 'Destroy', sector, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+              <%= link_to 'Delete', sector, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
             </div>
           </td>
         </tr>
