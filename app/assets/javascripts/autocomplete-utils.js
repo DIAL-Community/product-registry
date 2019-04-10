@@ -30,6 +30,7 @@ function addElement(baseElementId, inputElementName, value, label) {
 // Create autocomplete configuration for searches.
 function autoComplete(source, callback) {
   return {
+    minLength: 3,
     source: function(request, response) {
       $.getJSON(
         source, {
@@ -69,7 +70,7 @@ function addOrganization(value, label) {
 }
 
 var organizationAutoCompleteReady = function() {
-  var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
+  var organizationAutoComplete = autoComplete("/organizations.json", addOrganization)
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
 }
