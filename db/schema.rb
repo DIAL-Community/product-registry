@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20190405161615) do
+=======
+ActiveRecord::Schema.define(version: 20190408152727) do
+>>>>>>> 3080cd3cf0366940239c1c4f02810d6649b096b8
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "building_blocks", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.string "name"
@@ -161,6 +172,13 @@ ActiveRecord::Schema.define(version: 20190405161615) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "products_building_blocks", id: false, force: :cascade do |t|
+    t.bigint "building_block_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["building_block_id", "product_id"], name: "block_prods"
+    t.index ["product_id", "building_block_id"], name: "prod_blocks"
   end
 
   create_table "sectors", force: :cascade do |t|
