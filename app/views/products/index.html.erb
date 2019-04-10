@@ -29,10 +29,10 @@
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
-              <%= link_to 'Show', product, :class =>"dropdown-item"  %>
+              <%= link_to 'View', product, :class =>"dropdown-item"  %>
               <%= link_to 'Edit', edit_product_path(product), :class =>"dropdown-item"  %>
               <div class="dropdown-divider"></div>
-              <%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+              <%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
             </div>
           </td>
         </tr>
