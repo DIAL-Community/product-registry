@@ -30,6 +30,7 @@ function addElement(baseElementId, inputElementName, value, label) {
 // Create autocomplete configuration for searches.
 function autoComplete(source, callback) {
   return {
+    minLength: 2,
     source: function(request, response) {
       $.getJSON(
         source, {

@@ -10,9 +10,7 @@ class SectorsController < ApplicationController
             .where(nil)
             .starts_with(params[:search])
             .order(:name)
-      if params[:display_only]
-        @sectors = @sectors.where(is_displayable: true)
-      end
+      @sectors = params[:display_only].nil? ? @sectors : @sectors.where(is_displayable: true)
       return
     end
     if params[:search]
