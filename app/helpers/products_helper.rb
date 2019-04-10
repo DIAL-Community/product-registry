@@ -13,4 +13,26 @@ module ProductsHelper
     end
     maturity_text
   end
+
+  def has_osc_assessment(product_assessment)
+    has_assessment = false
+    product_assessment.attributes.keys.select { |name| name.start_with?("osc") }.each do |key|
+      has_assessment = product_assessment.send(key)
+      if (has_assessment)
+        break
+      end
+    end
+    has_assessment
+  end
+
+  def has_digisquare_assessment(product_assessment)
+    has_assessment = false
+    product_assessment.attributes.keys.select { |name| name.start_with?("digisquare") }.each do |key|
+      has_assessment = !product_assessment.send(key).nil?
+      if (has_assessment)
+        break
+      end
+    end
+    has_assessment
+  end
 end
