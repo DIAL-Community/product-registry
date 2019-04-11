@@ -43,8 +43,7 @@
                     <fieldset>
                       <input type="hidden"
                              name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
-                             value="false"
-                             <%= "checked" if product.product_assessment.send("osc_" + item["code"].downcase) %> />
+                             value="false" />
                       <input type="checkbox"
                              name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
                              value="true"
@@ -56,6 +55,15 @@
               <% end %>
             </div>
           <% end %>
+          <fieldset class="form-group form-check mt-2">
+            <input type="hidden"
+                   name="has_osc"
+                   value="false" />
+            <input id="osc-completed" type="checkbox" class="form-check-input"
+                   name="has_osc" value="true"
+                   <%= "checked" if product.product_assessment.has_osc %> />
+            <label class="form-check-label ml-1" for="osc-completed">Mark assessment as completed.</label>
+          </fieldset>
         </div>
         <div class="tab-pane fade" id="digisquare-element" role="tabpanel" aria-labelledby="digi-square-tab">
           <% @digisquare_maturity.each do |digisquare_maturity| %>
@@ -83,6 +91,16 @@
               <% end %>
             </div>
           <% end %>
+          <fieldset class="form-group form-check mt-2">
+            <input type="hidden"
+                   name="has_digisquare"
+                   value="false" />
+            <input id="digisquare-completed" type="checkbox" class="form-check-input"
+                   name="has_digisquare"
+                   value="true"
+                   <%= "checked" if product.product_assessment.has_digisquare %> />
+            <label class="form-check-label ml-1" for="digisquare-completed">Mark assessment as completed.</label>
+          </fieldset>
         </div>
       </div>
     </div>

@@ -100,6 +100,9 @@ class ProductsController < ApplicationController
           product_assessment[digisquare_maturity] = params[:digisquare_maturity][digisquare_maturity]
         end
       end
+      product_assessment.has_osc = (params[:has_osc] == "true")
+      product_assessment.has_digisquare = (params[:has_digisquare] == "true")
+
       @product.product_assessment = product_assessment
     end
 
@@ -107,7 +110,7 @@ class ProductsController < ApplicationController
     def product_params
       params
         .require(:product)
-        .permit(:name, :website, :osc_maturity, :digisquare_maturity)
+        .permit(:name, :website, :has_osc, :osc_maturity, :has_digisquare, :digisquare_maturity)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])
