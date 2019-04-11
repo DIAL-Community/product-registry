@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :organizations
   end
 
+  get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
