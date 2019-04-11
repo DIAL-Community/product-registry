@@ -8,8 +8,11 @@ module OrganizationsHelper
     sheet.row(0).default_format = format
     bold = Spreadsheet::Format.new :weight => :bold
 
-    4.times do |x|
-      sheet.row(x + 1).set_format(0, bold)
+    organizations = Organization.all
+
+    x = 0
+    organizations.each do |organization|
+      sheet.row(x += 1).push(organization.name)
     end
     book.write 'public/export.xlsx'
   end
