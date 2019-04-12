@@ -30,7 +30,7 @@ class OrganizationsController < ApplicationController
   def export
     export_with_params('test')
     send_file(
-      "#{Rails.root}/public/export.xlsx",
+      "#{Rails.root}/public/export.xls",
       filename: "Endorsing Organizations.xls",
       type: "application/vnd.ms-excel"
     )

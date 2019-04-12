@@ -21,6 +21,6 @@ module OrganizationsHelper
       sheet.row(x += 1).push organization.name, organization.when_endorsed.strftime("%m/%d/%Y"),
           organization.website.downcase.strip, contact_name, contact_email, country_name, sector_name, office_name.nil? ? "" : office_name.name
     end
-    book.write 'public/export.xlsx'
+    book.write 'public/export.xls'
   end
 end
