@@ -31,8 +31,8 @@ class OrganizationsController < ApplicationController
     export_with_params('test')
     send_file(
       "#{Rails.root}/public/export.xlsx",
-      filename: "Endorsing Organizations.xlsx",
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      filename: "Endorsing Organizations.xls",
+      type: "application/vnd.ms-excel"
     )
   end
 
