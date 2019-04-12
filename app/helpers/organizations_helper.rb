@@ -7,11 +7,9 @@ module OrganizationsHelper
     format = Spreadsheet::Format.new :weight => :bold, :size => 14
     sheet.row(0).default_format = format
 
-    sheet.row(0).push "Organization", "Year", "Active?", "Link", "Contact Name", "Contact Email", "Category", "Logo?",
-        "Case Study 1", "Which Principle?", "Case Study 2", "Which Principle?", "Geographic Locations",
-        "Sector Specialization", "Office Locations", "Main Offices"
+    sheet.row(0).push "Organization", "Year", "Link", "Contact Name", "Contact Email", "Geographic Locations","Sector Specialization", "Office Locations"
 
-    organizations = Organization.all
+    organizations = Organization.where(is_endorser: true).order(:name)
 
     x = 0
     organizations.each do |organization|
@@ -20,10 +18,8 @@ module OrganizationsHelper
       sector_name = organization.sectors.map{ |sector| sector.name }.join(",")
       country_name = organization.locations.select {|location| location.location_type != 'point'}.map{|location| location.name}.join(", ")
       office_name = organization.locations.select {|location| location.location_type == 'point'}.pop
-      sheet.row(x += 1).push organization.name, organization.when_endorsed.strftime("%m/%d/%Y"), "--Active--",
-          organization.website.downcase.strip, contact_name, contact_email, "--Category--", "--Logo--",
-          "--Case Study 1--", "--Which Principle--", "--Case Study 2--", "--Which Principle--", country_name,
-          sector_name, "--Office Locations--", office_name.nil? ? "--No Office--" : office_name.name
+      sheet.row(x += 1).push organization.name, organization.when_endorsed.strftime("%m/%d/%Y"),
+          organization.website.downcase.strip, contact_name, contact_email, country_name, sector_name, office_name.nil? ? "" : office_name.name
     end
     book.write 'public/export.xlsx'
   end
