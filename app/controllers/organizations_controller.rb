@@ -1,4 +1,6 @@
 class OrganizationsController < ApplicationController
+  include OrganizationsHelper
+
   before_action :authenticate_user!, only: [:show, :new, :create, :edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
 
@@ -23,6 +25,15 @@ class OrganizationsController < ApplicationController
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     end
+  end
+
+  def export
+    export_with_params('test')
+    send_file(
+      "#{Rails.root}/public/export.xls",
+      filename: "Endorsing Organizations.xls",
+      type: "application/vnd.ms-excel"
+    )
   end
 
   # GET /organizations/1
@@ -132,6 +143,7 @@ class OrganizationsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
       @organization = Organization.find(params[:id])

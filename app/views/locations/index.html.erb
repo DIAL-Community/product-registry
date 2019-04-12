@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<div class="float-right" style="padding-bottom: 1rem; ">
+<div class="float-right pb-2">
   <%= form_tag(locations_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search locations ...", :class => "form-control" %>
   <div class="input-group-append">
