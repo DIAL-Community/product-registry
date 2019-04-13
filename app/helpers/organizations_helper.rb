@@ -7,13 +7,14 @@ module OrganizationsHelper
     format = Spreadsheet::Format.new :weight => :bold, :size => 14
     sheet.row(0).default_format = format
 
-    sheet.row(0).push "Organization", "Year", "Link", "Contact Name", "Contact Email", "Geographic Locations","Sector Specialization", "Office Locations"
+    sheet.row(0).push "Organization", "Year", "Link", "Contact Name", "Contact Title", "Contact Email", "Geographic Locations","Sector Specialization", "Office Locations"
 
     organizations = Organization.where(is_endorser: true).order(:name)
 
     x = 0
     organizations.each do |organization|
       contact_name = organization.contacts.map{ |contact| contact.name }.join(", ")
+      contact_name = organization.contacts.map{ |contact| contact.title }.join(", ")
       contact_email = organization.contacts.map{ |contact| contact.email }.join(", ")
       sector_name = organization.sectors.map{ |sector| sector.name }.join(",")
       country_name = organization.locations.select {|location| location.location_type != 'point'}.map{|location| location.name}.join(", ")
