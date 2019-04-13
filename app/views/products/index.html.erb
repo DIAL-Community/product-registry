@@ -41,11 +41,11 @@
       <tr>
         <td colspan="4">
           <small class="text-muted">
-            We couldn't find product matching to the search phrase. Do you want to <%= link_to 'create new product?', new_product_path %>
+            We couldn't find a product matching the search phrase. Do you want to <%= link_to 'create a new product?', new_product_path %>
           </small>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @locations, :class => "apple-pagination" %>
+<%= will_paginate @products, :class => "apple-pagination" %>

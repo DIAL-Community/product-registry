@@ -4,7 +4,24 @@ class BuildingBlocksController < ApplicationController
   # GET /building_blocks
   # GET /building_blocks.json
   def index
-    @building_blocks = BuildingBlock.all
+    if params[:without_paging]
+      @building_blocks = BuildingBlock
+          .starts_with(params[:search])
+          .order(:name)
+      return
+    end
+
+    if params[:search]
+      @building_blocks = BuildingBlock
+          .where(nil)
+          .starts_with(params[:search])
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    else
+      @building_blocks = BuildingBlock
+          .order(:name)
+          .paginate(page: params[:page], per_page: 20)
+    end
   end
 
   # GET /building_blocks/1
