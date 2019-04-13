@@ -13,6 +13,31 @@
   </div>
 </div>
 
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Building Blocks</h5>
+      <%= link_to 'Add', new_building_block_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @product.building_blocks.count > 0 %>
+        <div class="card-columns">
+          <% @product.building_blocks.each do |building_block| %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to building_block.name, building_block %></h5>
+                <%= link_to 'Edit', edit_building_block_path(building_block), :class => "card-link float-right mb-2" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any product information for this building block.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
 <div class="card mt-4 mb-4">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">

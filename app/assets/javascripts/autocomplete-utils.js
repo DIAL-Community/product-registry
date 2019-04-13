@@ -72,6 +72,11 @@ function addOrganization(value, label) {
 function addProduct(value, label) {
   addElement("base-selected-products", "selected_products", value, label);
 }
+
+function addBuildingBlock(value, label) {
+  addElement("base-selected-building-blocks", "selected_building_blocks", value, label);
+}
+
 var organizationAutoCompleteReady = function() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
@@ -84,5 +89,12 @@ var buildingBlockAutoCompleteReady = function() {
   $("#product-search").autocomplete(buildingBlockAutoComplete);
 }
 
+var productAutoCompleteReady = function() {
+  var productAutoComplete = autoComplete("/building_blocks.json?without_paging=true", addBuildingBlock)
+  $("#base-selected-building-blocks").hide();
+  $("#building-block-search").autocomplete(productAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
+$(document).on('turbolinks:load', productAutoCompleteReady);

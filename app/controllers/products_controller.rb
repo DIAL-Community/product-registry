@@ -47,6 +47,14 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
     @product.product_assessment ||= ProductAssessment.new
     assign_maturity
+
+    if (params[:selected_building_blocks])
+      params[:selected_building_blocks].keys.each do |building_block_id|
+        building_block = BuildingBlock.find(building_block_id)
+        @product.building_blocks.push(building_block)
+      end
+    end
+
     respond_to do |format|
       if @product.save
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
@@ -62,6 +70,16 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     assign_maturity
+
+    if (params[:selected_building_blocks])
+      building_blocks = Set.new
+      params[:selected_building_blocks].keys.each do |building_block_id|
+        building_block = BuildingBlock.find(building_block_id)
+        building_blocks.add(building_block)
+      end
+      @product.building_blocks = building_blocks.to_a
+    end
+
     respond_to do |format|
       if @product.update(product_params)
         format.html { redirect_to @product, notice: 'Product was successfully updated.' }
