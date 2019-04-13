@@ -1,14 +1,37 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <div class="card">
+    <h5 class="card-header"><%= @building_block.name %></h5>
+    <div class="card-body">
+      <p class="float-right mb-0" >
+        <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
+        <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
+      </p>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @building_block.name %>
-</p>
-
-<p>
-  <strong>Slug:</strong>
-  <%= @building_block.slug %>
-</p>
-
-<%= link_to 'Edit', edit_building_block_path(@building_block) %> |
-<%= link_to 'Back', building_blocks_path %>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Product</h5>
+      <%= link_to 'Add', new_product_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @building_block.products.count > 0 %>
+        <div class="card-columns">
+          <% @building_block.products.each do |product| %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to product.name, product %></h5>
+                <%= link_to 'Edit', edit_product_path(product), :class => "card-link float-right mb-2" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="card-text text-muted">We don't have any product information for this building block.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

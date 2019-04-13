@@ -69,10 +69,20 @@ function addOrganization(value, label) {
   addElement("base-selected-organizations", "selected_organizations", value, label);
 }
 
+function addProduct(value, label) {
+  addElement("base-selected-products", "selected_products", value, label);
+}
 var organizationAutoCompleteReady = function() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
 }
 
+var buildingBlockAutoCompleteReady = function() {
+  var buildingBlockAutoComplete = autoComplete("/products.json?without_paging=true", addProduct)
+  $("#base-selected-products").hide();
+  $("#product-search").autocomplete(buildingBlockAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
+$(document).on('turbolinks:load', buildingBlockAutoCompleteReady);

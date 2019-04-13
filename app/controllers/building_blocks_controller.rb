@@ -36,6 +36,9 @@ class BuildingBlocksController < ApplicationController
 
   # GET /building_blocks/1/edit
   def edit
+    if (params[:product_id])
+      @product = Product.find(params[:product_id])
+    end
   end
 
   # POST /building_blocks
@@ -43,9 +46,16 @@ class BuildingBlocksController < ApplicationController
   def create
     @building_block = BuildingBlock.new(building_block_params)
 
+    if (params[:selected_products])
+      params[:selected_products].keys.each do |product_id|
+        product = Product.find(product_id)
+        @building_block.products.push(product)
+      end
+    end
+
     respond_to do |format|
       if @building_block.save
-        format.html { redirect_to @building_block, notice: 'Building block was successfully created.' }
+        format.html { redirect_to @building_block, notice: 'Building Block was successfully created.' }
         format.json { render :show, status: :created, location: @building_block }
       else
         format.html { render :new }
@@ -57,6 +67,16 @@ class BuildingBlocksController < ApplicationController
   # PATCH/PUT /building_blocks/1
   # PATCH/PUT /building_blocks/1.json
   def update
+
+    if (params[:selected_products])
+      products = Set.new
+      params[:selected_products].keys.each do |product_id|
+        product = Product.find(product_id)
+        products.add(product)
+      end
+      @building_block.products = products.to_a
+    end
+
     respond_to do |format|
       if @building_block.update(building_block_params)
         format.html { redirect_to @building_block, notice: 'Building block was successfully updated.' }
@@ -86,6 +106,13 @@ class BuildingBlocksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def building_block_params
-      params.require(:building_block).permit(:name, :slug)
+      params
+        .require(:building_block)
+        .permit(:name)
+        .tap do |attr|
+          if (attr[:name].present?)
+            attr[:slug] = slug_em(attr[:name])
+          end
+        end
     end
 end
