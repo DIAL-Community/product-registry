@@ -114,7 +114,7 @@ class SectorsController < ApplicationController
     def sector_params
       params
         .require(:sector)
-        .permit(:name, :slug)
+        .permit(:name)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

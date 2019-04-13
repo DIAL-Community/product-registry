@@ -1,3 +1,30 @@
 // Place all the styles related to the Products controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.maturity-element {
+  .list-group {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+#digisquare-element {
+  .dropdown-item {
+    white-space: normal !important;
+  }
+  .dropdown-toggle {
+    white-space: normal !important;
+    text-align: left;
+  }
+
+  .disable-hover {
+    background-color: transparent !important;
+    // $gray-900 color from _variables.scss
+    // https://github.com/twbs/bootstrap/blob/v4.3.1/scss/_variables.scss#L17
+    color: #212529 !important
+  }
+}

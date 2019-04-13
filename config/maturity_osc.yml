@@ -1,0 +1,132 @@
+  - header:   Software Code
+    items:
+      - code: CD10
+        desc: The project produces Open Source software, for distribution to the public at no charge.
+      - code: CD20
+        desc: The project&#39;s code is easily discoverable and publicly accessible.
+      - code: CD21
+        desc: The project&#39;s code uses mainstream revision control software, such as git.
+      - code: CD30
+        desc: The code can be built in a reproducible way using widely available standard tools.
+      - code: CD31
+        desc: Step-by-step instructions for setting up a developer environment is available for all appropriate platforms/operating systems, with a minimum of manual steps (e.g. running commands in a terminal/shell).
+      - code: CD40
+        desc: The full history of the project&#39;s code is available via a source code control system, in a way that allows any released version to be recreated.
+      - code: CD50
+        desc: The provenance of each line of code is established via the source code control system, in a reliable way based on strong authentication of the committer. When third-party contributions are committed, commit messages provide reliable information about the code provenance.
+      - code: CD60
+        desc: The code contains README, NOTICE, and CONTRIBUTING files (or README sections).
+      - code: CD61
+        desc: A process for claiming bugs is explained in the CONTRIBUTING documentation.
+  - header:   Licenses and Copyright
+    items:
+      - code: LC10
+        desc: The code is released under one of the preferred copyleft licenses explained in our <a href="https://www.osc.dial.community/licensing-principles">Licensing Principles</a>.
+      - code: LC20
+        desc: Libraries that are mandatory dependencies of the project&#39;s code do not create more restrictions than the project&#39;s license does.
+      - code: LC30
+        desc: The libraries mentioned in LC20 are available as Open Source software.
+      - code: LC40
+        desc: Committers are bound by an Individual Contributor Agreement (the <a href="http://www.apache.org/licenses/icla.txt">Apache iCLA</a> being an example) that defines which code they are allowed to commit and how they need to identify code that is not their own.
+      - code: LC50
+        desc: The copyright ownership of everything that the project produces is clearly defined and documented.
+      - code: LC60
+        desc: The project name has been checked for trademark issues.
+  - header:   Software Releases
+    items:
+      - code: RE10
+        desc: Releases consist of source code, distributed using standard and open archive formats that are expected to stay readable in the long term.
+      - code: RE30
+        desc: Releases are signed and/or distributed along with digests that can be reliably used to validate the downloaded archives.
+      - code: RE40
+        desc: Convenience binaries can be distributed alongside source code but they are not official releases -- they are just a convenience provided with no guarantee.
+      - code: RE50
+        desc: The release process is documented and repeatable to the extent that someone new to the project is able to independently generate the complete set of artifacts required for a release.
+      - code: RE60
+        desc: Release plans are developed and executed in public by the community, and approved by the project&#39;s governing body.
+      - code: RE70
+        desc: The project should use the OSC standard release taxonomy, once that is agreed upon.
+      - code: RE80
+        desc: The project has released at least one version.
+  - header:   Software Quality
+    items:
+      - code: QU10
+        desc: The project is open and honest about the quality of its code. Various levels of quality and maturity for various modules are natural and acceptable as long as they are clearly communicated.
+      - code: QU11
+        desc: In particular, there are either no "monoliths" or "god classes", or they are known and there is a roadmap to refactor them.
+      - code: QU12
+        desc: In particular, there are no custom utility features that could be replaced with common open source tools, including:<ul><li>Databases</li><li>Web application servers/containers</li><li>Object relational mappers</li><li>Dependency/package management</li><li>Authentication</li><li>Continuous integration</li><li>Packaging/installation</li></ul>
+      - code: QU20
+        desc: The project puts a very high priority on producing secure software.
+      - code: QU30
+        desc: The project provides a well-documented channel to report security issues, along with a documented way of responding to them.
+      - code: QU40
+        desc: The project puts a high priority on backwards compatibility and aims to document any incompatible changes and provide tools and documentation to help users transition to new features.
+      - code: QU50
+        desc: The project strives to respond to documented bug reports in a timely manner.
+      - code: QU51
+        desc: A list of outstanding bugs is open, easily discoverable, prioritized, and responsively triaged.
+      - code: QU52
+        desc: Bugs that are ideal for new contributors are labeled as such.
+      - code: QU60
+        desc: The project must include a unit and integration test suite of sufficient 13 coverage, and must document its coverage. Additional performance and scale test capability is desirable.
+      - code: QU70
+        desc: The project must include enough documentation for anyone to test or deploy any of the software.
+      - code: QU71
+        desc: The project must include enough documentation for a software developer of moderate skill to set up their development environment to contribute to the software code.
+      - code: QU80
+        desc: The project must document how it integrates with other OSC Member (or external) projects. Where applicable, the project should be compatible with other active projects.
+      - code: QU90
+        desc: The project has set up a Continuous Integration pipeline for testing and deployment purposes.
+      - code: QU100
+        desc: The project must demonstrate sufficient scalability and document its scalability over various dimensions appropriate to the project.
+  - header:   Community
+    items:
+      - code: CO10
+        desc: The project has a well-known homepage that points to all the information required to operate according to this maturity model.
+      - code: CO20
+        desc: The community welcomes contributions from anyone who acts in good faith and in a respectful manner and adds value to the project.
+      - code: CO30
+        desc: Contributions include not only source code, but also documentation, constructive bug reports, constructive discussions, marketing and generally anything that adds value to the project.
+      - code: CO40
+        desc: The community is a "holarchy" (see <a href="https://www.osc.dial.community/governance-principles">Governance Principles</a>) and over time aims to give more rights and responsibilities to contributors who add value to the project.
+      - code: CO50
+        desc: The way in which contributors can be granted more rights such as commit access or decision power is clearly documented and is the same for all contributors.
+      - code: CO60
+        desc: The community operates based on consensus of its members (see CS10) who have decision power. Dictators, benevolent or not, are not welcome in Apache projects.
+      - code: CO70
+        desc: The project strives to answer user questions in a timely manner.
+      - code: CO71
+        desc: The project has a well-known real-time communication platform such as IRC.
+      - code: CO72
+        desc: The project&#39;s real-time communications are archived so that users can refer back to past conversations.
+      - code: CO80
+        desc: The project has an active and diverse set of contributing members representing various constituencies.
+      - code: CO73
+        desc: The community has a forum or other discussion platform for users to ask questions, with reasonable response times from the community.
+  - header:   Consensus Building
+    items:
+      - code: CS10
+        desc: The project maintains a public list of its contributors who have decision power and some sort of documented governance process.
+      - code: CS20
+        desc: Decisions are made by consensus among PMC members 9 and are documented on the project&#39;s main communications channel. Community opinions are taken into account but the PMC has the final word if needed.
+      - code: CS30
+        desc: Documented voting rules are used to build consensus when discussion is not sufficient.
+      - code: CS40
+        desc: In Apache projects, vetoes are only valid for code commits and are justified by a technical explanation, as per the Apache voting rules defined in CS30.
+      - code: CS50
+        desc: All "important" discussions happen asynchronously in written form on the project&#39;s main communications channel. Offline, face-to-face or private discussions 11 that affect the project are also documented on that channel.
+  - header:   Independence
+    items:
+      - code: IN10
+        desc: The project is independent from any corporate or organizational influence.
+      - code: IN20
+        desc: Contributors act as themselves as opposed to representatives of a corporation or organization.
+      - code: IN30
+        desc: The project is not highly dependent on any single contributor. There are at least 3 legally independent contributors (e.g., code committers), and there is no single organization that is vital to the success of the project.
+  - header:   Impact
+    items:
+      - code: IM10
+        desc: The project should be used in real applications and not just in demos. Because not all real-world implementations may be inspected publicly, in such cases statements providing as much details as possible about these implementations should be made.
+      - code: IM20
+        desc: The project should be able to clearly make the case for its importance in the Development and/or Humanitarian sector(s).

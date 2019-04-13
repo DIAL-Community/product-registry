@@ -1,19 +1,114 @@
 <div class="card-body">
   <%= form_with(model: product, local: true) do |form| %>
 
-    <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :product_name, :class => "form-control", :placeholder => "Name"  %>
-      <%= form.label :name %>
-    </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :product_name, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :name %>
+  </fieldset>
 
-    <fieldset class="form-label-group">
-      <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website"  %>
-      <%= form.label :website %>
-    </fieldset>
+  <fieldset class="form-label-group">
+    <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website" %>
+    <%= form.label :website %>
+  </fieldset>
 
-    <fieldset class="float-right">
-      <%= form.submit 'Submit', :class => "btn btn-primary" %>
-      <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
-    </fieldset>
-  <% end %>
+  <div class="card mt-4 mb-4">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="osc-maturity-tab" data-toggle="tab" href="#osc-element" role="tab"
+             aria-controls="osc-maturity" aria-selected="true">
+            OSC Maturity
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digisquare-element" role="tab"
+             aria-controls="digi-square" aria-selected="false">
+            Digital Square Maturity
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div class="tab-content maturity-element">
+        <div class="tab-pane fade show active" id="osc-element" role="tabpanel" aria-labelledby="osc-maturity-tab">
+          <% @osc_maturity.each do |maturity| %>
+            <div class="list-group mb-2">
+              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
+                <h4 class="mb-1"><%= maturity["header"] %></h4>
+              </div>
+              <% maturity["items"].each do |item| %>
+                <div class="list-group-item align-items-start custom-control-lg">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1"><%= item["code"] %></h6>
+                    <fieldset>
+                      <input type="hidden"
+                             name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
+                             value="false" />
+                      <input type="checkbox"
+                             name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
+                             value="true"
+                             <%= "checked" if product.product_assessment.send("osc_" + item["code"].downcase) %> />
+                    </fieldset>
+                  </div>
+                  <p class="mb-1"><%= item["desc"].html_safe %></p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <fieldset class="form-group form-check mt-2">
+            <input type="hidden"
+                   name="has_osc"
+                   value="false" />
+            <input id="osc-completed" type="checkbox" class="form-check-input"
+                   name="has_osc" value="true"
+                   <%= "checked" if product.product_assessment.has_osc %> />
+            <label class="form-check-label ml-1" for="osc-completed">Mark assessment as completed.</label>
+          </fieldset>
+        </div>
+        <div class="tab-pane fade" id="digisquare-element" role="tabpanel" aria-labelledby="digi-square-tab">
+          <% @digisquare_maturity.each do |digisquare_maturity| %>
+            <div class="list-group mb-2">
+              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
+                <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
+              </div>
+              <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
+                <div class="list-group-item">
+                  <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
+                  <div class="dropdown">
+                    <button class="btn btn-block btn-outline-secondary dropdown-toggle disable-hover" type="button"
+                            id="digisquare-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <%= digisquare_maturity_level_text(product.product_assessment, sub_indicator) %>
+                    </button>
+                    <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
+                           value="<%= product.product_assessment.send(sub_indicator["code"]) %>"/>
+                    <div class="dropdown-menu" aria-labelledby="digisquare-selector">
+                      <div class="dropdown-item" data-sub-indicator="1"><%= sub_indicator["low"].html_safe %></div>
+                      <div class="dropdown-item" data-sub-indicator="2"><%= sub_indicator["medium"].html_safe %></div>
+                      <div class="dropdown-item" data-sub-indicator="3"><%= sub_indicator["high"].html_safe %></div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <fieldset class="form-group form-check mt-2">
+            <input type="hidden"
+                   name="has_digisquare"
+                   value="false" />
+            <input id="digisquare-completed" type="checkbox" class="form-check-input"
+                   name="has_digisquare"
+                   value="true"
+                   <%= "checked" if product.product_assessment.has_digisquare %> />
+            <label class="form-check-label ml-1" for="digisquare-completed">Mark assessment as completed.</label>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
 </div>

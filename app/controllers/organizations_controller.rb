@@ -153,7 +153,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :slug, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office_id)
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office_id)
         .tap do |attr|
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")

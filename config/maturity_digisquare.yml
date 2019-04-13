@@ -1,0 +1,83 @@
+- core: Global Utility
+  sub-indicators:
+    - name: Country Utilization
+      code: digisquare_country_utilization
+      low: 	Less than two countries or states actively use the tool as part of their health information system.
+      medium: At least four countries or states actively use the tool as part of their health information system with at least 20% of total nation-wide or state-wide target users routinely using product/service as intended.
+      high: At least ten countries or states actively use the tool as part of their health information system with at least 30% of total nation-wide or state-wide target users routinely using product/service as intended.
+    - name: Country Strategy
+      code: digisquare_country_strategy
+      low: Less than two countries or states have included the tool as part of their eHealth strategy or framework.
+      medium: At least four countries or states have included the tool as part of their eHealth strategy or framework.
+      high: At least ten countries or states have included the tool as part of their eHealth strategy or framework.
+    - name: Digital Health Interventions
+      code: digisquare_digital_health_interventions
+      low: The tool does not meet digital functional requirements (as defined by WHO's Classification of Digital Health Interventions) without signifigant customization or configuration.
+      medium: The tool partially meets digital functional requirements (as defined by WHO's Classification of Digital Health Interventions) without signifigant customization or configuration.
+      high: The tool fully meets digital functional requirements (as defined by WHO's Classification of Digital Health Interventions) without signifigant customization or configuration.
+    - name: Source Code Accessibility
+      code: digisquare_source_code_accessibility
+      low: Source code not publically available or not released under an open-source license.
+      medium: Source code exists on a publicly accessible repository and licensed under an Open Source Initiative approved license.
+      high: Source code exists on a publicly accessible repository and licensed under an Open Source Initiative approved license. Software is structured to allow local customizations and new modules and functionality without requiring forking of main code.
+    - name: Funding and Revenue
+      code: digisquare_funding_and_revenue
+      low: At most two revenue streams exists. Revenue streams are largely dependent on time-bound project implementations.
+      medium: Multiple revenue streams/funders exist across project implementations.
+      high: Multiple revenue streams and funding mechanisms exist, including at least one that provides for multi-year support of core software development, documentation and other key artifacts.
+
+- core: Community Support
+  sub-indicators:
+    - name: Developer, Contributor and Implementor Community Engagement
+      code: digisquare_developer_contributor_and_implementor_community_enga
+      low: Less than 10% of estimated total number of developers, contributors, and implementers are on a communication platform.
+      medium: Up to 20% of estimated total number of developers, contributors, or implementers, including some country representation, are engaged on a communication platform.
+      high: At least 30% of estimated total number of developers, contributors, and implementers are engaged on a communication platform. Community leadership includes representation from countries where the tool is deployed.
+    - name: Community Governance
+      code: digisquare_community_governance
+      low: There is no community governance structure in place to direct continued development of the digital health tool.
+      medium: Some informal processes for community management exist to direct continued development of the digital health tool.
+      high: Formal community structures (e.g. leadership, technical advisory group, community representatives) exist and are practiced with documented roles and responsibilities in a transparent fashion and are used to direct continued development of the digital health tool.
+    - name: Software Roadmap
+      code: digisquare_software_roadmap
+      low: No software roadmap exists or there is no publicly accessible and routintely maintained platform for new feature requests.
+      medium: There is a publicly accessible and routintely maintained platform for new feature requests. A software roadmap exists describing currently planned and resourced development activities.
+      high: New features and functionality are documented as part of a software roadmap as part of a release cycle. There are forums for community members to discuss new feature requests. A clear prioritization process exists and is utilized for the development of new features and functionality as part of a product backlog.
+    - name: User Documentation
+      code: digisquare_user_documentation
+      low: No user documentation exists.
+      medium: Some user documentation exists (training manual, demo videos) but only addresses a limited subset of common functionality.
+      high: A full suite of user documentation exists including training manuals, online courses, tutorials and implementation guides addressing most of the common functionality. Documentation has been released under a Creative Commons license.
+    - name: Multi-Lingual Support
+      code: digisquare_multilingual_support
+      low: Limited or no support in the software for multiple languages. Multi-lingual documentation / user resources are practically non-existent.
+      medium: Software has be internationalized to support multiple languages (though may not have been translated) for primary portions of the user interface. Some user documentation exists in more than one language.
+      high: Software has been translated into multiple languages and fully supports internationalization requirements. There is an easy tool for new translations to be added. Significant parts of user and implementer documentation has been translated into at least one other language.
+
+- core: Software Maturity
+  sub-indicators:
+    - name: Technical Documentation
+      code: digisquare_technical_documentation
+      low: No substantial documentation of the software exists.
+      medium: Some technical documentation exists of the source code, use cases, and functional requirements.
+      high: Source code is documented to the point that new adopters can customize and add new functionality without relying on significant help from one of the core developers. Online courses or tutorials are available to address common development and deployment tasks. Core business workflows and functional requirements are fully documented using use cases, user stories, or other equivalent methodology.
+    - name: Software Productization
+      code: digisquare_software_productization
+      low: No documentation available for deployment and configuration.
+      medium: Full documentation available for deployment and configuration. A new implementation does not require the involvement of the core development team.
+      high: Software has been packaged for one or more common operating systems or platforms. Software upgrades can largely be achieved without manual intervention. Unit or integration testing is part of the release process.
+    - name: Interoperability and Data Accessibility
+      code: digisquare_interoperability_and_data_accessibility
+      low: Extract or importing data into the system usually requires looking at source code and/or directly accessing database
+      medium: Some APIs are available for accessing and managing data. There are user-facing interfaces to export core data and metadata in the system (e.g. in CSV format) for further analysis and data transfer purposes.
+      high: A robust API is available for key data and metadata exchange needs for the primary business domain with functional requirements for the API having been developed in conjuction with appropriate country, regional and global stakeholders. API endpoints exist for core data and metadata elements which adhere to standards developed by an appropriate Standards Development Organization relevant to the tools business domain. Standards-based API endpoints are used in at least four jurisdictions (e.g. countries or states).
+    - name: Security
+      code: digisquare_security
+      low: No security controls or implementation guidance are in place.
+      medium: Role-based authorization exists, if appropriate. Guidance on encrypting all remote access (web interface, APIs) is available to implementors.
+      high: Role-based authorization exists, if appropriate. All remote access (web interface, APIs) are encrypted by default using current best practices. An independent security audit of the software has taken place within the last twelve months.
+    - name: Scalability
+      code: digisquare_scalability
+      low: There are no jurisdicions (e.g. country, state) that manage 10% of their "entities" within the tool, and no performance and load statistics exist.
+      medium: There is at least one jurisdicion (e.g. country, state) deployment for which 20% of all "entities" are managed within the software. There has been at least one evaluation of software performance / load testing.
+      high: There is at least one jurisdicions (e.g. country, state) deployment for which 30% of all "entities" are managed within the software. Performance and load testing is a part of routine releases and results are publicly available.

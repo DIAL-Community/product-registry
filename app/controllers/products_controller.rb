@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:show, :new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :load_maturity, only: [:show, :new, :edit, :create]
 
   # GET /products
   # GET /products.json
@@ -33,6 +34,7 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
+    @product.product_assessment ||= ProductAssessment.new
   end
 
   # GET /products/1/edit
@@ -43,7 +45,8 @@ class ProductsController < ApplicationController
   # POST /products.json
   def create
     @product = Product.new(product_params)
-
+    @product.product_assessment ||= ProductAssessment.new
+    assign_maturity
     respond_to do |format|
       if @product.save
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
@@ -58,6 +61,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
+    assign_maturity
     respond_to do |format|
       if @product.update(product_params)
         format.html { redirect_to @product, notice: 'Product was successfully updated.' }
@@ -83,13 +87,37 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
+      @product.product_assessment ||= ProductAssessment.new
+    end
+
+    def load_maturity
+      @osc_maturity = YAML.load_file("config/maturity_osc.yml")
+      @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
+    end
+
+    def assign_maturity
+      product_assessment = @product.product_assessment
+      if (params[:osc_maturity])
+        params[:osc_maturity].keys.each do |osc_maturity|
+          product_assessment[osc_maturity] = (params[:osc_maturity][osc_maturity] == "true")
+        end
+      end
+      if (params[:digisquare_maturity])
+        params[:digisquare_maturity].keys.each do |digisquare_maturity|
+          product_assessment[digisquare_maturity] = params[:digisquare_maturity][digisquare_maturity]
+        end
+      end
+      product_assessment.has_osc = (params[:has_osc] == "true")
+      product_assessment.has_digisquare = (params[:has_digisquare] == "true")
+
+      @product.product_assessment = product_assessment
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params
         .require(:product)
-        .permit(:name, :slug, :website)
+        .permit(:name, :website, :has_osc, :osc_maturity, :has_digisquare, :digisquare_maturity)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

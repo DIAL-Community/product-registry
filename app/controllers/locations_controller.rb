@@ -124,7 +124,7 @@ class LocationsController < ApplicationController
     def location_params
       params
         .require(:location)
-        .permit(:name, :slug)
+        .permit(:name)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])
