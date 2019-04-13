@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @building_block.name %>
+</p>
+
+<p>
+  <strong>Slug:</strong>
+  <%= @building_block.slug %>
+</p>
+
+<%= link_to 'Edit', edit_building_block_path(@building_block) %> |
+<%= link_to 'Back', building_blocks_path %>
