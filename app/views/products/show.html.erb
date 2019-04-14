@@ -121,22 +121,24 @@
             This product evaluation with this maturity model is completed.
           </div>
         <% end %>
-        <% @osc_maturity.each do |osc_maturity| %>
-          <div class="list-group">
-            <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
-              <h4 class="mb-1"><%= osc_maturity["header"] %></h4>
-            </div>
-            <% osc_maturity["items"].each do |item| %>
-              <div class="list-group-item align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                  <h6 class="mb-1"><%= item["code"] %></h6>
-                  <i class="
-                       <%= @product.product_assessment.send('osc_' + item["code"].downcase) ? 'fas fa-check-circle text-success' : 'far fa-circle' %>"></i>
-                </div>
-                <p class="mb-1"><%= item["desc"].html_safe %></p>
+        <% if @product.product_assessment.has_osc or has_osc_assessment(@product.product_assessment) %>
+          <% @osc_maturity.each do |osc_maturity| %>
+            <div class="list-group">
+              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
+                <h4 class="mb-1"><%= osc_maturity["header"] %></h4>
               </div>
-            <% end %>
-          </div>
+              <% osc_maturity["items"].each do |item| %>
+                <div class="list-group-item align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1"><%= item["code"] %></h6>
+                    <i class="
+                         <%= @product.product_assessment.send('osc_' + item["code"].downcase) ? 'fas fa-check-circle text-success' : 'far fa-circle' %>"></i>
+                  </div>
+                  <p class="mb-1"><%= item["desc"].html_safe %></p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
       <div class="tab-pane fade" id="digi-square-maturity" role="tabpanel" aria-labelledby="digi-square-tab">
@@ -155,61 +157,63 @@
             This product evaluation with this maturity model is completed.
           </div>
         <% end %>
-        <% @digisquare_maturity.each do |digisquare_maturity| %>
-          <div class="list-group">
-            <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
-              <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
-            </div>
-            <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
-              <div class="list-group-item">
-                <div class="list-group">
-                  <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
-                    <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
-                  </div>
-
-                  <% if !@product.product_assessment.send(sub_indicator["code"]) %>
-                    <div class="list-group-item align-items-start">
-                      <p class="mb-1">Maturity indicator is not assigned.</p>
-                    </div>
-                  <% end %>
-
-                  <% if @product.product_assessment.send(sub_indicator["code"]) == 1 %>
-                  <div class="list-group-item align-items-start" style="background-color: #e6b8af;">
-                    <div class="d-flex w-100 justify-content-between">
-                      <h6 class="mb-1">Low</h6>
-                      <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                    </div>
-                    <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
-                  </div>
-                  <% end %>
-
-                  <% if @product.product_assessment.send(sub_indicator["code"]) == 2 %>
-                  <div class="list-group-item align-items-start" style="background-color: #fff2cc;">
-                    <div class="d-flex w-100 justify-content-between">
-                      <h6 class="mb-1">Medium</h6>
-                      <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                    </div>
-                    <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
-                  </div>
-                  <% end %>
-
-                  <% if @product.product_assessment.send(sub_indicator["code"]) == 3 %>
-                  <div class="list-group-item align-items-start" style="background-color: #b6d7a8;">
-                    <div class="d-flex w-100 justify-content-between">
-                      <h6 class="mb-1">High</h6>
-                      <i class="
-                         <%= @product.product_assessment.send(sub_indicator["code"]) == 3 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                    </div>
-                    <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
-                  </div>
-                  <% end %>
-
-                </div>
+        <% if @product.product_assessment.has_digisquare or has_digisquare_assessment(@product.product_assessment) %>
+          <% @digisquare_maturity.each do |digisquare_maturity| %>
+            <div class="list-group">
+              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
+                <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
               </div>
-            <% end %>
-          </div>
+              <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
+                <div class="list-group-item">
+                  <div class="list-group">
+                    <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
+                      <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
+                    </div>
+
+                    <% if !@product.product_assessment.send(sub_indicator["code"]) %>
+                      <div class="list-group-item align-items-start">
+                        <p class="mb-1">Maturity indicator is not assigned.</p>
+                      </div>
+                    <% end %>
+
+                    <% if @product.product_assessment.send(sub_indicator["code"]) == 1 %>
+                    <div class="list-group-item align-items-start" style="background-color: #e6b8af;">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">Low</h6>
+                        <i class="
+                           <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
+                      </div>
+                      <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
+                    </div>
+                    <% end %>
+
+                    <% if @product.product_assessment.send(sub_indicator["code"]) == 2 %>
+                    <div class="list-group-item align-items-start" style="background-color: #fff2cc;">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">Medium</h6>
+                        <i class="
+                           <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
+                      </div>
+                      <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
+                    </div>
+                    <% end %>
+
+                    <% if @product.product_assessment.send(sub_indicator["code"]) == 3 %>
+                    <div class="list-group-item align-items-start" style="background-color: #b6d7a8;">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">High</h6>
+                        <i class="
+                           <%= @product.product_assessment.send(sub_indicator["code"]) == 3 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
+                      </div>
+                      <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
+                    </div>
+                    <% end %>
+
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
