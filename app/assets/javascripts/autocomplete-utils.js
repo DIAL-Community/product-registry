@@ -77,6 +77,14 @@ function addBuildingBlock(value, label) {
   addElement("base-selected-building-blocks", "selected_building_blocks", value, label);
 }
 
+function addInteropProduct(value, label) {
+  addElement("base-selected-interoperable-products", "selected_interoperable_products", value, label);
+}
+
+function addIncludedProduct(value, label) {
+  addElement("base-selected-included-products", "selected_included_products", value, label);
+}
+
 var organizationAutoCompleteReady = function() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
@@ -95,6 +103,20 @@ var productAutoCompleteReady = function() {
   $("#building-block-search").autocomplete(productAutoComplete);
 }
 
+var interopProductAutoCompleteReady = function() {
+  var interopProductAutoComplete = autoComplete("/products.json?without_paging=true", addInteropProduct)
+  $("#base-selected-interoperable-products").hide();
+  $("#interoperate-search").autocomplete(interopProductAutoComplete);
+}
+
+var includeProductAutoCompleteReady = function() {
+  var includeProductAutoComplete = autoComplete("/products.json?without_paging=true", addIncludedProduct)
+  $("#base-selected-included-products").hide();
+  $("#include-search").autocomplete(includeProductAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
 $(document).on('turbolinks:load', productAutoCompleteReady);
+$(document).on('turbolinks:load', interopProductAutoCompleteReady);
+$(document).on('turbolinks:load', includeProductAutoCompleteReady);
