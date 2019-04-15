@@ -1,5 +1,6 @@
 class BuildingBlocksController < ApplicationController
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   # GET /building_blocks
   # GET /building_blocks.json
