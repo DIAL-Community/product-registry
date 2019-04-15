@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   root to: 'organizations#map'
   resources :products
+  resources :building_blocks
 
   resources :organizations do
     resources :contacts

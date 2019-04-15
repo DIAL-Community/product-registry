@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190410153048) do
+ActiveRecord::Schema.define(version: 20190413162159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20190410153048) do
     t.point "points", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "location_type"
+    t.string "location_type", limit: 16
     t.index ["slug"], name: "index_locations_on_slug", unique: true
   end
 
@@ -166,6 +166,13 @@ ActiveRecord::Schema.define(version: 20190410153048) do
     t.index ["product_id"], name: "index_product_assessments_on_product_id"
   end
 
+  create_table "product_product_relationships", force: :cascade do |t|
+    t.bigint "from_product_id", null: false
+    t.bigint "to_product_id", null: false
+    t.string "relationship_type", limit: 16, null: false
+    t.index ["from_product_id", "to_product_id"], name: "product_rel_index", unique: true
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.string "slug", null: false
@@ -216,6 +223,9 @@ ActiveRecord::Schema.define(version: 20190410153048) do
   add_foreign_key "organizations_products", "products", name: "organizations_products_product_fk"
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
+  add_foreign_key "product_assessments", "products"
+  add_foreign_key "product_product_relationships", "products", column: "from_product_id", name: "from_product_fk"
+  add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
   add_foreign_key "products_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"
 end

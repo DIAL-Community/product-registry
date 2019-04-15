@@ -11,6 +11,96 @@
     <%= form.label :website %>
   </fieldset>
 
+  <% if !@building_block %>
+    <fieldset class="form-label-group">
+      <input type="text" id="building-block-search" class="form-control" placeholder="Search and assign building blocks ..." />
+      <label for="product-building-blocks">
+        Search and assign building blocks ...
+      </label>
+    </fieldset>
+  <% end %>
+
+  <div class="card">
+    <h6 class="card-header">Assigned Building Blocks</h6>
+    <div class="card-body">
+      <fieldset id="selected-building-blocks">
+        <div class="card-columns">
+          <div id="base-selected-building-blocks" class="card" style="max-width: 20rem;">
+            <div class="card-body p-1 d-flex">
+              <p class="card-text p-1 m-0" style="flex: 1"></p>
+              <% if !@buid %>
+                <a class="card-link p-1" onclick="remove(this);">
+                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                </a>
+              <% end %>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <% if !@interoperable_products %>
+    <fieldset class="form-label-group">
+      <input type="text" id="interoperate-search" class="form-control" placeholder="Search and assign interoperable products ..." />
+      <label for="interoperable-products">
+        Search and assign interoperable products ...
+      </label>
+    </fieldset>
+  <% end %>
+
+  <div class="card">
+    <h6 class="card-header">Interoperable Products</h6>
+    <div class="card-body">
+      <fieldset id="selected-interoperable-products">
+        <div class="card-columns">
+          <div id="base-selected-interoperable-products" class="card" style="max-width: 20rem;">
+            <div class="card-body p-1 d-flex">
+              <p class="card-text p-1 m-0" style="flex: 1"></p>
+              <% if !@buid %>
+                <a class="card-link p-1" onclick="remove(this);">
+                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                </a>
+              <% end %>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <% if !@interoperable_products %>
+    <fieldset class="form-label-group">
+      <input type="text" id="include-search" class="form-control" placeholder="Search and assign included products ..." />
+      <label for="included-products">
+        Search and assign included products ...
+      </label>
+    </fieldset>
+  <% end %>
+
+  <div class="card">
+    <h6 class="card-header">Included Products</h6>
+    <div class="card-body">
+      <fieldset id="selected-included-products">
+        <div class="card-columns">
+          <div id="base-selected-included-products" class="card" style="max-width: 20rem;">
+            <div class="card-body p-1 d-flex">
+              <p class="card-text p-1 m-0" style="flex: 1"></p>
+              <% if !@buid %>
+                <a class="card-link p-1" onclick="remove(this);">
+                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                </a>
+              <% end %>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
   <div class="card mt-4 mb-4">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">

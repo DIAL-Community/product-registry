@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<div class="float-right pb-2">
+  <%= form_tag(building_blocks_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search building blocks ...", :class => "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag "Search", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @building_blocks.count > 0 %>
+      <% @building_blocks.each do |building_block| %>
+        <tr>
+          <td><%= building_block.name %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'View', building_block, :class =>"dropdown-item"  %>
+              <%= link_to 'Edit', edit_building_block_path(building_block), :class =>"dropdown-item"  %>
+              <div class="dropdown-divider"></div>
+              <%= link_to 'Delete', building_block, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted">
+            We couldn't find a building block matching the search phrase. Do you want to <%= link_to 'create a new building block?', new_building_block_path %>
+          </small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @building_blocks, :class => "apple-pagination" %>

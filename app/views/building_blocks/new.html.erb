@@ -1,0 +1,16 @@
+<% if @building_block.errors.any? %>
+  <div id="error_explanation">
+    <div id="error_explanation">
+      <div class="alert alert-danger">
+        The form contains
+        <%= pluralize(@building_block.errors.count, "error") %>.
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="card">
+  <h5 class="card-header">
+    Create building block
+  </h5>
+  <%= render 'form', building_block: @building_block %>
+</div>
