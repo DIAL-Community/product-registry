@@ -59,12 +59,12 @@ html {
   background-color: white;
   -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
   filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-  padding: 0.5em;
+  padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid #cccccc;
-  bottom: -5em;
-  left: -3.1em;
-  min-width: 18em;
+  bottom: -5rem;
+  left: -3.1rem;
+  min-width: 18rem;
 
   &:after, &:before {
     bottom: 100%;
@@ -78,15 +78,15 @@ html {
 
   &:after {
     border-bottom-color: white;
-    border-width: 0.5em;
-    left: 3em;
-    margin-left: -0.5em;
+    border-width: 0.5rem;
+    left: 3rem;
+    margin-left: -0.5rem;
   }
 
   &:before {
     border-bottom-color: #cccccc;
-    border-width: 0.5em;
-    left: 3em;
-    margin-left: -0.5em;
+    border-width: 0.5rem;
+    left: 3rem;
+    margin-left: -0.5rem;
   }
 }

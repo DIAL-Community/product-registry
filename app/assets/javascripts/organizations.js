@@ -132,6 +132,24 @@ var organizationsReady = function() {
 
     coordinate = feature ? markerCoordinate : undefined;
     tooltip.setPosition(coordinate);
+
+    var element = tooltip.getElement();
+
+    var fontSize = parseInt($("body").css("font-size"));
+
+    var headerHeight = parseInt($(element).find("h5").height());
+    var lineOfHeader = headerHeight / 24
+    if (lineOfHeader > 1) {
+      var baseBottom = parseInt($(element).css("bottom"));
+      $(element).css("bottom", baseBottom - lineOfHeader * fontSize);
+    }
+
+    var bodyHeight = parseInt($(element).find("h6").height());
+    var lineOfBody = bodyHeight / 19;
+    if (lineOfBody > 1) {
+      var baseBottom = parseInt($(element).css("bottom"));
+      $(element).css("bottom", baseBottom - (lineOfBody + 0.5) * fontSize);
+    }
   });
 };
 
