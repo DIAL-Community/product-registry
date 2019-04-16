@@ -100,9 +100,11 @@ var mapObject = {
     $.getJSON('/organizations.json?without_paging=true', function(organizations) {
       organizations.forEach(function(o) {
         o.offices.forEach(function(of) {
+          var featureCoordinate = ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857');
           var iconFeature = new ol.Feature({
             id: o.id,
-            geometry: new ol.geom.Point(ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857')),
+            coordinate: featureCoordinate,
+            geometry: new ol.geom.Point(featureCoordinate),
             name: o.name,
             website: o.website,
             when_endorsed: o.when_endorsed.substr(0,4),
