@@ -1,6 +1,9 @@
 namespace :db do
   namespace :seed do
     task :dump => :environment do
+      osc_maturity = YAML.load_file("config/maturity_osc.yml")
+      digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
+
       building_block_file = File.open(File.join(Rails.root, 'db', 'building_blocks.rb'), 'w')
       BuildingBlock.all.order('slug').each do |bb|
         building_block_file.puts "BuildingBlock.create(name: \"#{bb.name}\", slug: '#{bb.slug}') if BuildingBlock.where(slug: '#{bb.slug}').empty?"
@@ -8,7 +11,7 @@ namespace :db do
 
       productfile = File.open(File.join(Rails.root, 'db', 'products.rb'), 'w')
       Product.all.order('slug').each do |product|
-        if product.building_blocks.empty?
+        if product.building_blocks.empty? and product.product_assessment.nil?
           productfile.puts "Product.create(name: \"#{product.name}\", slug: '#{product.slug}') if Product.where(slug: '#{product.slug}').empty?"
         else
           productfile.puts "if Product.where(slug: '#{product.slug}').empty?"
@@ -16,7 +19,58 @@ namespace :db do
           product.building_blocks.each do |bb|
             productfile.puts "  p.building_blocks << BuildingBlock.where(slug: '#{bb.slug}').limit(1)[0]"
           end
+          if !product.product_assessment.nil?
+            productfile.puts "  ProductAssessment.create("
+            osc_maturity.each do |maturity|
+              productfile.print "   "
+              maturity["items"].each do |item|
+                productfile.print " osc_#{item['code'].downcase}: #{product.product_assessment.send('osc_' + item['code'].downcase).to_s},"
+              end
+              productfile.puts ""
+            end
+            digisquare_maturity.each do |digisquare_maturity|
+              has_indicator_vals = false
+              digisquare_maturity["sub-indicators"].each do |sub_indicator|
+                indicator_val = product.product_assessment.send(sub_indicator['code'])
+                if !indicator_val.nil?
+                  has_indicator_vals = true
+                  productfile.print "   "
+                  break
+                end
+              end
+              if has_indicator_vals
+                digisquare_maturity["sub-indicators"].each do |sub_indicator|
+                  indicator_val = product.product_assessment.send(sub_indicator['code'])
+                  if !indicator_val.nil?
+                    productfile.print " #{sub_indicator['code']}: #{indicator_val.to_s},"
+                  end
+                end
+                productfile.puts ""
+              end
+            end
+            productfile.puts "    product: p, has_osc: #{product.product_assessment.has_osc.to_s}, has_digisquare: #{product.product_assessment.has_digisquare.to_s})"
+
+          end
           productfile.puts "end"
+        end
+      end
+      Product.all.order('slug').each do |product|
+        if !product.includes.empty? or !product.interoperates_with.empty?
+          productfile.puts "p = Product.where(slug: '#{product.slug}')[0]"
+          if !product.includes.empty?
+            productfile.print "p.includes = Product.where(slug: ["
+            product.includes.each do |include|
+              productfile.print "'#{include.slug}',"
+            end
+            productfile.puts "])"
+          end
+          if !product.interoperates_with.empty?
+            productfile.print "p.interoperates_with = Product.where(slug: ["
+            product.interoperates_with.each do |interop|
+              productfile.print "'#{interop.slug}',"
+            end
+            productfile.puts "])"
+          end
         end
       end
 
