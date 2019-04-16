@@ -69,6 +69,10 @@ var mapObject = {
 
     $("#map").empty();
 
+    mapObject.popup = new ol.Overlay({
+      element: document.getElementById('popup')
+    });
+
     mapObject.YearSelectorControl.prototype = Object.create(ol.control.Control.prototype);
     mapObject.YearSelectorControl.prototype.constructor = mapObject.YearSelectorControl;
 
@@ -87,6 +91,7 @@ var mapObject = {
         mapObject.countryHightlightLayer,
         mapObject.markerLayer
       ],
+      overlays: [mapObject.popup],
       view: new ol.View({
         center: ol.proj.fromLonLat([10, 20.3]),
         zoom: 2.5,
@@ -95,9 +100,11 @@ var mapObject = {
     $.getJSON('/organizations.json?without_paging=true', function(organizations) {
       organizations.forEach(function(o) {
         o.offices.forEach(function(of) {
+          var featureCoordinate = ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857');
           var iconFeature = new ol.Feature({
             id: o.id,
-            geometry: new ol.geom.Point(ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857')),
+            coordinate: featureCoordinate,
+            geometry: new ol.geom.Point(featureCoordinate),
             name: o.name,
             website: o.website,
             when_endorsed: o.when_endorsed.substr(0,4),
@@ -108,12 +115,7 @@ var mapObject = {
         });
       });
     });
-    mapObject.map.addOverlay(mapObject.popup);
     mapObject.map.on('click', mapObject.clickHandler);
   },
-
-  popup : new ol.Overlay({
-    element: document.getElementById('popup')
-  }),
 
 };

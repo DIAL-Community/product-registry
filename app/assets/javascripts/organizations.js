@@ -48,16 +48,12 @@ function setOfficeMarker(organization, location, lon, lat) {
   feature.setGeometry(new ol.geom.Point(markerCoordinate));
 
   // Set the tooltip structure and location.
-  tooltip.setPosition(markerCoordinate);
+  tooltip.setPosition(undefined);
   var element = tooltip.getElement();
-  $(element).popover('dispose');
-  $(element).popover({
-    placement: 'bottom',
-    animation: false,
-    html: true,
-    content: "<h5 class='text-muted'>" + organization + "</h5>" +
-      "<h6 class='text-muted'>" + location + "</h6>"
-  });
+  var content =
+    "<h5 class='text-muted'>" + organization + "</h5>" +
+    "<h6 class='text-muted'>" + location + "</h6>"
+  $(element).html(content);
 }
 
 function addSector(value, label) {
@@ -109,7 +105,7 @@ var organizationsReady = function() {
   console.log("Setting map view ...");
 
   tooltip = new ol.Overlay({
-    element: document.getElementById('popover')
+    element: document.getElementById('office-popup')
   });
   map = new ol.Map({
     target: "office",
@@ -128,34 +124,31 @@ var organizationsReady = function() {
 
   // Display tooltip when the user click on the office marker.
   map.on("click", function(e) {
-    map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+    var feature = map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
       if (layer === markerLayer && tooltip) {
-        var element = tooltip.getElement();
-        $(element).popover("show");
+        return feature;
       }
-    })
-  });
+    });
 
-  // Remove tooltip when the map is zoomed or dragged.
-  map.on("movestart", function(e) {
-    if (tooltip) {
-      var element = tooltip.getElement();
-      $(element).popover("hide");
+    coordinate = feature ? markerCoordinate : undefined;
+    tooltip.setPosition(coordinate);
+
+    var element = tooltip.getElement();
+
+    var fontSize = parseInt($("body").css("font-size"));
+
+    var headerHeight = parseInt($(element).find("h5").height());
+    var lineOfHeader = headerHeight / 24
+    if (lineOfHeader > 1) {
+      var baseBottom = parseInt($(element).css("bottom"));
+      $(element).css("bottom", baseBottom - lineOfHeader * fontSize);
     }
-  })
 
-  // Remove tooltip when the page is scrolled.
-  window.addEventListener('scroll', function(e) {
-    var ticking = false;
-    if (!ticking) {
-      window.requestAnimationFrame(function() {
-        if (tooltip) {
-          var element = tooltip.getElement();
-          $(element).popover("hide");
-        }
-        ticking = false;
-      });
-      ticking = true;
+    var bodyHeight = parseInt($(element).find("h6").height());
+    var lineOfBody = bodyHeight / 19;
+    if (lineOfBody > 1) {
+      var baseBottom = parseInt($(element).css("bottom"));
+      $(element).css("bottom", baseBottom - (lineOfBody + 0.5) * fontSize);
     }
   });
 };

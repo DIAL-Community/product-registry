@@ -19,7 +19,7 @@
 
       <% if @organization.locations.find{|location| location.location_type == 'point'} %>
         <div id="office" style="max-height: 28rem;"></div>
-        <div id="popover"></div>
+        <div id="office-popup" class="map-popup"></div>
       <% end %>
 
       <p class="float-right mb-0" >
