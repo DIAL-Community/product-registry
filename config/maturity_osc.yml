@@ -100,10 +100,10 @@
         desc: The project has a well-known real-time communication platform such as IRC.
       - code: CO72
         desc: The project&#39;s real-time communications are archived so that users can refer back to past conversations.
-      - code: CO80
-        desc: The project has an active and diverse set of contributing members representing various constituencies.
       - code: CO73
         desc: The community has a forum or other discussion platform for users to ask questions, with reasonable response times from the community.
+      - code: CO80
+        desc: The project has an active and diverse set of contributing members representing various constituencies.
   - header:   Consensus Building
     items:
       - code: CS10
