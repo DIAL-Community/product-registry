@@ -8,17 +8,17 @@ mapObject.clickHandler = function(evt) {
     }
   );
   if (feature) {
-    var element = mapObject.popup.element; //getElement();
-    mapObject.popup.setPosition(evt.coordinate);
     mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
       mapObject.countryLayer.getSource().addFeature(feature);
     });
     mapObject.countryHightlightLayer.getSource().clear();
 
     var content =
+    '<div class="map-popup">' +
     '<p class="mb-2"><strong><a href="http://' + feature.get("website") + '">' + feature.get('website') + '</a></strong></p>' +
     '<p class="text-muted mb-2">Endorser since ' + feature.get("when_endorsed") + '</p>' +
-    '<p class="float-right mb-2"><a href="/organizations/' + feature.get("id") + '"><small>View organization</small></a></p>';
+    '<p class="float-right mb-2"><a href="/organizations/' + feature.get("id") + '"><small>View organization</small></a></p>' +
+    '</div>';
 
     feature.get('countries').forEach(function(cLabel) {
       mapObject.countryLayer.getSource().forEachFeature(function(cFeature) {
@@ -30,21 +30,12 @@ mapObject.clickHandler = function(evt) {
     mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
       mapObject.countryLayer.getSource().removeFeature(feature);
     });
-    $(element).popover('dispose');
-    $(element).popover({
-      placement: 'top',
-      animation: false,
-      html: true,
-      content: content,
-      trigger: 'focus',
-      title: feature.get('name')
-    });
-    $(element).popover('show');
-    $(element).click(function(e) {
-      $(element).popover('hide');
-    })
+
+    var element = mapObject.popup.element;
+    $(element).html(content);
+    mapObject.popup.setPosition(evt.coordinate);
   } else {
-    $(mapObject.popup.element).popover('hide');
+    mapObject.popup.setPosition(undefined);
     mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
       mapObject.countryLayer.getSource().addFeature(feature);
     });

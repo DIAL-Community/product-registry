@@ -69,6 +69,10 @@ var mapObject = {
 
     $("#map").empty();
 
+    mapObject.popup = new ol.Overlay({
+      element: document.getElementById('popup')
+    });
+
     mapObject.YearSelectorControl.prototype = Object.create(ol.control.Control.prototype);
     mapObject.YearSelectorControl.prototype.constructor = mapObject.YearSelectorControl;
 
@@ -87,6 +91,7 @@ var mapObject = {
         mapObject.countryHightlightLayer,
         mapObject.markerLayer
       ],
+      overlays: [mapObject.popup],
       view: new ol.View({
         center: ol.proj.fromLonLat([10, 20.3]),
         zoom: 2.5,
@@ -108,12 +113,7 @@ var mapObject = {
         });
       });
     });
-    mapObject.map.addOverlay(mapObject.popup);
     mapObject.map.on('click', mapObject.clickHandler);
   },
-
-  popup : new ol.Overlay({
-    element: document.getElementById('popup')
-  }),
 
 };

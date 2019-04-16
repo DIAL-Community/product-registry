@@ -15,8 +15,6 @@ var mapReady = function() {
     if (mapObject) {
       var sectorId = $(this).val();
 
-      $(mapObject.popup.element).popover('hide');
-
       mapObject.countryHightlightLayer.getSource().forEachFeature(function(feature) {
         mapObject.countryLayer.getSource().addFeature(feature);
       });
