@@ -53,3 +53,40 @@ html {
     border-bottom-left-radius: 0;
   }
 }
+
+.map-popup {
+  position: absolute;
+  background-color: white;
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  bottom: -5em;
+  left: -3.1em;
+  min-width: 18em;
+
+  &:after, &:before {
+    bottom: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-bottom-color: white;
+    border-width: 0.5em;
+    left: 3em;
+    margin-left: -0.5em;
+  }
+
+  &:before {
+    border-bottom-color: #cccccc;
+    border-width: 0.5em;
+    left: 3em;
+    margin-left: -0.5em;
+  }
+}
