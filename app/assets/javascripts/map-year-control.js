@@ -21,7 +21,7 @@ mapObject.YearSelectorControl = function YearSelectorControl(selectElement) {
   },
 
   mapObject.handleYearSelection = function() {
-    $(mapObject.popup.element).popover('hide');
+    mapObject.popup.setPosition(undefined);
     mapObject.countryHightlightLayer.getSource().forEachFeature(function(feature) {
       mapObject.countryLayer.getSource().addFeature(feature);
     });
