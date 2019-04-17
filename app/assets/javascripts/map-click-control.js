@@ -14,8 +14,9 @@ mapObject.clickHandler = function(evt) {
     mapObject.countryHightlightLayer.getSource().clear();
 
     var content =
-    '<div class="card map-popup" style="bottom: -7.5rem; padding: 0">' +
-    '<h6 class="card-header p-2"><a href="http://' + feature.get("website") + '">' + feature.get('website') + '</a></h6>' +
+    '<div class="card map-popup" style="bottom: -9rem; padding: 0">' +
+    '<h6 class="card-header p-2">' + feature.get("name") + '</h6>' +
+    '<p class="text-muted mt-2 ml-2 mb-0"><a href="http://' + feature.get("website") + '">' + feature.get('website') + '</a></p>' +
     '<p class="text-muted mt-2 ml-2 mb-0">Endorser since ' + feature.get("when_endorsed") + '</p>' +
     '<p class="text-muted mt-2 ml-2 mb-2"><a href="/organizations/' + feature.get("id") + '"><small>View organization</small></a></p>' +
     '</div>';
