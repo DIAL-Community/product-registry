@@ -115,6 +115,19 @@ if Product.where(slug: 'mifos').empty?
 end
 Product.create(name: "MIT OpenSourceWare", slug: 'mit_opensourceware') if Product.where(slug: 'mit_opensourceware').empty?
 Product.create(name: "Moodle", slug: 'moodle') if Product.where(slug: 'moodle').empty?
+if Product.where(slug: 'motech').empty?
+  p = Product.create(name: "MOTECH", slug: 'motech') if Product.where(slug: 'motech').empty?
+  ProductAssessment.create(
+    osc_cd10: false, osc_cd20: false, osc_cd21: false, osc_cd30: false, osc_cd31: false, osc_cd40: false, osc_cd50: false, osc_cd60: false, osc_cd61: false,
+    osc_lc10: false, osc_lc20: false, osc_lc30: false, osc_lc40: false, osc_lc50: false, osc_lc60: false,
+    osc_re10: false, osc_re30: false, osc_re40: false, osc_re50: false, osc_re60: false, osc_re70: false, osc_re80: false,
+    osc_qu10: false, osc_qu11: false, osc_qu12: false, osc_qu20: false, osc_qu30: false, osc_qu40: false, osc_qu50: false, osc_qu51: false, osc_qu52: false, osc_qu60: false, osc_qu70: false, osc_qu71: false, osc_qu80: false, osc_qu90: false, osc_qu100: false,
+    osc_co10: false, osc_co20: false, osc_co30: false, osc_co40: false, osc_co50: false, osc_co60: false, osc_co70: false, osc_co71: false, osc_co72: false, osc_co73: false, osc_co80: false,
+    osc_cs10: false, osc_cs20: false, osc_cs30: false, osc_cs40: false, osc_cs50: false,
+    osc_in10: false, osc_in20: false, osc_in30: false,
+    osc_im10: false, osc_im20: false,
+    product: p, has_osc: false, has_digisquare: false)
+end
 Product.create(name: "mSpray", slug: 'mspray') if Product.where(slug: 'mspray').empty?
 if Product.where(slug: 'odk').empty?
   p = Product.create(name: "ODK", slug: 'odk') if Product.where(slug: 'odk').empty?
@@ -259,4 +272,15 @@ Product.create(name: "wikiHow", slug: 'wikihow') if Product.where(slug: 'wikihow
 Product.create(name: "Wikipedia", slug: 'wikipedia') if Product.where(slug: 'wikipedia').empty?
 Product.create(name: "WordPress", slug: 'wordpress') if Product.where(slug: 'wordpress').empty?
 p = Product.where(slug: 'bahmni')[0]
+p.includes = Product.where(slug: ['openmrs','odoo/openerp','openelis',])
 p.interoperates_with = Product.where(slug: ['dhis',])
+p = Product.where(slug: 'mhero')[0]
+p.includes = Product.where(slug: ['ihris','dhis','rapidpro',])
+p = Product.where(slug: 'motech')[0]
+p.interoperates_with = Product.where(slug: ['dhis','commcare','openmrs',])
+p = Product.where(slug: 'openlmis')[0]
+p.interoperates_with = Product.where(slug: ['dhis','commcare','openmrs',])
+p = Product.where(slug: 'openmrs')[0]
+p.interoperates_with = Product.where(slug: ['open_concept_lab',])
+p = Product.where(slug: 'opensrp')[0]
+p.includes = Product.where(slug: ['openmrs','dhis','rapidpro','openlmis',])

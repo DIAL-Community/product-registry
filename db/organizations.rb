@@ -78,6 +78,57 @@ if Organization.where(slug: 'aerian').empty?
   o.locations << Location.where(slug: 'the_old_malthouse_mill_lane_uk').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 end
+if Organization.where(slug: 'agulhas_applied_knowledge_ltd').empty?
+  o = Organization.create(name: "Agulhas Applied Knowledge Ltd.", slug: 'agulhas_applied_knowledge_ltd', when_endorsed: DateTime.new(2019, 4, 12), is_endorser: true, website: "http://agulhas.co.uk/")
+  o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
+  o.locations << Location.where(slug: 'armenia').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'burundi').limit(1)[0]
+  o.locations << Location.where(slug: 'cambodia').limit(1)[0]
+  o.locations << Location.where(slug: 'colombia').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'iraq').limit(1)[0]
+  o.locations << Location.where(slug: 'ireland').limit(1)[0]
+  o.locations << Location.where(slug: 'israel').limit(1)[0]
+  o.locations << Location.where(slug: 'jordan').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'kyrgystan').limit(1)[0]
+  o.locations << Location.where(slug: 'lebanon').limit(1)[0]
+  o.locations << Location.where(slug: 'lesotho').limit(1)[0]
+  o.locations << Location.where(slug: 'libya').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'madagascar').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'palestine').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'somalia').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'syria').limit(1)[0]
+  o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'tonga').limit(1)[0]
+  o.locations << Location.where(slug: 'tunisia').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
 if Organization.where(slug: 'akros').empty?
   o = Organization.create(name: "Akros", slug: 'akros', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.akros.com")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
@@ -104,11 +155,81 @@ if Organization.where(slug: 'akryl').empty?
   o.locations << Location.where(slug: 'germany').limit(1)[0]
   o.locations << Location.where(slug: 'hamburg_germany').limit(1)[0]
 end
+if Organization.where(slug: 'apocoach_gbr').empty?
+  o = Organization.create(name: "APO-Coach, GbR", slug: 'apocoach_gbr', when_endorsed: DateTime.new(2018, 10, 21), is_endorser: true, website: "https://apo-coach.de")
+  o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.sectors << Sector.where(slug: 'infrastructure').limit(1)[0]
+  o.locations << Location.where(slug: 'germany_office').limit(1)[0]
+  o.locations << Location.where(slug: 'kyrgystan').limit(1)[0]
+  o.locations << Location.where(slug: 'moldova').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
+  o.locations << Location.where(slug: 'uzbekistan').limit(1)[0]
+end
+if Organization.where(slug: 'applicatio').empty?
+  o = Organization.create(name: "Applicatio", slug: 'applicatio', when_endorsed: DateTime.new(2018, 11, 21), is_endorser: true, website: "https://www.application.com")
+  o.sectors << Sector.where(slug: 'communication').limit(1)[0]
+  o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'albania').limit(1)[0]
+  o.locations << Location.where(slug: 'armenia').limit(1)[0]
+  o.locations << Location.where(slug: 'austria').limit(1)[0]
+  o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
+  o.locations << Location.where(slug: 'belarus').limit(1)[0]
+  o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'botswana').limit(1)[0]
+  o.locations << Location.where(slug: 'china').limit(1)[0]
+  o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
+  o.locations << Location.where(slug: 'croatia').limit(1)[0]
+  o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'georgia').limit(1)[0]
+  o.locations << Location.where(slug: 'germany').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'hamburg_germany').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'kazakhstan').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'kyrgystan').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'macedonia').limit(1)[0]
+  o.locations << Location.where(slug: 'moldova').limit(1)[0]
+  o.locations << Location.where(slug: 'mongolia').limit(1)[0]
+  o.locations << Location.where(slug: 'montenegro').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'namibia').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'romania').limit(1)[0]
+  o.locations << Location.where(slug: 'serbia').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'thailand').limit(1)[0]
+  o.locations << Location.where(slug: 'turkey').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'uzbekistan').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'yemen').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
 if Organization.where(slug: 'aptivate').empty?
   o = Organization.create(name: "Aptivate", slug: 'aptivate', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.aptivate.org/")
   o.sectors << Sector.where(slug: 'gender_and_minority_groups').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+end
+if Organization.where(slug: 'arqaam').empty?
+  o = Organization.create(name: "Arqaam", slug: 'arqaam', when_endorsed: DateTime.new(2018, 10, 21), is_endorser: true, website: "www.arqaam.eu")
+  o.sectors << Sector.where(slug: 'development_impact').limit(1)[0]
+  o.locations << Location.where(slug: 'germany').limit(1)[0]
+  o.locations << Location.where(slug: 'germany_office').limit(1)[0]
+  o.locations << Location.where(slug: 'tunisia').limit(1)[0]
 end
 if Organization.where(slug: 'avallain_foundation_inc').empty?
   o = Organization.create(name: "Avallain Foundation, inc.", slug: 'avallain_foundation_inc', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.avallainfoundation.org")
@@ -126,6 +247,10 @@ if Organization.where(slug: 'awaazde').empty?
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'ahmedabad_gujrat_india').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
+end
+if Organization.where(slug: 'bao_systems').empty?
+  o = Organization.create(name: "BAO Systems", slug: 'bao_systems', when_endorsed: DateTime.new(2018, 10, 23), is_endorser: true, website: "baosystems.com")
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'belgian_development_agency').empty?
   o = Organization.create(name: "Belgian Development Agency", slug: 'belgian_development_agency', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "WWW.BTCCTB.ORG")
@@ -191,8 +316,24 @@ if Organization.where(slug: 'bivee').empty?
   o.locations << Location.where(slug: 'hong_kong').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
 end
+if Organization.where(slug: 'bluedoor').empty?
+  o = Organization.create(name: "Bluedoor", slug: 'bluedoor', when_endorsed: DateTime.new(2019, 4, 1), is_endorser: true, website: "http://www.bluedoor.us")
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'chapel_hill_nc').limit(1)[0]
+end
 if Organization.where(slug: 'build_up').empty?
   o = Organization.create(name: "Build Up", slug: 'build_up', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://howtobuildup.org/projects/ ")
+end
+if Organization.where(slug: 'butterfly_works').empty?
+  o = Organization.create(name: "Butterfly Works", slug: 'butterfly_works', when_endorsed: DateTime.new(2018, 11, 21), is_endorser: true, website: "http://www.butterflywordsdc.org")
+  o.sectors << Sector.where(slug: 'communication').limit(1)[0]
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
+end
+if Organization.where(slug: 'button_program').empty?
+  o = Organization.create(name: "Button Program", slug: 'button_program', when_endorsed: DateTime.new(2019, 3, 10), is_endorser: true, website: "https://www.buttonprogram.org")
+  o.locations << Location.where(slug: 'helsinki_finland').limit(1)[0]
 end
 if Organization.where(slug: 'caktus_group').empty?
   o = Organization.create(name: "Caktus Group", slug: 'caktus_group', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.caktusgroup.com/")
@@ -422,6 +563,55 @@ if Organization.where(slug: 'chemonics').empty?
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
+if Organization.where(slug: 'christian_aid').empty?
+  o = Organization.create(name: "Christian Aid", slug: 'christian_aid', when_endorsed: DateTime.new(2018, 11, 26), is_endorser: true, website: "https://www.christianaid.org.uk")
+  o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
+  o.sectors << Sector.where(slug: 'justice').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'angola').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'brazil').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'burundi').limit(1)[0]
+  o.locations << Location.where(slug: 'colombia').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'guatemala').limit(1)[0]
+  o.locations << Location.where(slug: 'haiti').limit(1)[0]
+  o.locations << Location.where(slug: 'honduras').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'iraq').limit(1)[0]
+  o.locations << Location.where(slug: 'israel').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'lebanon').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
+  o.locations << Location.where(slug: 'niger').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'palestine').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'syria').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
+if Organization.where(slug: 'clear_outcomes').empty?
+  o = Organization.create(name: "Clear Outcomes", slug: 'clear_outcomes', when_endorsed: DateTime.new(2019, 3, 5), is_endorser: true, website: "https://clearoutcomes.net")
+  o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
+  o.locations << Location.where(slug: 'boise_id').limit(1)[0]
+end
 if Organization.where(slug: 'code_innovation').empty?
   o = Organization.create(name: "CODE Innovation", slug: 'code_innovation', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://codeinnovation.com/")
   o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
@@ -431,6 +621,11 @@ if Organization.where(slug: 'code_innovation').empty?
   o.locations << Location.where(slug: 'palestine').limit(1)[0]
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'silicon_valley').limit(1)[0]
+end
+if Organization.where(slug: 'common_sense').empty?
+  o = Organization.create(name: "Common Sense", slug: 'common_sense', when_endorsed: DateTime.new(2019, 2, 1), is_endorser: true, website: "www.common-sense.at")
+  o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
+  o.locations << Location.where(slug: 'vienna_austria').limit(1)[0]
 end
 if Organization.where(slug: 'congo_in_the_picture').empty?
   o = Organization.create(name: "Congo in the Picture", slug: 'congo_in_the_picture', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.facebook.com/CongoInThePicture/")
@@ -765,6 +960,14 @@ if Organization.where(slug: 'digital_green').empty?
   o.locations << Location.where(slug: 'new_delhi_india').limit(1)[0]
   o.locations << Location.where(slug: 'san_francisco_ca').limit(1)[0]
 end
+if Organization.where(slug: 'digital_health_impact_dhit').empty?
+  o = Organization.create(name: "Digital Health Impact (DHIT)", slug: 'digital_health_impact_dhit', when_endorsed: DateTime.new(2019, 4, 1), is_endorser: true, website: "https://dhitglobal.org")
+  o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
+  o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.sectors << Sector.where(slug: 'research').limit(1)[0]
+  o.locations << Location.where(slug: 'chapel_hill_nc').limit(1)[0]
+end
 if Organization.where(slug: 'digital_impact_alliance_dial').empty?
   o = Organization.create(name: "Digital Impact Alliance (DIAL)", slug: 'digital_impact_alliance_dial', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://digitalimpactalliance.org/")
 end
@@ -813,6 +1016,31 @@ end
 if Organization.where(slug: 'disruptive_designs').empty?
   o = Organization.create(name: "Disruptive Designs", slug: 'disruptive_designs', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "")
 end
+if Organization.where(slug: 'dtree_international').empty?
+  o = Organization.create(name: "D-Tree International", slug: 'dtree_international', when_endorsed: DateTime.new(2018, 12, 9), is_endorser: true, website: "https://www.d-tree.org")
+  o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'haiti').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'norwell_ma').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'sri_lanka').limit(1)[0]
+  o.locations << Location.where(slug: 'sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'thailand').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+end
 if Organization.where(slug: 'ecorys').empty?
   o = Organization.create(name: "Ecorys", slug: 'ecorys', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://uk.ecorys.com/")
 end
@@ -822,6 +1050,30 @@ if Organization.where(slug: 'education_development_center_edc').empty?
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'waltham_boston_ma').limit(1)[0]
+end
+if Organization.where(slug: 'ekitabu').empty?
+  o = Organization.create(name: "eKitabu", slug: 'ekitabu', when_endorsed: DateTime.new(2019, 2, 8), is_endorser: true, website: "https://www.ekitabu.com")
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.locations << Location.where(slug: 'eritrea').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
+if Organization.where(slug: 'el_kanis_group').empty?
+  o = Organization.create(name: "El Kanis Group", slug: 'el_kanis_group', when_endorsed: DateTime.new(18, 10, 18), is_endorser: true, website: "http://elkanisgroup.com/")
+  o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+  o.locations << Location.where(slug: 'abuja_nigeria').limit(1)[0]
 end
 if Organization.where(slug: 'enabel').empty?
   o = Organization.create(name: "Enabel", slug: 'enabel', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.enabel.be")
@@ -858,6 +1110,14 @@ if Organization.where(slug: 'enabel').empty?
   o.locations << Location.where(slug: 'senegal').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
 end
+if Organization.where(slug: 'epcon').empty?
+  o = Organization.create(name: "Epcon", slug: 'epcon', when_endorsed: DateTime.new(2019, 4, 4), is_endorser: true, website: "https://www.epcon.ai")
+  o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'antwerp_belgium').limit(1)[0]
+  o.locations << Location.where(slug: 'belgium').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+end
 if Organization.where(slug: 'everymobile').empty?
   o = Organization.create(name: "Every1Mobile", slug: 'everymobile', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "http://www.every1mobile.net/")
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
@@ -867,6 +1127,26 @@ if Organization.where(slug: 'fair_denmark').empty?
   o.locations << Location.where(slug: 'copenhagen_denmark').limit(1)[0]
   o.locations << Location.where(slug: 'denmark').limit(1)[0]
   o.locations << Location.where(slug: 'norway').limit(1)[0]
+end
+if Organization.where(slug: 'fair_ventures_worldwide').empty?
+  o = Organization.create(name: "Fair Ventures Worldwide", slug: 'fair_ventures_worldwide', when_endorsed: DateTime.new(2019, 3, 11), is_endorser: true, website: "https://fairventures.org")
+  o.locations << Location.where(slug: 'stuttgart_germany').limit(1)[0]
+end
+if Organization.where(slug: 'farm_radio_international').empty?
+  o = Organization.create(name: "Farm Radio International", slug: 'farm_radio_international', when_endorsed: DateTime.new(2019, 1, 14), is_endorser: true, website: "https://farmradio.org")
+  o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'ottowa_canada').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
 end
 if Organization.where(slug: 'fhi_').empty?
   o = Organization.create(name: "FHI 360", slug: 'fhi_', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.fhi360.org/")
@@ -952,6 +1232,80 @@ if Organization.where(slug: 'foundation_botnar').empty?
   o.locations << Location.where(slug: 'romania').limit(1)[0]
   o.locations << Location.where(slug: 'switzerland').limit(1)[0]
   o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+end
+if Organization.where(slug: 'gfa_consulting_group').empty?
+  o = Organization.create(name: "GFA Consulting Group", slug: 'gfa_consulting_group', when_endorsed: DateTime.new(2019, 1, 12), is_endorser: true, website: "https://www.gfa-group.de")
+  o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+  o.sectors << Sector.where(slug: 'development_impact').limit(1)[0]
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'employment').limit(1)[0]
+  o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+  o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.sectors << Sector.where(slug: 'natural_resource_conflicts').limit(1)[0]
+  o.sectors << Sector.where(slug: 'water_and_sanitation').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'albania').limit(1)[0]
+  o.locations << Location.where(slug: 'algeria').limit(1)[0]
+  o.locations << Location.where(slug: 'argentina').limit(1)[0]
+  o.locations << Location.where(slug: 'armenia').limit(1)[0]
+  o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'belarus').limit(1)[0]
+  o.locations << Location.where(slug: 'belize').limit(1)[0]
+  o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'brazil').limit(1)[0]
+  o.locations << Location.where(slug: 'cambodia').limit(1)[0]
+  o.locations << Location.where(slug: 'china').limit(1)[0]
+  o.locations << Location.where(slug: 'colombia').limit(1)[0]
+  o.locations << Location.where(slug: 'costa_rica').limit(1)[0]
+  o.locations << Location.where(slug: 'croatia').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'ecuador').limit(1)[0]
+  o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
+  o.locations << Location.where(slug: 'georgia').limit(1)[0]
+  o.locations << Location.where(slug: 'germany').limit(1)[0]
+  o.locations << Location.where(slug: 'guatemala').limit(1)[0]
+  o.locations << Location.where(slug: 'hamburg_germany').limit(1)[0]
+  o.locations << Location.where(slug: 'honduras').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'iraq').limit(1)[0]
+  o.locations << Location.where(slug: 'israel').limit(1)[0]
+  o.locations << Location.where(slug: 'jamaica').limit(1)[0]
+  o.locations << Location.where(slug: 'jordan').limit(1)[0]
+  o.locations << Location.where(slug: 'kazakhstan').limit(1)[0]
+  o.locations << Location.where(slug: 'kosovo').limit(1)[0]
+  o.locations << Location.where(slug: 'kyrgystan').limit(1)[0]
+  o.locations << Location.where(slug: 'laos').limit(1)[0]
+  o.locations << Location.where(slug: 'lebanon').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'macedonia').limit(1)[0]
+  o.locations << Location.where(slug: 'malaysia').limit(1)[0]
+  o.locations << Location.where(slug: 'mauritania').limit(1)[0]
+  o.locations << Location.where(slug: 'mexico').limit(1)[0]
+  o.locations << Location.where(slug: 'moldova').limit(1)[0]
+  o.locations << Location.where(slug: 'mongolia').limit(1)[0]
+  o.locations << Location.where(slug: 'montenegro').limit(1)[0]
+  o.locations << Location.where(slug: 'morocco').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'peru').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'russia').limit(1)[0]
+  o.locations << Location.where(slug: 'saint_kitts_and_nevis').limit(1)[0]
+  o.locations << Location.where(slug: 'serbia').limit(1)[0]
+  o.locations << Location.where(slug: 'south_korea').limit(1)[0]
+  o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
+  o.locations << Location.where(slug: 'timor_leste').limit(1)[0]
+  o.locations << Location.where(slug: 'tunisia').limit(1)[0]
+  o.locations << Location.where(slug: 'turkey').limit(1)[0]
+  o.locations << Location.where(slug: 'ukraine').limit(1)[0]
+  o.locations << Location.where(slug: 'uzbekistan').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 end
 if Organization.where(slug: 'girl_effect_mobile__springster').empty?
   o = Organization.create(name: "Girl Effect Mobile - Springster ", slug: 'girl_effect_mobile__springster', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "girleffect.org")
@@ -1266,6 +1620,10 @@ if Organization.where(slug: 'healthenabled').empty?
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
+if Organization.where(slug: 'hikaya').empty?
+  o = Organization.create(name: "Hikaya", slug: 'hikaya', when_endorsed: DateTime.new(2019, 4, 13), is_endorser: true, website: "https://hikaya.io")
+  o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
+end
 if Organization.where(slug: 'human_network_international_hni').empty?
   o = Organization.create(name: "Human Network International (HNI)", slug: 'human_network_international_hni', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://hni.org/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
@@ -1288,6 +1646,41 @@ end
 if Organization.where(slug: 'humanitarian_open_street_map_tea').empty?
   o = Organization.create(name: "Humanitarian Open Street Map Team ", slug: 'humanitarian_open_street_map_tea', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "")
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
+end
+if Organization.where(slug: 'imc_worldwide').empty?
+  o = Organization.create(name: "iMC Worldwide", slug: 'imc_worldwide', when_endorsed: DateTime.new(2018, 11, 27), is_endorser: true, website: "http://www.imcworldwide.com")
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.locations << Location.where(slug: 'bahamas').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'belize').limit(1)[0]
+  o.locations << Location.where(slug: 'bhutan').limit(1)[0]
+  o.locations << Location.where(slug: 'china').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'gambia').limit(1)[0]
+  o.locations << Location.where(slug: 'guyana').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'jamaica').limit(1)[0]
+  o.locations << Location.where(slug: 'lesotho').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'netherlands').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sri_lanka').limit(1)[0]
+  o.locations << Location.where(slug: 'trinidad_and_tobago').limit(1)[0]
+  o.locations << Location.where(slug: 'turks_and_caicos_islands').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'instedd').empty?
   o = Organization.create(name: "InSTEDD", slug: 'instedd', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://instedd.org/")
@@ -1330,6 +1723,42 @@ if Organization.where(slug: 'intellisoft').empty?
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
   o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
+end
+if Organization.where(slug: 'interamerican_development_bank_i').empty?
+  o = Organization.create(name: "Inter-American Development Bank (IADB)", slug: 'interamerican_development_bank_i', when_endorsed: DateTime.new(2018, 10, 9), is_endorser: true, website: "https://www.iadb.org/en")
+  o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+  o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.sectors << Sector.where(slug: 'water_and_sanitation').limit(1)[0]
+  o.locations << Location.where(slug: 'argentina').limit(1)[0]
+  o.locations << Location.where(slug: 'bahamas').limit(1)[0]
+  o.locations << Location.where(slug: 'barbados').limit(1)[0]
+  o.locations << Location.where(slug: 'belize').limit(1)[0]
+  o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'brazil').limit(1)[0]
+  o.locations << Location.where(slug: 'chile').limit(1)[0]
+  o.locations << Location.where(slug: 'colombia').limit(1)[0]
+  o.locations << Location.where(slug: 'costa_rica').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'ecuador').limit(1)[0]
+  o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
+  o.locations << Location.where(slug: 'guatemala').limit(1)[0]
+  o.locations << Location.where(slug: 'guyana').limit(1)[0]
+  o.locations << Location.where(slug: 'haiti').limit(1)[0]
+  o.locations << Location.where(slug: 'honduras').limit(1)[0]
+  o.locations << Location.where(slug: 'jamaica').limit(1)[0]
+  o.locations << Location.where(slug: 'mexico').limit(1)[0]
+  o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
+  o.locations << Location.where(slug: 'panama').limit(1)[0]
+  o.locations << Location.where(slug: 'paraguay').limit(1)[0]
+  o.locations << Location.where(slug: 'peru').limit(1)[0]
+  o.locations << Location.where(slug: 'suriname').limit(1)[0]
+  o.locations << Location.where(slug: 'trinidad_and_tobago').limit(1)[0]
+  o.locations << Location.where(slug: 'uruguay').limit(1)[0]
+  o.locations << Location.where(slug: 'venezuela').limit(1)[0]
 end
 if Organization.where(slug: 'international_foundation_for_ele').empty?
   o = Organization.create(name: "International Foundation for Electoral Systems (IFES)", slug: 'international_foundation_for_ele', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.ifes.org/")
@@ -1524,6 +1953,80 @@ if Organization.where(slug: 'international_initiative_for_imp').empty?
   o.sectors << Sector.where(slug: 'governance').limit(1)[0]
   o.locations << Location.where(slug: 'india').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+end
+if Organization.where(slug: 'international_labour_organizatio').empty?
+  o = Organization.create(name: "International Labour Organization", slug: 'international_labour_organizatio', when_endorsed: DateTime.new(2019, 1, 17), is_endorser: true, website: "https://www.ilo.org/global/lang--en/index.htm")
+  o.sectors << Sector.where(slug: 'employment').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'albania').limit(1)[0]
+  o.locations << Location.where(slug: 'algeria').limit(1)[0]
+  o.locations << Location.where(slug: 'angola').limit(1)[0]
+  o.locations << Location.where(slug: 'antigua_and_barbuda').limit(1)[0]
+  o.locations << Location.where(slug: 'argentina').limit(1)[0]
+  o.locations << Location.where(slug: 'armenia').limit(1)[0]
+  o.locations << Location.where(slug: 'australia').limit(1)[0]
+  o.locations << Location.where(slug: 'austria').limit(1)[0]
+  o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
+  o.locations << Location.where(slug: 'bahamas').limit(1)[0]
+  o.locations << Location.where(slug: 'bahrain').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'barbados').limit(1)[0]
+  o.locations << Location.where(slug: 'belarus').limit(1)[0]
+  o.locations << Location.where(slug: 'belgium').limit(1)[0]
+  o.locations << Location.where(slug: 'belize').limit(1)[0]
+  o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'botswana').limit(1)[0]
+  o.locations << Location.where(slug: 'brazil').limit(1)[0]
+  o.locations << Location.where(slug: 'brunei').limit(1)[0]
+  o.locations << Location.where(slug: 'bulgaria').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'burundi').limit(1)[0]
+  o.locations << Location.where(slug: 'cambodia').limit(1)[0]
+  o.locations << Location.where(slug: 'cameroon').limit(1)[0]
+  o.locations << Location.where(slug: 'canada').limit(1)[0]
+  o.locations << Location.where(slug: 'cape_verde').limit(1)[0]
+  o.locations << Location.where(slug: 'central_african_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'chad').limit(1)[0]
+  o.locations << Location.where(slug: 'chile').limit(1)[0]
+  o.locations << Location.where(slug: 'china').limit(1)[0]
+  o.locations << Location.where(slug: 'colombia').limit(1)[0]
+  o.locations << Location.where(slug: 'comoros').limit(1)[0]
+  o.locations << Location.where(slug: 'congo').limit(1)[0]
+  o.locations << Location.where(slug: 'cook_islands').limit(1)[0]
+  o.locations << Location.where(slug: 'costa_rica').limit(1)[0]
+  o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
+  o.locations << Location.where(slug: 'croatia').limit(1)[0]
+  o.locations << Location.where(slug: 'cuba').limit(1)[0]
+  o.locations << Location.where(slug: 'cyprus').limit(1)[0]
+  o.locations << Location.where(slug: 'czech_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'denmark').limit(1)[0]
+  o.locations << Location.where(slug: 'djibouti').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'ecuador').limit(1)[0]
+  o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
+  o.locations << Location.where(slug: 'equatorial_guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'eritrea').limit(1)[0]
+  o.locations << Location.where(slug: 'estonia').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'fiji').limit(1)[0]
+  o.locations << Location.where(slug: 'finland').limit(1)[0]
+  o.locations << Location.where(slug: 'france').limit(1)[0]
+  o.locations << Location.where(slug: 'gabon').limit(1)[0]
+  o.locations << Location.where(slug: 'gambia').limit(1)[0]
+  o.locations << Location.where(slug: 'geneva_switzerland').limit(1)[0]
+  o.locations << Location.where(slug: 'georgia').limit(1)[0]
+  o.locations << Location.where(slug: 'germany').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'greece').limit(1)[0]
+  o.locations << Location.where(slug: 'grenada').limit(1)[0]
+  o.locations << Location.where(slug: 'guatemala').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea_bissau').limit(1)[0]
+  o.locations << Location.where(slug: 'swaziland').limit(1)[0]
 end
 if Organization.where(slug: 'international_rescue_committee_i').empty?
   o = Organization.create(name: "International Rescue Committee (IRC)", slug: 'international_rescue_committee_i', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.rescue.org/")
@@ -1942,6 +2445,20 @@ if Organization.where(slug: 'john_snow_inc_jsi').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
+if Organization.where(slug: 'jokkolabs').empty?
+  o = Organization.create(name: "Jokkolabs", slug: 'jokkolabs', when_endorsed: DateTime.new(2018, 12, 31), is_endorser: true, website: "https://www.jokkolabs.net")
+  o.sectors << Sector.where(slug: 'business_advocacy').limit(1)[0]
+  o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'cameroon').limit(1)[0]
+  o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
+  o.locations << Location.where(slug: 'france').limit(1)[0]
+  o.locations << Location.where(slug: 'gambia').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'morocco').limit(1)[0]
+  o.locations << Location.where(slug: 'paris_france').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+end
 if Organization.where(slug: 'kimetrica').empty?
   o = Organization.create(name: "Kimetrica", slug: 'kimetrica', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://kimetrica.com")
   o.sectors << Sector.where(slug: 'governance').limit(1)[0]
@@ -2003,9 +2520,78 @@ end
 if Organization.where(slug: 'lingos').empty?
   o = Organization.create(name: "LINGOs", slug: 'lingos', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://lingos.org/")
 end
+if Organization.where(slug: 'living_goods').empty?
+  o = Organization.create(name: "Living Goods", slug: 'living_goods', when_endorsed: DateTime.new(2018, 10, 19), is_endorser: true, website: "https://livinggoods.org/")
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+end
 if Organization.where(slug: 'logical_outcomes').empty?
   o = Organization.create(name: "Logical Outcomes", slug: 'logical_outcomes', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.logicaloutcomes.net/")
   o.locations << Location.where(slug: 'toronto_canada').limit(1)[0]
+end
+if Organization.where(slug: 'louis_berger').empty?
+  o = Organization.create(name: "Louis Berger", slug: 'louis_berger', when_endorsed: DateTime.new(2018, 12, 19), is_endorser: true, website: "https://www.louisberger.com")
+  o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+  o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+  o.sectors << Sector.where(slug: 'security').limit(1)[0]
+  o.sectors << Sector.where(slug: 'water_and_sanitation').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'albania').limit(1)[0]
+  o.locations << Location.where(slug: 'algeria').limit(1)[0]
+  o.locations << Location.where(slug: 'angola').limit(1)[0]
+  o.locations << Location.where(slug: 'australia').limit(1)[0]
+  o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'cambodia').limit(1)[0]
+  o.locations << Location.where(slug: 'cameroon').limit(1)[0]
+  o.locations << Location.where(slug: 'canada').limit(1)[0]
+  o.locations << Location.where(slug: 'chad').limit(1)[0]
+  o.locations << Location.where(slug: 'china').limit(1)[0]
+  o.locations << Location.where(slug: 'colombia').limit(1)[0]
+  o.locations << Location.where(slug: 'costa_rica').limit(1)[0]
+  o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'ecuador').limit(1)[0]
+  o.locations << Location.where(slug: 'france').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea_bissau').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'kosovo').limit(1)[0]
+  o.locations << Location.where(slug: 'macedonia').limit(1)[0]
+  o.locations << Location.where(slug: 'madagascar').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'mauritania').limit(1)[0]
+  o.locations << Location.where(slug: 'mauritius').limit(1)[0]
+  o.locations << Location.where(slug: 'moldova').limit(1)[0]
+  o.locations << Location.where(slug: 'morocco').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'panama').limit(1)[0]
+  o.locations << Location.where(slug: 'peru').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'qatar').limit(1)[0]
+  o.locations << Location.where(slug: 'romania').limit(1)[0]
+  o.locations << Location.where(slug: 'saudi_arabia').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'serbia').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'spain').limit(1)[0]
+  o.locations << Location.where(slug: 'tunisia').limit(1)[0]
+  o.locations << Location.where(slug: 'ukraine').limit(1)[0]
+  o.locations << Location.where(slug: 'united_arab_emirates').limit(1)[0]
+  o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 end
 if Organization.where(slug: 'lutheran_world_relief').empty?
   o = Organization.create(name: "Lutheran World Relief", slug: 'lutheran_world_relief', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "programs.lwr.org")
@@ -2082,6 +2668,25 @@ if Organization.where(slug: 'makaia').empty?
   o.locations << Location.where(slug: 'colombia').limit(1)[0]
   o.locations << Location.where(slug: 'medelln_colombia').limit(1)[0]
 end
+if Organization.where(slug: 'malaria_consortium').empty?
+  o = Organization.create(name: "Malaria Consortium", slug: 'malaria_consortium', when_endorsed: DateTime.new(2018, 10, 15), is_endorser: true, website: "https://www.malariaconsortium.org/")
+  o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'cambodia').limit(1)[0]
+  o.locations << Location.where(slug: 'chad').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'thailand').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
+end
 if Organization.where(slug: 'medic_mobile').empty?
   o = Organization.create(name: "Medic Mobile", slug: 'medic_mobile', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://medicmobile.org/")
   o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
@@ -2146,6 +2751,53 @@ if Organization.where(slug: 'mercy_corps').empty?
   o.locations << Location.where(slug: 'uganda').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
+if Organization.where(slug: 'mobile_accord_inc_geopoll').empty?
+  o = Organization.create(name: "Mobile Accord, Inc. (GeoPoll)", slug: 'mobile_accord_inc_geopoll', when_endorsed: DateTime.new(2019, 2, 5), is_endorser: true, website: "https://www.geopoll.com")
+  o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
+  o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'botswana').limit(1)[0]
+  o.locations << Location.where(slug: 'burundi').limit(1)[0]
+  o.locations << Location.where(slug: 'cameroon').limit(1)[0]
+  o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'fiji').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'guyana').limit(1)[0]
+  o.locations << Location.where(slug: 'haiti').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'iraq').limit(1)[0]
+  o.locations << Location.where(slug: 'jamaica').limit(1)[0]
+  o.locations << Location.where(slug: 'jordan').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'kyrgystan').limit(1)[0]
+  o.locations << Location.where(slug: 'lesotho').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'madagascar').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'panama').limit(1)[0]
+  o.locations << Location.where(slug: 'papua_new_guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'suriname').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'tunisia').limit(1)[0]
+  o.locations << Location.where(slug: 'turkey').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
@@ -2231,6 +2883,50 @@ if Organization.where(slug: 'national_democratic_institute_nd').empty?
   o.locations << Location.where(slug: 'ukraine').limit(1)[0]
   o.locations << Location.where(slug: 'venezuela').limit(1)[0]
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
+end
+if Organization.where(slug: 'norwegian_development_agency_nor').empty?
+  o = Organization.create(name: "Norwegian Development Agency (Norad)", slug: 'norwegian_development_agency_nor', when_endorsed: DateTime.new(2018, 12, 5), is_endorser: true, website: "https://norad.no/en/front")
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.sectors << Sector.where(slug: 'energy').limit(1)[0]
+  o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+  o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'angola').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'brazil').limit(1)[0]
+  o.locations << Location.where(slug: 'burundi').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'haiti').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'lebanon').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'madagascar').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'oslo_norway').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'palestine').limit(1)[0]
+  o.locations << Location.where(slug: 'somalia').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sri_lanka').limit(1)[0]
+  o.locations << Location.where(slug: 'sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'syria').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'norwegian_peoples_aid').empty?
   o = Organization.create(name: "Norwegian People''s Aid", slug: 'norwegian_peoples_aid', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.npaid.org")
@@ -2439,6 +3135,25 @@ if Organization.where(slug: 'oxfam').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
+if Organization.where(slug: 'oxford_policy_management').empty?
+  o = Organization.create(name: "Oxford Policy Management", slug: 'oxford_policy_management', when_endorsed: DateTime.new(2018, 10, 15), is_endorser: true, website: "https://www.opml.co.uk")
+  o.sectors << Sector.where(slug: 'climate').limit(1)[0]
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+  o.locations << Location.where(slug: 'australia').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'south_africa').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
 end
 if Organization.where(slug: 'palladium').empty?
   o = Organization.create(name: "Palladium", slug: 'palladium', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://thepalladiumgroup.com/")
@@ -2687,6 +3402,17 @@ if Organization.where(slug: 'praekeltorg').empty?
   o.locations << Location.where(slug: 'rwanda').limit(1)[0]
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
 end
+if Organization.where(slug: 'public_administration_internatio').empty?
+  o = Organization.create(name: "Public Administration International", slug: 'public_administration_internatio', when_endorsed: DateTime.new(2018, 9, 26), is_endorser: true, website: "www.public-admin.co.uk")
+  o.sectors << Sector.where(slug: 'governance').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+end
+if Organization.where(slug: 'rasello').empty?
+  o = Organization.create(name: "Rasello", slug: 'rasello', when_endorsed: DateTime.new(2019, 2, 19), is_endorser: true, website: "https://www.rasello.com")
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'singapore').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+end
 if Organization.where(slug: 'reboot').empty?
   o = Organization.create(name: "Reboot", slug: 'reboot', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://reboot.org/")
   o.sectors << Sector.where(slug: 'governance').limit(1)[0]
@@ -2813,6 +3539,71 @@ if Organization.where(slug: 'rti_international').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
+if Organization.where(slug: 'save_the_children').empty?
+  o = Organization.create(name: "Save the Children", slug: 'save_the_children', when_endorsed: DateTime.new(2018, 12, 4), is_endorser: true, website: "https://www.savethechildren.org")
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.sectors << Sector.where(slug: 'gender_and_minority_groups').limit(1)[0]
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.sectors << Sector.where(slug: 'security').limit(1)[0]
+  o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
+  o.locations << Location.where(slug: 'armenia').limit(1)[0]
+  o.locations << Location.where(slug: 'azerbaijan').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'bhutan').limit(1)[0]
+  o.locations << Location.where(slug: 'bolivia').limit(1)[0]
+  o.locations << Location.where(slug: 'bosnia__herzegovina').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'burundi').limit(1)[0]
+  o.locations << Location.where(slug: 'china').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'dominican_republic').limit(1)[0]
+  o.locations << Location.where(slug: 'ecuador').limit(1)[0]
+  o.locations << Location.where(slug: 'egypt').limit(1)[0]
+  o.locations << Location.where(slug: 'el_salvador').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'fairfield_ct').limit(1)[0]
+  o.locations << Location.where(slug: 'fiji').limit(1)[0]
+  o.locations << Location.where(slug: 'georgia').limit(1)[0]
+  o.locations << Location.where(slug: 'guatemala').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'haiti').limit(1)[0]
+  o.locations << Location.where(slug: 'honduras').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'indonesia').limit(1)[0]
+  o.locations << Location.where(slug: 'iraq').limit(1)[0]
+  o.locations << Location.where(slug: 'japan').limit(1)[0]
+  o.locations << Location.where(slug: 'jordan').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'lebanon').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'libya').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'mexico').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
+  o.locations << Location.where(slug: 'niger').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'philippines').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'somalia').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'syria').limit(1)[0]
+  o.locations << Location.where(slug: 'tajikistan').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'thailand').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
+  o.locations << Location.where(slug: 'vietnam').limit(1)[0]
+  o.locations << Location.where(slug: 'yemen').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
 if Organization.where(slug: 'search_for_common_ground').empty?
   o = Organization.create(name: "Search for Common Ground", slug: 'search_for_common_ground', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.sfcg.org")
   o.sectors << Sector.where(slug: 'conflict_resolution').limit(1)[0]
@@ -2866,6 +3657,47 @@ if Organization.where(slug: 'search_for_common_ground').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
+  o.locations << Location.where(slug: 'yemen').limit(1)[0]
+  o.locations << Location.where(slug: 'zambia').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
+end
+if Organization.where(slug: 'sightsavers').empty?
+  o = Organization.create(name: "Sightsavers", slug: 'sightsavers', when_endorsed: DateTime.new(2018, 12, 11), is_endorser: true, website: "https://www.sightsavers.org")
+  o.sectors << Sector.where(slug: 'health').limit(1)[0]
+  o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
+  o.locations << Location.where(slug: 'benin').limit(1)[0]
+  o.locations << Location.where(slug: 'burkina_faso').limit(1)[0]
+  o.locations << Location.where(slug: 'cameroon').limit(1)[0]
+  o.locations << Location.where(slug: 'chad').limit(1)[0]
+  o.locations << Location.where(slug: 'cote_dlvoire').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'gambia').limit(1)[0]
+  o.locations << Location.where(slug: 'ghana').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea').limit(1)[0]
+  o.locations << Location.where(slug: 'guinea_bissau').limit(1)[0]
+  o.locations << Location.where(slug: 'india').limit(1)[0]
+  o.locations << Location.where(slug: 'ireland').limit(1)[0]
+  o.locations << Location.where(slug: 'italy').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'liberia').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'mali').limit(1)[0]
+  o.locations << Location.where(slug: 'mozambique').limit(1)[0]
+  o.locations << Location.where(slug: 'nigeria').limit(1)[0]
+  o.locations << Location.where(slug: 'norway').limit(1)[0]
+  o.locations << Location.where(slug: 'pakistan').limit(1)[0]
+  o.locations << Location.where(slug: 'senegal').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sweden').limit(1)[0]
+  o.locations << Location.where(slug: 'tanzania').limit(1)[0]
+  o.locations << Location.where(slug: 'togo').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+  o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
@@ -2945,6 +3777,13 @@ if Organization.where(slug: 'souktel').empty?
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
+end
+if Organization.where(slug: 'stampede').empty?
+  o = Organization.create(name: "Stampede", slug: 'stampede', when_endorsed: DateTime.new(2019, 3, 1), is_endorser: true, website: ""https://www.linkedin.com/company/stampede-sdg-tech-accelerator/?viewAsMember=true")
+  o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
+  o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
+  o.locations << Location.where(slug: 'colombo_sri_lanka').limit(1)[0]
+  o.locations << Location.where(slug: 'sri_lanka').limit(1)[0]
 end
 if Organization.where(slug: 'surveycto').empty?
   o = Organization.create(name: "SurveyCTO", slug: 'surveycto', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.surveycto.com/index.html")
@@ -3098,6 +3937,17 @@ if Organization.where(slug: 'tetra_tech').empty?
   o.locations << Location.where(slug: 'united_arab_emirates').limit(1)[0]
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 end
+if Organization.where(slug: 'the_bond_network').empty?
+  o = Organization.create(name: "The Bond Network", slug: 'the_bond_network', when_endorsed: DateTime.new(2019, 2, 27), is_endorser: true, website: "https://www.bond.org.uk")
+  o.sectors << Sector.where(slug: 'training__employment').limit(1)[0]
+  o.locations << Location.where(slug: 'london_uk').limit(1)[0]
+  o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
+end
+if Organization.where(slug: 'the_food_and_agriculture_organiz').empty?
+  o = Organization.create(name: "the Food and Agriculture Organization of the United Nations (FAO)", slug: 'the_food_and_agriculture_organiz', when_endorsed: DateTime.new(2018, 10, 28), is_endorser: true, website: "http://www.fao.org/home/en/")
+  o.sectors << Sector.where(slug: 'hunger').limit(1)[0]
+  o.locations << Location.where(slug: 'rome_italy').limit(1)[0]
+end
 if Organization.where(slug: 'the_swedish_program_for_ict_in_d').empty?
   o = Organization.create(name: "The Swedish Program for ICT in Developing Regions (SPIDER)", slug: 'the_swedish_program_for_ict_in_d', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://spidercenter.org/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
@@ -3123,6 +3973,44 @@ if Organization.where(slug: 'toladata').empty?
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.locations << Location.where(slug: 'berlin_germany').limit(1)[0]
+end
+if Organization.where(slug: 'tracerx_inc').empty?
+  o = Organization.create(name: "TraceRx, Inc", slug: 'tracerx_inc', when_endorsed: DateTime.new(2019, 3, 1), is_endorser: true, website: "https://www.tracerx.us")
+  o.sectors << Sector.where(slug: 'supply_chain_solutions').limit(1)[0]
+  o.locations << Location.where(slug: 'richmond_va').limit(1)[0]
+end
+if Organization.where(slug: 'transtec').empty?
+  o = Organization.create(name: "Transtec", slug: 'transtec', when_endorsed: DateTime.new(2019, 1, 1), is_endorser: true, website: "https://www.transtec.be/website20/home")
+  o.sectors << Sector.where(slug: 'conflict_resolution').limit(1)[0]
+  o.sectors << Sector.where(slug: 'democracy').limit(1)[0]
+  o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
+  o.locations << Location.where(slug: 'brussels_belgium').limit(1)[0]
+end
+if Organization.where(slug: 'trcaire').empty?
+  o = Organization.create(name: "Trócaire", slug: 'trcaire', when_endorsed: DateTime.new(2019, 3, 22), is_endorser: true, website: "https://www.trocaire.org")
+  o.sectors << Sector.where(slug: 'food').limit(1)[0]
+  o.sectors << Sector.where(slug: 'gender_and_minority_groups').limit(1)[0]
+  o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
+  o.sectors << Sector.where(slug: 'justice').limit(1)[0]
+  o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
+  o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
+  o.locations << Location.where(slug: 'guatemala').limit(1)[0]
+  o.locations << Location.where(slug: 'honduras').limit(1)[0]
+  o.locations << Location.where(slug: 'israel').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+  o.locations << Location.where(slug: 'kildare_ireland').limit(1)[0]
+  o.locations << Location.where(slug: 'malawi').limit(1)[0]
+  o.locations << Location.where(slug: 'myanmar').limit(1)[0]
+  o.locations << Location.where(slug: 'nepal').limit(1)[0]
+  o.locations << Location.where(slug: 'nicaragua').limit(1)[0]
+  o.locations << Location.where(slug: 'rwanda').limit(1)[0]
+  o.locations << Location.where(slug: 'sierra_leone').limit(1)[0]
+  o.locations << Location.where(slug: 'somalia').limit(1)[0]
+  o.locations << Location.where(slug: 'south_sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'sudan').limit(1)[0]
+  o.locations << Location.where(slug: 'syria').limit(1)[0]
+  o.locations << Location.where(slug: 'uganda').limit(1)[0]
+  o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'tropical_health_and_education_tr').empty?
   o = Organization.create(name: "Tropical Health and Education Trust (THET)", slug: 'tropical_health_and_education_tr', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.thet.org")
@@ -3343,6 +4231,11 @@ if Organization.where(slug: 'united_nations_development_progr').empty?
   o.sectors << Sector.where(slug: 'gender_and_minority_groups').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
 end
+if Organization.where(slug: 'united_nations_environment_progr').empty?
+  o = Organization.create(name: "United Nations Environment Programme", slug: 'united_nations_environment_progr', when_endorsed: DateTime.new(2018, 10, 23), is_endorser: true, website: "unenvironment.org")
+  o.sectors << Sector.where(slug: 'environment').limit(1)[0]
+  o.locations << Location.where(slug: 'kenya').limit(1)[0]
+end
 if Organization.where(slug: 'united_nations_foundation_unf').empty?
   o = Organization.create(name: "United Nations Foundation (UNF)", slug: 'united_nations_foundation_unf', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.unfoundation.org")
   o.sectors << Sector.where(slug: 'climate').limit(1)[0]
@@ -3355,6 +4248,17 @@ if Organization.where(slug: 'united_nations_global_pulse').empty?
   o = Organization.create(name: "United Nations Global Pulse", slug: 'united_nations_global_pulse', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://www.unglobalpulse.org/")
   o.sectors << Sector.where(slug: 'big_data').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
+end
+if Organization.where(slug: 'united_nations_international_com').empty?
+  o = Organization.create(name: "United Nations International Computing Centre", slug: 'united_nations_international_com', when_endorsed: DateTime.new(2018, 12, 19), is_endorser: true, website: "https://www.unicc.org/Pages/Home.aspx")
+  o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
+  o.locations << Location.where(slug: 'geneva_switzerland').limit(1)[0]
+end
+if Organization.where(slug: 'united_nations_interregional_cri').empty?
+  o = Organization.create(name: "United Nations Interregional Crime and Justice Research Institute (UNICRI)", slug: 'united_nations_interregional_cri', when_endorsed: DateTime.new(2018, 11, 27), is_endorser: true, website: "http://www.unicri.it")
+  o.locations << Location.where(slug: 'italy').limit(1)[0]
+  o.locations << Location.where(slug: 'switzerland').limit(1)[0]
+  o.locations << Location.where(slug: 'turin_italy').limit(1)[0]
 end
 if Organization.where(slug: 'united_nations_office_for_the_co').empty?
   o = Organization.create(name: "United Nations Office for the Coordination of Humanitarian Affairs (OCHA)", slug: 'united_nations_office_for_the_co', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "https://www.unocha.org/")
@@ -3473,6 +4377,11 @@ if Organization.where(slug: 'united_nations_population_fund_u').empty?
   o.locations << Location.where(slug: 'turkey').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
+end
+if Organization.where(slug: 'united_nations_university').empty?
+  o = Organization.create(name: "United Nations University", slug: 'united_nations_university', when_endorsed: DateTime.new(2018, 10, 22), is_endorser: true, website: "https://unu.edu")
+  o.sectors << Sector.where(slug: 'education').limit(1)[0]
+  o.locations << Location.where(slug: 'tokyo_japan').limit(1)[0]
 end
 if Organization.where(slug: 'united_states_agency_for_interna').empty?
   o = Organization.create(name: "United States Agency for International Development (USAID)", slug: 'united_states_agency_for_interna', when_endorsed: DateTime.new(2015, 1, 1), is_endorser: true, website: "https://www.usaid.gov/")
@@ -3639,7 +4548,6 @@ if Organization.where(slug: 'voto_mobile').empty?
   o = Organization.create(name: "VOTO Mobile", slug: 'voto_mobile', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "https://www.votomobile.org/")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
-  o.locations << Location.where(slug: 'canada_us_uk_senegal_mali_burkin').limit(1)[0]
   o.locations << Location.where(slug: 'current_offices').limit(1)[0]
 end
 if Organization.where(slug: 'welthungerhilfe').empty?

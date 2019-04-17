@@ -230,6 +230,8 @@ Location.create(name: "Abuja, Nigeria", slug: 'abuja_nigeria', :location_type =>
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (9.0764785, 7.398574) ] WHERE slug = 'abuja_nigeria'")
 Location.create(name: "Ahmedabad, Gujrat, India", slug: 'ahmedabad_gujrat_india', :location_type => :point) if Location.where(slug: 'ahmedabad_gujrat_india').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (23.022505, 72.5713621) ] WHERE slug = 'ahmedabad_gujrat_india'")
+Location.create(name: "Antwerp, Belgium", slug: 'antwerp_belgium', :location_type => :point) if Location.where(slug: 'antwerp_belgium').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.3774301, 4.49784) ] WHERE slug = 'antwerp_belgium'")
 Location.create(name: "Arlington, VA", slug: 'arlington_va', :location_type => :point) if Location.where(slug: 'arlington_va').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.8816208, -77.0909809) ] WHERE slug = 'arlington_va'")
 Location.create(name: "Baltimore, MD", slug: 'baltimore_md', :location_type => :point) if Location.where(slug: 'baltimore_md').empty?
@@ -242,6 +244,8 @@ Location.create(name: "Berlin, Germany", slug: 'berlin_germany', :location_type 
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (52.5200066, 13.404954) ] WHERE slug = 'berlin_germany'")
 Location.create(name: "Bethesda, MD", slug: 'bethesda_md', :location_type => :point) if Location.where(slug: 'bethesda_md').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (38.984652, -77.0947092) ] WHERE slug = 'bethesda_md'")
+Location.create(name: "Boise, ID", slug: 'boise_id', :location_type => :point) if Location.where(slug: 'boise_id').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (43.6150186, -116.2023137) ] WHERE slug = 'boise_id'")
 Location.create(name: "Boston, MA", slug: 'boston_ma', :location_type => :point) if Location.where(slug: 'boston_ma').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3600825, -71.0588801) ] WHERE slug = 'boston_ma'")
 Location.create(name: "Brisbane, Austrailia", slug: 'brisbane_austrailia', :location_type => :point) if Location.where(slug: 'brisbane_austrailia').empty?
@@ -254,14 +258,16 @@ Location.create(name: "Burlington, VA, USA", slug: 'burlington_va_usa', :locatio
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (44.4758825, -73.212072) ] WHERE slug = 'burlington_va_usa'")
 Location.create(name: "California, USA", slug: 'california_usa', :location_type => :point) if Location.where(slug: 'california_usa').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (36.778261, -119.4179324) ] WHERE slug = 'california_usa'")
-Location.create(name: "Canada, US, UK, Senegal, Mali, Burkina Faso, Ghana, Niger, Nigeria, Ethiopia, Kenya, Uganda, Rawanda, DRC, Tanzania, Zambia, Malwai, Mozambique, Zimbabwe, Botswana, South Africa, Madagascar, Afghanistan, Pakistan, Nepal, India, Cambodia, Indonesia,", slug: 'canada_us_uk_senegal_mali_burkin', :location_type => :point) if Location.where(slug: 'canada_us_uk_senegal_mali_burkin').empty?
-connection.execute("UPDATE locations SET points = ARRAY[ POINT (56.130366, -106.346771) ] WHERE slug = 'canada_us_uk_senegal_mali_burkin'")
 Location.create(name: "Canberra, Austrailia", slug: 'canberra_austrailia', :location_type => :point) if Location.where(slug: 'canberra_austrailia').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-35.2809368, 149.1300092) ] WHERE slug = 'canberra_austrailia'")
 Location.create(name: "Cape Town, South Africa", slug: 'cape_town_south_africa', :location_type => :point) if Location.where(slug: 'cape_town_south_africa').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.9248685, 18.4240553) ] WHERE slug = 'cape_town_south_africa'")
 Location.create(name: "Carmel, IN, USA", slug: 'carmel_in_usa', :location_type => :point) if Location.where(slug: 'carmel_in_usa').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (39.978371, -86.1180435) ] WHERE slug = 'carmel_in_usa'")
+Location.create(name: "Chapel Hill, NC", slug: 'chapel_hill_nc', :location_type => :point) if Location.where(slug: 'chapel_hill_nc').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.9131996, -79.0558445) ] WHERE slug = 'chapel_hill_nc'")
+Location.create(name: "Colombo, Sri Lanka", slug: 'colombo_sri_lanka', :location_type => :point) if Location.where(slug: 'colombo_sri_lanka').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (6.9270786, 79.8900852) ] WHERE slug = 'colombo_sri_lanka'")
 Location.create(name: "Copenhagen, Denmark", slug: 'copenhagen_denmark', :location_type => :point) if Location.where(slug: 'copenhagen_denmark').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (55.6760968, 12.5683372) ] WHERE slug = 'copenhagen_denmark'")
 Location.create(name: "Current Offices:", slug: 'current_offices', :location_type => :point) if Location.where(slug: 'current_offices').empty?
@@ -280,16 +286,22 @@ Location.create(name: "Durham, NC", slug: 'durham_nc', :location_type => :point)
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.9940329, -78.898619) ] WHERE slug = 'durham_nc'")
 Location.create(name: "Eschborn, Germany", slug: 'eschborn_germany', :location_type => :point) if Location.where(slug: 'eschborn_germany').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (50.1467469, 8.5614555) ] WHERE slug = 'eschborn_germany'")
+Location.create(name: "Fairfield, CT", slug: 'fairfield_ct', :location_type => :point) if Location.where(slug: 'fairfield_ct').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (41.1408363, -73.2612615) ] WHERE slug = 'fairfield_ct'")
 Location.create(name: "Geneva, Switzerland", slug: 'geneva_switzerland', :location_type => :point) if Location.where(slug: 'geneva_switzerland').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (46.2043907, 6.1431577) ] WHERE slug = 'geneva_switzerland'")
 Location.create(name: "Germany", slug: 'germany_office', :location_type => :point) if Location.where(slug: 'germany_office').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.165691, 10.451526) ] WHERE slug = 'germany_office'")
 Location.create(name: "Hamburg, Germany", slug: 'hamburg_germany', :location_type => :point) if Location.where(slug: 'hamburg_germany').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (53.5510846, 9.9936819) ] WHERE slug = 'hamburg_germany'")
+Location.create(name: "Helsinki, Finland", slug: 'helsinki_finland', :location_type => :point) if Location.where(slug: 'helsinki_finland').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (60.16985569, 24.9383791) ] WHERE slug = 'helsinki_finland'")
 Location.create(name: "Jakarta, Indonesia", slug: 'jakarta_indonesia', :location_type => :point) if Location.where(slug: 'jakarta_indonesia').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-6.180495, 106.8283415) ] WHERE slug = 'jakarta_indonesia'")
 Location.create(name: "Kampala, Uganda", slug: 'kampala_uganda', :location_type => :point) if Location.where(slug: 'kampala_uganda').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (0.3475964, 32.5825197) ] WHERE slug = 'kampala_uganda'")
+Location.create(name: "Kildare, Ireland", slug: 'kildare_ireland', :location_type => :point) if Location.where(slug: 'kildare_ireland').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (53.1589342, -6.9095683) ] WHERE slug = 'kildare_ireland'")
 Location.create(name: "Kingston, Jamaica", slug: 'kingston_jamaica', :location_type => :point) if Location.where(slug: 'kingston_jamaica').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (18.0178743, -76.8099041) ] WHERE slug = 'kingston_jamaica'")
 Location.create(name: "Lausanne, 15 Avenue Montchoisi Lausanne 1006, Switzerland", slug: 'lausanne__avenue_montchoisi_laus', :location_type => :point) if Location.where(slug: 'lausanne__avenue_montchoisi_laus').empty?
@@ -306,12 +318,18 @@ Location.create(name: "Nairobi, Kenya", slug: 'nairobi_kenya', :location_type =>
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-1.2920659, 36.8219462) ] WHERE slug = 'nairobi_kenya'")
 Location.create(name: "New Delhi, India", slug: 'new_delhi_india', :location_type => :point) if Location.where(slug: 'new_delhi_india').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (28.6139391, 77.2090212) ] WHERE slug = 'new_delhi_india'")
+Location.create(name: "Norwell, MA", slug: 'norwell_ma', :location_type => :point) if Location.where(slug: 'norwell_ma').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.1615157, -70.7927832) ] WHERE slug = 'norwell_ma'")
 Location.create(name: "NY, NY", slug: 'ny_ny', :location_type => :point) if Location.where(slug: 'ny_ny').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (40.7127753, -74.0059728) ] WHERE slug = 'ny_ny'")
 Location.create(name: "Office of Pacific Islands (near New Zealand)", slug: 'office_of_pacific_islands_near_n', :location_type => :point) if Location.where(slug: 'office_of_pacific_islands_near_n').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-41.282324, 174.774992) ] WHERE slug = 'office_of_pacific_islands_near_n'")
+Location.create(name: "Oslo, Norway", slug: 'oslo_norway', :location_type => :point) if Location.where(slug: 'oslo_norway').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (59.9138688, 10.6225689) ] WHERE slug = 'oslo_norway'")
 Location.create(name: "Ottawa, Canada", slug: 'ottawa_canada', :location_type => :point) if Location.where(slug: 'ottawa_canada').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.4215296, -75.6971931) ] WHERE slug = 'ottawa_canada'")
+Location.create(name: "Ottowa, Canada", slug: 'ottowa_canada', :location_type => :point) if Location.where(slug: 'ottowa_canada').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.4215296, -75.6971931) ] WHERE slug = 'ottowa_canada'")
 Location.create(name: "Paolo Alto, CA, USA", slug: 'paolo_alto_ca_usa', :location_type => :point) if Location.where(slug: 'paolo_alto_ca_usa').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.4418834, -122.1430195) ] WHERE slug = 'paolo_alto_ca_usa'")
 Location.create(name: "Paris, France", slug: 'paris_france', :location_type => :point) if Location.where(slug: 'paris_france').empty?
@@ -324,6 +342,8 @@ Location.create(name: "Ramallah, Palestine", slug: 'ramallah_palestine', :locati
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (31.9037641, 35.2034184) ] WHERE slug = 'ramallah_palestine'")
 Location.create(name: "Research Triangle Park, NC, USA", slug: 'research_triangle_park_nc_usa', :location_type => :point) if Location.where(slug: 'research_triangle_park_nc_usa').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.8991678, -78.8636402) ] WHERE slug = 'research_triangle_park_nc_usa'")
+Location.create(name: "Richmond, VA", slug: 'richmond_va', :location_type => :point) if Location.where(slug: 'richmond_va').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.5407246, -77.4360481) ] WHERE slug = 'richmond_va'")
 Location.create(name: "Rome, Italy", slug: 'rome_italy', :location_type => :point) if Location.where(slug: 'rome_italy').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (41.9027835, 12.4963655) ] WHERE slug = 'rome_italy'")
 Location.create(name: "San Diego, CA, USA", slug: 'san_diego_ca_usa', :location_type => :point) if Location.where(slug: 'san_diego_ca_usa').empty?
@@ -336,14 +356,22 @@ Location.create(name: "Silicon Valley?", slug: 'silicon_valley', :location_type 
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.387474, -122.0575434) ] WHERE slug = 'silicon_valley'")
 Location.create(name: "Stockholm, Sweden", slug: 'stockholm_sweden', :location_type => :point) if Location.where(slug: 'stockholm_sweden').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (59.3293235, 18.0685808) ] WHERE slug = 'stockholm_sweden'")
+Location.create(name: "Stuttgart, Germany", slug: 'stuttgart_germany', :location_type => :point) if Location.where(slug: 'stuttgart_germany').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (48.7758459, 9.1829321) ] WHERE slug = 'stuttgart_germany'")
 Location.create(name: "Sunnyvale, CA, USA", slug: 'sunnyvale_ca_usa', :location_type => :point) if Location.where(slug: 'sunnyvale_ca_usa').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (37.36883, -122.0363496) ] WHERE slug = 'sunnyvale_ca_usa'")
 Location.create(name: "Sydney, Austrailia", slug: 'sydney_austrailia', :location_type => :point) if Location.where(slug: 'sydney_austrailia').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (-33.8688197, 151.2092955) ] WHERE slug = 'sydney_austrailia'")
 Location.create(name: "The Old Malthouse, Mill Lane, UK", slug: 'the_old_malthouse_mill_lane_uk', :location_type => :point) if Location.where(slug: 'the_old_malthouse_mill_lane_uk').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (51.4196516, -2.253189) ] WHERE slug = 'the_old_malthouse_mill_lane_uk'")
+Location.create(name: "Tokyo, Japan", slug: 'tokyo_japan', :location_type => :point) if Location.where(slug: 'tokyo_japan').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (35.6761919, 139.6503106) ] WHERE slug = 'tokyo_japan'")
 Location.create(name: "Toronto, Canada", slug: 'toronto_canada', :location_type => :point) if Location.where(slug: 'toronto_canada').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (43.653226, -79.3831843) ] WHERE slug = 'toronto_canada'")
+Location.create(name: "Turin, Italy", slug: 'turin_italy', :location_type => :point) if Location.where(slug: 'turin_italy').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (45.0703393, 7.686864) ] WHERE slug = 'turin_italy'")
+Location.create(name: "Vienna, Austria", slug: 'vienna_austria', :location_type => :point) if Location.where(slug: 'vienna_austria').empty?
+connection.execute("UPDATE locations SET points = ARRAY[ POINT (48.2081743, 16.3738189) ] WHERE slug = 'vienna_austria'")
 Location.create(name: "Waltham (Boston), MA", slug: 'waltham_boston_ma', :location_type => :point) if Location.where(slug: 'waltham_boston_ma').empty?
 connection.execute("UPDATE locations SET points = ARRAY[ POINT (42.3764852, -71.2356113) ] WHERE slug = 'waltham_boston_ma'")
 Location.create(name: "Washington, DC", slug: 'washington_dc', :location_type => :point) if Location.where(slug: 'washington_dc').empty?
