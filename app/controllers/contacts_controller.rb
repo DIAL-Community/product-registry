@@ -57,8 +57,15 @@ class ContactsController < ApplicationController
       end
     end
 
+    confirmed = @contact.can_be_saved?
+    if (!params[:confirmation].nil?)
+      size = Contact.slug_contains(@contact.slug).size
+      @contact.slug = @contact.slug + '_' + size.to_s
+      confirmed = true
+    end
+
     respond_to do |format|
-      if @contact.save
+      if confirmed && @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else
@@ -111,7 +118,7 @@ class ContactsController < ApplicationController
     def contact_params
       params
         .require(:contact)
-        .permit(:name, :email, :title, :selected_organizations)
+        .permit(:name, :email, :title, :selected_organizations, :confirmation)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

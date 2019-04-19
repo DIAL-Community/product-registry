@@ -1,5 +1,6 @@
 <div class="card-body">
   <%= form_with(model: contact, local: true) do |form| %>
+
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :contact_name, :class => "form-control", :placeholder => "Name" %>
       <%= form.label :name %>
@@ -43,7 +44,15 @@
       </div>
     </div>
 
-    <fieldset class="float-right mt-4">
+    <div class="mt-2"></div>
+    <% if contact.errors.include?(:duplicate) %>
+      <div class="alert alert-warning">
+        Another contact with similar name already exists. Press submit again to confirm (or update the form).
+        <input type="hidden" name="confirmation" value="true" />
+      </div>
+    <% end %>
+
+    <fieldset class="float-right">
       <%= form.submit 'Submit', :class => "btn btn-primary" %>
       <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </div>
