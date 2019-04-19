@@ -57,15 +57,15 @@ class ContactsController < ApplicationController
       end
     end
 
-    confirmed = @contact.can_be_saved?
+    can_be_saved = @contact.can_be_saved?
     if (!params[:confirmation].nil?)
       size = Contact.slug_contains(@contact.slug).size
       @contact.slug = @contact.slug + '_' + size.to_s
-      confirmed = true
+      can_be_saved = true
     end
 
     respond_to do |format|
-      if confirmed && @contact.save
+      if can_be_saved && @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else
@@ -87,8 +87,15 @@ class ContactsController < ApplicationController
       @contact.organizations = organizations.to_a
     end
 
+    can_be_saved = @contact.can_be_saved?
+    if (!params[:confirmation].nil?)
+      size = Contact.slug_contains(@contact.slug).size
+      @contact.slug = @contact.slug + '_' + size.to_s
+      can_be_saved = true
+    end
+
     respond_to do |format|
-      if @contact.update(contact_params)
+      if can_be_saved && @contact.update(contact_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @contact }
       else
