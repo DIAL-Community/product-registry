@@ -8,7 +8,7 @@ class ProductsController < ApplicationController
   def index
     if params[:without_paging]
       @products = Product
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
       return
     end
@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
     if params[:search]
       @products = Product
           .where(nil)
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -67,6 +67,13 @@ class ProductsController < ApplicationController
         building_block = BuildingBlock.find(building_block_id)
         @product.building_blocks.push(building_block)
       end
+    end
+
+    can_be_saved = @product.valid?
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = Product.slug_starts_with(@product.slug).size
+      @product.slug = @product.slug + '_' + size.to_s
+      can_be_saved = true
     end
 
     respond_to do |format|
@@ -167,7 +174,7 @@ class ProductsController < ApplicationController
     def product_params
       params
         .require(:product)
-        .permit(:name, :website, :has_osc, :osc_maturity, :has_digisquare, :digisquare_maturity)
+        .permit(:name, :website, :has_osc, :osc_maturity, :has_digisquare, :digisquare_maturity, :confirmation)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

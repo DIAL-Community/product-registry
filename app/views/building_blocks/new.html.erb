@@ -1,10 +1,17 @@
 <% if @building_block.errors.any? %>
   <div id="error_explanation">
     <div id="error_explanation">
-      <div class="alert alert-danger">
-        The form contains
-        <%= pluralize(@building_block.errors.count, "error") %>.
-      </div>
+      <% if @building_block.errors.include?(:duplicate) %>
+        <div class="alert alert-warning">
+          The form contains
+          <%= pluralize(@building_block.errors.count, "warning") %>.
+        </div>
+      <% else %>
+        <div class="alert alert-danger">
+          The form contains
+          <%= pluralize(@building_block.errors.count, "error") %>.
+        </div>
+      <% end %>
     </div>
   </div>
 <% end %>

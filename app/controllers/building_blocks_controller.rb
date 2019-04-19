@@ -1,13 +1,12 @@
 class BuildingBlocksController < ApplicationController
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   # GET /building_blocks
   # GET /building_blocks.json
   def index
     if params[:without_paging]
       @building_blocks = BuildingBlock
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
       return
     end
@@ -15,7 +14,7 @@ class BuildingBlocksController < ApplicationController
     if params[:search]
       @building_blocks = BuildingBlock
           .where(nil)
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -54,8 +53,16 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
+    can_be_saved = @building_block.valid?
+    puts "can be saved: " + can_be_saved.to_s
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = BuildingBlock.slug_starts_with(@building_block.slug).size
+      @building_block.slug = @building_block.slug + '_' + size.to_s
+      can_be_saved = true
+    end
+
     respond_to do |format|
-      if @building_block.save
+      if can_be_saved && @building_block.save
         format.html { redirect_to @building_block, notice: 'Building Block was successfully created.' }
         format.json { render :show, status: :created, location: @building_block }
       else
@@ -109,7 +116,7 @@ class BuildingBlocksController < ApplicationController
     def building_block_params
       params
         .require(:building_block)
-        .permit(:name)
+        .permit(:name, :confirmation)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

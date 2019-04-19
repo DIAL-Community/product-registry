@@ -10,7 +10,7 @@
     <div class="card-body">
       <p class="card-text">
         <strong>Endorsed on:</strong>
-        <%= @organization.when_endorsed.strftime("%m/%d/%Y") %>.
+        <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>.
       </p>
       <p class="card-text">
         <strong>Website:</strong>

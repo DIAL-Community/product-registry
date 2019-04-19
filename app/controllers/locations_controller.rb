@@ -8,7 +8,7 @@ class LocationsController < ApplicationController
     if params[:without_paging]
       @locations = Location
           .where.not(location_type: 'point')
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
       return
     end
@@ -16,7 +16,7 @@ class LocationsController < ApplicationController
     if params[:office_only]
       @locations = Location
           .where(location_type: 'point')
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
       return
     end
@@ -24,7 +24,7 @@ class LocationsController < ApplicationController
     if params[:search]
       @locations = Location
           .where.not(location_type: 'point')
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -69,8 +69,15 @@ class LocationsController < ApplicationController
       end
     end
 
+    can_be_saved = @location.valid?
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = Location.slug_starts_with(@location.slug).size
+      @location.slug = @location.slug + '_' + size.to_s
+      can_be_saved = true
+    end
+
     respond_to do |format|
-      if @location.save
+      if can_be_saved && @location.save
         format.html { redirect_to @location, notice: 'Location was successfully created.' }
         format.json { render :show, status: :created, location: @location }
       else
@@ -124,7 +131,7 @@ class LocationsController < ApplicationController
     def location_params
       params
         .require(:location)
-        .permit(:name)
+        .permit(:name, :confirmation)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

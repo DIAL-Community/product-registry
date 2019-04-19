@@ -7,10 +7,6 @@ class Contact < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}%")}
 
-  def can_be_saved?
-    valid?
-  end
-
   private
 
   def no_duplicates

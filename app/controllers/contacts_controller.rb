@@ -57,7 +57,7 @@ class ContactsController < ApplicationController
       end
     end
 
-    can_be_saved = @contact.can_be_saved?
+    can_be_saved = @contact.valid?
     if (!can_be_saved && !params[:confirmation].nil?)
       size = Contact.slug_starts_with(@contact.slug).size
       @contact.slug = @contact.slug + '_' + size.to_s
