@@ -3779,7 +3779,7 @@ if Organization.where(slug: 'souktel').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'stampede').empty?
-  o = Organization.create(name: "Stampede", slug: 'stampede', when_endorsed: DateTime.new(2019, 3, 1), is_endorser: true, website: ""https://www.linkedin.com/company/stampede-sdg-tech-accelerator/?viewAsMember=true")
+  o = Organization.create(name: "Stampede", slug: 'stampede', when_endorsed: DateTime.new(2019, 3, 1), is_endorser: true, website: "https://www.linkedin.com/company/stampede-sdg-tech-accelerator/?viewAsMember=true")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.locations << Location.where(slug: 'colombo_sri_lanka').limit(1)[0]

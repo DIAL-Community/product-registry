@@ -42,7 +42,7 @@
   </div>
 
   <% if !@interoperable_products %>
-    <fieldset class="form-label-group">
+    <fieldset class="form-label-group mt-3">
       <input type="text" id="interoperate-search" class="form-control" placeholder="Search and assign interoperable products ..." />
       <label for="interoperable-products">
         Search and assign interoperable products ...
@@ -72,7 +72,7 @@
   </div>
 
   <% if !@interoperable_products %>
-    <fieldset class="form-label-group">
+    <fieldset class="form-label-group mt-3">
       <input type="text" id="include-search" class="form-control" placeholder="Search and assign included products ..." />
       <label for="included-products">
         Search and assign included products ...
@@ -211,3 +211,15 @@
   </fieldset>
 <% end %>
 </div>
+
+<script>
+  <% product.building_blocks.order("name").each do |block| %>
+    addBuildingBlock('<%= block.id %>', '<%= block.name %>');
+  <% end %>
+  <% product.interoperates_with.order("name").each do |interop| %>
+    addInteropProduct('<%= interop.id %>', '<%= interop.name %>');
+  <% end %>
+  <% product.includes.order("name").each do |include| %>
+    addIncludedProduct('<%= include.id %>', '<%= include.name %>');
+  <% end %>
+</script>
