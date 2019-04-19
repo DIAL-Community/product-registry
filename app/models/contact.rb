@@ -4,8 +4,8 @@ class Contact < ApplicationRecord
   validates :name,  presence: true, length: { maximum: 300 }
   validate :no_duplicates
 
-  scope :starts_with, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
-  scope :slug_contains, -> (slug) { where("LOWER(slug) like LOWER(?)", "%#{slug}%")}
+  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
+  scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}%")}
 
   def can_be_saved?
     valid?
@@ -14,7 +14,7 @@ class Contact < ApplicationRecord
   private
 
   def no_duplicates
-    size = Contact.slug_contains(slug).size
+    size = Contact.where(slug: slug).size
     if size > 0
       errors.add(:duplicate, 'has duplicate.')
     end

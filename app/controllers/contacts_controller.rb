@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
   def index
     if params[:without_paging]
       @locations = Location
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
       return
     end
@@ -15,7 +15,7 @@ class ContactsController < ApplicationController
     if params[:search]
       @contacts = Contact
           .where(nil)
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -58,8 +58,8 @@ class ContactsController < ApplicationController
     end
 
     can_be_saved = @contact.can_be_saved?
-    if (!params[:confirmation].nil?)
-      size = Contact.slug_contains(@contact.slug).size
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = Contact.slug_starts_with(@contact.slug).size
       @contact.slug = @contact.slug + '_' + size.to_s
       can_be_saved = true
     end
@@ -87,15 +87,8 @@ class ContactsController < ApplicationController
       @contact.organizations = organizations.to_a
     end
 
-    can_be_saved = @contact.can_be_saved?
-    if (!params[:confirmation].nil?)
-      size = Contact.slug_contains(@contact.slug).size
-      @contact.slug = @contact.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @contact.update(contact_params)
+      if @contact.update(contact_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @contact }
       else
