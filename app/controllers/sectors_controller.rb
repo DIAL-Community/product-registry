@@ -8,7 +8,7 @@ class SectorsController < ApplicationController
     if params[:without_paging]
       @sectors = Sector
             .where(nil)
-            .starts_with(params[:search])
+            .name_contains(params[:search])
             .order(:name)
       @sectors = params[:display_only].nil? ? @sectors : @sectors.where(is_displayable: true)
       return
@@ -16,7 +16,7 @@ class SectorsController < ApplicationController
     if params[:search]
       @sectors = Sector
           .where(nil)
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -59,8 +59,15 @@ class SectorsController < ApplicationController
       end
     end
 
+    can_be_saved = @sector.valid?
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = Sector.slug_starts_with(@sector.slug).size
+      @sector.slug = @sector.slug + '_' + size.to_s
+      can_be_saved = true
+    end
+
     respond_to do |format|
-      if @sector.save
+      if can_be_saved && @sector.save
         format.html { redirect_to @sector, notice: 'Sector was successfully created.' }
         format.json { render :show, status: :created, location: @sector }
       else
@@ -114,7 +121,7 @@ class SectorsController < ApplicationController
     def sector_params
       params
         .require(:sector)
-        .permit(:name)
+        .permit(:name, :confirmation)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])

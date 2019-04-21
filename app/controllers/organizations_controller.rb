@@ -10,14 +10,14 @@ class OrganizationsController < ApplicationController
     if params[:without_paging]
       @organizations = Organization
       @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
-      @organizations = params[:search].nil? ? @organizations : @organizations.starts_with(params[:search])
+      @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
       @organizations = @organizations.order(:name);
       return
     end
     if params[:search]
       @organizations = Organization
           .where(nil)
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -77,8 +77,15 @@ class OrganizationsController < ApplicationController
       end
     end
 
+    can_be_saved = @organization.valid?
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = Organization.slug_starts_with(@organization.slug).size
+      @organization.slug = @organization.slug + '_' + size.to_s
+      can_be_saved = true
+    end
+
     respond_to do |format|
-      if @organization.save
+      if can_be_saved && @organization.save
         format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
         format.json { render :show, status: :created, location: @organization }
       else
@@ -110,7 +117,7 @@ class OrganizationsController < ApplicationController
       @organization.locations = locations.to_a
     end
 
-    if (params[:office_id])
+    if (params[:office_id].present?)
       office = Location.find(params[:office_id])
       if (office and @organization.locations.where(slug: office.slug).empty?)
         @organization.locations.push(office)
@@ -153,7 +160,8 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :selected_sectors, :selected_countries, :office_id)
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email,
+                :selected_sectors, :selected_countries, :office_id, :confirmation)
         .tap do |attr|
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")

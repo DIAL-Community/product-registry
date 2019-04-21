@@ -27,8 +27,12 @@
     <% @organizations.each do |organization| %>
       <tr>
         <td class="align-middle"><%= organization.name %></td>
-        <td class="align-middle"><%= organization.when_endorsed.strftime("%m/%d/%Y") %></td>
-        <td class="align-middle"><%= link_to organization.website.downcase.strip.sub('https://', '').sub('http://', ''), organization.website.downcase.strip %></td>
+        <td class="align-middle">
+          <%= organization.when_endorsed.nil? ? '' : organization.when_endorsed.strftime("%m/%d/%Y") %>
+        </td>
+        <td class="align-middle">
+          <%= link_to organization.website.downcase.strip, organization.website.downcase.strip %>
+        </td>
         <td class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
           <div class="dropdown-menu">

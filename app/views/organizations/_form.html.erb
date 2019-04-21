@@ -81,6 +81,14 @@
       </div>
     </div>
 
+    <div class="mt-2"></div>
+    <% if organization.errors.include?(:duplicate) %>
+      <div class="alert alert-warning">
+        Another organization with similar name already exists. Press submit again to confirm (or update the form).
+        <input type="hidden" name="confirmation" value="true" />
+      </div>
+    <% end %>
+
     <fieldset class="float-right mt-4">
       <%= form.submit 'Submit', :class => "btn btn-primary" %>
       <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>

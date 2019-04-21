@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
   def index
     if params[:without_paging]
       @locations = Location
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
       return
     end
@@ -15,7 +15,7 @@ class ContactsController < ApplicationController
     if params[:search]
       @contacts = Contact
           .where(nil)
-          .starts_with(params[:search])
+          .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
     else
@@ -57,8 +57,15 @@ class ContactsController < ApplicationController
       end
     end
 
+    can_be_saved = @contact.valid?
+    if (!can_be_saved && !params[:confirmation].nil?)
+      size = Contact.slug_starts_with(@contact.slug).size
+      @contact.slug = @contact.slug + '_' + size.to_s
+      can_be_saved = true
+    end
+
     respond_to do |format|
-      if @contact.save
+      if can_be_saved && @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else
@@ -111,7 +118,7 @@ class ContactsController < ApplicationController
     def contact_params
       params
         .require(:contact)
-        .permit(:name, :email, :title, :selected_organizations)
+        .permit(:name, :email, :title, :selected_organizations, :confirmation)
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])
