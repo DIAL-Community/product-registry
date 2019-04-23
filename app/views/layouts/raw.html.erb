@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Product Registry</title>
+    <%= csrf_meta_tags %>
+    <meta name="turbolinks-cache-control" content="no-cache">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag "https://use.fontawesome.com/releases/v5.7.2/css/all.css",
+        :integrity => "sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr",
+        :crossorigin => "anonymous" %>
+    <style>
+      .rotate-north {
+        top: 65px;
+        left: 0.5em;
+      }
+      .ol-touch .rotate-north {
+        top: 80px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

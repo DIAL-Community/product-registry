@@ -6,6 +6,7 @@ class ProductsController < ApplicationController
   def map
     @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
     @product_relationships = ProductProductRelationship.order(:id).eager_load(:from_product, :to_product)
+    render layout: 'layouts/raw'
   end
 
   # GET /products
