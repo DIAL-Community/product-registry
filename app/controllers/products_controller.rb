@@ -3,6 +3,11 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create]
 
+  def map
+    @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
+    @product_relationships = ProductProductRelationship.order(:id).eager_load(:from_product, :to_product)
+  end
+
   # GET /products
   # GET /products.json
   def index

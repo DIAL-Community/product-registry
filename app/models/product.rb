@@ -9,6 +9,8 @@ class Product < ApplicationRecord
   has_many :interop_relationships, -> { where(relationship_type: 'interoperates')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
   has_many :interoperates_with, through: :interop_relationships, source: :to_product
 
+  has_many :references, foreign_key: :to_product_id, class_name: 'ProductProductRelationship'
+
   validates :name,  presence: true, length: { maximum: 300 }
   validate :no_duplicates
 
