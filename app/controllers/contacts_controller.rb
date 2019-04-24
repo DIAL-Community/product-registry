@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:show, :new, :create, :edit, :update, :destroy]
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
 
   # GET /contacts
@@ -57,15 +57,8 @@ class ContactsController < ApplicationController
       end
     end
 
-    can_be_saved = @contact.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Contact.slug_starts_with(@contact.slug).size
-      @contact.slug = @contact.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @contact.save
+      if @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else
@@ -92,7 +85,7 @@ class ContactsController < ApplicationController
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @contact }
       else
-        format.html { render :edit }
+        format.html { render :edit, :locals => { :contact => @contact } }
         format.json { render json: @contact.errors, status: :unprocessable_entity }
       end
     end
@@ -106,6 +99,17 @@ class ContactsController < ApplicationController
       format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def duplicates
+    @contacts = Array.new
+    if params[:name].present?
+      current_slug = slug_em(params[:name]);
+      if (current_slug != params[:slug])
+        @contacts = Contact.where(slug: slug_em(params[:name])).to_a
+      end
+    end
+    render json: @contacts, :only => [:name, :title]
   end
 
   private
@@ -122,6 +126,11 @@ class ContactsController < ApplicationController
         .tap do |attr|
           if (attr[:name].present?)
             attr[:slug] = slug_em(attr[:name])
+            puts params[:confirmation].to_s
+            if (params[:confirmation].present?)
+              size = Contact.slug_starts_with(attr[:slug]).size + 1
+              attr[:slug] = attr[:slug] + "_" + size.to_s
+            end
           end
         end
     end

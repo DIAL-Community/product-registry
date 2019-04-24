@@ -24,5 +24,7 @@ Rails.application.routes.draw do
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
+
+  get 'contact_duplicates', :to => 'contacts#duplicates'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
