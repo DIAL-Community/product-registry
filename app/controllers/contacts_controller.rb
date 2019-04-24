@@ -103,10 +103,11 @@ class ContactsController < ApplicationController
 
   def duplicates
     @contacts = Array.new
-    if params[:name].present?
-      current_slug = slug_em(params[:name]);
-      if (current_slug != params[:slug])
-        @contacts = Contact.where(slug: slug_em(params[:name])).to_a
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @contacts = Contact.where(slug: current_slug).to_a
       end
     end
     render json: @contacts, :only => [:name, :title]
@@ -122,13 +123,16 @@ class ContactsController < ApplicationController
     def contact_params
       params
         .require(:contact)
-        .permit(:name, :email, :title, :selected_organizations, :confirmation)
+        .permit(:name, :email, :title, :selected_organizations, :duplicate, :reslug)
         .tap do |attr|
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
-            puts params[:confirmation].to_s
-            if (params[:confirmation].present?)
-              size = Contact.slug_starts_with(attr[:slug]).size + 1
+            if (params[:duplicate].present?)
+              first_duplicate = Contact.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              size = 1;
+              if (!first_duplicate.nil?)
+                size = first_duplicate.slug.delete('^0-9').to_i + 1
+              end
               attr[:slug] = attr[:slug] + "_" + size.to_s
             end
           end

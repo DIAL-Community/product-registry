@@ -2,35 +2,49 @@
 // All this logic will automatically be available in application.js.
 // You can use CoffeeScript in this file: http://coffeescript.org/
 
-function addConfirmation() {
-  $('<input>').attr({
-    type: 'hidden',
-    id: "confirmation",
-    name: 'confirmation',
-    value: true
-  }).appendTo($("#slug-warning"));
-}
-
-function removeConfirmation() {
-  $("#confirmation").remove();
-}
-
 $(document).on('turbolinks:load', function() {
-  $("#slug-warning").hide();
+  var reslugAdded = false;
+  var warningShown = false;
+
+  function addInput(id) {
+    $('<input>').attr({
+        type: 'hidden',
+        id: id,
+        name: id,
+        value: true
+    }).appendTo($("#duplicate-warning"));
+  }
+
+  function removeInput(id) {
+    $("#" + id).remove();
+  }
+
+  $("#duplicate-warning").hide();
+
   $("#contact_name").on('input', function() {
-    var name = $(this).val();
-    var slug = $("#slug-warning").attr("data-slug");
+    var current = $(this).val();
+    var original = $("#original_name").val();
+    if (current !== original && !reslugAdded) {
+      addInput('reslug');
+      reslugAdded = true;
+    } else if (current === original && reslugAdded) {
+      removeInput('reslug');
+      reslugAdded = false;
+    }
+
     $.getJSON(
       "/contact_duplicates.json", {
-        name: name,
-        slug: slug
+        current: current,
+        original: original
     }, function(duplicates) {
-      if (duplicates.length > 0) {
-        $("#slug-warning").show();
-        addConfirmation();
-      } else {
-        $("#slug-warning").hide();
-        removeConfirmation();
+      if (duplicates.length > 0 && !warningShown) {
+        $("#duplicate-warning").show();
+        addInput('duplicate');
+        warningShown = true;
+      } else if (duplicates.length <= 0 && warningShown) {
+        $("#duplicate-warning").hide();
+        removeInput('duplicate');
+        warningShown = false;
       }
     });
   });

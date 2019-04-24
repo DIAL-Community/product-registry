@@ -42,7 +42,8 @@
     </div>
 
     <div class="mt-2"></div>
-    <div id="slug-warning" class="alert alert-warning" data-slug="<%= contact.slug %>">
+    <input id="original_name" type="hidden" value="<%= contact.name %>" />
+    <div id="duplicate-warning" class="alert alert-warning">
       One or more contact(s) with similar name already exists.
     </div>
 
