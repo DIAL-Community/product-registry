@@ -178,8 +178,12 @@ class OrganizationsController < ApplicationController
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
           end
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
+            if (params[:duplicate].present?)
+              first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            end
           end
         end
     end
