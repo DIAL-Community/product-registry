@@ -2,16 +2,16 @@
 // All this logic will automatically be available in application.js.
 // You can use CoffeeScript in this file: http://coffeescript.org/
 
-$(document).on('turbolinks:load', function() {
+function detectDupes() {
   var reslugAdded = false;
   var warningShown = false;
 
   function addInput(id) {
     $('<input>').attr({
-        type: 'hidden',
-        id: id,
-        name: id,
-        value: true
+      type: 'hidden',
+      id: id,
+      name: id,
+      value: true
     }).appendTo($("#duplicate-warning"));
   }
 
@@ -36,16 +36,20 @@ $(document).on('turbolinks:load', function() {
       "/contact_duplicates.json", {
         current: current,
         original: original
-    }, function(duplicates) {
-      if (duplicates.length > 0 && !warningShown) {
-        $("#duplicate-warning").show();
-        addInput('duplicate');
-        warningShown = true;
-      } else if (duplicates.length <= 0 && warningShown) {
-        $("#duplicate-warning").hide();
-        removeInput('duplicate');
-        warningShown = false;
-      }
-    });
+      },
+      function(duplicates) {
+        if (duplicates.length > 0 && !warningShown) {
+          $("#duplicate-warning").show();
+          addInput('duplicate');
+          warningShown = true;
+        } else if (duplicates.length <= 0 && warningShown) {
+          $("#duplicate-warning").hide();
+          removeInput('duplicate');
+          warningShown = false;
+        }
+      });
   });
-});
+};
+
+$(document).on('contacts#edit:loaded', detectDupes);
+$(document).on('contacts#new:loaded', detectDupes);

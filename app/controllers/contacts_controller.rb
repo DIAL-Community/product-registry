@@ -129,11 +129,7 @@ class ContactsController < ApplicationController
             attr[:slug] = slug_em(attr[:name])
             if (params[:duplicate].present?)
               first_duplicate = Contact.slug_starts_with(attr[:slug]).order(slug: :desc).first
-              size = 1;
-              if (!first_duplicate.nil?)
-                size = first_duplicate.slug.delete('^0-9').to_i + 1
-              end
-              attr[:slug] = attr[:slug] + "_" + size.to_s
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
             end
           end
         end

@@ -64,43 +64,7 @@ function addLocation(value, label) {
   addElement("base-selected-countries", "selected_countries", value, label);
 }
 
-var organizationsReady = function() {
-  // Init the datepicker field.
-  $('#organization_when_endorsed').datepicker();
-
-  // Init the autocomplete for the sector field.
-  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
-  $('#base-selected-sectors').hide();
-  $("#sector-search").autocomplete(sectorAutoComplete);
-
-  // Init the autocomplete for the country field.
-  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
-  $('#base-selected-countries').hide();
-  $("#country-search").autocomplete(countryAutoComplete);
-
-  $("#office-label").autocomplete({
-    source: function(request, response) {
-      $.getJSON(
-        "/locations.json?office_only=true", {
-          search: request.term
-        },
-        function(sectors) {
-          response($.map(sectors, function(sector) {
-            return {
-              id: sector.id,
-              label: sector.name,
-              value: sector.name
-            }
-          }));
-        }
-      );
-    },
-    select: function(event, ui) {
-      $("#office-id").val(ui.item.id);
-    }
-  });
-
-  // Clean the map holder.
+var setupMapView = function() {  // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
   console.log("Setting map view ...");
 
@@ -151,7 +115,45 @@ var organizationsReady = function() {
       $(element).css("bottom", baseBottom - (lineOfBody + 0.5) * fontSize);
     }
   });
+}
+
+var setupFormView = function() {
+  // Init the datepicker field.
+  $('#organization_when_endorsed').datepicker();
+
+  // Init the autocomplete for the sector field.
+  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
+  $('#base-selected-sectors').hide();
+  $("#sector-search").autocomplete(sectorAutoComplete);
+
+  // Init the autocomplete for the country field.
+  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
+  $('#base-selected-countries').hide();
+  $("#country-search").autocomplete(countryAutoComplete);
+
+  $("#office-label").autocomplete({
+    source: function(request, response) {
+      $.getJSON(
+        "/locations.json?office_only=true", {
+          search: request.term
+        },
+        function(sectors) {
+          response($.map(sectors, function(sector) {
+            return {
+              id: sector.id,
+              label: sector.name,
+              value: sector.name
+            }
+          }));
+        }
+      );
+    },
+    select: function(event, ui) {
+      $("#office-id").val(ui.item.id);
+    }
+  });
 };
 
-// Attach all of them to the browser, page, and turbolinks event.
-$(document).on('turbolinks:load', organizationsReady);
+$(document).on('organizations#new:loaded', setupFormView);
+$(document).on('organizations#show:loaded', setupMapView);
+$(document).on('organizations#edit:loaded', setupFormView);
