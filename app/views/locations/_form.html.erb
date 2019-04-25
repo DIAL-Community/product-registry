@@ -1,4 +1,3 @@
-<div class="card-body">
   <%= form_with(model: location, local: true) do |form| %>
 
     <fieldset class="form-label-group">
@@ -6,50 +5,43 @@
       <%= form.label :name %>
     </fieldset>
 
+    <input id="original_name" type="hidden" value="<%= location.name %>" />
+    <div id="duplicate-warning" class="alert alert-warning">
+      One or more location(s) with similar name already exists.
+    </div>
+
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      Assigned Organizations
+    </h6>
     <% if !@organization %>
-      <fieldset class="form-label-group">
+      <fieldset class="form-label-group mt-2">
         <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
         <label for="country-organization">
           Search and assign organizations ...
         </label>
       </fieldset>
     <% end %>
-
-    <div class="card">
-      <h6 class="card-header">Assigned Organizations</h6>
-      <div class="card-body">
-        <fieldset id="selected-organizations">
-          <div class="card-columns">
-            <div id="base-selected-organizations" class="card" style="max-width: 20rem;">
-              <div class="card-body p-1 d-flex">
-                <p class="card-text p-1 m-0" style="flex: 1"></p>
-                <% if !@organization %>
-                  <a class="card-link p-1" onclick="remove(this);">
-                    <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-                  </a>
-                <% end %>
-                <input type="hidden"/>
-              </div>
-            </div>
+    <div class="row">
+      <div id="base-selected-organizations" class="col-6 col-lg-4 mb-2">
+        <div class="card h-100">
+          <div class="p-2 clearfix">
+            <p class="mb-0 float-left"></p>
+            <% if !@organization %>
+              <a class="card-link p-1" onclick="remove(this);" style="cursor: pointer;">
+                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+              </a>
+            <% end %>
+            <input type="hidden"/>
           </div>
-        </fieldset>
+        </div>
       </div>
     </div>
-
-    <div class="mt-2"></div>
-    <% if location.errors.include?(:duplicate) %>
-      <div class="alert alert-warning">
-        Another location with similar name already exists. Press submit again to confirm (or update the form).
-        <input type="hidden" name="confirmation" value="true" />
-      </div>
-    <% end %>
 
     <fieldset class="float-right mt-4">
       <%= form.submit 'Submit', :class => "btn btn-primary" %>
       <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
-</div>
 
 <script>
   <% location.organizations.sort_by{|organization| organization.name }.each do |organization| %>
