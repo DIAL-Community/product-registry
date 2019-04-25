@@ -1,16 +1,12 @@
 <% if @sector.errors.any? %>
   <div id="error_explanation">
-    <div id="error_explanation">
-      <div class="alert alert-danger">
-        The form contains
-        <%= pluralize(@sector.errors.count, "error") %>.
-      </div>
+    <div class="alert alert-danger">
+      The form contains
+      <%= pluralize(@sector.errors.count, "error") %>.
     </div>
   </div>
 <% end %>
-<div class="card">
-  <h5 class="card-header">
+<h5 class="border rounded bg-secondary text-white p-3">
     Create sector
-  </h5>
-  <%= render 'form', sector: @sector %>
-</div>
+</h5>
+<%= render 'form', sector: @sector %>
