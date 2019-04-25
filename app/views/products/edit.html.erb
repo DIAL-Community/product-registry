@@ -1,16 +1,12 @@
 <% if @product.errors.any? %>
   <div id="error_explanation">
-    <div id="error_explanation">
-      <div class="alert alert-danger">
-        The form contains
-        <%= pluralize(@product.errors.count, "error") %>.
-      </div>
+    <div class="alert alert-danger">
+      The form contains
+      <%= pluralize(@product.errors.count, "error") %>.
     </div>
   </div>
 <% end %>
-<div class="card">
-  <div class="card-header">
-    Edit product
-  </div>
-  <%= render 'form', product: @product %>
-</div>
+<h5 class="border rounded bg-secondary text-white p-3">
+  Edit product
+</h5>
+<%= render 'form', product: @product %>

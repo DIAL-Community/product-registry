@@ -5,6 +5,11 @@
       <%= form.label :name %>
     </fieldset>
 
+    <input id="original_name" type="hidden" value="<%= contact.name %>" />
+    <div id="duplicate-warning" class="alert alert-warning">
+      One or more contact(s) with similar name already exists.
+    </div>
+
     <fieldset class="form-label-group">
       <%= form.text_field :email, id: :contact_email, :class => "form-control", :placeholder => "Email" %>
       <%= form.label :email %>
@@ -15,20 +20,19 @@
       <%= form.label :title %>
     </fieldset>
 
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      Assigned Organization
+    </h6>
     <% if !@organization %>
-      <fieldset class="form-label-group">
+      <fieldset class="form-label-group mt-2">
         <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
         <label for="country-organization">
           Search and assign organizations ...
         </label>
       </fieldset>
     <% end %>
-
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Assigned Organization
-    </h6>
     <div class="row">
-      <div id="base-selected-organizations" class="col-6 col-lg-4 mt-2">
+      <div id="base-selected-organizations" class="col-6 col-lg-4 mb-2">
         <div class="card h-100">
           <div class="p-2 clearfix">
             <p class="mb-0 float-left"></p>
@@ -43,13 +47,7 @@
       </div>
     </div>
 
-    <div class="mt-2"></div>
-    <input id="original_name" type="hidden" value="<%= contact.name %>" />
-    <div id="duplicate-warning" class="alert alert-warning">
-      One or more contact(s) with similar name already exists.
-    </div>
-
-    <fieldset class="float-right">
+    <fieldset class="float-right mt-4">
       <%= form.submit 'Submit', :class => "btn btn-primary" %>
       <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>

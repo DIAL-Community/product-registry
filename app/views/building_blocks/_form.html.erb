@@ -4,20 +4,24 @@
       <%= form.label :name %>
     </fieldset>
 
+    <input id="original_name" type="hidden" value="<%= building_block.name %>" />
+    <div id="duplicate-warning" class="alert alert-warning">
+      One or more building block(s) with similar name already exists.
+    </div>
+
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      Assigned Products
+    </h6>
     <% if !@product %>
-      <fieldset class="form-label-group">
+      <fieldset class="form-label-group mt-2">
         <input type="text" id="product-search" class="form-control" placeholder="Search and assign products ..." />
         <label for="building-block-product">
           Search and assign products ...
         </label>
       </fieldset>
     <% end %>
-
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Assigned Products
-    </h6>
     <div class="row">
-      <div id="base-selected-products" class="col-6 col-lg-4 mt-2">
+      <div id="base-selected-products" class="col-6 col-lg-4 mb-2">
         <div class="card h-100">
           <div class="p-2 clearfix">
             <p class="mb-0 float-left"></p>
@@ -30,12 +34,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="mt-2"></div>
-    <input id="original_name" type="hidden" value="<%= building_block.name %>" />
-    <div id="duplicate-warning" class="alert alert-warning">
-      One or more building block(s) with similar name already exists.
     </div>
 
     <fieldset class="float-right mt-4">

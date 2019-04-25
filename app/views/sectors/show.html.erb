@@ -1,17 +1,15 @@
-<div class="container">
-  <p id="notice"><%= notice %></p>
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white"><%= @sector.name %></h5>
-    <div class="card-body">
-      <p class="float-right mb-0" >
-        <%= link_to 'Back', sectors_path, :class => "card-link" %>
-        <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
-      </p>
-    </div>
+<p id="notice"><%= notice %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white"><%= @sector.name %></h5>
+  <div class="card-body">
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', sectors_path, :class => "card-link" %>
+      <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+    </p>
   </div>
 </div>
 
-<div class="container mt-4">
+<div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0">Organization</h5>
     <%= link_to 'Add', new_organization_path, :class => "card-link text-white float-right" %>
