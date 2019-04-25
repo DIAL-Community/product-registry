@@ -111,6 +111,18 @@ class SectorsController < ApplicationController
     end
   end
 
+  def duplicates
+    @sectors = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @sectors = Sector.where(slug: current_slug).to_a
+      end
+    end
+    render json: @sectors, :only => [:name]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sector

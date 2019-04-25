@@ -149,6 +149,18 @@ class OrganizationsController < ApplicationController
     @organizations = Organization.eager_load(:locations)
   end
 
+  def duplicates
+    @organizations = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @organizations = Organization.where(slug: current_slug).to_a
+      end
+    end
+    render json: @organizations, :only => [:name]
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.

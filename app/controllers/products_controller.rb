@@ -140,6 +140,18 @@ class ProductsController < ApplicationController
     end
   end
 
+  def duplicates
+    @products = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @products = Product.where(slug: current_slug).to_a
+      end
+    end
+    render json: @products, :only => [:name]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
