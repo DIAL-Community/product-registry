@@ -24,14 +24,14 @@
       </fieldset>
     <% end %>
 
-    <div class="card">
-    <h6 class="card-header" style="padding: 0.75rem">Assigned Organization</h6>
-      <div class="card-body assigned-container">
-        <div id="base-selected-organizations" class="card mt-2 mr-2" style="max-width: 20rem;">
-          <div class="card-body p-1 d-flex">
-            <p class="card-text p-1 m-0" style="flex: 1"></p>
+    <h6 class="card-header border rounded" style="padding: 0.75rem">Assigned Organization</h6>
+    <div class="row">
+      <div id="base-selected-organizations" class="col-md-4 mt-2">
+        <div class="card h-100">
+          <div class="p-2 clearfix">
+            <p class="mb-0 float-left"></p>
             <% if !@organization %>
-              <a class="card-link p-1" onclick="remove(this);">
+              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
                 <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
               </a>
             <% end %>
