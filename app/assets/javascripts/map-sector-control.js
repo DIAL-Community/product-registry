@@ -37,4 +37,4 @@ var mapReady = function() {
 }
 
 // Attach all of them to the browser, page, and turbolinks event.
-$(document).on('turbolinks:load', mapReady);
+$(document).on('organizations#map:loaded', mapReady);
