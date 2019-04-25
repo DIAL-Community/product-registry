@@ -60,7 +60,7 @@ module OrganizationsHelper
     end
 
     column_length.each.with_index do |c, index|
-      sheet.column(index).width = c + 5
+      sheet.column(index).width = c
     end
 
     book.write 'public/export.xls'
