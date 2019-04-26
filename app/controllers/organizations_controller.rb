@@ -199,7 +199,8 @@ class OrganizationsController < ApplicationController
           "SingleLine" => magic_key,
           "magicKey" => magic_key,
           "token" => auth_token,
-          "f" => "json"
+          "f" => "json",
+          "forStorage" => "true"
         }
       })
 
