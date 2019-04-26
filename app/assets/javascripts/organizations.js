@@ -134,21 +134,35 @@ var setupFormView = function() {
   $("#office-label").autocomplete({
     source: function(request, response) {
       $.getJSON(
-        "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
-          f: 'json',
-          maxSuggestions: 10,
-          text: request.term
+        "/locations.json?office_only=true", {
+          search: request.term
         },
-        function(data) {
-          response($.map(data.suggestions, function(city) {
+        function(sectors) {
+          if (sectors.length <= 0) {
+            $.getJSON(
+              "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
+                f: 'json',
+                maxSuggestions: 10,
+                text: request.term
+              },
+              function(data) {
+                response($.map(data.suggestions, function(city) {
+                  return {
+                    id: city.magicKey,
+                    label: city.text,
+                    value: city.text
+                  }
+                }));
+              });
+          }
+          response($.map(sectors, function(sector) {
             return {
-              id: city.magicKey,
-              label: city.text,
-              value: city.text
+              id: sector.id,
+              label: sector.name,
+              value: sector.name
             }
           }));
-        }
-      );
+        });
     },
     select: function(event, ui) {
       $("#office-id").val(ui.item.id);
