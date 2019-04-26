@@ -82,7 +82,7 @@ var setupMapView = function() {  // Clean the map holder.
     overlays: [tooltip],
     view: new ol.View({
       center: markerCoordinate ? markerCoordinate : [0, 0],
-      zoom: 8
+      zoom: 10
     })
   });
 
@@ -142,15 +142,17 @@ var setupFormView = function() {
             $.getJSON(
               "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
                 f: 'json',
+                category: 'City',
                 maxSuggestions: 10,
                 text: request.term
               },
               function(data) {
                 response($.map(data.suggestions, function(city) {
                   return {
-                    id: city.magicKey,
+                    id: null,
                     label: city.text,
-                    value: city.text
+                    value: city.text,
+                    magicKey: city.magicKey
                   }
                 }));
               });
@@ -159,13 +161,15 @@ var setupFormView = function() {
             return {
               id: sector.id,
               label: sector.name,
-              value: sector.name
+              value: sector.name,
+              magicKey: null
             }
           }));
         });
     },
     select: function(event, ui) {
       $("#office-id").val(ui.item.id);
+      $("#office-magickey").val(ui.item.magicKey);
     }
   });
 };

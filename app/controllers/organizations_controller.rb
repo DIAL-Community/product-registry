@@ -56,14 +56,14 @@ class OrganizationsController < ApplicationController
 
     @organization = Organization.new(organization_params)
 
-    if (params[:selected_sectors])
+    if (params[:selected_sectors].present?)
       params[:selected_sectors].keys.each do |sector_id|
         @sector = Sector.find(sector_id)
         @organization.sectors.push(@sector)
       end
     end
 
-    if (params[:selected_countries])
+    if (params[:selected_countries].present?)
       params[:selected_countries].keys.each do |location_id|
         location = Location.find(location_id)
         @organization.locations.push(location)
@@ -75,6 +75,13 @@ class OrganizationsController < ApplicationController
       if (office)
         @organization.locations.push(office)
       end
+    end
+
+    if (params[:office_magickey].present?)
+      auth_token = authenticate_user
+      geocoded_location = geocode(params[:office_magickey], auth_token)
+      geocoded_location.save
+      @organization.locations.push(geocoded_location)
     end
 
     respond_to do |format|
@@ -92,7 +99,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1.json
   def update
 
-    if (params[:selected_countries])
+    if (params[:selected_sectors].present?)
       sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
         sector = Sector.find(sector_id)
@@ -101,21 +108,29 @@ class OrganizationsController < ApplicationController
       @organization.sectors = sectors.to_a
     end
 
-    if (params[:selected_countries])
-      locations = Set.new
+    locations = Set.new
+    if (params[:selected_countries].present?)
       params[:selected_countries].keys.each do |location_id|
         location = Location.find(location_id)
         locations.add(location)
       end
-      @organization.locations = locations.to_a
     end
 
     if (params[:office_id].present?)
       office = Location.find(params[:office_id])
       if (office and @organization.locations.where(slug: office.slug).empty?)
-        @organization.locations.push(office)
+        locations.add(office)
       end
     end
+
+    if (params[:office_magickey].present?)
+      auth_token = authenticate_user
+      geocoded_location = geocode(params[:office_magickey], auth_token)
+      geocoded_location.save
+      locations.add(geocoded_location)
+    end
+
+    @organization.locations = locations.to_a
 
     respond_to do |format|
       if @organization.update(organization_params)
@@ -166,7 +181,7 @@ class OrganizationsController < ApplicationController
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
 
-      request = Net::HTTP::Post.new(uri.path, {'Content-Type' => 'application/json'})
+      request = Net::HTTP::Post.new(uri.path)
       data = {"client_id" => Rails.configuration.geocode["esri"]["client_id"],
           "client_secret" => Rails.configuration.geocode["esri"]["client_secret"],
           "grant_type" => Rails.configuration.geocode["esri"]["grant_type"]}
@@ -177,12 +192,36 @@ class OrganizationsController < ApplicationController
       response_json["access_token"]
     end
 
+    def geocode(magic_key, auth_token)
+      uri_template = Addressable::Template.new(Rails.configuration.geocode["esri"]["geocode_uri"])
+      geocode_uri = uri_template.expand({
+        "q" => {
+          "SingleLine" => magic_key,
+          "magicKey" => magic_key,
+          "token" => auth_token,
+          "f" => "json"
+        }
+      })
+
+      uri = URI.parse(geocode_uri)
+      response = Net::HTTP.post_form(uri, {})
+
+      location_data = JSON.parse(response.body)
+      location_name = location_data["candidates"][0]["address"]
+      location_slug = slug_em(location_name)
+      location_x = location_data["candidates"][0]["location"]["x"]
+      location_y = location_data["candidates"][0]["location"]["y"]
+
+      Location.new(name: location_name, slug: location_slug, :location_type => :point,
+          points: [ActiveRecord::Point.new(location_y, location_x)])
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
       params
         .require(:organization)
         .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email,
-                :selected_sectors, :selected_countries, :office_id, :confirmation)
+                :selected_sectors, :selected_countries, :office_id, :office_magickey, :confirmation)
         .tap do |attr|
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
