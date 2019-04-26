@@ -53,16 +53,8 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
-    can_be_saved = @building_block.valid?
-    puts "can be saved: " + can_be_saved.to_s
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = BuildingBlock.slug_starts_with(@building_block.slug).size
-      @building_block.slug = @building_block.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @building_block.save
+      if @building_block.save
         format.html { redirect_to @building_block, notice: 'Building Block was successfully created.' }
         format.json { render :show, status: :created, location: @building_block }
       else

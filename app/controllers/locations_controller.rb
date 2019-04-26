@@ -69,15 +69,8 @@ class LocationsController < ApplicationController
       end
     end
 
-    can_be_saved = @location.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Location.slug_starts_with(@location.slug).size
-      @location.slug = @location.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @location.save
+      if @location.save
         format.html { redirect_to @location, notice: 'Location was successfully created.' }
         format.json { render :show, status: :created, location: @location }
       else

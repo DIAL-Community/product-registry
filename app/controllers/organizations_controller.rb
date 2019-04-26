@@ -77,15 +77,8 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    can_be_saved = @organization.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Organization.slug_starts_with(@organization.slug).size
-      @organization.slug = @organization.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @organization.save
+      if @organization.save
         format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
         format.json { render :show, status: :created, location: @organization }
       else

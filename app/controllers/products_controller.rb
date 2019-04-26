@@ -69,13 +69,6 @@ class ProductsController < ApplicationController
       end
     end
 
-    can_be_saved = @product.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Product.slug_starts_with(@product.slug).size
-      @product.slug = @product.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
       if @product.save
         format.html { redirect_to @product, notice: 'Product was successfully created.' }

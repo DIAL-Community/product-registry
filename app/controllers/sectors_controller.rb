@@ -59,15 +59,8 @@ class SectorsController < ApplicationController
       end
     end
 
-    can_be_saved = @sector.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Sector.slug_starts_with(@sector.slug).size
-      @sector.slug = @sector.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @sector.save
+      if @sector.save
         format.html { redirect_to @sector, notice: 'Sector was successfully created.' }
         format.json { render :show, status: :created, location: @sector }
       else
