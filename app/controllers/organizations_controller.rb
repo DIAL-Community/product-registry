@@ -161,6 +161,22 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find(params[:id])
     end
 
+    def authenticate_user
+      uri = URI.parse(Rails.configuration.geocode["esri"]["auth_uri"])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(uri.path, {'Content-Type' => 'application/json'})
+      data = {"client_id" => Rails.configuration.geocode["esri"]["client_id"],
+          "client_secret" => Rails.configuration.geocode["esri"]["client_secret"],
+          "grant_type" => Rails.configuration.geocode["esri"]["grant_type"]}
+      request.set_form_data(data);
+
+      response = http.request(request)
+      response_json = JSON.parse(response.body)
+      response_json["access_token"]
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
       params

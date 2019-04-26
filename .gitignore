@@ -25,3 +25,5 @@
 
 public/export.xls
 public/export.xlsx
+
+config/esri.yml
