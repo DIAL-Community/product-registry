@@ -17,6 +17,16 @@ class Product < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}%")}
 
+  def image_file
+    ['png','jpg','gif'].each do |extension|
+      if File.exist?(File.join('app','assets','images','products',"#{slug}.#{extension}"))
+        return "products/#{slug}.#{extension}"
+      end
+    end
+
+    "products/prod_placeholder.png"
+  end
+
   private
 
   def no_duplicates

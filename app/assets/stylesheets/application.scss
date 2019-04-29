@@ -90,3 +90,19 @@ html {
     margin-left: -0.5rem;
   }
 }
+
+.card-deck {
+  margin-bottom: 1rem;
+}
+
+.card-deck > .card {
+  display:inline-block;
+}
+
+.card-placeholder {
+  border: none;
+}
+
+.card-img-top {
+  padding: 0.5rem;
+}

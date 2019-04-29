@@ -1071,7 +1071,7 @@ if Organization.where(slug: 'ekitabu').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'el_kanis_group').empty?
-  o = Organization.create(name: "El Kanis Group", slug: 'el_kanis_group', when_endorsed: DateTime.new(18, 10, 18), is_endorser: true, website: "http://elkanisgroup.com/")
+  o = Organization.create(name: "El Kanis Group", slug: 'el_kanis_group', when_endorsed: DateTime.new(2018, 10, 18), is_endorser: true, website: "http://elkanisgroup.com/")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.locations << Location.where(slug: 'abuja_nigeria').limit(1)[0]
 end

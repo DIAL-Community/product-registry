@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+<%= link_to 'Create New', new_product_path %>
 <div class="float-right pb-2">
   <%= form_tag(products_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search products ...", :class => "form-control" %>
@@ -8,42 +10,30 @@
   </div>
 <% end %>
 </div>
+<br clear="both"/>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th>Name</th>
-      <th>Website</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% if @products.count > 0 %>
-      <% @products.each do |product| %>
-        <tr>
-          <td><%= product.name %></td>
-          <td><%= product.website %></td>
-          <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
-            <div class="dropdown-menu">
-              <%= link_to 'View', product, :class =>"dropdown-item"  %>
-              <%= link_to 'Edit', edit_product_path(product), :class =>"dropdown-item"  %>
-              <div class="dropdown-divider"></div>
-              <%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan="4">
-          <small class="text-muted">
-            We couldn't find a product matching the search phrase. Do you want to <%= link_to 'create a new product?', new_product_path %>
-          </small>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= will_paginate @products, :class => "apple-pagination" %>
+<!-- <div class="card-deck"> -->
+<% @products.each_slice(4) do |product_row| %>
+<div class="card-deck">
+<% product_row.each do |product| %>
+  <div class="card">
+    <div class="card-header">
+      <%= link_to product.name, product %>
+    </div>
+    <%= image_tag(product.image_file, width: 200, class: 'card-img-top align-middle') %>
+    <div class="card-body">
+        <% if !product.website.nil? and !product.website.empty? %>
+          <p class="card-text"><small><a href="<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small>
+        <% end %>
+    </div>
+  </div>
+<% end %>
+<% if product_row.size < 4  %>
+  <% (4 - product_row.size).times do |x| %>
+    <div class="card card-placeholder">
+    </div>
+  <% end %>
+<% end %>
+</div>
+<% end %>
+</div>

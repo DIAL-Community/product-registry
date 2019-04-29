@@ -23,7 +23,7 @@ class OrganizationsController < ApplicationController
     else
       @organizations = Organization
           .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+          #.paginate(page: params[:page], per_page: 20)
     end
   end
 
