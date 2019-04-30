@@ -28,3 +28,34 @@
     color: #212529 !important
   }
 }
+
+.digisquare-gauge {
+  position: relative;
+  display: inline-block;
+  height: 50px;
+  width: 100px;
+  background: lightgray;
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+  background: conic-gradient(from 270deg at 50% 100%, red, yellow, green, black, black, black);
+}
+
+.needle {
+  height: 100px;
+  width: 50px;
+  position: absolute;
+  top: 0px;
+  left: 25px;
+  border-radius: 50%;
+  transition: all 3s;
+}
+
+.needle:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 2.5px);
+  height: 50%;
+  width: 5px;
+  background: black;
+}

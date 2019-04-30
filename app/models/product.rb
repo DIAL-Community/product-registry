@@ -27,6 +27,43 @@ class Product < ApplicationRecord
     "products/prod_placeholder.png"
   end
 
+  def maturity_scores
+    @osc_maturity = YAML.load_file("config/maturity_osc.yml")
+    @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
+
+    toret = {}
+    if !self.product_assessment.nil?
+      if self.product_assessment.has_osc
+        @osc_maturity.each do |osc_maturity_category|
+          total_possible_score = 0
+          total_score = 0
+          osc_maturity_category['items'].each do |item|
+            if self.product_assessment.send('osc_' + item["code"].downcase)
+              total_score += 1
+            end
+          end
+          toret[osc_maturity_category['header']] = {}
+          toret[osc_maturity_category['header']]['total'] = osc_maturity_category['items'].length
+          toret[osc_maturity_category['header']]['score'] = total_score
+        end
+      end
+      if self.product_assessment.has_digisquare
+        @digisquare_maturity.each do |digisquare_maturity_category|
+          cat_total = 0
+          digisquare_maturity_category["sub-indicators"].each do |sub_indicator|
+            if self.product_assessment.send(sub_indicator['code'])
+              cat_total += (self.product_assessment.send(sub_indicator['code']) - 2)
+            end
+          end
+          cat_score = 5 * (cat_total.to_f / digisquare_maturity_category['sub-indicators'].length) + 5
+          toret[digisquare_maturity_category['core']] = cat_score
+        end
+      end
+    end
+    toret
+  end
+
+
   private
 
   def no_duplicates
