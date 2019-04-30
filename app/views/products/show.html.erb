@@ -1,4 +1,9 @@
 <p id="notice"><%= notice %></p>
+
+<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+<a href="#" class="btn btn-primary float-left ml-1">Add to Launch</a>
+<br clear="both"/>
+<br/>
 <div class="card-deck">
   <div class="card">
     <h5 class="card-header"><%= @product.name %></h5>
@@ -84,7 +89,7 @@
 <div class="card-deck">
     <div class="card">
       <h5 class="card-header">Digital Square Maturity</h5>
-      <div class="card-body">
+      <div class="card-body text-center">
         <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
           <% @digisquare_maturity.each do |digisquare_maturity_category| %>
             <div class="digisquare-gauge">

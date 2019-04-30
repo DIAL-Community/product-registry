@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
     if params[:without_paging]
       @products = Product
           .name_contains(params[:search])
-          .order(:name)
+          .order(:slug)
       return
     end
 
@@ -23,11 +23,13 @@ class ProductsController < ApplicationController
       @products = Product
           .where(nil)
           .name_contains(params[:search])
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .order(:slug)
+          #.paginate(page: params[:page], per_page: 20)
     else
       @products = Product
-          .order(:name)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .order(:slug)
           #.paginate(page: params[:page], per_page: 20)
     end
   end
