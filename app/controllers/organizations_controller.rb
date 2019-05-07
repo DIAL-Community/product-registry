@@ -56,14 +56,14 @@ class OrganizationsController < ApplicationController
 
     @organization = Organization.new(organization_params)
 
-    if (params[:selected_sectors])
+    if (params[:selected_sectors].present?)
       params[:selected_sectors].keys.each do |sector_id|
         @sector = Sector.find(sector_id)
         @organization.sectors.push(@sector)
       end
     end
 
-    if (params[:selected_countries])
+    if (params[:selected_countries].present?)
       params[:selected_countries].keys.each do |location_id|
         location = Location.find(location_id)
         @organization.locations.push(location)
@@ -77,15 +77,15 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    can_be_saved = @organization.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Organization.slug_starts_with(@organization.slug).size
-      @organization.slug = @organization.slug + '_' + size.to_s
-      can_be_saved = true
+    if (params[:office_magickey].present?)
+      auth_token = authenticate_user
+      geocoded_location = geocode(params[:office_magickey], auth_token)
+      geocoded_location.save
+      @organization.locations.push(geocoded_location)
     end
 
     respond_to do |format|
-      if can_be_saved && @organization.save
+      if @organization.save
         format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
         format.json { render :show, status: :created, location: @organization }
       else
@@ -99,7 +99,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1.json
   def update
 
-    if (params[:selected_countries])
+    if (params[:selected_sectors].present?)
       sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
         sector = Sector.find(sector_id)
@@ -108,21 +108,29 @@ class OrganizationsController < ApplicationController
       @organization.sectors = sectors.to_a
     end
 
-    if (params[:selected_countries])
-      locations = Set.new
+    locations = Set.new
+    if (params[:selected_countries].present?)
       params[:selected_countries].keys.each do |location_id|
         location = Location.find(location_id)
         locations.add(location)
       end
-      @organization.locations = locations.to_a
     end
 
     if (params[:office_id].present?)
       office = Location.find(params[:office_id])
       if (office and @organization.locations.where(slug: office.slug).empty?)
-        @organization.locations.push(office)
+        locations.add(office)
       end
     end
+
+    if (params[:office_magickey].present?)
+      auth_token = authenticate_user
+      geocoded_location = geocode(params[:office_magickey], auth_token)
+      geocoded_location.save
+      locations.add(geocoded_location)
+    end
+
+    @organization.locations = locations.to_a
 
     respond_to do |format|
       if @organization.update(organization_params)
@@ -149,6 +157,18 @@ class OrganizationsController < ApplicationController
     @organizations = Organization.eager_load(:locations)
   end
 
+  def duplicates
+    @organizations = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @organizations = Organization.where(slug: current_slug).to_a
+      end
+    end
+    render json: @organizations, :only => [:name]
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.
@@ -156,18 +176,63 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find(params[:id])
     end
 
+    def authenticate_user
+      uri = URI.parse(Rails.configuration.geocode["esri"]["auth_uri"])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(uri.path)
+      data = {"client_id" => Rails.configuration.geocode["esri"]["client_id"],
+          "client_secret" => Rails.configuration.geocode["esri"]["client_secret"],
+          "grant_type" => Rails.configuration.geocode["esri"]["grant_type"]}
+      request.set_form_data(data);
+
+      response = http.request(request)
+      response_json = JSON.parse(response.body)
+      response_json["access_token"]
+    end
+
+    def geocode(magic_key, auth_token)
+      uri_template = Addressable::Template.new(Rails.configuration.geocode["esri"]["geocode_uri"])
+      geocode_uri = uri_template.expand({
+        "q" => {
+          "SingleLine" => magic_key,
+          "magicKey" => magic_key,
+          "token" => auth_token,
+          "f" => "json",
+          "forStorage" => "true"
+        }
+      })
+
+      uri = URI.parse(geocode_uri)
+      response = Net::HTTP.post_form(uri, {})
+
+      location_data = JSON.parse(response.body)
+      location_name = location_data["candidates"][0]["address"]
+      location_slug = slug_em(location_name)
+      location_x = location_data["candidates"][0]["location"]["x"]
+      location_y = location_data["candidates"][0]["location"]["y"]
+
+      Location.new(name: location_name, slug: location_slug, :location_type => :point,
+          points: [ActiveRecord::Point.new(location_y, location_x)])
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
       params
         .require(:organization)
         .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email,
-                :selected_sectors, :selected_countries, :office_id, :confirmation)
+                :selected_sectors, :selected_countries, :office_id, :office_magickey, :confirmation)
         .tap do |attr|
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
           end
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
+            if (params[:duplicate].present?)
+              first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            end
           end
         end
     end

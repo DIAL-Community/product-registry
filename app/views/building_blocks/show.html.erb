@@ -1,37 +1,37 @@
-<div class="container">
-  <p id="notice"><%= notice %></p>
-  <div class="card">
-    <h5 class="card-header"><%= @building_block.name %></h5>
-    <div class="card-body">
-      <p class="float-right mb-0" >
-        <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
-        <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
-      </p>
-    </div>
+<p id="notice"><%= notice %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white"><%= @building_block.name %></h5>
+  <div class="card-body">
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
+      <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
+    </p>
   </div>
 </div>
 
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-header clearfix">
-      <h5 class="float-left">Products</h5>
-      <%= link_to 'Add', new_product_path, :class => "card-link float-right" %>
-    </div>
-    <div class="card-body">
-      <% if @building_block.products.count > 0 %>
-        <div class="card-columns">
-          <% @building_block.products.each do |product| %>
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><%= link_to product.name, product %></h5>
-                <%= link_to 'Edit', edit_product_path(product), :class => "card-link float-right mb-2" %>
-              </div>
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Products</h5>
+    <%= link_to 'Add', new_product_path, :class => "card-link text-white float-right" %>
+  </div>
+  <% if @building_block.products.count > 0 %>
+    <div class="row">
+      <% @building_block.products.each do |product| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-1">
+              <h5 class="card-title"><%= link_to product.name, product %></h5>
             </div>
-          <% end %>
+            <div class="card-footer text-muted p-2">
+              <small>
+                <%= link_to 'Edit', edit_product_path(product), :class => "card-link float-right" %>
+              </small>
+            </div>
+          </div>
         </div>
-      <% else %>
-        <p class="card-text text-muted">We don't have any product information for this building block.</p>
       <% end %>
     </div>
-  </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any product information for this building block.</p>
+  <% end %>
 </div>

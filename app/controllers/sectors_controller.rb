@@ -59,15 +59,8 @@ class SectorsController < ApplicationController
       end
     end
 
-    can_be_saved = @sector.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Sector.slug_starts_with(@sector.slug).size
-      @sector.slug = @sector.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @sector.save
+      if @sector.save
         format.html { redirect_to @sector, notice: 'Sector was successfully created.' }
         format.json { render :show, status: :created, location: @sector }
       else
@@ -111,6 +104,18 @@ class SectorsController < ApplicationController
     end
   end
 
+  def duplicates
+    @sectors = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @sectors = Sector.where(slug: current_slug).to_a
+      end
+    end
+    render json: @sectors, :only => [:name]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sector
@@ -123,8 +128,12 @@ class SectorsController < ApplicationController
         .require(:sector)
         .permit(:name, :confirmation)
         .tap do |attr|
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
+            if (params[:duplicate].present?)
+              first_duplicate = Sector.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            end
           end
         end
     end

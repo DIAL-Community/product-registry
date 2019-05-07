@@ -69,15 +69,8 @@ class LocationsController < ApplicationController
       end
     end
 
-    can_be_saved = @location.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Location.slug_starts_with(@location.slug).size
-      @location.slug = @location.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @location.save
+      if @location.save
         format.html { redirect_to @location, notice: 'Location was successfully created.' }
         format.json { render :show, status: :created, location: @location }
       else
@@ -121,6 +114,18 @@ class LocationsController < ApplicationController
     end
   end
 
+  def duplicates
+    @locations = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @locations = Location.where(slug: current_slug).to_a
+      end
+    end
+    render json: @locations, :only => [:name]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_location
@@ -133,8 +138,12 @@ class LocationsController < ApplicationController
         .require(:location)
         .permit(:name, :confirmation)
         .tap do |attr|
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
+            if (params[:duplicate].present?)
+              first_duplicate = Location.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            end
           end
         end
     end

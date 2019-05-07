@@ -1,23 +1,12 @@
 <% if @location.errors.any? %>
   <div id="error_explanation">
-    <div id="error_explanation">
-      <% if @location.errors.include?(:duplicate) %>
-        <div class="alert alert-warning">
-          The form contains
-          <%= pluralize(@location.errors.count, "warning") %>.
-        </div>
-      <% else %>
-        <div class="alert alert-danger">
-          The form contains
-          <%= pluralize(@location.errors.count, "error") %>.
-        </div>
-      <% end %>
+    <div class="alert alert-danger">
+      The form contains
+      <%= pluralize(@location.errors.count, "error") %>.
     </div>
   </div>
 <% end %>
-<div class="card">
-  <h5 class="card-header">
-    Edit location
-  </h5>
-  <%= render 'form', location: @location %>
-</div>
+<h5 class="border rounded bg-secondary text-white p-3">
+  Edit location
+</h5>
+<%= render 'form', location: @location %>

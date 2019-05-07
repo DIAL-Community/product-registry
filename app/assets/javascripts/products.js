@@ -11,4 +11,5 @@ function productsReady() {
 }
 
 // Attach all of them to the browser, page, and turbolinks event.
-$(document).on('turbolinks:load', productsReady);
+$(document).on('products#new:loaded', productsReady);
+$(document).on('products#edit:loaded', productsReady);

@@ -1,16 +1,12 @@
 <% if @contact.errors.any? %>
   <div id="error_explanation">
-    <div id="error_explanation">
-      <div class="alert alert-danger">
-        The form contains
-        <%= pluralize(@contact.errors.count, "error") %>.
-      </div>
+    <div class="alert alert-danger">
+      The form contains
+      <%= pluralize(@contact.errors.count, "error") %>.
     </div>
   </div>
 <% end %>
-<div class="card">
-  <h5 class="card-header">
-    Edit contact
-  </h5>
-  <%= render 'form', contact: @contact %>
-</div>
+<h5 class="border rounded bg-secondary text-white p-3">
+  Edit contact
+</h5>
+<%= render 'form', contact: @contact %>

@@ -53,16 +53,8 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
-    can_be_saved = @building_block.valid?
-    puts "can be saved: " + can_be_saved.to_s
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = BuildingBlock.slug_starts_with(@building_block.slug).size
-      @building_block.slug = @building_block.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @building_block.save
+      if @building_block.save
         format.html { redirect_to @building_block, notice: 'Building Block was successfully created.' }
         format.json { render :show, status: :created, location: @building_block }
       else
@@ -106,6 +98,18 @@ class BuildingBlocksController < ApplicationController
     end
   end
 
+  def duplicates
+    @building_block = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @building_block = BuildingBlock.where(slug: current_slug).to_a
+      end
+    end
+    render json: @building_block, :only => [:name]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
@@ -118,8 +122,12 @@ class BuildingBlocksController < ApplicationController
         .require(:building_block)
         .permit(:name, :confirmation)
         .tap do |attr|
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
+            if (params[:duplicate].present?)
+              first_duplicate = BuildingBlock.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            end
           end
         end
     end

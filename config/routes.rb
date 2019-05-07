@@ -24,5 +24,12 @@ Rails.application.routes.draw do
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
+
+  get 'contact_duplicates', :to => 'contacts#duplicates'
+  get 'location_duplicates', :to => 'locations#duplicates'
+  get 'sector_duplicates', :to => 'sectors#duplicates'
+  get 'product_duplicates', :to => 'products#duplicates'
+  get 'building_block_duplicates', :to => 'building_blocks#duplicates'
+  get 'organization_duplicates', :to => 'organizations#duplicates'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

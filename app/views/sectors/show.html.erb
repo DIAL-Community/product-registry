@@ -1,38 +1,38 @@
-<div class="container">
-  <p id="notice"><%= notice %></p>
-  <div class="card">
-    <h5 class="card-header"><%= @sector.name %></h5>
-    <div class="card-body">
-      <p class="float-right mb-0" >
-        <%= link_to 'Back', sectors_path, :class => "card-link" %>
-        <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
-      </p>
-    </div>
+<p id="notice"><%= notice %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white"><%= @sector.name %></h5>
+  <div class="card-body">
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', sectors_path, :class => "card-link" %>
+      <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+    </p>
   </div>
 </div>
 
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-header clearfix">
-      <h5 class="float-left">Organization</h5>
-      <%= link_to 'Add', new_organization_path, :class => "card-link float-right" %>
-    </div>
-    <div class="card-body">
-      <% if @sector.organizations.count > 0 %>
-        <div class="card-columns">
-          <% @sector.organizations.each do |organization| %>
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><%= link_to organization.name, organization %></h5>
-                <h6 class="card-subtitle text-muted mb-2"><%= organization.website %></h6>
-                <%= link_to 'Edit', edit_organization_path(organization), :class => "card-link float-right mb-2" %>
-              </div>
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Organization</h5>
+    <%= link_to 'Add', new_organization_path, :class => "card-link text-white float-right" %>
+  </div>
+  <% if @sector.organizations.count > 0 %>
+    <div class="row">
+      <% @sector.organizations.each do |organization| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-1">
+              <h5 class="card-title"><%= link_to organization.name, organization %></h5>
+              <h6 class="card-subtitle text-muted mb-2"><%= organization.website %></h6>
             </div>
-          <% end %>
+            <div class="card-footer text-muted p-2">
+              <small>
+                <%= link_to 'Edit', edit_organization_path(organization), :class => "card-link float-right" %>
+              </small>
+            </div>
+          </div>
         </div>
-      <% else %>
-        <p class="card-text text-muted">We don't have any contact information for this organization.</p>
       <% end %>
     </div>
-  </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+  <% end %>
 </div>

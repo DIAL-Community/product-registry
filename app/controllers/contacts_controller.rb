@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:show, :new, :create, :edit, :update, :destroy]
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
 
   # GET /contacts
@@ -57,15 +57,8 @@ class ContactsController < ApplicationController
       end
     end
 
-    can_be_saved = @contact.valid?
-    if (!can_be_saved && !params[:confirmation].nil?)
-      size = Contact.slug_starts_with(@contact.slug).size
-      @contact.slug = @contact.slug + '_' + size.to_s
-      can_be_saved = true
-    end
-
     respond_to do |format|
-      if can_be_saved && @contact.save
+      if @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else
@@ -92,7 +85,7 @@ class ContactsController < ApplicationController
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @contact }
       else
-        format.html { render :edit }
+        format.html { render :edit, :locals => { :contact => @contact } }
         format.json { render json: @contact.errors, status: :unprocessable_entity }
       end
     end
@@ -108,6 +101,18 @@ class ContactsController < ApplicationController
     end
   end
 
+  def duplicates
+    @contacts = Array.new
+    if params[:current].present?
+      current_slug = slug_em(params[:current]);
+      original_slug = slug_em(params[:original]);
+      if (current_slug != original_slug)
+        @contacts = Contact.where(slug: current_slug).to_a
+      end
+    end
+    render json: @contacts, :only => [:name, :title]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
@@ -118,10 +123,14 @@ class ContactsController < ApplicationController
     def contact_params
       params
         .require(:contact)
-        .permit(:name, :email, :title, :selected_organizations, :confirmation)
+        .permit(:name, :email, :title, :selected_organizations, :duplicate, :reslug)
         .tap do |attr|
-          if (attr[:name].present?)
+          if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
+            if (params[:duplicate].present?)
+              first_duplicate = Contact.slug_starts_with(attr[:slug]).order(slug: :desc).first
+              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            end
           end
         end
     end
