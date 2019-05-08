@@ -3,6 +3,7 @@
 </p>
 
 <%= link_to "Export", export_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+<%= link_to 'Create New', new_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
 <div class="float-right pb-2">
   <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
@@ -11,48 +12,32 @@
   </div>
 <% end %>
 </div>
+<br clear="both"/>
 
-<table class="table">
-<thead class="thead-light">
-  <tr>
-    <th>Name</th>
-    <th>When endorsed</th>
-    <th>Website</th>
-    <th></th>
-  </tr>
-</thead>
+<% @organizations.each_slice(4) do |organization_row| %>
+<div class="card-deck">
+<% organization_row.each do |organization| %>
+  <div class="card">
+    <div class="card-header">
+      <small><%= link_to organization.name, organization %></small>
+    </div>
+    <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
+    <div class="card-body">
 
-<tbody>
-  <% if @organizations.count > 0 %>
-    <% @organizations.each do |organization| %>
-      <tr>
-        <td class="align-middle"><%= organization.name %></td>
-        <td class="align-middle">
-          <%= organization.when_endorsed.nil? ? '' : organization.when_endorsed.strftime("%m/%d/%Y") %>
-        </td>
-        <td class="align-middle">
-          <%= link_to organization.website.downcase.strip, organization.website.downcase.strip %>
-        </td>
-        <td class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
-          <div class="dropdown-menu">
-            <%= link_to 'View', organization, :class =>"dropdown-item" %>
-            <%= link_to 'Edit', edit_organization_path(organization), :class =>"dropdown-item" %>
-            <div class="dropdown-divider"></div>
-            <%= link_to "Delete", organization, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
-          </div>
-        </td>
-      </tr>
+      <p class="card-text"><small><a href="<%= organization.website %>" target="_new"><%= organization.website %> &#x29c9;</a></small>
+    </div>
+    <% if organization.is_endorser %>
+      <div class="card-footer">
+        <small class="text-muted"><%= image_tag('digiprins.png', width: 16) %> Endorser since <%= organization.when_endorsed.year %></small>
+      </div>
     <% end %>
-  <% else %>
-    <tr>
-      <td colspan="4">
-        <small class="text-muted">
-          We couldn't find organization matching to the search phrase. Do you want to <%= link_to 'create new organization?', new_organization_path %>
-        </small>
-      </td>
-    </tr>
+  </div>
+  <% if organization_row.size < 4  %>
+    <% (4 - organization_row.size).times do |x| %>
+      <div class="card card-placeholder">
+      </div>
+    <% end %>
   <% end %>
-</tbody>
-</table>
-<%= will_paginate @organizations, :class => "apple-pagination" %>
+<% end %>
+</div>
+<% end %>

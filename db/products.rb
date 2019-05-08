@@ -48,7 +48,6 @@ end
 Product.create(name: "Drupal", slug: 'drupal') if Product.where(slug: 'drupal').empty?
 Product.create(name: "Energydata.info", slug: 'energydata.info') if Product.where(slug: 'energydata.info').empty?
 Product.create(name: "Global Digital Library", slug: 'global_digital_library') if Product.where(slug: 'global_digital_library').empty?
-Product.create(name: "Google TensorFlow", slug: 'google_tensorflow') if Product.where(slug: 'google_tensorflow').empty?
 if Product.where(slug: 'ihris').empty?
   p = Product.create(name: "iHRIS", slug: 'ihris') if Product.where(slug: 'ihris').empty?
   p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
@@ -145,7 +144,7 @@ if Product.where(slug: 'odk').empty?
     digisquare_technical_documentation: 2, digisquare_software_productization: 2, digisquare_interoperability_and_data_accessibility: 2, digisquare_security: 2, digisquare_scalability: 2,
     product: p, has_osc: true, has_digisquare: true)
 end
-Product.create(name: "Odoo/OpenERP", slug: 'odoo/openerp') if Product.where(slug: 'odoo/openerp').empty?
+Product.create(name: "Odoo/OpenERP", slug: 'odoo_openerp') if Product.where(slug: 'odoo_openerp').empty?
 Product.create(name: "Open Concept Lab", slug: 'open_concept_lab') if Product.where(slug: 'open_concept_lab').empty?
 Product.create(name: "OpenCRVS", slug: 'opencrvs') if Product.where(slug: 'opencrvs').empty?
 if Product.where(slug: 'openelis').empty?
@@ -272,7 +271,7 @@ Product.create(name: "wikiHow", slug: 'wikihow') if Product.where(slug: 'wikihow
 Product.create(name: "Wikipedia", slug: 'wikipedia') if Product.where(slug: 'wikipedia').empty?
 Product.create(name: "WordPress", slug: 'wordpress') if Product.where(slug: 'wordpress').empty?
 p = Product.where(slug: 'bahmni')[0]
-p.includes = Product.where(slug: ['openmrs','odoo/openerp','openelis',])
+p.includes = Product.where(slug: ['openmrs','odoo_openerp','openelis',])
 p.interoperates_with = Product.where(slug: ['dhis',])
 p = Product.where(slug: 'mhero')[0]
 p.includes = Product.where(slug: ['ihris','dhis','rapidpro',])

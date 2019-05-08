@@ -1,0 +1,48 @@
+<div id="mynetwork" style="width:100%; height:900px"></div>
+
+<script type="text/javascript">
+    // create an array with nodes
+    var nodes = new vis.DataSet([
+    <% @products.each do |product| %>
+       <% if !product.include_relationships.empty? or !product.interop_relationships.empty? or !product.references.empty? %>
+          {id: <%= product.id %>, label: '<%= product.name %>',value: <%= product.include_relationships.size + product.interop_relationships.size + product.references.size %>},
+      <% end %>
+    <% end %>
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+    <% @product_relationships.each do |product_rel| %>
+        {from: <%= product_rel.from_product.id %>, to: <%= product_rel.to_product.id %>
+        <% if product_rel.relationship_type == 'contains' %>
+          , color: {color:'#5b90e6', inherit:false}, dashes: false
+        <% elsif product_rel.relationship_type == 'interoperates_with' %>
+          , color: {color:'#CD6155', inherit:false}, dashes: [5,5] //#64c3ce (teal), #8551ff (tanzanite)
+        <% end %>
+        },
+    <% end %>
+    ]);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+      edges: { arrows: { to: { enabled: true, scaleFactor: .5 } } },
+      physics: { repulsion: { nodeDistance: 10 } },
+      nodes: {
+        shape: 'dot',
+        scaling: {
+          min: 1,
+          max: <%= @products.count / 3 %>
+        }
+      }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+</script>

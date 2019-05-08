@@ -1,227 +1,147 @@
 <p id="notice"><%= notice %></p>
-<div class="card">
-  <h5 class="card-header bg-secondary text-white"><%= @product.name %></h5>
-  <div class="card-body">
-    <h6 class="card-text text-muted mb-2">
-      <strong>Website:
-      </strong><%= @product.website %>
-    </h6>
-    <p class="float-right mb-0">
-      <%= link_to 'Back', products_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %>
-    </p>
+
+<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+<br clear="both"/>
+<br/>
+<div class="card-deck">
+  <div class="card">
+    <h5 class="card-header"><%= @product.name %></h5>
+    <%= image_tag(@product.image_file, width: 200) %>
+    <div class="card-body">
+      <% if !@product.website.nil? and !@product.website.empty? %>
+      <h6 class="card-text text-muted mb-2">
+        <strong>Website:
+        </strong><%= @product.website %>
+      </h6>
+      <% end %>
+      <p class="float-right mb-0">
+        <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %></small>
+      </p>
+    </div>
   </div>
 </div>
 
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Building Blocks</h5>
-    <%= link_to 'Add', new_building_block_path, :class => "card-link text-white float-right" %>
-  </div>
-  <% if @product.building_blocks.count > 0 %>
-    <div class="row">
-      <% @product.building_blocks.each do |building_block| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body pb-1">
-              <h5 class="card-title"><%= link_to building_block.name, building_block %></h5>
+<div class="card-deck">
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Interoperable Products</h5>
+      <%= link_to 'Add', new_product_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @product.interoperates_with.count > 0 %>
+        <% @product.interoperates_with.each_slice(3) do |product_row| %>
+        <div class="card-deck">
+          <% product_row.each do |product| %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to product.name, product %></h5>
+                <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+              </div>
             </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_building_block_path(building_block), :class => "card-link float-right" %>
-              </small>
-            </div>
-          </div>
+          <% end %>
+          <% if product_row.size < 3  %>
+            <% (3 - product_row.size).times do |x| %>
+              <div class="card card-placeholder">
+              </div>
+            <% end %>
+          <% end %>
         </div>
+        <%end %>
+      <% else %>
+        <p class="card-text text-muted">We don't have any interoperating information for this product.</p>
       <% end %>
     </div>
-  <% else %>
-    <p class="card-text text-muted">We don't have any building block information for this product.</p>
-  <% end %>
-</div>
-
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Interoperable Products</h5>
-    <%= link_to 'Add', new_product_path, :class => "card-link text-white float-right" %>
   </div>
-  <% if @product.interoperates_with.count > 0 %>
-    <div class="row">
-      <% @product.interoperates_with.each do |product| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body pb-1">
-              <h5 class="card-title"><%= link_to product.name, product %></h5>
+
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">Included Products</h5>
+      <%= link_to 'Add', new_product_path, :class => "card-link float-right" %>
+    </div>
+    <div class="card-body">
+      <% if @product.includes.count > 0 %>
+        <% @product.includes.each_slice(3) do |product_row| %>
+        <div class="card-deck">
+          <% product_row.each do |product| %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><%= link_to product.name, product %></h5>
+                <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+              </div>
             </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_product_path(product), :class => "card-link float-right" %>
-              </small>
-            </div>
-          </div>
+          <% end %>
+          <% if product_row.size < 3  %>
+            <% (3 - product_row.size).times do |x| %>
+              <div class="card card-placeholder">
+              </div>
+            <% end %>
+          <% end %>
         </div>
+        <% end %>
+      <% else %>
+        <p class="card-text text-muted">We don't have any includes information for this product.</p>
       <% end %>
     </div>
-  <% else %>
-    <p class="card-text text-muted">We don't have any interoperating  information for this product.</p>
-  <% end %>
+  </div>
 </div>
 
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Included Products</h5>
-    <%= link_to 'Add', new_product_path, :class => "card-link text-white float-right" %>
-  </div>
-  <% if @product.includes.count > 0 %>
-    <div class="row">
-      <% @product.includes.each do |product| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body pb-1">
-              <h5 class="card-title"><%= link_to product.name, product %></h5>
+<div class="card-deck">
+    <div class="card">
+      <h5 class="card-header">Digital Square Maturity</h5>
+      <div class="card-body text-center">
+        <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
+          <% @digisquare_maturity.each do |digisquare_maturity_category| %>
+            <div class="digisquare-gauge">
+             <div class="needle" style="transform: rotate(<%= 90 + 18*(@product.maturity_scores[digisquare_maturity_category['core']])%>deg)"></div>
             </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_product_path(product), :class => "card-link float-right" %>
-              </small>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p class="card-text text-muted">We don't have any includes information for this product.</p>
-  <% end %>
-</div>
-
-<div class="card mt-4 mb-4">
-  <div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="osc-maturity-tab" data-toggle="tab" href="#osc-maturity" role="tab" aria-controls="osc-maturity" aria-selected="true">
-          OSC Maturity
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digi-square-maturity" role="tab" aria-controls="digi-square" aria-selected="false">
-          Digital Square Maturity
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="card-body">
-    <div class="tab-content maturity-element">
-      <div class="tab-pane fade show active" id="osc-maturity" role="tabpanel" aria-labelledby="osc-maturity-tab">
-        <% if !@product.product_assessment.has_osc %>
-          <% if !has_osc_assessment(@product.product_assessment) %>
-            <div class="alert alert-primary" role="alert">
-              This product has not been evaluated with this maturity model.
-            </div>
-          <% else %>
-            <div class="alert alert-warning" role="alert">
-              This product evaluation is started but the evaluation process is not complete yet.
-            </div>
+            <br clear="both"/>
+            <small><%= digisquare_maturity_category['core'] %>:<%= @product.maturity_scores[digisquare_maturity_category['core']] %></small>
+            <br clear="both"/>
           <% end %>
         <% else %>
-          <div class="alert alert-success" role="alert">
-            This product evaluation with this maturity model is completed.
-          </div>
-        <% end %>
-        <% if @product.product_assessment.has_osc or has_osc_assessment(@product.product_assessment) %>
-          <% @osc_maturity.each do |osc_maturity| %>
-            <div class="list-group">
-              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
-                <h4 class="mb-1"><%= osc_maturity["header"] %></h4>
-              </div>
-              <% osc_maturity["items"].each do |item| %>
-                <div class="list-group-item align-items-start">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1"><%= item["code"] %></h6>
-                    <i class="
-                         <%= @product.product_assessment.send('osc_' + item["code"].downcase) ? 'fas fa-check-circle text-success' : 'far fa-circle' %>"></i>
-                  </div>
-                  <p class="mb-1"><%= item["desc"].html_safe %></p>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-      <div class="tab-pane fade" id="digi-square-maturity" role="tabpanel" aria-labelledby="digi-square-tab">
-        <% if !@product.product_assessment.has_digisquare %>
-          <% if !has_digisquare_assessment(@product.product_assessment) %>
-            <div class="alert alert-primary" role="alert">
-              This product has not been evaluated with this maturity model.
-            </div>
-          <% else %>
-            <div class="alert alert-warning" role="alert">
-              This product evaluation is started but the evaluation process is not complete yet.
-            </div>
-          <% end %>
-        <% else %>
-          <div class="alert alert-success" role="alert">
-            This product evaluation with this maturity model is completed.
-          </div>
-        <% end %>
-        <% if @product.product_assessment.has_digisquare or has_digisquare_assessment(@product.product_assessment) %>
-          <% @digisquare_maturity.each do |digisquare_maturity| %>
-            <div class="list-group">
-              <div class="list-group-item align-items-start text-light" style="background-color: #2e3842;">
-                <h4 class="mb-1"><%= digisquare_maturity["core"] %></h4>
-              </div>
-              <% digisquare_maturity["sub-indicators"].each do |sub_indicator| %>
-                <div class="list-group-item">
-                  <div class="list-group">
-                    <div class="list-group-item align-items-start" style="background-color: #c9daf8;">
-                      <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
-                    </div>
-
-                    <% if !@product.product_assessment.send(sub_indicator["code"]) %>
-                      <div class="list-group-item align-items-start">
-                        <p class="mb-1">Maturity indicator is not assigned.</p>
-                      </div>
-                    <% end %>
-
-                    <% if @product.product_assessment.send(sub_indicator["code"]) == 1 %>
-                    <div class="list-group-item align-items-start" style="background-color: #e6b8af;">
-                      <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">Low</h6>
-                        <i class="
-                           <%= @product.product_assessment.send(sub_indicator["code"]) == 1 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                      </div>
-                      <p class="mb-1"><%= sub_indicator["low"].html_safe %></p>
-                    </div>
-                    <% end %>
-
-                    <% if @product.product_assessment.send(sub_indicator["code"]) == 2 %>
-                    <div class="list-group-item align-items-start" style="background-color: #fff2cc;">
-                      <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">Medium</h6>
-                        <i class="
-                           <%= @product.product_assessment.send(sub_indicator["code"]) == 2 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                      </div>
-                      <p class="mb-1"><%= sub_indicator["medium"].html_safe %></p>
-                    </div>
-                    <% end %>
-
-                    <% if @product.product_assessment.send(sub_indicator["code"]) == 3 %>
-                    <div class="list-group-item align-items-start" style="background-color: #b6d7a8;">
-                      <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">High</h6>
-                        <i class="
-                           <%= @product.product_assessment.send(sub_indicator["code"]) == 3 ? 'fas fa-check-circle text-success' : 'far fa-check-circle' %>"></i>
-                      </div>
-                      <p class="mb-1"><%= sub_indicator["high"].html_safe %></p>
-                    </div>
-                    <% end %>
-
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
+          <small>This product hasn't been evaluated with Digital Square's maturity model.</small>
         <% end %>
       </div>
     </div>
-  </div>
+    <div class="card">
+      <h5 class="card-header">Open Source Center Maturity</h5>
+      <div class="card-body">
+        <% if !@product.product_assessment.nil? and @product.product_assessment.has_osc %>
+          <small>
+          <ul>
+            <% @osc_maturity.each do |osc_maturity| %>
+              <li>
+                  <strong><%= osc_maturity["header"] %></strong>:
+                  <big><%= @product.maturity_scores[osc_maturity['header']]['score'] %></big> /
+                  <%= @product.maturity_scores[osc_maturity['header']]['total'] %>
+              </li>
+            <% end %>
+          </ul>
+          </small>
+        <% else %>
+          <small>This product hasn't been evaluated with the OSC's maturity model.</small>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header clearfix">
+        <h5 class="float-left">Building Blocks</h5>
+        <%= link_to 'Add', new_building_block_path, :class => "card-link float-right" %>
+      </div>
+      <div class="card-body">
+        <% if @product.building_blocks.count > 0 %>
+            <% @product.building_blocks.each do |building_block| %>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><small><%= link_to building_block.name, building_block %></small></h5>
+                </div>
+              </div>
+              <br clear="both"/>
+            <% end %>
+        <% else %>
+          <p class="card-text text-muted">We don't have any building block information for this product.</p>
+        <% end %>
+      </div>
+    </div>
 </div>

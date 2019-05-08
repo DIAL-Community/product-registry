@@ -1,0 +1,58 @@
+<p id="notice">
+  <%= notice %>
+</p>
+
+<%= link_to "Export", export_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+<div class="float-right pb-2">
+  <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag "Search", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+</div>
+
+<table class="table">
+<thead class="thead-light">
+  <tr>
+    <th>Name</th>
+    <th>When endorsed</th>
+    <th>Website</th>
+    <th></th>
+  </tr>
+</thead>
+
+<tbody>
+  <% if @organizations.count > 0 %>
+    <% @organizations.each do |organization| %>
+      <tr>
+        <td class="align-middle"><%= organization.name %></td>
+        <td class="align-middle">
+          <%= organization.when_endorsed.nil? ? '' : organization.when_endorsed.strftime("%m/%d/%Y") %>
+        </td>
+        <td class="align-middle">
+          <%= link_to organization.website.downcase.strip, organization.website.downcase.strip %>
+        </td>
+        <td class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+          <div class="dropdown-menu">
+            <%= link_to 'View', organization, :class =>"dropdown-item" %>
+            <%= link_to 'Edit', edit_organization_path(organization), :class =>"dropdown-item" %>
+            <div class="dropdown-divider"></div>
+            <%= link_to "Delete", organization, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="4">
+        <small class="text-muted">
+          We couldn't find organization matching to the search phrase. Do you want to <%= link_to 'create new organization?', new_organization_path %>
+        </small>
+      </td>
+    </tr>
+  <% end %>
+</tbody>
+</table>
+<%= will_paginate @organizations, :class => "apple-pagination" %>

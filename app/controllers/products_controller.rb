@@ -3,13 +3,19 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create]
 
+  def map
+    @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
+    @product_relationships = ProductProductRelationship.order(:id).eager_load(:from_product, :to_product)
+    render layout: 'layouts/raw'
+  end
+
   # GET /products
   # GET /products.json
   def index
     if params[:without_paging]
       @products = Product
           .name_contains(params[:search])
-          .order(:name)
+          .order(:slug)
       return
     end
 
@@ -17,12 +23,14 @@ class ProductsController < ApplicationController
       @products = Product
           .where(nil)
           .name_contains(params[:search])
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .order(:slug)
+          #.paginate(page: params[:page], per_page: 20)
     else
       @products = Product
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .order(:slug)
+          #.paginate(page: params[:page], per_page: 20)
     end
   end
 
