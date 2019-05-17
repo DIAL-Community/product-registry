@@ -6,7 +6,19 @@ namespace :sync do
   task :public_goods, [:path] => :environment do |task, params|
     Dir.entries(params[:path]).select{ |item| item.include? ".json" }.each do |entry|
       entry_data = File.read(File.join(params[:path], entry))
-      json_data = JSON.parse(entry_data)
+
+      begin
+        json_data = JSON.parse(entry_data)
+      rescue JSON::ParserError => e
+        puts "Skipping unparseable json file: " + entry
+        next
+      end
+      
+      if (!json_data.key?("type") && !json_data.key?("name"))
+        puts "Skipping unrecognized json file: " + entry
+        next
+      end
+
       if (json_data["type"].detect{ |element| element.downcase == "software" } != nil)
         new_product = Product.new
         existing_product = nil
