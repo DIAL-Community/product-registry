@@ -90,3 +90,40 @@ html {
     margin-left: -0.5rem;
   }
 }
+
+.office-popup {
+  position: absolute;
+  background-color: white;
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  padding: 0.1rem;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  bottom: -4rem;
+  left: -9.1rem;
+  min-width: 18rem;
+
+  &:after, &:before {
+    bottom: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-bottom-color: white;
+    border-width: 0.5rem;
+    left: 9rem;
+    margin-left: -0.5rem;
+  }
+
+  &:before {
+    border-bottom-color: #cccccc;
+    border-width: 0.5rem;
+    left: 9rem;
+    margin-left: -0.5rem;
+  }
+}
