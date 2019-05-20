@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+ postgres:
+  environment:
+    POSTGRES_USER: registry
+    POSTGRES_PASSWORD: Password!1
+    POSTGRES_DB: registry_development
+  image: postgres
+  ports:
+    - 5432:5432
+ web:
+  build:
+    context: .
+    target: build-web
+  entrypoint: /t4d/docker-entrypoint.sh
+  command: bundle exec rails s -p 3000 -b '0.0.0.0'
+  volumes:
+   - .:/t4d
+   - ./config/database.yml.docker:/t4d/config/database.yml
+  ports:
+   - 3000:3000
+  depends_on:
+   - postgres
+ cron:
+  build:
+    context: .
+    target: build-cron
+  command: cron -f
+  volumes:
+   - .:/t4d
+   - ./config/database.yml.docker:/t4d/config/database.yml
+

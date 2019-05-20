@@ -51,8 +51,8 @@ function setOfficeMarker(organization, location, lon, lat) {
   tooltip.setPosition(undefined);
   var element = tooltip.getElement();
   var content =
-    "<h5 class='text-muted'>" + organization + "</h5>" +
-    "<h6 class='text-muted'>" + location + "</h6>"
+    "<h5 class='text-muted m-2' style='font-size: 0.75em;'>" + organization + "</h5>" +
+    "<h6 class='text-muted m-2' style='font-size: 0.75em;'>" + location + "</h6>"
   $(element).html(content);
 }
 
@@ -99,20 +99,19 @@ var setupMapView = function() {  // Clean the map holder.
 
     var element = tooltip.getElement();
 
-    var fontSize = parseInt($("body").css("font-size"));
+    var fontSize = parseInt($("body").css("font-size")) * 0.75;
 
+    var baseBottom = -4 * fontSize;
     var headerHeight = parseInt($(element).find("h5").height());
-    var lineOfHeader = headerHeight / 24
-    if (lineOfHeader > 1) {
-      var baseBottom = parseInt($(element).css("bottom"));
+    var lineOfHeader = Math.floor(headerHeight / fontSize)
+    if (lineOfHeader >= 2) {
       $(element).css("bottom", baseBottom - lineOfHeader * fontSize);
     }
 
     var bodyHeight = parseInt($(element).find("h6").height());
-    var lineOfBody = bodyHeight / 19;
-    if (lineOfBody > 1) {
-      var baseBottom = parseInt($(element).css("bottom"));
-      $(element).css("bottom", baseBottom - (lineOfBody + 0.5) * fontSize);
+    var lineOfBody = Math.floor(bodyHeight / fontSize);
+    if (lineOfBody >= 2) {
+      $(element).css("bottom", baseBottom - lineOfBody * fontSize);
     }
   });
 }

@@ -1,30 +1,32 @@
 <p id="notice"><%= notice %></p>
-<div class="card">
-  <h5 class="card-header bg-secondary text-white">
+<div class="border rounded bg-secondary text-white clearfix border card-header">
+  <h5 class="float-left mb-0">
     <%= @organization.name %>
     <% if @organization.is_endorser %>
       <i class="fas fa-check-circle text-success ml-2"></i>
     <% end %>
   </h5>
-  <div class="card-body">
-    <p class="card-text">
-      <strong>Endorsed on:</strong>
-      <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>.
-    </p>
-    <p class="card-text">
-      <strong>Website:</strong>
-      <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip %>
-    </p>
+  <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link text-white float-right" %>
+</div>
 
-    <% if @organization.locations.find{|location| location.location_type == 'point'} %>
-      <div id="office" style="max-height: 28rem;"></div>
-      <div id="office-popup" class="map-popup"></div>
-    <% end %>
-
-    <p class="float-right mb-0" >
-      <%= link_to 'Back', organizations_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
-    </p>
+<div class="mt-2">
+  <div class="row">
+    <div class="col-lg-4 col-12">
+      <% if @organization.locations.find{|location| location.location_type == 'point'} %>
+        <div id="office" style="max-height: 28rem;"></div>
+        <div id="office-popup" class="office-popup"></div>
+      <% end %>
+    </div>
+    <div class="col-lg-8 col-12">
+      <p class="m-2">
+        <strong>Endorsed on:</strong>
+        <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
+      </p>
+      <p class="m-2">
+        <strong>Website:</strong>
+        <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip %>
+      </p>
+    </div>
   </div>
 </div>
 

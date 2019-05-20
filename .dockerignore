@@ -1,0 +1,14 @@
+.git
+.dockerignore
+.byebug_history
+log/*
+tmp/*
+
+/node_modules
+/yarn-error.log
+
+.byebug_history
+.DS_Store
+
+public/export.xls
+public/export.xlsx

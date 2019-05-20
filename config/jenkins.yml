@@ -1,0 +1,9 @@
+development:
+  jenkins_url: http://142.93.75.198:8080
+  jenkins_user: t4d
+  jenkins_password: t4d
+
+production:
+  jenkins_url: http://142.93.75.198:8080
+  jenkins_user: t4d
+  jenkins_password: t4d

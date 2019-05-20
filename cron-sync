@@ -1,0 +1,12 @@
+PATH=/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUBY_MAJOR=2.6
+RUBY_VERSION=2.6.3
+RUBY_DOWNLOAD_SHA256=11a83f85c03d3f0fc9b8a9b6cad1b2674f26c5aaa43ba858d4b0fcc2b54171e1
+GEM_HOME=/usr/local/bundle
+BUNDLE_PATH=/usr/local/bundle
+BUNDLE_SILENCE_ROOT_WARNING=1
+BUNDLE_APP_CONFIG=/usr/local/bundle
+BUNDLER_VERSION=2.0.1
+HOME=/root
+
+* * * * *   /t4d/sync.sh >> /var/log/cron.log 2>&1

@@ -16,6 +16,15 @@
     <%= form.label :website %>
   </fieldset>
 
+  <%= form.hidden_field :is_launchable, :value => false %>
+  <%= form.check_box :is_launchable, {}, true, false %>
+  <label class="form-label-group mt-2" for="is_launchable">Check to indicate product is auto-launchable.</label>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :docker_image, id: :docker_image, :class => "form-control", :placeholder => "Docker Image" %>
+    <%= form.label :docker_image %>
+  </fieldset>
+
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     Building Blocks
   </h6>
