@@ -21,12 +21,4 @@ services:
    - 3000:3000
   depends_on:
    - postgres
- cron:
-  build:
-    context: .
-    target: build-cron
-  command: cron -f
-  volumes:
-   - .:/t4d
-   - ./config/database.yml.docker:/t4d/config/database.yml
-
+ 
