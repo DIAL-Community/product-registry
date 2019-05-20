@@ -1,0 +1,6 @@
+<p class="card-text text-muted">Automatically launch an instance this product </p>
+<% if !@launched %>
+    <%= link_to 'Launch', product_launch_path(@product.slug), :class => "btn btn-primary ml-3", :remote => true %>
+<% else %>
+    <p class="card-text text-muted"><%= @launch_message %></p>
+<% end %>

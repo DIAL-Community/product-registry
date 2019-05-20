@@ -15,6 +15,20 @@
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Automatic Launch</h5>
+  </div id="autolaunch">
+  <% if @product.is_launchable %>
+    <p class="card-text text-muted">Docker hub image: <%= @product.docker_image %></p>
+    <div id="launchdata">
+    <%= render partial: "launch" %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">This product is not configured for auto-launch</p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0">Building Blocks</h5>
     <%= link_to 'Add', new_building_block_path, :class => "card-link text-white float-right" %>
   </div>
