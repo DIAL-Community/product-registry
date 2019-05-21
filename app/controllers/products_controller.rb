@@ -54,31 +54,42 @@ class ProductsController < ApplicationController
     jenkins_user = Rails.configuration.jenkins["jenkins_user"]
     jenkins_password = Rails.configuration.jenkins["jenkins_password"]
     build_name = params[:product_id]
-    logger.debug build_name
 
     @launched = true
     @launch_message = "Product is being launched on Digital Ocean droplet"
 
     # First, get the crumb that we need to validate the build
     url = jenkins_url+"/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,%22:%22,//crumb)"
-    logger.debug url
     uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     request.basic_auth(jenkins_user, jenkins_password)
-    response = http.request(request)
+    begin
+      response = Net::HTTP.start(uri.host, uri.port, :read_timeout => 10, :open_timeout => 10) {|http|
+        response = http.request(request)
+      }
+    rescue Net::OpenTimeout, StandardError => e
+      @launch_message = "Unable to communicate with Jenkins server"
+      logger.error "Unable to communicate with Jenkins server"
+      return
+    end 
 
     crumb_parts=response.body.split(':')
     jenkins_crumb=crumb_parts[1]
-    logger.debug jenkins_crumb
 
     # Add Jenkins-Crumb and crumb value to request header, Content-Type=text/xml
     url=jenkins_url+"/job/"+build_name+"/build"
     uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json', 'Jenkins-Crumb' => jenkins_crumb})
     request.basic_auth(jenkins_user, jenkins_password)
-    response = http.request(request)
+    begin
+      response = Net::HTTP.start(uri.host, uri.port, :read_timeout => 10, :open_timeout => 10) {|http|
+        response = http.request(request)
+      }
+    rescue StandardError => e
+      @launch_message = "Unable to launch Jenkins build"
+      logger.error "Unable to launch Jenkins build"
+      return
+    end 
 
     respond_to do |format|               
       format.js
