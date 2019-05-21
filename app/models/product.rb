@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   has_one :product_assessment
   has_and_belongs_to_many :organizations
+  has_and_belongs_to_many :sustainable_development_goals
   has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks
 
   has_many :include_relationships, -> { where(relationship_type: 'composed')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'

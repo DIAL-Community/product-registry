@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190515140930) do
+ActiveRecord::Schema.define(version: 20190521161155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -191,6 +191,13 @@ ActiveRecord::Schema.define(version: 20190515140930) do
     t.index ["product_id", "building_block_id"], name: "prod_blocks", unique: true
   end
 
+  create_table "products_sustainable_development_goals", id: false, force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "sustainable_development_goal_id", null: false
+    t.index ["product_id", "sustainable_development_goal_id"], name: "prod_sdgs", unique: true
+    t.index ["sustainable_development_goal_id", "product_id"], name: "sdgs_prods", unique: true
+  end
+
   create_table "sectors", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -198,6 +205,16 @@ ActiveRecord::Schema.define(version: 20190515140930) do
     t.datetime "updated_at", null: false
     t.boolean "is_displayable"
     t.index ["slug"], name: "index_sectors_on_slug", unique: true
+  end
+
+  create_table "sustainable_development_goals", force: :cascade do |t|
+    t.string "slug"
+    t.string "name"
+    t.string "long_title"
+    t.integer "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_sdgs_on_slug", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -230,4 +247,6 @@ ActiveRecord::Schema.define(version: 20190515140930) do
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
   add_foreign_key "products_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"
+  add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
+  add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
 end
