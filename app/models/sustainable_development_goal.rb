@@ -1,6 +1,8 @@
 class SustainableDevelopmentGoal < ApplicationRecord
   has_and_belongs_to_many :products
 
+  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
+
   def image_file
     if File.exist?(File.join('app','assets','images','sdgs',"#{slug}.png"))
       return "sdgs/#{slug}.png"

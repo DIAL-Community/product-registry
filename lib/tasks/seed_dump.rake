@@ -19,6 +19,9 @@ namespace :db do
           product.building_blocks.each do |bb|
             productfile.puts "  p.building_blocks << BuildingBlock.where(slug: '#{bb.slug}').limit(1)[0]"
           end
+          product.sustainable_development_goals.each do |sdg|
+            productfile.puts "  p.sustainable_development_goals << SustainableDevelopmentGoal.where(slug: '#{sdg.slug}').limit(1)[0]"
+          end
           if !product.product_assessment.nil?
             productfile.puts "  ProductAssessment.create("
             osc_maturity.each do |maturity|
@@ -45,7 +48,7 @@ namespace :db do
                 productfile.puts ""
               end
             end
-            productfile.puts "    product: p, has_osc: #{product.product_assessment.has_osc.to_s}, has_digisquare: #{product.product_assessment.has_digisquare.to_s})"
+            productfile.puts "    product: p, has_osc: #{product.product_assessment.has_osc.inspect}, has_digisquare: #{product.product_assessment.has_digisquare.inspect})"
 
           end
           productfile.puts "end"

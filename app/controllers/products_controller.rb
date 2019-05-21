@@ -23,12 +23,12 @@ class ProductsController < ApplicationController
       @products = Product
           .where(nil)
           .name_contains(params[:search])
-          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals)
           .order(:slug)
           #.paginate(page: params[:page], per_page: 20)
     else
       @products = Product
-          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals)
           .order(:slug)
           #.paginate(page: params[:page], per_page: 20)
     end
@@ -80,7 +80,7 @@ class ProductsController < ApplicationController
     request.basic_auth(jenkins_user, jenkins_password)
     response = http.request(request)
 
-    respond_to do |format|               
+    respond_to do |format|
       format.js
     end
   end
@@ -113,6 +113,13 @@ class ProductsController < ApplicationController
       end
     end
 
+    if (params[:selected_sustainable_development_goals])
+      params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
+        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
+        @product.sustainable_development_goals.push(sustainable_development_goal)
+      end
+    end
+
     respond_to do |format|
       if @product.save
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
@@ -129,32 +136,41 @@ class ProductsController < ApplicationController
   def update
     assign_maturity
 
+    products = Set.new
     if (params[:selected_interoperable_products])
-      products = Set.new
       params[:selected_interoperable_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
       end
-      @product.interoperates_with = products.to_a
     end
+    @product.interoperates_with = products.to_a
 
+    products = Set.new
     if (params[:selected_included_products])
-      products = Set.new
       params[:selected_included_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
       end
-      @product.includes = products.to_a
     end
+    @product.includes = products.to_a
 
+    building_blocks = Set.new
     if (params[:selected_building_blocks])
-      building_blocks = Set.new
       params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
         building_blocks.add(building_block)
       end
-      @product.building_blocks = building_blocks.to_a
     end
+    @product.building_blocks = building_blocks.to_a
+
+    sustainable_development_goals = Set.new
+    if (params[:selected_sustainable_development_goals])
+      params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
+        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
+        sustainable_development_goals.add(sustainable_development_goal)
+      end
+    end
+    @product.sustainable_development_goals = sustainable_development_goals.to_a
 
     respond_to do |format|
       if @product.update(product_params)
