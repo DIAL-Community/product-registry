@@ -10,3 +10,6 @@ BUNDLER_VERSION=2.0.1
 HOME=/root
 
 * * * * *   /t4d/sync.sh >> /var/log/cron.log 2>&1
+0 4 * * *   rails db:backup >> /var/log/cron.log 2>&1
+0 5 * * *   mpack -s "T4D Registry backup" /t4d/db/backups/registry.dump dmccann@digitalimpactalliance.org >> /var/log/cron.log 2>&1
+
