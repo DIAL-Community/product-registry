@@ -110,7 +110,6 @@ if Product.where(slug: 'mifos').empty?
     osc_im10: true, osc_im20: true,
     product: p, has_osc: true, has_digisquare: false)
 end
-Product.create(name: "MIT OpenSourceWare", slug: 'mit_opensourceware') if Product.where(slug: 'mit_opensourceware').empty?
 Product.create(name: "Moodle", slug: 'moodle') if Product.where(slug: 'moodle').empty?
 if Product.where(slug: 'motech').empty?
   p = Product.create(name: "MOTECH", slug: 'motech') if Product.where(slug: 'motech').empty?
