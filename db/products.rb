@@ -51,7 +51,6 @@ if Product.where(slug: 'ihris').empty?
   p = Product.create(name: "iHRIS", slug: 'ihris') if Product.where(slug: 'ihris').empty?
   p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
 end
-Product.create(name: "Khan Academy", slug: 'khan_academy') if Product.where(slug: 'khan_academy').empty?
 if Product.where(slug: 'librehealth').empty?
   p = Product.create(name: "LibreHealth", slug: 'librehealth') if Product.where(slug: 'librehealth').empty?
   ProductAssessment.create(
