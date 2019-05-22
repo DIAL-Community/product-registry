@@ -8,4 +8,7 @@ fi
 rails db:create
 rails db:migrate
 rails db:seed
+
+cron
+
 rails server
