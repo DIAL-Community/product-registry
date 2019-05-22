@@ -46,7 +46,6 @@ if Product.where(slug: 'dhis').empty?
     product: p, has_osc: false, has_digisquare: true)
 end
 Product.create(name: "Drupal", slug: 'drupal') if Product.where(slug: 'drupal').empty?
-Product.create(name: "Energydata.info", slug: 'energydata.info') if Product.where(slug: 'energydata.info').empty?
 Product.create(name: "Global Digital Library", slug: 'global_digital_library') if Product.where(slug: 'global_digital_library').empty?
 if Product.where(slug: 'ihris').empty?
   p = Product.create(name: "iHRIS", slug: 'ihris') if Product.where(slug: 'ihris').empty?
@@ -271,15 +270,15 @@ Product.create(name: "wikiHow", slug: 'wikihow') if Product.where(slug: 'wikihow
 Product.create(name: "Wikipedia", slug: 'wikipedia') if Product.where(slug: 'wikipedia').empty?
 Product.create(name: "WordPress", slug: 'wordpress') if Product.where(slug: 'wordpress').empty?
 p = Product.where(slug: 'bahmni')[0]
-p.includes = Product.where(slug: ['openmrs','odoo_openerp','openelis',])
+p.includes = Product.where(slug: ['odoo_openerp','openelis','openmrs',])
 p.interoperates_with = Product.where(slug: ['dhis',])
 p = Product.where(slug: 'mhero')[0]
-p.includes = Product.where(slug: ['ihris','dhis','rapidpro',])
+p.includes = Product.where(slug: ['dhis','ihris','rapidpro',])
 p = Product.where(slug: 'motech')[0]
-p.interoperates_with = Product.where(slug: ['dhis','commcare','openmrs',])
+p.interoperates_with = Product.where(slug: ['commcare','dhis','openmrs',])
 p = Product.where(slug: 'openlmis')[0]
-p.interoperates_with = Product.where(slug: ['dhis','commcare','openmrs',])
+p.interoperates_with = Product.where(slug: ['commcare','dhis','openmrs',])
 p = Product.where(slug: 'openmrs')[0]
 p.interoperates_with = Product.where(slug: ['open_concept_lab',])
 p = Product.where(slug: 'opensrp')[0]
-p.includes = Product.where(slug: ['openmrs','dhis','rapidpro','openlmis',])
+p.includes = Product.where(slug: ['dhis','openlmis','openmrs','rapidpro',])
