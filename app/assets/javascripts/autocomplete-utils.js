@@ -85,6 +85,10 @@ function addIncludedProduct(value, label) {
   addElement("base-selected-included-products", "selected_included_products", value, label);
 }
 
+function addSDG(value, label) {
+  addElement("base-selected-sustainable-development-goals", "selected_sustainable_development_goals", value, label);
+}
+
 var organizationAutoCompleteReady = function() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
@@ -115,8 +119,14 @@ var includeProductAutoCompleteReady = function() {
   $("#include-search").autocomplete(includeProductAutoComplete);
 }
 
+var sdgsAutoCompleteReady = function() {
+  var sdgsAutoComplete = autoComplete("/sustainable_development_goals.json?without_paging=true", addSDG)
+  $("#base-selected-sustainable-development-goals").hide();
+  $("#sustainable-development-goal-search").autocomplete(sdgsAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
 $(document).on('turbolinks:load', productAutoCompleteReady);
 $(document).on('turbolinks:load', interopProductAutoCompleteReady);
-$(document).on('turbolinks:load', includeProductAutoCompleteReady);
+$(document).on('turbolinks:load', sdgsAutoCompleteReady);

@@ -136,7 +136,7 @@ if Product.where(slug: 'odk').empty?
     osc_cs10: true, osc_cs20: true, osc_cs30: true, osc_cs40: true, osc_cs50: true,
     osc_in10: true, osc_in20: false, osc_in30: true,
     osc_im10: true, osc_im20: true,
-    digisquare_country_utilization: 3, digisquare_country_strategy: 2, digisquare_source_code_accessibility: 3, digisquare_funding_and_revenue: 3,
+    digisquare_country_utilization: 3, digisquare_country_strategy: 2, digisquare_digital_health_interventions: nil, digisquare_source_code_accessibility: 3, digisquare_funding_and_revenue: 3,
     digisquare_developer_contributor_and_implementor_community_enga: 3, digisquare_community_governance: 3, digisquare_software_roadmap: 2, digisquare_user_documentation: 2, digisquare_multilingual_support: 2,
     digisquare_technical_documentation: 2, digisquare_software_productization: 2, digisquare_interoperability_and_data_accessibility: 2, digisquare_security: 2, digisquare_scalability: 2,
     product: p, has_osc: true, has_digisquare: true)

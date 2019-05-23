@@ -103,6 +103,14 @@ html {
   border: none;
 }
 
+.snug {
+  padding: 0 !important;
+}
+
+.snug > .card-img-top {
+  padding: 0.1rem;
+}
+
 .card-img-top {
   padding: 0.5rem;
 }

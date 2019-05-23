@@ -1,42 +1,20 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1 float-right', target: "_blank" %>
 <br clear="both"/>
 
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Automatic Launch</h5>
-  </div id="autolaunch">
-  <% if @product.is_launchable %>
-    <p class="card-text text-muted">Docker hub image: <%= @product.docker_image %></p>
-    <div id="launchdata">
-    <%= render partial: "launch" %>
-    </div>
-  <% else %>
-    <p class="card-text text-muted">This product is not configured for auto-launch</p>
-  <% end %>
-</div>
+<h2><%= @product.name %></h2>
+<small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %></small><br clear="both"/>
+<%= image_tag(@product.image_file, width: 200) %>
+<br clear="both"/>
+<% if !@product.website.nil? and !@product.website.empty? %>
+<h6 class="card-text text-muted mb-2">
+  <strong>Website:
+  </strong><%= @product.website %>
+</h6>
+<% end %>
 
-<br/>
-<div class="card-deck">
-  <div class="card">
-    <h5 class="card-header"><%= @product.name %></h5>
-    <%= image_tag(@product.image_file, width: 200) %>
-    <div class="card-body">
-      <% if !@product.website.nil? and !@product.website.empty? %>
-      <h6 class="card-text text-muted mb-2">
-        <strong>Website:
-        </strong><%= @product.website %>
-      </h6>
-      <% end %>
-
-      <p class="float-right mb-0">
-        <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %></small>
-      </p>
-    </div>
-  </div>
-</div>
-
+<br clear="both"/>
 <div class="card-deck">
   <div class="card">
     <div class="card-header clearfix">
@@ -45,18 +23,20 @@
     </div>
     <div class="card-body">
       <% if @product.interoperates_with.count > 0 %>
-        <% @product.interoperates_with.each_slice(3) do |product_row| %>
+        <% @product.interoperates_with.each_slice(2) do |product_row| %>
         <div class="card-deck">
           <% product_row.each do |product| %>
             <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><%= link_to product.name, product %></h5>
-                <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+              <div class="card-body snug">
+                <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
+                <%= link_to product do %>
+                  <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+                <% end %>
               </div>
             </div>
           <% end %>
-          <% if product_row.size < 3  %>
-            <% (3 - product_row.size).times do |x| %>
+          <% if product_row.size < 2  %>
+            <% (2 - product_row.size).times do |x| %>
               <div class="card card-placeholder">
               </div>
             <% end %>
@@ -76,18 +56,20 @@
     </div>
     <div class="card-body">
       <% if @product.includes.count > 0 %>
-        <% @product.includes.each_slice(3) do |product_row| %>
+        <% @product.includes.each_slice(2) do |product_row| %>
         <div class="card-deck">
           <% product_row.each do |product| %>
             <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"><%= link_to product.name, product %></h5>
-                <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+              <div class="card-body snug">
+                <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
+                <%= link_to product do %>
+                  <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+                <% end %>
               </div>
             </div>
           <% end %>
-          <% if product_row.size < 3  %>
-            <% (3 - product_row.size).times do |x| %>
+          <% if product_row.size < 2  %>
+            <% (2 - product_row.size).times do |x| %>
               <div class="card card-placeholder">
               </div>
             <% end %>
@@ -96,6 +78,36 @@
         <% end %>
       <% else %>
         <p class="card-text text-muted">We don't have any includes information for this product.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header clearfix">
+      <h5 class="float-left">SDGs</h5>
+    </div>
+    <div class="card-body">
+      <% if @product.sustainable_development_goals.count > 0 %>
+        <% @product.sustainable_development_goals.each_slice(2) do |sdg_row| %>
+        <div class="card-deck">
+          <% sdg_row.each do |sdg| %>
+            <div class="card">
+              <div class="card-body snug">
+                <!-- <h5 class="card-title"><%= sdg.name %></h5> -->
+                <%= image_tag(sdg.image_file, width: 50, class: 'card-img-top align-middle') %>
+              </div>
+            </div>
+          <% end %>
+          <% if sdg_row.size < 2  %>
+            <% (2 - sdg_row.size).times do |x| %>
+              <div class="card card-placeholder">
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <% end %>
+      <% else %>
+        <p class="card-text text-muted">We don't have any sustainable development goal information for this product.</p>
       <% end %>
     </div>
   </div>
@@ -160,4 +172,18 @@
         <% end %>
       </div>
     </div>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Automatic Launch</h5>
+  </div id="autolaunch">
+  <% if @product.is_launchable %>
+    <p class="card-text text-muted">Docker hub image: <%= @product.docker_image %></p>
+    <div id="launchdata">
+    <%= render partial: "launch" %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">This product is not configured for auto-launch</p>
+  <% end %>
 </div>
