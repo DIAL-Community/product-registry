@@ -17,13 +17,11 @@ class Product < ApplicationRecord
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}%\\_")}
 
   def image_file
-    ['png','jpg','gif'].each do |extension|
-      if File.exist?(File.join('app','assets','images','products',"#{slug}.#{extension}"))
-        return "products/#{slug}.#{extension}"
-      end
+    if File.exist?(File.join('app','assets','images','products',"#{slug}.png"))
+      return "products/#{slug}.png"
+    else
+      return "products/prod_placeholder.png"
     end
-
-    "products/prod_placeholder.png"
   end
 
   def maturity_scores
