@@ -160,9 +160,10 @@ class ProductsController < ApplicationController
         sector = Sector.find(sector_id)
         sectors.add(sector)
       end
-      @product.sectors = sectors.to_a
     end
+    @product.sectors = sectors.to_a
 
+    products = Set.new
     if (params[:selected_interoperable_products])
       params[:selected_interoperable_products].keys.each do |product_id|
         product = Product.find(product_id)
