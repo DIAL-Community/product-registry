@@ -19,6 +19,34 @@
   </div>
 </div>
 
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Organization</h5>
+    <%= link_to 'Add', new_organization_path, :class => "card-link text-white float-right" %>
+  </div>
+  <% if @product.organizations.count > 0 %>
+    <div class="row">
+      <% @product.organizations.each do |organization| %>
+        <div class="col-6 col-lg-2 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-1">
+              <h5 class="card-title"><%= link_to organization.name, organization %></h5>
+              <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
+            </div>
+            <div class="card-footer text-muted p-2">
+              <small>
+                <%= link_to 'Edit', edit_organization_path(organization), :class => "card-link float-right" %>
+              </small>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any organization information for this product.</p>
+  <% end %>
+</div>
+
 <div class="card-deck mt-4">
   <div class="card">
     <div class="card-header clearfix">
