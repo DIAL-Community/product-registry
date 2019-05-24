@@ -37,6 +37,10 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    # All of this data will be passed to the launch partial and used by javascript
+    @jenkins_url = Rails.configuration.jenkins["jenkins_url"]
+    @jenkins_user = Rails.configuration.jenkins["jenkins_user"]
+    @jenkins_password = Rails.configuration.jenkins["jenkins_password"]
   end
 
   # GET /products/new
@@ -47,53 +51,6 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
-  end
-
-  def launch
-    jenkins_url = Rails.configuration.jenkins["jenkins_url"]
-    jenkins_user = Rails.configuration.jenkins["jenkins_user"]
-    jenkins_password = Rails.configuration.jenkins["jenkins_password"]
-    build_name = params[:product_id]
-
-    @launched = true
-    @launch_message = "Product is being launched on Digital Ocean droplet"
-
-    # First, get the crumb that we need to validate the build
-    url = jenkins_url+"/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,%22:%22,//crumb)"
-    uri = URI(url)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    request.basic_auth(jenkins_user, jenkins_password)
-    begin
-      response = Net::HTTP.start(uri.host, uri.port, :read_timeout => 10, :open_timeout => 10) {|http|
-        response = http.request(request)
-      }
-    rescue Net::OpenTimeout, StandardError => e
-      @launch_message = "Unable to communicate with Jenkins server"
-      logger.error "Unable to communicate with Jenkins server"
-      return
-    end 
-
-    crumb_parts=response.body.split(':')
-    jenkins_crumb=crumb_parts[1]
-
-    # Add Jenkins-Crumb and crumb value to request header, Content-Type=text/xml
-    url=jenkins_url+"/job/"+build_name+"/build"
-    uri = URI(url)
-    request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json', 'Jenkins-Crumb' => jenkins_crumb})
-    request.basic_auth(jenkins_user, jenkins_password)
-    begin
-      response = Net::HTTP.start(uri.host, uri.port, :read_timeout => 10, :open_timeout => 10) {|http|
-        response = http.request(request)
-      }
-    rescue StandardError => e
-      @launch_message = "Unable to launch Jenkins build"
-      logger.error "Unable to launch Jenkins build"
-      return
-    end 
-
-    respond_to do |format|
-      format.js
-    end
   end
 
   # POST /products
