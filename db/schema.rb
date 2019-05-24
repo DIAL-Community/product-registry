@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(version: 20190521173413) do
     t.index ["product_id", "sector_id"], name: "index_products_sectors_on_product_id_and_sector_id"
     t.index ["sector_id", "product_id"], name: "index_products_sectors_on_sector_id_and_product_id"
   end
-  
+
   create_table "products_sustainable_development_goals", id: false, force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "sustainable_development_goal_id", null: false

@@ -3,41 +3,23 @@
 <%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1 float-right', target: "_blank" %>
 <br clear="both"/>
 
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Automatic Launch</h5>
-  </div id="autolaunch">
-  <% if @product.is_launchable %>
-    <p class="card-text text-muted">Docker hub image: <%= @product.docker_image %></p>
-    <div id="launchdata">
-    <%= render partial: "launch" %>
-    </div>
-  <% else %>
-    <p class="card-text text-muted">This product is not configured for auto-launch</p>
-  <% end %>
-</div>
-
-<br/>
-<div class="card-deck">
-  <div class="card">
-    <h5 class="card-header"><%= @product.name %></h5>
-    <%= image_tag(@product.image_file, width: 200, class: "ml-3") %>
-    <div class="card-body">
-      <% if !@product.website.nil? and !@product.website.empty? %>
-      <h6 class="card-text text-muted mb-2">
-        <strong>Website:
-        </strong><%= @product.website %>
-      </h6>
-      <% end %>
-    </div>
-    <div class="card-footer">
-      <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link float-right" %></small>
-    </div>
+<div class="card mt-4">
+  <h5 class="card-header"><%= @product.name %></h5>
+  <%= image_tag(@product.image_file, width: 200, class: "ml-3") %>
+  <div class="card-body">
+    <% if !@product.website.nil? and !@product.website.empty? %>
+    <h6 class="card-text text-muted mb-2">
+      <strong>Website:
+      </strong><%= @product.website %>
+    </h6>
+    <% end %>
+  </div>
+  <div class="card-footer p-2">
+    <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link float-right" %></small>
   </div>
 </div>
 
-<br clear="both"/>
-<div class="card-deck">
+<div class="card-deck mt-4">
   <div class="card">
     <div class="card-header clearfix">
       <h5 class="float-left">Interoperable Products</h5>
