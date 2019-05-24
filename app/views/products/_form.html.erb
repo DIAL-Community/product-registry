@@ -26,6 +26,33 @@
   </fieldset>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    Assigned Organizations
+  </h6>
+  <% if !@organization %>
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
+      <label for="country-organization">
+        Search and assign organizations ...
+      </label>
+    </fieldset>
+  <% end %>
+  <div class="row">
+    <div id="base-selected-organizations" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+          <% if !@organization %>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <% end %>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     Assigned Sectors
   </h6>
   <fieldset class="form-label-group mt-2">
@@ -255,6 +282,9 @@
 <% end %>
 
 <script>
+  <% product.organizations.sort_by{|organization| organization.name }.each do |organization| %>
+    addOrganization('<%= organization.id %>', '<%= organization.name %>');
+  <% end %>
   <% product.building_blocks.order("name").each do |block| %>
     addBuildingBlock('<%= block.id %>', '<%= block.name %>');
   <% end %>

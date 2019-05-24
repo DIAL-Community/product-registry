@@ -60,10 +60,17 @@ class ProductsController < ApplicationController
     @product.product_assessment ||= ProductAssessment.new
     assign_maturity
 
+    if (params[:selected_organizations])
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        @products.organizations.push(organization)
+      end
+    end
+
     if (params[:selected_sectors].present?)
       params[:selected_sectors].keys.each do |sector_id|
-        @sector = Sector.find(sector_id)
-        @organization.sectors.push(@sector)
+        sector = Sector.find(sector_id)
+        @products.sectors.push(sector)
       end
     end
 
@@ -110,6 +117,15 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     assign_maturity
+
+    organizations = Set.new
+    if (params[:selected_organizations])
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        organizations.add(organization)
+      end
+    end
+    @product.organizations = organizations.to_a
 
     sectors = Set.new
     if (params[:selected_sectors].present?)

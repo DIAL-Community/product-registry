@@ -13,6 +13,12 @@ function productsReady() {
   var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
   $('#base-selected-sectors').hide();
   $("#sector-search").autocomplete(sectorAutoComplete);
+
+  var organizationAutoCompleteReady = function() {
+    var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
+    $("#base-selected-organizations").hide();
+    $("#organization-search").autocomplete(organizationAutoComplete);
+  }
 }
 
 // Attach all of them to the browser, page, and turbolinks event.

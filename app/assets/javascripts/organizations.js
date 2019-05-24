@@ -116,9 +116,10 @@ var setupMapView = function() {  // Clean the map holder.
   });
 }
 
-var setupFormView = function() {
-  // Init the datepicker field.
-  $('#organization_when_endorsed').datepicker();
+var setupAutoComplete = function() {
+  var productAutoComplete = autoComplete("/products.json?without_paging=true", addProduct)
+  $('#base-selected-products').hide();
+  $("#product-search").autocomplete(productAutoComplete);
 
   // Init the autocomplete for the sector field.
   var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
@@ -129,6 +130,12 @@ var setupFormView = function() {
   var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
+
+}
+
+var setupFormView = function() {
+  // Init the datepicker field.
+  $('#organization_when_endorsed').datepicker();
 
   $("#office-label").autocomplete({
     source: function(request, response) {
@@ -176,3 +183,6 @@ var setupFormView = function() {
 $(document).on('organizations#new:loaded', setupFormView);
 $(document).on('organizations#show:loaded', setupMapView);
 $(document).on('organizations#edit:loaded', setupFormView);
+
+$(document).on('organizations#new:loaded', setupAutoComplete);
+$(document).on('organizations#edit:loaded', setupAutoComplete);
