@@ -14,30 +14,33 @@
 </div>
 <br clear="both"/>
 
-<% @organizations.each_slice(4) do |organization_row| %>
-<div class="card-deck">
-<% organization_row.each do |organization| %>
-  <div class="card">
-    <div class="card-header">
-      <small><%= link_to organization.name, organization %></small>
-    </div>
-    <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
-    <div class="card-body">
-
-      <p class="card-text"><small><a href="<%= organization.website %>" target="_new"><%= organization.website %> &#x29c9;</a></small>
-    </div>
-    <% if organization.is_endorser %>
-      <div class="card-footer">
-        <small class="text-muted"><%= image_tag('digiprins.png', width: 16) %> Endorser since <%= organization.when_endorsed.year %></small>
+<div class="row">
+  <% @organizations.each do |organization| %>
+    <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-3">
+      <div class="card">
+        <div class="card-header">
+          <small><%= link_to organization.name, organization %></small>
+        </div>
+        <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
+        <div class="card-body">
+          <% if organization.website.present? %>
+          <p class="card-text">
+            <small>
+              <a href="<%= organization.website %>" target="_new">
+                <%= organization.website %> &#x29c9;
+              </a>
+            </small>
+          </p>
+          <% end %>
+        </div>
+        <% if organization.is_endorser %>
+          <div class="card-footer">
+            <small class="text-muted">
+              <%= image_tag('digiprins.png', width: 16) %> Endorser since <%= organization.when_endorsed.year %>
+            </small>
+          </div>
+        <% end %>
       </div>
-    <% end %>
-  </div>
-  <% if organization_row.size < 4  %>
-    <% (4 - organization_row.size).times do |x| %>
-      <div class="card card-placeholder">
-      </div>
-    <% end %>
+    </div>
   <% end %>
-<% end %>
 </div>
-<% end %>

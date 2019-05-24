@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190521161155) do
+ActiveRecord::Schema.define(version: 20190521173413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,6 +189,13 @@ ActiveRecord::Schema.define(version: 20190521161155) do
     t.bigint "product_id", null: false
     t.index ["building_block_id", "product_id"], name: "block_prods", unique: true
     t.index ["product_id", "building_block_id"], name: "prod_blocks", unique: true
+  end
+
+  create_table "products_sectors", id: false, force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "sector_id", null: false
+    t.index ["product_id", "sector_id"], name: "index_products_sectors_on_product_id_and_sector_id"
+    t.index ["sector_id", "product_id"], name: "index_products_sectors_on_sector_id_and_product_id"
   end
 
   create_table "products_sustainable_development_goals", id: false, force: :cascade do |t|

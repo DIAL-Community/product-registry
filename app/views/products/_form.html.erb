@@ -26,6 +26,29 @@
   </fieldset>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    Assigned Sectors
+  </h6>
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="sector-search" class="form-control" placeholder="Search and assign sectors ..." />
+    <label for="sector-search">
+      Search and assign sectors ...
+    </label>
+  </fieldset>
+  <div class="row">
+    <div id="base-selected-sectors" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+          <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+            <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+          </a>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     Building Blocks
   </h6>
   <fieldset class="form-label-group mt-2">

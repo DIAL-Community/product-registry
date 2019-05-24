@@ -3,19 +3,23 @@
 <%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1 float-right', target: "_blank" %>
 <br clear="both"/>
 
-<h2><%= @product.name %></h2>
-<small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %></small><br clear="both"/>
-<%= image_tag(@product.image_file, width: 200) %>
-<br clear="both"/>
-<% if !@product.website.nil? and !@product.website.empty? %>
-<h6 class="card-text text-muted mb-2">
-  <strong>Website:
-  </strong><%= @product.website %>
-</h6>
-<% end %>
+<div class="card mt-4">
+  <h5 class="card-header"><%= @product.name %></h5>
+  <%= image_tag(@product.image_file, width: 200, class: "ml-3") %>
+  <div class="card-body">
+    <% if !@product.website.nil? and !@product.website.empty? %>
+    <h6 class="card-text text-muted mb-2">
+      <strong>Website:
+      </strong><%= @product.website %>
+    </h6>
+    <% end %>
+  </div>
+  <div class="card-footer p-2">
+    <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link float-right" %></small>
+  </div>
+</div>
 
-<br clear="both"/>
-<div class="card-deck">
+<div class="card-deck mt-4">
   <div class="card">
     <div class="card-header clearfix">
       <h5 class="float-left">Interoperable Products</h5>

@@ -103,6 +103,13 @@ class ProductsController < ApplicationController
     @product.product_assessment ||= ProductAssessment.new
     assign_maturity
 
+    if (params[:selected_sectors].present?)
+      params[:selected_sectors].keys.each do |sector_id|
+        @sector = Sector.find(sector_id)
+        @organization.sectors.push(@sector)
+      end
+    end
+
     if (params[:selected_interoperable_products])
       params[:selected_interoperable_products].keys.each do |product_id|
         to_product = Product.find(product_id)
@@ -146,6 +153,15 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     assign_maturity
+
+    sectors = Set.new
+    if (params[:selected_sectors].present?)
+      params[:selected_sectors].keys.each do |sector_id|
+        sector = Sector.find(sector_id)
+        sectors.add(sector)
+      end
+    end
+    @product.sectors = sectors.to_a
 
     products = Set.new
     if (params[:selected_interoperable_products])
@@ -250,7 +266,8 @@ class ProductsController < ApplicationController
     def product_params
       params
         .require(:product)
-        .permit(:name, :website, :is_launchable, :docker_image, :has_osc, :osc_maturity, :has_digisquare, :digisquare_maturity, :confirmation)
+        .permit(:name, :website, :is_launchable, :docker_image, :has_osc, :osc_maturity, :has_digisquare,
+                :digisquare_maturity, :confirmation)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

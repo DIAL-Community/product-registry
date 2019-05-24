@@ -8,6 +8,11 @@ function productsReady() {
     $(this).parents(".dropdown").find(".btn").html($(this).html());
     $(this).parents(".dropdown").find("input").val($(this).attr("data-sub-indicator"));
   });
+
+  // Init the autocomplete for the sector field.
+  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
+  $('#base-selected-sectors').hide();
+  $("#sector-search").autocomplete(sectorAutoComplete);
 }
 
 // Attach all of them to the browser, page, and turbolinks event.

@@ -1,5 +1,6 @@
 class Sector < ApplicationRecord
   has_and_belongs_to_many :organizations
+  has_and_belongs_to_many :products, join_table: :products_sectors
 
   validates :name,  presence: true, length: { maximum: 300 }
 
