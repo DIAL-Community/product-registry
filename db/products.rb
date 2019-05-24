@@ -46,13 +46,11 @@ if Product.where(slug: 'dhis').empty?
     product: p, has_osc: false, has_digisquare: true)
 end
 Product.create(name: "Drupal", slug: 'drupal') if Product.where(slug: 'drupal').empty?
-Product.create(name: "Energydata.info", slug: 'energydata.info') if Product.where(slug: 'energydata.info').empty?
 Product.create(name: "Global Digital Library", slug: 'global_digital_library') if Product.where(slug: 'global_digital_library').empty?
 if Product.where(slug: 'ihris').empty?
   p = Product.create(name: "iHRIS", slug: 'ihris') if Product.where(slug: 'ihris').empty?
   p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
 end
-Product.create(name: "Khan Academy", slug: 'khan_academy') if Product.where(slug: 'khan_academy').empty?
 if Product.where(slug: 'librehealth').empty?
   p = Product.create(name: "LibreHealth", slug: 'librehealth') if Product.where(slug: 'librehealth').empty?
   ProductAssessment.create(
@@ -112,7 +110,6 @@ if Product.where(slug: 'mifos').empty?
     osc_im10: true, osc_im20: true,
     product: p, has_osc: true, has_digisquare: false)
 end
-Product.create(name: "MIT OpenSourceWare", slug: 'mit_opensourceware') if Product.where(slug: 'mit_opensourceware').empty?
 Product.create(name: "Moodle", slug: 'moodle') if Product.where(slug: 'moodle').empty?
 if Product.where(slug: 'motech').empty?
   p = Product.create(name: "MOTECH", slug: 'motech') if Product.where(slug: 'motech').empty?
@@ -139,7 +136,7 @@ if Product.where(slug: 'odk').empty?
     osc_cs10: true, osc_cs20: true, osc_cs30: true, osc_cs40: true, osc_cs50: true,
     osc_in10: true, osc_in20: false, osc_in30: true,
     osc_im10: true, osc_im20: true,
-    digisquare_country_utilization: 3, digisquare_country_strategy: 2, digisquare_source_code_accessibility: 3, digisquare_funding_and_revenue: 3,
+    digisquare_country_utilization: 3, digisquare_country_strategy: 2, digisquare_digital_health_interventions: nil, digisquare_source_code_accessibility: 3, digisquare_funding_and_revenue: 3,
     digisquare_developer_contributor_and_implementor_community_enga: 3, digisquare_community_governance: 3, digisquare_software_roadmap: 2, digisquare_user_documentation: 2, digisquare_multilingual_support: 2,
     digisquare_technical_documentation: 2, digisquare_software_productization: 2, digisquare_interoperability_and_data_accessibility: 2, digisquare_security: 2, digisquare_scalability: 2,
     product: p, has_osc: true, has_digisquare: true)
@@ -271,15 +268,15 @@ Product.create(name: "wikiHow", slug: 'wikihow') if Product.where(slug: 'wikihow
 Product.create(name: "Wikipedia", slug: 'wikipedia') if Product.where(slug: 'wikipedia').empty?
 Product.create(name: "WordPress", slug: 'wordpress') if Product.where(slug: 'wordpress').empty?
 p = Product.where(slug: 'bahmni')[0]
-p.includes = Product.where(slug: ['openmrs','odoo_openerp','openelis',])
+p.includes = Product.where(slug: ['odoo_openerp','openelis','openmrs',])
 p.interoperates_with = Product.where(slug: ['dhis',])
 p = Product.where(slug: 'mhero')[0]
-p.includes = Product.where(slug: ['ihris','dhis','rapidpro',])
+p.includes = Product.where(slug: ['dhis','ihris','rapidpro',])
 p = Product.where(slug: 'motech')[0]
-p.interoperates_with = Product.where(slug: ['dhis','commcare','openmrs',])
+p.interoperates_with = Product.where(slug: ['commcare','dhis','openmrs',])
 p = Product.where(slug: 'openlmis')[0]
-p.interoperates_with = Product.where(slug: ['dhis','commcare','openmrs',])
+p.interoperates_with = Product.where(slug: ['commcare','dhis','openmrs',])
 p = Product.where(slug: 'openmrs')[0]
 p.interoperates_with = Product.where(slug: ['open_concept_lab',])
 p = Product.where(slug: 'opensrp')[0]
-p.includes = Product.where(slug: ['openmrs','dhis','rapidpro','openlmis',])
+p.includes = Product.where(slug: ['dhis','openlmis','openmrs','rapidpro',])

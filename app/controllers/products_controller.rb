@@ -23,12 +23,12 @@ class ProductsController < ApplicationController
       @products = Product
           .where(nil)
           .name_contains(params[:search])
-          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals)
           .order(:slug)
           #.paginate(page: params[:page], per_page: 20)
     else
       @products = Product
-          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks)
+          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals)
           .order(:slug)
           #.paginate(page: params[:page], per_page: 20)
     end
@@ -54,33 +54,44 @@ class ProductsController < ApplicationController
     jenkins_user = Rails.configuration.jenkins["jenkins_user"]
     jenkins_password = Rails.configuration.jenkins["jenkins_password"]
     build_name = params[:product_id]
-    logger.debug build_name
 
     @launched = true
     @launch_message = "Product is being launched on Digital Ocean droplet"
 
     # First, get the crumb that we need to validate the build
     url = jenkins_url+"/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,%22:%22,//crumb)"
-    logger.debug url
     uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     request.basic_auth(jenkins_user, jenkins_password)
-    response = http.request(request)
+    begin
+      response = Net::HTTP.start(uri.host, uri.port, :read_timeout => 10, :open_timeout => 10) {|http|
+        response = http.request(request)
+      }
+    rescue Net::OpenTimeout, StandardError => e
+      @launch_message = "Unable to communicate with Jenkins server"
+      logger.error "Unable to communicate with Jenkins server"
+      return
+    end 
 
     crumb_parts=response.body.split(':')
     jenkins_crumb=crumb_parts[1]
-    logger.debug jenkins_crumb
 
     # Add Jenkins-Crumb and crumb value to request header, Content-Type=text/xml
     url=jenkins_url+"/job/"+build_name+"/build"
     uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json', 'Jenkins-Crumb' => jenkins_crumb})
     request.basic_auth(jenkins_user, jenkins_password)
-    response = http.request(request)
+    begin
+      response = Net::HTTP.start(uri.host, uri.port, :read_timeout => 10, :open_timeout => 10) {|http|
+        response = http.request(request)
+      }
+    rescue StandardError => e
+      @launch_message = "Unable to launch Jenkins build"
+      logger.error "Unable to launch Jenkins build"
+      return
+    end 
 
-    respond_to do |format|               
+    respond_to do |format|
       format.js
     end
   end
@@ -120,6 +131,13 @@ class ProductsController < ApplicationController
       end
     end
 
+    if (params[:selected_sustainable_development_goals])
+      params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
+        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
+        @product.sustainable_development_goals.push(sustainable_development_goal)
+      end
+    end
+
     respond_to do |format|
       if @product.save
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
@@ -136,8 +154,8 @@ class ProductsController < ApplicationController
   def update
     assign_maturity
 
+    sectors = Set.new
     if (params[:selected_sectors].present?)
-      sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
         sector = Sector.find(sector_id)
         sectors.add(sector)
@@ -146,31 +164,39 @@ class ProductsController < ApplicationController
     end
 
     if (params[:selected_interoperable_products])
-      products = Set.new
       params[:selected_interoperable_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
       end
-      @product.interoperates_with = products.to_a
     end
+    @product.interoperates_with = products.to_a
 
+    products = Set.new
     if (params[:selected_included_products])
-      products = Set.new
       params[:selected_included_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
       end
-      @product.includes = products.to_a
     end
+    @product.includes = products.to_a
 
+    building_blocks = Set.new
     if (params[:selected_building_blocks])
-      building_blocks = Set.new
       params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
         building_blocks.add(building_block)
       end
-      @product.building_blocks = building_blocks.to_a
     end
+    @product.building_blocks = building_blocks.to_a
+
+    sustainable_development_goals = Set.new
+    if (params[:selected_sustainable_development_goals])
+      params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
+        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
+        sustainable_development_goals.add(sustainable_development_goal)
+      end
+    end
+    @product.sustainable_development_goals = sustainable_development_goals.to_a
 
     respond_to do |format|
       if @product.update(product_params)

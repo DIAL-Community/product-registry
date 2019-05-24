@@ -25,4 +25,7 @@ The application will run on localhost port 3000 by default.
  * docker-compose up -d
 
 
+# Backing up and restoring database
 
+ * rails db:backup   (will store dump in db/backups directory)
+ * rails db:restore

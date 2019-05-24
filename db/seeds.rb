@@ -1,3 +1,7 @@
+f = File.join(Rails.root, 'db', 'sustainable_development_goals.rb')
+if File.exists?(f)
+  load f
+end
 f = File.join(Rails.root, 'db', 'locations.rb')
 if File.exists?(f)
   load f

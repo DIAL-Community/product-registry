@@ -11,6 +11,9 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
+# Ignore the database dumps/backups
+/db/backups/*
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
@@ -27,3 +30,4 @@ public/export.xls
 public/export.xlsx
 
 config/esri.yml
+ssmtp.conf

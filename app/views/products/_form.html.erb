@@ -74,6 +74,31 @@
   </div>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    SDGs
+  </h6>
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="sustainable-development-goal-search" class="form-control" placeholder="Search and assign sustainable development goals ..." />
+    <label for="product-sustainable-development-goals">
+      Search and assign sustainable development goals ...
+    </label>
+  </fieldset>
+  <div class="row">
+    <div id="base-selected-sustainable-development-goals" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+          <% if !@sustainable_development_goal %>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <% end %>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
       Interoperable Products
   </h6>
   <fieldset class="form-label-group mt-2">
@@ -238,5 +263,8 @@
   <% end %>
   <% product.includes.order("name").each do |include| %>
     addIncludedProduct('<%= include.id %>', '<%= include.name %>');
+  <% end %>
+  <% product.sustainable_development_goals.order("name").each do |sdg| %>
+    addSDG('<%= sdg.id %>', '<%= sdg.name %>');
   <% end %>
 </script>

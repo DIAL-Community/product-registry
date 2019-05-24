@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: 'organizations#map'
-  resources :products do 
+  resources :products do
     get :launch
   end
 
   resources :building_blocks
+  resources :sustainable_development_goals, only: [:index]
 
   resources :organizations do
     resources :contacts

@@ -19,12 +19,15 @@ namespace :db do
           product.building_blocks.each do |bb|
             productfile.puts "  p.building_blocks << BuildingBlock.where(slug: '#{bb.slug}').limit(1)[0]"
           end
+          product.sustainable_development_goals.each do |sdg|
+            productfile.puts "  p.sustainable_development_goals << SustainableDevelopmentGoal.where(slug: '#{sdg.slug}').limit(1)[0]"
+          end
           if !product.product_assessment.nil?
             productfile.puts "  ProductAssessment.create("
             osc_maturity.each do |maturity|
               productfile.print "   "
               maturity["items"].each do |item|
-                productfile.print " osc_#{item['code'].downcase}: #{product.product_assessment.send('osc_' + item['code'].downcase).to_s},"
+                productfile.print " osc_#{item['code'].downcase}: #{product.product_assessment.send('osc_' + item['code'].downcase).inspect},"
               end
               productfile.puts ""
             end
@@ -40,15 +43,12 @@ namespace :db do
               end
               if has_indicator_vals
                 digisquare_maturity["sub-indicators"].each do |sub_indicator|
-                  indicator_val = product.product_assessment.send(sub_indicator['code'])
-                  if !indicator_val.nil?
-                    productfile.print " #{sub_indicator['code']}: #{indicator_val.to_s},"
-                  end
+                  productfile.print " #{sub_indicator['code']}: #{product.product_assessment.send(sub_indicator['code']).inspect},"
                 end
                 productfile.puts ""
               end
             end
-            productfile.puts "    product: p, has_osc: #{product.product_assessment.has_osc.to_s}, has_digisquare: #{product.product_assessment.has_digisquare.to_s})"
+            productfile.puts "    product: p, has_osc: #{product.product_assessment.has_osc.inspect}, has_digisquare: #{product.product_assessment.has_digisquare.inspect})"
 
           end
           productfile.puts "end"
@@ -59,14 +59,14 @@ namespace :db do
           productfile.puts "p = Product.where(slug: '#{product.slug}')[0]"
           if !product.includes.empty?
             productfile.print "p.includes = Product.where(slug: ["
-            product.includes.each do |include|
+            product.includes.order(:slug).each do |include|
               productfile.print "'#{include.slug}',"
             end
             productfile.puts "])"
           end
           if !product.interoperates_with.empty?
             productfile.print "p.interoperates_with = Product.where(slug: ["
-            product.interoperates_with.each do |interop|
+            product.interoperates_with.order(:slug).each do |interop|
               productfile.print "'#{interop.slug}',"
             end
             productfile.puts "])"
@@ -112,8 +112,13 @@ namespace :db do
         orgfile.puts "end"
       end
 
+      sdgfile = File.open(File.join(Rails.root, 'db', 'sustainable_development_goals.rb'), 'w')
+      SustainableDevelopmentGoal.all.order('slug').each do |sdg|
+        sdgfile.puts "SustainableDevelopmentGoal.create(name: \"#{sdg.name}\", long_title: \"#{sdg.long_title}\", slug: '#{sdg.slug}', number: #{sdg.number}) if SustainableDevelopmentGoal.where(slug: '#{sdg.slug}').empty?"
+      end
+
       seedfile = File.open(File.join(Rails.root, 'db', 'seeds.rb'), "w")
-      ['locations', 'sectors', 'organizations', 'contacts', 'building_blocks', 'products'].each do |f|
+      ['sustainable_development_goals','locations', 'sectors', 'organizations', 'contacts', 'building_blocks', 'products'].each do |f|
         seedfile.puts "f = File.join(Rails.root, 'db', '#{f}.rb')"
         seedfile.puts "if File.exists?(f)"
         seedfile.puts "  load f"
