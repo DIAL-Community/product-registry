@@ -1,6 +1,9 @@
 <p class="card-text text-muted">Automatically launch an instance this product </p>
-<% if !@launched %>
-    <%= link_to 'Launch', product_launch_path(@product.slug), :class => "btn btn-primary ml-3", :remote => true %>
-<% else %>
-    <p class="card-text text-muted"><%= @launch_message %></p>
+
+<div id="launchDiv" style="height:220px;"></div>
+<%= content_tag :div, id: "jenkinsData", data: {jenkins_url: @jenkins_url, jenkins_user: @jenkins_user, jenkins_password: @jenkins_password, job_name: @product.slug} do %>
 <% end %>
+
+<script>
+    launchData.initialize();
+</script>

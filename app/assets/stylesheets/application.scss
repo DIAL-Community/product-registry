@@ -151,3 +151,58 @@ html {
     margin-left: -0.5rem;
   }
 }
+
+.launch-popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.launch-popup .launch-popuptext {
+  visibility: hidden;
+  width: 400px;
+  background-color: #DDD;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: -50px;
+  left: 150px;
+  margin-left: -80px;
+}
+
+.launch-popup .launch-popuptext::after {
+  content: "";
+  position: absolute;
+  top: 88px;
+  left: -5px;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  transform: rotate(90deg);
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.launch-popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+.field-valid {
+  display: none;
+}
+
