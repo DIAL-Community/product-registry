@@ -12,32 +12,28 @@
 </div>
 <br clear="both"/>
 
-<!-- <div class="card-deck"> -->
-<% @products.each_slice(4) do |product_row| %>
-<div class="card-deck">
-<% product_row.each do |product| %>
-  <div class="card">
-    <div class="card-header">
-      <%= link_to product.name, product %>
-    </div>
-    <%= image_tag(product.image_file, width: 200, class: 'card-img-top align-middle') %>
-    <div class="card-body">
-        <% if !product.website.nil? and !product.website.empty? %>
-          <p class="card-text"><small><a href="<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small><br/>
-        <% end %>
-        <small><%= product.interop_relationships.size %> interops,
-          <%= product.include_relationships.size %> includes,
-          <%= product.references.size %> references,
-          <%= product.building_blocks.size %> building block(s)</small>
-    </div>
-  </div>
-<% end %>
-<% if product_row.size < 4  %>
-  <% (4 - product_row.size).times do |x| %>
-    <div class="card card-placeholder">
+
+<div class="row">
+  <% @products.each do |product| %>
+    <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-3">
+      <div class="card">
+        <div class="card-header">
+          <%= link_to product.name, product %>
+        </div>
+        <%= image_tag(product.image_file, width: 200, class: 'card-img-top align-middle') %>
+        <div class="card-body">
+            <% if !product.website.nil? and !product.website.empty? %>
+              <p class="card-text"><small><a href="<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small><br/>
+            <% end %>
+            <small>
+              <%= product.interop_relationships.size %> interops,
+              <%= product.include_relationships.size %> includes,
+              <%= product.references.size %> references,
+              <%= product.building_blocks.size %> building block(s),
+              <%= product.sectors.size %> sector(s)
+            </small>
+        </div>
+      </div>
     </div>
   <% end %>
-<% end %>
-</div>
-<% end %>
 </div>
