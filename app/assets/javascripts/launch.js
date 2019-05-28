@@ -99,8 +99,8 @@ var launchData = {
                     $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Build launched...<i class="fas fa-spinner fa-spin ml-3"></i></p>');
                     var location = xhr.getResponseHeader("Location").split('/')
                     // The job number is the second to last element
-                    var jobNumber = location[location.length-2]
-                    setTimeout(function() { that.queryJob(jenkinsData, jenkinsCrumb, jobNumber) }, 10000);
+                    var queueNumber = location[location.length-2]
+                    that.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber, that.queryJob);
                 }
             },
             success: function (data, status, xhr){
@@ -110,6 +110,27 @@ var launchData = {
                 console.log("Error")
                 $("#launchStatus").text("There was an issue in launching your build. Please try again.")
               }
+        });
+    },
+
+    findJobNumber: function(jenkinsData, jenkinsCrumb, queueNumber, queryJob) {
+        var that = this;
+        var queueUrl=jenkinsData.jenkinsUrl + "/queue/item/" + queueNumber + "/api/json";
+        $.ajax({
+            type: "GET",
+            url: queueUrl,
+            crossDomain: true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader ("Authorization", "Basic " + btoa(jenkinsData.jenkinsUser + ":" + jenkinsData.jenkinsPassword));
+                xhr.setRequestHeader ("Jenkins-Crumb", jenkinsCrumb);
+            },
+            success: function (data) {
+              if (!data.executable) {
+                setTimeout(function() {that.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber, queryJob)}, 10000);
+              } else {
+                setTimeout(function() {queryJob(jenkinsData, jenkinsCrumb, data.executable.number)}, 10000);
+              }
+            }
         });
     },
 
