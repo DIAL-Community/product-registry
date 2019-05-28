@@ -65,7 +65,7 @@ var launchData = {
                     // Ping again in 10 seconds
                     $("#launchStatus").remove()
                     $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Waiting for job to complete...<i class="fas fa-spinner fa-spin ml-3"></i></p>');
-                    setTimeout(function() { that.queryJob(jenkinsData, jenkinsCrumb, jobNumber) }, 10000);
+                    setTimeout(function() { launchData.queryJob(jenkinsData, jenkinsCrumb, jobNumber) }, 10000);
                 } else {
                     // Error
                     $("#launchStatus").text("Error. Please try again")
@@ -84,7 +84,6 @@ var launchData = {
         } else {
             buildUrl=jenkinsData.jenkinsUrl+"/job/"+jenkinsData.jobName+"/buildWithParameters?AUTH_TOKEN="+jenkinsData.accessKey+"&ORG_ID="+jenkinsData.orgId+"&PROVIDER="+jenkinsData.provider+"&SECRET_KEY="+jenkinsData.secretKey;
         }
-        var that = this;
         $.ajax({
             type: "POST",
             url: buildUrl,
@@ -100,7 +99,7 @@ var launchData = {
                     var location = xhr.getResponseHeader("Location").split('/')
                     // The job number is the second to last element
                     var queueNumber = location[location.length-2]
-                    that.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber, that.queryJob);
+                    launchData.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber);
                 }
             },
             success: function (data, status, xhr){
@@ -113,8 +112,7 @@ var launchData = {
         });
     },
 
-    findJobNumber: function(jenkinsData, jenkinsCrumb, queueNumber, queryJob) {
-        var that = this;
+    findJobNumber: function(jenkinsData, jenkinsCrumb, queueNumber) {
         var queueUrl=jenkinsData.jenkinsUrl + "/queue/item/" + queueNumber + "/api/json";
         $.ajax({
             type: "GET",
@@ -126,9 +124,9 @@ var launchData = {
             },
             success: function (data) {
               if (!data.executable) {
-                setTimeout(function() {that.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber, queryJob)}, 10000);
+                setTimeout(function() {launchData.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber)}, 10000);
               } else {
-                setTimeout(function() {queryJob(jenkinsData, jenkinsCrumb, data.executable.number)}, 10000);
+                setTimeout(function() {launchData.queryJob(jenkinsData, jenkinsCrumb, data.executable.number)}, 10000);
               }
             }
         });
