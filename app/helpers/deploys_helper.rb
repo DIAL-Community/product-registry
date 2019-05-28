@@ -15,21 +15,10 @@ module DeploysHelper
             
             request["Authorization"] = "Bearer "+auth_token
             request["Content-Type"] = "application/json"
+
+            response = http.request(request)
     
-            begin
-                response = http.request(request)
-            rescue StandardError
-                responseData = {}
-                return responseData
-            end
-            
-            if (method == "DELETE")
-                responseData = {}
-            else
-                responseData = JSON.parse(response.body, object_class: OpenStruct)
-            end
-    
-            return responseData
+            return response
           end
     end
 end
