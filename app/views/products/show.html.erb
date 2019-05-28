@@ -21,7 +21,7 @@
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Organization</h5>
+    <h5 class="float-left mb-0">Organizations</h5>
     <%= link_to 'Add', new_organization_path, :class => "card-link text-white float-right" %>
   </div>
   <% if @product.organizations.count > 0 %>
@@ -29,14 +29,10 @@
       <% @product.organizations.each do |organization| %>
         <div class="col-6 col-lg-2 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1">
-              <h5 class="card-title"><%= link_to organization.name, organization %></h5>
-              <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
-            </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_organization_path(organization), :class => "card-link float-right" %>
-              </small>
+            <div class="card-body pb-1 snug">
+              <%= link_to organization do %>
+                <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
+              <% end %>
             </div>
           </div>
         </div>
