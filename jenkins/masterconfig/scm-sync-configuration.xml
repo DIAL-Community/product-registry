@@ -1,0 +1,14 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.plugins.scm__sync__configuration.ScmSyncConfigurationPlugin version="1">
+  <scm class="hudson.plugins.scm_sync_configuration.scms.ScmSyncGitSCM"/>
+  <scmRepositoryUrl>scm:git:git@github.com:conradsp/JenkinsGitTest.git</scmRepositoryUrl>
+  <noUserCommitMessage>false</noUserCommitMessage>
+  <displayStatus>true</displayStatus>
+  <commitMessagePattern>[message]</commitMessagePattern>
+  <manualSynchronizationIncludes>
+    <include>org.jenkinsci.plugins.workflow.flow.FlowExecutionList.xml</include>
+    <include>com.nirima.jenkins.plugins.docker.DockerPluginConfiguration.xml</include>
+    <include>nodes/*/config.xml</include>
+    <include>jobs/**/nextBuildNumber</include>
+  </manualSynchronizationIncludes>
+</hudson.plugins.scm__sync__configuration.ScmSyncConfigurationPlugin>
