@@ -70,6 +70,13 @@ class OrganizationsController < ApplicationController
       end
     end
 
+    if (params[:selected_products].present?)
+      params[:selected_products].keys.each do |product_id|
+        product = Product.find(product_id)
+        @organization.products.push(product)
+      end
+    end
+
     if (params[:office_id].present?)
       office = Location.find(params[:office_id])
       if (office)
@@ -115,6 +122,15 @@ class OrganizationsController < ApplicationController
         locations.add(location)
       end
     end
+
+    products = Set.new
+    if (params[:selected_products].present?)
+      params[:selected_products].keys.each do |product_id|
+        product = Product.find(product_id)
+        products.add(product)
+      end
+    end
+    @organization.products = products.to_a
 
     if (params[:office_id].present?)
       office = Location.find(params[:office_id])

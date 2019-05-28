@@ -88,6 +88,32 @@
   <% end %>
 </div>
 
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Products</h5>
+    <%= link_to 'Add', new_product_path, :class => "card-link float-right text-white" %>
+  </div>
+  <% if @organization.products.count > 0 %>
+    <div class="row">
+      <% @organization.products.each do |product| %>
+        <div class="col-6 col-lg-2 mt-2">
+          <div class="card">
+            <h5 class="card-header"><%= product.name %></h5>
+            <div class="card-body snug">
+              <%= link_to product do %>
+                <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any includes information for this product.</p>
+  <% end %>
+</div>
+
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0">Countries</h5>
