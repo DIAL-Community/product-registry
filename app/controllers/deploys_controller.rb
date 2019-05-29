@@ -35,7 +35,12 @@ class DeploysController < ApplicationController
 
   def destroy
     if (params[:id])
+      # Get the name
+      response = helpers.getDataFromProvider("GET", 'https://api.digitalocean.com/v2/droplets/'+params[:id], session[:provider], session[:auth_token])
+      responseData = JSON.parse(response.body, object_class: OpenStruct)
+      machine_name = responseData.droplet.name
       response = helpers.getDataFromProvider("DELETE", 'https://api.digitalocean.com/v2/droplets/'+params[:id], session[:provider], session[:auth_token])
+      helpers.jenkinsDeleteMachine(machine_name)
     end
 
     respond_to do |format|

@@ -76,7 +76,6 @@ var launchData = {
 
     launchBuild: function(jenkinsData) {
         var jenkinsCrumb = this.getCrumb(jenkinsData);
-        console.log("Jenkins_crumb: "+jenkinsCrumb);
 
         var buildUrl;
         if (jenkinsData.provider == "DO") {
