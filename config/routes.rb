@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'deploys/index'
+
   devise_for :users
   root to: 'organizations#map'
   
@@ -6,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :building_blocks
   resources :sustainable_development_goals, only: [:index]
+  resources :deploys
 
   resources :organizations do
     resources :contacts
