@@ -46,7 +46,6 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
-    @product.product_assessment ||= ProductAssessment.new
   end
 
   # GET /products/1/edit
@@ -58,11 +57,8 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
 
-    if product_params[:start_assessment]
+    if product_params[:start_assessment] == "true"
       assign_maturity
-    else
-      # Removing the temp product assessment if the user didn't toggle the UI slider.
-      @product.product_assessment = nil
     end
 
     if (params[:selected_organizations])
@@ -122,11 +118,8 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
 
-    if product_params[:start_assessment]
+    if product_params[:start_assessment] == "true" || @product.product_assessment.start_assessment
       assign_maturity
-    else
-      # Removing the temp product assessment if the user didn't toggle the UI slider.
-      @product.product_assessment = nil
     end
 
     organizations = Set.new
@@ -220,7 +213,6 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
-      @product.product_assessment ||= ProductAssessment.new
     end
 
     def load_maturity
@@ -243,6 +235,9 @@ class ProductsController < ApplicationController
       end
       product_assessment.has_osc = (params[:has_osc] == "true")
       product_assessment.has_digisquare = (params[:has_digisquare] == "true")
+
+      puts "Final product assessment objects: "
+      puts product_assessment
 
       @product.product_assessment = product_assessment
     end

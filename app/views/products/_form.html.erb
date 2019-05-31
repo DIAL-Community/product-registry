@@ -179,13 +179,10 @@
   </div>
 
   <div class="custom-control custom-switch">
-    <input type="hidden"
-           name="product[start_assessment]"
-           value="false" />
     <input type="checkbox" class="custom-control-input"
            id="product-assessment" name="product[start_assessment]"
            value="true"
-           <%= "checked disabled" if product.start_assessment %> />
+           <%= "checked" if product.start_assessment %> />
     <label class="custom-control-label" for="product-assessment">Start assessing this product.</label>
   </div>
 
@@ -225,7 +222,7 @@
                       <input type="checkbox"
                              name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
                              value="true"
-                             <%= "checked" if product.product_assessment.send("osc_" + item["code"].downcase) %> />
+                             <%= "checked" if product.product_assessment && product.product_assessment.send("osc_" + item["code"].downcase) %> />
                     </fieldset>
                   </div>
                   <p class="mb-1"><%= item["desc"].html_safe %></p>
@@ -239,7 +236,7 @@
                    value="false" />
             <input id="osc-completed" type="checkbox" class="form-check-input"
                    name="has_osc" value="true"
-                   <%= "checked" if product.product_assessment.has_osc %> />
+                   <%= "checked" if product.product_assessment && product.product_assessment.has_osc %> />
             <label class="form-check-label ml-1" for="osc-completed">Mark assessment as completed.</label>
           </fieldset>
         </div>
@@ -258,7 +255,7 @@
                       <%= digisquare_maturity_level_text(product.product_assessment, sub_indicator) %>
                     </button>
                     <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
-                           value="<%= product.product_assessment.send(sub_indicator["code"]) %>"/>
+                           value="<%= product.product_assessment.send(sub_indicator["code"]) if product.product_assessment  %>"/>
                     <div class="dropdown-menu" aria-labelledby="digisquare-selector">
                       <div class="dropdown-item" data-sub-indicator="1">
                         <h6>Low</h6>
@@ -285,7 +282,7 @@
             <input id="digisquare-completed" type="checkbox" class="form-check-input"
                    name="has_digisquare"
                    value="true"
-                   <%= "checked" if product.product_assessment.has_digisquare %> />
+                   <%= "checked" if product.product_assessment && product.product_assessment.has_digisquare %> />
             <label class="form-check-label ml-1" for="digisquare-completed">Mark assessment as completed.</label>
           </fieldset>
         </div>
