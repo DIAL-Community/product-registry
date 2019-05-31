@@ -46,6 +46,7 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
+    @product.product_assessment ||= ProductAssessment.new
   end
 
   # GET /products/1/edit
@@ -59,6 +60,9 @@ class ProductsController < ApplicationController
 
     if product_params[:start_assessment]
       assign_maturity
+    else
+      # Removing the temp product assessment if the user didn't toggle the UI slider.
+      @product.product_assessment = nil
     end
 
     if (params[:selected_organizations])
@@ -120,6 +124,9 @@ class ProductsController < ApplicationController
 
     if product_params[:start_assessment]
       assign_maturity
+    else
+      # Removing the temp product assessment if the user didn't toggle the UI slider.
+      @product.product_assessment = nil
     end
 
     organizations = Set.new
@@ -213,6 +220,7 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
+      @product.product_assessment ||= ProductAssessment.new
     end
 
     def load_maturity
