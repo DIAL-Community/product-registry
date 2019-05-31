@@ -59,3 +59,11 @@
   width: 5px;
   background: black;
 }
+
+.selected-elements {
+  padding-right: 0px !important;
+
+  &:nth-child(odd) {
+    padding-right: 15px !important;
+  }
+}
