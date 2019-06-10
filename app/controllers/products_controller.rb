@@ -236,9 +236,6 @@ class ProductsController < ApplicationController
       product_assessment.has_osc = (params[:has_osc] == "true")
       product_assessment.has_digisquare = (params[:has_digisquare] == "true")
 
-      puts "Final product assessment objects: "
-      puts product_assessment
-
       @product.product_assessment = product_assessment
     end
 
