@@ -89,6 +89,18 @@ docker-compose pull
 
 docker-compose up -d
 
+# Wait for OpenLMIS to finish configuring. Poll the services until all are ready
+sleep 1m
+
+WAITING=1
+echo $WAITING
+while [ $WAITING -gt 0 ]; do 
+sleep 5s
+WAITING=$(curl http://$IPADDRESS:8500/v1/internal/ui/services?dc=dc1 | python -c &quot;exec(\&quot;import json,sys\nobj=json.load(sys.stdin)\ni=0\nfor item in obj:  i += item[&apos;ChecksCritical&apos;]\nprint i\&quot;)&quot;)
+echo $WAITING
+done
+
+
 # The last line of the build output should always be the docker-machine IP
 # This will be used by the T4D app to give the user a link
 
