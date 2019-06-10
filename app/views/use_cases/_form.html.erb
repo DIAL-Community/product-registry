@@ -1,0 +1,48 @@
+<%= form_with(model: use_case, local: true) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :use_case_name, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :name %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= use_case.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    One or more use case(s) with similar name already exists.
+  </div>
+
+  <fieldset class="form-label-group mt-2">
+    <% options = options_from_collection_for_select(@sectors, 'id', 'name', use_case.sector_id) %>
+    <%= form.select :sector_id, options, {}, :class => "form-control", :placeholder => "Sector" %>
+  </fieldset>
+
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="sdg-target-search" class="form-control" placeholder="Search and assign SDG Targets ..." />
+    <label for="use-case-sdg-target">
+      Search and assign SDG Targets ...
+    </label>
+  </fieldset>
+
+  <div class="row">
+    <div id="base-selected-sdg-targets" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <fieldset class="float-right mt-4">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  <% use_case.sdg_targets.order("target_number").each do |sdg_target| %>
+    addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.name %>');
+  <% end %>
+</script>

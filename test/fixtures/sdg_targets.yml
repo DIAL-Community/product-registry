@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  slug: MyString
+  number: 9.99
+  sustainable_development_goals: one
+
+two:
+  name: MyString
+  slug: MyString
+  number: 9.99
+  sustainable_development_goals: two

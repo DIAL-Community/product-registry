@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Create New', new_use_case_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<div class="float-right pb-2">
+  <%= form_tag(workflows_path, :method => "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search use_cases ...", :class => "form-control" %>
+    <div class="input-group-append">
+        <%= submit_tag "Search", :class => "btn btn-primary" %>
+    </div>
+    <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @use_cases.count > 0 %>
+      <% @use_cases.each do |use_case| %>
+        <tr>
+          <td><%= use_case.name %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'View', use_case, :class =>"dropdown-item"  %>
+              <%= link_to 'Edit', edit_use_case_path(use_case), :class =>"dropdown-item"  %>
+              <div class="dropdown-divider"></div>
+              <%= link_to 'Delete', use_case, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted">
+            We couldn't find a use_case matching the search phrase. Do you want to <%= link_to 'create a new use_case?', new_use_case_path %>
+          </small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @use_cases, :class => "apple-pagination" %>
+

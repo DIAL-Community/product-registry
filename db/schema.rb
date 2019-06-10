@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190531134352) do
+ActiveRecord::Schema.define(version: 20190531152933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,6 +206,15 @@ ActiveRecord::Schema.define(version: 20190531134352) do
     t.index ["sustainable_development_goal_id", "product_id"], name: "sdgs_prods", unique: true
   end
 
+  create_table "sdg_targets", force: :cascade do |t|
+    t.string "name"
+    t.string "target_number"
+    t.string "slug"
+    t.integer "sdg_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sectors", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -225,6 +234,23 @@ ActiveRecord::Schema.define(version: 20190531134352) do
     t.index ["slug"], name: "index_sdgs_on_slug", unique: true
   end
 
+  create_table "use_cases", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "description"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sector_id"], name: "index_use_cases_on_sector_id"
+  end
+
+  create_table "use_cases_sdg_targets", id: false, force: :cascade do |t|
+    t.bigint "use_case_id", null: false
+    t.bigint "sdg_target_id", null: false
+    t.index ["sdg_target_id", "use_case_id"], name: "sdgs_usecases", unique: true
+    t.index ["use_case_id", "sdg_target_id"], name: "usecases_sdgs", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -242,6 +268,30 @@ ActiveRecord::Schema.define(version: 20190531134352) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "workflows", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "description"
+    t.string "other_names"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "workflows_building_blocks", id: false, force: :cascade do |t|
+    t.bigint "workflow_id", null: false
+    t.bigint "building_block_id", null: false
+    t.index ["building_block_id", "workflow_id"], name: "bbs_workflows", unique: true
+    t.index ["workflow_id", "building_block_id"], name: "workflows_bbs", unique: true
+  end
+
+  create_table "workflows_use_cases", id: false, force: :cascade do |t|
+    t.bigint "workflow_id", null: false
+    t.bigint "use_case_id", null: false
+    t.index ["use_case_id", "workflow_id"], name: "usecases_workflows", unique: true
+    t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
+  end
+
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"
@@ -257,4 +307,11 @@ ActiveRecord::Schema.define(version: 20190531134352) do
   add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"
   add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
   add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
+  add_foreign_key "use_cases", "sectors"
+  add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
+  add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"
+  add_foreign_key "workflows_building_blocks", "building_blocks", name: "workflows_bbs_bb_fk"
+  add_foreign_key "workflows_building_blocks", "workflows", name: "workflows_bbs_workflow_fk"
+  add_foreign_key "workflows_use_cases", "use_cases", name: "workflows_usecases_usecase_fk"
+  add_foreign_key "workflows_use_cases", "workflows", name: "workflows_usecases_workflow_fk"
 end

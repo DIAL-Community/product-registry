@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<div class="float-right pb-2">
+  <%= form_tag(sustainable_development_goals_path, :method => "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search SDGs ...", :class => "form-control" %>
+    <div class="input-group-append">
+        <%= submit_tag "Search", :class => "btn btn-primary" %>
+    </div>
+    <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th>Number</th>
+      <th colspan="4">Name</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @sustainable_development_goals.count > 0 %>
+      <% @sustainable_development_goals.each do |sustainable_development_goal| %>
+        <tr>
+          <td><%= sustainable_development_goal.number %></td>
+          <td><%= sustainable_development_goal.name %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'View Targets', sustainable_development_goal, :class =>"dropdown-item"  %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted">
+            We couldn't find a sustainable_development_goal matching the search phrase. 
+          </small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @use_cases, :class => "apple-pagination" %>

@@ -1,0 +1,82 @@
+<%= form_with(model: workflow, local: true) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :workflow_name, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :name %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= workflow.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    One or more workflow(s) with similar name already exists.
+  </div>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :description, id: :workflow_description, :class => "form-control", :placeholder => "Description" %>
+    <%= form.label :description %>
+  </fieldset>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :other_names, id: :workflow_other_names, :class => "form-control", :placeholder => "Other Names" %>
+    <%= form.label :other_names %>
+  </fieldset>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :category, id: :workflow_category, :class => "form-control", :placeholder => "Category" %>
+    <%= form.label :category %>
+  </fieldset>
+
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="use-case-search" class="form-control" placeholder="Search and assign Use Cases ..." />
+    <label for="workflow-use-case">
+      Search and assign Use Cases ...
+    </label>
+  </fieldset>
+
+  <div class="row">
+    <div id="base-selected-use-cases" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="building-block-search" class="form-control" placeholder="Search and assign Building Blocks ..." />
+    <label for="workflow-building-block">
+      Search and assign Building Blocks ...
+    </label>
+  </fieldset>
+
+  <div class="row">
+  <div id="base-selected-building-blocks" class="col-6 col-lg-4 mb-2">
+    <div class="card h-100">
+      <div class="p-2 clearfix">
+        <p class="mb-0 float-left"></p>
+          <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+            <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+          </a>
+        <input type="hidden"/>
+      </div>
+    </div>
+  </div>
+</div>
+  <fieldset class="float-right mt-4">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  <% workflow.use_cases.order("name").each do |use_case| %>
+    addUseCase('<%= use_case.id %>', '<%= use_case.name %>');
+  <% end %>
+  <% workflow.building_blocks.order("name").each do |building_block| %>
+    addBuildingBlock('<%= building_block.id %>', '<%= building_block.name %>');
+  <% end %>
+</script>
