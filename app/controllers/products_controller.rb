@@ -46,7 +46,6 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
-    @product.product_assessment ||= ProductAssessment.new
   end
 
   # GET /products/1/edit
@@ -57,8 +56,10 @@ class ProductsController < ApplicationController
   # POST /products.json
   def create
     @product = Product.new(product_params)
-    @product.product_assessment ||= ProductAssessment.new
-    assign_maturity
+
+    if product_params[:start_assessment] == "true"
+      assign_maturity
+    end
 
     if (params[:selected_organizations])
       params[:selected_organizations].keys.each do |organization_id|
@@ -116,7 +117,10 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    assign_maturity
+
+    if product_params[:start_assessment] == "true" || @product.product_assessment.start_assessment
+      assign_maturity
+    end
 
     organizations = Set.new
     if (params[:selected_organizations])
@@ -209,7 +213,6 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
-      @product.product_assessment ||= ProductAssessment.new
     end
 
     def load_maturity
@@ -218,6 +221,7 @@ class ProductsController < ApplicationController
     end
 
     def assign_maturity
+      @product.product_assessment ||= ProductAssessment.new
       product_assessment = @product.product_assessment
       if (params[:osc_maturity])
         params[:osc_maturity].keys.each do |osc_maturity|
@@ -240,7 +244,7 @@ class ProductsController < ApplicationController
       params
         .require(:product)
         .permit(:name, :website, :is_launchable, :docker_image, :has_osc, :osc_maturity, :has_digisquare,
-                :digisquare_maturity, :confirmation)
+                :start_assessment, :digisquare_maturity, :confirmation)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

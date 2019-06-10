@@ -19,6 +19,19 @@ function productsReady() {
     $("#base-selected-organizations").hide();
     $("#organization-search").autocomplete(organizationAutoComplete);
   }
+
+  toggleAssessmentSection($('#product-assessment'));
+  $('#product-assessment').change(function() {
+    toggleAssessmentSection($(this));
+  });
+}
+
+function toggleAssessmentSection(checkbox) {
+  if ($(checkbox).prop('checked')) {
+    $('#product-assessment-section').show();
+  } else {
+    $('#product-assessment-section').hide();
+  }
 }
 
 // Attach all of them to the browser, page, and turbolinks event.

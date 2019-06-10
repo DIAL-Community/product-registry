@@ -129,4 +129,5 @@ $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
 $(document).on('turbolinks:load', productAutoCompleteReady);
 $(document).on('turbolinks:load', interopProductAutoCompleteReady);
+$(document).on('turbolinks:load', includeProductAutoCompleteReady);
 $(document).on('turbolinks:load', sdgsAutoCompleteReady);

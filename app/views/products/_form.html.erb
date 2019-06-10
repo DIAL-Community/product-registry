@@ -25,153 +25,168 @@
     <%= form.label :docker_image %>
   </fieldset>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    Assigned Organizations
-  </h6>
-  <% if !@organization %>
-    <fieldset class="form-label-group mt-2">
-      <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
-      <label for="country-organization">
-        Search and assign organizations ...
-      </label>
-    </fieldset>
-  <% end %>
   <div class="row">
-    <div id="base-selected-organizations" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <% if !@organization %>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-            </a>
-          <% end %>
-          <input type="hidden"/>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        Assigned Organizations
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
+        <label for="country-organization">
+          Search and assign organizations ...
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-organizations" class="selected-elements col-6 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+                <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                </a>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        Assigned Sectors
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="sector-search" class="form-control" placeholder="Search and assign sectors ..." />
+        <label for="sector-search">
+          Search and assign sectors ...
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-sectors" class="selected-elements ol-6 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+              </a>
+              <input type="hidden"/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    Assigned Sectors
-  </h6>
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="sector-search" class="form-control" placeholder="Search and assign sectors ..." />
-    <label for="sector-search">
-      Search and assign sectors ...
-    </label>
-  </fieldset>
   <div class="row">
-    <div id="base-selected-sectors" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-            <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-          </a>
-          <input type="hidden"/>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        Building Blocks
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="building-block-search" class="form-control" placeholder="Search and assign building blocks ..." />
+        <label for="product-building-blocks">
+          Search and assign building blocks ...
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-building-blocks" class="selected-elements col-6 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+                <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                </a>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        SDGs
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="sustainable-development-goal-search" class="form-control" placeholder="Search and assign sustainable development goals ..." />
+        <label for="product-sustainable-development-goals">
+          Search and assign sustainable development goals ...
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-sustainable-development-goals" class="selected-elements col-6 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+                <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+                </a>
+              <input type="hidden"/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    Building Blocks
-  </h6>
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="building-block-search" class="form-control" placeholder="Search and assign building blocks ..." />
-    <label for="product-building-blocks">
-      Search and assign building blocks ...
-    </label>
-  </fieldset>
   <div class="row">
-    <div id="base-selected-building-blocks" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <% if !@building_block %>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-            </a>
-          <% end %>
-          <input type="hidden"/>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+          Interoperable Products
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="interoperate-search" class="form-control" placeholder="Search and assign interoperable products ..." />
+        <label for="interoperable-products">
+          Search and assign interoperable products ...
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-interoperable-products" class="selected-elements col-6 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+              </a>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        Included Products
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="include-search" class="form-control" placeholder="Search and assign included products ..." />
+        <label for="included-products">
+          Search and assign included products ...
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-included-products" class="selected-elements col-6 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+              </a>
+              <input type="hidden"/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    SDGs
-  </h6>
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="sustainable-development-goal-search" class="form-control" placeholder="Search and assign sustainable development goals ..." />
-    <label for="product-sustainable-development-goals">
-      Search and assign sustainable development goals ...
-    </label>
-  </fieldset>
-  <div class="row">
-    <div id="base-selected-sustainable-development-goals" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <% if !@sustainable_development_goal %>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-            </a>
-          <% end %>
-          <input type="hidden"/>
-        </div>
-      </div>
-    </div>
+  <div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input"
+           id="product-assessment" name="product[start_assessment]"
+           value="true"
+           <%= "checked" if product.start_assessment %> />
+    <label class="custom-control-label" for="product-assessment">Start assessing this product.</label>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Interoperable Products
-  </h6>
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="interoperate-search" class="form-control" placeholder="Search and assign interoperable products ..." />
-    <label for="interoperable-products">
-      Search and assign interoperable products ...
-    </label>
-  </fieldset>
-  <div class="row">
-    <div id="base-selected-interoperable-products" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-            <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-          </a>
-          <input type="hidden"/>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    Included Products
-  </h6>
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="include-search" class="form-control" placeholder="Search and assign included products ..." />
-    <label for="included-products">
-      Search and assign included products ...
-    </label>
-  </fieldset>
-  <div class="row">
-    <div id="base-selected-included-products" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-            <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-          </a>
-          <input type="hidden"/>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mt-4 mb-4">
+  <div id="product-assessment-section" class="card mt-4 mb-4">
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
         <li class="nav-item">
@@ -207,7 +222,7 @@
                       <input type="checkbox"
                              name="<%= "osc_maturity[osc_" + item["code"].downcase + "]" %>"
                              value="true"
-                             <%= "checked" if product.product_assessment.send("osc_" + item["code"].downcase) %> />
+                             <%= "checked" if product.product_assessment && product.product_assessment.send("osc_" + item["code"].downcase) %> />
                     </fieldset>
                   </div>
                   <p class="mb-1"><%= item["desc"].html_safe %></p>
@@ -221,7 +236,7 @@
                    value="false" />
             <input id="osc-completed" type="checkbox" class="form-check-input"
                    name="has_osc" value="true"
-                   <%= "checked" if product.product_assessment.has_osc %> />
+                   <%= "checked" if product.product_assessment && product.product_assessment.has_osc %> />
             <label class="form-check-label ml-1" for="osc-completed">Mark assessment as completed.</label>
           </fieldset>
         </div>
@@ -240,7 +255,7 @@
                       <%= digisquare_maturity_level_text(product.product_assessment, sub_indicator) %>
                     </button>
                     <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
-                           value="<%= product.product_assessment.send(sub_indicator["code"]) %>"/>
+                           value="<%= product.product_assessment.send(sub_indicator["code"]) if product.product_assessment  %>"/>
                     <div class="dropdown-menu" aria-labelledby="digisquare-selector">
                       <div class="dropdown-item" data-sub-indicator="1">
                         <h6>Low</h6>
@@ -267,7 +282,7 @@
             <input id="digisquare-completed" type="checkbox" class="form-check-input"
                    name="has_digisquare"
                    value="true"
-                   <%= "checked" if product.product_assessment.has_digisquare %> />
+                   <%= "checked" if product.product_assessment && product.product_assessment.has_digisquare %> />
             <label class="form-check-label ml-1" for="digisquare-completed">Mark assessment as completed.</label>
           </fieldset>
         </div>
