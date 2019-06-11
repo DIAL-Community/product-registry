@@ -35,3 +35,24 @@
     <p class="card-text text-muted">We don't have any product information for this building block.</p>
   <% end %>
 </div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Workflows</h5>
+  </div>
+  <% if @building_block.workflows.count > 0 %>
+    <div class="row">
+      <% @building_block.workflows.order("name").each do |workflow| %>
+        <div class="col-6 col-lg-4 mt-1">
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <p class="card-text text-muted mb-1" style="flex: 1"><%= workflow.name %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any Workflow information for this Building Block.</p>
+  <% end %>
+</div>

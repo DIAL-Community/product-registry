@@ -6,12 +6,16 @@ Rails.application.routes.draw do
   
   resources :products
 
-  resources :building_blocks
+  resources :building_blocks do
+    resources :workflows
+  end
+
   resources :sustainable_development_goals, only: [:index, :show]
   resources :sdg_targets, only: [:index, :show]
 
   resources :use_cases do
     resources :sdg_targets
+    resources :workflows
   end
   
   resources :workflows do
@@ -32,6 +36,7 @@ Rails.application.routes.draw do
 
   resources :sectors do
     resources :organizations
+    resources :use_cases
   end
 
   resources :contacts do

@@ -63,6 +63,13 @@ class UseCasesController < ApplicationController
       end
     end
 
+    if (params[:selected_workflows])
+      params[:selected_workflows].keys.each do |workflow_id|
+        workflow = Workflow.find(workflow_id)
+        @use_case.workflows.push(workflow)
+      end
+    end
+
     respond_to do |format|
       if @use_case.save
         format.html { redirect_to @use_case, notice: 'Use case was successfully created.' }
@@ -95,6 +102,15 @@ class UseCasesController < ApplicationController
       end
     end
     @use_case.sdg_targets = sdg_targets.to_a
+
+    workflows = Set.new
+    if (params[:selected_workflows])
+      params[:selected_workflows].keys.each do |workflow_id|
+        workflow = Workflow.find(workflow_id)
+        workflows.add(workflow)
+      end
+    end
+    @use_case.workflows = workflows.to_a
   end
 
   # DELETE /use_cases/1
@@ -116,7 +132,6 @@ class UseCasesController < ApplicationController
 
     def set_sectors
       @sectors = Sector.order(:name)
-      logger.debug @sectors
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

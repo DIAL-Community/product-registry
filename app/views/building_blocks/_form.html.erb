@@ -1,49 +1,73 @@
-  <%= form_with(model: building_block, local: true) do |form| %>
-    <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :building_block_name, :class => "form-control", :placeholder => "Name" %>
-      <%= form.label :name %>
+<%= form_with(model: building_block, local: true) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :building_block_name, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :name %>
+  </fieldset>
+
+  <input id="original_name" type="hidden" value="<%= building_block.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    One or more building block(s) with similar name already exists.
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    Assigned Products
+  </h6>
+  <% if !@product %>
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="product-search" class="form-control" placeholder="Search and assign products ..." />
+      <label for="building-block-product">
+        Search and assign products ...
+      </label>
     </fieldset>
-
-    <input id="original_name" type="hidden" value="<%= building_block.name %>" />
-    <div id="duplicate-warning" class="alert alert-warning">
-      One or more building block(s) with similar name already exists.
-    </div>
-
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Assigned Products
-    </h6>
-    <% if !@product %>
-      <fieldset class="form-label-group mt-2">
-        <input type="text" id="product-search" class="form-control" placeholder="Search and assign products ..." />
-        <label for="building-block-product">
-          Search and assign products ...
-        </label>
-      </fieldset>
-    <% end %>
-    <div class="row">
-      <div id="base-selected-products" class="col-6 col-lg-4 mb-2">
-        <div class="card h-100">
-          <div class="p-2 clearfix">
-            <p class="mb-0 float-left"></p>
-            <% if !@product %>
-              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-              </a>
-            <% end %>
-            <input type="hidden"/>
-          </div>
+  <% end %>
+  <div class="row">
+    <div id="base-selected-products" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+          <% if !@product %>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <% end %>
+          <input type="hidden"/>
         </div>
       </div>
     </div>
+  </div>
 
-    <fieldset class="float-right mt-4">
-      <%= form.submit 'Submit', :class => "btn btn-primary" %>
-      <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
-    </fieldset>
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="workflow-search" class="form-control" placeholder="Search and assign Workflows ..." />
+    <label for="use-case-workflow">
+      Search and assign Workflows ...
+    </label>
+  </fieldset>
+
+  <div class="row">
+    <div id="base-selected-workflows" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
   <% end %>
 
 <script>
-  <% building_block.products.sort_by{|product| product.name }.each do |product| %>
+  <% building_block.products.order("name").each do |product| %>
     addProduct('<%= product.id %>', '<%= product.name %>');
+  <% end %>
+  <% building_block.workflows.order("name").each do |workflow| %>
+    addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 </script>

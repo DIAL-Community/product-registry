@@ -6,21 +6,21 @@ class BuildingBlocksController < ApplicationController
   def index
     if params[:without_paging]
       @building_blocks = BuildingBlock
-          .name_contains(params[:search])
-          .order(:name)
+        .name_contains(params[:search])
+        .order(:name)
       return
     end
 
     if params[:search]
       @building_blocks = BuildingBlock
-          .where(nil)
-          .name_contains(params[:search])
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+        .where(nil)
+        .name_contains(params[:search])
+        .order(:name)
+        .paginate(page: params[:page], per_page: 20)
     else
       @building_blocks = BuildingBlock
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+        .order(:name)
+        .paginate(page: params[:page], per_page: 20)
     end
   end
 
@@ -53,6 +53,13 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
+    if (params[:selected_workflows])
+      params[:selected_workflows].keys.each do |workflow_id|
+        workflow = Workflow.find(workflow_id)
+        @building_block.workflows.push(workflow)
+      end
+    end
+
     respond_to do |format|
       if @building_block.save
         format.html { redirect_to @building_block, notice: 'Building Block was successfully created.' }
@@ -68,14 +75,23 @@ class BuildingBlocksController < ApplicationController
   # PATCH/PUT /building_blocks/1.json
   def update
 
+    products = Set.new
     if (params[:selected_products])
-      products = Set.new
       params[:selected_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
       end
-      @building_block.products = products.to_a
     end
+    @building_block.products = products.to_a
+
+    workflows = Set.new
+    if (params[:selected_workflows])
+      params[:selected_workflows].keys.each do |workflow_id|
+        workflow = Workflow.find(workflow_id)
+        workflows.add(workflow)
+      end
+    end
+    @building_block.workflows = workflows.to_a
 
     respond_to do |format|
       if @building_block.update(building_block_params)

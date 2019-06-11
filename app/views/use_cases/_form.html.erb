@@ -35,6 +35,28 @@
       </div>
     </div>
   </div>
+
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="workflow-search" class="form-control" placeholder="Search and assign Workflows ..." />
+    <label for="use-case-workflow">
+      Search and assign Workflows ...
+    </label>
+  </fieldset>
+
+  <div class="row">
+    <div id="base-selected-workflows" class="col-6 col-lg-4 mb-2">
+      <div class="card h-100">
+        <div class="p-2 clearfix">
+          <p class="mb-0 float-left"></p>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+          <input type="hidden"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <fieldset class="float-right mt-4">
     <%= form.submit 'Submit', :class => "btn btn-primary" %>
     <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
@@ -44,5 +66,8 @@
 <script>
   <% use_case.sdg_targets.order("target_number").each do |sdg_target| %>
     addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.name %>');
+  <% end %>
+  <% use_case.workflows.order("name").each do |workflow| %>
+    addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 </script>

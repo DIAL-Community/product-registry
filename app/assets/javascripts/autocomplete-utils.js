@@ -97,6 +97,10 @@ function addUseCase(value, label) {
   addElement("base-selected-use-cases", "selected_use_cases", value, label);
 }
 
+function addWorkflow(value, label) {
+  addElement("base-selected-workflows", "selected_workflows", value, label);
+}
+
 var organizationAutoCompleteReady = function() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
@@ -145,6 +149,12 @@ var useCasesAutoCompleteReady = function() {
   $("#use-case-search").autocomplete(useCasesAutoComplete);
 }
 
+var workflowsAutoCompleteReady = function() {
+  var workflowsAutoComplete = autoComplete("/workflows.json?without_paging=true", addWorkflow)
+  $("#base-selected-workflows").hide();
+  $("#workflow-search").autocomplete(workflowsAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
 $(document).on('turbolinks:load', productAutoCompleteReady);
@@ -153,3 +163,4 @@ $(document).on('turbolinks:load', includeProductAutoCompleteReady);
 $(document).on('turbolinks:load', sdgsAutoCompleteReady);
 $(document).on('turbolinks:load', sdgTargetsAutoCompleteReady);
 $(document).on('turbolinks:load', useCasesAutoCompleteReady);
+$(document).on('turbolinks:load', workflowsAutoCompleteReady);
