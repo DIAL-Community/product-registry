@@ -1,0 +1,21 @@
+#header {
+    background-color: #000043;
+    margin-bottom: 1rem;
+}
+
+#header .dropdown-item {
+    color: #000043;
+}
+
+.navbar-nav {
+    .nav-link {
+        color: white !important;
+    }
+}
+
+.navbar-nav {
+    .nav-link:hover {
+       /* color: #bbbbbb !important; */
+       color: #fbab18 !important;
+    }
+}

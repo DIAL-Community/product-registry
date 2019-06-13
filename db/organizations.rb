@@ -71,7 +71,7 @@ if Organization.where(slug: 'abt_associates').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'aerian').empty?
-  o = Organization.create(name: "Aerian", slug: 'aerian', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.aerian.com")
+  o = Organization.create(name: "Aerian", slug: 'aerian', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.aerian.com")
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.sectors << Sector.where(slug: 'platform_creation').limit(1)[0]
@@ -130,7 +130,7 @@ if Organization.where(slug: 'agulhas_applied_knowledge_ltd').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'akros').empty?
-  o = Organization.create(name: "Akros", slug: 'akros', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.akros.com")
+  o = Organization.create(name: "Akros", slug: 'akros', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.akros.com")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
@@ -147,7 +147,7 @@ if Organization.where(slug: 'akros').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'akryl').empty?
-  o = Organization.create(name: "Akryl", slug: 'akryl', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.akryl.net ")
+  o = Organization.create(name: "Akryl", slug: 'akryl', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.akryl.net ")
   o.sectors << Sector.where(slug: 'communication').limit(1)[0]
   o.sectors << Sector.where(slug: 'media').limit(1)[0]
   o.locations << Location.where(slug: 'beijing_china').limit(1)[0]
@@ -225,14 +225,14 @@ if Organization.where(slug: 'aptivate').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 end
 if Organization.where(slug: 'arqaam').empty?
-  o = Organization.create(name: "Arqaam", slug: 'arqaam', when_endorsed: DateTime.new(2018, 10, 21), is_endorser: true, website: "www.arqaam.eu")
+  o = Organization.create(name: "Arqaam", slug: 'arqaam', when_endorsed: DateTime.new(2018, 10, 21), is_endorser: true, website: "http://www.arqaam.eu")
   o.sectors << Sector.where(slug: 'development_impact').limit(1)[0]
   o.locations << Location.where(slug: 'germany').limit(1)[0]
   o.locations << Location.where(slug: 'germany_office').limit(1)[0]
   o.locations << Location.where(slug: 'tunisia').limit(1)[0]
 end
 if Organization.where(slug: 'avallain_foundation_inc').empty?
-  o = Organization.create(name: "Avallain Foundation, inc.", slug: 'avallain_foundation_inc', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.avallainfoundation.org")
+  o = Organization.create(name: "Avallain Foundation, inc.", slug: 'avallain_foundation_inc', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.avallainfoundation.org")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'education').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
@@ -249,11 +249,11 @@ if Organization.where(slug: 'awaazde').empty?
   o.locations << Location.where(slug: 'india').limit(1)[0]
 end
 if Organization.where(slug: 'bao_systems').empty?
-  o = Organization.create(name: "BAO Systems", slug: 'bao_systems', when_endorsed: DateTime.new(2018, 10, 23), is_endorser: true, website: "baosystems.com")
+  o = Organization.create(name: "BAO Systems", slug: 'bao_systems', when_endorsed: DateTime.new(2018, 10, 23), is_endorser: true, website: "http://baosystems.com")
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
 if Organization.where(slug: 'belgian_development_agency').empty?
-  o = Organization.create(name: "Belgian Development Agency", slug: 'belgian_development_agency', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "WWW.BTCCTB.ORG")
+  o = Organization.create(name: "Belgian Development Agency", slug: 'belgian_development_agency', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http//:www.btcctb.org")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]
   o.sectors << Sector.where(slug: 'education').limit(1)[0]
@@ -311,7 +311,7 @@ if Organization.where(slug: 'bill_and_melinda_gates_foundatio').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 end
 if Organization.where(slug: 'bivee').empty?
-  o = Organization.create(name: "Bivee", slug: 'bivee', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.bivee.co")
+  o = Organization.create(name: "Bivee", slug: 'bivee', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.bivee.co")
   o.sectors << Sector.where(slug: 'education').limit(1)[0]
   o.locations << Location.where(slug: 'hong_kong').limit(1)[0]
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
@@ -507,7 +507,7 @@ if Organization.where(slug: 'center_for_international_private').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
 end
 if Organization.where(slug: 'chamilo').empty?
-  o = Organization.create(name: "Chamilo", slug: 'chamilo', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.chamilo.org")
+  o = Organization.create(name: "Chamilo", slug: 'chamilo', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.chamilo.org")
 end
 if Organization.where(slug: 'charlie_goldsmith_associates').empty?
   o = Organization.create(name: "Charlie Goldsmith Associates", slug: 'charlie_goldsmith_associates', when_endorsed: DateTime.new(2016, 1, 1), is_endorser: true, website: "http://charliegoldsmithassociates.co.uk/")
@@ -529,7 +529,7 @@ if Organization.where(slug: 'charlie_goldsmith_associates').empty?
   o.locations << Location.where(slug: 'united_kingdom').limit(1)[0]
 end
 if Organization.where(slug: 'chemonics').empty?
-  o = Organization.create(name: "Chemonics", slug: 'chemonics', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.chemonics.com")
+  o = Organization.create(name: "Chemonics", slug: 'chemonics', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.chemonics.com")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'climate').limit(1)[0]
   o.sectors << Sector.where(slug: 'corporate_partnerships').limit(1)[0]
@@ -623,7 +623,7 @@ if Organization.where(slug: 'code_innovation').empty?
   o.locations << Location.where(slug: 'silicon_valley').limit(1)[0]
 end
 if Organization.where(slug: 'common_sense').empty?
-  o = Organization.create(name: "Common Sense", slug: 'common_sense', when_endorsed: DateTime.new(2019, 2, 1), is_endorser: true, website: "www.common-sense.at")
+  o = Organization.create(name: "Common Sense", slug: 'common_sense', when_endorsed: DateTime.new(2019, 2, 1), is_endorser: true, website: "http://www.common-sense.at")
   o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
   o.locations << Location.where(slug: 'vienna_austria').limit(1)[0]
 end
@@ -632,7 +632,7 @@ if Organization.where(slug: 'congo_in_the_picture').empty?
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
 end
 if Organization.where(slug: 'coopersmith').empty?
-  o = Organization.create(name: "Cooper/Smith", slug: 'coopersmith', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "coopersmith.org")
+  o = Organization.create(name: "Cooper/Smith", slug: 'coopersmith', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://coopersmith.org")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'washington_dc').limit(1)[0]
 end
@@ -895,7 +895,7 @@ if Organization.where(slug: 'development_alternatives_incorpo').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'development_gateway').empty?
-  o = Organization.create(name: "Development Gateway", slug: 'development_gateway', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.developmentgateway.org")
+  o = Organization.create(name: "Development Gateway", slug: 'development_gateway', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.developmentgateway.org")
   o.sectors << Sector.where(slug: 'data_management__policy').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
@@ -1076,7 +1076,7 @@ if Organization.where(slug: 'el_kanis_group').empty?
   o.locations << Location.where(slug: 'abuja_nigeria').limit(1)[0]
 end
 if Organization.where(slug: 'enabel').empty?
-  o = Organization.create(name: "Enabel", slug: 'enabel', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.enabel.be")
+  o = Organization.create(name: "Enabel", slug: 'enabel', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.enabel.be")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'climate').limit(1)[0]
   o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
@@ -1212,7 +1212,7 @@ if Organization.where(slug: 'fhi_').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'fio').empty?
-  o = Organization.create(name: "Fio", slug: 'fio', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.fio.com")
+  o = Organization.create(name: "Fio", slug: 'fio', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.fio.com")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'democratic_republic_of_congo').limit(1)[0]
   o.locations << Location.where(slug: 'ghana').limit(1)[0]
@@ -1308,7 +1308,7 @@ if Organization.where(slug: 'gfa_consulting_group').empty?
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 end
 if Organization.where(slug: 'girl_effect_mobile__springster').empty?
-  o = Organization.create(name: "Girl Effect Mobile - Springster ", slug: 'girl_effect_mobile__springster', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "girleffect.org")
+  o = Organization.create(name: "Girl Effect Mobile - Springster ", slug: 'girl_effect_mobile__springster', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://girleffect.org")
   o.sectors << Sector.where(slug: 'gender_and_minority_groups').limit(1)[0]
   o.sectors << Sector.where(slug: 'youth').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
@@ -1570,7 +1570,7 @@ if Organization.where(slug: 'global_integrity').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'good_business').empty?
-  o = Organization.create(name: "Good Business", slug: 'good_business', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.good.business")
+  o = Organization.create(name: "Good Business", slug: 'good_business', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.good.business")
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'botswana').limit(1)[0]
@@ -1689,10 +1689,10 @@ if Organization.where(slug: 'instedd').empty?
   o.locations << Location.where(slug: 'sunnyvale_ca_usa').limit(1)[0]
 end
 if Organization.where(slug: 'institute_of_development_studies').empty?
-  o = Organization.create(name: "Institute of Development Studies (IDS)", slug: 'institute_of_development_studies', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.ids.ac.uk")
+  o = Organization.create(name: "Institute of Development Studies (IDS)", slug: 'institute_of_development_studies', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.ids.ac.uk")
 end
 if Organization.where(slug: 'integrity_global').empty?
-  o = Organization.create(name: "Integrity Global", slug: 'integrity_global', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.integrityglobal.com")
+  o = Organization.create(name: "Integrity Global", slug: 'integrity_global', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.integrityglobal.com")
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
   o.locations << Location.where(slug: 'bangladesh').limit(1)[0]
   o.locations << Location.where(slug: 'burundi').limit(1)[0]
@@ -1719,7 +1719,7 @@ if Organization.where(slug: 'integrity_global').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'intellisoft').empty?
-  o = Organization.create(name: "IntelliSOFT", slug: 'intellisoft', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.intellisoftkenya.com")
+  o = Organization.create(name: "IntelliSOFT", slug: 'intellisoft', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.intellisoftkenya.com")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
   o.locations << Location.where(slug: 'nairobi_kenya').limit(1)[0]
@@ -2509,7 +2509,7 @@ if Organization.where(slug: 'kimetrica').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'kingship_digital_inc').empty?
-  o = Organization.create(name: "Kingship Digital Inc. ", slug: 'kingship_digital_inc', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.kingshipdigital.com")
+  o = Organization.create(name: "Kingship Digital Inc. ", slug: 'kingship_digital_inc', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.kingshipdigital.com")
   o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
   o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
   o.sectors << Sector.where(slug: 'media').limit(1)[0]
@@ -2594,7 +2594,7 @@ if Organization.where(slug: 'louis_berger').empty?
   o.locations << Location.where(slug: 'vietnam').limit(1)[0]
 end
 if Organization.where(slug: 'lutheran_world_relief').empty?
-  o = Organization.create(name: "Lutheran World Relief", slug: 'lutheran_world_relief', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "programs.lwr.org")
+  o = Organization.create(name: "Lutheran World Relief", slug: 'lutheran_world_relief', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://programs.lwr.org")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'climate').limit(1)[0]
   o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
@@ -2628,7 +2628,7 @@ if Organization.where(slug: 'lutheran_world_relief').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'main_level').empty?
-  o = Organization.create(name: "Main Level", slug: 'main_level', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.mainlevel.de")
+  o = Organization.create(name: "Main Level", slug: 'main_level', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.mainlevel.de")
   o.sectors << Sector.where(slug: 'consulting').limit(1)[0]
   o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
@@ -3281,7 +3281,7 @@ if Organization.where(slug: 'pathfinder_international').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'people_in_need').empty?
-  o = Organization.create(name: "People in Need", slug: 'people_in_need', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.peopleinneed.cz")
+  o = Organization.create(name: "People in Need", slug: 'people_in_need', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.peopleinneed.cz")
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
   o.locations << Location.where(slug: 'angola').limit(1)[0]
@@ -3403,7 +3403,7 @@ if Organization.where(slug: 'praekeltorg').empty?
   o.locations << Location.where(slug: 'south_africa').limit(1)[0]
 end
 if Organization.where(slug: 'public_administration_internatio').empty?
-  o = Organization.create(name: "Public Administration International", slug: 'public_administration_internatio', when_endorsed: DateTime.new(2018, 9, 26), is_endorser: true, website: "www.public-admin.co.uk")
+  o = Organization.create(name: "Public Administration International", slug: 'public_administration_internatio', when_endorsed: DateTime.new(2018, 9, 26), is_endorser: true, website: "http://www.public-admin.co.uk")
   o.sectors << Sector.where(slug: 'governance').limit(1)[0]
   o.locations << Location.where(slug: 'london_uk').limit(1)[0]
 end
@@ -3479,7 +3479,7 @@ if Organization.where(slug: 'relief_applications').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
 end
 if Organization.where(slug: 'resolve_to_save_lives').empty?
-  o = Organization.create(name: "Resolve to Save Lives", slug: 'resolve_to_save_lives', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "resolvetosavelives.org")
+  o = Organization.create(name: "Resolve to Save Lives", slug: 'resolve_to_save_lives', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://resolvetosavelives.org")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'ny_ny').limit(1)[0]
 end
@@ -3605,7 +3605,7 @@ if Organization.where(slug: 'save_the_children').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'search_for_common_ground').empty?
-  o = Organization.create(name: "Search for Common Ground", slug: 'search_for_common_ground', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.sfcg.org")
+  o = Organization.create(name: "Search for Common Ground", slug: 'search_for_common_ground', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.sfcg.org")
   o.sectors << Sector.where(slug: 'conflict_resolution').limit(1)[0]
   o.sectors << Sector.where(slug: 'demobilization__reintegration').limit(1)[0]
   o.sectors << Sector.where(slug: 'democracy').limit(1)[0]
@@ -3723,7 +3723,7 @@ if Organization.where(slug: 'smart_resultancy').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'somali_disaster_resilience_insti').empty?
-  o = Organization.create(name: "Somali Disaster Resilience Institute (SDRI)", slug: 'somali_disaster_resilience_insti', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.sdri.so/")
+  o = Organization.create(name: "Somali Disaster Resilience Institute (SDRI)", slug: 'somali_disaster_resilience_insti', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.sdri.so/")
   o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
   o.locations << Location.where(slug: 'mogadishu_somalia').limit(1)[0]
@@ -3843,7 +3843,7 @@ if Organization.where(slug: 'swedish_international_developmen').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'sweetsense_inc').empty?
-  o = Organization.create(name: "SweetSense, Inc.", slug: 'sweetsense_inc', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.sweetsensors.com")
+  o = Organization.create(name: "SweetSense, Inc.", slug: 'sweetsense_inc', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.sweetsensors.com")
   o.sectors << Sector.where(slug: 'energy').limit(1)[0]
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.sectors << Sector.where(slug: 'water_and_sanitation').limit(1)[0]
@@ -3869,7 +3869,7 @@ if Organization.where(slug: 'tecsalud').empty?
   o.locations << Location.where(slug: 'united_states').limit(1)[0]
 end
 if Organization.where(slug: 'terre_des_hommes').empty?
-  o = Organization.create(name: "Terre des Hommes", slug: 'terre_des_hommes', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.ieda-project.org ")
+  o = Organization.create(name: "Terre des Hommes", slug: 'terre_des_hommes', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.ieda-project.org ")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'afghanistan').limit(1)[0]
   o.locations << Location.where(slug: 'albania').limit(1)[0]
@@ -4013,7 +4013,7 @@ if Organization.where(slug: 'trcaire').empty?
   o.locations << Location.where(slug: 'zimbabwe').limit(1)[0]
 end
 if Organization.where(slug: 'tropical_health_and_education_tr').empty?
-  o = Organization.create(name: "Tropical Health and Education Trust (THET)", slug: 'tropical_health_and_education_tr', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.thet.org")
+  o = Organization.create(name: "Tropical Health and Education Trust (THET)", slug: 'tropical_health_and_education_tr', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.thet.org")
   o.sectors << Sector.where(slug: 'health').limit(1)[0]
   o.locations << Location.where(slug: 'ethiopia').limit(1)[0]
   o.locations << Location.where(slug: 'london_uk').limit(1)[0]
@@ -4026,7 +4026,7 @@ if Organization.where(slug: 'uk_department_for_international').empty?
   o = Organization.create(name: "UK Department for International Development (DFID)", slug: 'uk_department_for_international', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "https://www.gov.uk/government/organisations/department-for-international-development")
 end
 if Organization.where(slug: 'un_climate_change_secretariat').empty?
-  o = Organization.create(name: "UN Climate Change Secretariat", slug: 'un_climate_change_secretariat', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "unfccc.int")
+  o = Organization.create(name: "UN Climate Change Secretariat", slug: 'un_climate_change_secretariat', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://unfccc.int")
   o.sectors << Sector.where(slug: 'climate').limit(1)[0]
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
 end
@@ -4232,12 +4232,12 @@ if Organization.where(slug: 'united_nations_development_progr').empty?
   o.sectors << Sector.where(slug: 'humanitarian').limit(1)[0]
 end
 if Organization.where(slug: 'united_nations_environment_progr').empty?
-  o = Organization.create(name: "United Nations Environment Programme", slug: 'united_nations_environment_progr', when_endorsed: DateTime.new(2018, 10, 23), is_endorser: true, website: "unenvironment.org")
+  o = Organization.create(name: "United Nations Environment Programme", slug: 'united_nations_environment_progr', when_endorsed: DateTime.new(2018, 10, 23), is_endorser: true, website: "http://unenvironment.org")
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
   o.locations << Location.where(slug: 'kenya').limit(1)[0]
 end
 if Organization.where(slug: 'united_nations_foundation_unf').empty?
-  o = Organization.create(name: "United Nations Foundation (UNF)", slug: 'united_nations_foundation_unf', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.unfoundation.org")
+  o = Organization.create(name: "United Nations Foundation (UNF)", slug: 'united_nations_foundation_unf', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.unfoundation.org")
   o.sectors << Sector.where(slug: 'climate').limit(1)[0]
   o.sectors << Sector.where(slug: 'energy').limit(1)[0]
   o.sectors << Sector.where(slug: 'environment').limit(1)[0]
@@ -4320,7 +4320,7 @@ if Organization.where(slug: 'united_nations_office_for_the_co').empty?
   o.locations << Location.where(slug: 'yemen').limit(1)[0]
 end
 if Organization.where(slug: 'united_nations_population_fund_u').empty?
-  o = Organization.create(name: "United Nations Population Fund (UNFPA)", slug: 'united_nations_population_fund_u', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.unfpa.org")
+  o = Organization.create(name: "United Nations Population Fund (UNFPA)", slug: 'united_nations_population_fund_u', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.unfpa.org")
   o.sectors << Sector.where(slug: 'corporation_and_business_managem').limit(1)[0]
   o.sectors << Sector.where(slug: 'emergency_response').limit(1)[0]
   o.sectors << Sector.where(slug: 'female_genital_mutilation').limit(1)[0]
@@ -4517,7 +4517,7 @@ if Organization.where(slug: 'villagereach').empty?
   o.locations << Location.where(slug: 'zambia').limit(1)[0]
 end
 if Organization.where(slug: 'vitalwave').empty?
-  o = Organization.create(name: "VitalWave", slug: 'vitalwave', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "www.vitalwave.com")
+  o = Organization.create(name: "VitalWave", slug: 'vitalwave', when_endorsed: DateTime.new(2017, 1, 1), is_endorser: true, website: "http://www.vitalwave.com")
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'digital_development').limit(1)[0]
   o.sectors << Sector.where(slug: 'digitaldatatech').limit(1)[0]
@@ -4551,7 +4551,7 @@ if Organization.where(slug: 'voto_mobile').empty?
   o.locations << Location.where(slug: 'current_offices').limit(1)[0]
 end
 if Organization.where(slug: 'welthungerhilfe').empty?
-  o = Organization.create(name: "Welthungerhilfe", slug: 'welthungerhilfe', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "www.welthungerhilfe.de")
+  o = Organization.create(name: "Welthungerhilfe", slug: 'welthungerhilfe', when_endorsed: DateTime.new(2018, 1, 1), is_endorser: true, website: "http://www.welthungerhilfe.de")
   o.sectors << Sector.where(slug: 'advocacy').limit(1)[0]
   o.sectors << Sector.where(slug: 'agriculture').limit(1)[0]
   o.sectors << Sector.where(slug: 'economicsfinance').limit(1)[0]

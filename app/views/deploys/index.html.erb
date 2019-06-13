@@ -5,7 +5,7 @@
     <%= select_tag :provider, options_for_select(['Digital Ocean', 'AWS'], params[:provider]), :class => "form-control col-3" %>
     <%= text_field_tag :auth_token, params[:auth_token], placeholder: "Authentication token", :class => "form-control col-6" %>
     <div class="input-group-append">
-        <%= submit_tag "Search", :class => "btn btn-primary" %>
+        <%= submit_tag "Search", :class => "btn btn-secondary" %>
     </div>
   <% end %>
 </div>
