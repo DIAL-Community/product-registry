@@ -189,12 +189,12 @@
       <div class="card-header bg-secondary text-white clearfix">
         <h5 class="float-left">Building Blocks</h5>
       </div>
-      <div class="card-body">
+      <div class="row">
         <% if @product.building_blocks.count > 0 %>
             <% @product.building_blocks.each do |building_block| %>
-              <div class="card mb-2 mt-2">
-                <div class="card-body">
-                  <h5 class="card-title"><small><%= link_to building_block.name, building_block %></small></h5>
+              <div class="card h-100 p-1">
+                <div class="card-body pb-2 pt-2">
+                  <h5 class="card-text text-muted mb-1"><small><%= link_to building_block.name, building_block %></small></h5>
                 </div>
               </div>
               <br clear="both"/>
