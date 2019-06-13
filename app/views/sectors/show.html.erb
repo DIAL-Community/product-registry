@@ -36,3 +36,25 @@
     <p class="card-text text-muted">We don't have any contact information for this organization.</p>
   <% end %>
 </div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Use Cases</h5>
+  </div>
+  <% if @sector.use_cases.count > 0 %>
+    <div class="row">
+      <% @sector.use_cases.order("name").each do |use_case| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-1">
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to use_case.name, use_case %></p>
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= use_case.description %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any Use Case information for this Sector.</p>
+  <% end %>
+</div>

@@ -59,6 +59,13 @@ class SectorsController < ApplicationController
       end
     end
 
+    if (params[:selected_use_cases])
+      params[:selected_use_cases].keys.each do |use_case_id|
+        use_case = UseCase.find(use_case_id)
+        @sector.use_cases.push(use_case)
+      end
+    end
+
     respond_to do |format|
       if @sector.save
         format.html { redirect_to @sector, notice: 'Sector was successfully created.' }
@@ -82,6 +89,15 @@ class SectorsController < ApplicationController
       end
       @sector.organizations = organizations.to_a
     end
+
+    use_cases = Set.new
+    if (params[:selected_use_cases])
+      params[:selected_use_cases].keys.each do |use_case_id|
+        use_case = UseCase.find(use_case_id)
+        use_cases.add(use_case)
+      end
+    end
+    @sector.use_cases = use_cases.to_a
 
     respond_to do |format|
       if @sector.update(sector_params)

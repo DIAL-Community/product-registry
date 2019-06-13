@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<div class="card">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">
+      <%= @workflow.name %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <p class="card-subtitle text-muted mb-0" >
+      <%= @workflow.description %>
+    </p>
+    <p class="card-subtitle text-muted mt-3" >
+      Other Names: <%= @workflow.other_names %>
+    </p>
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', workflows_path, :class => "card-link" %>
+      <%= link_to 'Edit', edit_workflow_path(@workflow), :class => "card-link" %>
+    </p>
+  </div>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Use Cases</h5>
+  </div>
+  <% if @workflow.use_cases.count > 0 %>
+    <div class="row">
+      <% @workflow.use_cases.order("name").each do |use_case| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to use_case.name, use_case %></p>
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= use_case.description %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any Use Case information for this Workflow.</p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">Building Blocks</h5>
+  </div>
+  <% if @workflow.building_blocks.count > 0 %>
+    <div class="row">
+      <% @workflow.building_blocks.order("name").each do |building_block| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to building_block.name, building_block %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">We don't have any Building Block information for this Workflow.</p>
+  <% end %>
+</div>

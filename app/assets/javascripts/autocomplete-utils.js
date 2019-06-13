@@ -89,6 +89,18 @@ function addSDG(value, label) {
   addElement("base-selected-sustainable-development-goals", "selected_sustainable_development_goals", value, label);
 }
 
+function addSdgTarget(value, label) {
+  addElement("base-selected-sdg-targets", "selected_sdg_targets", value, label);
+}
+
+function addUseCase(value, label) {
+  addElement("base-selected-use-cases", "selected_use_cases", value, label);
+}
+
+function addWorkflow(value, label) {
+  addElement("base-selected-workflows", "selected_workflows", value, label);
+}
+
 var organizationAutoCompleteReady = function() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
@@ -125,9 +137,30 @@ var sdgsAutoCompleteReady = function() {
   $("#sustainable-development-goal-search").autocomplete(sdgsAutoComplete);
 }
 
+var sdgTargetsAutoCompleteReady = function() {
+  var sdgTargetsAutoComplete = autoComplete("/sdg_targets.json?without_paging=true", addSdgTarget)
+  $("#base-selected-sdg-targets").hide();
+  $("#sdg-target-search").autocomplete(sdgTargetsAutoComplete);
+}
+
+var useCasesAutoCompleteReady = function() {
+  var useCasesAutoComplete = autoComplete("/use_cases.json?without_paging=true", addUseCase)
+  $("#base-selected-use-cases").hide();
+  $("#use-case-search").autocomplete(useCasesAutoComplete);
+}
+
+var workflowsAutoCompleteReady = function() {
+  var workflowsAutoComplete = autoComplete("/workflows.json?without_paging=true", addWorkflow)
+  $("#base-selected-workflows").hide();
+  $("#workflow-search").autocomplete(workflowsAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
 $(document).on('turbolinks:load', productAutoCompleteReady);
 $(document).on('turbolinks:load', interopProductAutoCompleteReady);
 $(document).on('turbolinks:load', includeProductAutoCompleteReady);
 $(document).on('turbolinks:load', sdgsAutoCompleteReady);
+$(document).on('turbolinks:load', sdgTargetsAutoCompleteReady);
+$(document).on('turbolinks:load', useCasesAutoCompleteReady);
+$(document).on('turbolinks:load', workflowsAutoCompleteReady);
