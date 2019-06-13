@@ -20,11 +20,17 @@
   <%= form.check_box :is_launchable, {}, true, false %>
   <label class="form-label-group mt-2" for="is_launchable">Check to indicate product is auto-launchable.</label>
 
-  <fieldset class="form-label-group">
-    <%= form.text_field :docker_image, id: :docker_image, :class => "form-control", :placeholder => "Docker Image" %>
-    <%= form.label :docker_image %>
-  </fieldset>
-
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    Assigned Organizations
+  </h6>
+  <% if !@organization %>
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
+      <label for="country-organization">
+        Search and assign organizations ...
+      </label>
+    </fieldset>
+  <% end %>
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">

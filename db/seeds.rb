@@ -26,3 +26,15 @@ f = File.join(Rails.root, 'db', 'products.rb')
 if File.exists?(f)
   load f
 end
+f = File.join(Rails.root, 'db', 'sdg_targets.rb')
+if File.exists?(f)
+  load f
+end
+f = File.join(Rails.root, 'db', 'use_cases.rb')
+if File.exists?(f)
+  load f
+end
+f = File.join(Rails.root, 'db', 'workflows.rb')
+if File.exists?(f)
+  load f
+end

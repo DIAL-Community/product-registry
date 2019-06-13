@@ -36,6 +36,27 @@
       </div>
     </div>
 
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="use-case-search" class="form-control" placeholder="Search and assign Use Cases ..." />
+      <label for="sector-use-case">
+        Search and assign Use Cases ...
+      </label>
+    </fieldset>
+
+    <div class="row">
+      <div id="base-selected-use-cases" class="col-6 col-lg-4 mb-2">
+        <div class="card h-100">
+          <div class="p-2 clearfix">
+            <p class="mb-0 float-left"></p>
+              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+              </a>
+            <input type="hidden"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <fieldset class="float-right mt-4">
       <%= form.submit 'Submit', :class => "btn btn-primary" %>
       <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
@@ -45,5 +66,8 @@
 <script>
   <% sector.organizations.sort_by{|organization| organization.name }.each do |organization| %>
     addOrganization('<%= organization.id %>', '<%= organization.name %>');
+  <% end %>
+  <% sector.use_cases.order("name").each do |use_case| %>
+    addUseCase('<%= use_case.id %>', '<%= use_case.name %>');
   <% end %>
 </script>

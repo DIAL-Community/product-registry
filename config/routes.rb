@@ -6,8 +6,22 @@ Rails.application.routes.draw do
   
   resources :products
 
-  resources :building_blocks
-  resources :sustainable_development_goals, only: [:index]
+  resources :building_blocks do
+    resources :workflows
+  end
+
+  resources :sustainable_development_goals, only: [:index, :show]
+  resources :sdg_targets, only: [:index, :show]
+
+  resources :use_cases do
+    resources :sdg_targets
+    resources :workflows
+  end
+  
+  resources :workflows do
+    resources :use_cases
+  end
+  
   resources :deploys
 
   resources :organizations do
@@ -22,6 +36,7 @@ Rails.application.routes.draw do
 
   resources :sectors do
     resources :organizations
+    resources :use_cases
   end
 
   resources :contacts do
@@ -36,6 +51,8 @@ Rails.application.routes.draw do
   get 'product_duplicates', :to => 'products#duplicates'
   get 'building_block_duplicates', :to => 'building_blocks#duplicates'
   get 'organization_duplicates', :to => 'organizations#duplicates'
+  get 'use_case_duplicates', :to => 'use_cases#duplicates'
+  get 'workflow_duplicates', :to => 'workflows#duplicates'
 
   get 'productmap', :to => 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

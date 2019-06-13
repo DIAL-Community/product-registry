@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white"><%= @sustainable_development_goal.name %></h5>
+  <div class="card-body">
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', sustainable_development_goals_path, :class => "card-link" %>
+    </p>
+    <table class="table">
+        <tbody>
+        <% if @sustainable_development_goal.sdg_targets.count > 0 %>
+            <% @sustainable_development_goal.sdg_targets.each do |sdg_target| %>
+                <tr>
+                    <td>Target <%= sdg_target.target_number %></td>
+                    <td><%= sdg_target.name %></td>
+                </tr>
+            <% end %>
+        <% end %>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="mt-4">
+  
+</div>

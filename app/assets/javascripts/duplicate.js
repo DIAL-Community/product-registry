@@ -72,6 +72,14 @@ var organizationDuplicateCheck = function() {
   duplicateCheck("organization_name", "/organization_duplicates.json");
 }
 
+var useCaseDuplicateCheck = function() {
+  duplicateCheck("use_case_name", "/use_case_duplicates.json");
+}
+
+var workflowDuplicateCheck = function() {
+  duplicateCheck("workflow_name", "/workflow_duplicates.json");
+}
+
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
 $(document).on('contacts#new:loaded', contactDuplicateCheck);
 $(document).on('locations#edit:loaded', locationDuplicateCheck);
@@ -84,3 +92,7 @@ $(document).on('building_blocks#edit:loaded', buildingBlockDuplicateCheck);
 $(document).on('building_blocks#new:loaded', buildingBlockDuplicateCheck);
 $(document).on('organizations#edit:loaded', organizationDuplicateCheck);
 $(document).on('organizations#new:loaded', organizationDuplicateCheck);
+$(document).on('use_cases#edit:loaded', useCaseDuplicateCheck);
+$(document).on('use_cases#new:loaded', useCaseDuplicateCheck);
+$(document).on('workflows#edit:loaded', workflowDuplicateCheck);
+$(document).on('workflows#new:loaded', workflowDuplicateCheck);
