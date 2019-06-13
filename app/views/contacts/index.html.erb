@@ -4,7 +4,7 @@
   <%= form_tag(contacts_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search contacts ...", :class => "form-control" %>
   <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-primary" %>
+    <%= submit_tag "Search", :class => "btn btn-secondary" %>
   </div>
 <% end %>
 </div>
