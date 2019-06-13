@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 <div class="border rounded bg-secondary text-white clearfix border card-header">
   <h5 class="float-left mb-0">
-    <%= @organization.name %>
+    Organization: <%= @organization.name %>
     <% if @organization.is_endorser %>
       <i class="fas fa-check-circle text-success ml-2"></i>
     <% end %>
@@ -47,11 +47,6 @@
                 <p class="card-text"><%= contact.title %></p>
               <% end %>
             </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_organization_contact_path(@organization, contact), :class => "card-link float-right" %>
-              </small>
-            </div>
           </div>
         </div>
       <% end %>
@@ -71,13 +66,8 @@
       <% @organization.sectors.order("name").each do |sector| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1">
+            <div class="card-body pb-2 pt-2">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to sector.name, sector %></p>
-            </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_organization_sector_path(@organization, sector), :class => "card-link float-right" %>
-              </small>
             </div>
           </div>
         </div>
@@ -124,13 +114,8 @@
       <% @organization.locations.where.not(location_type: 'point').order("name").each do |country| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1">
+            <div class="card-body pb-2 pt-2">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to country.name, country %></p>
-            </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_organization_location_path(@organization, country), :class => "card-link float-right" %>
-              </small>
             </div>
           </div>
         </div>

@@ -4,15 +4,23 @@
 <br clear="both"/>
 
 <div class="card mt-4">
-  <h5 class="card-header"><%= @product.name %></h5>
-  <%= image_tag(@product.image_file, width: 200, class: "ml-3") %>
+  <h5 class="card-header bg-secondary text-white">
+    Product: <%= @product.name %>
+  </h5>
   <div class="card-body">
-    <% if !@product.website.nil? and !@product.website.empty? %>
-    <h6 class="card-text text-muted mb-2">
-      <strong>Website:
-      </strong><%= @product.website %>
-    </h6>
-    <% end %>
+    <div class="row">
+      <div class="col-4">
+        <%= image_tag(@product.image_file, width: 200, class: "ml-3") %>
+      </div>
+      <div class="col-6 mt-4">
+        <% if !@product.website.nil? and !@product.website.empty? %>
+          <h6 class="card-text text-muted mt-2 mb-2">
+            <strong>Website:
+            </strong><%= @product.website %>
+          </h6>
+        <% end %>
+      </div>
+    </div>
   </div>
   <div class="card-footer p-2">
     <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link float-right" %></small>
@@ -22,7 +30,6 @@
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0">Organizations</h5>
-    <%= link_to 'Add', new_organization_path, :class => "card-link text-white float-right" %>
   </div>
   <% if @product.organizations.count > 0 %>
     <div class="row">
@@ -45,9 +52,8 @@
 
 <div class="card-deck mt-4">
   <div class="card">
-    <div class="card-header clearfix">
+    <div class="card-header bg-secondary text-white clearfix">
       <h5 class="float-left">Interoperable Products</h5>
-      <%= link_to 'Add', new_product_path, :class => "card-link float-right" %>
     </div>
     <div class="card-body">
       <% if @product.interoperates_with.count > 0 %>
@@ -78,9 +84,8 @@
   </div>
 
   <div class="card">
-    <div class="card-header clearfix">
+    <div class="card-header bg-secondary text-white clearfix">
       <h5 class="float-left">Included Products</h5>
-      <%= link_to 'Add', new_product_path, :class => "card-link float-right" %>
     </div>
     <div class="card-body">
       <% if @product.includes.count > 0 %>
@@ -111,7 +116,7 @@
   </div>
 
   <div class="card">
-    <div class="card-header clearfix">
+    <div class="card-header bg-secondary text-white clearfix">
       <h5 class="float-left">SDGs</h5>
     </div>
     <div class="card-body">
@@ -143,7 +148,7 @@
 
 <div class="card-deck">
     <div class="card">
-      <h5 class="card-header">Digital Square Maturity</h5>
+      <h5 class="card-header bg-secondary text-white">Digital Square Maturity</h5>
       <div class="card-body text-center">
         <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
           <% @digisquare_maturity.each do |digisquare_maturity_category| %>
@@ -160,7 +165,7 @@
       </div>
     </div>
     <div class="card">
-      <h5 class="card-header">Open Source Center Maturity</h5>
+      <h5 class="card-header bg-secondary text-white">Open Source Center Maturity</h5>
       <div class="card-body">
         <% if !@product.product_assessment.nil? and @product.product_assessment.has_osc %>
           <small>
@@ -181,14 +186,13 @@
     </div>
 
     <div class="card">
-      <div class="card-header clearfix">
+      <div class="card-header bg-secondary text-white clearfix">
         <h5 class="float-left">Building Blocks</h5>
-        <%= link_to 'Add', new_building_block_path, :class => "card-link float-right" %>
       </div>
       <div class="card-body">
         <% if @product.building_blocks.count > 0 %>
             <% @product.building_blocks.each do |building_block| %>
-              <div class="card">
+              <div class="card mb-2 mt-2">
                 <div class="card-body">
                   <h5 class="card-title"><small><%= link_to building_block.name, building_block %></small></h5>
                 </div>

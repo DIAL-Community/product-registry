@@ -6,7 +6,7 @@
   <%= form_tag(products_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search products ...", :class => "form-control" %>
   <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-primary" %>
+    <%= submit_tag "Search", :class => "btn btn-secondary" %>
   </div>
 <% end %>
 </div>
@@ -17,7 +17,7 @@
   <% @products.each do |product| %>
     <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-3">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header bg-secondary text-white">
           <%= link_to product.name, product %>
         </div>
         <%= image_tag(product.image_file, width: 200, class: 'card-img-top align-middle') %>

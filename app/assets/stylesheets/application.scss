@@ -15,6 +15,11 @@
  *= require_tree .
  *= require_self
  */
+
+$theme-colors: (
+  "secondary": #000043
+);
+
 @import 'bootstrap';
 
 body,
@@ -24,9 +29,33 @@ html {
   min-height: 100vh;
 }
 
+body { 
+  padding-top: 120px; 
+}
+
+a {
+  /* color: #000043; */
+  color: #fbab18;
+}
+
+.card-header {
+  a:hover {
+    color: #fff
+  }
+}
+
+a:hover {
+  color: #000043
+}
+
 #content {
   flex: 1;
   padding-bottom: 1rem;
+}
+
+.placeholder {
+  color: #5A667F;
+  transform: scale(.85);
 }
 
 .form-inline {

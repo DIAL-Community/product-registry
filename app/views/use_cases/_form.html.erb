@@ -10,9 +10,12 @@
     One or more use case(s) with similar name already exists.
   </div>
 
-  <fieldset class="form-label-group mt-2">
+  <label for="use-case-sector mb-0" class="placeholder">
+      &nbsp;&nbsp;Sector
+  </label>
+  <fieldset class="form-label-group">
     <% options = options_from_collection_for_select(@sectors, 'id', 'name', use_case.sector_id) %>
-    <%= form.select :sector_id, options, {}, :class => "form-control", :placeholder => "Sector" %>
+    <%= form.select :sector_id, options, {}, :class => "form-control mb-2" %>
   </fieldset>
 
   <fieldset class="form-label-group mt-2">

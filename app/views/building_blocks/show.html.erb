@@ -1,6 +1,8 @@
 <p id="notice"><%= notice %></p>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white"><%= @building_block.name %></h5>
+  <h5 class="card-header bg-secondary text-white">
+    Building Block: <%= @building_block.name %>
+  </h5>
   <div class="card-body">
     <p class="float-right mb-0" >
       <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
@@ -21,11 +23,6 @@
           <div class="card h-100">
             <div class="card-body pb-1">
               <h5 class="card-title"><%= link_to product.name, product %></h5>
-            </div>
-            <div class="card-footer text-muted p-2">
-              <small>
-                <%= link_to 'Edit', edit_product_path(product), :class => "card-link float-right" %>
-              </small>
             </div>
           </div>
         </div>

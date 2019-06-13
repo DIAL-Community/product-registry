@@ -2,10 +2,10 @@
 
 <div class="float-right pb-2">
   <%= form_tag(building_blocks_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search building blocks ...", :class => "form-control" %>
-  <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-primary" %>
-  </div>
+    <%= text_field_tag :search, params[:search], placeholder: "Search building blocks ...", :class => "form-control" %>
+    <div class="input-group-append">
+      <%= submit_tag "Search", :class => "btn btn-secondary" %>
+    </div>
 <% end %>
 </div>
 
