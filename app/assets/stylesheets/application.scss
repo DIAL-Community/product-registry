@@ -16,10 +16,6 @@
  *= require_self
  */
 
-$theme-colors: (
-  "secondary": #000043
-);
-
 @import 'bootstrap';
 
 body,
@@ -38,14 +34,20 @@ a {
   color: #fbab18;
 }
 
+a:hover {
+  color: #000043
+}
+
 .card-header {
-  a:hover {
+  a {
     color: #fff
   }
 }
 
-a:hover {
-  color: #000043
+.card-header {
+  a:hover {
+    color: #fbab18
+  }
 }
 
 #content {
