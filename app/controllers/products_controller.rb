@@ -118,7 +118,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
 
-    if product_params[:start_assessment] == "true" || @product.product_assessment.start_assessment
+    if (!product_params[:start_assessment].nil? && product_params[:start_assessment] == "true") || @product.product_assessment.start_assessment
       assign_maturity
     end
 
