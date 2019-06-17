@@ -134,7 +134,7 @@ class OrganizationsController < ApplicationController
 
     if (params[:office_id].present?)
       office = Location.find(params[:office_id])
-      if (office and @organization.locations.where(slug: office.slug).empty?)
+      if (office)
         locations.add(office)
       end
     end
