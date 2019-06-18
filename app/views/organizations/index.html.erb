@@ -19,7 +19,7 @@
     <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-3">
       <div class="card">
         <div class="card-header bg-secondary text-white">
-          <small><%= link_to organization.name, organization %></small>
+          <%= link_to organization.name, organization %>
         </div>
         <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
         <div class="card-body">
