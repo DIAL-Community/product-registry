@@ -212,7 +212,11 @@ class ProductsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
-      @product = Product.find(params[:id])
+      if !params[:id].scan(/\D/).empty?
+        @product = Product.find_by(slug: params[:id])
+      else
+        @product = Product.find(params[:id])
+      end
     end
 
     def load_maturity
