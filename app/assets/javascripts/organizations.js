@@ -133,10 +133,34 @@ var setupAutoComplete = function() {
 
 }
 
+function addOffice(label, officeId, magicKey) {
+  var copy = $("#base-selected-offices").clone();
+
+  $(copy).removeAttr("id");
+  $(copy).find("p").html(label);
+
+  if (officeId) {
+    var input = $(copy).find("input").first();
+    $(input).attr("name",  "office_ids[" + officeId + "]");
+    $(input).val(officeId);
+  }
+
+  if (magicKey) {
+    var input = $(copy).find("input").last();
+    $(input).attr("name",  "office_magickeys[" + magicKey + "]");
+    $(input).val(magicKey);
+  }
+  
+  $(copy).appendTo($("#base-selected-offices").parent());
+
+  $(copy).show();
+}
+
 var setupFormView = function() {
   // Init the datepicker field.
   $('#organization_when_endorsed').datepicker();
 
+  $("#base-selected-offices").hide();
   $("#office-label").autocomplete({
     source: function(request, response) {
       $.getJSON(
@@ -174,8 +198,9 @@ var setupFormView = function() {
         });
     },
     select: function(event, ui) {
-      $("#office-id").val(ui.item.id);
-      $("#office-magickey").val(ui.item.magicKey);
+      addOffice(ui.item.label, ui.item.id, ui.item.magicKey)
+      $(this).val("")
+      return false;
     }
   });
 };

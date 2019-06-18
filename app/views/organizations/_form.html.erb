@@ -20,14 +20,29 @@
       <%= form.label :website %>
     </fieldset>
 
-    <fieldset class="form-label-group">
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      Offices
+    </h6>
+    <fieldset class="form-label-group mt-2">
       <input type="text" id="office-label" name="office_label" class="form-control" placeholder="Office Location" />
       <label for="office-label">
-        Office Location
+        Office Locations
       </label>
-      <input type="hidden" id="office-id" name="office_id" />
-      <input type="hidden" id="office-magickey" name="office_magickey" />
     </fieldset>
+    <div class="row">
+      <div id="base-selected-offices" class="col-6 col-lg-4 mb-2">
+        <div class="card h-100">
+          <div class="p-2 clearfix">
+            <p class="mb-0 float-left"></p>
+            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+            </a>
+            <input type="hidden"/>
+            <input type="hidden"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <fieldset class="form-group form-check">
       <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
@@ -35,7 +50,7 @@
     </fieldset>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Assigned Sectors
+      Sectors
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="sector-search" class="form-control" placeholder="Search and assign sectors ..." />
@@ -58,7 +73,7 @@
     </div>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-        Products
+      Products
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="product-search" class="form-control" placeholder="Search and assign products ..." />
@@ -81,7 +96,7 @@
     </div>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Assigned Countries
+      Countries
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="country-search" class="form-control" placeholder="Search and assign countries ..." />
@@ -120,7 +135,6 @@
     addLocation('<%= location.id %>', '<%= location.name %>');
   <% end %>
   <% organization.locations.where(location_type: 'point').order("name").each do |location| %>
-    $("#office-id").val('<%= location.id %>');
-    $("#office-label").val('<%= location.name %>');
+    addOffice('<%= location.name %>', '<%= location.id %>', null);
   <% end %>
 </script>

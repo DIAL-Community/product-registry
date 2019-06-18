@@ -132,18 +132,19 @@ class OrganizationsController < ApplicationController
     end
     @organization.products = products.to_a
 
-    if (params[:office_id].present?)
-      office = Location.find(params[:office_id])
-      if (office)
+    if (params[:office_ids].present?)
+      params[:office_ids].keys.each do |office_id|
+        office = Location.find(office_id)
         locations.add(office)
       end
     end
 
-    if (params[:office_magickey].present?)
+    if (params[:office_magickeys].present?)
       auth_token = authenticate_user
-      geocoded_location = geocode(params[:office_magickey], auth_token)
-      geocoded_location.save
-      locations.add(geocoded_location)
+      params[:office_magickeys].keys.each do |office_magickey|
+        geocoded_location = geocode(office_magickey, auth_token)
+        locations.add(geocoded_location)
+      end
     end
 
     @organization.locations = locations.to_a
@@ -237,8 +238,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email,
-                :selected_sectors, :selected_countries, :office_id, :office_magickey, :confirmation)
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
         .tap do |attr|
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
