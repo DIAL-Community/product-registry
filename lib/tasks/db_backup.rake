@@ -21,6 +21,16 @@ namespace :db do
       puts cmd
       exec cmd
     end
+
+    desc "Export database minus proprietary data - this export can be provided to other customers"
+    task :create_initial_db => :environment do
+      cmd = nil
+      with_config do |app, host, db, user, pass|
+        cmd = "export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} --exclude-table-data=users --exclude-table-data=contacts --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}_init.dump"
+      end
+      puts cmd
+      exec cmd
+    end
   
     private
   
