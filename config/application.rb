@@ -16,5 +16,6 @@ module Registry
     # -- all .rb files in that directory are automatically loaded.
     config.geocode = config_for(:esri)
     config.jenkins = config_for(:jenkins)
+    config.mailgun = config_for(:mailgun)
   end
 end
