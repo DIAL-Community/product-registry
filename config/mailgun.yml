@@ -1,0 +1,7 @@
+development:
+  api_key: 47d4bfc8e371c0151af5c4ce36ac06d7-29b7488f-19edcd3a
+  domain: t4d.dial.community
+
+production:
+  api_key: 47d4bfc8e371c0151af5c4ce36ac06d7-29b7488f-19edcd3a
+  domain: t4d.dial.community
