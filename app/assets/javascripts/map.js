@@ -66,7 +66,6 @@ var mapObject = {
   map : {},
 
   initMap : function() {
-
     $("#map").empty();
 
     mapObject.popup = new ol.Overlay({
@@ -98,24 +97,62 @@ var mapObject = {
       })
     });
     $.getJSON('/organizations.json?without_paging=true', function(organizations) {
+      var coordinatesToOrgs = {};
       organizations.forEach(function(o) {
+        var officeObj = {
+          id: o.id,
+          name: o.name,
+          website: o.website,
+          when_endorsed: o.when_endorsed.substr(0,4),
+          countries: o.countries,
+          sectors: o.sectors
+        }
         o.offices.forEach(function(of) {
-          var featureCoordinate = ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857');
-          var iconFeature = new ol.Feature({
-            id: o.id,
-            coordinate: featureCoordinate,
-            geometry: new ol.geom.Point(featureCoordinate),
-            name: o.name,
-            website: o.website,
-            when_endorsed: o.when_endorsed.substr(0,4),
-            countries: o.countries,
-            sectors: o.sectors
-          });
-          mapObject.markerLayer.getSource().addFeature(iconFeature);
+          var coordKey = "" + [of.lat] + "," + of.lon;
+          var coord = ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857');
+          if (!(coordKey in coordinatesToOrgs)) {
+            coordinatesToOrgs[coordKey] = { coordinate: coord, orgs: [] };
+          }
+          coordinatesToOrgs[coordKey].orgs.push(officeObj)
         });
+      });
+      $.each(coordinatesToOrgs, function(coordKey, orgs) {
+        var coord = coordinatesToOrgs[coordKey].coordinate;
+        var orgs = coordinatesToOrgs[coordKey].orgs;
+        mapObject.markerLayer.getSource().addFeature(new ol.Feature({
+          //id: orgs[0].id,
+          coordinate: coord,
+          geometry: new ol.geom.Point(coord),
+          organizations: orgs
+          //name: orgs[0].name,
+          //website: orgs[0].website,
+          //when_endorsed: orgs[0].when_endorsed,
+          //countries: orgs[0].countries,
+          //sectors: orgs[0].sectors
+        }));
       });
     });
     mapObject.map.on('click', mapObject.clickHandler);
+  },
+
+  showCountries: function(countries) {
+    countries.forEach(function(cLabel) {
+      mapObject.countryLayer.getSource().forEachFeature(function(cFeature) {
+        if (cLabel == cFeature.get('name')) {
+          mapObject.countryHightlightLayer.getSource().addFeature(cFeature);
+        }
+      });
+    });
+    mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
+      mapObject.countryLayer.getSource().removeFeature(feature);
+    });
+  },
+
+  hideCountries: function() {
+    mapObject.countryHightlightLayer.getSource().forEachFeature(function (feature) {
+      mapObject.countryLayer.getSource().addFeature(feature);
+    });
+    mapObject.countryHightlightLayer.getSource().clear();
   },
 
 };
