@@ -173,7 +173,7 @@ end
 Product.create(name: "OpenIMIS", slug: 'openimis') if Product.where(slug: 'openimis').empty?
 if Product.where(slug: 'openlmis').empty?
   p = Product.create(name: "OpenLMIS", slug: 'openlmis', start_assessment: true) if Product.where(slug: 'openlmis').empty?
-  p.building_blocks << BuildingBlock.where(slug: 'analytics_and_business_intellige').limit(1)[0]
+  p.building_blocks << BuildingBlock.where(slug: 'analytics_and_business_intel').limit(1)[0]
   ProductAssessment.create(
     osc_cd10: true, osc_cd20: true, osc_cd21: false, osc_cd30: true, osc_cd31: false, osc_cd40: true, osc_cd50: true, osc_cd60: true, osc_cd61: false,
     osc_lc10: true, osc_lc20: true, osc_lc30: true, osc_lc40: true, osc_lc50: true, osc_lc60: true,

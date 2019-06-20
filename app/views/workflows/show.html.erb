@@ -7,11 +7,27 @@
     </h5>
   </div>
   <div class="card-body">
-    <p class="card-subtitle text-muted mb-0" >
-      <%= @workflow.description %>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Short Description: </strong>
+      <%= @workflowJson.short_desc %>
     </p>
-    <p class="card-subtitle text-muted mt-3" >
-      Other Names: <%= @workflow.other_names %>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Full Description: </strong>
+      <%= @workflowJson.full_desc %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Other names: </strong>
+      <%= @workflowJson.other_names %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Sample mappings of WorkFlows to Use Case: </strong>
+      <% if @workflowJson.sample_mappings.count > 0 %>
+        <ul>
+        <% @workflowJson.sample_mappings.each do |mapping| %>
+          <li class="text-muted"><strong><%= mapping.name %>: </strong><%= mapping.description %>
+        <% end %>
+        </ul>
+      <% end %>
     </p>
     <p class="float-right mb-0" >
       <%= link_to 'Back', workflows_path, :class => "card-link" %>

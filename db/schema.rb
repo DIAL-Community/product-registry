@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190531152933) do
+ActiveRecord::Schema.define(version: 20190619211133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20190531152933) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "description", default: "{}", null: false
     t.index ["slug"], name: "index_building_blocks_on_slug", unique: true
   end
 
@@ -271,11 +272,9 @@ ActiveRecord::Schema.define(version: 20190531152933) do
   create_table "workflows", force: :cascade do |t|
     t.string "name"
     t.string "slug"
-    t.string "description"
-    t.string "other_names"
-    t.string "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "description", default: "{}", null: false
   end
 
   create_table "workflows_building_blocks", id: false, force: :cascade do |t|

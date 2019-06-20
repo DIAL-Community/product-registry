@@ -126,6 +126,7 @@ class WorkflowsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_workflow
       @workflow = Workflow.find(params[:id])
+      @workflowJson = JSON.parse(@workflow.description, object_class: OpenStruct)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
