@@ -28,7 +28,7 @@ mapObject.clickHandler = function(evt) {
       $(element).html(content);
     } else {
       orgs = feature.get("organizations");
-      var contentDiv = $('<div class="card map-popup" style="bottom: -9rem; padding: 0"/>');
+      var contentDiv = $('<div class="card map-popup" style="padding: 0"/>');
       var contentHeader = $('<h6 class="card-header p-2">' + orgs.length + ' Organizations</h6>');
       contentDiv.append(contentHeader);
       var orgListEl = $('<ul/>');
