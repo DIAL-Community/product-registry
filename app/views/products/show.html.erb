@@ -21,9 +21,10 @@
         <% end %>
       </div>
     </div>
-  </div>
-  <div class="card-footer p-2">
-    <small><%= link_to 'Edit', edit_product_path(@product), :class => "card-link float-right" %></small>
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', products_path, :class => "card-link" %>
+      <%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %>
+    </p>
   </div>
 </div>
 
@@ -190,18 +191,17 @@
         <h5 class="float-left">Building Blocks</h5>
       </div>
       <div class="row">
-        <% if @product.building_blocks.count > 0 %>
-            <% @product.building_blocks.each do |building_block| %>
-              <div class="card h-100 p-1">
-                <div class="card-body pb-2 pt-2">
+        <div class="card h-100 p-1">
+          <div class="card-body pb-2 pt-2">
+            <% if @product.building_blocks.count > 0 %>
+                <% @product.building_blocks.each do |building_block| %>
                   <h5 class="card-text text-muted mb-1"><small><%= link_to building_block.name, building_block %></small></h5>
-                </div>
-              </div>
-              <br clear="both"/>
+                <% end %>
+            <% else %>
+              <p class="card-text text-muted">We don't have any building block information for this product.</p>
             <% end %>
-        <% else %>
-          <p class="card-text text-muted">We don't have any building block information for this product.</p>
-        <% end %>
+          </div>
+        </div>
       </div>
     </div>
 </div>
