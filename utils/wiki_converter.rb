@@ -1,4 +1,5 @@
 require 'json'
+require 'cgi'
 
 class WikiConverter
     def convert_workflow_to_wiki(filename)
@@ -74,9 +75,57 @@ class WikiConverter
             puts cmd
         end
     end
+
+    def convert_sdg_to_wiki(filename)
+      input = open(filename)
+      sdgData = input.read()
+
+      first_element_style = 'border-top: 0; border-bottom: 1px dotted #ccc;'
+      other_element_style = 'border-bottom: 1px dotted #ccc;'
+
+      sdgJson = JSON.parse(sdgData, object_class: OpenStruct)
+      sdgJson.each_with_index do | sdg, index |
+        outFilename = "SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, "0")}.xml"
+        output = open(outFilename, 'w')
+        output.puts('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
+        output.puts('<page xmlns="http://www.xwiki.org">')
+        output.puts("<title>#{sdg["description"]}</title>")
+        output.puts('<syntax>xwiki/2.1</syntax>')
+        output.puts('<content>')
+
+        output.puts('|(% colspan="2" rowspan="1" %)(((=== Targets ===)))|(((=== Indicators ===)))')
+        
+        sdg['targets'].each do |target|
+          output.puts "|(((==== #{target['code']} ====)))|#{target['description']}|"
+          output.puts "((("
+          target['indicators'].each_with_index do |indicator, index|
+            code = indicator['code']
+            description = CGI.escapeHTML(indicator['description'])
+            if index == 0
+              output.puts "|(% style='#{first_element_style}' %)(((==== #{code} ====)))"\
+                          "|(% style='#{first_element_style}' %)(((#{description})))"
+            else
+              output.puts "|(% style='#{other_element_style}' %)(((==== #{code} ====)))"\
+                          "|(% style='#{other_element_style}' %)(((#{description})))"
+            end
+          end
+          output.puts(")))")
+        end
+
+        output.write('</content>')
+        output.write('</page>')
+
+        cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{outFilename}' "\
+              "-H 'Content-Type: application/xml' "\
+              "http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/SDGs"\
+              "/pages/SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, "0")}"
+        puts cmd
+      end
+    end
 end
 
 converter = WikiConverter.new
 
 #converter.convert_workflow_to_wiki("./workflows.json")
-converter.convert_bb_to_wiki("./building_blocks.json")
+#converter.convert_bb_to_wiki("./building_blocks.json")
+converter.convert_sdg_to_wiki("./sdgs.json")
