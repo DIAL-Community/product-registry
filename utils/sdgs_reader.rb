@@ -20,17 +20,19 @@ def sdg_reader
       current_sdg["description"] = "#{elements[2]}".strip 
       current_sdg["targets"] = []
       sdgs.push current_sdg
-    elsif line.include? "Target"
+    elsif line.start_with? "Target"
       current_target = {}
       current_target["code"] = "#{elements[1]}"
       current_target["description"] = "#{elements[2]}".strip
       current_target["indicators"] = []
       current_sdg["targets"].push current_target
-    else
+    elsif line.start_with? "Indicator"
       current_indicator = {}
       current_indicator["code"] = "#{elements[1]}"
       current_indicator["description"] = "#{elements[2]}".strip
       current_target["indicators"].push current_indicator
+    else
+      puts "Skipping: #{line}"
     end
   end
 

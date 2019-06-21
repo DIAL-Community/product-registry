@@ -1661,14 +1661,10 @@
         "code": "15.9",
         "description": "By 2020, integrate ecosystem and biodiversity values into national and local planning, development processes, poverty reduction strategies and accounts",
         "indicators": [
-
-        ]
-      },
-      {
-        "code": "15.9.1",
-        "description": "Progress towards national targets established in accordance with Aichi Biodiversity Target 2 of the Strategic Plan for Biodiversity 2011–2020",
-        "indicators": [
-
+          {
+            "code": "15.9.1",
+            "description": "Progress towards national targets established in accordance with Aichi Biodiversity Target 2 of the Strategic Plan for Biodiversity 2011–2020"
+          }
         ]
       },
       {
@@ -1868,10 +1864,6 @@
           {
             "code": "16.b.1",
             "description": "Proportion of population reporting having personally felt discriminated against or harassed in the previous 12 months on the basis of a ground of discrimination prohibited under international human rights law"
-          },
-          {
-            "code": "-",
-            "description": "Finance"
           }
         ]
       }
@@ -1936,10 +1928,6 @@
           {
             "code": "17.5.1",
             "description": "Number of countries that adopt and implement investment promotion regimes for least developed countries"
-          },
-          {
-            "code": "-",
-            "description": "Technology"
           }
         ]
       },
@@ -1974,10 +1962,6 @@
           {
             "code": "17.8.1",
             "description": "Proportion of individuals using the Internet"
-          },
-          {
-            "code": "-",
-            "description": "Capacity-building"
           }
         ]
       },
@@ -1988,10 +1972,6 @@
           {
             "code": "17.9.1",
             "description": "Dollar value of financial and technical assistance (including through North-South, South‑South and triangular cooperation) committed to developing countries"
-          },
-          {
-            "code": "-",
-            "description": "Trade"
           }
         ]
       },
@@ -2022,14 +2002,6 @@
           {
             "code": "17.12.1",
             "description": "Average tariffs faced by developing countries, least developed countries and small island developing States"
-          },
-          {
-            "code": "-",
-            "description": "Systemic issues"
-          },
-          {
-            "code": "-",
-            "description": "Policy and institutional coherence"
           }
         ]
       },
@@ -2060,10 +2032,6 @@
           {
             "code": "17.15.1",
             "description": "Extent of use of country-owned results frameworks and planning tools by providers of development cooperation"
-          },
-          {
-            "code": "-",
-            "description": "Multi-stakeholder partnerships"
           }
         ]
       },
@@ -2084,10 +2052,6 @@
           {
             "code": "17.17.1",
             "description": "Amount of United States dollars committed to (a) public-private partnerships and (b) civil society partnerships"
-          },
-          {
-            "code": "-",
-            "description": "Data, monitoring and accountability"
           }
         ]
       },
