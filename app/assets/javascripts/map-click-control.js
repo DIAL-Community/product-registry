@@ -14,7 +14,6 @@ mapObject.clickHandler = function(evt) {
     mapObject.countryHightlightLayer.getSource().clear();
     var element = mapObject.popup.element;
     if (feature.get("organizations").length == 1) {
-      console.log("one org");
       org = feature.get("organizations")[0];
       var content =
       '<div class="card map-popup" style="bottom: -9rem; padding: 0">' +
@@ -23,7 +22,6 @@ mapObject.clickHandler = function(evt) {
       '<p class="text-muted mt-2 ml-2 mb-0">Endorser since ' + org.when_endorsed + '</p>' +
       '<p class="text-muted mt-2 ml-2 mb-2"><a href="/organizations/' + org.id + '"><small>View organization</small></a></p>' +
       '</div>';
-      console.log(content);
       mapObject.showCountries(org.countries);
       $(element).html(content);
     } else {

@@ -120,15 +120,9 @@ var mapObject = {
         var coord = coordinatesToOrgs[coordKey].coordinate;
         var orgs = coordinatesToOrgs[coordKey].orgs;
         mapObject.markerLayer.getSource().addFeature(new ol.Feature({
-          //id: orgs[0].id,
           coordinate: coord,
           geometry: new ol.geom.Point(coord),
           organizations: orgs
-          //name: orgs[0].name,
-          //website: orgs[0].website,
-          //when_endorsed: orgs[0].when_endorsed,
-          //countries: orgs[0].countries,
-          //sectors: orgs[0].sectors
         }));
       });
     });
