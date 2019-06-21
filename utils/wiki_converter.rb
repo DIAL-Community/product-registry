@@ -93,27 +93,35 @@ class WikiConverter
         output.puts('<syntax>xwiki/2.1</syntax>')
         output.puts('<content>')
 
-        output.puts('|(% colspan="2" rowspan="1" %)(((=== Targets ===)))|(((=== Indicators ===)))')
+        output.puts '(% class="box" style="background:#eb1c2d;" %)'\
+        '((('\
+        '(% style="text-align:center" %)'\
+        '[[image:https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_60.jpg||height="120" width="279"]]'\
+        ')))'
+
+        output.puts('|(% colspan="2" rowspan="1" %)(((=== Targets ===)))'\
+                    '|(% colspan="2" rowspan="1" %)(((=== Indicators ===)))')
         
         sdg['targets'].each do |target|
-          output.puts "|(((==== #{target['code']} ====)))|#{target['description']}|"
-          output.puts "((("
+          output.puts "|(% style='width: 5%;' %)(((==== #{target['code']} ====)))"\
+                      "|(% style='width: 45%;' %)(((#{target['description']})))|"
+          output.puts '(% colspan="2" rowspan="1" %)((('
           target['indicators'].each_with_index do |indicator, index|
             code = indicator['code']
             description = CGI.escapeHTML(indicator['description'])
             if index == 0
-              output.puts "|(% style='#{first_element_style}' %)(((==== #{code} ====)))"\
-                          "|(% style='#{first_element_style}' %)(((#{description})))"
+              output.puts "|(% style='width: 5%; #{first_element_style}' %)(((==== #{code} ====)))"\
+                          "|(% style='width: 45%; #{first_element_style}' %)(((#{description})))"
             else
-              output.puts "|(% style='#{other_element_style}' %)(((==== #{code} ====)))"\
-                          "|(% style='#{other_element_style}' %)(((#{description})))"
+              output.puts "|(% style='width: 5%; #{other_element_style}' %)(((==== #{code} ====)))"\
+                          "|(% style='width: 45%; #{other_element_style}' %)(((#{description})))"
             end
           end
           output.puts(")))")
         end
 
-        output.write('</content>')
-        output.write('</page>')
+        output.puts('</content>')
+        output.puts('</page>')
 
         cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{outFilename}' "\
               "-H 'Content-Type: application/xml' "\
