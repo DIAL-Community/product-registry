@@ -8,31 +8,42 @@
   </h5>
 </div>
 
-<div class="card">
-  <div class="card-body">
-    <div class="row">
+<div class="mt-2">
+  <div class="row">
+    <% if @organization.locations.find_all{|location| location.location_type == 'point'}.first %>
       <div class="col-lg-4 col-12">
-        <% if @organization.locations.find{|location| location.location_type == 'point'} %>
-          <div id="office" style="max-height: 28rem;"></div>
-          <div id="office-popup" class="office-popup"></div>
-        <% end %>
+        <div id="office" style="max-height: 28rem;"></div>
+        <div id="office-popup" class="office-popup"></div>
       </div>
-      <div class="col-lg-8 col-12">
+    <% end %>
+    <div class="col-lg-8 col-12">
+      <p class="m-2">
+        <strong>Endorsed on:</strong>
+        <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
+      </p>
+      <p class="m-2">
+        <strong>Website:</strong>
+        <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip %>
+      </p>
+      <% if @organization.locations.find_all{|location| location.location_type == 'point'}.count > 1 %>
         <p class="m-2">
-          <strong>Endorsed on:</strong>
-          <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
+          <strong>Other offices:</strong>
+          <ul>
+          <% @organization.locations
+                .find_all{ |location| location.location_type == 'point' }
+                .drop(1)
+                .each do |office| %>
+            <li><%= office.name %></li>
+          <% end %>
+          </ul>
         </p>
-        <p class="m-2">
-          <strong>Website:</strong>
-          <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip, target: :_blank %>
-        </p>
-      </div>
+      <% end %>
     </div>
-    <p class="float-right mb-0" >
-      <%= link_to 'Back', organizations_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
-    </p>
   </div>
+  <p class="float-right mb-0" >
+    <%= link_to 'Back', organizations_path, :class => "card-link" %>
+    <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
+  </p>
 </div>
 
 <div class="mt-4">
