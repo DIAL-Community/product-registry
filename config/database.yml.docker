@@ -34,4 +34,10 @@ development:
 
 production:
   <<: *default
-  
+  timeout: 5000
+  host: postgres
+  adapter: postgresql
+  encoding: unicode
+  database: registry_production
+  username: registry
+  password: "Password!1"
