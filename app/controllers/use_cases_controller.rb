@@ -128,6 +128,7 @@ class UseCasesController < ApplicationController
     def set_use_case
       @use_case = UseCase.find(params[:id])
       @sector_name = Sector.find(@use_case.sector_id).name
+      @useCaseJson = JSON.parse(@use_case.description, object_class: OpenStruct)
     end
 
     def set_sectors
