@@ -138,11 +138,39 @@
   ],
   "mappings": [{
     "step": {
-      "title": "",
-      "description": ""
+      "title": "Recognition of the problem",
+      "description": "Cherifa receives a message on her mobile phone about a looming drought; not able to read the message but sensing its importance, she realizes she has a problem and decides to address it "
     },
-    "workflow": "",
-    "building block": ""
+    "workflow": "Client communication for providing early warning awareness about farming conditions to reach adult farmers Client communication for providing relevant information to inform farmers about weather patterns and farming; this also triggers Cherifa’s interest in learning how to read Content management provides relevant, timely content to users",
+    "building block": "Cherifa uses a messaging service to raise her awareness of impending farming and weather conditions that affect her livelihood Cherifa also accesses instantaneous updates on changing weather conditions through a service backed by a content management ICT Building Blocks"
+  }, {
+    "step": {
+      "title": "Awareness about a mobile learning app",
+      "description": "Through an SMS message and the help of her literate son, Cherifa learns about literacy classes and a mobile learning app through the I Can Read project, promoted by the Ministry of Non-Formal Education."
+    },
+    "workflow": "Client communication for raising awareness about upcoming literacy classes Client communication for providing relevant information about the literacy classes and app Client education providing relevant, timely content to users via a mobile literacy app",
+    "building block": "Cherifa accesses messaging services that make her aware of classes and a mobile app to help her with her literacy challenges Cherifa accesses eLearning services that provide relevant literacy content to help her improve her literacy skills via a mobile app"
+  }, {
+    "step": {
+      "title": "Registering for the literacy course ",
+      "description": "Cherifa’s son Amadou downloads the I Can Read app that was developed by Girl Geeks, a technology company partnering with the Niger Literacy Trust, the MNFE and West African Aid, a donor The app is hosted on a server based in the capital Cherifa communicates with the server, which keeps track of all the information she supplies The server also communicates data to Cherifa, including changes that are made to the app The app has a strong backend system, which means that if there are any breakdowns or challenges, they can be addressed immediately. Amadou registers Cherifa on the app and shows her how to log in using an ID and password whenever she wants to use it After she logs in, she is asked to create a profile; unsure what to do, she asks Amadou to help He creates her profile, and the built-in GPS in the mobile phone automatically captures the location data so the app can provide location-based services"
+    },
+    "workflow": "Identification and registration to register Cherifa in the literacy program Client education to provide relevant, timely content in the form of a mobile app where user information and use can be tracked Identification and registration for validating user access to the content management system Client case management WorkFlow for enabling Cherifa to access the mobile app from the content management system",
+    "building block": "Cherifa downloads the mobile application from the Ministry’s website The app uses registration services to enrol Cherifa in the literacy programme and then map to the skills development portfolio. The registration services record her in the relevant literacy program, assigning her a unique programme identifier and capturing her profile information The registration services uses identity and authentication services to validate her identity with an external national identity system"
+  }, {
+    "step": {
+      "title": "Working through the literacy course",
+      "description": "Cherifa discovers that the mobile app contains a host of features and the full literacy curriculum in Hausa and Zarma She finds tools and resources such as games, tests, information about farming, exercises, scheduling services and feedback loops"
+    },
+    "workflow": "Client education WorkFlow for providing locally relevant interactive tools as part of the education cloud service to users Content management providing relevant, timely content to users via a mobile literacy app",
+    "building block": "Cherifa uses eLearning services with a strong back-end system that maintains and monitors her use of all eLearning features and provides relevant data to policy intermediaries on usage patterns"
+  }, {
+    "step": {
+      "title": "Digital badge",
+      "description": "When she completes the six modules, Cherifa is sent a digital badge that confirms her successful completion of the literacy course She receives alerts about follow-up literacy courses she can take that are also available in Hausa and is encouraged to keep learning"
+    },
+    "workflow": "Identification and registration WorkFlow for validating user access to the content management system Client education WorkFlow for coordinating the completion of the course and enabling access to further learning courses to encourage lifelong learning",
+    "building block": "The literacy education services use the shared data repository services to search, retrieve, review and track Cherifa’s lifelong learning and development, updating her qualifications and digital badges The literacy education services use eLearning services to make available a suite of further literacy development courses and other skills development programmes to encourage Cherifa to become a lifelong learner The literacy education services also have scheduling services for upcoming courses that may interest Cherifa that are communicated via messaging services"
   }]
 },
 {
