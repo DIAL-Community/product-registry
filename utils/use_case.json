@@ -223,11 +223,25 @@
   }],
   "mappings": [{
     "step": {
-      "title": "",
-      "description": ""
+      "title": "Background",
+      "description": "Awareness about the marketplace service is spread using digital promotional activities Users can access the service by downloading a mobile app from the ministry’s mobility management service"
     },
-    "workflow": "",
-    "building block": ""
+    "workflow": "Client communication to raise awareness and advertise new products or services to the prospective customers or users",
+    "building block": "Messaging services send promotional messages to prospective users, making them aware of new services, events, etc Farmers can access the Ministry’s website to download a certified eMarketplace app"
+  }, {
+    "step": {
+      "title": "Register in the marketplace",
+      "description": "1. Raghu calls a toll-free number to register 2. He provides information about his identity using an IVR system 3. The system verifies information and sends a link to Raghu to download the marketplace mobile application 4. Raghu downloads the marketplace mobile app and registers 5. After registration, Raghu creates his profile 6. His profile data is stored 7. His location is captured, and it is used to suggest localized services"
+    },
+    "workflow": "Identification and registration allows users to register themselves in the marketplace in order to access it and its services Client communication sends users promotional information from the marketplace",
+    "building block": "Messaging services are used to capture Raghu’s registration information and send confirmation messages, often with instructions about further onboarding processes The marketplace system uses identification and authentication services to verify and authenticate Raghu’s identity with the national ID system and then uses messaging services to send Raghu an authorized link to download the app from the app store Raghu uses the Ministry’s app store to download a certified marketplace app The app uses registration services to collect information and register users into the marketplace and store the farmer’s data in the register and assign a unique identifier to the farmer for the marketplace. The registration services collect additional information, including demographic and geographic information (in addition to geolocation) to profile the user The marketplace system uses GIS services to identify other location-based services that might be relevant to the farmer"
+  }, {
+    "step": {
+      "title": "Financial transaction from buyer to seller",
+      "description": "Raghu finds out that there is a search-by-image feature, so he takes a picture of the container of a product he bought last year and finds the product he is looking for from a suggested list Raghu pays for the product using the online payment feature After the transaction, Raghu receives an SMS with an authentication code, which has to be shared with the delivery person when the product is delivered Another SMS goes to the seller informing them of the remittance The seller searches for a logistics service to deliver the product to Raghu On receipt, Raghu provides the authentication code to the delivery person The code is authenticated and the seller receives payment"
+    },
+    "workflow": "Financial services facilitate financial transactions between buyers and sellers in order to conclude the buy-sale process.",
+    "building block": "Raghu uses AI services to search images of similar products Payment services (Payment Gateway) are used to exchange money (eg credit card, netbanking) Messaging services are used to confirm the transaction and send an authentication code The seller searches registries of logistics providers to find a provider to deliver the goods Messaging services are used to authenticate the code and then WorkFlow services trigger payment services to pay the seller"
   }]
 }
 ]
