@@ -42,11 +42,52 @@
   ],
   "mappings": [{
     "step": {
-      "title": "",
-      "description": ""
+      "title": "Linkage with community health worker",
+      "description": "Sona meets Sowmya, who hasdelivered her first babySona educates Sowmyaabout post-delivery care (egbreastfeeding, nutrition,immunization, personalhygiene), and the importanceof using the support andfacilities of the mother andchildcare program."
     },
-    "workflow": "",
-    "building block": ""
+    "workflow": "Client communication for spreading awareness and encouraging enrolment in the community health programme Client education for educating Sona on post-delivery care Content management for the backend marketing staff of the community health programme to populate relevant educational and promotional content that Sona can use during field visits",
+    "building block": "Sona uses the scheduling service* of the MCTS system to plan her promotional field visits and gets reminders based on the female community members she meets to identify relevant candidates for the community healthcare programme Sona uses eLearning services to educate Sowmya about the relevance and importance of the community health programme for her and her child Sona uses registration services to enrol Sowmya into the community health programme The community health programme managers provide relevant promotional content using content management services"
+  }, {
+    "step": {
+      "title": "Enrolment in the MCTS system",
+      "description": "Sona registers the child’s name, address and birth certificate, as well as Sowmya’s name, phone number and ID as the caretaker of her child MCTS automatically validates the birth certificate and Sowmya’s ID with the government’s citizen records system Sowmya creates an account with electronic health records (EHRs) and a barcoded unique ID card for getting further assistance MCTS connects Sowmya’s phone number to the child’s ID and enables permissions for Sona to electronically coordinate various services for Sowmya"
+    },
+    "workflow": "Identification and registration for registering Sowmya and her child in the system and enabling permissions for interaction with MCTS Client case management for creating EHRs for Sowmya and giving Sona permission to use EHRs to coordinate with various service providers that Sowmya may need",
+    "building block": "The MCTS system uses identityauthentication services to validate Sowmya’s child’s identity by comparing the birth certificate to an external national identity system, and then mapping to the MCTS record. To track the child’s encounters with the MCTS system, a barcoded ID card for that account is issued The MCTS system uses a registration service to create a new account for Sowmya’s child with a unique MCTS ID The MCTS system uses a shared data repository to create an EHR for Sowmya and link it to the MCTS ID The MCTS system also uses the WorkFlow service to create a complete individualized WorkFlow for Sona and Sowmya to interact with MCTS for managing the child’s development"
+  }, {
+    "step": {
+      "title": "Arranging the first visit to the paediatric clinic",
+      "description": "Sona uses her mobile phone to book an appointment at the local paediatric clinic Sona helps Sowmya by uploading the child’s details into the EHRs from her mobile phone Sona downloads information about managing child growth and the importance of immunization from the MCTS system to Sowmya’s phone Sona and Sowmya receive SMS messages on their mobile phones from MCTS reminding them of the appointment"
+    },
+    "workflow": "Work planning and coordination for booking appointments at the paediatric clinic and lab, autopopulating doctors’ worklists and calendars, generating SMS reminders to mobile devices of relevant participants, and tracking completion/no show status until the appointment expires",
+    "building block": "The MCTS system accesses a shared digital registry to identify the nearest service facilities Sona uses the scheduling service of the MCTS system for booking appointments at the chosen facility The MCTS system uses messaging services to remind Sowmya and Sona about their appointment a few days prior Sona uses eLearning services to download information onto Sowmya’s mobile phone"
+  }, {
+    "step": {
+      "title": "Paediatrician visits",
+      "description": "The paediatrician swipes the baby’s ID card to access and study the baby’s EHRs and update information, findings and prescriptions Sona books appointments for future immunization and follow-up visits and orders nutrition and medicine as per the paediatrician’s prescription During the first year, the paediatrician tracks the development of the child and finds early signs of autism Sona books an appointment for the therapy centre and downloads autism information from MCTS to Sowmya’s mobile phone"
+    },
+    "workflow": "Client case management and problem diagnosis for the doctor to inspect EHR records of relevance, have face-to-face or mobile phone-based discussions with the patient, and populate new records such as examination findings, prescriptions and referral notes as needed", "building block": "The MCTS system uses a shared data repository to search, retrieve, review and track the child’s development and update findings and prescriptions into the EHR The MCTS system uses eLearning services to download educational content on managing the child’s development onto Sowmya’s mobile phone The MCTS system accesses a shared digital registry to identify the nearest service facility Sona uses the scheduling service of the MCTS system to make appointments at the chosen facility The MCTS system uses messaging services to remind Sowmya and Sona about the forthcoming therapy visit a few days prior"
+  }, {
+    "step": {
+      "title": "Procurement of medicine and nutrition",
+      "description": "Sowmya goes to the pharmacy and presents her MCTS card to the pharmacist The pharmacist scans the barcode on Sowmya’s card to retrieve her MCTS record from the system and matches it with the e-prescription received. The pharmacist fills the prescription, assesses the instructions Sowmya has already received from her physician, and reinforces the benefits of Sowmya following the instructions"
+    },
+    "workflow": "Procurement WorkFlow for ordering commodities Supply chain management WorkFlow for managing the delivery ",
+    "building block": "The MCTS system uses an eMarketplace service to enable clients to electronically order supplies from different entities that internally use a payment service to settle payments to vendors from the MCTS program Workflow services enable those entities to: Receive medicine orders placed from multiple pharmacies along with respective prescriptions Determine the nutritional supplements or the equivalent supplements to be provided Dispense medication and supplements for shipment and delivery units Update the electronic records after dispensing"
+  }, {
+    "step": {
+      "title": "Getting therapy",
+      "description": "The therapist scans the child’s MCTS card to retrieve health records, referral notes and appointment details The therapist records the findings of the interactive tests with the child and a therapy schedule. The MCTS system automatically tracks and sends alerts to Sowmya at each encounter according to the schedule The therapist helps Sowmya download a rehab application from MCTS onto her mobile phone. The therapist also educates Sowmya on how to monitor the child and record her observations into the MCTS system from her phone"
+    },
+    "workflow": "Client case management for coordinating admission to the hospital and scheduling inhospital consultation/treatment /procedures as needed until delivery, along with the ability to view old records and update new medical records generated during therapy Data collection and reporting to compile observations and decision support for help making decisions.",
+    "building block": "Workflow services are used for routing all electronic transactions involved in providing in-hospital care from admission to discharge The MCTS system provides scheduling services to the therapy centre staff to book resources and appointments for the child, populating staff calendars and worklists as needed Rehab tools uses data collection services and AI services to provide the functionality for Sowmya to log observations at home and for the therapist to derive key indicators to assess response to treatment and make course corrections as necessary"
+  }, {
+    "step": {
+      "title": "Recognition incentive",
+      "description": " Sowmya and Sona are paid an incentive for participation in and compliance with the community health program"
+    },
+    "workflow": "Procurement WorkFlow for giving incentives to recognize Sona and Sowmya for their strict compliance with guidelines and successful outcomes",
+    "building block": "Workflow services are used for routing successful adherence cases to the incentive list Payment services are used for transferring incentives to corresponding accounts"
   }]
 },
 {
