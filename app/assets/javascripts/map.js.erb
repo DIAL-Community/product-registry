@@ -28,7 +28,7 @@ var mapObject = {
 
   countryLayer : new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: 'assets/countries.json',
+      url: "<%= asset_path('countries.json') %>",
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
@@ -45,7 +45,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: '/assets/marker.png'
+        src: "<%= asset_path('marker.png') %>"
       })
     }),
   }),
@@ -58,7 +58,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: '/assets/marker.png'
+        src: "<%= asset_path('marker.png') %>"
       })
     }),
   }),
