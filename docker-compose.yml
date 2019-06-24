@@ -15,7 +15,6 @@ services:
     context: .
     target: build-web
   environment:
-    - SECRET_KEY_BASE=5875385139d569da415070f64a3f38b5a183163c700ff157d7854d9d8b8ca2c59ac4b9b6cc3b96938b43f798e4778712cb887f8ac9a1b5cba0aab3fa871fd92d
     - RAILS_SERVE_STATIC_FILES=true
     - RAILS_ENV=production
   entrypoint: /t4d/docker-entrypoint.sh
