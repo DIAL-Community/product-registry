@@ -8,7 +8,7 @@ BuildingBlock.create(name: "Analytics and business intelligence", slug: 'analyti
         {"name":"Education sector","description":"Use in supply chain management systems for optimizing distribution of equipment, such as desks and textbooks to schools and learning institutions • Track analytics on learner performance, providing diagnostic information to guide future learning interventions • Track teacher professional development based on self-diagnostic assessment and development of professional learning pathways"},
         {"name":"Health sector","description":"• Disease surveillance systems can use analytics and business intelligence services to identify disease incidence, morbidity/mortality rates, density, distribution, etc • Supply chain management systems can use them to optimize shipment logistics for efficient delivery and inventory management • Point-of-service data analysis can help optimize health commodities production and demand-based pricing • Health insurance companies can use this for risk analysis and region- or disease- based optimization of insurance plans"}
     ],
-    "existing_software":["Microsoft Power BI","Tableau"],
+    "commercial_software":["Microsoft Power BI","Tableau"],
     "workflow_mappings":["Data analysis and business intelligence"]
 }') if BuildingBlock.where(slug: 'analytics_and_business_intel').empty?
 BuildingBlock.create(name: "Artificial intelligence", slug: 'artificial_intelligence', description: '{
@@ -21,7 +21,7 @@ BuildingBlock.create(name: "Artificial intelligence", slug: 'artificial_intellig
         {"name":"Education sector","description":"• Intelligent tutoring systems that work with learners directly and provide support to teachers on personalized learning support strategies • Artificially intelligent assessment software to support adaptive, personalized learning"},
         {"name":"Health sector:","description":"• Clinical decision support systems that assist doctors in diagnosing a patient’s disease condition and related intervention • Rehabilitation tools for patients with stroke, Alzheimer’s, autism, etc • AI can also help insurance companies detect high-yield and low-risk ROI patterns or fraud across various claim settlements"}
     ],
-    "existing_software":["Google TensorFlow"],
+    "commercial_software":[],
     "workflow_mappings":["Data analysis and business intelligence","Problem diagnosis"]
 }') if BuildingBlock.where(slug: 'artificial_intelligence').empty?
 BuildingBlock.create(name: "Client case management", slug: 'client_case_management', description: '{
@@ -34,7 +34,7 @@ BuildingBlock.create(name: "Client case management", slug: 'client_case_manageme
         {"name":"Education sector","description":"• Learner profiles are tracked from students’ first enrollment throughout their schooling careers"},
         {"name":"Health sector","description":"• Pregnancy and birth registration, as well as longitudinal tracking of antenatal and postnatal visits"}
     ],
-    "existing_software":["Dimagi CommCare"],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Client communication","Client education"]
 }') if BuildingBlock.where(slug: 'client_case_management').empty?
 BuildingBlock.create(name: "Collaboration management", slug: 'collaboration_management', description: '{
@@ -46,7 +46,7 @@ BuildingBlock.create(name: "Collaboration management", slug: 'collaboration_mana
     "sector_use":[{"name":"Agriculture sector", "description": "• Agri-Wikis (eg Agropedia) help agriculture research and development (ARD) and agriculture extension communities collaboratively develop knowledge packages for farmers"},
         {"name":"Education sector","description":"• User-generated content produced by learners, teachers and management can be uploaded to education portals that service various education communities"}
     ],
-    "existing_software":["Google Drive","Microsoft SharePoint"],
+    "commercial_software":["Google Drive","Microsoft SharePoint"],
     "workflow_mappings":["Client case management"]
 }') if BuildingBlock.where(slug: 'collaboration_management').empty?
 BuildingBlock.create(name: "Consent management", slug: 'consent_management', description: '{
@@ -59,7 +59,7 @@ BuildingBlock.create(name: "Consent management", slug: 'consent_management', des
         {"name":"Education sector","description":"• Automated parental consent system for approving children’s participation in school activities"},
         {"name":"Health sector","description":"• Patients can grant consent to health professionals to collect, use or disclose their personal health data, whether it is stored in a local system or it needs to be transferred to other organizations • Consent can also be obtained to allow a certain clinical procedure to be performed"}
     ],
-    "existing_software":[],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Identification and registration"]
 }') if BuildingBlock.where(slug: 'consent_management').empty?
 BuildingBlock.create(name: "Content management", slug: 'content_management', description: '{
@@ -72,7 +72,7 @@ BuildingBlock.create(name: "Content management", slug: 'content_management', des
         {"name":"Education sector","description":"• Ministry of education content portals that provide curriculum-aligned digital content, lesson plans, and exam papers for download by education communities"},
         {"name":"Health sector","description":"• Preventive care programmes can use these tools to raise awareness and spread information about medicines, diseases, lifestyle disorders, family planning, stress management, etc • CME programmes can use this tool to create or publish education and training content for students • Digital marketing can use content management services to manage advertisements as well as display and promote health messages, products and services"}
     ],
-    "existing_software":["Drupal","WordPress"],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Client education","Content management","Knowledge management"]
 }') if BuildingBlock.where(slug: 'content_management').empty?
 BuildingBlock.create(name: "Data collection", slug: 'data_collection', description: '{
@@ -85,7 +85,7 @@ BuildingBlock.create(name: "Data collection", slug: 'data_collection', descripti
         {"name":"Education sector","description":"• Conduct whole school evaluation surveys by principals to ascertain school improvement needs"},
         {"name":"Health sector","description":"• Health census can use this in surveying demographic distribution of lifestyle habits, living conditions, disease incidence, mortality, morbidity, etc • Diagnostics and monitoring applications can use it to acquire health status and biomedical signals of patients • Real-time mapping of disease epidemics"}
     ],
-    "existing_software":["Open Data Kit (ODK)"],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Client communication","Data collection and reporting"]
 }') if BuildingBlock.where(slug: 'data_collection').empty?
 BuildingBlock.create(name: "Digital registries", slug: 'digital_registries', description: '{
@@ -98,7 +98,7 @@ BuildingBlock.create(name: "Digital registries", slug: 'digital_registries', des
         {"name":"Education sector","description":"• Registries of criminal offenders accessible to all education institutions • Registries of parent or guardian financial status with reference to school payment systems"},
         {"name":"Health sector","description":"• Facility registry – manages unique identifiers for health service delivery locations, including hospitals, clinics, pharmacies and standalone laboratories • Health worker registry (or provider registry) – manages unique identifiers for all types of health workers, including doctors, nurses, pharmacists, social workers, community health workers, and sometimes administrators. It is also called the Master Provider Index, which obtains provider identification information and can connect the provider to facility information • Patient registry – manages the unique identifiers of people receiving health services. It is also called the Master Patient Index (MPI), which maintains patient identification information and verifies the patient demographic data in a system"}
     ],
-    "existing_software":["DHIS2","iHIRS"],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Client education","Data collection and reporting","Identification and registration","Marketplace"]
 }') if BuildingBlock.where(slug: 'digital_registries').empty?
 BuildingBlock.create(name: "eLearning", slug: 'elearning', description: '{
@@ -111,7 +111,7 @@ BuildingBlock.create(name: "eLearning", slug: 'elearning', description: '{
         {"name":"Education sector","description":"• Open distance and flexible learning systems (ODFL) offered by education institutions that enroll learners from remote, distant areas who can learn and submit assignments virtually, and universities offering MOOCs"},
         {"name":"Health sector","description":"• Continuing medical education (CME) for medical professionals and health workers • Tele-trainings for yoga or exercise • Remote training for college students in disaster management and first aid"}
     ],
-    "existing_software":["MIT Open Course Ware","Moodle"],
+    "commercial_software":["MIT Open Course Ware"],
     "workflow_mappings":["Client education","Knowledge management"]
 }') if BuildingBlock.where(slug: 'elearning').empty?
 BuildingBlock.create(name: "eMarketplace", slug: 'emarketplace', description: '{
@@ -124,7 +124,7 @@ BuildingBlock.create(name: "eMarketplace", slug: 'emarketplace', description: '{
         {"name":"Education sector","description":"• An eLearning marketplace in education can be used to provide a range of free and open education products and services that include user reviews for learners, parents, schools, teachers, researchers and education officials"},
         {"name":"Health sector","description":"• Medicine supply • Bio-medical equipment sales • Patient access to services such as physical assistance, transportation, diagnostics services, therapy services, consultation and counselling services"}
     ],
-    "existing_software":["Esoko"],
+    "commercial_software":["Esoko"],
     "workflow_mappings":["Financial services","Procurement"]
 }') if BuildingBlock.where(slug: 'emarketplace').empty?
 BuildingBlock.create(name: "Geographic information services (GIS)", slug: 'geographic_information_services', description: '{
@@ -137,7 +137,7 @@ BuildingBlock.create(name: "Geographic information services (GIS)", slug: 'geogr
         {"name":"Education sector","description":"• Locate every private and public education institution • Communicates student enrollment data, grade level allocation, and student travel in a municipality, district or state"},
         {"name":"Health sector","description":"• Improve the identification of disease outbreak sources, supply chain bottlenecks, and structures in the built environment that impact health and wellness"}
     ],
-    "existing_software":["Quantum GIS (QGIS)"],
+    "commercial_software":[],
     "workflow_mappings":["Data collection and reporting","Identification and registration","Supply chain management"]
 }') if BuildingBlock.where(slug: 'geographic_information_services').empty?
 BuildingBlock.create(name: "Identification and authentication", slug: 'identification_and_authenticatio', description: '{
@@ -149,7 +149,7 @@ BuildingBlock.create(name: "Identification and authentication", slug: 'identific
     "sector_use":[{"name":"All sectors","description":"The use of a foundational ID is cross-sectoral. It can be used to verify user identity and enable any service that a user has access credentials for, such as a fertilizer subsidy or food voucher."},
         {"name":"Health sector","description":"• Enterprise Master Patient Index"}
     ],
-    "existing_software":["Apache Syncope","Modular Open Source Identification Platform (MOSIP, currently under development)"],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Client communication","Data collection and reporting","Financial services","Identification and registration","Knowledge management","Procurement","Supply chain management","Work planning and coordination"]
 }') if BuildingBlock.where(slug: 'identification_and_authenticatio').empty?
 BuildingBlock.create(name: "Information mediator", slug: 'information_mediator', description: '{
@@ -160,7 +160,7 @@ BuildingBlock.create(name: "Information mediator", slug: 'information_mediator',
     "digital_function":"• Routes requests to the correct provider after necessary message transformation functionalities and protocol conversion • Connects the service requestor to the service provider and its underlying solution platforms, realizing the requested service • Discovers services and, at runtime, to support the virtualization of services, so that changes to end-points can occur without impact to service consumers and service providers • Supports the handling of transactions and associated communication errors and exceptions • Enforces access privileges and other security policies • Maintains service invocation history and monitors and tracks service invocations • Provides local caching/broadcast/multicast capabilities to reduce repeated access to databases for the same information and to speed up data exchange • Translates data from one format to another, and interoperates with handshake protocols to enable interoperability between different ICT Building Blocks duplications",
     "sector_use":[{"name":"Health sector","description":"• The Health Information Access Layer (HIAL) in Canada provides communications services, common services and supporting components to broker data and service requests from point-of-service applications • It publishes a catalogue of available services, such as services to access registries and domain repositories (eg labs, drugs, diagnostic images) • A point-of-service system requests the ‘get lab results’ service for a healthcare client as part of the larger business service of managing lab results and reports • The system or user requesting the service does not need to know how to interface with the registries, domain repositories and applications; it just needs to know how to request a service that is exposed through the HIAL"}
     ],
-    "existing_software":["OpenHIM"],
+    "commercial_software":[],
     "workflow_mappings":["Important in the integration ICT Building Blocks as part of any WorkFlow"]
 }') if BuildingBlock.where(slug: 'information_mediator').empty?
 BuildingBlock.create(name: "Messaging", slug: 'messaging', description: '{
@@ -173,7 +173,7 @@ BuildingBlock.create(name: "Messaging", slug: 'messaging', description: '{
         {"name":"Education sector","description":"• Messages via SMS or WhatsApp to enlist potential participants for an online or blended course • Formation of WhatsApp groups among course participants and course facilitators to exchange information, share experiences, collaborate on projects or communicate alerts about upcoming events or deliverables"},
         {"name":"Health sector","description":"• Send patients reminders for medication, diet, activity and appointments • Remotely track medical devices or take the vital signs of patients at home or in a remote hospital • Supply chain management systems can use messaging services to notify low stocks of inventory • It can also be used to announce new programmes, report on diseases, notify the public or individuals about events, and share public awareness content over mobile phones and social media"}
     ],
-    "existing_software":["RapidPro","Twilio"],
+    "commercial_software":["Twilio"],
     "workflow_mappings":["Client communication","Data collection and reporting","Financial services","Marketplace","Supply chain management"]
 }') if BuildingBlock.where(slug: 'messaging').empty?
 BuildingBlock.create(name: "Mobility management", slug: 'mobility_management', description: '{
@@ -185,7 +185,7 @@ BuildingBlock.create(name: "Mobility management", slug: 'mobility_management', d
     "sector_use":[{"name":"Agriculture sector","description":"• EMM services are used to remotely manage and control devices used by agriculture extension workers to add, update or remove applications and to manage field workforce"},
         {"name":"Health sector","description":"• EMM services are used to remotely manage and control devices used by community health workers to add, update or remove applications and to manage field workforce"}
     ],
-    "existing_software":["Microsoft Group Policy Management"],
+    "commercial_software":["Microsoft Group Policy Management"],
     "workflow_mappings":["Client communication","Data collection and reporting","Identification and registration","Supply chain management"]
 }') if BuildingBlock.where(slug: 'mobility_management').empty?
 BuildingBlock.create(name: "Payments", slug: 'payments', description: '{
@@ -198,7 +198,7 @@ BuildingBlock.create(name: "Payments", slug: 'payments', description: '{
         {"name":"Education sector","description":"• Payment for online course enrollment • Fee payment systems for primary and secondary schools, universities, and other learning institutions • Payment for downloading proprietary electronic publications • Bursary payments to students"},
         {"name":"Health sector","description":"• Payment during booking of services • Downloading of electronic publications • Insurance claim settlements • Purchase of medicines or food, etc"}
     ],
-    "existing_software":["Apache Fineract","Electronic Funds Transfers (EFT) from banks, credit card payments, and online payment services such as PayPal"],
+    "commercial_software":["Electronic Funds Transfers (EFT) from banks, credit card payments, and online payment services such as PayPal"],
     "workflow_mappings":["Client case management","Client education","Financial services","Marketplace","Procurement","Supply chain management"]
 }') if BuildingBlock.where(slug: 'payments').empty?
 BuildingBlock.create(name: "Registration", slug: 'registration', description: '{
@@ -211,7 +211,7 @@ BuildingBlock.create(name: "Registration", slug: 'registration', description: '{
         {"name":"Education sector","description":"• Registration for online professional development courses via the web or a mobile app • During registration, personal, educational and demographic data is required to help the system ascertain qualification levels • Doing so helps the system tailor course content in accordance with user needs"},
         {"name":"Health sector","description":"• Pregnant women’s registration into Mother Child Tracking System"}
     ],
-    "existing_software":["OpenSRP"],
+    "commercial_software":[],
     "workflow_mappings":["Client case management","Client communication","Data collection and reporting","Identification and registration","Marketplace","Supply chain management"]
 }') if BuildingBlock.where(slug: 'registration').empty?
 BuildingBlock.create(name: "Reporting and dashboards", slug: 'reporting_and_dashboards', description: '{
@@ -224,7 +224,7 @@ BuildingBlock.create(name: "Reporting and dashboards", slug: 'reporting_and_dash
         {"name":"Education sector","description":"• Production of reports on educational key performance indicators, including learner performance, completion rates, retention, dropout rates, graduate passes and failure rates"},
         {"name":"Health sector","description":"• Production of aggregated statistics for the routine data a health facility uses for strategic planning within the health system • Management information system reports for hospitals, labs and other entities, supply chain tracking reports, patient feedback reports, medical test reports, etc"}
     ],
-    "existing_software":["DHIS2","Tableau"],
+    "commercial_software":["Tableau"],
     "workflow_mappings":["Client Case Management","Client Education","Content Management","Data Analysis and Business Intelligence","Data Collection and Reporting","Remote Monitoring"]
 }') if BuildingBlock.where(slug: 'reporting_and_dashboards').empty?
 BuildingBlock.create(name: "Scheduling", slug: 'scheduling', description: '{
@@ -237,7 +237,7 @@ BuildingBlock.create(name: "Scheduling", slug: 'scheduling', description: '{
         {"name":"Education sector","description":"• Calendar service that schedules the school timetable, exam timetable, quarterly district official meetings, subject advisor visit schools and school evaluation meetings • Alerts are sent in advance of scheduled events as task reminders, such as reports and presentations that are due • Relevant forms required for submission of these types of documents are also sent with these alerts"},
         {"name":"Health sector","description":"• Booking appointments with providers • Planning medication, diet, exercise and follow-up consultations for patients and providers • Acquiring periodic measurements from medical monitoring devices • Supply chain management systems can organize shipments of medical commodities or equipment • Hospitals, public health departments, and organizations can announce new programmes or events to the public over mobile phones and social media • Facility managers can schedule regular maintenance checks on equipment or to generate periodic reports from management information systems"}
     ],
-    "existing_software":["Cron","Django Celery"],
+    "commercial_software":["Cron","Django Celery"],
     "workflow_mappings":["Client communication","Supply chain management","Work planning and coordination"]
 }') if BuildingBlock.where(slug: 'scheduling').empty?
 BuildingBlock.create(name: "Security", slug: 'security', description: '{
@@ -250,7 +250,7 @@ BuildingBlock.create(name: "Security", slug: 'security', description: '{
         {"name":"Education sector","description":"• Multi-password management systems in schools for secure storage of passwords and sensitive data"},
         {"name":"Health sector","description":"• SSL digital certificate-based permission for uploading digital documents to servers from client systems • Role-based access control in hospital information systems that prevents unauthorized persons from accessing content • HL7/DICOM messaging for transmission of anonymized data • MAC-id-based access control protocols for allowing only authorized machines to access or operate medical or financial records • ePayment applications verify the digital signature of the payer, or diagnostic tests check the digital signature of doctors for authenticating medical reports in insurance claims • Biometric passwords may be used for health workers accessing eLearning tools, patient data, etc via mobile devices and computers"}
     ],
-    "existing_software":["OpenSSL"],
+    "commercial_software":["OpenSSL"],
     "workflow_mappings":["Security is an important consideration in all WorkFlows","Client case management","Client education","Content management","Data analysis and business intelligence","Identification and registration","Knowledge management","Marketplace"]
 }') if BuildingBlock.where(slug: 'security').empty?
 BuildingBlock.create(name: "Shared data repositories", slug: 'shared_data_repositories', description: '{
@@ -263,7 +263,7 @@ BuildingBlock.create(name: "Shared data repositories", slug: 'shared_data_reposi
         {"name":"Education sector","description":"• Repositories of learner profiles and progression records accessible across government systems"},
         {"name":"Health sector","description":"• Shared health record: Collection of patient records typically provided by many clinically related systems, made available for consumption by those who have the necessary rights and need to see the information. The systems or applications used by insurers or payers of subsidized care may be given partial access to shared health records in order to approve payment for services • Encounter: Data pertaining to an interaction between a patient and healthcare provider for the purpose of assessing the health status of a patient or for providing patient services • Clinical documentation: Component of the patient’s medical record that documents clinical observations and services • Medications: Information pertaining to a patient’s medication history. This includes those medications taken at home, prescribed medications, and also those administered in care settings such as a hospital or an outpatient clinic • Immunizations: Records of a patient’s immunization history • Laboratory: Contains the results of laboratory tests performed on clinical specimens • Imaging: Contains records of diagnostic imaging as well as clinician notes and other information stored with the images • There may also be repositories of insurance claims, subsidies, or out-of-pocket payments linked to health service records"}
     ],
-    "existing_software":["World Bank Open Data"],
+    "commercial_software":["World Bank Open Data"],
     "workflow_mappings":["Client case management","Client education","Content management","Data analysis and business intelligence","Knowledge management"]
 }') if BuildingBlock.where(slug: 'shared_data_repositories').empty?
 BuildingBlock.create(name: "Terminology", slug: 'terminology', description: '{
@@ -275,7 +275,7 @@ BuildingBlock.create(name: "Terminology", slug: 'terminology', description: '{
     "sector_use":[{"name":"Agriculture sector","description":"• FAO Agrovoc is the main terminology standard in agriculture • It is a controlled vocabulary covering all areas of interest including food, nutrition, agriculture, fisheries, forestry and environment • It is published by FAO and edited by a community of experts • Apart from Agrovoc, Pesticide Environmental Stewardship (PES) by Cornwell University has a glossary of terms related to pesticides • Population census (definition of income group, standards related to type of housing, and terminology such as literate and semi-literate)"},
         {"name":"Health sector","description":"• Several terminology reference standards such as DICOM, HL7, ICD-10/PCT, LOINC, etc are used widely for payments and insurance claims processing as well as different supply chain applications"}
     ],
-    "existing_software":["Open Concept Lab"],
+    "commercial_software":[],
     "workflow_mappings":["Client education","Data analysis and business intelligence"]
 }') if BuildingBlock.where(slug: 'terminology').empty?
 BuildingBlock.create(name: "Workflow and algorithm", slug: 'workflow_and_algorithm', description: '{
@@ -287,6 +287,6 @@ BuildingBlock.create(name: "Workflow and algorithm", slug: 'workflow_and_algorit
     "sector_use":[{"name":"Agriculture sector","description":"• Farm management systems use many WorkFlows related to various agronomic activities, such as fertilizer application and irrigation"},
         {"name":"Health sector","description":"• Worklist tracking and reminding • Clinical decision support algorithms • Evaluation and processing of financial subsidy or insurance claims • Electronic collection or remittance of payments"}
     ],
-    "existing_software":["Drools","Zapier"],
+    "commercial_software":["Zapier"],
     "workflow_mappings":["Client case management","Data analysis and business intelligence","Problem diagnosis","Procurement","Work planning and coordination"]
 }') if BuildingBlock.where(slug: 'workflow_and_algorithm').empty?

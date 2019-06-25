@@ -36,16 +36,6 @@
         </ul>
       <% end %>
     </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong>Examples of Existing Software: </strong>
-      <% if @bbJson.existing_software.count > 0 %>
-        <ul>
-        <% @bbJson.existing_software.each do |software| %>
-          <li class="text-muted"><%= software %>
-        <% end %>
-        </ul>
-      <% end %>
-    </p>
     <p class="float-right mb-0" >
       <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
       <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
@@ -58,19 +48,31 @@
     <h5 class="float-left mb-0">Products</h5>
     <%= link_to 'Add', new_product_path, :class => "card-link text-white float-right" %>
   </div>
+  <div class="row">
   <% if @building_block.products.count > 0 %>
-    <div class="row">
-      <% @building_block.products.each do |product| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body pb-1">
-              <h5 class="card-title"><%= link_to product.name, product %></h5>
-            </div>
+    <% @building_block.products.each do |product| %>
+      <div class="col-6 col-lg-4 mt-2">
+        <div class="card h-100">
+          <div class="card-body pb-1">
+            <h5 class="card-title"><%= link_to product.name, product %></h5>
           </div>
         </div>
-      <% end %>
-    </div>
-  <% else %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if @bbJson.commercial_software.count > 0 %>
+    <% @bbJson.commercial_software.each do |product| %>
+      <div class="col-6 col-lg-4 mt-2">
+        <div class="card h-100">
+          <div class="card-body pb-1">
+            <h5 class="card-title text-muted"><%= product %></h5>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  </div>
+  <% if @bbJson.commercial_software.count == 0 && @building_block.products.count == 0 %>
     <p class="card-text text-muted">We don't have any product information for this building block.</p>
   <% end %>
 </div>
