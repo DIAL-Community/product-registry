@@ -25,8 +25,8 @@ html {
   min-height: 100vh;
 }
 
-body { 
-  padding-top: 120px; 
+body {
+  padding-top: 120px;
 }
 
 a {
@@ -93,7 +93,6 @@ a:hover {
   padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid #cccccc;
-  bottom: -5rem;
   left: -3.1rem;
   min-width: 18rem;
 
@@ -119,6 +118,12 @@ a:hover {
     border-width: 0.5rem;
     left: 3rem;
     margin-left: -0.5rem;
+  }
+
+  ul {
+    max-height: 200px;
+    overflow-x: scroll;
+    margin-block-end: 0;
   }
 }
 
@@ -224,7 +229,7 @@ a:hover {
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
-  from {opacity: 0;} 
+  from {opacity: 0;}
   to {opacity: 1;}
 }
 
@@ -236,4 +241,3 @@ a:hover {
 .field-valid {
   display: none;
 }
-
