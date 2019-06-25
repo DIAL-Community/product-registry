@@ -14,6 +14,7 @@ if Product.where(slug: 'bahmni').empty?
 end
 if Product.where(slug: 'commcare').empty?
   p = Product.create(name: "CommCare", slug: 'commcare', start_assessment: true) if Product.where(slug: 'commcare').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'client_case_management').limit(1)[0]
   ProductAssessment.create(
     osc_cd10: true, osc_cd20: true, osc_cd21: true, osc_cd30: true, osc_cd31: false, osc_cd40: true, osc_cd50: true, osc_cd60: true, osc_cd61: false,
     osc_lc10: false, osc_lc20: true, osc_lc30: true, osc_lc40: true, osc_lc50: true, osc_lc60: true,
@@ -31,6 +32,7 @@ end
 if Product.where(slug: 'dhis').empty?
   p = Product.create(name: "DHIS2", slug: 'dhis', start_assessment: true) if Product.where(slug: 'dhis').empty?
   p.building_blocks << BuildingBlock.where(slug: 'digital_registries').limit(1)[0]
+  p.building_blocks << BuildingBlock.where(slug: 'reporting_and_dashboards').limit(1)[0]
   ProductAssessment.create(
     osc_cd10: false, osc_cd20: false, osc_cd21: false, osc_cd30: false, osc_cd31: false, osc_cd40: false, osc_cd50: false, osc_cd60: false, osc_cd61: false,
     osc_lc10: false, osc_lc20: false, osc_lc30: false, osc_lc40: false, osc_lc50: false, osc_lc60: false,
@@ -45,11 +47,19 @@ if Product.where(slug: 'dhis').empty?
     digisquare_technical_documentation: 3, digisquare_software_productization: 2, digisquare_interoperability_and_data_accessibility: 3, digisquare_security: 3, digisquare_scalability: 3,
     product: p, has_osc: false, has_digisquare: true)
 end
-Product.create(name: "Drupal", slug: 'drupal') if Product.where(slug: 'drupal').empty?
+if Product.where(slug: 'drools').empty?
+  p = Product.create(name: "Drools", slug: 'drools') if Product.where(slug: 'drools').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'terminology').limit(1)[0]
+end
+if Product.where(slug: 'drupal').empty?
+  p=Product.create(name: "Drupal", slug: 'drupal') if Product.where(slug: 'drupal').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'content_management').limit(1)[0]
+end
 Product.create(name: "Global Digital Library", slug: 'global_digital_library') if Product.where(slug: 'global_digital_library').empty?
 if Product.where(slug: 'ihris').empty?
   p = Product.create(name: "iHRIS", slug: 'ihris') if Product.where(slug: 'ihris').empty?
   p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
+  p.building_blocks << BuildingBlock.where(slug: 'digital_registries').limit(1)[0]
 end
 if Product.where(slug: 'librehealth').empty?
   p = Product.create(name: "LibreHealth", slug: 'librehealth', start_assessment: true) if Product.where(slug: 'librehealth').empty?
@@ -97,7 +107,6 @@ if Product.where(slug: 'mhero').empty?
 end
 if Product.where(slug: 'mifos').empty?
   p = Product.create(name: "Mifos", slug: 'mifos', start_assessment: true) if Product.where(slug: 'mifos').empty?
-  p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
   p.building_blocks << BuildingBlock.where(slug: 'payments').limit(1)[0]
   ProductAssessment.create(
     osc_cd10: true, osc_cd20: true, osc_cd21: false, osc_cd30: true, osc_cd31: false, osc_cd40: true, osc_cd50: true, osc_cd60: true, osc_cd61: false,
@@ -110,7 +119,14 @@ if Product.where(slug: 'mifos').empty?
     osc_im10: true, osc_im20: true,
     product: p, has_osc: true, has_digisquare: false)
 end
-Product.create(name: "Moodle", slug: 'moodle') if Product.where(slug: 'moodle').empty?
+if Product.where(slug: 'moodle').empty?
+  p=Product.create(name: "Moodle", slug: 'moodle') if Product.where(slug: 'moodle').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
+end
+if Product.where(slug: 'mosip').empty?
+  p = Product.create(name: "MOSIP", slug: 'mosip') if Product.where(slug: 'mosip').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'identification_and_authenticatio').limit(1)[0]
+end
 if Product.where(slug: 'motech').empty?
   p = Product.create(name: "MOTECH", slug: 'motech', start_assessment: true) if Product.where(slug: 'motech').empty?
   ProductAssessment.create(
@@ -127,6 +143,7 @@ end
 Product.create(name: "mSpray", slug: 'mspray') if Product.where(slug: 'mspray').empty?
 if Product.where(slug: 'odk').empty?
   p = Product.create(name: "ODK", slug: 'odk', start_assessment: true) if Product.where(slug: 'odk').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'data_collection').limit(1)[0]
   ProductAssessment.create(
     osc_cd10: true, osc_cd20: true, osc_cd21: false, osc_cd30: true, osc_cd31: false, osc_cd40: true, osc_cd50: true, osc_cd60: true, osc_cd61: false,
     osc_lc10: false, osc_lc20: true, osc_lc30: true, osc_lc40: false, osc_lc50: true, osc_lc60: true,
@@ -142,7 +159,10 @@ if Product.where(slug: 'odk').empty?
     product: p, has_osc: true, has_digisquare: true)
 end
 Product.create(name: "Odoo/OpenERP", slug: 'odoo_openerp') if Product.where(slug: 'odoo_openerp').empty?
-Product.create(name: "Open Concept Lab", slug: 'open_concept_lab') if Product.where(slug: 'open_concept_lab').empty?
+if Product.where(slug: 'open_concept_lab').empty?
+  p = Product.create(name: "Open Concept Lab", slug: 'open_concept_lab') if Product.where(slug: 'open_concept_lab').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'terminology').limit(1)[0]
+end
 Product.create(name: "OpenCRVS", slug: 'opencrvs') if Product.where(slug: 'opencrvs').empty?
 if Product.where(slug: 'openelis').empty?
   p = Product.create(name: "OpenELIS", slug: 'openelis', start_assessment: true) if Product.where(slug: 'openelis').empty?
@@ -159,6 +179,7 @@ if Product.where(slug: 'openelis').empty?
 end
 if Product.where(slug: 'openhim').empty?
   p = Product.create(name: "OpenHIM", slug: 'openhim', start_assessment: true) if Product.where(slug: 'openhim').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'information_mediator').limit(1)[0]
   ProductAssessment.create(
     osc_cd10: true, osc_cd20: true, osc_cd21: false, osc_cd30: true, osc_cd31: false, osc_cd40: true, osc_cd50: true, osc_cd60: true, osc_cd61: false,
     osc_lc10: true, osc_lc20: true, osc_lc30: true, osc_lc40: true, osc_lc50: true, osc_lc60: false,
@@ -233,7 +254,10 @@ if Product.where(slug: 'publiclab').empty?
     osc_im10: true, osc_im20: true,
     product: p, has_osc: true, has_digisquare: false)
 end
-Product.create(name: "Quantum GIS", slug: 'quantum_gis') if Product.where(slug: 'quantum_gis').empty?
+if Product.where(slug: 'quantum_gis').empty?
+  p = Product.create(name: "Quantum GIS", slug: 'quantum_gis') if Product.where(slug: 'quantum_gis').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'geographic_information_services').limit(1)[0]
+end
 if Product.where(slug: 'rapidpro').empty?
   p = Product.create(name: "RapidPro", slug: 'rapidpro', start_assessment: true) if Product.where(slug: 'rapidpro').empty?
   p.building_blocks << BuildingBlock.where(slug: 'data_collection').limit(1)[0]
@@ -249,7 +273,14 @@ if Product.where(slug: 'rapidpro').empty?
     osc_im10: true, osc_im20: true,
     product: p, has_osc: true, has_digisquare: false)
 end
-Product.create(name: "TensorFlow", slug: 'tensorflow') if Product.where(slug: 'tensorflow').empty?
+if Product.where(slug: 'syncope').empty?
+  p = Product.create(name: "Apache Syncope", slug: 'syncope') if Product.where(slug: 'syncope').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'identification_and_authenticatio').limit(1)[0]
+end
+if Product.where(slug: 'tensorflow').empty?
+  p= Product.create(name: "TensorFlow", slug: 'tensorflow') if Product.where(slug: 'tensorflow').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'artificial_intelligence').limit(1)[0]
+end
 Product.create(name: "U-Report", slug: 'u-report') if Product.where(slug: 'u-report').empty?
 if Product.where(slug: 'ushahidi').empty?
   p = Product.create(name: "Ushahidi", slug: 'ushahidi', start_assessment: true) if Product.where(slug: 'ushahidi').empty?
@@ -266,7 +297,10 @@ if Product.where(slug: 'ushahidi').empty?
 end
 Product.create(name: "wikiHow", slug: 'wikihow') if Product.where(slug: 'wikihow').empty?
 Product.create(name: "Wikipedia", slug: 'wikipedia') if Product.where(slug: 'wikipedia').empty?
-Product.create(name: "WordPress", slug: 'wordpress') if Product.where(slug: 'wordpress').empty?
+if Product.where(slug: 'wordpress').empty?
+  p=Product.create(name: "WordPress", slug: 'wordpress') if Product.where(slug: 'wordpress').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'content_management').limit(1)[0]
+end
 p = Product.where(slug: 'bahmni')[0]
 p.includes = Product.where(slug: ['odoo_openerp','openelis','openmrs',])
 p.interoperates_with = Product.where(slug: ['dhis',])
@@ -280,3 +314,4 @@ p = Product.where(slug: 'openmrs')[0]
 p.interoperates_with = Product.where(slug: ['open_concept_lab',])
 p = Product.where(slug: 'opensrp')[0]
 p.includes = Product.where(slug: ['dhis','openlmis','openmrs','rapidpro',])
+
