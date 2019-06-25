@@ -1,4 +1,5 @@
 require 'json'
+require 'cgi'
 
 class WikiConverter
     def convert_workflow_to_wiki(filename)
@@ -74,9 +75,104 @@ class WikiConverter
             puts cmd
         end
     end
+
+    def convert_sdg_to_wiki(filename)
+      input = open(filename)
+      sdgData = input.read()
+
+      sdg_images = [
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_60.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_32.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_68.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_16.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_44.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_28.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_8.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_20.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_12.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_36.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_40.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_64.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_72.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_76.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_4.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_48.jpg',
+        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_56.jpg'
+      ];
+      sdg_bg = [
+        'background:#eb1c2d;',
+        'background:#d3a029;',
+        'background:#4c9f38;',
+        'background:#c52333;',
+        'background:#ed4135;',
+        'background:#00aed9;',
+        'background:#fdb713;',
+        'background:#8f1838;',
+        'background:#f06a38;',
+        'background:#dd1367;',
+        'background:#f69c39;',
+        'background:#cf8d2a;',
+        'background:#48773e;',
+        'background:#007dbc;',
+        'background:#5cb84d;',
+        'background:#02558b;',
+        'background:#183668;'
+      ];
+
+      first_element_style = 'border-top: 0; border-bottom: 1px dotted #ccc;'
+      other_element_style = 'border-bottom: 1px dotted #ccc;'
+
+      sdgJson = JSON.parse(sdgData, object_class: OpenStruct)
+      sdgJson.each_with_index do | sdg, index |
+        outFilename = "SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, "0")}.xml"
+        output = open(outFilename, 'w')
+        output.puts('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
+        output.puts('<page xmlns="http://www.xwiki.org">')
+        output.puts("<title>#{sdg["description"]}</title>")
+        output.puts('<syntax>xwiki/2.1</syntax>')
+        output.puts('<content>')
+
+        output.puts "(% class='box' style='#{sdg_bg[index]}' %)"
+        output.puts '((('
+        output.puts '(% style="text-align:center" %)'
+        output.puts "[[image:#{sdg_images[index]}||height='120' width='279']]"
+        output.puts ')))'
+
+        output.puts('|(% colspan="2" rowspan="1" %)(((=== Targets ===)))'\
+                    '|(% colspan="2" rowspan="1" %)(((=== Indicators ===)))')
+        
+        sdg['targets'].each do |target|
+          output.puts "|(% style='width: 5%;' %)(((==== #{target['code']} ====)))"\
+                      "|(% style='width: 45%;' %)(((#{target['description']})))|"
+          output.puts '(% colspan="2" rowspan="1" %)((('
+          target['indicators'].each_with_index do |indicator, index|
+            code = indicator['code']
+            description = CGI.escapeHTML(indicator['description'])
+            if index == 0
+              output.puts "|(% style='width: 5%; #{first_element_style}' %)(((==== #{code} ====)))"\
+                          "|(% style='width: 45%; #{first_element_style}' %)(((#{description})))"
+            else
+              output.puts "|(% style='width: 5%; #{other_element_style}' %)(((==== #{code} ====)))"\
+                          "|(% style='width: 45%; #{other_element_style}' %)(((#{description})))"
+            end
+          end
+          output.puts(")))")
+        end
+
+        output.puts('</content>')
+        output.puts('</page>')
+
+        cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{outFilename}' "\
+              "-H 'Content-Type: application/xml' "\
+              "http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/SDGs"\
+              "/pages/SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, "0")}"
+        puts cmd
+      end
+    end
 end
 
 converter = WikiConverter.new
 
 #converter.convert_workflow_to_wiki("./workflows.json")
-converter.convert_bb_to_wiki("./building_blocks.json")
+#converter.convert_bb_to_wiki("./building_blocks.json")
+converter.convert_sdg_to_wiki("./sdgs.json")
