@@ -126,7 +126,7 @@ class WikiConverter
                     '|(% colspan="2" rowspan="1" %)(((=== Indicators ===)))')
         
         sdg['targets'].each do |target|
-          output.puts "|(% style='width: 5%;' %)(((==== #{target['code']} ====)))"\
+          output.puts "|(% style='width: 5%;' %){{id name='SDG" + sdg['code'].to_s.rjust(2, '0') + "-T" + target['code'].gsub(/\./, '') + "'/}}(((==== #{target['code']} ====)))"\
                       "|(% style='width: 45%;' %)(((#{target['description']})))|"
           output.puts '(% colspan="2" rowspan="1" %)((('
           target['indicators'].each_with_index do |indicator, index|
