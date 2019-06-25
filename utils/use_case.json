@@ -1,0 +1,247 @@
+[{
+  "name": "Maternal and newborn health",
+  "summary": "Care services for mother and child spanning the prenatal and postnatal periods resulting in a healthy mother and child.",
+  "sector": "Health",
+  "SDGs": [{
+      "code": "3.1",
+      "description": "By 2030,reduce the global maternal mortality ratio to lessthan 70 per 100,000 live births"
+    },
+    {
+      "code": "3.2",
+      "description": "By 2030, end preventable deaths of newborns and children under 5 years of age, with all countries aiming to reduce neonatal mortality to at least as low as 12 per 1,000 live births and under-5 mortality to at least as low as 25 per 1,000 live births"
+    }
+  ],
+  "steps": [{
+      "title": "Sona, an ASHA worker, meets Sowmya and her family",
+      "description": "Sona, a government-accredited social health activist (ASHA), works in a rural Indian town and routinely visits patients at homes and hospitals in the area. She works with a mother and child tracking system (MCTS) to coordinate healthcare servicesfor her clients. During her visitto a hospital, Sona meets Sowmya, who has delivered her first baby, and educates her about post-delivery care (eg breastfeeding, nutrition, immunization, personal hygiene), and the importance of using the support and facilities provided by the mother and childcare programme."
+    },
+    {
+      "title": "Sona registers Sowmya in MCTS",
+      "description": "With Sowmya’s consent, Sona registers Sowmya’s child’s name, address and birth certificate, and Sowmya’s name and ID as the caretaker of the child into the MCTS system, which automatically validates the birth certificate and Sowmya’s ID with the government’s citizen records system. Sowmya then creates an account in MCTS for her electronic health records (EHRs) and a barcoded unique ID card for getting further assistance. MCTS connects Sowmya’s mobile phone number to her ID and enables permissions for Sona to electronically coordinate various MCTS services for Sowmya."
+    },
+    {
+      "title": "Arranging baby’s first visit to the paediatric clinic",
+      "description": "Sona helps Sowmya upload her baby’s photo, family medical history and hospital discharge summary into the EHRs from her mobile phone and download guidance information from the MCTS system. Sona then uses her mobile phone to book an appointment with a paediatrician. A few days before the appointment, Sona and Sowmya get SMS messages on their mobile phones from MCTS reminding them of the appointment."
+    },
+    {
+      "title": "Paediatrician visits",
+      "description": "At the clinic, the paediatrician swipes the baby’s ID card to access and study the baby’s EHRs and update the information and findings, as well as the prescriptions for medication, nutrition and immunization. She educates Sowmya on managing child growth and the importance of immunization and shows her relevant information on the MCTS system. Sona helps Sowmya access the information, order medication and nutrition supplements, and book appointments for future immunization and follow-up visits. Over the first year, the paediatrician tracks the development of the child and observes normal physical growth but sustained delays in behavioural development. She notes that the child does not make eye contact, smile in reciprocation, respond when called or to familiar voices, or follow gestures or pronounced verbal cues. She suspects early signs of autism, a neurological disorder that can cause significant challenges to the social, communication and behavioural development of the child. She counsels Sowmya about the situation and the importance of early treatment and refers the child to a therapy centre. Sona helps Sowmya book an appointment with a nearby therapy centre and download more information about autism from the MCTS website to Sowmya’s mobile phone."
+    },
+    {
+      "title": "Procuring medicine and nutrition supplies",
+      "description": "Sowmya visits an authorized pharmacy and food store to pick up her prescribed medicine and food. Sona also picks up medication and food prescribed for her other clients and delivers them to their homes. The store scans the barcode on Sowmya’s card to retrieve her MCTS record and matches it with the e-prescription received. The pharmacist fills the prescription, assesses the instructions Sowmya has already received from her physician, and reinforces the benefits of Sowmya following the instructions."
+    },
+    {
+      "title": "Visit to the therapy centre",
+      "description": "Sowmya goes to the therapy centre, where the therapist scans the child’s MCTS card to retrieve health records, referral notes and appointment details. The therapist conducts interactive tests with the child and plans a therapy schedule. She helps Sowmya download an interactive game-like rehab application from MCTS onto her mobile phone that will help the child learn to recognize colours, shapes, objeand gestures, as well as perform gestures, pronounce words and trace lines. The therapist educates Sowmya on how to interact with and monitor the child, and record and report any abnormal behaviour from her phone. The MCTS system automatically tracks and sends alerts to Sowmya at each encounter according to the schedule. Sowmya does the prescribed exercises with her child and visits the therapy centre based on the prescribed plan, getting help from Sona to make follow-up tele-consultation appointments with the paediatrician and therapist. The MCTS system automatically populates the appointment in the respective doctor’s electronic worklist along with links to Sowmya’s medical records. When the doctor opensthe appointment from the worklist, the MCTS automatically places a call to Sowmya on her mobile phone. Sowmya attends the tele-consultation call with the doctor remotely and shares the records she has uploaded. Eventually, the child responds to the therapy and shows significant recovery from the developmental delays."
+    },
+    {
+      "title": "Visit to the therapy centre",
+      "description": "Because Sowmya and Sona have followed all of the procedures for a safe and healthy recovery of the child, both are paid the incentive offered to participate in the MCTS health intervention."
+    }
+  ],
+  "mappings": [{
+    "step": {
+      "title": "Linkage with community health worker",
+      "description": "Sona meets Sowmya, who hasdelivered her first babySona educates Sowmyaabout post-delivery care (egbreastfeeding, nutrition,immunization, personalhygiene), and the importanceof using the support andfacilities of the mother andchildcare program."
+    },
+    "workflow": "Client communication for spreading awareness and encouraging enrolment in the community health programme Client education for educating Sona on post-delivery care Content management for the backend marketing staff of the community health programme to populate relevant educational and promotional content that Sona can use during field visits",
+    "building block": "Sona uses the scheduling service* of the MCTS system to plan her promotional field visits and gets reminders based on the female community members she meets to identify relevant candidates for the community healthcare programme Sona uses eLearning services to educate Sowmya about the relevance and importance of the community health programme for her and her child Sona uses registration services to enrol Sowmya into the community health programme The community health programme managers provide relevant promotional content using content management services"
+  }, {
+    "step": {
+      "title": "Enrolment in the MCTS system",
+      "description": "Sona registers the child’s name, address and birth certificate, as well as Sowmya’s name, phone number and ID as the caretaker of her child MCTS automatically validates the birth certificate and Sowmya’s ID with the government’s citizen records system Sowmya creates an account with electronic health records (EHRs) and a barcoded unique ID card for getting further assistance MCTS connects Sowmya’s phone number to the child’s ID and enables permissions for Sona to electronically coordinate various services for Sowmya"
+    },
+    "workflow": "Identification and registration for registering Sowmya and her child in the system and enabling permissions for interaction with MCTS Client case management for creating EHRs for Sowmya and giving Sona permission to use EHRs to coordinate with various service providers that Sowmya may need",
+    "building block": "The MCTS system uses identityauthentication services to validate Sowmya’s child’s identity by comparing the birth certificate to an external national identity system, and then mapping to the MCTS record. To track the child’s encounters with the MCTS system, a barcoded ID card for that account is issued The MCTS system uses a registration service to create a new account for Sowmya’s child with a unique MCTS ID The MCTS system uses a shared data repository to create an EHR for Sowmya and link it to the MCTS ID The MCTS system also uses the WorkFlow service to create a complete individualized WorkFlow for Sona and Sowmya to interact with MCTS for managing the child’s development"
+  }, {
+    "step": {
+      "title": "Arranging the first visit to the paediatric clinic",
+      "description": "Sona uses her mobile phone to book an appointment at the local paediatric clinic Sona helps Sowmya by uploading the child’s details into the EHRs from her mobile phone Sona downloads information about managing child growth and the importance of immunization from the MCTS system to Sowmya’s phone Sona and Sowmya receive SMS messages on their mobile phones from MCTS reminding them of the appointment"
+    },
+    "workflow": "Work planning and coordination for booking appointments at the paediatric clinic and lab, autopopulating doctors’ worklists and calendars, generating SMS reminders to mobile devices of relevant participants, and tracking completion/no show status until the appointment expires",
+    "building block": "The MCTS system accesses a shared digital registry to identify the nearest service facilities Sona uses the scheduling service of the MCTS system for booking appointments at the chosen facility The MCTS system uses messaging services to remind Sowmya and Sona about their appointment a few days prior Sona uses eLearning services to download information onto Sowmya’s mobile phone"
+  }, {
+    "step": {
+      "title": "Paediatrician visits",
+      "description": "The paediatrician swipes the baby’s ID card to access and study the baby’s EHRs and update information, findings and prescriptions Sona books appointments for future immunization and follow-up visits and orders nutrition and medicine as per the paediatrician’s prescription During the first year, the paediatrician tracks the development of the child and finds early signs of autism Sona books an appointment for the therapy centre and downloads autism information from MCTS to Sowmya’s mobile phone"
+    },
+    "workflow": "Client case management and problem diagnosis for the doctor to inspect EHR records of relevance, have face-to-face or mobile phone-based discussions with the patient, and populate new records such as examination findings, prescriptions and referral notes as needed", "building block": "The MCTS system uses a shared data repository to search, retrieve, review and track the child’s development and update findings and prescriptions into the EHR The MCTS system uses eLearning services to download educational content on managing the child’s development onto Sowmya’s mobile phone The MCTS system accesses a shared digital registry to identify the nearest service facility Sona uses the scheduling service of the MCTS system to make appointments at the chosen facility The MCTS system uses messaging services to remind Sowmya and Sona about the forthcoming therapy visit a few days prior"
+  }, {
+    "step": {
+      "title": "Procurement of medicine and nutrition",
+      "description": "Sowmya goes to the pharmacy and presents her MCTS card to the pharmacist The pharmacist scans the barcode on Sowmya’s card to retrieve her MCTS record from the system and matches it with the e-prescription received. The pharmacist fills the prescription, assesses the instructions Sowmya has already received from her physician, and reinforces the benefits of Sowmya following the instructions"
+    },
+    "workflow": "Procurement WorkFlow for ordering commodities Supply chain management WorkFlow for managing the delivery ",
+    "building block": "The MCTS system uses an eMarketplace service to enable clients to electronically order supplies from different entities that internally use a payment service to settle payments to vendors from the MCTS program Workflow services enable those entities to: Receive medicine orders placed from multiple pharmacies along with respective prescriptions Determine the nutritional supplements or the equivalent supplements to be provided Dispense medication and supplements for shipment and delivery units Update the electronic records after dispensing"
+  }, {
+    "step": {
+      "title": "Getting therapy",
+      "description": "The therapist scans the child’s MCTS card to retrieve health records, referral notes and appointment details The therapist records the findings of the interactive tests with the child and a therapy schedule. The MCTS system automatically tracks and sends alerts to Sowmya at each encounter according to the schedule The therapist helps Sowmya download a rehab application from MCTS onto her mobile phone. The therapist also educates Sowmya on how to monitor the child and record her observations into the MCTS system from her phone"
+    },
+    "workflow": "Client case management for coordinating admission to the hospital and scheduling inhospital consultation/treatment /procedures as needed until delivery, along with the ability to view old records and update new medical records generated during therapy Data collection and reporting to compile observations and decision support for help making decisions.",
+    "building block": "Workflow services are used for routing all electronic transactions involved in providing in-hospital care from admission to discharge The MCTS system provides scheduling services to the therapy centre staff to book resources and appointments for the child, populating staff calendars and worklists as needed Rehab tools uses data collection services and AI services to provide the functionality for Sowmya to log observations at home and for the therapist to derive key indicators to assess response to treatment and make course corrections as necessary"
+  }, {
+    "step": {
+      "title": "Recognition incentive",
+      "description": " Sowmya and Sona are paid an incentive for participation in and compliance with the community health program"
+    },
+    "workflow": "Procurement WorkFlow for giving incentives to recognize Sona and Sowmya for their strict compliance with guidelines and successful outcomes",
+    "building block": "Workflow services are used for routing successful adherence cases to the incentive list Payment services are used for transferring incentives to corresponding accounts"
+  }]
+},
+{
+  "name": "Remote learning",
+  "summary": "Digital content and tools to provide or supplement all types of learning in either connected of unconnected environments.",
+  "sector": "Education",
+  "SDGs": [{
+      "code": "4.1",
+      "description": "By 2030, ensure that all girls and boys complete free, equitable and quality primary and secondary education leading to relevant and effective learning outcomes"
+    },
+    {
+      "code": "4.3",
+      "description": "By 2030, ensure equal access for all women and men to affordable and quality technical, vocational and tertiary education, including university"
+    },
+    {
+      "code": "4.4",
+      "description": "By 2030, substantially increase the number of youth and adults who have relevant skills, including technical and vocational skills, for employment, decent jobs and entrepreneurship"
+    },
+    {
+      "code": "4.5",
+      "description": "By 2030, eliminate gender disparities in education and ensure equal access to all levels of education and vocational training for the vulnerable, including persons with disabilities, indigenous peoples and children in vulnerable situations"
+    }
+  ],
+  "steps": [{
+      "title": "Cherifa cannot read or write in Hausa or French",
+      "description": " Forty-five-year-old Cherifa feels very frustrated as she tries to make sense of the words on her cell phone screen. She knows the message has something to do with a looming disaster, but she doesn’t know exactly what it says. She hates that she cannot read or write in Hausa or French. It is a hot, dry day, and the onion crop on her 3.5-hectare farm in Zinder, a city in the southern part of Niger, is growing slowly. It has not rained for a long time, and Cherifa wonders if the message on her cell phone is about the possibility that they are facing yet another drought. This makes her worry and wish she could understand the message."
+    },
+    {
+      "title": "Mobile literacy app",
+      "description": "Cherifa owns her own Itel cell phone with a pay-as-you-go subscription with Orange, which includesan affordable data package. When her son Amadou arrives home, she asks him to read the two SMSmessages that she has received. The first one is indeed a warning about another impending droughtand the need to save water. The second isfrom the Ministry of Non-Formal Education (MNFE), whichis supporting a literacy programme called the I Can Read project run by the Niger Literacy Trust, alocal NGO. The programme, aimed at adults who want to learn how to read and write, uses a mobileliteracy app to teach people how to read. The NGO is hosting classes once a week in Zinder forinterested participants. This makes Cherifa very happy, and she decidesthatshe wantsto participate."
+    },
+    {
+      "title": "Creating a profile on the I Can Read app",
+      "description": "Cherifa’s son Amadou downloads the I Can Read app that was developed by Girl Geeks, atechnology company partnering with the Niger Literacy Trust, the MNFE and West African Aid, adonor organization. The app is hosted on a server based in Niamey, the capital city. As a user, Cherifacommunicates with the server, which keeps track of all the information she supplies. The server alsocommunicates data to Cherifa, including changes that are made to the app. The app has a strongbackend system, which means that if there are any breakdowns or challenges, they can be addressedimmediately.Amadou registers Cherifa on the app and shows her how to log in using an ID and passwordwhenever she wants to use the app. After Cherifa logs in, she is asked to create a profile. Unsurewhat to do, she asks Amadou for help. He creates her profile, and the built-in GPS on her mobilephone automatically captures her location data so the app can provide location-based services."
+    },
+    {
+      "title": "Mobile app content and features",
+      "description": "Cherifa discovers that the mobile app contains a host of features and the full literacy curriculumin Hausa and Zarma. Based on Cherifa’s profile, which indicates that Hausa is her home language,the app allows her to engage in Hausa. The literacy content uses many examples that she can relateto as a woman farmer, including practical market information. The words and letters are writtenclearly and the voice of a cartoon woman speaks to her in Hausa, calling her by her name. Cherifafinds games that teach her how to recognize letters, pronounce the sounds of written letters andphonics, and write and read texts. She also finds practical farming examples, including informationabout market prices, how to obtain them and how to make sense of them. Every time she completesan exercise,she receives congratulatory messages and is encouraged to take a test. After completingthe test, she receives another congratulatory message and is guided to the next level. From timeto time, Cherifa receives messages that changes are being made to the app. Overall, she enjoyslearning on her phone. She works through the entire six-module literacy course, taking the tests ateach level. She works at her own pace and in her own time, and she decides what she wants to learnfrom the app.The app allows her to engage with other female and male farmers who are part of the course, someof whom she has not met before. The app has a scheduling feature that indicates when and wheremeetings are taking place and what they will be about. During these weekly meetings, a facilitatorshows how to make the most of the app.The app also gives Cherifa access to a wide range of resources, videos and online books that shefinds very helpful. But to access all of them, she needs more data on her phone."
+    },
+    {
+      "title": "Digital badge",
+      "description": "When she completes all six modules, Cherifa is sent a digital badge that confirms her successfulcompletion of the course. She receives alerts about follow-up literacy coursesshe could take that arealso available in Hausa and is encouraged to keep learning.Cherifa can now recognize the word onion in Hausa on her cell phone. She can understand howmuch her products are selling for on the market each week. This helps her negotiate a good priceevery time she goes to the market. Cherifa realizes that learning how to read makes her better atselling her products and improves her livelihood."
+    },
+    {
+      "title": "The MNFE uses Cherifa’s example",
+      "description": "The MNFE and its partners are pleased that their literacy app has proven to be useful to Cherifa,and they promote her as an example of a hardworking farmer who is committed to learning andimproving her life. They use her story to encourage more women and men farmers to download theapp and improve their literacy skills."
+    }
+  ],
+  "mappings": [{
+    "step": {
+      "title": "Recognition of the problem",
+      "description": "Cherifa receives a message on her mobile phone about a looming drought; not able to read the message but sensing its importance, she realizes she has a problem and decides to address it "
+    },
+    "workflow": "Client communication for providing early warning awareness about farming conditions to reach adult farmers Client communication for providing relevant information to inform farmers about weather patterns and farming; this also triggers Cherifa’s interest in learning how to read Content management provides relevant, timely content to users",
+    "building block": "Cherifa uses a messaging service to raise her awareness of impending farming and weather conditions that affect her livelihood Cherifa also accesses instantaneous updates on changing weather conditions through a service backed by a content management ICT Building Blocks"
+  }, {
+    "step": {
+      "title": "Awareness about a mobile learning app",
+      "description": "Through an SMS message and the help of her literate son, Cherifa learns about literacy classes and a mobile learning app through the I Can Read project, promoted by the Ministry of Non-Formal Education."
+    },
+    "workflow": "Client communication for raising awareness about upcoming literacy classes Client communication for providing relevant information about the literacy classes and app Client education providing relevant, timely content to users via a mobile literacy app",
+    "building block": "Cherifa accesses messaging services that make her aware of classes and a mobile app to help her with her literacy challenges Cherifa accesses eLearning services that provide relevant literacy content to help her improve her literacy skills via a mobile app"
+  }, {
+    "step": {
+      "title": "Registering for the literacy course ",
+      "description": "Cherifa’s son Amadou downloads the I Can Read app that was developed by Girl Geeks, a technology company partnering with the Niger Literacy Trust, the MNFE and West African Aid, a donor The app is hosted on a server based in the capital Cherifa communicates with the server, which keeps track of all the information she supplies The server also communicates data to Cherifa, including changes that are made to the app The app has a strong backend system, which means that if there are any breakdowns or challenges, they can be addressed immediately. Amadou registers Cherifa on the app and shows her how to log in using an ID and password whenever she wants to use it After she logs in, she is asked to create a profile; unsure what to do, she asks Amadou to help He creates her profile, and the built-in GPS in the mobile phone automatically captures the location data so the app can provide location-based services"
+    },
+    "workflow": "Identification and registration to register Cherifa in the literacy program Client education to provide relevant, timely content in the form of a mobile app where user information and use can be tracked Identification and registration for validating user access to the content management system Client case management WorkFlow for enabling Cherifa to access the mobile app from the content management system",
+    "building block": "Cherifa downloads the mobile application from the Ministry’s website The app uses registration services to enrol Cherifa in the literacy programme and then map to the skills development portfolio. The registration services record her in the relevant literacy program, assigning her a unique programme identifier and capturing her profile information The registration services uses identity and authentication services to validate her identity with an external national identity system"
+  }, {
+    "step": {
+      "title": "Working through the literacy course",
+      "description": "Cherifa discovers that the mobile app contains a host of features and the full literacy curriculum in Hausa and Zarma She finds tools and resources such as games, tests, information about farming, exercises, scheduling services and feedback loops"
+    },
+    "workflow": "Client education WorkFlow for providing locally relevant interactive tools as part of the education cloud service to users Content management providing relevant, timely content to users via a mobile literacy app",
+    "building block": "Cherifa uses eLearning services with a strong back-end system that maintains and monitors her use of all eLearning features and provides relevant data to policy intermediaries on usage patterns"
+  }, {
+    "step": {
+      "title": "Digital badge",
+      "description": "When she completes the six modules, Cherifa is sent a digital badge that confirms her successful completion of the literacy course She receives alerts about follow-up literacy courses she can take that are also available in Hausa and is encouraged to keep learning"
+    },
+    "workflow": "Identification and registration WorkFlow for validating user access to the content management system Client education WorkFlow for coordinating the completion of the course and enabling access to further learning courses to encourage lifelong learning",
+    "building block": "The literacy education services use the shared data repository services to search, retrieve, review and track Cherifa’s lifelong learning and development, updating her qualifications and digital badges The literacy education services use eLearning services to make available a suite of further literacy development courses and other skills development programmes to encourage Cherifa to become a lifelong learner The literacy education services also have scheduling services for upcoming courses that may interest Cherifa that are communicated via messaging services"
+  }]
+},
+{
+  "name": "Market linkage",
+  "summary": "Connecting rural farmers to market information, products, and related services to improve rural incomes.",
+  "sector": "Agriculture",
+  "SDGs": [{
+      "code": "2.1",
+      "description": "By 2030, end hunger and ensure access by all people, in particular the poor and people in vulnerable situations, including infants, to safe, nutritious and sufficient food all year round"
+    },
+    {
+      "code": "2.2",
+      "description": "By 2030, end all forms of malnutrition, including achieving, by 2025, the internationally agreed targets on stunting and wasting in children under 5 years of age, and address the nutritional needs of adolescent girls, pregnant and lactating women and older persons"
+    },
+    {
+      "code": "2.3",
+      "description": "By 2030, double the agricultural productivity and incomes of small-scale food producers, in particular women, indigenous peoples, family farmers, pastoralists and fishers, including through secure and equal access to land, other productive resources and inputs, knowledge, financial services, markets and opportunities for value addition and non-farm employment"
+    }
+  ],
+  "steps": [{
+    "title": "",
+    "description": ""
+  }, {
+    "title": "Awareness about Farmers’ Digital Marketplace",
+    "description": "Raghu is a smallholder farmer in India with two acres of land. He grows paddy, wheat and seasonal vegetables. He also has two cows that provide milk for his family and to sell to a local milkman who visits him at his home for collection. Raghu has to travel 30 kilometres to the nearest agro-market, Mandi, to buy seeds, fertilizer and other goods and to sell his produce to the commodity wholesaler, Aratiya, which in turn sells it to big buyers. Raghu feels that income from his farm is not sufficient to provide for his family and his children’s education. He believes he gets too little compensation for his products and often gets fake products sold to him by resellers in the market. Krishi Vigyan Kendra (KVK or Agriculture Science Centre) is a government-run agriculture extension institution that has a small outreach centre near Raghu’s village. The KVK runs an awareness programme about a Farmers’ Digital Marketplace that helps smallholder farmers like Raghu sell their products directly to buyers, thus avoiding a multitude of middlemen and earning more profit. Raghu learns about the programme by calling a toll-free number and discovers he can register in the Farmers’ Digital Marketplace for free."
+  }, {
+    "title": "Registration in the Famers’ Digital Marketplace",
+    "description": " Raghu calls the toll-free number to register in the Farmers’ Digital Marketplace. An interactive voice response system (IVRS) operated by a private company collects basic information (eg citizen ID, age, gender), and then sends an SMS to the caller confirming registration and provides a first-time user ID and password, and a link to download a digital marketplace mobile application."
+  }, {
+    "title": "Creating a profile in the Famers’ Digital Marketplace",
+    "description": " Raghu installsthe mobile app on his phone and logsin with the user ID and password he received. He creates his profile in the digital marketplace, and the built-in GPS on his mobile phone automatically captures the location data so the app can provide location-based services."
+  }, {
+    "title": "Purchase transaction in the Farmers’ Digital Marketplace",
+    "description": "After completing his profile, Raghu starts using the Farmers’ Digital Marketplace, which highlights the products and services that may be of most interest to Raghu, based on his profile, location and other factors. Raghu wants to buy a chemical for pest management that he bought last year and got good results from, but he cannot read the name written on the empty can. Using a search-by-image feature on the app, he takes a picture of the container and is able to find the product he is looking for by recognizing it from a list of suggested products. Raghu is given a list of sellers and the price they are asking. He chooses a seller and shares his location. The seller agrees to deliver the product to Raghu for INR 20 extra, which still leaves the product cheaper than he would have found it in the market."
+  }, {
+    "title": "Financial transaction from buyer to seller in the Farmers’ Digital Marketplace",
+    "description": "The seller tells Raghu to pay him for the product using the built-in paymentfunctioninthemarketplace application. Raghu clicks on Payment Service and enters his Universal Payment Interface ID (UPI-ID) provided to him by his bank. After the transaction, Raghu receives an SMS informing him of the transaction with an authentication code, which has to be shared with the delivery person when the product is delivered. Another SMS goes to the seller informing him of the remittance. The money is deposited to an escrow account managed by a financial services provider, which holds the final remittance to the seller until the physical delivery happens successfully."
+  }, {
+    "title": "Physical delivery of goods purchased online in the Farmers’ Digital Marketplace",
+    "description": "Once the seller receives confirmation about the remittance by the buyer, he searches for a logistics service provider (courier company) to deliver the product to Raghu. He finds a company that delivers to Raghu’s location and generates an invoice with Raghu’s name and address. The seller pays the courier company for on-site pick-up and the courier company picks up the product and delivers it to Raghu. On receipt, Raghu provides the authentication code to the delivery person. The code is authenticated and the seller receives payment."
+  }, {
+    "title": "Sell transaction in the Farmers’ Digital Marketplace",
+    "description": "Raghu has a good harvest and wants to sell his crop directly to buyers so he can get a better price than at the local markets. The application gives him information about the prevailing market price at different markets near his location, expected arrivals based on the number of other farmers and volume, and other information. Raghu finds several buyers who are paying a good price. He contacts them, and after price negotiation, he finalizes a dealwith one buyer. The buyer authenticates Raghu’s identity, then obtains a quality assurance report that evaluates various data points, such as Raghu’s farm location, weather and seeds used, so he can be sure that the crop produced at Raghu’s farm is of good quality. The buyer locates a warehouse near Raghu’s location and executes a purchase contract so Raghu can deliver the goods to the warehouse and obtain a receipt, which will allow the buyer to remit payment."
+  }, {
+    "title": "Financial transaction from buyer to seller in the Farmers’ Digital Marketplace",
+    "description": "Raghu asks the buyer to pay him against the purchase contract for the product. The buyer uses a payment service to authorize the bank to pay Raghu against the warehouse receipt. An SMS is sent to the selected warehouse informing them of the incoming consignment along with a payment authentication code, which has to be shared with Raghu when the goods are delivered to the warehouse.Another SMS goestoRaghu informing himofthe remittance and a delivery authentication code, which has to be shared with the warehouse to identify the incoming consignment. The money is deposited into an escrow account managed by a financial service provider, which holds the final remittance for the seller until the physical delivery happens successfully."
+  }, {
+    "title": "Physical delivery of goods sold online in the Farmers’ Digital Marketplace",
+    "description": "Raghu searches for a logistics service provider (transporter) who can deliver the goods to the designated warehouse. He books the transporter online and the transporter picks up the goods from Raghu’s farm. The transporter delivers the goods to the warehouse, and the warehouse issues a receipt and shares the payment authentication code and the receipt with Raghu. Raghu sends the warehouse receipt and the payment authentication code to his bank, which authenticates it and instructs the escrow account to release the payment to Raghu’s bank. Raghu receives payment for his produce, which is much more than he used to get when he took his goods to the local market and waited for an interested buyer to purchase them."
+  }],
+  "mappings": [{
+    "step": {
+      "title": "Background",
+      "description": "Awareness about the marketplace service is spread using digital promotional activities Users can access the service by downloading a mobile app from the ministry’s mobility management service"
+    },
+    "workflow": "Client communication to raise awareness and advertise new products or services to the prospective customers or users",
+    "building block": "Messaging services send promotional messages to prospective users, making them aware of new services, events, etc Farmers can access the Ministry’s website to download a certified eMarketplace app"
+  }, {
+    "step": {
+      "title": "Register in the marketplace",
+      "description": "1. Raghu calls a toll-free number to register 2. He provides information about his identity using an IVR system 3. The system verifies information and sends a link to Raghu to download the marketplace mobile application 4. Raghu downloads the marketplace mobile app and registers 5. After registration, Raghu creates his profile 6. His profile data is stored 7. His location is captured, and it is used to suggest localized services"
+    },
+    "workflow": "Identification and registration allows users to register themselves in the marketplace in order to access it and its services Client communication sends users promotional information from the marketplace",
+    "building block": "Messaging services are used to capture Raghu’s registration information and send confirmation messages, often with instructions about further onboarding processes The marketplace system uses identification and authentication services to verify and authenticate Raghu’s identity with the national ID system and then uses messaging services to send Raghu an authorized link to download the app from the app store Raghu uses the Ministry’s app store to download a certified marketplace app The app uses registration services to collect information and register users into the marketplace and store the farmer’s data in the register and assign a unique identifier to the farmer for the marketplace. The registration services collect additional information, including demographic and geographic information (in addition to geolocation) to profile the user The marketplace system uses GIS services to identify other location-based services that might be relevant to the farmer"
+  }, {
+    "step": {
+      "title": "Financial transaction from buyer to seller",
+      "description": "Raghu finds out that there is a search-by-image feature, so he takes a picture of the container of a product he bought last year and finds the product he is looking for from a suggested list Raghu pays for the product using the online payment feature After the transaction, Raghu receives an SMS with an authentication code, which has to be shared with the delivery person when the product is delivered Another SMS goes to the seller informing them of the remittance The seller searches for a logistics service to deliver the product to Raghu On receipt, Raghu provides the authentication code to the delivery person The code is authenticated and the seller receives payment"
+    },
+    "workflow": "Financial services facilitate financial transactions between buyers and sellers in order to conclude the buy-sale process.",
+    "building block": "Raghu uses AI services to search images of similar products Payment services (Payment Gateway) are used to exchange money (eg credit card, netbanking) Messaging services are used to confirm the transaction and send an authentication code The seller searches registries of logistics providers to find a provider to deliver the goods Messaging services are used to authenticate the code and then WorkFlow services trigger payment services to pay the seller"
+  }]
+}
+]
