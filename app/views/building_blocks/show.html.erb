@@ -4,6 +4,48 @@
     Building Block: <%= @building_block.name %>
   </h5>
   <div class="card-body">
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Short Description: </strong>
+      <%= @bbJson.short_desc %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Full Description: </strong>
+      <%= @bbJson.full_description %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Other names: </strong>
+      <%= @bbJson.other_names %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Key Digital Functionalities: </strong>
+      <% if @digital_functions.count > 0 %>
+        <ul>
+        <% @digital_functions.each do |digital_func| %>
+          <li class="text-muted"><%= digital_func %></li>
+        <% end %>
+        </ul>
+      <% end %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Examples of use in different sectors: </strong>
+      <% if @bbJson.sector_use.count > 0 %>
+        <ul>
+        <% @bbJson.sector_use.each do |sector| %>
+          <li class="text-muted"><strong><%= sector.name %>: </strong><%= sector.description %>
+        <% end %>
+        </ul>
+      <% end %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Examples of Existing Software: </strong>
+      <% if @bbJson.existing_software.count > 0 %>
+        <ul>
+        <% @bbJson.existing_software.each do |software| %>
+          <li class="text-muted"><%= software %>
+        <% end %>
+        </ul>
+      <% end %>
+    </p>
     <p class="float-right mb-0" >
       <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
       <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>

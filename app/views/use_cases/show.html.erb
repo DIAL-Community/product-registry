@@ -8,11 +8,19 @@
   </div>
   <div class="card-body">
     <p class="card-subtitle text-muted mb-0" >
-      <%= @use_case.description %>
+      <strong>Description: </strong><%= @useCaseJson.desc %>
     </p>
     <p class="card-subtitle text-muted mt-3" >
-      Sector: <%= @sector_name %>
+      <strong>Sector: </strong><%= @sector_name %>
     </p>
+    <% if @useCaseJson.steps %>
+    <p class="card-subtitle text-muted mt-3" ><strong>Steps for this Use Case include:</strong></p>
+      <ul>
+      <% @useCaseJson.steps.each do |step| %>
+        <li class="text-muted"><%= step %>
+      <% end %>
+      </ul>
+    <% end %>
     <p class="float-right mb-0" >
       <%= link_to 'Back', use_cases_path, :class => "card-link" %>
       <%= link_to 'Edit', edit_use_case_path(@use_case), :class => "card-link" %>

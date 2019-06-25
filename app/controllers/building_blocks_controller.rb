@@ -130,6 +130,8 @@ class BuildingBlocksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])
+      @bbJson = JSON.parse(@building_block.description, object_class: OpenStruct)
+      @digital_functions = @bbJson.digital_function.split("•")[1..]
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

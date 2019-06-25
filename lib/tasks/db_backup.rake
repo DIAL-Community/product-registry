@@ -4,7 +4,7 @@ namespace :db do
     task :backup => :environment do
       cmd = nil
       with_config do |app, host, db, user, pass|
-        cmd = "mkdir /t4d/db/backups && export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}.dump"
+        cmd = "export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}.dump"
       end
       exec cmd
     end

@@ -7,11 +7,27 @@
     </h5>
   </div>
   <div class="card-body">
-    <p class="card-subtitle text-muted mb-0" >
-      <%= @workflow.description %>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Short Description: </strong>
+      <%= @workflowJson.short_desc %>
     </p>
-    <p class="card-subtitle text-muted mt-3" >
-      Other Names: <%= @workflow.other_names %>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Full Description: </strong>
+      <%= @workflowJson.full_desc %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Other names: </strong>
+      <%= @workflowJson.other_names %>
+    </p>
+    <p class="card-subtitle text-muted mb-3" >
+      <strong>Sample mappings of WorkFlows to Use Case: </strong>
+      <% if @workflowJson.sample_mappings.count > 0 %>
+        <ul>
+        <% @workflowJson.sample_mappings.each do |mapping| %>
+          <li class="text-muted"><strong><%= mapping.name %>: </strong><%= mapping.description %>
+        <% end %>
+        </ul>
+      <% end %>
     </p>
     <p class="float-right mb-0" >
       <%= link_to 'Back', workflows_path, :class => "card-link" %>
@@ -27,11 +43,12 @@
   <% if @workflow.use_cases.count > 0 %>
     <div class="row">
       <% @workflow.use_cases.order("name").each do |use_case| %>
+        <% useCaseJson = JSON.parse(use_case.description) %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
             <div class="card-body pb-2 pt-2">
               <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to use_case.name, use_case %></p>
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= use_case.description %></p>
+              <p class="card-text text-muted mb-0" style="flex: 1"><%= useCaseJson['desc'] %></p>
             </div>
           </div>
         </div>
