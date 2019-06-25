@@ -2,7 +2,7 @@
   "name": "Maternal and newborn health",
   "summary": "Care services for mother and child spanning the prenatal and postnatal periods resulting in a healthy mother and child.",
   "sector": "Health",
-  "SDGs": [{
+  "sdgs": [{
       "code": "3.1",
       "description": "By 2030,reduce the global maternal mortality ratio to lessthan 70 per 100,000 live births"
     },
@@ -94,7 +94,7 @@
   "name": "Remote learning",
   "summary": "Digital content and tools to provide or supplement all types of learning in either connected of unconnected environments.",
   "sector": "Education",
-  "SDGs": [{
+  "sdgs": [{
       "code": "4.1",
       "description": "By 2030, ensure that all girls and boys complete free, equitable and quality primary and secondary education leading to relevant and effective learning outcomes"
     },
@@ -177,7 +177,7 @@
   "name": "Market linkage",
   "summary": "Connecting rural farmers to market information, products, and related services to improve rural incomes.",
   "sector": "Agriculture",
-  "SDGs": [{
+  "sdgs": [{
       "code": "2.1",
       "description": "By 2030, end hunger and ensure access by all people, in particular the poor and people in vulnerable situations, including infants, to safe, nutritious and sufficient food all year round"
     },
@@ -191,9 +191,6 @@
     }
   ],
   "steps": [{
-    "title": "",
-    "description": ""
-  }, {
     "title": "Awareness about Farmers’ Digital Marketplace",
     "description": "Raghu is a smallholder farmer in India with two acres of land. He grows paddy, wheat and seasonal vegetables. He also has two cows that provide milk for his family and to sell to a local milkman who visits him at his home for collection. Raghu has to travel 30 kilometres to the nearest agro-market, Mandi, to buy seeds, fertilizer and other goods and to sell his produce to the commodity wholesaler, Aratiya, which in turn sells it to big buyers. Raghu feels that income from his farm is not sufficient to provide for his family and his children’s education. He believes he gets too little compensation for his products and often gets fake products sold to him by resellers in the market. Krishi Vigyan Kendra (KVK or Agriculture Science Centre) is a government-run agriculture extension institution that has a small outreach centre near Raghu’s village. The KVK runs an awareness programme about a Farmers’ Digital Marketplace that helps smallholder farmers like Raghu sell their products directly to buyers, thus avoiding a multitude of middlemen and earning more profit. Raghu learns about the programme by calling a toll-free number and discovers he can register in the Farmers’ Digital Marketplace for free."
   }, {

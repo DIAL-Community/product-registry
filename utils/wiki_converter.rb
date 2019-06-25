@@ -153,10 +153,80 @@ class WikiConverter
         puts cmd
       end
     end
+
+    def convert_usecase_to_wiki(filename)
+      input = open(filename)
+      usecase_data = input.read()
+
+      border_style = 'border-color:#cccccc; border-style:dotted; border-width:1px;'
+      background_style = 'background-color:#eff2fa; background:#eff2fa;'
+
+      usecase_json = JSON.parse(usecase_data, object_class: OpenStruct)
+      usecase_json.each_with_index do | usecase, index |
+        outFilename = "UseCase#{index + 1}.xml"
+        output = open(outFilename, 'w')
+        output.puts('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
+        output.puts('<page xmlns="http://www.xwiki.org">')
+        output.puts("<title>#{usecase['name']}</title>")
+        output.puts('<syntax>xwiki/2.1</syntax>')
+        output.puts('<content>')
+
+        output.puts("|(% style='#{background_style} #{border_style}' %)")
+        output.puts('(((')
+        output.puts("**Summary:** #{usecase['summary']}")
+        output.puts()
+        output.puts("**Sector:** #{usecase['sector']}")
+        output.puts()
+        output.puts('**Mapped SDG Targets:**')
+
+        usecase['sdgs'].each do | sdg |
+          output.puts("* #{sdg['code']} #{sdg['description']}")
+        end
+
+        output.puts()
+        output.puts(')))')
+
+        output.puts('===Use case steps===')
+
+        usecase['steps'].each_with_index do | step, index |
+          output.puts("**~#{index + 1}. #{step['title']} **")
+          output.puts()
+          output.puts("#{step['description']}")
+          output.puts()
+        end
+        output.puts()
+
+        output.puts("|(% style='text-align:center; #{background_style} #{border_style}' %)(((==== Use Case Step ====)))"\
+          "|(% style='text-align:center; #{background_style} #{border_style}' %)(((==== Workflow ====)))"\
+          "|(% style='text-align:center; #{background_style} #{border_style}' %)(((==== ICT Building Blocks ====)))")
+
+        usecase['mappings'].each_with_index do |mapping, index|
+          output.write('|(% style="width: 33%" %)(((')
+          output.puts("**~#{index + 1}. #{mapping['step']['title']}**")
+          output.puts()
+          output.puts("#{mapping['step']['description']}")
+          output.write(")))")
+          output.write("|(% style='width: 34%' %)(((#{mapping['workflow']})))")
+          output.write("|(% style='width: 33%' %)(((#{mapping['building block']})))")
+          output.puts()
+        end
+
+        output.puts('</content>')
+        output.puts('</page>')
+
+        cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{outFilename}' "\
+              "-H 'Content-Type: application/xml' "\
+              "http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/UseCases"\
+              "/pages/UseCases#{index + 1}"
+        puts cmd
+      end
+
+    end
 end
 
 converter = WikiConverter.new
 
 #converter.convert_workflow_to_wiki("./workflows.json")
 #converter.convert_bb_to_wiki("./building_blocks.json")
-converter.convert_sdg_to_wiki("./sdgs.json")
+#converter.convert_sdg_to_wiki("./sdgs.json")
+converter.convert_usecase_to_wiki("./use_case.json")
