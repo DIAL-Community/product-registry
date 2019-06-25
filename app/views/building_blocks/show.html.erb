@@ -49,7 +49,7 @@
     <%= link_to 'Add', new_product_path, :class => "card-link text-white float-right" %>
   </div>
   <div class="row">
-  <% if @building_block.products.count > 0 %>
+  <% if @building_block.products %>
     <% @building_block.products.each do |product| %>
       <div class="col-6 col-lg-4 mt-2">
         <div class="card h-100">
@@ -60,7 +60,7 @@
       </div>
     <% end %>
   <% end %>
-  <% if @bbJson.commercial_software.count > 0 %>
+  <% if @bbJson.commercial_software %>
     <% @bbJson.commercial_software.each do |product| %>
       <div class="col-6 col-lg-4 mt-2">
         <div class="card h-100">
@@ -72,7 +72,7 @@
     <% end %>
   <% end %>
   </div>
-  <% if @bbJson.commercial_software.count == 0 && @building_block.products.count == 0 %>
+  <% if !@bbJson.commercial_software && !@building_block.products %>
     <p class="card-text text-muted">We don't have any product information for this building block.</p>
   <% end %>
 </div>
