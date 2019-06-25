@@ -196,9 +196,14 @@ class WikiConverter
         end
         output.puts()
 
-        output.puts("|(% style='text-align:center; #{background_style} #{border_style}' %)(((==== Use Case Step ====)))"\
-          "|(% style='text-align:center; #{background_style} #{border_style}' %)(((==== Workflow ====)))"\
-          "|(% style='text-align:center; #{background_style} #{border_style}' %)(((==== ICT Building Blocks ====)))")
+        # Output the table header.
+        output.puts(
+          "|(% style='text-align:center; #{background_style} #{border_style}' %)"\
+          "(((==== Use Case Step ====)))"\
+          "|(% style='text-align:center; #{background_style} #{border_style}' %)"\
+          "(((==== Workflow ====)))"\
+          "|(% style='text-align:center; #{background_style} #{border_style}' %)"\
+          "(((==== ICT Building Blocks ====)))")
 
         usecase['mappings'].each_with_index do |mapping, index|
           output.write('|(% style="width: 33%" %)(((')
