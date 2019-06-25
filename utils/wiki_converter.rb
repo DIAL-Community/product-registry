@@ -80,43 +80,24 @@ class WikiConverter
       input = open(filename)
       sdgData = input.read()
 
-      sdg_images = [
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_60.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_32.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_68.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_16.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_44.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_28.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_8.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_20.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_12.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_36.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_40.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_64.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_72.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_76.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_4.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_48.jpg',
-        'https://sustainabledevelopment.un.org/content/images/image_logo_clean10008_56.jpg'
-      ];
       sdg_bg = [
-        'background:#eb1c2d;',
-        'background:#d3a029;',
-        'background:#4c9f38;',
-        'background:#c52333;',
-        'background:#ed4135;',
-        'background:#00aed9;',
-        'background:#fdb713;',
-        'background:#8f1838;',
-        'background:#f06a38;',
-        'background:#dd1367;',
-        'background:#f69c39;',
-        'background:#cf8d2a;',
-        'background:#48773e;',
-        'background:#007dbc;',
-        'background:#5cb84d;',
-        'background:#02558b;',
-        'background:#183668;'
+        '#ea2031;',
+        '#dba440;',
+        '#4d9d3a;',
+        '#c41e31;',
+        '#fa3f2b;',
+        '#35bbe0;',
+        '#fabf1d;',
+        '#a02345;',
+        '#fa682e;',
+        '#dc1867;',
+        '#fa992d;',
+        '#ba8735;',
+        '#437c48;',
+        '#3095d7;',
+        '#56be32;',
+        '#20689b;',
+        '#234b6a;'
       ];
 
       first_element_style = 'border-top: 0; border-bottom: 1px dotted #ccc;'
@@ -132,10 +113,13 @@ class WikiConverter
         output.puts('<syntax>xwiki/2.1</syntax>')
         output.puts('<content>')
 
-        output.puts "(% class='box' style='#{sdg_bg[index]}' %)"
+        output.puts "(% class='box' style='background: #{sdg_bg[index]}' %)"
         output.puts '((('
         output.puts '(% style="text-align:center" %)'
-        output.puts "[[image:#{sdg_images[index]}||height='120' width='279']]"
+
+        image_url = "https://www.itu.int/en/sustainable-world/PublishingImages/icons-svg/sdg#{index + 1}.svg"
+
+        output.puts "[[image:#{image_url}||alt='" + sdg['description'] + "' height='150' width='150']]"
         output.puts ')))'
 
         output.puts('|(% colspan="2" rowspan="1" %)(((=== Targets ===)))'\
