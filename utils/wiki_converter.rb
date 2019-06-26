@@ -14,12 +14,12 @@ class WikiConverter
             output.write('<title>'+workflow.name+'</title>'+"\n")
             output.write('<syntax>xwiki/2.0</syntax>'+"\n")
             output.write('<content>'+"\n")
-            output.write('(% class="table-bordered" %)'+"\n")
-            output.write('|=Other names |'+workflow.other_names+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)Short description|'+workflow.short_desc+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)Full description|((('+workflow.full_desc+"\n")
-            output.write(')))'+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)(((Sample mappings'+"\n"+'of WorkFlows'+"\n"+'to Use Case)))|((('+"\n")
+            output.write('|(% style="background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px" %)((('+"\n")
+            output.write('**Other names:** '+workflow.other_names+"\n\n")
+            output.write('**Short description:** '+workflow.short_desc+"\n\n")
+            output.write('**Full description:** '+"\n\n"+workflow.full_desc+"\n")
+            output.write(')))'+"\n\n")
+            output.write('=== Sample mappings of WorkFlows to Use Case ==='+"\n"+'(((')
             workflow.sample_mappings.each do |mapping|
                 output.write('**'+mapping.name+'** - '+mapping.description+"\n")
             end
@@ -46,28 +46,48 @@ class WikiConverter
             output.write('<title>'+bb.name+'</title>'+"\n")
             output.write('<syntax>xwiki/2.0</syntax>'+"\n")
             output.write('<content>'+"\n")
-            output.write('(% class="table-bordered" %)'+"\n")
-            output.write('|=Other names |'+bb.other_names+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)Short description|'+bb.short_desc+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)Full description|((('+bb.full_description+"\n")
-            output.write(')))'+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)Key Digital'+"\n"+'functionalities|((('+bb.digital_function+"\n")
-            output.write(')))'+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)(((Examples of use in'+"\n"+'different sectors)))|((('+"\n")
+            output.write('|(% style="background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px" %)((('+"\n")
+            output.write('**Other names:** '+bb.other_names+"\n\n")
+            output.write('**Short description:** '+bb.short_desc+"\n\n")
+            output.write('**Full description:** '+"\n\n"+bb.full_description+"\n")
+            output.write(')))'+"\n\n")
+            output.write('=== Key Digital functionalities ==='+"\n\n"+bb.digital_function+"\n")
+            output.write("\n\n")
+            output.write('=== Examples of use in different sectors ==='+"\n")
+            output.write('|(% style="background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px; text-align:center" %)((('+"\n"+'==== Agriculture Sector ===='+"\n"+')))')
+            output.write('|(% style="background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px; text-align:center" %)((('+"\n"+'==== Education Sector ===='+"\n"+')))')
+            output.write('|(% style="background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px; text-align:center" %)((('+"\n"+'==== Health Sector ===='+"\n"+')))'+"\n")
+            output.write('|(% style="width:33%" %)((('+"\n")
             bb.sector_use.each do |sector|
-                output.write('**'+sector.name+'** - '+sector.description+"\n")
+              if (sector.name == "Agriculture sector")
+                output.write(sector.description+"\n")
+              end
+            end
+            output.write(')))')
+            output.write('|(% style="width:34%" %)((('+"\n")
+            bb.sector_use.each do |sector|
+              if (sector.name == "Education sector")
+                output.write(sector.description+"\n")
+              end
+            end
+            output.write(')))')
+            output.write('|(% style="width:33%" %)((('+"\n")
+            bb.sector_use.each do |sector|
+              if (sector.name == "Health sector")
+                output.write(sector.description+"\n")
+              end
             end
             output.write(')))'+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)(((Examples of'+"\n"+'existing software)))|((('+"\n")
+            output.write('=== Examples of existing software ==='+"\n")
             bb.existing_software && bb.existing_software.each do |software|
                 output.write(software+"\n")
             end
-            output.write(')))'+"\n")
-            output.write('|=(% style="white-space: nowrap;" %)(((Sample mappings'+"\n"+'of ICT Building'+"\n"+'Blocks to Workflows)))|((('+"\n")
+            output.write("\n")
+            output.write('=== Sample mappings of ICT Building Blocks to Workflows ==='+"\n")
             bb.workflow_mappings && bb.workflow_mappings.each do |mapping|
                 output.write(mapping+"\n")
             end
-            output.write(')))'+"\n")
+            output.write("\n")
             output.write('</content>'+"\n")
             output.write('</page>'+"\n")
 
@@ -231,7 +251,7 @@ end
 
 converter = WikiConverter.new
 
-#converter.convert_workflow_to_wiki("./workflows.json")
+converter.convert_workflow_to_wiki("./workflows.json")
 #converter.convert_bb_to_wiki("./building_blocks.json")
 #converter.convert_sdg_to_wiki("./sdgs.json")
 converter.convert_usecase_to_wiki("./use_case.json")
