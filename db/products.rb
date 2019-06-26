@@ -119,6 +119,10 @@ if Product.where(slug: 'mifos').empty?
     osc_im10: true, osc_im20: true,
     product: p, has_osc: true, has_digisquare: false)
 end
+if Product.where(slug: 'mojaloop').empty?
+  p = Product.create(name: "Mojaloop", slug: 'mojaloop' if Product.where(slug: 'mojaloop').empty?
+  p.building_blocks << BuildingBlock.where(slug: 'payments').limit(1)[0]
+end
 if Product.where(slug: 'moodle').empty?
   p=Product.create(name: "Moodle", slug: 'moodle') if Product.where(slug: 'moodle').empty?
   p.building_blocks << BuildingBlock.where(slug: 'elearning').limit(1)[0]
