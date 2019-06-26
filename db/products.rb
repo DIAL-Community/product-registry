@@ -120,7 +120,7 @@ if Product.where(slug: 'mifos').empty?
     product: p, has_osc: true, has_digisquare: false)
 end
 if Product.where(slug: 'mojaloop').empty?
-  p = Product.create(name: "Mojaloop", slug: 'mojaloop' if Product.where(slug: 'mojaloop').empty?
+  p = Product.create(name: "Mojaloop", slug: 'mojaloop') if Product.where(slug: 'mojaloop').empty?
   p.building_blocks << BuildingBlock.where(slug: 'payments').limit(1)[0]
 end
 if Product.where(slug: 'moodle').empty?
