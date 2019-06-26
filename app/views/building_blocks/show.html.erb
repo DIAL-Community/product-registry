@@ -54,7 +54,10 @@
       <div class="col-6 col-lg-4 mt-2">
         <div class="card h-100">
           <div class="card-body pb-1">
-            <h5 class="card-title"><%= link_to product.name, product %></h5>
+            <%= link_to product do %>
+              <%= image_tag(product.image_file, height: 75, class: 'align-middle') %>
+              <h5 class="card-title ml-3" style="display:inline;"><%= link_to product.name, product %></h5>
+            <% end %>
           </div>
         </div>
       </div>
@@ -64,7 +67,7 @@
     <% @bbJson.commercial_software.each do |product| %>
       <div class="col-6 col-lg-4 mt-2">
         <div class="card h-100">
-          <div class="card-body pb-1">
+          <div class="card-body pb-1" style="display:flex; align-items:center;">
             <h5 class="card-title text-muted"><%= product %></h5>
           </div>
         </div>
@@ -72,10 +75,6 @@
     <% end %>
   <% end %>
   </div>
-  <% if !@bbJson.commercial_software && !@building_block.products %>
-    <p class="card-text text-muted">We don't have any product information for this building block.</p>
-  <% end %>
-</div>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
