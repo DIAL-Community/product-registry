@@ -76,7 +76,7 @@ if Product.where(slug: 'librehealth').empty?
 end
 Product.create(name: "MediaWiki", slug: 'mediawiki') if Product.where(slug: 'mediawiki').empty?
 if Product.where(slug: 'medicmobile').empty?
-  p = Product.create(name: "MedicMobile", slug: 'medicmobile', start_assessment: true) if Product.where(slug: 'medicmobile').empty?
+  p = Product.create(name: "Medic Mobile", slug: 'medic_mobile', start_assessment: true) if Product.where(slug: 'medic_mobile').empty?
   ProductAssessment.create(
     osc_cd10: true, osc_cd20: true, osc_cd21: false, osc_cd30: true, osc_cd31: false, osc_cd40: true, osc_cd50: true, osc_cd60: true, osc_cd61: false,
     osc_lc10: true, osc_lc20: true, osc_lc30: true, osc_lc40: true, osc_lc50: true, osc_lc60: true,
@@ -285,7 +285,6 @@ if Product.where(slug: 'tensorflow').empty?
   p= Product.create(name: "TensorFlow", slug: 'tensorflow') if Product.where(slug: 'tensorflow').empty?
   p.building_blocks << BuildingBlock.where(slug: 'artificial_intelligence').limit(1)[0]
 end
-Product.create(name: "U-Report", slug: 'u-report') if Product.where(slug: 'u-report').empty?
 if Product.where(slug: 'ushahidi').empty?
   p = Product.create(name: "Ushahidi", slug: 'ushahidi', start_assessment: true) if Product.where(slug: 'ushahidi').empty?
   ProductAssessment.create(
