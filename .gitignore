@@ -30,5 +30,6 @@ public/export.xls
 public/export.xlsx
 
 config/esri.yml
+config/google.yml
 config/secrets.yml
 ssmtp.conf
