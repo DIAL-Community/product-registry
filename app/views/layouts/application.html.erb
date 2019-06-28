@@ -18,6 +18,18 @@
         top: 80px;
       }
     </style>
+    <% if Rails.env.production? || Rails.env.development? %>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.configuration.google["google"]["tracker"] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '<%= Rails.configuration.google["google"]["tracker"] %>');
+      </script>
+    <% end %>
+    
   </head>
 
   <body data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
