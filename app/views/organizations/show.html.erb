@@ -42,34 +42,38 @@
   </div>
   <p class="float-right mb-0" >
     <%= link_to 'Back', organizations_path, :class => "card-link" %>
-    <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
+    <% if user_signed_in? %>
+      <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
+    <% end %>
   </p>
 </div>
 
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Contacts</h5>
-  </div>
-  <% if @organization.contacts.count > 0 %>
-    <div class="row">
-      <% @organization.contacts.order("name").each do |contact| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body pb-1">
-              <h5 class="card-title"><%= link_to contact.name, contact %></h5>
-              <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
-              <% if contact.title %>
-                <p class="card-text"><%= contact.title %></p>
-              <% end %>
+<% if user_signed_in? %>
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0">Contacts</h5>
+    </div>
+    <% if @organization.contacts.count > 0 %>
+      <div class="row">
+        <% @organization.contacts.order("name").each do |contact| %>
+          <div class="col-6 col-lg-4 mt-2">
+            <div class="card h-100">
+              <div class="card-body pb-1">
+                <h5 class="card-title"><%= link_to contact.name, contact %></h5>
+                <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
+                <% if contact.title %>
+                  <p class="card-text"><%= contact.title %></p>
+                <% end %>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p class="card-text text-muted">We don't have any contact information for this organization.</p>
-  <% end %>
-</div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+    <% end %>
+  </div>
+<% end %>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
