@@ -93,7 +93,9 @@ var mapObject = {
       overlays: [mapObject.popup],
       view: new ol.View({
         center: ol.proj.fromLonLat([10, 20.3]),
-        zoom: 2.5,
+        zoom: 2,
+        maxZoom: 10,
+        minZoom: 2
       })
     });
     $.getJSON('/organizations.json?without_paging=true', function(organizations) {
