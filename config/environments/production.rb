@@ -47,6 +47,20 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = false
+
+  config.action_mailer.perform_caching = false
+
+  config.action_mailer.default_url_options = { host: '134.209.41.212', port: 80 }
+
+  config.action_mailer.delivery_method = :mailgun
+
+  config.action_mailer.mailgun_settings = {
+          api_key: Rails.configuration.mailgun["api_key"],
+          domain: Rails.configuration.mailgun["domain"]
+  }
+
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :debug
