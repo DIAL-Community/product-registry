@@ -30,7 +30,7 @@
               <div class="dropdown-menu">
                 <%= link_to 'Products', products_path, :class => 'dropdown-item' %>
                 <% if user_signed_in? %>
-                  <%= link_to 'Deploys', deploys_path, :class => 'dropdown-item' %></strong>
+                  <%= link_to 'Deploys', deploys_path, :class => 'dropdown-item' %>
                 <% end %>
               </div>
             </li>
@@ -40,9 +40,9 @@
               </a>
               <div class="dropdown-menu">
                 <%= link_to 'Building Blocks', building_blocks_path, :class => 'dropdown-item' %>
-                <%= link_to 'SDGs', sustainable_development_goals_path, :class => 'dropdown-item' %>
-                <%= link_to 'Use Cases', use_cases_path, :class => 'dropdown-item' %>
                 <%= link_to 'Workflows', workflows_path, :class => 'dropdown-item' %>
+                <%= link_to 'Use Cases', use_cases_path, :class => 'dropdown-item' %>
+                <%= link_to 'SDGs', sustainable_development_goals_path, :class => 'dropdown-item' %>
               </div>
             </li>
             <% if user_signed_in? %>
