@@ -20,7 +20,7 @@
         <div class="card-header bg-secondary text-white">
           <%= link_to product.name, product %>
         </div>
-        <%= image_tag(product.image_file, width: 200, class: 'card-img-top align-middle') %>
+        <%= link_to image_tag(product.image_file, width: 200, class: 'card-img-top align-middle'), product %>
         <div class="card-body">
             <% if !product.website.nil? and !product.website.empty? %>
               <p class="card-text"><small><a href="<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small><br/>
