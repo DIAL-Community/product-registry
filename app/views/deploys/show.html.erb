@@ -1,5 +1,17 @@
 <p id="notice"><%= notice %></p>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white"><%= @deploy.name %></h5>
+  <h5 class="card-header bg-secondary text-white">
+    Deploy: <%= @deploy.instance_name %>
+  </h5>
+  <div class="card-body">
+    <p class="card-subtitle text-muted mb-2">Status: <%= @deploy.status %></p>
+    <p class="card-subtitle text-muted mb-2">URL: <%= link_to @deploy.url, "#{@deploy.url}", target: :_blank %></p>
+    <p class="card-subtitle text-muted mb-2">Provider: <%= @provider_full %></p>
+    <p class="card-subtitle text-muted mb-2">Latest messages: (click to view all messages)
+      <div class="ml-3"><%= @deploy.message.html_safe %></p></div>
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', deploys_path, :class => "card-link" %>
+    </p>
+  </div>
 </div>
 

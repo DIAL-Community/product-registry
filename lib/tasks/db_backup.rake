@@ -1,4 +1,14 @@
 namespace :db do
+    task :run_if_no_db do
+      begin
+        Rake::Task['environment'].invoke
+        ActiveRecord::Base.connection
+      rescue
+        exit 0
+      else
+        exit 1
+      end
+    end
 
     desc "Dumps the database to db/backup/APP_NAME.dump"
     task :backup => :environment do
@@ -20,8 +30,18 @@ namespace :db do
       exec cmd
     end
 
+    desc "Creates a database the first time the app is run - from db/APP_NAME.dump."
+    task :create_db_with_data => :environment do
+      cmd = nil
+      with_config do |app, host, db, user, pass|
+        cmd = "export PGPASSWORD=#{pass} && pg_restore --verbose --host #{host} --username #{user} --clean --no-owner --no-acl --dbname #{db} #{Rails.root}/db/backups/#{app}.dump"
+      end
+      Rake::Task["db:create"].invoke
+      exec cmd
+    end
+
     desc "Export database minus proprietary data - this export can be provided to other customers"
-    task :create_initial_db => :environment do
+    task :dump_initial_db => :environment do
       cmd = nil
       with_config do |app, host, db, user, pass|
         cmd = "export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} --exclude-table-data=users --exclude-table-data=contacts --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}_init.dump"

@@ -19,7 +19,10 @@
   <%= form.hidden_field :is_launchable, :value => false %>
   <%= form.check_box :is_launchable, {}, true, false %>
   <label class="form-label-group mt-2" for="is_launchable">Check to indicate product is auto-launchable.</label>
-
+  <fieldset class="form-label-group">
+    <%= form.text_field :default_url, id: :default_url, :class => "form-control", :placeholder => "Default Url (use <host_ip> as placeholder)" %>
+    <%= form.label :default_url %>
+  </fieldset>
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">

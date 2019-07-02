@@ -211,7 +211,6 @@
     <h5 class="float-left mb-0">Automatic Launch</h5>
   </div id="autolaunch">
   <% if @product.is_launchable %>
-    <p class="card-text text-muted">Docker hub image: <%= @product.docker_image %></p>
     <div id="launchdata">
     <%= render partial: "launch" %>
     </div>

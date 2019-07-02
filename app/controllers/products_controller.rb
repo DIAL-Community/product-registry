@@ -203,7 +203,7 @@ class ProductsController < ApplicationController
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @products = Product.where(slug: current_slug).to_a
+        @products = Product.(slug: current_slug).to_a
       end
     end
     render json: @products, :only => [:name]
@@ -247,7 +247,7 @@ class ProductsController < ApplicationController
     def product_params
       params
         .require(:product)
-        .permit(:name, :website, :is_launchable, :docker_image, :has_osc, :osc_maturity, :has_digisquare,
+        .permit(:name, :website, :is_launchable, :default_url, :has_osc, :osc_maturity, :has_digisquare,
                 :start_assessment, :digisquare_maturity, :confirmation)
         .tap do |attr|
           if (params[:reslug].present?)

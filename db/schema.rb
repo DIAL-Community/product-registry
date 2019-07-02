@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190621203306) do
+ActiveRecord::Schema.define(version: 20190628163911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,23 @@ ActiveRecord::Schema.define(version: 20190621203306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_contacts_on_slug", unique: true
+  end
+
+  create_table "deploys", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "product_id"
+    t.string "provider"
+    t.string "instance_name"
+    t.string "auth_token"
+    t.string "status"
+    t.string "message"
+    t.string "url"
+    t.string "suite"
+    t.integer "job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_deploys_on_product_id"
+    t.index ["user_id"], name: "index_deploys_on_user_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -181,8 +198,8 @@ ActiveRecord::Schema.define(version: 20190621203306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_launchable", default: false
-    t.string "docker_image"
     t.boolean "start_assessment"
+    t.string "default_port"
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 
@@ -291,6 +308,8 @@ ActiveRecord::Schema.define(version: 20190621203306) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "deploys", "products"
+  add_foreign_key "deploys", "users"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"
