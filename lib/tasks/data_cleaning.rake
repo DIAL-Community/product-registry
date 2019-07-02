@@ -5,8 +5,8 @@ namespace :data do
       previous_website = organization.website
       organization.website = organization.website
                                          .strip
-                                         .sub(/^https?\:\/\//,'')
-                                         .sub(/^https?\/\/\:/,'')
+                                         .sub(/^https?\:\/\//i,'')
+                                         .sub(/^https?\/\/\:/i,'')
                                          .sub(/\/$/, '')
       if (organization.save)
         puts "Website changed: #{previous_website} -> #{organization.website}"

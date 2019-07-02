@@ -240,6 +240,15 @@ class OrganizationsController < ApplicationController
         .require(:organization)
         .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
         .tap do |attr|
+          if (attr[:website].present?)
+            # Handle both:
+            # * http:// or https:// 
+            # * (and the typo) http//: or https//:
+            attr[:website] = attr[:website].strip
+                                           .sub(/^https?\:\/\//i,'')
+                                           .sub(/^https?\/\/\:/i,'')
+                                           .sub(/\/$/, '')
+          end
           if (attr[:when_endorsed].present?)
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
           end
