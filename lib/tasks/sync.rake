@@ -51,4 +51,37 @@ namespace :sync do
     end
     puts 'Sync task completed ...'
   end
+
+  task :digi_square_digital_good, [:path] => :environment do |task, params|
+    puts "Starting pulling data from digital square ..."
+
+    digi_square_location = "https://wiki.digitalsquare.io/api.php?"\
+                      "action=parse&format=json&prop=sections&"\
+                      "page=Digital_Square_Investments_in_Global_Goods:Approved_Global_Goods"
+    digi_square_uri = URI.parse(digi_square_location)
+    digi_square_response = Net::HTTP.get(digi_square_uri)
+    digi_square_data = JSON.parse(digi_square_response)
+
+    digi_square_data['parse']['sections'].each do |section|
+      # only process section 2 & 3 and the toc level 2
+      # also skip the lorem ipsum
+      if (!section['number'].start_with?("2", "3") || section['toclevel'] != 2 || section['line'].start_with?("Lorem"))
+        next;
+      end
+      
+      slug_line = Slugger.slug_em section['line']
+      existing_product = Product.where(slug: slug_line)[0]
+      if existing_product.nil?
+        new_product = Product.new
+        new_product.name = section['line']
+        new_product.slug = slug_line
+        if new_product.save
+          puts "Added new product: #{new_product.name} -> #{new_product.slug}"
+        end
+      end
+    end
+
+    puts "Digital square data synced ..."
+
+  end
 end
