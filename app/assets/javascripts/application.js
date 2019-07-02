@@ -34,4 +34,4 @@ $(document).on("turbolinks:load", function(){ $(this).trigger("page:change")});
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
-})
+});
