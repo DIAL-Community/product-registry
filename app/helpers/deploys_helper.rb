@@ -1,6 +1,6 @@
 module DeploysHelper
     def getDataFromProvider(method, url, provider, auth_token)
-        if (provider == 'Digital Ocean')
+        if (provider == 'DO')
             uri = URI.parse(url)
             http = Net::HTTP.new(uri.host, uri.port)
             http.use_ssl = true
@@ -22,6 +22,27 @@ module DeploysHelper
           end
     end
 
+    def getDataFromJenkins(method, url)
+        jenkinsUrl = Rails.configuration.jenkins["jenkins_url"]
+        jenkinsUser = Rails.configuration.jenkins["jenkins_user"]
+        jenkinsPassword = Rails.configuration.jenkins["jenkins_password"]
+
+        crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
+
+        uri = URI.parse(jenkinsUrl+url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        case method
+        when "GET"
+            request = Net::HTTP::Get.new(uri.request_uri)
+        when "POST"
+            request = Net::HTTP::Post.new(uri.request_uri)
+        end
+        request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
+        request["Jenkins-Crumb"] = crumb
+
+        response = http.request(request)
+    end
+
     def getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword) 
 
         crumbUrl = jenkinsUrl+"/crumbIssuer/api/json"
@@ -38,20 +59,50 @@ module DeploysHelper
     end
 
     def jenkinsDeleteMachine(instanceName)
-        
-        jenkinsUrl = Rails.configuration.jenkins["jenkins_url"]
-        jenkinsUser = Rails.configuration.jenkins["jenkins_user"]
-        jenkinsPassword = Rails.configuration.jenkins["jenkins_password"]
 
-        crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
+        buildUrl="/job/dockermachine/buildWithParameters?MACHINE_NAME="+instanceName;
 
-        buildUrl=jenkinsUrl+"/job/dockermachine/buildWithParameters?MACHINE_NAME="+instanceName;
-        uri = URI.parse(buildUrl)
-        http = Net::HTTP.new(uri.host, uri.port)
-        request = Net::HTTP::Post.new(uri.request_uri)
-        request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
-        request["Jenkins-Crumb"] = crumb
+        response = getDataFromJenkins("POST", buildUrl)
+    end
 
-        response = http.request(request)
+    def queryJenkinsJob(jobName, jobNumber)
+
+        jobUrl = "/job/"+jobName+"/"+jobNumber.to_s+"/api/json";
+
+        response = getDataFromJenkins("GET", jobUrl)
+        responseData = JSON.parse(response.body, object_class: OpenStruct)
+
+        return responseData.result;
+    end
+
+    def getJenkinsMessage(jobName, jobNumber, numLines)
+        jobUrl="/job/"+jobName+"/"+jobNumber.to_s+"/logText/progressiveText?start=0"
+        response = getDataFromJenkins("GET", jobUrl)
+        responseData = response.body
+        messageLines = responseData.strip.split("\n").pop(numLines)
+
+        messages = ''
+        messageLines.each do | message |
+            messages = messages + '<p>'+message+'<p>'
+        end
+        return messages
+    end
+
+    def getMachineInfo(instanceName, provider, authToken)
+        machineName = instanceName
+        ipAddress = "0.0.0.0"
+        port = "80"
+        response = getDataFromProvider("GET", 'https://api.digitalocean.com/v2/droplets/?tag_name=t4dlaunched', provider, authToken)
+        if (response.code == "200")
+            responseData = JSON.parse(response.body, object_class: OpenStruct)
+            responseData.droplets.each do | droplet |
+                puts droplet
+                if (droplet.name == machineName) 
+                    ipAddress = droplet.networks.v4[0].ip_address
+                end
+            end
+        end
+    
+        return ipAddress
     end
 end

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  product: one
+  provider: MyString
+  instance_name: MyString
+  status: MyString
+  message: MyString
+  url: MyString
+  suite: MyString
+
+two:
+  user: two
+  product: two
+  provider: MyString
+  instance_name: MyString
+  status: MyString
+  message: MyString
+  url: MyString
+  suite: MyString
