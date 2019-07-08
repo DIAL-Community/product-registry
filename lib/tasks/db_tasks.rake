@@ -1,14 +1,4 @@
 namespace :db do
-    task :run_if_no_db do
-      begin
-        Rake::Task['environment'].invoke
-        ActiveRecord::Base.connection
-      rescue
-        exit 0
-      else
-        exit 1
-      end
-    end
 
     desc "returns appropriate exit code whether db exists or not"
     task :run_if_no_db do
