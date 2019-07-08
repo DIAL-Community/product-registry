@@ -10,15 +10,30 @@ class DeploysController < ApplicationController
 
   def show
     errorMsg = helpers.getJenkinsMessage(@deploy.product.slug, @deploy.job_id, 5)
-    @deploy.message = errorMsg
+    @messages = errorMsg
     if (@deploy.status == "BUILDING")
     end
   end
 
   def refresh_list
-
     respond_to do |format|
       format.js
+    end
+  end
+
+  def show_messages
+    @deploy = Deploy.find(params[:deploy_id])
+    @messages = helpers.getJenkinsMessage(@deploy.product.slug, @deploy.job_id, -1)
+  end
+
+  def add_ssh_user
+    logger.debug params
+    @deploy = Deploy.find(params[:deploy_id])
+    helpers.jenkinsAddSshUser(@deploy.instance_name, params[:pub_key].gsub('+','%2B'))
+
+    respond_to do |format|
+      format.html { redirect_to deploys_url(:auth_token => session[:auth_token], :provider => session[:provider]), notice: 'SSH Key added for this machine.' }
+      format.json { head :no_content }
     end
   end
 
@@ -37,7 +52,7 @@ class DeploysController < ApplicationController
   end
 
   def destroy
-
+  
     helpers.jenkinsDeleteMachine(@deploy.instance_name)
     @deploy.destroy
 

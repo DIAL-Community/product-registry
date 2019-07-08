@@ -22,7 +22,10 @@ Rails.application.routes.draw do
     resources :use_cases
   end
   
-  resources :deploys 
+  resources :deploys do
+    get 'show_messages'
+    post 'add_ssh_user'
+  end
 
   resources :organizations do
     resources :contacts
