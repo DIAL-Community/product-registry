@@ -12,24 +12,17 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
+    @products = Product.eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals, :sectors).order(:name)
     if params[:without_paging]
-      @products = Product
+      @products = @products
           .name_contains(params[:search])
-          .order(:slug)
       return
     end
 
     if params[:search]
-      @products = Product
+      @products = @products
           .where(nil)
           .name_contains(params[:search])
-          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals)
-          .order(:slug)
-          #.paginate(page: params[:page], per_page: 20)
-    else
-      @products = Product
-          .eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals)
-          .order(:slug)
           #.paginate(page: params[:page], per_page: 20)
     end
   end

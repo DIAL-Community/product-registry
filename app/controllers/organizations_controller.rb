@@ -11,7 +11,7 @@ class OrganizationsController < ApplicationController
       @organizations = Organization
       @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
       @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
-      @organizations = @organizations.eager_load(:sectors).eager_load(:locations).order(:name);
+      @organizations = @organizations.eager_load(:sectors, :locations).order(:name);
       return
     end
     if params[:search]
@@ -242,7 +242,7 @@ class OrganizationsController < ApplicationController
         .tap do |attr|
           if (attr[:website].present?)
             # Handle both:
-            # * http:// or https:// 
+            # * http:// or https://
             # * (and the typo) http//: or https//:
             attr[:website] = attr[:website].strip
                                            .sub(/^https?\:\/\//i,'')
