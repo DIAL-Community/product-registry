@@ -19,7 +19,8 @@
     <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-3">
       <div class="card">
         <div class="card-header bg-secondary text-white">
-          <%= link_to organization.name, organization %>
+          <%= link_to truncate(organization.name, length: 28, omission: '&hellip;', escape: false), organization,
+              'title' => organization.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
         </div>
         <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
         <div class="card-body">
