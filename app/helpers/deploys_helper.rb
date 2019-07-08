@@ -66,7 +66,6 @@ module DeploysHelper
     end
 
     def jenkinsAddSshUser(instanceName, publicKey)
-        logger.debug "PUBLIC_KEY="+publicKey
         buildUrl="/job/SetupSshUser/buildWithParameters?ENV_NAME="+instanceName+"&PUBLIC_KEY="+publicKey;
 
         response = getDataFromJenkins("POST", buildUrl)

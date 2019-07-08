@@ -27,7 +27,6 @@ class DeploysController < ApplicationController
   end
 
   def add_ssh_user
-    logger.debug params
     @deploy = Deploy.find(params[:deploy_id])
     helpers.jenkinsAddSshUser(@deploy.instance_name, params[:pub_key].gsub('+','%2B'))
 
