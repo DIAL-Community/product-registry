@@ -8,6 +8,7 @@ BUNDLE_SILENCE_ROOT_WARNING=1
 BUNDLE_APP_CONFIG=/usr/local/bundle
 BUNDLER_VERSION=2.0.1
 HOME=/root
+RAILS_ENV=production
 
 0 3 * * *   /t4d/sync.sh >> /var/log/cron.log 2>&1
 0 4 * * *   rails db:backup >> /var/log/cron.log 2>&1

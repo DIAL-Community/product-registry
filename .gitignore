@@ -11,8 +11,9 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
-# Ignore the database dumps/backups
-/db/backups/*
+# Ignore the database dumps/backups with sensitive info
+/db/backups/registry.dump
+/postgres-data
 
 # Ignore all logfiles and tempfiles.
 /log/*
