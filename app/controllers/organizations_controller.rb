@@ -28,9 +28,8 @@ class OrganizationsController < ApplicationController
   end
 
   def export
-    export_with_params('test')
-    send_file(
-      "#{Rails.root}/public/export.xls",
+    send_data(
+      export_with_params(user_signed_in?),
       filename: "Endorsing Organizations.xls",
       type: "application/vnd.ms-excel"
     )
