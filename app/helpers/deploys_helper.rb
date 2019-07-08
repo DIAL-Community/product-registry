@@ -65,6 +65,13 @@ module DeploysHelper
         response = getDataFromJenkins("POST", buildUrl)
     end
 
+    def jenkinsAddSshUser(instanceName, publicKey)
+        logger.debug "PUBLIC_KEY="+publicKey
+        buildUrl="/job/SetupSshUser/buildWithParameters?ENV_NAME="+instanceName+"&PUBLIC_KEY="+publicKey;
+
+        response = getDataFromJenkins("POST", buildUrl)
+    end
+
     def queryJenkinsJob(jobName, jobNumber)
 
         jobUrl = "/job/"+jobName+"/"+jobNumber.to_s+"/api/json";
@@ -79,13 +86,12 @@ module DeploysHelper
         jobUrl="/job/"+jobName+"/"+jobNumber.to_s+"/logText/progressiveText?start=0"
         response = getDataFromJenkins("GET", jobUrl)
         responseData = response.body
-        messageLines = responseData.strip.split("\n").pop(numLines)
-
-        messages = ''
-        messageLines.each do | message |
-            messages = messages + '<p>'+message+'<p>'
+        messageLines = responseData.strip.split("\n")
+        if (numLines > 0)
+            messageLines = messageLines.pop(numLines)
         end
-        return messages
+
+        return messageLines
     end
 
     def getMachineInfo(instanceName, provider, authToken)
