@@ -23,7 +23,7 @@
       </p>
       <p class="m-2">
         <strong>Website:</strong>
-        <%= link_to @organization.website.downcase.strip, @organization.website.downcase.strip %>
+        <%= link_to @organization.website.downcase.strip, "//#{@organization.website.downcase.strip}", target: :_blank %>
       </p>
       <% if @organization.locations.find_all{|location| location.location_type == 'point'}.count > 1 %>
         <p class="m-2">
