@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   include Pundit
-  after_action :verify_authorized, except: :index
   helper_method :slug_em
   protect_from_forgery with: :exception
 
