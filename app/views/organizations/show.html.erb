@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 <div class="border rounded bg-secondary text-white clearfix border card-header">
   <h5 class="float-left mb-0">
     Organization: <%= @organization.name %>
