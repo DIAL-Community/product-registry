@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<div class="card">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0">
+      User: <%= @user.email %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <p class="card-subtitle text-muted mb-0" >
+      <strong>Role: </strong><%= @user.role.capitalize %>
+    </p>
+    <p class="card-subtitle text-muted mt-3" >
+      <strong>Approved: </strong><%= @user.confirmed_at %>
+    </p>
+    <p class="card-subtitle text-muted mt-3"> 
+      <%= link_to 'Reset Password', edit_user_registration_path, :class => 'btn btn-secondary' %>
+    </p>
+    <p class="float-right mb-0" >
+      <%= link_to 'Back', users_path, :class => "card-link" %>
+      <%= link_to 'Edit', edit_user_path(@user), :class => "card-link" %>
+    </p>
+  </div>
+</div>
