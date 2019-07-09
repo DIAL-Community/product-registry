@@ -16,7 +16,7 @@
 <div class="row">
   <% @products.each do |product| %>
     <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-3">
-      <div class="card">
+      <div class="card index-card">
         <div class="card-header bg-secondary text-white">
           <%= link_to truncate(product.name, length: 28, omission: '&hellip;', escape: false), product,
               'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
