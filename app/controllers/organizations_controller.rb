@@ -40,22 +40,25 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
+    authorize @organization, :view_allowed?
   end
 
   # GET /organizations/new
   def new
     @organization = Organization.new
+    authorize @organization, :mod_allowed?
   end
 
   # GET /organizations/1/edit
   def edit
+    authorize @organization, :mod_allowed?
   end
 
   # POST /organizations
   # POST /organizations.json
   def create
-
     @organization = Organization.new(organization_params)
+    authorize @organization, :mod_allowed?
 
     if (params[:selected_sectors].present?)
       params[:selected_sectors].keys.each do |sector_id|
@@ -94,7 +97,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
+        format.html { redirect_to @organization, flash: { notice: 'Organization was successfully created.' }}
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -106,7 +109,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
-
+    authorize @organization, :mod_allowed?
     if (params[:selected_sectors].present?)
       sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
@@ -152,7 +155,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.update(organization_params)
-        format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
+        format.html { redirect_to @organization, flash: { notice: 'Organization was successfully updated.' }}
         format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
@@ -195,7 +198,6 @@ class OrganizationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
       @organization = Organization.find(params[:id])
-      authorize @organization, :view_allowed?
     end
 
     def authenticate_user

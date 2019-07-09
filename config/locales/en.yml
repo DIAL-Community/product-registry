@@ -31,6 +31,6 @@
 
 en:
   hello: "Hello world"
-
-pundit:
-  default: 'You cannot perform this action.'
+  pundit:
+    organization_policy:
+      mod_allowed?: "The operation is not allowed."

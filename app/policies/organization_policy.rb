@@ -7,7 +7,7 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == "admin" || user.role == "ict4sdg" || user.role == "user"
+    user.role == "admin" || user.role == "principle"
   end
 
   def view_allowed?
