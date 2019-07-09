@@ -27,9 +27,11 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
               <%= link_to 'View', use_case, :class =>"dropdown-item"  %>
-              <%= link_to 'Edit', edit_use_case_path(use_case), :class =>"dropdown-item"  %>
-              <div class="dropdown-divider"></div>
-              <%= link_to 'Delete', use_case, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+              <% if user_signed_in? %>
+                <%= link_to 'Edit', edit_use_case_path(use_case), :class =>"dropdown-item"  %>
+                <div class="dropdown-divider"></div>
+                <%= link_to 'Delete', use_case, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+              <% end %>
             </div>
           </td>
         </tr>
@@ -46,4 +48,3 @@
   </tbody>
 </table>
 <%= will_paginate @use_cases, :class => "apple-pagination" %>
-
