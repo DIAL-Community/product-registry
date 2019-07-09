@@ -6,17 +6,15 @@ class Organization < ApplicationRecord
 
   validates :name,  presence: true, length: { maximum: 300 }
 
-  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
-  scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
+  scope :name_contains, -> (name) { where("LOWER(organizations.name) like LOWER(?)", "%#{name}%")}
+  scope :slug_starts_with, -> (slug) { where("LOWER(organizations.slug) like LOWER(?)", "#{slug}\\_%")}
 
   def image_file
-    ['png','jpg','gif'].each do |extension|
-      if File.exist?(File.join('app','assets','images','organizations',"#{slug}.#{extension}"))
-        return "organizations/#{slug}.#{extension}"
+      if File.exist?(File.join('app','assets','images','organizations',"#{slug}.png"))
+        return "organizations/#{slug}.png"
+      else
+        return "organizations/org_placeholder.png"
       end
-    end
-
-    "organizations/org_placeholder.png"
   end
 
   private

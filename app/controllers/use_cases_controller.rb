@@ -1,6 +1,7 @@
 class UseCasesController < ApplicationController
   before_action :set_use_case, only: [:show, :edit, :update, :destroy]
   before_action :set_sectors, only: [:new, :edit, :update, :show]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /use_cases
   # GET /use_cases.json
