@@ -12,18 +12,20 @@ class OrganizationsController < ApplicationController
       @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
       @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
       @organizations = @organizations.eager_load(:sectors, :locations).order(:name);
+      authorize @organizations, :view_allowed?
       return
     end
+
     if params[:search]
       @organizations = Organization
           .where(nil)
           .name_contains(params[:search])
           .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+      authorize @organizations, :view_allowed?
     else
       @organizations = Organization
           .order(:slug)
-          #.paginate(page: params[:page], per_page: 20)
+      authorize @organizations, :view_allowed?
     end
   end
 
@@ -162,6 +164,7 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1
   # DELETE /organizations/1.json
   def destroy
+    authorize @organization, :mod_allowed?
     @organization.destroy
     respond_to do |format|
       format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.' }
@@ -171,6 +174,7 @@ class OrganizationsController < ApplicationController
 
   def map
     @organizations = Organization.eager_load(:locations)
+    authorize @organizations, :view_allowed?
   end
 
   def duplicates
@@ -182,6 +186,7 @@ class OrganizationsController < ApplicationController
         @organizations = Organization.where(slug: current_slug).to_a
       end
     end
+    authorize @organizations, :view_allowed?
     render json: @organizations, :only => [:name]
   end
 
@@ -190,6 +195,7 @@ class OrganizationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
       @organization = Organization.find(params[:id])
+      authorize @organization, :view_allowed?
     end
 
     def authenticate_user
