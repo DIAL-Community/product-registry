@@ -1,12 +1,12 @@
-<% if @use_case.errors.any? %>
+<% if @user.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
       The form contains
-      <%= pluralize(@use_case.errors.count, "error") %>.
+      <%= pluralize(@user.errors.count, "error") %>.
     </div>
   </div>
 <% end %>
 <h5 class="border rounded bg-secondary text-white p-3">
-  Edit use case
+  Create User
 </h5>
-<%= render 'form', use_case: @use_case %>
+<%= render 'newform', user: @user %>
