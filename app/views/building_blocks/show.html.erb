@@ -39,7 +39,9 @@
     </p>
     <p class="float-right mb-0" >
       <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
+      <% if user_signed_in? && policy(@building_block).mod_allowed? %>
+        <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
+      <% end %>
     </p>
   </div>
 </div>
@@ -76,6 +78,7 @@
     <% end %>
   <% end %>
   </div>
+</div>
 
 <div class="mt-4 mb-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">

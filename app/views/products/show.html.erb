@@ -24,7 +24,7 @@
     </div>
     <p class="float-right mb-0" >
       <%= link_to 'Back', products_path, :class => "card-link" %>
-      <% if user_signed_in? %>
+      <% if user_signed_in? && policy(@product).mod_allowed? %>
         <%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %>
       <% end %>
     </p>

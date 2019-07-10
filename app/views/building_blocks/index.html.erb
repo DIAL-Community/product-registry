@@ -6,7 +6,7 @@
     <div class="input-group-append">
       <%= submit_tag "Search", :class => "btn btn-secondary" %>
     </div>
-<% end %>
+  <% end %>
 </div>
 
 <table class="table">
@@ -26,7 +26,7 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
               <%= link_to 'View', building_block, :class =>"dropdown-item"  %>
-              <% if user_signed_in? %>
+              <% if user_signed_in? && policy(building_block).mod_allowed? %>
                 <%= link_to 'Edit', edit_building_block_path(building_block), :class =>"dropdown-item"  %>
                 <div class="dropdown-divider"></div>
                 <%= link_to 'Delete', building_block, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>

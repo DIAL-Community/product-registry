@@ -7,7 +7,7 @@
   <div class="card-body">
     <p class="float-right mb-0" >
       <%= link_to 'Back', locations_path, :class => "card-link" %>
-      <% if policy(@location).mod_allowed? %>
+      <% if user_signed_in? && policy(@location).mod_allowed? %>
         <%= link_to 'Edit', edit_location_path(@location), :class => "card-link" %>
       <% end %>
     </p>

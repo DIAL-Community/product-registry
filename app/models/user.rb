@@ -9,6 +9,8 @@ class User < ApplicationRecord
     self.role ||= :user
   end
 
+  scope :email_contains, -> (email) { where("LOWER(email) like LOWER(?)", "%#{email}%")}
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

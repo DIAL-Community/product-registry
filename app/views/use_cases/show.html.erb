@@ -24,7 +24,9 @@
     <% end %>
     <p class="float-right mb-0" >
       <%= link_to 'Back', use_cases_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_use_case_path(@use_case), :class => "card-link" %>
+      <% if user_signed_in? && policy(@use_case).mod_allowed? %>
+        <%= link_to 'Edit', edit_use_case_path(@use_case), :class => "card-link" %>
+      <% end %>
     </p>
   </div>
 </div>

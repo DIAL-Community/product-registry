@@ -43,7 +43,7 @@
   </div>
   <p class="float-right mb-0" >
     <%= link_to 'Back', organizations_path, :class => "card-link" %>
-    <% if user_signed_in? %>
+    <% if user_signed_in? && policy(@organization).mod_allowed? %>
       <%= link_to 'Edit', edit_organization_path(@organization), :class => "card-link" %>
     <% end %>
   </p>
