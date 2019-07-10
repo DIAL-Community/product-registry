@@ -45,8 +45,8 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/new
   def new
+    authorize Organization, :mod_allowed?
     @organization = Organization.new
-    authorize @organization, :mod_allowed?
   end
 
   # GET /organizations/1/edit
@@ -57,8 +57,8 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
+    authorize Organization, :mod_allowed?
     @organization = Organization.new(organization_params)
-    authorize @organization, :mod_allowed?
 
     if (params[:selected_sectors].present?)
       params[:selected_sectors].keys.each do |sector_id|
@@ -170,7 +170,7 @@ class OrganizationsController < ApplicationController
     authorize @organization, :mod_allowed?
     @organization.destroy
     respond_to do |format|
-      format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.' }
+      format.html { redirect_to organizations_url, flash: { notice: 'Organization was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end

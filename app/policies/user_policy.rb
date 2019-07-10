@@ -7,20 +7,30 @@ class UserPolicy < ApplicationPolicy
   end
 
   def index?
-    @current_user.admin?
+    @current_user.role == "admin"
   end
 
   def show?
-    @current_user.admin? or @current_user == @user
+    @current_user.role == "admin"
+  end
+
+  def edit?
+    @current_user.role == "admin"
   end
 
   def update?
-    @current_user.admin?
+    @current_user.role == "admin"
+  end
+
+  def create?
+    @current_user.role == "admin"
+  end
+
+  def new?
+    @current_user.role == "admin"
   end
 
   def destroy?
-    return false if @current_user == @user
-    @current_user.admin?
+    @current_user.role == "admin"
   end
-
 end

@@ -48,7 +48,9 @@
                 <strong>Users</strong>
               </a>
               <div class="dropdown-menu">
-                <%= link_to 'Users', users_path, :class => 'dropdown-item' %>
+                <% if (policy(current_user).index?) %>
+                  <%= link_to 'Users', users_path, :class => 'dropdown-item' %>
+                <% end %>
                 <%= link_to 'Locations', locations_path, :class => 'dropdown-item' %>
                 <%= link_to 'Sectors', sectors_path, :class => 'dropdown-item' %>
               </div>

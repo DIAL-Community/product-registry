@@ -9,6 +9,7 @@ class WorkflowsController < ApplicationController
       @workflows = Workflow
           .name_contains(params[:search])
           .order(:name)
+      authorize @workflows, :view_allowed?
       return
     end
 
@@ -18,30 +19,36 @@ class WorkflowsController < ApplicationController
         .name_contains(params[:search])
         .order(:name)
         .paginate(page: params[:page], per_page: 20)
+      authorize @workflows, :view_allowed?
     else
       @workflows = Workflow
         .order(:name)
         .paginate(page: params[:page], per_page: 20)
+      authorize @workflows, :view_allowed?
     end
   end
 
   # GET /workflows/1
   # GET /workflows/1.json
   def show
+    authorize @workflow, :view_allowed?
   end
 
   # GET /workflows/new
   def new
+    authorize Workflow, :mod_allowed?
     @workflow = Workflow.new
   end
 
   # GET /workflows/1/edit
   def edit
+    authorize @workflow, :mod_allowed?
   end
 
   # POST /workflows
   # POST /workflows.json
   def create
+    authorize Workflow, :mod_allowed?
     @workflow = Workflow.new(workflow_params)
 
     if (params[:selected_use_cases])
@@ -60,7 +67,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       if @workflow.save
-        format.html { redirect_to @workflow, notice: 'Workflow was successfully created.' }
+        format.html { redirect_to @workflow, flash: { notice: 'Workflow was successfully created.' }}
         format.json { render :show, status: :created, location: @workflow }
       else
         format.html { render :new }
@@ -72,15 +79,7 @@ class WorkflowsController < ApplicationController
   # PATCH/PUT /workflows/1
   # PATCH/PUT /workflows/1.json
   def update
-    respond_to do |format|
-      if @workflow.update(workflow_params)
-        format.html { redirect_to @workflow, notice: 'Workflow was successfully updated.' }
-        format.json { render :show, status: :ok, location: @workflow }
-      else
-        format.html { render :edit }
-        format.json { render json: @workflow.errors, status: :unprocessable_entity }
-      end
-    end
+    authorize @workflow, :mod_allowed?
 
     use_cases = Set.new
     if (params[:selected_use_cases])
@@ -99,28 +98,40 @@ class WorkflowsController < ApplicationController
       end
     end
     @workflow.building_blocks = building_blocks.to_a
+
+    respond_to do |format|
+      if @workflow.update(workflow_params)
+        format.html { redirect_to @workflow, flash: { notice: 'Workflow was successfully updated.' }}
+        format.json { render :show, status: :ok, location: @workflow }
+      else
+        format.html { render :edit }
+        format.json { render json: @workflow.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # DELETE /workflows/1
   # DELETE /workflows/1.json
   def destroy
+    authorize @workflow, :mod_allowed?
     @workflow.destroy
     respond_to do |format|
-      format.html { redirect_to workflows_url, notice: 'Workflow was successfully destroyed.' }
+      format.html { redirect_to workflows_url, flash: { notice: 'Workflow was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
 
   def duplicates
-    @workflow = Array.new
+    @workflows = Array.new
     if params[:current].present?
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @workflow = Workflow.where(slug: current_slug).to_a
+        @workflows = Workflow.where(slug: current_slug).to_a
       end
     end
-    render json: @workflow, :only => [:name]
+    authorize @workflows, :view_allowed?
+    render json: @workflows, :only => [:name]
   end
 
   private

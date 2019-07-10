@@ -32,5 +32,4 @@
 en:
   hello: "Hello world"
   pundit:
-    organization_policy:
-      mod_allowed?: "The operation is not allowed."
+    mod_allowed?: "The operation is not allowed."

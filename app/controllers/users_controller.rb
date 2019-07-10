@@ -4,33 +4,39 @@ class UsersController < ApplicationController
 
   def index
     if params[:without_paging]
-        @users = User
-            .name_contains(params[:search])
-            .order(:email)
-        return
-      end
-  
-      if params[:search]
-        @users = User
-          .where(nil)
-          .email_contains(params[:search])
+      @users = User
+          .name_contains(params[:search])
           .order(:email)
-          .paginate(page: params[:page], per_page: 20)
-      else
-        @users = User
-          .order(:email)
-          .paginate(page: params[:page], per_page: 20)
-      end
+      authorize @users
+      return
+    end
+
+    if params[:search]
+      @users = User
+        .where(nil)
+        .email_contains(params[:search])
+        .order(:email)
+        .paginate(page: params[:page], per_page: 20)
+      authorize @users
+    else
+      @users = User
+        .order(:email)
+        .paginate(page: params[:page], per_page: 20)
+      authorize @users
+    end
   end
 
   def show
+    authorize @user
   end
 
   def edit
+    authorize @user
   end
 
   def new
     @user = User.new
+    authorize @user
   end
 
   def update
@@ -41,7 +47,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       if @user.update(user_hash)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to @user, flash: { notice: 'User was successfully updated.' }}
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -55,7 +61,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
         if @user.save
-          format.html { redirect_to @user, notice: 'User was successfully created.' }
+          format.html { redirect_to @user, flash: { notice: 'User was successfully created.' }}
           format.json { render :show, status: :created, location: @user }
         else
           format.html { render :new }
@@ -67,7 +73,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'Use case was successfully destroyed.' }
+      format.html { redirect_to users_url, flash: { notice: 'Use case was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
