@@ -26,21 +26,21 @@
 
     <% if organization.new_record? %>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="contact-name" name="contact['name']" class="form-control" placeholder="Name" />
+        <input type="text" id="contact-name" name="contact[name]" class="form-control" placeholder="Name" />
         <label for="contact-name">
           Name
         </label>
       </fieldset>
 
       <fieldset class="form-label-group">
-        <input type="text" id="contact-email" name="contact['email']" class="form-control" placeholder="Email" />
+        <input type="text" id="contact-email" name="contact[email]" class="form-control" placeholder="Email" />
         <label for="contact-email">
           Email
         </label>
       </fieldset>
 
       <fieldset class="form-label-group">
-        <input type="text" id="contact-title" name="contact['title']" class="form-control" placeholder="Title" />
+        <input type="text" id="contact-title" name="contact[title]" class="form-control" placeholder="Title" />
         <label for="contact-title">
           Title
         </label>
@@ -188,6 +188,6 @@
     addOffice('<%= location.name %>', '<%= location.id %>', null);
   <% end %>
   <% organization.contacts.order("name").each do |contact| %>
-    addContact('<%= contact.name %>', '<%= contact.id %>');
+    addContact('<%= contact.id %>', '<%= contact.name %>');
   <% end %>
 </script>

@@ -67,6 +67,22 @@ class OrganizationsController < ApplicationController
       end
     end
 
+    if (params[:contact].present?)
+      contact = Contact.new
+      contact.name = params[:contact][:name]
+      contact.email = params[:contact][:email]
+      contact.title = params[:contact][:title]
+
+      contact_slug = slug_em(params[:contact][:name]);
+      dupe_count = Contact.where(slug: contact_slug).count
+      if (dupe_count > 0)
+        first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
+        contact.slug = contact_slug + "_" + calculate_offset(first_duplicate).to_s
+      end
+
+      @organization.contacts.push(contact)
+    end
+
     if (params[:selected_countries].present?)
       params[:selected_countries].keys.each do |location_id|
         location = Location.find(location_id)
@@ -117,6 +133,15 @@ class OrganizationsController < ApplicationController
         sectors.add(sector)
       end
       @organization.sectors = sectors.to_a
+    end
+
+    if (params[:selected_contacts].present?)
+      contacts = Set.new
+      params[:selected_contacts].keys.each do |contact_id|
+        contact = Contact.find(contact_id)
+        contacts.add(contact)
+      end
+      @organization.contacts = contacts.to_a
     end
 
     locations = Set.new
