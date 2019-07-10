@@ -59,6 +59,10 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
+    if (user_params[:is_approved])
+      @user.confirmed_at = Time.now.to_s
+    end
+
     respond_to do |format|
         if @user.save
           format.html { redirect_to @user, flash: { notice: 'User was successfully created.' }}
@@ -73,7 +77,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, flash: { notice: 'Use case was successfully destroyed.' }}
+      format.html { redirect_to users_url, flash: { notice: 'User was successfully deleted.' }}
       format.json { head :no_content }
     end
   end
