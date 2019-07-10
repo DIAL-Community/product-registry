@@ -21,6 +21,56 @@
     </fieldset>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      Contact
+    </h6>
+
+    <% if organization.new_record? %>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="contact-name" name="contact['name']" class="form-control" placeholder="Name" />
+        <label for="contact-name">
+          Name
+        </label>
+      </fieldset>
+
+      <fieldset class="form-label-group">
+        <input type="text" id="contact-email" name="contact['email']" class="form-control" placeholder="Email" />
+        <label for="contact-email">
+          Email
+        </label>
+      </fieldset>
+
+      <fieldset class="form-label-group">
+        <input type="text" id="contact-title" name="contact['title']" class="form-control" placeholder="Title" />
+        <label for="contact-title">
+          Title
+        </label>
+      </fieldset>
+    <% end %>
+
+    <% if organization.persisted? %>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="contact-search" name="contact_label" class="form-control" placeholder="Contacts" />
+        <label for="contact-label">
+          Contacts
+        </label>
+      </fieldset>
+      <div class="row">
+        <div id="base-selected-contacts" class="col-6 col-lg-4 mb-2">
+          <div class="card h-100">
+            <div class="p-2 clearfix">
+              <p class="mb-0 float-left"></p>
+              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
+                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
+              </a>
+              <input type="hidden"/>
+              <input type="hidden"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
       Offices
     </h6>
     <fieldset class="form-label-group mt-2">
@@ -136,5 +186,8 @@
   <% end %>
   <% organization.locations.where(location_type: 'point').order("name").each do |location| %>
     addOffice('<%= location.name %>', '<%= location.id %>', null);
+  <% end %>
+  <% organization.contacts.order("name").each do |contact| %>
+    addContact('<%= contact.name %>', '<%= contact.id %>');
   <% end %>
 </script>
