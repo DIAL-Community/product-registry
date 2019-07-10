@@ -7,7 +7,9 @@
   <div class="card-body">
     <p class="float-right mb-0" >
       <%= link_to 'Back', sectors_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+      <% if policy(@sector).mod_allowed? %>
+        <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+      <% end %>
     </p>
   </div>
 </div>
