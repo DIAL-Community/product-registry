@@ -1,6 +1,6 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
-<% if policy(Location).mod_allowed? %>
+<% if user_signed_in? && policy(Location).mod_allowed? %>
   <%= link_to 'Create New', new_location_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
 <% end %>
 <div class="float-right pb-2">
@@ -29,7 +29,7 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
               <%= link_to 'View', location, :class =>"dropdown-item"  %>
-              <% if policy(location).mod_allowed? %>
+              <% if user_signed_in? && policy(location).mod_allowed? %>
                 <%= link_to 'Edit', edit_location_path(location), :class =>"dropdown-item"  %>
                 <div class="dropdown-divider"></div>
                 <%= link_to 'Delete', location, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>

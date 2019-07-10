@@ -2,7 +2,9 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <%= link_to "Export", export_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
-<%= link_to 'Create New', new_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% if user_signed_in? && policy(Organization).mod_allowed? %>
+  <%= link_to 'Create New', new_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
 <div class="float-right pb-2">
   <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
