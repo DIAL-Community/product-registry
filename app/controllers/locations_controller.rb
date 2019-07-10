@@ -10,6 +10,7 @@ class LocationsController < ApplicationController
           .where.not(location_type: 'point')
           .name_contains(params[:search])
           .order(:name)
+      authorize @locations, :view_allowed?
       return
     end
 
@@ -18,6 +19,7 @@ class LocationsController < ApplicationController
           .where(location_type: 'point')
           .name_contains(params[:search])
           .order(:name)
+      authorize @locations, :view_allowed?
       return
     end
 
@@ -27,21 +29,25 @@ class LocationsController < ApplicationController
           .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @locations, :view_allowed?
     else
       @locations = Location
           .where.not(location_type: 'point')
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @locations, :view_allowed?
     end
   end
 
   # GET /locations/1
   # GET /locations/1.json
   def show
+    authorize @location, :view_allowed?
   end
 
   # GET /locations/new
   def new
+    authorize Location, :mod_allowed?
     @location = Location.new
     if (params[:organization_id])
       @organization = Organization.find(params[:organization_id])
@@ -51,6 +57,7 @@ class LocationsController < ApplicationController
 
   # GET /locations/1/edit
   def edit
+    authorize @location, :mod_allowed?
     if (params[:organization_id])
       @organization = Organization.find(params[:organization_id])
     end
@@ -59,6 +66,7 @@ class LocationsController < ApplicationController
   # POST /locations
   # POST /locations.json
   def create
+    authorize Location, :mod_allowed?
     @location = Location.new(location_params)
     @location.location_type = 'country'
 
@@ -71,7 +79,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.save
-        format.html { redirect_to @location, notice: 'Location was successfully created.' }
+        format.html { redirect_to @location, flash: { notice: 'Location was successfully created.' }}
         format.json { render :show, status: :created, location: @location }
       else
         format.html { render :new }
@@ -83,7 +91,7 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1
   # PATCH/PUT /locations/1.json
   def update
-
+    authorize @location, :mod_allowed?
     if (params[:selected_organizations])
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
@@ -95,7 +103,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.update(location_params)
-        format.html { redirect_to @location, notice: 'Location was successfully updated.' }
+        format.html { redirect_to @location, flash: { notice: 'Location was successfully updated.' }}
         format.json { render :show, status: :ok, location: @location }
       else
         format.html { render :edit }
@@ -107,9 +115,10 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.json
   def destroy
+    authorize @location, :mod_allowed?
     @location.destroy
     respond_to do |format|
-      format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }
+      format.html { redirect_to locations_url, flash: { notice: 'Location was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
@@ -123,6 +132,7 @@ class LocationsController < ApplicationController
         @locations = Location.where(slug: current_slug).to_a
       end
     end
+    authorize @locations, :view_allowed?
     render json: @locations, :only => [:name]
   end
 

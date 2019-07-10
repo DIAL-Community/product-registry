@@ -9,6 +9,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
           .includes(:sdg_targets)
           .name_contains(params[:search])
           .order(:number)
+      authorize @sustainable_development_goals, :view_allowed?
       return
     end
 
@@ -19,15 +20,18 @@ class SustainableDevelopmentGoalsController < ApplicationController
           .name_contains(params[:search])
           .order(:number)
           .paginate(page: params[:page], per_page: 20)
+      authorize @sustainable_development_goals, :view_allowed?
     else
       @sustainable_development_goals = SustainableDevelopmentGoal
           .includes(:sdg_targets)
           .order(:number)
           .paginate(page: params[:page], per_page: 20)
+      authorize @sustainable_development_goals, :view_allowed?
     end
   end
 
   def show
+    authorize @sustainable_development_goal, :view_allowed?
   end
 
   private

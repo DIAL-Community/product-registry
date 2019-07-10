@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
   <h5 class="card-header bg-secondary text-white">
     Location: <%= @location.name %>

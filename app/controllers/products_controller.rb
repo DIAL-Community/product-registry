@@ -16,6 +16,7 @@ class ProductsController < ApplicationController
     if params[:without_paging]
       @products = @products
           .name_contains(params[:search])
+      authorize @products, :view_allowed?
       return
     end
 
@@ -23,13 +24,14 @@ class ProductsController < ApplicationController
       @products = @products
           .where(nil)
           .name_contains(params[:search])
-          #.paginate(page: params[:page], per_page: 20)
     end
+    authorize @products, :view_allowed?
   end
 
   # GET /products/1
   # GET /products/1.json
   def show
+    authorize @product, :view_allowed?
     # All of this data will be passed to the launch partial and used by javascript
     @jenkins_url = Rails.configuration.jenkins["jenkins_url"]
     @jenkins_user = Rails.configuration.jenkins["jenkins_user"]
@@ -38,16 +40,19 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
+    authorize Product, :mod_allowed?
     @product = Product.new
   end
 
   # GET /products/1/edit
   def edit
+    authorize @product, :mod_allowed?
   end
 
   # POST /products
   # POST /products.json
   def create
+    authorize Product, :mod_allowed?
     @product = Product.new(product_params)
 
     if product_params[:start_assessment] == "true"
@@ -98,7 +103,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
+        format.html { redirect_to @product, flash: { notice: 'Product was successfully created.' }}
         format.json { render :show, status: :created, location: @product }
       else
         format.html { render :new }
@@ -111,6 +116,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
 
+    authorize @product, :mod_allowed?
     if (!product_params[:start_assessment].nil? && product_params[:start_assessment] == "true") || @product.start_assessment
       assign_maturity
     end
@@ -171,7 +177,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
+        format.html { redirect_to @product, flash: { notice: 'Product was successfully updated.' }}
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }
@@ -183,9 +189,10 @@ class ProductsController < ApplicationController
   # DELETE /products/1
   # DELETE /products/1.json
   def destroy
+    authorize @product, :mod_allowed?
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+      format.html { redirect_to products_url, flash: { notice: 'Product was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
@@ -199,6 +206,7 @@ class ProductsController < ApplicationController
         @products = Product.where(slug: current_slug).to_a
       end
     end
+    authorize @products, :view_allowed?
     render json: @products, :only => [:name]
   end
 
