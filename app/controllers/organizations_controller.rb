@@ -30,8 +30,9 @@ class OrganizationsController < ApplicationController
   end
 
   def export
+    export_contacts = params[:export_contacts].downcase == "true" ? true : false
     send_data(
-      export_with_params(user_signed_in?),
+      export_with_params(export_contacts),
       filename: "Endorsing Organizations.xls",
       type: "application/vnd.ms-excel"
     )
