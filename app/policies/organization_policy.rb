@@ -10,6 +10,10 @@ class OrganizationPolicy < ApplicationPolicy
     user.role == "admin" || user.role == "principle"
   end
 
+  def export_contacts_allowed?
+    user.role == "admin" || user.role == "principle"
+  end
+
   def view_allowed?
     true
   end
