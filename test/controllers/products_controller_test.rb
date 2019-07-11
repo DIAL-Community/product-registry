@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @product = products(:one)
   end
 
@@ -17,7 +20,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product" do
     assert_difference('Product.count') do
-      post products_url, params: { product: { name: @product.name, slug: @product.slug, website: @product.website } }
+      post products_url, params: { product: { name: @product.name, slug: 'testslug', website: @product.website } }
     end
 
     assert_redirected_to product_url(Product.last)
@@ -38,11 +41,4 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to product_url(@product)
   end
 
-  test "should destroy product" do
-    assert_difference('Product.count', -1) do
-      delete product_url(@product)
-    end
-
-    assert_redirected_to products_url
-  end
 end

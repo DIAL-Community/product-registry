@@ -2,12 +2,10 @@
 
 one:
   name: MyString
-  slug: MyString
-  number: 9.99
-  sustainable_development_goals: one
+  slug: slug1
+  sdg_number: 1
 
 two:
   name: MyString
-  slug: MyString
-  number: 9.99
-  sustainable_development_goals: two
+  slug: slug2
+  sdg_number: 2

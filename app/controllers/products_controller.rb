@@ -249,7 +249,7 @@ class ProductsController < ApplicationController
       params
         .require(:product)
         .permit(:name, :website, :is_launchable, :docker_image, :has_osc, :osc_maturity, :has_digisquare,
-                :start_assessment, :digisquare_maturity, :confirmation)
+                :start_assessment, :digisquare_maturity, :confirmation, :slug)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

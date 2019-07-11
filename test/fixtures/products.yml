@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  slug: MyString
+  slug: slug1
   website: MyString
 
 two:
   name: MyString
-  slug: MyString
+  slug: slug2
   website: MyString

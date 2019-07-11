@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class ContactsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @contact = contacts(:one)
   end
 
@@ -17,7 +20,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create contact" do
     assert_difference('Contact.count') do
-      post contacts_url, params: { contact: { email: @contact.email, name: @contact.name, slug: @contact.slug, title: @contact.title } }
+      post contacts_url, params: { contact: { name: @contact.name, slug: 'testslug', email: @contact.email, title: @contact.title } }
     end
 
     assert_redirected_to contact_url(Contact.last)

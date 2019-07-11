@@ -2,12 +2,10 @@
 
 one:
   name: MyString
-  slug: MyString
-  description: MyString
-  other_names: MyString
+  slug: slug1
+  description: '{}'
 
 two:
   name: MyString
-  slug: MyString
-  description: MyString
-  other_names: MyString
+  slug: slug2
+  description: '{}'

@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @building_block = building_blocks(:one)
   end
 

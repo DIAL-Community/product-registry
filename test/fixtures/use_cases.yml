@@ -3,11 +3,11 @@
 one:
   name: MyString
   slug: MyString
-  description: MyString
+  description: '{ }'
   sector: one
 
 two:
   name: MyString
   slug: MyString
-  description: MyString
+  description: '{ }'
   sector: two

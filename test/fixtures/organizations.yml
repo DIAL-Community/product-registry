@@ -2,14 +2,14 @@
 
 one:
   name: MyString
-  slug: MyString
+  slug: slug1
   when_endorsed: 2018-11-16 08:26:18
   website: MyString
   is_endorser: false
 
 two:
   name: MyString
-  slug: MyString
+  slug: slug2
   when_endorsed: 2018-11-16 08:26:18
   website: MyString
   is_endorser: false

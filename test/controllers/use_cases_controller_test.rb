@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class UseCasesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @use_case = use_cases(:one)
   end
 

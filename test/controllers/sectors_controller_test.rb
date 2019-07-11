@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class SectorsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @sector = sectors(:one)
   end
 
@@ -39,7 +42,13 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy sector" do
+    # Should not delete because it is referenced by a use case
+    assert_difference('Sector.count', 0) do
+      delete sector_url(@sector)
+    end
+
     assert_difference('Sector.count', -1) do
+      delete use_case_url(@sector)
       delete sector_url(@sector)
     end
 

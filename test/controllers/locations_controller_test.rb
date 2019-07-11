@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class LocationsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @location = locations(:one)
   end
 
@@ -17,7 +20,7 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create location" do
     assert_difference('Location.count') do
-      post locations_url, params: { location: { name: @location.name, slug: @location.slug } }
+      post locations_url, params: { location: { name: @location.name, slug: 'testslug' } }
     end
 
     assert_redirected_to location_url(Location.last)
