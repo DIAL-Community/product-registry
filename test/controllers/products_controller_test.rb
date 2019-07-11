@@ -41,4 +41,23 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to product_url(@product)
   end
 
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get product_url(@product)
+    assert_response :success
+    
+    get new_product_url
+    assert_response :redirect
+
+    get edit_product_url(@product)
+    assert_response :redirect    
+
+    patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug, website: @product.website } }
+    assert_response :redirect  
+
+    delete product_url(@product)
+    assert_response :redirect
+  end
+
 end

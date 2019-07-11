@@ -48,4 +48,23 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to organizations_url
   end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get organization_url(@organization)
+    assert_response :success
+    
+    get new_organization_url
+    assert_response :redirect
+
+    get edit_organization_url(@organization)
+    assert_response :redirect    
+
+    patch organization_url(@organization), params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: @organization.slug, website: @organization.website, when_endorsed: '11/16/2018' } }
+    assert_response :redirect  
+
+    delete organization_url(@organization)
+    assert_response :redirect
+  end
 end

@@ -48,4 +48,23 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to locations_url
   end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get location_url(@location)
+    assert_response :success
+    
+    get new_location_url
+    assert_response :redirect
+
+    get edit_location_url(@location)
+    assert_response :redirect    
+
+    patch location_url(@location), params: { location: { name: @location.name, slug: @location.slug } }
+    assert_response :redirect  
+
+    delete location_url(@location)
+    assert_response :redirect
+  end
 end

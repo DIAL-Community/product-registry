@@ -48,4 +48,23 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to contacts_url
   end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get contact_url(@contact)
+    assert_response :success
+    
+    get new_contact_url
+    assert_response :redirect
+
+    get edit_contact_url(@contact)
+    assert_response :redirect    
+
+    patch contact_url(@contact), params: { contact: { email: @contact.email, name: @contact.name, slug: @contact.slug, title: @contact.title } }
+    assert_response :redirect  
+
+    delete contact_url(@contact)
+    assert_response :redirect
+  end
 end

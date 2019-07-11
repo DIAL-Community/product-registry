@@ -48,4 +48,23 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to use_cases_url
   end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get use_case_url(@use_case)
+    assert_response :success
+    
+    get new_use_case_url
+    assert_response :redirect
+
+    get edit_use_case_url(@use_case)
+    assert_response :redirect    
+
+    patch use_case_url(@use_case), params: { use_case: { description: @use_case.description, name: @use_case.name, slug: @use_case.slug } }
+    assert_response :redirect  
+
+    delete use_case_url(@use_case)
+    assert_response :redirect
+  end
 end

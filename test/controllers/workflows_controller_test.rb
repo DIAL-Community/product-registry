@@ -48,4 +48,23 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to workflows_url
   end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get workflow_url(@workflow)
+    assert_response :success
+    
+    get new_workflow_url
+    assert_response :redirect
+
+    get edit_workflow_url(@workflow)
+    assert_response :redirect    
+
+    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
+    assert_response :redirect  
+
+    delete workflow_url(@workflow)
+    assert_response :redirect
+  end
 end

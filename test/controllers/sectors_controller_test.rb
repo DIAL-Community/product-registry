@@ -54,4 +54,23 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to sectors_url
   end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get sector_url(@sector)
+    assert_response :success
+    
+    get new_sector_url
+    assert_response :redirect
+
+    get edit_sector_url(@sector)
+    assert_response :redirect    
+
+    patch sector_url(@sector), params: { sector: { name: @sector.name, slug: @sector.slug } }
+    assert_response :redirect  
+
+    delete sector_url(@sector)
+    assert_response :redirect
+  end
 end
