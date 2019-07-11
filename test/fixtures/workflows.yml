@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
+  name: Workflow1
   slug: slug1
   description: '{}'
 
 two:
-  name: MyString
+  name: Workflow2
   slug: slug2
   description: '{}'

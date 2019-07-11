@@ -13,6 +13,14 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get contacts_url(:search=>"Contact1")
+    assert_equal(1, assigns(:contacts).count)
+
+    get contacts_url(:search=>"InvalidContact")
+    assert_equal(0, assigns(:contacts).count)
+  end
+
   test "should get new" do
     get new_contact_url
     assert_response :success

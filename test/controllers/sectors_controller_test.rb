@@ -13,6 +13,14 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get sectors_url(:search=>"Sector1")
+    assert_equal(1, assigns(:sectors).count)
+
+    get sectors_url(:search=>"InvalidSector")
+    assert_equal(0, assigns(:sectors).count)
+  end
+
   test "should get new" do
     get new_sector_url
     assert_response :success

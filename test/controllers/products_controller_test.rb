@@ -13,6 +13,14 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get products_url(:search=>"Product1")
+    assert_equal(1, assigns(:products).count)
+
+    get products_url(:search=>"InvalidProduct")
+    assert_equal(0, assigns(:products).count)
+  end
+
   test "should get new" do
     get new_product_url
     assert_response :success

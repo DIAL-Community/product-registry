@@ -13,6 +13,14 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get use_cases_url(:search=>"UseCase1")
+    assert_equal(1, assigns(:use_cases).count)
+
+    get use_cases_url(:search=>"InvalidUseCase")
+    assert_equal(0, assigns(:use_cases).count)
+  end
+
   test "should get new" do
     get new_use_case_url
     assert_response :success

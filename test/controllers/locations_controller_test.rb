@@ -13,6 +13,18 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get locations_url(:search=>"Location1")
+    assert_equal(1, assigns(:locations).count)
+
+    # Should not find location2, because it is a point location
+    get locations_url(:search=>"Location2")
+    assert_equal(0, assigns(:locations).count)
+
+    get locations_url(:search=>"InvalidLocation")
+    assert_equal(0, assigns(:locations).count)
+  end
+
   test "should get new" do
     get new_location_url
     assert_response :success

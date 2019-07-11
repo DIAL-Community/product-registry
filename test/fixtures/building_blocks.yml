@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  slug: slug1
+  name: BuildingBlock1
+  slug: bb1
 
 two:
-  name: MyString
-  slug: slug2
+  name: BuildingBlock2
+  slug: bb2

@@ -13,6 +13,14 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get organizations_url(:search=>"Organization1")
+    assert_equal(1, assigns(:organizations).count)
+
+    get organizations_url(:search=>"InvalidOrg")
+    assert_equal(0, assigns(:organizations).count)
+  end
+
   test "should get new" do
     get new_organization_url
     assert_response :success

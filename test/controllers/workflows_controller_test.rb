@@ -13,6 +13,14 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "search test" do
+    get workflows_url(:search=>"Workflow1")
+    assert_equal(1, assigns(:workflows).count)
+
+    get workflows_url(:search=>"InvalidWorkflow")
+    assert_equal(0, assigns(:workflows).count)
+  end
+
   test "should get new" do
     get new_workflow_url
     assert_response :success
