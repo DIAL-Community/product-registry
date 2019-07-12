@@ -6,35 +6,24 @@ variables:
   POSTGRES_USER: registry
   POSTGRES_PASSWORD: Password!1
 
-.default-cache: &default-cache
-  cache:
-    untracked: true
-    key: CACHE-KEY-5.2
-    paths:
-      - node_modules/
-      - vendor/
-      - public/
-
 stages:
   - build
   - test
   - deploy
 
 build:
-  <<: *default-cache
   services:
     - postgres:latest
   stage: build
   script:
   - ruby -v
   - which ruby
-  - gem install bundler  --no-ri --no-rdoc
-  - bundle install  --jobs $(nproc) "${FLAGS[@]}"
+  - gem install bundler 
+  - bundle install --jobs 20 --retry 5
   - RAILS_ENV=test bundle exec rake db:create_db_with_public_data db:migrate
   - RAILS_ENV=test bundle exec rails assets:precompile
 
 integration_test:
-  <<: *default-cache
   stage: test
   services:
     - postgres:latest
