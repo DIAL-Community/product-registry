@@ -1,20 +1,20 @@
 
+function addInput(id) {
+  $('<input>').attr({
+    type: 'hidden',
+    id: id,
+    name: id,
+    value: true
+  }).appendTo($("#duplicate-warning"));
+}
+
+function removeInput(id) {
+  $("#" + id).remove();
+}
+
 function duplicateCheck(trigerInputId, duplicateCheckUrl) {
   var reslugAdded = false;
   var warningShown = false;
-
-  function addInput(id) {
-    $('<input>').attr({
-      type: 'hidden',
-      id: id,
-      name: id,
-      value: true
-    }).appendTo($("#duplicate-warning"));
-  }
-
-  function removeInput(id) {
-    $("#" + id).remove();
-  }
 
   $("#duplicate-warning").hide();
 
