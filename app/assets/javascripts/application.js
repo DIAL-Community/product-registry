@@ -24,14 +24,12 @@
 //= require bootstrap
 //= require_tree .
 
-$(document).on("page:change", function(){
+function triggerPageEvents() {
   var data = $('body').data();
   $(document).trigger(data.controller + ':loaded');
   $(document).trigger(data.controller + '#' + data.action + ':loaded');
-});
 
-$(document).on("turbolinks:load", function(){ $(this).trigger("page:change")});
-
-$(function () {
   $('[data-toggle="tooltip"]').tooltip()
-});
+}
+
+$(document).on("turbolinks:load", triggerPageEvents);

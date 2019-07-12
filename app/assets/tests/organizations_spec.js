@@ -29,21 +29,21 @@ describe("organizations.js:", function() {
     });
 
     it('should have blank template for search office', function() {
-      expect($("#base-selected-offices").size()).to.be(1);
+      expect($("#base-selected-offices").parent().children().size()).to.be(1);
     });
 
-    it('calling setupFormView should hide the first selected office element', function() {
+    it('calling setupFormView should hide the first element', function() {
       setupFormView();
-      expect($("#base-selected-offices").size()).to.be(1);
-      expect($("#base-selected-offices").first().is(":hidden")).to.be.true;
-    })
+      expect($("#base-selected-offices").parent().children().size()).to.be(1);
+      expect($("#base-selected-offices").parent().children(':first').is(":hidden")).to.be.true;
+    });
 
-    it('calling addOffice will add new office element to the row', function() {
+    it('calling addOffice will add new element to the row', function() {
       addOffice("some-label", "some-id", "some-magicKey");
       expect($("#base-selected-offices").parent().children().size()).to.be(2);
       expect($("#base-selected-offices").parent().children(":first").is(":hidden")).to.be.true;
       expect($("#base-selected-offices").parent().children(":last").not(":hidden")).to.be.true;
-    })
-  })
+    });
+  });
 
 });
