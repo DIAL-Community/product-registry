@@ -27,7 +27,6 @@ build:
   stage: build
   script:
   - ruby -v
-  - node -v
   - which ruby
   - gem install bundler  --no-ri --no-rdoc
   - bundle install  --jobs $(nproc) "${FLAGS[@]}"
