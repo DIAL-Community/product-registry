@@ -6,7 +6,7 @@ describe("organizations.js:", function() {
 
   it('should setup feature object.', function() {
     expect(feature).to.not.be(undefined);
-    expect(feature instanceof ol.Feature).to.be.true;
+    expect(feature instanceof ol.Feature).to.be(true);
   });
 
   describe("addOffice function: ", function() {
@@ -25,7 +25,8 @@ describe("organizations.js:", function() {
               '</div>' +
             '</div>' +
           '</div>' +
-        '</div>')
+        '</div>');
+      setupFormView();
     });
 
     it('should have blank template for search office', function() {
@@ -33,16 +34,15 @@ describe("organizations.js:", function() {
     });
 
     it('calling setupFormView should hide the first element', function() {
-      setupFormView();
       expect($("#base-selected-offices").parent().children().size()).to.be(1);
-      expect($("#base-selected-offices").parent().children(':first').is(":hidden")).to.be.true;
+      expect($("#base-selected-offices").parent().children(':first').is(":hidden")).to.be(true);
     });
 
     it('calling addOffice will add new element to the row', function() {
       addOffice("some-label", "some-id", "some-magicKey");
       expect($("#base-selected-offices").parent().children().size()).to.be(2);
-      expect($("#base-selected-offices").parent().children(":first").is(":hidden")).to.be.true;
-      expect($("#base-selected-offices").parent().children(":last").not(":hidden")).to.be.true;
+      expect($("#base-selected-offices").parent().children(":first").is(":hidden")).to.be(true);
+      expect($("#base-selected-offices").parent().children(":last").is(":hidden")).to.be(false);
     });
   });
 

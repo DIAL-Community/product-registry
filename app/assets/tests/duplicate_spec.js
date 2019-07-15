@@ -36,7 +36,7 @@ describe('duplicate.js:', function() {
     expect(request.url).to.have.string("original", "some-org-name");
 
     request.respond(200, { "Content-Type": "application/json" }, '[]');
-    expect($("#duplicate-warning").is(":hidden")).to.be.true;
+    expect($("#duplicate-warning").is(":hidden")).to.be(true);
   });
 
   it('should display duplicate warning when ajax return dupes.', function() {
@@ -56,6 +56,6 @@ describe('duplicate.js:', function() {
 
     request = requests.shift();
     request.respond(200, { "Content-Type": "application/json" }, '[]');
-    expect($("#duplicate-warning").is(":hidden")).to.be.true;
+    expect($("#duplicate-warning").is(":hidden")).to.be(true);
   });
 });

@@ -5,7 +5,7 @@
 function productsReady() {
   // hook drop down item click event
   $("#digisquare-element .dropdown-item").click(function() {
-    $(this).parents(".dropdown").find(".btn").html($(this).html());
+    $(this).parents(".dropdown").find("button").html($(this).html());
     $(this).parents(".dropdown").find("input").val($(this).attr("data-sub-indicator"));
   });
 

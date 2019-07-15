@@ -25,9 +25,14 @@
 //= require_tree .
 
 function triggerPageEvents() {
-  var data = $('body').data();
-  $(document).trigger(data.controller + ':loaded');
-  $(document).trigger(data.controller + '#' + data.action + ':loaded');
+  var action = $('#main-body').attr("data-action");
+  var controller = $('#main-body').attr("data-controller");
+  if (controller) {
+    $(document).trigger(controller + ':loaded');
+    if (action) {
+      $(document).trigger(controller + '#' + action + ':loaded');
+    }
+  }
 
   $('[data-toggle="tooltip"]').tooltip()
 }

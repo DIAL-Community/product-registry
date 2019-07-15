@@ -34,7 +34,8 @@ describe("autocomplete-utils.js: ", function() {
               '</div>' +
             '</div>' +
           '</div>' +
-        '</div>')
+        '</div>');
+      organizationAutoCompleteReady();
     });
 
     it('should have blank template for search element', function() {
@@ -42,19 +43,15 @@ describe("autocomplete-utils.js: ", function() {
     });
 
     it('calling ready handler should hide the first element', function() {
-      organizationAutoCompleteReady();
-
-      var selectedElements = $("#base-selected-organizations").parent().children(); 
-      expect(selectedElements.size()).to.be(1);
-      expect(selectedElements.find(':first').is(":hidden")).to.be.true;
+      expect($("#base-selected-organizations").parent().children().size()).to.be(1);
+      expect($("#base-selected-organizations").parent().children().find(':first').is(":hidden")).to.be(true);
     });
 
     it('calling addElement will add new element to the row', function() {
       addElement("base-selected-organizations", "selected_organizations", "some-id", "some-magicKey");
-      var selectedElements = $("#base-selected-organizations").parent().children(); 
-      expect(selectedElements.size()).to.be(2);
-      expect(selectedElements.find(":first").is(":hidden")).to.be.true;
-      expect(selectedElements.find(":last").not(":hidden")).to.be.true;
+      expect($("#base-selected-organizations").parent().children().size()).to.be(2);
+      expect($("#base-selected-organizations").parent().children().find(":first").is(":hidden")).to.be(true);
+      expect($("#base-selected-organizations").parent().children().find(":first").next().is(":hidden")).to.be(false);
     });
   });
 });

@@ -1,26 +1,26 @@
 describe("application.js:", function() {
-  var action = "index";
-  var controller = "organizations";
+  var action = "some-action";
+  var controller = "some-controller";
+
+  var actionSpy = sinon.spy();
+  var controllerSpy = sinon.spy();
   beforeEach(function() {
     fixture.set(
-      '<body data-controller="' + controller + '" data-action="' + action + '">' +
-      '</body>'
+      '<div id="main-body" data-controller="' + controller + '" data-action="' + action + '"></div>'
     );
+    // prep the handler
+    $(document).on(controller + ':loaded', controllerSpy);
+    $(document).on(controller + '#' + action + ':loaded', actionSpy);
+    // trigger the events
+    triggerPageEvents();
   })
 
-  it("should trigger 'controller:loaded' based on body tag.", function() {
-    var eventSpy = sinon.spy();
-    $(document).trigger(controller + ':loaded');
-
-    expect(eventSpy.called).to.be.true;
-    expect(eventSpy.calledOnce).to.be.true;
-  });
-
-  it("should trigger 'action:loaded' based on body tag.", function() {
-    var eventSpy = sinon.spy();
-    $(document).trigger(controller + '#' + action + ':loaded');
-
-    expect(eventSpy.called).to.be.true;
-    expect(eventSpy.calledOnce).to.be.true;
+  it("should trigger based on body tag.", function() {
+    setTimeout(function() {
+      expect(actionSpy.called).to.be(true);
+      expect(actionSpy.calledOnce).to.be(true);
+      expect(controllerSpy.called).to.be(true);
+      expect(controllerSpy.calledOnce).to.be(true);
+    }, 1000);
   });
 });
