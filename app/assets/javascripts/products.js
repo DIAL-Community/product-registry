@@ -9,17 +9,6 @@ function productsReady() {
     $(this).parents(".dropdown").find("input").val($(this).attr("data-sub-indicator"));
   });
 
-  // Init the autocomplete for the sector field.
-  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
-  $('#base-selected-sectors').hide();
-  $("#sector-search").autocomplete(sectorAutoComplete);
-
-  var organizationAutoCompleteReady = function() {
-    var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
-    $("#base-selected-organizations").hide();
-    $("#organization-search").autocomplete(organizationAutoComplete);
-  }
-
   toggleAssessmentSection($('#product-assessment'));
   $('#product-assessment').change(function() {
     toggleAssessmentSection($(this));
