@@ -6,6 +6,14 @@ development:
     client_secret: <client_secret>
     grant_type: client_credentials
 
+test:
+  esri:
+    auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
+    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates{?q*}
+    client_id: <client_id>
+    client_secret: <client_secret>
+    grant_type: client_credentials
+
 production:
   esri:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
