@@ -91,6 +91,25 @@ describe("organizations.js:", function() {
     });
   });
 
+  describe("setupAutocomplete function: ", function() {
+    beforeEach(function() {
+      fixture.set(
+        '<div id="base-selected-products"></div>' +
+        '<div id="base-selected-sectors"></div>' +
+        '<div id="base-selected-countries"></div>' +
+        '<div id="base-selected-contacts"></div>'
+      );
+    });
+
+    it("should hide all the search result divs.", function() {
+      setupAutoComplete();
+      expect($("#base-selected-products").is(":hidden")).to.be(true);
+      expect($("#base-selected-sectors").is(":hidden")).to.be(true);
+      expect($("#base-selected-countries").is(":hidden")).to.be(true);
+      expect($("#base-selected-contacts").is(":hidden")).to.be(true);
+    })
+  });
+
   describe("addOffice function: ", function() {
     beforeEach(function() {
       fixture.set(
