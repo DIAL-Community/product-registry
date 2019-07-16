@@ -10,7 +10,7 @@ services:
     - ./postgres-data:/var/lib/postgresql/data
   ports:
     - 5432:5432
- web:
+ test:
   build:
     context: .
     target: build-web
@@ -22,6 +22,8 @@ services:
   volumes:
    - .:/t4d
    - ./config/database.yml.docker:/t4d/config/database.yml
+   - ./config/esri.yml.example:/t4d/config/esri.yml
+   - ./config/google.yml.example:/t4d/config/google.yml
   ports:
    - 3000:3000
   depends_on:

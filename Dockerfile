@@ -22,5 +22,3 @@ ENV BUNDLER_VERSION 2.0.1
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 COPY . /t4d
-COPY config/esri.yml.example /t4d/config/esri.yml
-COPY config/google.yml.example /t4d/config/google.yml
