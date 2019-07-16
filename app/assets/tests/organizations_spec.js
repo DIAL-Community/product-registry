@@ -107,7 +107,15 @@ describe("organizations.js:", function() {
       expect($("#base-selected-sectors").is(":hidden")).to.be(true);
       expect($("#base-selected-countries").is(":hidden")).to.be(true);
       expect($("#base-selected-contacts").is(":hidden")).to.be(true);
-    })
+    });
+  });
+
+  describe("setupMapView function: ", function() {
+    it("should setup the map view needed to display office.", function() {
+      setupMapView();
+      expect(map).not.to.be(undefined);
+      expect(tooltip).not.to.be(undefined);
+    });
   });
 
   describe("addOffice function: ", function() {
