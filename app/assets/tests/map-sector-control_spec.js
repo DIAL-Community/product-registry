@@ -33,8 +33,15 @@ describe("map-sector-control.js: ", function() {
 
     request.respond(200, { "Content-Type": "application/json" }, JSON.stringify(sectors));
     expect($("#sector").children().size()).to.be(2);
-  });
 
-  it("should filter based on the selected sectors.", function() {
+    expect(mapObject).not.to.be(undefined);
+    mapObject.popup = {
+      setPosition: sinon.spy()
+    }
+
+    $("#sector").val(1);
+    $("#sector").change();
+
+    expect(mapObject.popup.setPosition.called).to.be(true);
   });
 });
