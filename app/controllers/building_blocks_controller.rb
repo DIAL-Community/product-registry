@@ -1,5 +1,6 @@
 class BuildingBlocksController < ApplicationController
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /building_blocks
   # GET /building_blocks.json
@@ -8,6 +9,7 @@ class BuildingBlocksController < ApplicationController
       @building_blocks = BuildingBlock
         .name_contains(params[:search])
         .order(:name)
+      authorize @building_blocks, :view_allowed?
       return
     end
 
@@ -17,33 +19,36 @@ class BuildingBlocksController < ApplicationController
         .name_contains(params[:search])
         .order(:name)
         .paginate(page: params[:page], per_page: 20)
+      authorize @building_blocks, :view_allowed?
     else
       @building_blocks = BuildingBlock
         .order(:name)
         .paginate(page: params[:page], per_page: 20)
+      authorize @building_blocks, :view_allowed?
     end
   end
 
   # GET /building_blocks/1
   # GET /building_blocks/1.json
   def show
+    authorize @building_block, :view_allowed?
   end
 
   # GET /building_blocks/new
   def new
+    authorize BuildingBlock, :mod_allowed?
     @building_block = BuildingBlock.new
   end
 
   # GET /building_blocks/1/edit
   def edit
-    if (params[:product_id])
-      @product = Product.find(params[:product_id])
-    end
+    authorize @building_block, :mod_allowed?
   end
 
   # POST /building_blocks
   # POST /building_blocks.json
   def create
+    authorize BuildingBlock, :mod_allowed?
     @building_block = BuildingBlock.new(building_block_params)
 
     if (params[:selected_products])
@@ -62,7 +67,7 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if @building_block.save
-        format.html { redirect_to @building_block, notice: 'Building Block was successfully created.' }
+        format.html { redirect_to @building_block, flash: { notice: 'Building Block was successfully created.' }}
         format.json { render :show, status: :created, location: @building_block }
       else
         format.html { render :new }
@@ -74,6 +79,7 @@ class BuildingBlocksController < ApplicationController
   # PATCH/PUT /building_blocks/1
   # PATCH/PUT /building_blocks/1.json
   def update
+    authorize @building_block, :mod_allowed?
 
     products = Set.new
     if (params[:selected_products])
@@ -95,7 +101,7 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if @building_block.update(building_block_params)
-        format.html { redirect_to @building_block, notice: 'Building block was successfully updated.' }
+        format.html { redirect_to @building_block, flash: { notice: 'Building block was successfully updated.' }}
         format.json { render :show, status: :ok, location: @building_block }
       else
         format.html { render :edit }
@@ -107,23 +113,25 @@ class BuildingBlocksController < ApplicationController
   # DELETE /building_blocks/1
   # DELETE /building_blocks/1.json
   def destroy
+    authorize @building_block, :mod_allowed?
     @building_block.destroy
     respond_to do |format|
-      format.html { redirect_to building_blocks_url, notice: 'Building block was successfully destroyed.' }
+      format.html { redirect_to building_blocks_url, flash: { notice: 'Building block was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
 
   def duplicates
-    @building_block = Array.new
+    @building_blocks = Array.new
     if params[:current].present?
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @building_block = BuildingBlock.where(slug: current_slug).to_a
+        @building_blocks = BuildingBlock.where(slug: current_slug).to_a
       end
     end
-    render json: @building_block, :only => [:name]
+    authorize @building_blocks, :mod_allowed?
+    render json: @building_blocks, :only => [:name]
   end
 
   private
@@ -131,7 +139,11 @@ class BuildingBlocksController < ApplicationController
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])
       @bbJson = JSON.parse(@building_block.description, object_class: OpenStruct)
-      @digital_functions = @bbJson.digital_function.split("•").drop(1)
+      if @bbJson.digital_function
+        @digital_functions = @bbJson.digital_function.split("•").drop(1)
+      else
+        @digital_functions = []
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,6 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Create New', new_use_case_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+<% if user_signed_in? && policy(UseCase).mod_allowed? %>
+  <%= link_to 'Create New', new_use_case_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
 <div class="float-right pb-2">
   <%= form_tag(use_cases_path, :method => "get", id: "search-form", class: "form-inline") do %>
     <%= text_field_tag :search, params[:search], placeholder: "Search use cases ...", :class => "form-control" %>
@@ -27,9 +29,11 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
               <%= link_to 'View', use_case, :class =>"dropdown-item"  %>
-              <%= link_to 'Edit', edit_use_case_path(use_case), :class =>"dropdown-item"  %>
-              <div class="dropdown-divider"></div>
-              <%= link_to 'Delete', use_case, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+              <% if user_signed_in? && policy(use_case).mod_allowed? %>
+                <%= link_to 'Edit', edit_use_case_path(use_case), :class =>"dropdown-item"  %>
+                <div class="dropdown-divider"></div>
+                <%= link_to 'Delete', use_case, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+              <% end %>
             </div>
           </td>
         </tr>
@@ -46,4 +50,3 @@
   </tbody>
 </table>
 <%= will_paginate @use_cases, :class => "apple-pagination" %>
-

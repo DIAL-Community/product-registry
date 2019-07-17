@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   get 'deploys/index'
 
   devise_for :users
+  scope "/admin" do
+    resources :users
+  end
+  
   root to: 'organizations#map'
   
   resources :products

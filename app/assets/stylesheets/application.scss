@@ -38,6 +38,22 @@ a:hover {
   color: #000043
 }
 
+.index-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  .card-header {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .card-footer {
+    padding: 0.75rem;
+  }
+}
+
+.col-lg-2 {
+  padding-right: 0px;
+}
+
 .card-header {
   a {
     color: #fff
@@ -68,10 +84,6 @@ a:hover {
   .form-group {
     display: inline-block;
   }
-}
-
-#notice {
-  color: theme-color("success");
 }
 
 #search-form {

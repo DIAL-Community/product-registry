@@ -12,25 +12,27 @@ class OrganizationsController < ApplicationController
       @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
       @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
       @organizations = @organizations.eager_load(:sectors, :locations).order(:name);
+      authorize @organizations, :view_allowed?
       return
     end
+
     if params[:search]
       @organizations = Organization
           .where(nil)
           .name_contains(params[:search])
           .order(:name)
-          .paginate(page: params[:page], per_page: 20)
+      authorize @organizations, :view_allowed?
     else
       @organizations = Organization
           .order(:slug)
-          #.paginate(page: params[:page], per_page: 20)
+      authorize @organizations, :view_allowed?
     end
   end
 
   def export
-    export_with_params('test')
-    send_file(
-      "#{Rails.root}/public/export.xls",
+    export_contacts = params[:export_contacts].downcase == "true" ? true : false
+    send_data(
+      export_with_params(export_contacts),
       filename: "Endorsing Organizations.xls",
       type: "application/vnd.ms-excel"
     )
@@ -39,21 +41,24 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
+    authorize @organization, :view_allowed?
   end
 
   # GET /organizations/new
   def new
+    authorize Organization, :mod_allowed?
     @organization = Organization.new
   end
 
   # GET /organizations/1/edit
   def edit
+    authorize @organization, :mod_allowed?
   end
 
   # POST /organizations
   # POST /organizations.json
   def create
-
+    authorize Organization, :mod_allowed?
     @organization = Organization.new(organization_params)
 
     if (params[:selected_sectors].present?)
@@ -93,7 +98,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
+        format.html { redirect_to @organization, flash: { notice: 'Organization was successfully created.' }}
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -105,7 +110,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
-
+    authorize @organization, :mod_allowed?
     if (params[:selected_sectors].present?)
       sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
@@ -151,7 +156,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.update(organization_params)
-        format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
+        format.html { redirect_to @organization, flash: { notice: 'Organization was successfully updated.' }}
         format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
@@ -163,15 +168,17 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1
   # DELETE /organizations/1.json
   def destroy
+    authorize @organization, :mod_allowed?
     @organization.destroy
     respond_to do |format|
-      format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.' }
+      format.html { redirect_to organizations_url, flash: { notice: 'Organization was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
 
   def map
     @organizations = Organization.eager_load(:locations)
+    authorize @organizations, :view_allowed?
   end
 
   def duplicates
@@ -183,6 +190,7 @@ class OrganizationsController < ApplicationController
         @organizations = Organization.where(slug: current_slug).to_a
       end
     end
+    authorize @organizations, :view_allowed?
     render json: @organizations, :only => [:name]
   end
 
@@ -238,7 +246,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email)
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :slug)
         .tap do |attr|
           if (attr[:website].present?)
             # Handle both:

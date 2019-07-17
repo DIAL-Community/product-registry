@@ -1,11 +1,13 @@
 class SdgTargetsController < ApplicationController
   before_action :set_sdg_target, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   def index
     if params[:without_paging]
       @sdg_targets = SdgTarget
           .name_contains(params[:search])
           .order(:target_number)
+      authorize @sdg_targets, :view_allowed?
       return
     end
 
@@ -15,17 +17,21 @@ class SdgTargetsController < ApplicationController
           .name_contains(params[:search])
           .order(:target_number)
           .paginate(page: params[:page], per_page: 20)
+      authorize @sdg_targets, :view_allowed?
     else
       @sdg_targets = SdgTarget
           .order(:target_number)
           .paginate(page: params[:page], per_page: 20)
+      authorize @sdg_targets, :view_allowed?
     end
   end
 
   def show
+    authorize @sdg_target, :view_allowed?
   end
 
   def destroy
+    authorize @sdg_target, :mod_allowed?
     use_case = UseCase.find(params[:use_case_id]);
     use_case.sdg_targets.delete(params[:id])
   end

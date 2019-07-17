@@ -1,6 +1,7 @@
 class UseCasesController < ApplicationController
   before_action :set_use_case, only: [:show, :edit, :update, :destroy]
   before_action :set_sectors, only: [:new, :edit, :update, :show]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /use_cases
   # GET /use_cases.json
@@ -9,6 +10,7 @@ class UseCasesController < ApplicationController
       @use_cases = UseCase
           .name_contains(params[:search])
           .order(:name)
+      authorize @use_cases, :view_allowed?
       return
     end
 
@@ -18,42 +20,49 @@ class UseCasesController < ApplicationController
           .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @use_cases, :view_allowed?
     else
       @use_cases = UseCase
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @use_cases, :view_allowed?
     end
   end
 
   # GET /use_cases/1
   # GET /use_cases/1.json
   def show
+    authorize @use_case, :view_allowed?
   end
 
   # GET /use_cases/new
   def new
+    authorize UseCase, :mod_allowed?
     @use_case = UseCase.new
   end
 
   # GET /use_cases/1/edit
   def edit
+    authorize @use_case, :mod_allowed?
   end
 
   def duplicates
-    @use_case = Array.new
+    @use_cases = Array.new
     if params[:current].present?
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @use_case = UseCase.where(slug: current_slug).to_a
+        @use_cases = UseCase.where(slug: current_slug).to_a
       end
     end
-    render json: @use_case, :only => [:name]
+    authorize @use_cases, :view_allowed?
+    render json: @use_cases, :only => [:name]
   end
 
   # POST /use_cases
   # POST /use_cases.json
   def create
+    authorize UseCase, :mod_allowed?
     @use_case = UseCase.new(use_case_params)
 
     if (params[:selected_sdg_targets])
@@ -72,7 +81,7 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.save
-        format.html { redirect_to @use_case, notice: 'Use case was successfully created.' }
+        format.html { redirect_to @use_case, flash: { notice: 'Use case was successfully created.' }}
         format.json { render :show, status: :created, location: @use_case }
       else
         format.html { render :new }
@@ -84,15 +93,7 @@ class UseCasesController < ApplicationController
   # PATCH/PUT /use_cases/1
   # PATCH/PUT /use_cases/1.json
   def update
-    respond_to do |format|
-      if @use_case.update(use_case_params)
-        format.html { redirect_to @use_case, notice: 'Use case was successfully updated.' }
-        format.json { render :show, status: :ok, location: @use_case }
-      else
-        format.html { render :edit }
-        format.json { render json: @use_case.errors, status: :unprocessable_entity }
-      end
-    end
+    authorize @use_case, :mod_allowed?
 
     sdg_targets = Set.new
     if (params[:selected_sdg_targets])
@@ -111,14 +112,25 @@ class UseCasesController < ApplicationController
       end
     end
     @use_case.workflows = workflows.to_a
+
+    respond_to do |format|
+      if @use_case.update(use_case_params)
+        format.html { redirect_to @use_case, flash: { notice: 'Use case was successfully updated.' }}
+        format.json { render :show, status: :ok, location: @use_case }
+      else
+        format.html { render :edit }
+        format.json { render json: @use_case.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # DELETE /use_cases/1
   # DELETE /use_cases/1.json
   def destroy
+    authorize @use_case, :mod_allowed?
     @use_case.destroy
     respond_to do |format|
-      format.html { redirect_to use_cases_url, notice: 'Use case was successfully destroyed.' }
+      format.html { redirect_to use_cases_url, flash: { notice: 'Use case was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end

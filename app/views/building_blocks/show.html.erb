@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
   <h5 class="card-header bg-secondary text-white">
     Building Block: <%= @building_block.name %>
@@ -28,7 +29,7 @@
     </p>
     <p class="card-subtitle text-muted mb-3" >
       <strong>Examples of use in different sectors: </strong>
-      <% if @bbJson.sector_use.count > 0 %>
+      <% if @bbJson.sector_use && @bbJson.sector_use.count > 0 %>
         <ul>
         <% @bbJson.sector_use.each do |sector| %>
           <li class="text-muted"><strong><%= sector.name %>: </strong><%= sector.description %>
@@ -38,7 +39,9 @@
     </p>
     <p class="float-right mb-0" >
       <%= link_to 'Back', building_blocks_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
+      <% if user_signed_in? && policy(@building_block).mod_allowed? %>
+        <%= link_to 'Edit', edit_building_block_path(@building_block), :class => "card-link" %>
+      <% end %>
     </p>
   </div>
 </div>
@@ -75,6 +78,7 @@
     <% end %>
   <% end %>
   </div>
+</div>
 
 <div class="mt-4 mb-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">

@@ -6,9 +6,10 @@ class ContactsController < ApplicationController
   # GET /contacts.json
   def index
     if params[:without_paging]
-      @locations = Location
+      @contacts = Contact
           .name_contains(params[:search])
           .order(:name)
+      authorize @contacts, :view_allowed?
       return
     end
 
@@ -18,20 +19,24 @@ class ContactsController < ApplicationController
           .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @contacts, :view_allowed?
     else
       @contacts = Contact
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @contacts, :view_allowed?
     end
   end
 
   # GET /contacts/1
   # GET /contacts/1.json
   def show
+    authorize @contact, :view_allowed?
   end
 
   # GET /contacts/new
   def new
+    authorize Contact, :mod_allowed?
     @contact = Contact.new
     if (params[:organization_id])
       @organization = Organization.find(params[:organization_id])
@@ -41,6 +46,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1/edit
   def edit
+    authorize @contact, :mod_allowed?
     if (params[:organization_id])
       @organization = Organization.find(params[:organization_id])
     end
@@ -49,6 +55,7 @@ class ContactsController < ApplicationController
   # POST /contacts
   # POST /contacts.json
   def create
+    authorize Contact, :mod_allowed?
     @contact = Contact.new(contact_params)
     if (params[:selected_organizations])
       params[:selected_organizations].keys.each do |organization_id|
@@ -59,7 +66,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.save
-        format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
+        format.html { redirect_to @contact, flash: { notice: 'Contact was successfully created.' }}
         format.json { render :show, status: :created, location: @contact }
       else
         format.html { render :new }
@@ -71,6 +78,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
+    authorize @contact, :mod_allowed?
     if (params[:selected_organizations])
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
@@ -82,7 +90,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.update(contact_params)
-        format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
+        format.html { redirect_to @contact, flash: { notice: 'Contact was successfully updated.' }}
         format.json { render :show, status: :ok, location: @contact }
       else
         format.html { render :edit, :locals => { :contact => @contact } }
@@ -94,9 +102,10 @@ class ContactsController < ApplicationController
   # DELETE /contacts/1
   # DELETE /contacts/1.json
   def destroy
+    authorize @contact, :mod_allowed?
     @contact.destroy
     respond_to do |format|
-      format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
+      format.html { redirect_to contacts_url, flash: { notice: 'Contact was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
@@ -110,6 +119,7 @@ class ContactsController < ApplicationController
         @contacts = Contact.where(slug: current_slug).to_a
       end
     end
+    authorize @contacts, :view_allowed?
     render json: @contacts, :only => [:name, :title]
   end
 
@@ -123,7 +133,7 @@ class ContactsController < ApplicationController
     def contact_params
       params
         .require(:contact)
-        .permit(:name, :email, :title, :selected_organizations, :duplicate, :reslug)
+        .permit(:name, :email, :title, :selected_organizations, :duplicate, :slug)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

@@ -10,7 +10,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown mt-1">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 <strong>Digital Principles</strong>
               </a>
@@ -18,12 +18,10 @@
                 <%= link_to 'Organizations', organizations_path, :class => 'dropdown-item' %>
                 <% if user_signed_in? %>
                   <%= link_to 'Contacts', contacts_path, :class => 'dropdown-item' %>
-                  <%= link_to 'Locations', locations_path, :class => 'dropdown-item' %>
-                  <%= link_to 'Sectors', sectors_path, :class => 'dropdown-item' %>
                   <% end %>
               </div>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown mt-1">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 <strong>Product Registry</strong>
               </a>
@@ -34,7 +32,7 @@
                 <% end %>
               </div>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown mt-1">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 <strong>ICT4SDG</strong>
               </a>
@@ -45,12 +43,26 @@
                 <%= link_to 'SDGs', sustainable_development_goals_path, :class => 'dropdown-item' %>
               </div>
             </li>
+            <li class="nav-item dropdown mt-1">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                <strong>Users</strong>
+              </a>
+              <div class="dropdown-menu">
+                <% if (policy(current_user).index?) %>
+                  <%= link_to 'Users', users_path, :class => 'dropdown-item' %>
+                <% end %>
+                <%= link_to 'Locations', locations_path, :class => 'dropdown-item' %>
+                <%= link_to 'Sectors', sectors_path, :class => 'dropdown-item' %>
+              </div>
+            </li>
             <% if user_signed_in? %>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                  <strong>
-                    <%= current_user.email %>
-                  </strong>
+                <a class="nav-link dropdown-toggle-avatar" data-toggle="dropdown" href="#" role="button">
+                  <div class="avatar-circle">
+                    <span class="initials">
+                      <%= current_user.email[0].upcase %>
+                    </span>
+                  </div>
                 </a>
                 <div class="dropdown-menu">
                   <%= link_to "Profile Settings", edit_user_registration_path, :class => 'dropdown-item' %>
@@ -59,7 +71,7 @@
                 </div>
               </li>
             <% else %>
-              <li>
+              <li class="mt-1">
                 <strong><%= link_to 'Login', new_user_session_path, :class => 'nav-link' %></strong>
               </li>
             <% end %>

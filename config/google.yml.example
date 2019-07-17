@@ -5,3 +5,8 @@ development:
 production:
   google:
     tracker: [your-tracking-id]
+
+test:
+  google:
+    tracker: [your-tracking-id]
+

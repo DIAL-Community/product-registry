@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  slug: MyString
-  description: MyString
+  name: UseCase1
+  slug: usecase1
+  description: '{ }'
   sector: one
 
 two:
-  name: MyString
-  slug: MyString
-  description: MyString
+  name: UseCase2
+  slug: usecase2
+  description: '{ }'
   sector: two

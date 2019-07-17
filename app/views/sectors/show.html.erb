@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
   <h5 class="card-header bg-secondary text-white">
     Sector: <%= @sector.name %>
@@ -6,7 +7,9 @@
   <div class="card-body">
     <p class="float-right mb-0" >
       <%= link_to 'Back', sectors_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+      <% if user_signed_in? && policy(@sector).mod_allowed? %>
+        <%= link_to 'Edit', edit_sector_path(@sector), :class => "card-link" %>
+      <% end %>
     </p>
   </div>
 </div>
