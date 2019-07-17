@@ -26,7 +26,7 @@
 
 <div class="row">
   <% @organizations.each do |organization| %>
-    <div class="col-lg-2 col-md-5 d-flex align-items-stretch mt-2">
+    <div class="col-lg-2 col-md-4 d-flex align-items-stretch mt-2">
       <div class="card index-card">
         <div class="card-header bg-secondary text-white small">
           <%= link_to truncate(organization.name, length: 23, omission: '&hellip;', escape: false), organization,
