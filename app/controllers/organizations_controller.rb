@@ -79,6 +79,8 @@ class OrganizationsController < ApplicationController
       if (dupe_count > 0)
         first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
         contact.slug = contact_slug + "_" + calculate_offset(first_duplicate).to_s
+      else
+        contact.slug = contact_slug
       end
 
       @organization.contacts.push(contact)
