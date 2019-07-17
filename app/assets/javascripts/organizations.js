@@ -64,6 +64,10 @@ function addLocation(value, label) {
   addElement("base-selected-countries", "selected_countries", value, label);
 }
 
+function addContact(value, label) {
+  addElement("base-selected-contacts", "selected_contacts", value, label);
+}
+
 var setupMapView = function() {  // Clean the map holder.
   // Might need to find another way to prevent duplicate maps.
   console.log("Setting map view ...");
@@ -130,6 +134,11 @@ var setupAutoComplete = function() {
   var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
+
+  // Init the autocomplete for the country field.
+  var contactAutoComplete = autoComplete("/contacts.json?without_paging=true", addContact)
+  $('#base-selected-contacts').hide();
+  $("#contact-search").autocomplete(contactAutoComplete);
 
 }
 
