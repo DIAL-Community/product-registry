@@ -32,6 +32,16 @@ development:
   username: registry
   password: "Password!1"
 
+test:
+  <<: *default
+  timeout: 5000
+  host: postgres
+  adapter: postgresql
+  encoding: unicode
+  database: registry_test
+  username: registry
+  password: "Password!1"
+
 production:
   <<: *default
   timeout: 5000
