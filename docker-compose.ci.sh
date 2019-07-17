@@ -18,3 +18,5 @@ set -e
 cron
 
 rails test -e test
+rails teaspoon
+

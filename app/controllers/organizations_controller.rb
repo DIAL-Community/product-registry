@@ -273,7 +273,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website)
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :slug)
         .tap do |attr|
           if (attr[:website].present?)
             # Handle both:
