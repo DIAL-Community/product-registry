@@ -11,6 +11,7 @@ class SectorsController < ApplicationController
             .name_contains(params[:search])
             .order(:name)
       @sectors = params[:display_only].nil? ? @sectors : @sectors.where(is_displayable: true)
+      authorize @sectors, :view_allowed?
       return
     end
     if params[:search]
@@ -19,20 +20,24 @@ class SectorsController < ApplicationController
           .name_contains(params[:search])
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @sectors, :view_allowed?
     else
       @sectors = Sector
           .order(:name)
           .paginate(page: params[:page], per_page: 20)
+      authorize @sectors, :view_allowed?
     end
   end
 
   # GET /sectors/1
   # GET /sectors/1.json
   def show
+    authorize @sector, :view_allowed?
   end
 
   # GET /sectors/new
   def new
+    authorize Sector, :mod_allowed?
     @sector = Sector.new
     if (params[:organization_id])
       @organization = Organization.find(params[:organization_id])
@@ -42,6 +47,7 @@ class SectorsController < ApplicationController
 
   # GET /sectors/1/edit
   def edit
+    authorize @sector, :mod_allowed?
     if (params[:organization_id])
       @organization = Organization.find(params[:organization_id])
     end
@@ -50,6 +56,7 @@ class SectorsController < ApplicationController
   # POST /sectors
   # POST /sectors.json
   def create
+    authorize Sector, :mod_allowed?
     @sector = Sector.new(sector_params)
 
     if (params[:selected_organizations])
@@ -68,7 +75,7 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.save
-        format.html { redirect_to @sector, notice: 'Sector was successfully created.' }
+        format.html { redirect_to @sector, flash: { notice: 'Sector was successfully created.' }}
         format.json { render :show, status: :created, location: @sector }
       else
         format.html { render :new }
@@ -81,6 +88,7 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1.json
   def update
 
+    authorize @sector, :mod_allowed?
     if (params[:selected_organizations])
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
@@ -101,7 +109,7 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.update(sector_params)
-        format.html { redirect_to @sector, notice: 'Sector was successfully updated.' }
+        format.html { redirect_to @sector, flash: { notice: 'Sector was successfully updated.' }}
         format.json { render :show, status: :ok, location: @sector }
       else
         format.html { render :edit }
@@ -113,9 +121,10 @@ class SectorsController < ApplicationController
   # DELETE /sectors/1
   # DELETE /sectors/1.json
   def destroy
+    authorize @sector, :mod_allowed?
     @sector.destroy
     respond_to do |format|
-      format.html { redirect_to sectors_url, notice: 'Sector was successfully destroyed.' }
+      format.html { redirect_to sectors_url, flash: { notice: 'Sector was successfully destroyed.' }}
       format.json { head :no_content }
     end
   end
@@ -129,6 +138,7 @@ class SectorsController < ApplicationController
         @sectors = Sector.where(slug: current_slug).to_a
       end
     end
+    authorize @sectors, :view_allowed?
     render json: @sectors, :only => [:name]
   end
 

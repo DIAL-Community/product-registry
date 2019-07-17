@@ -1,0 +1,22 @@
+<%= form_with(model: user, local: true) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :email, id: :user_email, :class => "form-control", :placeholder => "Name" %>
+    <%= form.label :email %>
+  </fieldset>
+
+  <label for="user-role mb-0" class="placeholder">
+      &nbsp;&nbsp;Role
+  </label>
+  <fieldset class="form-label-group">
+    <%= form.select(:role, User.roles.keys.map {|role| [role.titleize,role]}, {}, :class => "form-control mb-2") %>
+  </fieldset>
+
+  <%= form.hidden_field :is_approved, :value => false %>
+  <%= form.check_box :is_approved, {}, true, false %>
+  <label class="form-label-group mt-2" for="is_approved">Manually approve this user.</label>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit 'Submit', :class => "btn btn-primary" %>
+    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>

@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 
 <div class="float-right pb-2">
   <%= form_tag(sustainable_development_goals_path, :method => "get", id: "search-form", class: "form-inline") do %>

@@ -1,6 +1,9 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to 'Create New', new_workflow_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% if user_signed_in? && policy(Workflow).mod_allowed? %>
+  <%= link_to 'Create New', new_workflow_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
 <div class="float-right pb-2">
   <%= form_tag(workflows_path, :method => "get", id: "search-form", class: "form-inline") do %>
     <%= text_field_tag :search, params[:search], placeholder: "Search workflows ...", :class => "form-control" %>
@@ -27,7 +30,7 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
             <div class="dropdown-menu">
               <%= link_to 'View', workflow, :class =>"dropdown-item"  %>
-              <% if user_signed_in? %>
+              <% if user_signed_in? && policy(workflow).mod_allowed? %>
                 <%= link_to 'Edit', edit_workflow_path(workflow), :class =>"dropdown-item"  %>
                 <div class="dropdown-divider"></div>
                 <%= link_to 'Delete', workflow, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
