@@ -34,7 +34,6 @@ var launchData = {
                 xhr.setRequestHeader ("Jenkins-Crumb", jenkinsCrumb);
             },
             success: function (data){
-                //console.log("Job data: " + JSON.stringify(data))
                 var offset1 = data.indexOf("docker-machine ip " + jenkinsData.orgId+"-"+jenkinsData.jobName) + 1
                 var offset = data.indexOf("docker-machine ip " + jenkinsData.orgId+"-"+jenkinsData.jobName, offset1) + 21
                 offset += jenkinsData.orgId.length
@@ -74,6 +73,14 @@ var launchData = {
         });
     },
 
+    createDeploy: function(jenkinsData) {
+        $.ajax({
+            type: 'POST',
+            url: '/deploys',
+            data: jenkinsData  
+          });
+    },
+
     launchBuild: function(jenkinsData) {
         var jenkinsCrumb = this.getCrumb(jenkinsData);
 
@@ -93,11 +100,8 @@ var launchData = {
             },
             statusCode: {
                 201: function(data, status, xhr) {
-                    $("#launchStatus").remove()
-                    $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Build launched...<i class="fas fa-spinner fa-spin ml-3"></i></p>');
-                    var location = xhr.getResponseHeader("Location").split('/')
-                    // The job number is the second to last element
-                    var queueNumber = location[location.length-2]
+                    var location = xhr.getResponseHeader("Location").split('/');
+                    var queueNumber = location[location.length-2];
                     launchData.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber);
                 }
             },
@@ -105,7 +109,6 @@ var launchData = {
                 
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                console.log("Error")
                 $("#launchStatus").text("There was an issue in launching your build. Please try again.")
               }
         });
@@ -123,12 +126,53 @@ var launchData = {
             },
             success: function (data) {
               if (!data.executable) {
-                setTimeout(function() {launchData.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber)}, 10000);
+                setTimeout(function() {launchData.findJobNumber(jenkinsData, jenkinsCrumb, queueNumber)}, 5000);
               } else {
-                setTimeout(function() {launchData.queryJob(jenkinsData, jenkinsCrumb, data.executable.number)}, 10000);
+                jenkinsData.jobNumber = data.executable.number;
+                launchData.createDeploy(jenkinsData);
+                $("#launchStatus").remove()
+                $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Build launched. You can view the status of this build on the <a href="/deploys">Deploys page</a></p>');
               }
             }
         });
+    },
+
+    validateUniqueName: function(jenkinsData) {
+        var that=this;
+        if (jenkinsData.provider == "DO") {
+            providerUrl = "https://api.digitalocean.com/v2/droplets/?tag_name=t4dlaunched"
+            $.ajax({
+                type: "GET",
+                url: providerUrl,
+                crossDomain: true,
+                async: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader ("Authorization", "Bearer " + jenkinsData.authToken);
+                    xhr.setRequestHeader ("Content-Type", "application/json");
+                },
+                success: function (data) {
+                    var newName = jenkinsData.orgId + "-" + jenkinsData.jobName
+                    // Parse the list and make sure that 
+                    var droplets = data.droplets.filter(droplet => droplet.name == newName)
+
+                    if (droplets.length > 0) {
+                        $("#launchMessage").empty();
+                        $("#launchDiv").append('<p id="launchMessage" class="card-text text-muted">The name for this deploy is not unique. Please update the Machine Identifier and try again</p>');
+                        return
+                    }
+
+                    $("#launchDiv").empty();
+
+                    if (jenkinsData.provider == "DO") {
+                        $("#launchDiv").append('<p id="launchMessage" class="card-text text-muted">Product is being launched on Digital Ocean droplet</p>');
+                    } else {
+                        $("#launchDiv").append('<p id="launchMessage" class="card-text text-muted">Product is being launched on AWS</p>');
+                    }
+                    $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Waiting for build to start...<i class="fas fa-spinner fa-spin ml-3"></i></p>');
+                    that.launchBuild(jenkinsData); 
+                }
+            });
+        }
     },
 
     startLaunch: function() {
@@ -141,7 +185,6 @@ var launchData = {
         jenkinsData.orgId = $("#orgId").val()
         jenkinsData.accessKey = $("#accessKey").val()
         jenkinsData.secretKey = $("#secretKey").val()
-        console.log(jenkinsData);
 
         if (jenkinsData.orgId == "") {
             $("#orgValidate").toggleClass("field-valid");
@@ -164,15 +207,8 @@ var launchData = {
             }
         }
 
-        $("#launchDiv").empty();
-
-        if (jenkinsData.provider == "DO") {
-            $("#launchDiv").append('<p id="launchMessage" class="card-text text-muted">Product is being launched on Digital Ocean droplet</p>');
-        } else {
-            $("#launchDiv").append('<p id="launchMessage" class="card-text text-muted">Product is being launched on AWS</p>');
-        }
-        $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Waiting...<i class="fas fa-spinner fa-spin ml-3"></i></p>');
-        this.launchBuild(jenkinsData); 
+        // Query provider (Digital Ocean to make sure that the machine name is unique)
+        var valid = this.validateUniqueName(jenkinsData)
     },
 
     popInstructions: function() {

@@ -1,0 +1,93 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>AUTH_TOKEN</name>
+          <description>Digital Ocean authorization token</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ORG_ID</name>
+          <description>Organization ID - used as prefix for machine</description>
+          <defaultValue>DIAL</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>PROVIDER</name>
+          <description>Digital Ocean (DO) or AWS</description>
+          <defaultValue>DO</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SECRET_KEY</name>
+          <description>Secret key for AWS</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.10.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/iHRIS/dockerfiles</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>**</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>docker -v &amp;&amp; docker-compose -v &amp;&amp; docker-machine -v
+
+MACHINE_NAME=$ORG_ID&quot;-ihris&quot;
+ 
+# set-up: clean up any previous machine failures
+docker-machine stop $MACHINE_NAME || {
+  docker-machine rm -y $MACHINE_NAME || echo &quot;Nothing to destroy&quot;
+  docker-machine create --driver digitalocean --digitalocean-access-token $AUTH_TOKEN --digitalocean-tags t4dlaunched --digitalocean-size 4gb $MACHINE_NAME
+}
+ 
+# use docker-machine to create and configure &apos;test&apos; environment
+# add a -D (debug) if having issues
+docker-machine start $MACHINE_NAME || echo &quot;container started&quot;
+
+IPADDRESS=&quot;$(docker-machine ip $MACHINE_NAME)&quot;
+
+eval $(docker-machine env --shell sh $MACHINE_NAME)
+ 
+docker-compose -f docker-compose.manage.yml pull
+docker-compose -f docker-compose.manage.yml up -d
+
+# The last line of the build output should always be the docker-machine IP
+# This will be used by the T4D app to give the user a link
+
+sleep 1m
+
+docker exec -i ihris sh -c &apos;cd manage &amp;&amp; php index.php --update=1; exit $?&apos;
+echo &quot;iHRIS instance: &quot;
+docker-machine ip $MACHINE_NAME</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

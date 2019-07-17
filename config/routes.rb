@@ -26,7 +26,10 @@ Rails.application.routes.draw do
     resources :use_cases
   end
   
-  resources :deploys
+  resources :deploys do
+    get 'show_messages'
+    post 'add_ssh_user'
+  end
 
   resources :organizations do
     resources :contacts
@@ -57,6 +60,7 @@ Rails.application.routes.draw do
   get 'organization_duplicates', :to => 'organizations#duplicates'
   get 'use_case_duplicates', :to => 'use_cases#duplicates'
   get 'workflow_duplicates', :to => 'workflows#duplicates'
+  get 'deploys_refresh_list', :to => 'deploys#refresh_list'
 
   get 'productmap', :to => 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

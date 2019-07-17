@@ -203,7 +203,7 @@ class ProductsController < ApplicationController
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @products = Product.where(slug: current_slug).to_a
+        @products = Product.(slug: current_slug).to_a
       end
     end
     authorize @products, :view_allowed?
