@@ -29,7 +29,7 @@
     </p>
     <p class="card-subtitle text-muted mb-3" >
       <strong>Examples of use in different sectors: </strong>
-      <% if @bbJson.sector_use.count > 0 %>
+      <% if @bbJson.sector_use && @bbJson.sector_use.count > 0 %>
         <ul>
         <% @bbJson.sector_use.each do |sector| %>
           <li class="text-muted"><strong><%= sector.name %>: </strong><%= sector.description %>

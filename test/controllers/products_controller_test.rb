@@ -1,13 +1,24 @@
 require 'test_helper'
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @product = products(:one)
   end
 
   test "should get index" do
     get products_url
     assert_response :success
+  end
+
+  test "search test" do
+    get products_url(:search=>"Product1")
+    assert_equal(1, assigns(:products).count)
+
+    get products_url(:search=>"InvalidProduct")
+    assert_equal(0, assigns(:products).count)
   end
 
   test "should get new" do
@@ -17,7 +28,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product" do
     assert_difference('Product.count') do
-      post products_url, params: { product: { name: @product.name, slug: @product.slug, website: @product.website } }
+      post products_url, params: { product: { name: @product.name, slug: 'testslug', website: @product.website } }
     end
 
     assert_redirected_to product_url(Product.last)
@@ -38,11 +49,23 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to product_url(@product)
   end
 
-  test "should destroy product" do
-    assert_difference('Product.count', -1) do
-      delete product_url(@product)
-    end
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
-    assert_redirected_to products_url
+    get product_url(@product)
+    assert_response :success
+    
+    get new_product_url
+    assert_response :redirect
+
+    get edit_product_url(@product)
+    assert_response :redirect    
+
+    patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug, website: @product.website } }
+    assert_response :redirect  
+
+    delete product_url(@product)
+    assert_response :redirect
   end
+
 end

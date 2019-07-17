@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  slug: MyString
-  email: MyString
+  name: Contact1
+  slug: contact1
+  email: contact@mail.com
   title: MyString
 
 two:
-  name: MyString
-  slug: MyString
-  email: MyString
+  name: Contact2
+  slug: contact2
+  email: InvalidEmail
   title: MyString

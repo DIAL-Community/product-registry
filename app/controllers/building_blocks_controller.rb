@@ -139,7 +139,11 @@ class BuildingBlocksController < ApplicationController
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])
       @bbJson = JSON.parse(@building_block.description, object_class: OpenStruct)
-      @digital_functions = @bbJson.digital_function.split("•").drop(1)
+      if @bbJson.digital_function
+        @digital_functions = @bbJson.digital_function.split("•").drop(1)
+      else
+        @digital_functions = []
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

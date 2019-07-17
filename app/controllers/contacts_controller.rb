@@ -133,7 +133,7 @@ class ContactsController < ApplicationController
     def contact_params
       params
         .require(:contact)
-        .permit(:name, :email, :title, :selected_organizations, :duplicate, :reslug)
+        .permit(:name, :email, :title, :selected_organizations, :duplicate, :slug)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

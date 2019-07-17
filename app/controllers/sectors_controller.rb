@@ -122,10 +122,15 @@ class SectorsController < ApplicationController
   # DELETE /sectors/1.json
   def destroy
     authorize @sector, :mod_allowed?
-    @sector.destroy
+
     respond_to do |format|
-      format.html { redirect_to sectors_url, flash: { notice: 'Sector was successfully destroyed.' }}
-      format.json { head :no_content }
+      if @sector.destroy
+        format.html { redirect_to sectors_url, flash: { notice: 'Sector was successfully destroyed.' }}
+        format.json { head :no_content }
+      else
+        format.html { redirect_to sectors_url, flash: { error: 'Could not destroy sector that is referenced by a use case' }}
+        format.json { head :no_content }
+      end
     end
   end
 
