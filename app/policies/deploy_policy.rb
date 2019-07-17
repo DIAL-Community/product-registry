@@ -1,4 +1,4 @@
-class ContactPolicy < ApplicationPolicy
+class DeployPolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
