@@ -36,8 +36,6 @@ function setOfficeMarker(organization, location, lon, lat) {
     return;
   }
 
-  console.log("Setting up the office marker ...");
-
   // Project the lon lat to the map.
   markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
 
@@ -68,10 +66,7 @@ function addContact(value, label) {
   addElement("base-selected-contacts", "selected_contacts", value, label);
 }
 
-var setupMapView = function() {  // Clean the map holder.
-  // Might need to find another way to prevent duplicate maps.
-  console.log("Setting map view ...");
-
+var setupMapView = function() {
   tooltip = new ol.Overlay({
     element: document.getElementById('office-popup')
   });
@@ -165,47 +160,50 @@ function addOffice(label, officeId, magicKey) {
   $(copy).show();
 }
 
+function sourceHandle(request, response) {
+  $.getJSON(
+    "/locations.json?office_only=true", {
+      search: request.term
+    },
+    function(sectors) {
+      if (sectors.length <= 0) {
+        $.getJSON(
+          "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
+            f: 'json',
+            category: 'City',
+            maxSuggestions: 10,
+            text: request.term
+          },
+          function(data) {
+            response($.map(data.suggestions, function(city) {
+              return {
+                id: null,
+                label: city.text,
+                value: city.text,
+                magicKey: city.magicKey
+              }
+            }));
+          });
+      }
+      response($.map(sectors, function(sector) {
+        return {
+          id: sector.id,
+          label: sector.name,
+          value: sector.name,
+          magicKey: null
+        }
+      }));
+    }
+  );
+}
+
 var setupFormView = function() {
   // Init the datepicker field.
   $('#organization_when_endorsed').datepicker();
 
   $("#base-selected-offices").hide();
   $("#office-label").autocomplete({
-    source: function(request, response) {
-      $.getJSON(
-        "/locations.json?office_only=true", {
-          search: request.term
-        },
-        function(sectors) {
-          if (sectors.length <= 0) {
-            $.getJSON(
-              "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
-                f: 'json',
-                category: 'City',
-                maxSuggestions: 10,
-                text: request.term
-              },
-              function(data) {
-                response($.map(data.suggestions, function(city) {
-                  return {
-                    id: null,
-                    label: city.text,
-                    value: city.text,
-                    magicKey: city.magicKey
-                  }
-                }));
-              });
-          }
-          response($.map(sectors, function(sector) {
-            return {
-              id: sector.id,
-              label: sector.name,
-              value: sector.name,
-              magicKey: null
-            }
-          }));
-        });
-    },
+    source: sourceHandle,
     select: function(event, ui) {
       addOffice(ui.item.label, ui.item.id, ui.item.magicKey)
       $(this).val("")

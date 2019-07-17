@@ -24,14 +24,17 @@
 //= require bootstrap
 //= require_tree .
 
-$(document).on("page:change", function(){
-  var data = $('body').data();
-  $(document).trigger(data.controller + ':loaded');
-  $(document).trigger(data.controller + '#' + data.action + ':loaded');
-});
+function triggerPageEvents() {
+  var action = $('#main-body').attr("data-action");
+  var controller = $('#main-body').attr("data-controller");
+  if (controller) {
+    $(document).trigger(controller + ':loaded');
+    if (action) {
+      $(document).trigger(controller + '#' + action + ':loaded');
+    }
+  }
 
-$(document).on("turbolinks:load", function(){ $(this).trigger("page:change")});
-
-$(function () {
   $('[data-toggle="tooltip"]').tooltip()
-});
+}
+
+$(document).on("turbolinks:load", triggerPageEvents);
