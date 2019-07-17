@@ -1,55 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<div class="float-left col-10">
-  <%= form_tag(deploys_path, :method => "get", id: "search-form", class: "form-inline mb-2") do %>
-    <%= select_tag :provider, options_for_select(['Digital Ocean', 'AWS'], params[:provider]), :class => "form-control col-3" %>
-    <%= text_field_tag :auth_token, params[:auth_token], placeholder: "Authentication token", :class => "form-control col-6" %>
-    <div class="input-group-append">
-        <%= submit_tag "Search", :class => "btn btn-secondary" %>
-    </div>
-  <% end %>
+<div id="deployList">
+  <%= render partial: "list" %>
 </div>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th>Name</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<script>
+$(document).ready(function () {
+  setInterval(refreshScreen, 15000)
+});
 
-  <tbody>
-    <% if @deploys.count > 0 %>
-      <% @deploys.each do |deploy| %>
-        <% if deploy.status == "active" %>
-            <tr>
-            <td><%= deploy.name %></td>
-            <td class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
-                <div class="dropdown-menu">
-                <%= link_to 'View', deploy_path(deploy.id), :class =>"dropdown-item"  %>
-                <div class="dropdown-divider"></div>
-                <%= link_to 'Delete', deploy_path(deploy.id), method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
-                </div>
-            </td>
-            </tr>
-        <% end %>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan="4">
-          <small class="text-muted">
-          <% if @message %>
-            <p><%= @message %></p>
-          <% else %>
-            <p>Please enter your provider and authorization token.</p>
-            <p>For information on how to create an authentication token or access key, visit these links:</p>
-            <p><a class="ml-5 card-text text-muted" target="_blank" href="https://www.digitalocean.com/docs/api/create-personal-access-token/">Digital Ocean</a></p>
-            <p><a class="ml-5 card-text text-muted" target="_blank" href="https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">AWS</a></p>
-          <% end %>
-          </small>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+function refreshScreen() {
+  $.ajax({
+    url: "deploys_refresh_list"
+ })
+}
+</script>

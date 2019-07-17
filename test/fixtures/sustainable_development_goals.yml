@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  slug: MyString
-  name: MyString
+  slug: SDG1
+  name: slug1
   long_title: MyString
 
 two:
-  slug: MyString
-  name: MyString
+  slug: SDG2
+  name: slug2
   long_title: MyString

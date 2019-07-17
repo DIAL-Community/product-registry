@@ -30,8 +30,9 @@ class OrganizationsController < ApplicationController
   end
 
   def export
+    export_contacts = params[:export_contacts].downcase == "true" ? true : false
     send_data(
-      export_with_params(user_signed_in?),
+      export_with_params(export_contacts),
       filename: "Endorsing Organizations.xls",
       type: "application/vnd.ms-excel"
     )
@@ -78,6 +79,8 @@ class OrganizationsController < ApplicationController
       if (dupe_count > 0)
         first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
         contact.slug = contact_slug + "_" + calculate_offset(first_duplicate).to_s
+      else
+        contact.slug = contact_slug
       end
 
       @organization.contacts.push(contact)

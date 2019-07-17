@@ -50,6 +50,8 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
   gem 'teaspoon-mocha'
+  gem 'factory_bot'
+  gem 'rails-controller-testing'
 end
 
 group :development do

@@ -2,6 +2,15 @@ development:
   google:
     tracker: [your-tracking-id]
 
+test:
+  google:
+    tracker: [your-tracking-id]
+
 production:
   google:
     tracker: [your-tracking-id]
+
+test:
+  google:
+    tracker: [your-tracking-id]
+

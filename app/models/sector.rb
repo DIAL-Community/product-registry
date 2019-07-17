@@ -1,7 +1,7 @@
 class Sector < ApplicationRecord
   has_and_belongs_to_many :organizations
   has_and_belongs_to_many :products, join_table: :products_sectors
-  has_many :use_cases
+  has_many :use_cases, dependent: :restrict_with_error
 
   validates :name,  presence: true, length: { maximum: 300 }
 
