@@ -49,9 +49,14 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  
   gem 'teaspoon-mocha'
+  
   gem 'factory_bot'
   gem 'rails-controller-testing'
+
+  gem 'poltergeist'
+  gem 'phantomjs', :require => 'phantomjs/poltergeist'
 end
 
 group :development do
