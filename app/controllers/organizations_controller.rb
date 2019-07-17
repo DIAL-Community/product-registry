@@ -30,8 +30,9 @@ class OrganizationsController < ApplicationController
   end
 
   def export
+    export_contacts = params[:export_contacts].downcase == "true" ? true : false
     send_data(
-      export_with_params(user_signed_in?),
+      export_with_params(export_contacts),
       filename: "Endorsing Organizations.xls",
       type: "application/vnd.ms-excel"
     )
@@ -270,7 +271,11 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
+<<<<<<< HEAD
         .permit(:id, :name, :is_endorser, :when_endorsed, :website)
+=======
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :contact_name, :contact_email, :slug)
+>>>>>>> 407e05e3609ca7a77b1362a4f9457b16fb537899
         .tap do |attr|
           if (attr[:website].present?)
             # Handle both:

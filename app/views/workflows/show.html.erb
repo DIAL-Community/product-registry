@@ -22,7 +22,7 @@
     </p>
     <p class="card-subtitle text-muted mb-3" >
       <strong>Sample mappings of WorkFlows to Use Case: </strong>
-      <% if @workflowJson.sample_mappings.count > 0 %>
+      <% if @workflowJson.sample_mappings && @workflowJson.sample_mappings.count > 0 %>
         <ul>
         <% @workflowJson.sample_mappings.each do |mapping| %>
           <li class="text-muted"><strong><%= mapping.name %>: </strong><%= mapping.description %>

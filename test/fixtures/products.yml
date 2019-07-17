@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  slug: MyString
-  website: MyString
+  name: Product1
+  slug: slug1
+  website: website.org
 
 two:
-  name: MyString
-  slug: MyString
-  website: MyString
+  name: Product2
+  slug: slug2
+  website: InvalidWebsite

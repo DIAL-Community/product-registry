@@ -1,4 +1,4 @@
-FROM jenkins/jenkins
+FROM jenkins/jenkins as t4d-jenkins
 USER root
 
 # Install docker machine
@@ -13,3 +13,5 @@ RUN apt-get update
 RUN apt-get install -y python-pip
 RUN apt-get install -y python-dev libffi-dev gcc libc-dev make
 RUN pip install docker-compose
+
+VOLUME /var/jenkins_home

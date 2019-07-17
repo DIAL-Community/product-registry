@@ -1,13 +1,24 @@
 require 'test_helper'
 
 class WorkflowsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in FactoryBot.create(:user, role: :admin)
     @workflow = workflows(:one)
   end
 
   test "should get index" do
     get workflows_url
     assert_response :success
+  end
+
+  test "search test" do
+    get workflows_url(:search=>"Workflow1")
+    assert_equal(1, assigns(:workflows).count)
+
+    get workflows_url(:search=>"InvalidWorkflow")
+    assert_equal(0, assigns(:workflows).count)
   end
 
   test "should get new" do
@@ -17,7 +28,7 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create workflow" do
     assert_difference('Workflow.count') do
-      post workflows_url, params: { workflow: { description: @workflow.description, name: @workflow.name, other_names: @workflow.other_names, slug: @workflow.slug } }
+      post workflows_url, params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
     end
 
     assert_redirected_to workflow_url(Workflow.last)
@@ -34,7 +45,7 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update workflow" do
-    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, other_names: @workflow.other_names, slug: @workflow.slug } }
+    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
     assert_redirected_to workflow_url(@workflow)
   end
 
@@ -44,5 +55,24 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to workflows_url
+  end
+
+  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get workflow_url(@workflow)
+    assert_response :success
+    
+    get new_workflow_url
+    assert_response :redirect
+
+    get edit_workflow_url(@workflow)
+    assert_response :redirect    
+
+    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
+    assert_response :redirect  
+
+    delete workflow_url(@workflow)
+    assert_response :redirect
   end
 end

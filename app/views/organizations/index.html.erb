@@ -1,9 +1,18 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to "Export", export_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
 <% if user_signed_in? && policy(Organization).mod_allowed? %>
   <%= link_to 'Create New', new_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
+<%= form_with(url: export_path, :method => :get, :data => {remote: false}, :class => 'inline-form'  ) do | form | %>
+  <%= form.hidden_field :export_contacts, :value => false %>
+  <%= form.submit 'Export', :class => 'btn btn-outline-secondary float-left ml-1', data: { disable_with: false } %>
+  <% if user_signed_in? && policy(Organization).export_contacts_allowed? %>
+    <fieldset class="form-group form-check">
+      <%= form.check_box :export_contacts, {}, true, false %>
+      <label class="form-label-group text-muted mt-2" for="is_approved">Export with contacts info</label>
+    </fieldset>
+  <% end %>
 <% end %>
 <div class="float-right pb-2">
   <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
@@ -17,7 +26,7 @@
 
 <div class="row">
   <% @organizations.each do |organization| %>
-    <div class="col-lg-2 col-md-5 d-flex align-items-stretch mt-2">
+    <div class="col-lg-2 col-md-4 d-flex align-items-stretch mt-2">
       <div class="card index-card">
         <div class="card-header bg-secondary text-white small">
           <%= link_to truncate(organization.name, length: 23, omission: '&hellip;', escape: false), organization,
@@ -42,3 +51,4 @@
     </div>
   <% end %>
 </div>
+
