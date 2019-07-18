@@ -19,12 +19,16 @@ class ApplicationController < ActionController::Base
     return slug
   end
 
-  def calculate_offset(first_duplicate)
+  def generate_offset(first_duplicate)
     size = 1;
     if (!first_duplicate.nil?)
-      size = first_duplicate.slug.delete('^0-9').to_i + 1
+      size = first_duplicate
+                .slug
+                .slice(/_dup\d+$/)
+                .delete('^0-9')
+                .to_i + 1
     end
-    return size
+    return "_dup#{size.to_s}"
   end
   
   private

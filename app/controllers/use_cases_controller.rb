@@ -156,7 +156,7 @@ class UseCasesController < ApplicationController
           attr[:slug] = slug_em(attr[:name])
           if (params[:duplicate].present?)
             first_duplicate = UseCase.slug_starts_with(attr[:slug]).order(slug: :desc).first
-            attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
           end
         end
       end
