@@ -13,6 +13,14 @@ function productsReady() {
   $('#product-assessment').change(function() {
     toggleAssessmentSection($(this));
   });
+
+  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
+  $('#base-selected-sectors').hide();
+  $("#sector-search").autocomplete(sectorAutoComplete);
+
+  var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
+  $("#base-selected-organizations").hide();
+  $("#organization-search").autocomplete(organizationAutoComplete);
 }
 
 function toggleAssessmentSection(checkbox) {
