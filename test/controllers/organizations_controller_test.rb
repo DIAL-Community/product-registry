@@ -26,6 +26,11 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should slug digits" do
+    digit_org_name = "1234-56-789 011"
+    # post the name above, check the slug output.
+  end
+
   test "should create organization" do
     assert_difference('Organization.count') do
       post organizations_url, params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: 'testslug', website: @organization.website, when_endorsed: '11/16/2018' } }
