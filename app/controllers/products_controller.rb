@@ -203,9 +203,14 @@ class ProductsController < ApplicationController
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @products = Product.(slug: current_slug).to_a
+        @products = Product.where(slug: current_slug).to_a
+      end
+
+      if (@products.empty?)
+        @products = Product.where(":other_name = ANY(aliases)", other_name: params[:current])
       end
     end
+
     authorize @products, :view_allowed?
     render json: @products, :only => [:name]
   end
