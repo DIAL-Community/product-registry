@@ -21,6 +21,26 @@ function productsReady() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
+
+  $(".add-other-name").click(addOtherName);
+  $(".remove-other-name").hide();
+}
+
+function addOtherName(event) {
+  event.preventDefault();
+  var clone = $("#base-other-name").clone();
+
+  clone.removeAttr("id");
+  clone.find("button.add-other-name").click(addOtherName);
+  clone.find("button.remove-other-name").click(removeOtherName);
+  clone.find("button.remove-other-name").show();
+
+  $("#other-names").append(clone);
+}
+
+function removeOtherName(event) {
+  event.preventDefault();
+  $(event.target).parent().parent().remove();
 }
 
 function toggleAssessmentSection(checkbox) {
