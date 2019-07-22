@@ -5,7 +5,7 @@ namespace :sync do
   desc 'Sync the database with the digital public goods list.'
   task :public_goods, [:path] => :environment do |task, params|
 
-    puts 'Starting sync task ...'
+    puts 'Pulling data from digital public good ...'
 
     Dir.entries(params[:path]).select{ |item| item.include? '.json' }.each do |entry|
       entry_data = File.read(File.join(params[:path], entry))
@@ -27,7 +27,11 @@ namespace :sync do
         existing_product = nil
         unless json_data['initialism'].nil?
           slug_initialism = Slugger.slug_em json_data['initialism']
-          existing_product = Product.where(slug: slug_initialism)[0]
+          existing_product = Product.find_by(slug: slug_initialism)
+
+          if existing_product.nil?
+            existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['initialism'])
+          end
 
           new_product.name = json_data['initialism']
           new_product.slug = slug_initialism
@@ -35,7 +39,11 @@ namespace :sync do
 
         if existing_product.nil?
           slug_name = Slugger.slug_em json_data['name']
-          existing_product = Product.where(slug: slug_name)[0]
+          existing_product = Product.find_by(slug: slug_name)
+          
+          if existing_product.nil?
+            existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['name'])
+          end
 
           new_product.name = json_data['name']
           new_product.slug = slug_name
@@ -43,17 +51,19 @@ namespace :sync do
 
         if existing_product.nil?
           if new_product.save
-            puts "Added new product: #{new_product.name} -> #{new_product.slug}"
+            puts "Added new product: #{new_product.name} -> #{new_product.slug}."
           end
+        else
+          puts "Skipping existing product: #{existing_product.name}."
         end
 
       end
     end
-    puts 'Sync task completed ...'
+    puts 'Digital public good data synced ...'
   end
 
   task :digi_square_digital_good, [:path] => :environment do |task, params|
-    puts "Starting pulling data from digital square ..."
+    puts "Pulling data from digital square ..."
 
     digi_square_location = "https://wiki.digitalsquare.io/api.php?"\
                       "action=parse&format=json&prop=sections&"\
@@ -72,14 +82,20 @@ namespace :sync do
       end
       
       slug_line = Slugger.slug_em section['line']
-      existing_product = Product.where(slug: slug_line)[0]
+      existing_product = Product.find_by(slug: slug_line)
+      if existing_product.nil?
+        existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: section['line'])
+      end
+
       if existing_product.nil?
         new_product = Product.new
         new_product.name = section['line']
         new_product.slug = slug_line
         if new_product.save
-          puts "Added new product: #{new_product.name} -> #{new_product.slug}"
+          puts "Added new product: #{new_product.name} -> #{new_product.slug}."
         end
+      else
+        puts "Skipping existing product: #{existing_product.name}."
       end
     end
 
