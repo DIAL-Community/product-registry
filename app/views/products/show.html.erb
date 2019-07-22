@@ -164,7 +164,7 @@
             <br clear="both"/>
           <% end %>
         <% else %>
-          <small>This product hasn't been evaluated with Digital Square's maturity model.</small>
+          <p class="card-text text-muted">This product hasn't been evaluated with Digital Square's maturity model.</p>
         <% end %>
       </div>
     </div>
@@ -184,27 +184,25 @@
           </ul>
           </small>
         <% else %>
-          <small>This product hasn't been evaluated with the OSC's maturity model.</small>
+          <p class="card-text text-muted">This product hasn't been evaluated with the OSC's maturity model.</p>
         <% end %>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-header bg-secondary text-white clearfix">
-        <h5 class="float-left">Building Blocks</h5>
-      </div>
-      <div class="row">
-        <div class="card h-100 p-1">
-          <div class="card-body pb-2 pt-2">
-            <% if @product.building_blocks.count > 0 %>
-                <% @product.building_blocks.each do |building_block| %>
-                  <h5 class="card-text text-muted mb-1"><small><%= link_to building_block.name, building_block %></small></h5>
-                <% end %>
-            <% else %>
-              <p class="card-text text-muted">We don't have any building block information for this product.</p>
-            <% end %>
+      <h5 class="card-header bg-secondary text-white">Building Blocks</h5>
+      <div class="card-body">
+        <% if @product.building_blocks.count > 0 %>
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <% @product.building_blocks.each do |building_block| %>
+                <h5 class="card-text text-muted mb-1"><small><%= link_to building_block.name, building_block %></small></h5>
+              <% end %>
+            </div>
           </div>
-        </div>
+        <% else %>
+          <p class="card-text text-muted">We don't have any building block information for this product.</p>
+        <% end %>
       </div>
     </div>
 </div>

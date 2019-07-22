@@ -22,25 +22,37 @@ function productsReady() {
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
 
-  $(".add-other-name").click(function(event) {
+  $("button.add-other-name").click(function(event) {
     event.preventDefault();
     addOtherName();
   });
-  $(".remove-other-name").hide();
+  $("button.remove-other-name").click(function(event) {
+    event.preventDefault();
+    removeOtherName(event.target);
+  });
 }
 
-function addOtherName() {
+function addOtherName(value) {
   var clone = $("#base-other-name").clone();
 
   clone.removeAttr("id");
-  clone.find("button.add-other-name").click(addOtherName);
+
+  clone.find("button.add-other-name").click(function(event) {
+    event.preventDefault();
+    addOtherName();
+  });
   clone.find("button.remove-other-name").click(function(event) {
     event.preventDefault();
     removeOtherName(event.target);
   });
-  clone.find("button.remove-other-name").show();
 
-  $("#other-names").append(clone);
+  if (value) {
+    clone.find("input").val(value);
+    $("#other-names").prepend(clone);
+  } else {
+    clone.find("input").val("");
+    $("#other-names").append(clone);
+  }
 }
 
 function removeOtherName(element) {

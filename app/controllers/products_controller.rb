@@ -248,8 +248,11 @@ class ProductsController < ApplicationController
     def product_params
       params
         .require(:product)
-        .permit(:name, :website, :is_launchable, :start_assessment, :aliases)
+        .permit(:name, :website, :is_launchable, :start_assessment)
         .tap do |attr|
+          if (params[:other_names].present?)
+            attr[:aliases] = params[:other_names].reject {|x|x.empty?}
+          end
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
             if (params[:duplicate].present?)

@@ -11,8 +11,8 @@
     One or more product(s) with similar name already exists.
   </div>
 
+  <div id="other-name-label">Other names:</div>
   <div id="other-names">
-    <div id="other-name-label">Other names:</div>
     <div id="base-other-name" class="form-inline mt-2 mb-2">
       <input type="text" id="sector-search" name="other_names[]" class="form-control col-10"
               placeholder="Other name" aria-labelledby="other-name-label" style="height: 3.125rem" />
@@ -322,4 +322,7 @@
   <% product.sustainable_development_goals.order("name").each do |sdg| %>
     addSDG('<%= sdg.id %>', '<%= sdg.name %>');
   <% end %>
+  <% product.aliases.each {|other_name| %>
+    addOtherName('<%= other_name %>');
+  <% } %>
 </script>
