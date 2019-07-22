@@ -10,16 +10,7 @@
   <div id="duplicate-warning" class="alert alert-warning">
     One or more product(s) with similar name already exists.
   </div>
-
-  <div>
-    <div class="form-inline mt-2 mb-2">
-      <input type="text" id="sector-search" class="form-control" placeholder="Other name" />
-      <div class="input-group-append ml-2">
-        <button type="submit" class="btn btn-primary">+</button>
-      </div>
-    </div>
-  </div>
-
+  
   <fieldset class="form-label-group">
     <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website" %>
     <%= form.label :website %>
@@ -68,7 +59,7 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-sectors" class="selected-elements ol-6 mb-2">
+        <div id="base-selected-sectors" class="selected-elements col-6 mb-2">
           <div class="card h-100">
             <div class="p-2 clearfix">
               <p class="mb-0 float-left"></p>

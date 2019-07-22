@@ -78,7 +78,7 @@ class OrganizationsController < ApplicationController
       dupe_count = Contact.where(slug: contact_slug).count
       if (dupe_count > 0)
         first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
-        contact.slug = contact_slug + "_" + calculate_offset(first_duplicate).to_s
+        contact.slug = contact_slug + "_" + generate_offset(first_duplicate).to_s
       else
         contact.slug = contact_slug
       end
@@ -291,7 +291,7 @@ class OrganizationsController < ApplicationController
             attr[:slug] = slug_em(attr[:name])
             if (params[:duplicate].present?)
               first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first
-              attr[:slug] = attr[:slug] + "_" + calculate_offset(first_duplicate).to_s
+              attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
             end
           end
         end
