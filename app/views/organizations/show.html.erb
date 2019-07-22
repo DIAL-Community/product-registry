@@ -49,7 +49,7 @@
   </p>
 </div>
 
-<% if user_signed_in? %>
+<% if policy(Contact).view_allowed? %>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0">Contacts</h5>
