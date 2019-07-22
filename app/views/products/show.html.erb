@@ -20,6 +20,16 @@
             </strong><%= @product.website %>
           </h6>
         <% end %>
+        <% if !@product.aliases.empty? %>
+          <h6 class="card-text text-muted mt-2 mb-2">
+            <strong>Other names:</strong>
+            <ul>
+              <% @product.aliases.each{|other_name| %>
+                <li><%= other_name %></li>
+              <%}%>
+            </ul>
+          </h6>
+        <% end %>
       </div>
     </div>
     <p class="float-right mb-0" >
