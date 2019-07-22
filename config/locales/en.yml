@@ -33,3 +33,4 @@ en:
   hello: "Hello world"
   pundit:
     mod_allowed?: "The operation is not allowed."
+    view_allowed?: "You're not allowed to view this page."
