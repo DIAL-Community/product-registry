@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :load_maturity, only: [:show, :new, :edit, :create]
+  before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
 
   def map
     @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
@@ -12,6 +12,10 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
+    image = MiniMagick::Image.open("https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg")
+    image.contrast
+    image.write("from_internets.jpg")
+
     @products = Product.eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals, :sectors).order(:name)
     if params[:without_paging]
       @products = @products
@@ -249,7 +253,7 @@ class ProductsController < ApplicationController
       params
         .require(:product)
         .permit(:name, :website, :is_launchable, :default_url, :has_osc, :osc_maturity, :has_digisquare,
-                :start_assessment, :digisquare_maturity, :confirmation, :slug)
+                :start_assessment, :digisquare_maturity, :confirmation, :slug, :logo)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
