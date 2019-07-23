@@ -21,6 +21,11 @@ function productsReady() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
+
+  $('.custom-file-input').on('change', function() {
+    var fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').html(fileName);
+  })
 }
 
 function toggleAssessmentSection(checkbox) {
