@@ -21,7 +21,9 @@ class Product < ApplicationRecord
   scope :slug_starts_with, -> (slug) { where("LOWER(products.slug) like LOWER(?)", "#{slug}%\\_")}
 
   def image_file
-    if File.exist?(File.join('app','assets','images','products',"#{slug}.png"))
+    if !logo.nil? && !logo.blank?
+      return logo
+    elsif File.exist?(File.join('app','assets','images','products',"#{slug}.png"))
       return "products/#{slug}.png"
     else
       return "products/prod_placeholder.png"
