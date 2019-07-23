@@ -23,6 +23,7 @@ namespace :sync do
       end
 
       if json_data['type'].detect{ |element| element.downcase == 'software' } != nil
+        aliases = Array.new
         new_product = Product.new
         existing_product = nil
         unless json_data['initialism'].nil?
@@ -33,6 +34,7 @@ namespace :sync do
             existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['initialism'])
           end
 
+          aliases.push(json_data['name'])
           new_product.name = json_data['initialism']
           new_product.slug = slug_initialism
         end
@@ -45,11 +47,13 @@ namespace :sync do
             existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['name'])
           end
 
+          aliases.push(json_data['initialism'])
           new_product.name = json_data['name']
           new_product.slug = slug_name
         end
 
         if existing_product.nil?
+          new_product.aliases = aliases.reject{ |x| x.nil? || x.empty? || x == new_product.name }
           if new_product.save
             puts "Added new product: #{new_product.name} -> #{new_product.slug}."
           end
