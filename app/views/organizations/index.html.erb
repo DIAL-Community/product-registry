@@ -16,11 +16,35 @@
 <% end %>
 <div class="float-right pb-2">
   <%= form_tag(organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
-  <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-secondary" %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
+    <div class="input-group-append">
+      <%= submit_tag "Search", :class => "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#filter-dialog">
+  Filter
+</button>
+<div class="modal fade" id="filter-dialog" tabindex="-1" role="dialog" aria-labelledby="filter-dialog-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <%= form_tag(organizations_path, :method => "get") do %>
+      <div class="modal-header">
+        <h5 class="modal-title" id="filter-dialog-label">Filter organizations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= text_field_tag :search, params[:search], placeholder: "Search organizations ...", :class => "form-control" %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <%= submit_tag "Apply", :class => "btn btn-secondary" %>
+      </div>
+      <% end %>
+    </div>
   </div>
-<% end %>
 </div>
 <br clear="both"/>
 
