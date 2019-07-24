@@ -12,6 +12,7 @@ services:
   ports:
     - 5432:5432
  web:
+  image: localhost:5000/t4d-product-backlog:${T4D_VERSION}
   build:
     context: .
     target: build-web
@@ -23,26 +24,28 @@ services:
   restart: always
   volumes:
    - .:/t4d
-   - ./config/database.yml.docker:/t4d/config/database.yml
+   - ./setEnv.sh:/t4d/setEnv.sh
   ports:
-   - 80:3000
+   - 3000:3000
   depends_on:
    - postgres
  nginx:
   image: nginx:1.15-alpine
   restart: unless-stopped
   volumes:
-   - ./ssl/data/nginx:/etc/nginx/conf.d
-   - ./ssl/data/certbot/conf:/etc/letsencrypt
-   - ./ssl/data/certbot/www:/var/www/certbot
+   - ./prod/ssl/data/nginx:/etc/nginx/conf.d
+   - ./prod/ssl/data/certbot/conf:/etc/letsencrypt
+   - ./prod/ssl/data/certbot/www:/var/www/certbot
+   - ./public:/var/www/registry
   ports:
-   - "443:443"
-   command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+   - 80:80
+   - 443:443
+  command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
  certbot:
   image: certbot/certbot
   restart: unless-stopped
   volumes:
-   - ./ssl/data/certbot/conf:/etc/letsencrypt
-   - ./ssl/data/certbot/www:/var/www/certbot
+   - ./prod/ssl/data/certbot/conf:/etc/letsencrypt
+   - ./prod/ssl/data/certbot/www:/var/www/certbot
   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
  

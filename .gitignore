@@ -39,3 +39,7 @@ config/secrets.yml
 ssmtp.conf
 
 /coverage
+
+setEnv.sh
+
+prod/ssl/data/*

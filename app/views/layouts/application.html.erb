@@ -20,13 +20,13 @@
     </style>
     <% if Rails.env.production? || Rails.env.development? %>
       <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.configuration.google["google"]["tracker"] %>"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.application.secrets.google_tracker %>"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '<%= Rails.configuration.google["google"]["tracker"] %>');
+        gtag('config', '<%= Rails.application.secrets.google_tracker %>');
       </script>
     <% end %>
     

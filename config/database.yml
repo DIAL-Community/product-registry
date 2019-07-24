@@ -28,20 +28,27 @@ development:
   host: localhost
   adapter: postgresql
   encoding: unicode
-  database: registry_development
-  username: registry
-  password: "Password!1"
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 test:
   <<: *default
   timeout: 5000
-  host: localhost
+  host: postgres
   adapter: postgresql
   encoding: unicode
-  database: registry_test
-  username: registry
-  password: "Password!1"
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 
 production:
   <<: *default
+  timeout: 5000
+  host: postgres
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
