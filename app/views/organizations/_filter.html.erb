@@ -14,44 +14,45 @@
       <div class="modal-body">
         <div class="form-row">
           <div class="col-md-12 mb-3">
-            <label for="organization-name">Name</label>
-            <input type="text" class="form-control" id="organization-name" placeholder="Organization name" required>
+            <%= label_tag "name" %>
+            <%= text_field_tag "name", nil, placeholder: "Organization name ...", class: "form-control" %>
           </div>
         </div>
         <div class="form-row">
           <div class="col-md-6">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="endorser">
-              <label class="custom-control-label" for="endorser">Endorser only.</label>
+            <div class="form-group">
+              <%= check_box_tag "endorser_only", true, class: "form-check-input" %>
+              <%= label_tag "endorser_only", nil, class: "form-check-label" %>
             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="year-endorsed">Year Endorsed</label>
-            <select id="year-endorsed" class="custom-select">
-              <option selected>Year</option>
-              <option value="2016">2016</option>
-              <option value="2017">2017</option>
-              <option value="2018">2018</option>
-              <option value="2019">2019</option>
-            </select>
+            <%= label_tag "year_endorsed" %>
+            <%= select_tag "year_endorsed",
+                options_from_collection_for_select(
+                  organizations
+                               .map{ |x| x.when_endorsed.strftime('%Y') }
+                               .uniq!
+                               .sort!),
+                multiple: true, class: 'custom-select' %>
           </div>
         </div>
         <div class="form-row">
           <div class="col-md-12 mb-3">
-            <label for="sectors-assigned">Sectors</label>
-            <select id="sectors-assigned" class="custom-select">
-              <option selected>Sector</option>
-              <option value="2016">2016</option>
-              <option value="2017">2017</option>
-              <option value="2018">2018</option>
-              <option value="2019">2019</option>
-            </select>
+            <%= label_tag "sectors_assigned" %>
+            <%= select_tag "sectors_assigned",
+                options_from_collection_for_select(
+                  organizations
+                    .map{|x| x.sectors}
+                    .flatten
+                    .uniq!
+                    .sort!, "id", "name"),
+                multiple: true, class: 'custom-select' %>
           </div>
         </div>
         <div class="form-row">
           <div class="col-md-12 mb-3">
             <label for="products-assigned">Products</label>
-            <select id="products-assigned" class="custom-select">
+            <select id="products-assigned" name="products_assigned" class="custom-select">
               <option selected>Product</option>
               <option value="2016">2016</option>
               <option value="2017">2017</option>
