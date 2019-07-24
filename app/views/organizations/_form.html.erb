@@ -9,8 +9,13 @@
     <div id="duplicate-warning" class="alert alert-warning">
       One or more organization(s) with similar name already exists.
     </div>
+  
+    <fieldset class="custom-file">
+      <%= form.file_field :logo, :class => "custom-file-input", :id => "logo-file", :'aria-describedby' => "logo-file" %>
+      <label class="custom-file-label" for="logo-file">Pick logo</label>
+    </fieldset>
 
-    <fieldset class="form-label-group">
+    <fieldset class="form-label-group mt-2">
       <%= form.text_field :when_endorsed, :value => organization.when_endorsed.blank? ? '' : organization.when_endorsed.strftime("%m/%d/%Y"), id: :organization_when_endorsed, :class => "form-control data-date", :placeholder => "When endorsed" %>
       <%= form.label :when_endorsed %>
     </fieldset>

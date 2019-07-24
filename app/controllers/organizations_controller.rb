@@ -116,6 +116,9 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
+        if !@organization.logo.nil? && !@organization.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @organization.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @organization, flash: { notice: 'Organization was successfully created.' }}
         format.json { render :show, status: :created, location: @organization }
       else
@@ -183,6 +186,9 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.update(organization_params)
+        if !@organization.logo.nil? && !@organization.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @organization.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @organization, flash: { notice: 'Organization was successfully updated.' }}
         format.json { render :show, status: :ok, location: @organization }
       else
@@ -273,7 +279,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :slug)
+        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :slug, :logo)
         .tap do |attr|
           if (attr[:website].present?)
             # Handle both:
