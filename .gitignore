@@ -30,13 +30,8 @@
 public/export.xls
 public/export.xlsx
 
-public/assets/.sprockets*
 public/assets/organizations/fixer*
-
-config/esri.yml
-config/google.yml
-config/secrets.yml
-ssmtp.conf
+public/assets/.sprockets*
 
 /coverage
 

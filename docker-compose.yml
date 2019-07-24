@@ -12,7 +12,7 @@ services:
   ports:
     - 5432:5432
  web:
-  image: localhost:5000/t4d-product-backlog:${T4D_VERSION}
+ # image: localhost:5000/t4d-product-backlog:${T4D_VERSION}
   build:
     context: .
     target: build-web
@@ -24,7 +24,6 @@ services:
   restart: always
   volumes:
    - .:/t4d
-   - ./setEnv.sh:/t4d/setEnv.sh
   ports:
    - 3000:3000
   depends_on:
