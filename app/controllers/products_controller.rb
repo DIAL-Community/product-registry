@@ -12,10 +12,6 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    image = MiniMagick::Image.open("https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg")
-    image.contrast
-    image.write("from_internets.jpg")
-
     @products = Product.eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals, :sectors).order(:name)
     if params[:without_paging]
       @products = @products
@@ -107,6 +103,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
+        if !@product.logo.nil? && !@product.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully created.' }}
         format.json { render :show, status: :created, location: @product }
       else
@@ -181,6 +180,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.update(product_params)
+        if !@product.logo.nil? && !@product.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully updated.' }}
         format.json { render :show, status: :ok, location: @product }
       else
