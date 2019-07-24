@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :load_maturity, only: [:show, :new, :edit, :create]
+  before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
 
   def map
     @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
@@ -103,6 +103,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
+        if !@product.logo.nil? && !@product.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully created.' }}
         format.json { render :show, status: :created, location: @product }
       else
@@ -177,6 +180,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.update(product_params)
+        if !@product.logo.nil? && !@product.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully updated.' }}
         format.json { render :show, status: :ok, location: @product }
       else
@@ -249,7 +255,7 @@ class ProductsController < ApplicationController
       params
         .require(:product)
         .permit(:name, :website, :is_launchable, :default_url, :has_osc, :osc_maturity, :has_digisquare,
-                :start_assessment, :digisquare_maturity, :confirmation, :slug)
+                :start_assessment, :digisquare_maturity, :confirmation, :slug, :logo)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

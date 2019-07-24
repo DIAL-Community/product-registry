@@ -5,13 +5,19 @@
     <%= form.label :name %>
   </fieldset>
 
-  <div class="mt-2"></div>
-  <input id="original_name" type="hidden" value="<%= product.name %>" />
-  <div id="duplicate-warning" class="alert alert-warning">
-    One or more product(s) with similar name already exists.
+  <div class="mt-2">
+    <input id="original_name" type="hidden" value="<%= product.name %>" />
+    <div id="duplicate-warning" class="alert alert-warning">
+      One or more product(s) with similar name already exists.
+    </div>
   </div>
+
+  <fieldset class="custom-file">
+    <%= form.file_field :logo, :class => "custom-file-input", :id => "logo-file", :'aria-describedby' => "logo-file" %>
+    <label class="custom-file-label" for="logo-file">Pick different logo</label>
+  </fieldset>
   
-  <fieldset class="form-label-group">
+  <fieldset class="form-label-group mt-2">
     <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website" %>
     <%= form.label :website %>
   </fieldset>
