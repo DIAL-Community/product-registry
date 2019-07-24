@@ -26,9 +26,15 @@ function productsReady() {
     event.preventDefault();
     addOtherName();
   });
+
   $("button.remove-other-name").click(function(event) {
     event.preventDefault();
     removeOtherName(event.target);
+  });
+  
+  $('.custom-file-input').on('change', function () {
+    var fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').html(fileName);
   });
 }
 
