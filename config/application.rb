@@ -14,9 +14,5 @@ module Registry
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    config.geocode = config_for(:esri)
-    config.google = config_for(:google)
-    config.jenkins = config_for(:jenkins)
-    config.mailgun = config_for(:mailgun)
   end
 end

@@ -28,9 +28,9 @@ development:
   host: postgres
   adapter: postgresql
   encoding: unicode
-  database: registry_development
-  username: registry
-  password: "Password!1"
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 test:
   <<: *default
@@ -38,9 +38,9 @@ test:
   host: postgres
   adapter: postgresql
   encoding: unicode
-  database: registry_test
-  username: registry
-  password: "Password!1"
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 production:
   <<: *default
@@ -48,6 +48,6 @@ production:
   host: postgres
   adapter: postgresql
   encoding: unicode
-  database: registry_production
-  username: registry
-  password: "Password!1"
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>

@@ -9,6 +9,8 @@ until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_produc
   sleep 2s
 done
 
+. ./setEnv.sh prod
+
 rails db:run_if_no_db && rails db:create_db_with_public_data
 rails db:migrate
 rails assets:precompile RAILS_ENV=production

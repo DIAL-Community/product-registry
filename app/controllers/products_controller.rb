@@ -33,9 +33,9 @@ class ProductsController < ApplicationController
   def show
     authorize @product, :view_allowed?
     # All of this data will be passed to the launch partial and used by javascript
-    @jenkins_url = Rails.configuration.jenkins["jenkins_url"]
-    @jenkins_user = Rails.configuration.jenkins["jenkins_user"]
-    @jenkins_password = Rails.configuration.jenkins["jenkins_password"]
+    @jenkins_url = Rails.application.secrets.jenkins_url
+    @jenkins_user = Rails.application.secrets.jenkins_user
+    @jenkins_password = Rails.application.secrets.jenkins_password
   end
 
   # GET /products/new

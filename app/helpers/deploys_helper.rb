@@ -23,9 +23,9 @@ module DeploysHelper
     end
 
     def getDataFromJenkins(method, url)
-        jenkinsUrl = Rails.configuration.jenkins["jenkins_url"]
-        jenkinsUser = Rails.configuration.jenkins["jenkins_user"]
-        jenkinsPassword = Rails.configuration.jenkins["jenkins_password"]
+        jenkinsUrl = Rails.application.secrets.jenkins_url
+        jenkinsUser = Rails.application.secrets.jenkins_user
+        jenkinsPassword = Rails.application.secrets.jenkins_password
 
         crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
 

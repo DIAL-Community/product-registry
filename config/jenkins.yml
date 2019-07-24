@@ -1,9 +1,0 @@
-development:
-  jenkins_url: http://134.209.170.222
-  jenkins_user: t4d
-  jenkins_password: t4d
-
-production:
-  jenkins_url: http://134.209.170.222
-  jenkins_user: t4d
-  jenkins_password: t4d

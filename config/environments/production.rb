@@ -57,8 +57,8 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :mailgun
 
   config.action_mailer.mailgun_settings = {
-          api_key: Rails.configuration.mailgun["api_key"],
-          domain: Rails.configuration.mailgun["domain"]
+    api_key: Rails.application.secrets.mailgun_api_key,
+    domain: Rails.application.secrets.mailgun_domain
   }
 
   # Use the lowest log level to ensure availability of diagnostic information
