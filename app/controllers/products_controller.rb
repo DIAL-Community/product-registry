@@ -209,9 +209,14 @@ class ProductsController < ApplicationController
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @products = Product.(slug: current_slug).to_a
+        @products = Product.where(slug: current_slug).to_a
+      end
+
+      if (@products.empty?)
+        @products = Product.where(":other_name = ANY(aliases)", other_name: params[:current])
       end
     end
+
     authorize @products, :view_allowed?
     render json: @products, :only => [:name]
   end
@@ -257,6 +262,9 @@ class ProductsController < ApplicationController
         .permit(:name, :website, :is_launchable, :default_url, :has_osc, :osc_maturity, :has_digisquare,
                 :start_assessment, :digisquare_maturity, :confirmation, :slug, :logo)
         .tap do |attr|
+          if (params[:other_names].present?)
+            attr[:aliases] = params[:other_names].reject {|x|x.empty?}
+          end
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
             if (params[:duplicate].present?)

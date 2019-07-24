@@ -17,13 +17,4 @@ class Organization < ApplicationRecord
       end
   end
 
-  private
-
-  def no_duplicates
-    size = Organization.where(slug: slug).size
-    if size > 0
-      errors.add(:duplicate, 'has duplicate.')
-    end
-  end
-
 end

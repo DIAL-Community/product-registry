@@ -66,14 +66,4 @@ class Product < ApplicationRecord
     toret
   end
 
-
-  private
-
-  def no_duplicates
-    size = Product.where(slug: slug).size
-    if size > 0
-      errors.add(:duplicate, 'has duplicate.')
-    end
-  end
-
 end

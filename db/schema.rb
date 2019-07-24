@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 20190723183059) do
     t.boolean "is_launchable", default: false
     t.boolean "start_assessment"
     t.string "default_url", default: "http://<host_ip>", null: false
+    t.string "aliases", default: [], array: true
     t.string "logo"
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
