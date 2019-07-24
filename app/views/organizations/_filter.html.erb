@@ -1,0 +1,68 @@
+<div class="modal fade" id="filter-dialog" tabindex="-1" role="dialog" aria-labelledby="filter-dialog-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <%= form_tag(organizations_path, :method => "get") do %>
+      <div class="modal-header">
+        <h5 class="modal-title" id="filter-dialog-label">Filter organizations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="organization-name">Name</label>
+            <input type="text" class="form-control" id="organization-name" placeholder="Organization name" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-6">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="endorser">
+              <label class="custom-control-label" for="endorser">Endorser only.</label>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="year-endorsed">Year Endorsed</label>
+            <select id="year-endorsed" class="custom-select">
+              <option selected>Year</option>
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="sectors-assigned">Sectors</label>
+            <select id="sectors-assigned" class="custom-select">
+              <option selected>Sector</option>
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="products-assigned">Products</label>
+            <select id="products-assigned" class="custom-select">
+              <option selected>Product</option>
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <%= submit_tag "Apply", :class => "btn btn-secondary" %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
