@@ -44,8 +44,5 @@
         <%= collection_select(nil, "products_assigned", Product.all.order(:name), :id, :name, {}, {multiple: true, class: 'custom-select'})%>
       </div>
     </div>
-    <div class="float-right">
-      <%= submit_tag "Apply", :class => "btn btn-primary" %>
-    </div>
   <% end %>
 </div>
