@@ -28,11 +28,11 @@
           <div class="col-md-6 mb-3">
             <%= label_tag "year_endorsed" %>
             <%= select_tag "year_endorsed",
-                options_from_collection_for_select(
+                options_for_select(
                   organizations
-                               .map{ |x| x.when_endorsed.strftime('%Y') }
-                               .uniq!
-                               .sort!),
+                    .map{ |x| x.when_endorsed.strftime('%Y')}
+                    .uniq!
+                    .sort!),
                 multiple: true, class: 'custom-select' %>
           </div>
         </div>
@@ -51,14 +51,13 @@
         </div>
         <div class="form-row">
           <div class="col-md-12 mb-3">
-            <label for="products-assigned">Products</label>
-            <select id="products-assigned" name="products_assigned" class="custom-select">
-              <option selected>Product</option>
-              <option value="2016">2016</option>
-              <option value="2017">2017</option>
-              <option value="2018">2018</option>
-              <option value="2019">2019</option>
-            </select>
+            <%= label_tag "products_assigned" %>
+            <%= select_tag "products_assigned",
+                options_from_collection_for_select(
+                  organizations
+                    .map{|x| x.products}
+                    .flatten, "id", "name"),
+                multiple: true, class: 'custom-select' %>
           </div>
         </div>
       </div>

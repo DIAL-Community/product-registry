@@ -1,0 +1,7 @@
+development:
+  google:
+    tracker: UA-142856504-1
+
+production:
+  google:
+    tracker: UA-142856504-1
