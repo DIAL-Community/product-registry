@@ -200,6 +200,11 @@ function sourceHandle(request, response) {
 var setupFormView = function() {
   // Init the datepicker field.
   $('#organization_when_endorsed').datepicker();
+  
+  $('.custom-file-input').on('change', function () {
+    var fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').html(fileName);
+  });
 
   $("#base-selected-offices").hide();
   $("#office-label").autocomplete({
