@@ -1,11 +1,11 @@
 <div class="row float-right">
-  <button type="button" class="btn btn-secondary"
-          data-toggle="collapse" data-target="#filter-dialog"
-          aria-expanded="false" aria-controls="filter-dialog">
+  <button id="filter-toggle" type="button" class="btn btn-secondary"
+          data-toggle="collapse" data-target="#filter-options"
+          aria-expanded="false" aria-controls="filter-options">
     Filter
   </button>
 </div>
-<div class="collapse" id="filter-dialog">
+<div class="collapse" id="filter-options">
   <%= form_tag(organizations_path, :method => "get") do %>
     <div class="form-row">
       <div class="col-md-12 mb-3">
