@@ -116,9 +116,6 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        if !@organization.logo.nil? && !@organization.logo.blank?
-          LogoUploadMailer.with(user: current_user, url: @organization.logo.url).notify_upload.deliver_later
-        end
         format.html { redirect_to @organization, flash: { notice: 'Organization was successfully created.' }}
         format.json { render :show, status: :created, location: @organization }
       else
@@ -184,11 +181,15 @@ class OrganizationsController < ApplicationController
 
     @organization.locations = locations.to_a
 
+    uploader = LogoUploader.new(@organization, params[:logo].original_filename)
+    uploader.store!(params[:logo])
+
+    #if !@organization.logo.nil? && !@organization.logo.blank?
+    #  LogoUploadMailer.with(user: current_user, url: @organization.logo.url).notify_upload.deliver_later
+    #end
+
     respond_to do |format|
       if @organization.update(organization_params)
-        if !@organization.logo.nil? && !@organization.logo.blank?
-          LogoUploadMailer.with(user: current_user, url: @organization.logo.url).notify_upload.deliver_later
-        end
         format.html { redirect_to @organization, flash: { notice: 'Organization was successfully updated.' }}
         format.json { render :show, status: :ok, location: @organization }
       else

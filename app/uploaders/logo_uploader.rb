@@ -10,7 +10,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    File.join('app','assets','images', "#{model.class.to_s.underscore}s")
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -21,7 +21,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
-  process crop_center: 640
+  # process crop_center: 640
   def crop_center(size)
     manipulate! do |image|                 
       if image[:width] < image[:height]
@@ -52,7 +52,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg gif png)
+    %w(jpg jpeg png)
   end
 
   def content_type_whitelist
@@ -61,7 +61,7 @@ class LogoUploader < CarrierWave::Uploader::Base
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
-  # def filename
-  #   "something.jpg" if original_filename
-  # end
+  def filename
+    "#{model.slug}#{File.extname(mounted_as)}"
+  end
 end
