@@ -114,6 +114,9 @@ class OrganizationsController < ApplicationController
       @organization.locations.push(geocoded_location)
     end
 
+    uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
+    uploader.store!(params[:logo])
+
     respond_to do |format|
       if @organization.save
         format.html { redirect_to @organization, flash: { notice: 'Organization was successfully created.' }}
@@ -181,12 +184,8 @@ class OrganizationsController < ApplicationController
 
     @organization.locations = locations.to_a
 
-    uploader = LogoUploader.new(@organization, params[:logo].original_filename)
+    uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
     uploader.store!(params[:logo])
-
-    #if !@organization.logo.nil? && !@organization.logo.blank?
-    #  LogoUploadMailer.with(user: current_user, url: @organization.logo.url).notify_upload.deliver_later
-    #end
 
     respond_to do |format|
       if @organization.update(organization_params)

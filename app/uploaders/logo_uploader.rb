@@ -3,9 +3,12 @@ class LogoUploader < CarrierWave::Uploader::Base
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
 
-  def initialize(model, file_name)
+  after :store, :send_notification
+
+  def initialize(model, file_name, current_user)
     super(model, nil)
     @file_name = file_name
+    @current_user = current_user
   end
 
   # Choose what kind of storage to use for this uploader:
@@ -68,5 +71,15 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
     "#{model.slug}#{File.extname(@file_name)}"
+  end
+
+  def send_notification(file)
+    LogoUploadMailer
+      .with(user: @current_user,
+            filename: file.original_filename,
+            name: model.name,
+            type: model.class.to_s.downcase)
+      .notify_upload
+      .deliver_later
   end
 end
