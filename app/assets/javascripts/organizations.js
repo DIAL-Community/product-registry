@@ -217,7 +217,7 @@ var setupFormView = function() {
   });
 };
 
-var setupIndex = function() {
+var setupFilter = function() {
   $('#filter-options').on('show.bs.collapse', function() {
     $('#filter-toggle').html('Apply')
                        .removeClass('btn-secondary')
@@ -231,7 +231,7 @@ var setupIndex = function() {
   });
 }
 
-$(document).on('organizations#index:loaded', setupIndex);
+$(document).on('organizations#index:loaded', setupFilter);
 
 $(document).on('organizations#new:loaded', setupFormView);
 $(document).on('organizations#show:loaded', setupMapView);
