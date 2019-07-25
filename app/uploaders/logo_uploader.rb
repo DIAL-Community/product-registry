@@ -21,13 +21,28 @@ class LogoUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
+  process crop_center: 640
+  def crop_center(size)
+    manipulate! do |image|                 
+      if image[:width] < image[:height]
+        remove = ((image[:height] - image[:width])/2).round
+        image.shave("0x#{remove}") 
+      elsif image[:width] > image[:height] 
+        remove = ((image[:width] - image[:height])/2).round
+        image.shave("#{remove}x0")
+      end
+      image.resize("#{size}x#{size}")
+      image
+    end
+  end
+
   # Process files as they are uploaded:
   # process scale: [200, 300]
   #
   # def scale(width, height)
   #   # do something
   # end
-  process resize_to_fit: [640, 640]
+  # process resize_to_fit: [640, 640]
 
   # Create different versions of your uploaded files:
   # version :thumb do
