@@ -10,13 +10,13 @@
     <div class="form-row">
       <div class="col-md-12 mb-3">
         <%= label_tag "name" %>
-        <%= text_field_tag "search", nil, placeholder: "Organization name ...", class: "form-control" %>
+        <%= text_field_tag "search", params[:search], placeholder: "Organization name ...", class: "form-control" %>
       </div>
     </div>
-    <div class="form-row">
+    <div class="form-row mb-2">
       <div class="col-md-12">
-        <div class="form-group">
-          <%= check_box_tag "endorser_only", true, class: "form-check-input" %>
+        <div class="form-check">
+          <%= check_box_tag "endorser_only", true, params[:endorser_only], {class: "form-check-input"} %>
           <%= label_tag "endorser_only", nil, class: "form-check-label" %>
         </div>
       </div>
@@ -30,18 +30,26 @@
                         .all
                         .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
                         .uniq!
-                        .sort!, {}, {multiple: true, class: 'custom-select'}) %>
+                        .sort!,
+                     { selected: params[:year_endorsed] },
+                     { multiple: true, class: 'custom-select' }) %>
         </div>
       </div>
       <div class="col-md-6 mb-3">
         <%= label_tag "sectors_assigned" %>
-        <%= collection_select(nil, "products_assigned", Sector.all.order(:name), :id, :name, {}, {multiple: true, class: 'custom-select'}) %>
+        <%= collection_select(nil, "products_assigned",
+                              Sector.all.order(:name), :id, :name,
+                              { selected: params[:products_assigned] },
+                              { multiple: true, class: 'custom-select' }) %>
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-6 mb-3">
         <%= label_tag "products_assigned" %>
-        <%= collection_select(nil, "products_assigned", Product.all.order(:name), :id, :name, {}, {multiple: true, class: 'custom-select'})%>
+        <%= collection_select(nil, "products_assigned",
+                              Product.all.order(:name), :id, :name,
+                              { selected: params[:products_assigned] },
+                              { multiple: true, class: 'custom-select' }) %>
       </div>
     </div>
   <% end %>
