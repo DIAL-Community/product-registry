@@ -1,71 +1,51 @@
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#filter-dialog">
-  Filter
-</button>
-<div class="modal fade" id="filter-dialog" tabindex="-1" role="dialog" aria-labelledby="filter-dialog-label" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <%= form_tag(organizations_path, :method => "get") do %>
-      <div class="modal-header">
-        <h5 class="modal-title" id="filter-dialog-label">Filter organizations</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="row float-right">
+  <button type="button" class="btn btn-secondary"
+          data-toggle="collapse" data-target="#filter-dialog"
+          aria-expanded="false" aria-controls="filter-dialog">
+    Filter
+  </button>
+</div>
+<div class="collapse" id="filter-dialog">
+  <%= form_tag(organizations_path, :method => "get") do %>
+    <div class="form-row">
+      <div class="col-md-12 mb-3">
+        <%= label_tag "name" %>
+        <%= text_field_tag "search", nil, placeholder: "Organization name ...", class: "form-control" %>
       </div>
-      <div class="modal-body">
-        <div class="form-row">
-          <div class="col-md-12 mb-3">
-            <%= label_tag "name" %>
-            <%= text_field_tag "name", nil, placeholder: "Organization name ...", class: "form-control" %>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <%= check_box_tag "endorser_only", true, class: "form-check-input" %>
-              <%= label_tag "endorser_only", nil, class: "form-check-label" %>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <%= label_tag "year_endorsed" %>
-            <%= select_tag "year_endorsed",
-                options_for_select(
-                  organizations
-                    .map{ |x| x.when_endorsed.strftime('%Y')}
-                    .uniq!
-                    .sort!),
-                multiple: true, class: 'custom-select' %>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-12 mb-3">
-            <%= label_tag "sectors_assigned" %>
-            <%= select_tag "sectors_assigned",
-                options_from_collection_for_select(
-                  organizations
-                    .map{|x| x.sectors}
-                    .flatten
-                    .uniq!
-                    .sort!, "id", "name"),
-                multiple: true, class: 'custom-select' %>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-12 mb-3">
-            <%= label_tag "products_assigned" %>
-            <%= select_tag "products_assigned",
-                options_from_collection_for_select(
-                  organizations
-                    .map{|x| x.products}
-                    .flatten, "id", "name"),
-                multiple: true, class: 'custom-select' %>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <%= submit_tag "Apply", :class => "btn btn-secondary" %>
-      </div>
-      <% end %>
     </div>
-  </div>
+    <div class="form-row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <%= check_box_tag "endorser_only", true, class: "form-check-input" %>
+          <%= label_tag "endorser_only", nil, class: "form-check-label" %>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= label_tag "year_endorsed" %>
+          <%= select(nil, "year_endorsed",
+                     Organization
+                        .all
+                        .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
+                        .uniq!
+                        .sort!, {}, {multiple: true, class: 'custom-select'}) %>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <%= label_tag "sectors_assigned" %>
+        <%= collection_select(nil, "products_assigned", Sector.all.order(:name), :id, :name, {}, {multiple: true, class: 'custom-select'}) %>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6 mb-3">
+        <%= label_tag "products_assigned" %>
+        <%= collection_select(nil, "products_assigned", Product.all.order(:name), :id, :name, {}, {multiple: true, class: 'custom-select'})%>
+      </div>
+    </div>
+    <div class="float-right">
+      <%= submit_tag "Apply", :class => "btn btn-primary" %>
+    </div>
+  <% end %>
 </div>
