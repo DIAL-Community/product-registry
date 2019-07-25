@@ -3,6 +3,11 @@ class LogoUploader < CarrierWave::Uploader::Base
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
 
+  def initialize(model, file_name)
+    super(model, nil)
+    @file_name = file_name
+  end
+
   # Choose what kind of storage to use for this uploader:
   storage :file
   # storage :fog
@@ -10,7 +15,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    File.join('app','assets','images', "#{model.class.to_s.underscore}s")
+    Rails.root.join('app','assets','images', "#{model.class.to_s.underscore}s")
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -62,6 +67,6 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
-    "#{model.slug}#{File.extname(mounted_as)}"
+    "#{model.slug}#{File.extname(@file_name)}"
   end
 end
