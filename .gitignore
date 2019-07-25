@@ -30,9 +30,11 @@
 public/export.xls
 public/export.xlsx
 
-config/esri.yml
-config/google.yml
-config/secrets.yml
-ssmtp.conf
+public/assets/organizations/fixer*
+public/assets/.sprockets*
 
 /coverage
+
+setEnv.sh
+
+prod/ssl/data/*

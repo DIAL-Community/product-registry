@@ -21,6 +21,48 @@ function productsReady() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
+
+  $("button.add-other-name").click(function(event) {
+    event.preventDefault();
+    addOtherName();
+  });
+
+  $("button.remove-other-name").click(function(event) {
+    event.preventDefault();
+    removeOtherName(event.target);
+  });
+  
+  $('.custom-file-input').on('change', function () {
+    var fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').html(fileName);
+  });
+}
+
+function addOtherName(value) {
+  var clone = $("#base-other-name").clone();
+
+  clone.removeAttr("id");
+
+  clone.find("button.add-other-name").click(function(event) {
+    event.preventDefault();
+    addOtherName();
+  });
+  clone.find("button.remove-other-name").click(function(event) {
+    event.preventDefault();
+    removeOtherName(event.target);
+  });
+
+  if (value) {
+    clone.find("input").val(value);
+    $("#other-names").prepend(clone);
+  } else {
+    clone.find("input").val("");
+    $("#other-names").append(clone);
+  }
+}
+
+function removeOtherName(element) {
+  $(element).parent().parent().remove();
 }
 
 function toggleAssessmentSection(checkbox) {

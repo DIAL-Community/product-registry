@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :load_maturity, only: [:show, :new, :edit, :create]
+  before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
 
   def map
     @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
@@ -33,9 +33,9 @@ class ProductsController < ApplicationController
   def show
     authorize @product, :view_allowed?
     # All of this data will be passed to the launch partial and used by javascript
-    @jenkins_url = Rails.configuration.jenkins["jenkins_url"]
-    @jenkins_user = Rails.configuration.jenkins["jenkins_user"]
-    @jenkins_password = Rails.configuration.jenkins["jenkins_password"]
+    @jenkins_url = Rails.application.secrets.jenkins_url
+    @jenkins_user = Rails.application.secrets.jenkins_user
+    @jenkins_password = Rails.application.secrets.jenkins_password
   end
 
   # GET /products/new
@@ -103,6 +103,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
+        if !@product.logo.nil? && !@product.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully created.' }}
         format.json { render :show, status: :created, location: @product }
       else
@@ -177,6 +180,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.update(product_params)
+        if !@product.logo.nil? && !@product.logo.blank?
+          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
+        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully updated.' }}
         format.json { render :show, status: :ok, location: @product }
       else
@@ -203,9 +209,14 @@ class ProductsController < ApplicationController
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @products = Product.(slug: current_slug).to_a
+        @products = Product.where(slug: current_slug).to_a
+      end
+
+      if (@products.empty?)
+        @products = Product.where(":other_name = ANY(aliases)", other_name: params[:current])
       end
     end
+
     authorize @products, :view_allowed?
     render json: @products, :only => [:name]
   end
@@ -249,8 +260,11 @@ class ProductsController < ApplicationController
       params
         .require(:product)
         .permit(:name, :website, :is_launchable, :default_url, :has_osc, :osc_maturity, :has_digisquare,
-                :start_assessment, :digisquare_maturity, :confirmation, :slug)
+                :start_assessment, :digisquare_maturity, :confirmation, :slug, :logo)
         .tap do |attr|
+          if (params[:other_names].present?)
+            attr[:aliases] = params[:other_names].reject {|x|x.empty?}
+          end
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])
             if (params[:duplicate].present?)

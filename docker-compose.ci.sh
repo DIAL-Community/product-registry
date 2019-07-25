@@ -9,6 +9,8 @@ until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_test" 
   sleep 2s
 done
 
+. ./setEnv.sh test
+
 set +e
 rails db:create_db_with_public_data
 rails db:migrate
