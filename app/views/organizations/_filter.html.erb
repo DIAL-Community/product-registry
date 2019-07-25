@@ -8,6 +8,7 @@
 <div class="collapse" id="filter-options">
   <hr />
   <%= form_tag(organizations_path, :method => "get") do %>
+    <%= hidden_field nil, 'filter' %>
     <div class="form-row">
       <div class="col-md-12 mb-3">
         <%= label_tag "name" %>
@@ -25,31 +26,31 @@
     <div class="form-row">
       <div class="col-md-6">
         <div class="form-group">
-          <%= label_tag "year_endorsed" %>
-          <%= select(nil, "year_endorsed",
+          <%= label_tag "years" %>
+          <%= select(nil, "years",
                      Organization
                         .all
                         .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
                         .uniq!
                         .sort!,
-                     { selected: params[:year_endorsed] },
+                     { selected: params[:years] },
                      { multiple: true, class: 'custom-select' }) %>
         </div>
       </div>
       <div class="col-md-6 mb-3">
-        <%= label_tag "sectors_assigned" %>
-        <%= collection_select(nil, "products_assigned",
+        <%= label_tag "sectors" %>
+        <%= collection_select(nil, "sectors",
                               Sector.all.order(:name), :id, :name,
-                              { selected: params[:products_assigned] },
+                              { selected: params[:sectors] },
                               { multiple: true, class: 'custom-select' }) %>
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-6 mb-3">
-        <%= label_tag "products_assigned" %>
-        <%= collection_select(nil, "products_assigned",
+        <%= label_tag "products" %>
+        <%= collection_select(nil, "products",
                               Product.all.order(:name), :id, :name,
-                              { selected: params[:products_assigned] },
+                              { selected: params[:products] },
                               { multiple: true, class: 'custom-select' }) %>
       </div>
     </div>
