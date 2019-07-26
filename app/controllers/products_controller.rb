@@ -20,6 +20,20 @@ class ProductsController < ApplicationController
       return
     end
 
+    if params[:filter]
+      organizations = params[:organizations].reject{|x| x.nil? || x.blank? }
+
+      @products = Product.all
+      @products = @products.name_contains(params[:search])\
+        if params[:search].present? && !params[:search].blank?
+      @products = @products.where(start_assessment: true)\
+        if params[:has_maturity].present?
+      @products = @products.joins(:organizations).where("organizations.id in (?)", organizations)\
+        if !organizations.empty?
+      authorize @products, :view_allowed?
+      return
+    end
+
     if params[:search]
       @products = @products
           .where(nil)
