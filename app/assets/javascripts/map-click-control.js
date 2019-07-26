@@ -18,7 +18,7 @@ mapObject.clickHandler = function(evt) {
       var content =
       '<div class="card map-popup" style="bottom: -9rem; padding: 0">' +
       '<h6 class="card-header p-2">' + org.name + '</h6>' +
-      '<p class="text-muted mt-2 ml-2 mb-0"><a href="'+org.website + '" target="_blank">' + org.website + '</a></p>' +
+      '<p class="text-muted mt-2 ml-2 mb-0"><a href="//'+org.website + '" target="_blank">' + org.website + '</a></p>' +
       '<p class="text-muted mt-2 ml-2 mb-0">Endorser since ' + org.when_endorsed + '</p>' +
       '<p class="text-muted mt-2 ml-2 mb-2"><a href="/organizations/' + org.id + '"><small>View organization</small></a></p>' +
       '</div>';
