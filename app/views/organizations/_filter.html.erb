@@ -53,6 +53,13 @@
                               { selected: params[:products] },
                               { multiple: true, class: 'custom-select' }) %>
       </div>
+      <div class="col-md-6 mb-3">
+        <%= label_tag "locations" %>
+        <%= collection_select(nil, "locations",
+                              Location.where.not(location_type: 'point').order(:name), :id, :name,
+                              { selected: params[:locations] },
+                              { multiple: true, class: 'custom-select' }) %>
+      </div>
     </div>
   <% end %>
   <hr />

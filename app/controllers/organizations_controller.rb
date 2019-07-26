@@ -17,8 +17,9 @@ class OrganizationsController < ApplicationController
     end
 
     if params[:filter]
-      sectors = params[:sectors].reject{|x| x.nil? || x.blank? }
+      locations = params[:locations].reject{|x| x.nil? || x.blank? }
       products = params[:products].reject{|x| x.nil? || x.blank? }
+      sectors = params[:sectors].reject{|x| x.nil? || x.blank? }
       years = params[:years].reject{|x| x.nil? || x.blank? }
 
       @organizations = Organization.all
@@ -28,6 +29,8 @@ class OrganizationsController < ApplicationController
         if params[:search].present? && !params[:search].blank?
       @organizations = @organizations.where(is_endorser: true)\
         if params[:endorser_only].present?
+      @organizations = @organizations.joins(:locations).where("locations.id in (?)", locations)\
+        if !locations.empty?
       @organizations = @organizations.joins(:sectors).where("sectors.id in (?)", sectors)\
         if !sectors.empty?
       @organizations = @organizations.joins(:products).where("products.id in (?)", products)\
