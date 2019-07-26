@@ -126,7 +126,11 @@ class ContactsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
-      @contact = Contact.find(params[:id])
+      if !params[:id].scan(/\D/).empty?
+        @contact = Contact.find_by(slug: params[:id])
+      else
+        @contact = Contact.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -139,7 +139,11 @@ class LocationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_location
-      @location = Location.find(params[:id])
+      if !params[:id].scan(/\D/).empty?
+        @location = Location.find_by(slug: params[:id])
+      else
+        @location = Location.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
