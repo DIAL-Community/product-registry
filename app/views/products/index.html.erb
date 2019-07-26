@@ -1,20 +1,24 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
-<% if user_signed_in? && policy(Product).mod_allowed? %>
-  <%= link_to 'Create New', new_product_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
-<% end %>
-<div class="float-right pb-2">
-  <%= form_tag(products_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search products ...", :class => "form-control" %>
-  <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-secondary" %>
+<div class="row">
+  <div class="col-8">
+    <%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+    <% if user_signed_in? && policy(Product).mod_allowed? %>
+      <%= link_to 'Create New', new_product_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+    <% end %>
   </div>
-<% end %>
+  <div class="col-4 pr-0">
+    <div class="float-right">
+      <button id="filter-toggle" type="button" class="btn btn-secondary"
+              data-toggle="collapse" data-target="#filter-options"
+              aria-expanded="false" aria-controls="filter-options">
+        Filter
+      </button>
+    </div>
+  </div>
 </div>
-<br clear="both"/>
-
+<%= render 'filter', products: @products %>
 
 <div class="row">
   <% @products.each do |product| %>
