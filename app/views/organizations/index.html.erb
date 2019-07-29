@@ -1,21 +1,33 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<% if user_signed_in? && policy(Organization).mod_allowed? %>
-  <%= link_to 'Create New', new_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
-<% end %>
-<%= form_with(url: export_path, :method => :get, :data => {remote: false}, :class => 'inline-form'  ) do | form | %>
-  <%= form.hidden_field :export_contacts, :value => false %>
-  <%= form.submit 'Export', :class => 'btn btn-outline-secondary float-left ml-1', data: { disable_with: false } %>
-  <% if user_signed_in? && policy(Organization).export_contacts_allowed? %>
-    <fieldset class="form-group form-check">
-      <%= form.check_box :export_contacts, {}, true, false %>
-      <label class="form-label-group text-muted mt-2" for="is_approved">Export with contacts info</label>
-    </fieldset>
-  <% end %>
-<% end %>
+<div class="row">
+  <div class="col-8">
+    <% if user_signed_in? && policy(Organization).mod_allowed? %>
+      <%= link_to 'Create New', new_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+    <% end %>
+    <%= form_with(url: export_path, :method => :get, :data => {remote: false}, :class => 'inline-form'  ) do | form | %>
+      <%= form.hidden_field :export_contacts, :value => false %>
+      <%= form.submit 'Export', :class => 'btn btn-outline-secondary float-left ml-1', data: { disable_with: false } %>
+      <% if user_signed_in? && policy(Organization).export_contacts_allowed? %>
+        <fieldset class="form-group form-check">
+          <%= form.check_box :export_contacts, {}, true, false %>
+          <label class="form-label-group text-muted mt-2" for="is_approved">Export with contacts info</label>
+        </fieldset>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-4 pr-0">
+    <div class="float-right">
+      <button id="filter-toggle" type="button" class="btn btn-secondary"
+              data-toggle="collapse" data-target="#filter-options"
+              aria-expanded="false" aria-controls="filter-options">
+        Filter
+      </button>
+    </div>
+  </div>
+</div>
 <%= render 'filter', organizations: @organizations %>
-<br clear="both"/>
 
 <div class="row">
   <% @organizations.each do |organization| %>
@@ -44,4 +56,3 @@
     </div>
   <% end %>
 </div>
-
