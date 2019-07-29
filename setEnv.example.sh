@@ -6,6 +6,7 @@ export DATABASE_USER=registry
 export DATABASE_PASSWORD=<DB password>
 export ESRI_CLIENT_ID=<esri client id>
 export ESRI_CLIENT_SECRET=<esri secret>
+export GOOGLE_TRACKER=<google tracker id>
 export JENKINS_URL=<jenkins host url>
 export JENKINS_USER=<jenkins user>
 export JENKINS_PASSWORD=<jenkins password>

@@ -153,7 +153,7 @@ var launchData = {
                 success: function (data) {
                     var newName = jenkinsData.orgId + "-" + jenkinsData.jobName
                     // Parse the list and make sure that 
-                    var droplets = data.droplets.filter(droplet => droplet.name == newName)
+                    var droplets = data.droplets.filter(function(droplet) { droplet.name == newName})
 
                     if (droplets.length > 0) {
                         $("#launchMessage").empty();
