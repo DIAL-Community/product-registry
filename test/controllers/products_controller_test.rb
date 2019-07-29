@@ -14,7 +14,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get products_url(:search=>"Product1")
+    get products_url(:search=>"Product Again")
     assert_equal(1, assigns(:products).count)
 
     get products_url(:search=>"InvalidProduct")
@@ -29,7 +29,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test "should create product" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     assert_difference('Product.count') do
-      post products_url, params: { product: { name: @product.name, website: @product.website }, reslug: true, logo: uploaded_file }
+      post products_url, params: { product: { name: @product.name, website: @product.website }, duplicate: true, reslug: true, logo: uploaded_file }
     end
 
     assert_redirected_to product_url(Product.last)

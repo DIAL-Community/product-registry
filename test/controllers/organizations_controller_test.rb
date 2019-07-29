@@ -14,7 +14,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get organizations_url(:search=>"Organization1")
+    get organizations_url(:search=>"Organization Again")
     assert_equal(1, assigns(:organizations).count)
 
     get organizations_url(:search=>"InvalidOrg")
