@@ -16,8 +16,8 @@
       <div class="col-6 mt-4">
         <% if !@product.website.nil? and !@product.website.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-            <strong>Website:
-            </strong><%= @product.website %>
+            <strong>Website:</strong>
+            <a href="//<%= @product.website %>" target="_new"><%= @product.website %> &#x29c9;</a>
           </h6>
         <% end %>
         <% if !@product.aliases.empty? %>
