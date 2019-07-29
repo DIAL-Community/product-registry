@@ -217,6 +217,22 @@ var setupFormView = function() {
   });
 };
 
+var setupFilter = function() {
+  $('#filter-options').on('show.bs.collapse', function() {
+    $('#filter-toggle').html('Apply')
+                       .removeClass('btn-secondary')
+                       .addClass('btn-primary');
+  });
+  $('#filter-options').on('hide.bs.collapse', function() {
+    $('#filter-toggle').html('Filter')
+                       .removeClass('btn-primary')
+                       .addClass('btn-secondary');
+    $(this).find("form").submit();
+  });
+}
+
+$(document).on('organizations#index:loaded', setupFilter);
+
 $(document).on('organizations#new:loaded', setupFormView);
 $(document).on('organizations#show:loaded', setupMapView);
 $(document).on('organizations#edit:loaded', setupFormView);

@@ -16,6 +16,29 @@ class OrganizationsController < ApplicationController
       return
     end
 
+    if params[:filter]
+      locations = params[:locations].reject{|x| x.nil? || x.blank? }
+      products = params[:products].reject{|x| x.nil? || x.blank? }
+      sectors = params[:sectors].reject{|x| x.nil? || x.blank? }
+      years = params[:years].reject{|x| x.nil? || x.blank? }
+
+      @organizations = Organization.all
+      @organizations = @organizations.where('extract(year from when_endorsed) in (?)', years)\
+        if !years.empty?
+      @organizations = @organizations.name_contains(params[:search])\
+        if params[:search].present? && !params[:search].blank?
+      @organizations = @organizations.where(is_endorser: true)\
+        if params[:endorser_only].present?
+      @organizations = @organizations.joins(:locations).where("locations.id in (?)", locations)\
+        if !locations.empty?
+      @organizations = @organizations.joins(:sectors).where("sectors.id in (?)", sectors)\
+        if !sectors.empty?
+      @organizations = @organizations.joins(:products).where("products.id in (?)", products)\
+        if !products.empty?
+      authorize @organizations, :view_allowed?
+      return
+    end
+
     if params[:search]
       @organizations = Organization
           .where(nil)

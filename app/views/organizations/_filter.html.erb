@@ -1,0 +1,66 @@
+<div class="row float-right">
+  <button id="filter-toggle" type="button" class="btn btn-secondary"
+          data-toggle="collapse" data-target="#filter-options"
+          aria-expanded="false" aria-controls="filter-options">
+    Filter
+  </button>
+</div>
+<div class="collapse" id="filter-options">
+  <hr />
+  <%= form_tag(organizations_path, :method => "get") do %>
+    <%= hidden_field nil, 'filter' %>
+    <div class="form-row">
+      <div class="col-md-12 mb-3">
+        <%= label_tag "name" %>
+        <%= text_field_tag "search", params[:search], placeholder: "Organization name ...", class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-row mb-2">
+      <div class="col-md-12">
+        <div class="form-check">
+          <%= check_box_tag "endorser_only", true, params[:endorser_only], {class: "form-check-input"} %>
+          <%= label_tag "endorser_only", nil, class: "form-check-label" %>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= label_tag "years" %>
+          <%= select(nil, "years",
+                     Organization
+                        .all
+                        .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
+                        .uniq!
+                        .sort!,
+                     { selected: params[:years] },
+                     { multiple: true, class: 'custom-select' }) %>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <%= label_tag "sectors" %>
+        <%= collection_select(nil, "sectors",
+                              Sector.all.order(:name), :id, :name,
+                              { selected: params[:sectors] },
+                              { multiple: true, class: 'custom-select' }) %>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6 mb-3">
+        <%= label_tag "products" %>
+        <%= collection_select(nil, "products",
+                              Product.all.order(:name), :id, :name,
+                              { selected: params[:products] },
+                              { multiple: true, class: 'custom-select' }) %>
+      </div>
+      <div class="col-md-6 mb-3">
+        <%= label_tag "locations" %>
+        <%= collection_select(nil, "locations",
+                              Location.where.not(location_type: 'point').order(:name), :id, :name,
+                              { selected: params[:locations] },
+                              { multiple: true, class: 'custom-select' }) %>
+      </div>
+    </div>
+  <% end %>
+  <hr />
+</div>
