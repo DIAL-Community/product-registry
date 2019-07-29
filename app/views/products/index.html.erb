@@ -38,7 +38,7 @@
         </div>
         <div class="card-footer">
             <% if !product.website.nil? and !product.website.empty? %>
-              <p class="card-text"><small><a href="<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small><br/>
+              <p class="card-text"><small><a href="//<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small><br/>
             <% end %>
             <small>
               <%= product.interop_relationships.size %> interops,
