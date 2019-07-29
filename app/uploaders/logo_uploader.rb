@@ -29,17 +29,23 @@ class LogoUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
-  # process crop_center: 640
-  def crop_center(size)
+  process resize_image: 640
+  def resize_image(size)
     manipulate! do |image|                 
       if image[:width] < image[:height]
-        remove = ((image[:height] - image[:width])/2).round
-        image.shave("0x#{remove}") 
-      elsif image[:width] > image[:height] 
-        remove = ((image[:width] - image[:height])/2).round
-        image.shave("#{remove}x0")
+        if image[:height] > size
+          image.resize("x#{size}>")
+        elsif image[:height] < size
+          image.resize("x#{size}<")
+        end
+      else
+        if image[:width] > size
+          image.resize("#{size}>")
+        elsif image[:width] < size
+          image.resize("#{size}<")
+        end
       end
-      image.resize("#{size}x#{size}")
+      image.format('png')
       image
     end
   end
@@ -70,7 +76,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
-    "#{model.slug}#{File.extname(@file_name)}"
+    "#{model.slug}.png"
   end
 
   def send_notification(file)
