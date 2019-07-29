@@ -115,11 +115,11 @@ class ProductsController < ApplicationController
       end
     end
 
+    uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
+    uploader.store!(params[:logo])
+
     respond_to do |format|
       if @product.save
-        if !@product.logo.nil? && !@product.logo.blank?
-          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
-        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully created.' }}
         format.json { render :show, status: :created, location: @product }
       else
@@ -192,11 +192,11 @@ class ProductsController < ApplicationController
     end
     @product.sustainable_development_goals = sustainable_development_goals.to_a
 
+    uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
+    uploader.store!(params[:logo])
+
     respond_to do |format|
       if @product.update(product_params)
-        if !@product.logo.nil? && !@product.logo.blank?
-          LogoUploadMailer.with(user: current_user, url: @product.logo.url).notify_upload.deliver_later
-        end
         format.html { redirect_to @product, flash: { notice: 'Product was successfully updated.' }}
         format.json { render :show, status: :ok, location: @product }
       else

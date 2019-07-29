@@ -1,4 +1,4 @@
-  <%= form_with(model: organization, local: true) do |form| %>
+  <%= form_with(model: organization, multipart: true, local: true) do |form| %>
 
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => "Name" %>
@@ -11,7 +11,7 @@
     </div>
   
     <fieldset class="custom-file">
-      <%= form.file_field :logo, :class => "custom-file-input", :id => "logo-file", :'aria-describedby' => "logo-file" %>
+      <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
       <label class="custom-file-label" for="logo-file">Pick logo</label>
     </fieldset>
 
