@@ -28,41 +28,48 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should slug digits" do
     digit_org_name = "1234-56-789 011"
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true }
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, logo: uploaded_file }
     saved_organization = Organization.last;
     assert_equal saved_organization.slug, "123456789_011"
 
     digit_org_name = "1234 56 789 011"
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true }
+    uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
+    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, logo: uploaded_file }
     saved_organization = Organization.last;
     assert_equal saved_organization.slug, "1234_56_789_011"
   end
 
   test "should append counter to duplicate slugs" do
     digit_org_name = "ABCD 56 789 011"
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true }
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, logo: uploaded_file }
     saved_organization = Organization.last;
     assert_equal saved_organization.slug, "abcd_56_789_011"
 
     digit_org_name = "ABCD?$% 56 789 011"
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true }
+    uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
+    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true, logo: uploaded_file }
     saved_organization = Organization.last;
     assert_equal saved_organization.slug, "abcd_56_789_011_dup1"
 
     digit_org_name = "ABCD?$% 56 789 011"
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true }
+    uploaded_file = fixture_file_upload('files/other-logo.png', 'image/png')
+    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true, logo: uploaded_file }
     saved_organization = Organization.last;
     assert_equal saved_organization.slug, "abcd_56_789_011_dup2"
 
     digit_org_name = "ABCD?$% 56 789 011"
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true }
+    uploaded_file = fixture_file_upload('files/more-logo.png', 'image/png')
+    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true, logo: uploaded_file }
     saved_organization = Organization.last;
     assert_equal saved_organization.slug, "abcd_56_789_011_dup3"
   end
 
   test "should create organization" do
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     assert_difference('Organization.count') do
-      post organizations_url, params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: 'testslug', website: @organization.website, when_endorsed: '11/16/2018' } }
+      post organizations_url, params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: 'testslug', website: @organization.website, when_endorsed: '11/16/2018' }, logo: uploaded_file }
     end
 
     assert_redirected_to organization_url(Organization.last)
@@ -79,7 +86,8 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update organization" do
-    patch organization_url(@organization), params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: @organization.slug, website: @organization.website, when_endorsed: '11/16/2018' } }
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    patch organization_url(@organization), params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: @organization.slug, website: @organization.website, when_endorsed: '11/16/2018' }, logo: uploaded_file }
     assert_redirected_to organization_url(@organization)
   end
 
