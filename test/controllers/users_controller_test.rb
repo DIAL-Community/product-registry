@@ -1,7 +1,31 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+  include Devise::Test::IntegrationHelpers
+
+  setup do
+    sign_in FactoryBot.create(:user, role: :admin)
+    @user = users(:one)
+  end
+  
+  test "should get index" do
+    get users_url
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get edit_user_url(@user)
+    assert_response :success
+  end
+
+  test "Policy tests: should reject edit and get actions for regular user." do
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    get user_url(@user)
+    assert_response :redirect
+
+    get edit_user_url(@user)
+    assert_response :redirect    
+
+  end
 end
