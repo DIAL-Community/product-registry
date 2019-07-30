@@ -35,7 +35,7 @@ development:
 test:
   <<: *default
   timeout: 5000
-  host: postgres
+  host: localhost
   adapter: postgresql
   encoding: unicode
   database: <%= ENV["DATABASE_NAME"] %>
