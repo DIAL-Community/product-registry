@@ -11,6 +11,6 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def view_allowed?
-    true
+    user.role == "admin"
   end
 end
