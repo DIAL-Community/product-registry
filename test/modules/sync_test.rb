@@ -91,6 +91,17 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.all.size, initial_size + 1
   end
 
+  test "ensure origin is set" do
+    p1 = products(:one)
+    assert p1.origins.empty?
+
+    p2 = JSON.parse('{ "name": "Product" }')
+    sync_osc_product(p2)
+
+    p1 = Product.where(name: 'Product')[0]
+    assert_equal p1.origins[0].slug, 'dial_osc'
+  end
+
   test "create assessment" do
     sync_osc_product(JSON.parse('{ "name": "Product", "maturity": { "cd10":true}}'))
     p1 = Product.where(name: 'Product')[0]
