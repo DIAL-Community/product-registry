@@ -1,14 +1,23 @@
 class ProjectsController < ApplicationController
+  before_action :authenticate_user!, only: [:destroy]
   before_action :set_project, only: [:show]
 
   def index
     authorize @projects, :view_allowed?
-    @projects = Project
-        .order(:name)
+    @projects = Project.all.order(:name)
   end
 
   def show
     authorize @project, :view_allowed?
+  end
+
+  def destroy
+    authorize @project, :mod_allowed?
+    @project.destroy
+    respond_to do |format|
+      format.html { redirect_to projects_url, flash: { notice: 'Project was successfully destroyed.' }}
+      format.json { head :no_content }
+    end
   end
   
   private

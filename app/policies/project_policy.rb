@@ -7,7 +7,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    false
+    user.role == "admin"
   end
 
   def view_allowed?
