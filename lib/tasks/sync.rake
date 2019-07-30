@@ -25,6 +25,7 @@ namespace :sync do
       end
 
       if json_data['type'].detect{ |element| element.downcase == 'software' } != nil
+        unicef_origin = Origin.find_by(:slug => 'unicef')
         aliases = Array.new
         new_product = Product.new
         existing_product = nil
@@ -56,11 +57,16 @@ namespace :sync do
 
         if existing_product.nil?
           new_product.aliases = aliases.reject{ |x| x.nil? || x.empty? || x == new_product.name }
+          new_product.origins.push(unicef_origin)
           if new_product.save
             puts "Added new product: #{new_product.name} -> #{new_product.slug}."
           end
         else
           puts "Skipping existing product: #{existing_product.name}."
+          if (!existing_product.origins.exists?(:id => unicef_origin.id))
+            existing_product.origins.push(unicef_origin)
+            existing_product.save
+          end
         end
 
       end
@@ -79,6 +85,7 @@ namespace :sync do
     digi_square_data = JSON.parse(digi_square_response)
 
     digi_square_data['parse']['sections'].each do |section|
+      digisquare_origin = Origin.find_by(:slug => 'digital_square')
       # only process section 2 & 3 and the toc level 2
       # also skip the lorem ipsum
       if (!section['number'].start_with?("2", "3") ||
@@ -97,10 +104,15 @@ namespace :sync do
         new_product = Product.new
         new_product.name = section['line']
         new_product.slug = slug_line
+        new_product.origins.push(digisquare_origin)
         if new_product.save
           puts "Added new product: #{new_product.name} -> #{new_product.slug}."
         end
       else
+        if (!existing_product.origins.exists?(id: digisquare_origin.id))
+          existing_product.origins.push(digisquare_origin)
+          existing_product.save
+        end
         puts "Skipping existing product: #{existing_product.name}."
       end
     end

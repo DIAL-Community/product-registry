@@ -21,6 +21,7 @@ services:
   entrypoint: /t4d/docker-compose.ci.sh
   command: bundle exec rails s -p 3000 -b '0.0.0.0'
   volumes:
+   - ./config/database.yml.docker:/t4d/config/database.yml
    - .:/t4d
   ports:
    - 3000:3000

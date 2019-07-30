@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: DIAL OSC
+  slug: dial_osc
+  description: DIAL OSC
+
+two:
+  name: Unicef
+  slug: unicef
+  description: Unicef

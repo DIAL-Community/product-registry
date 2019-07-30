@@ -22,6 +22,13 @@
             <a href="//<%= @product.website %>" target="_new"><%= @product.website %> &#x29c9;</a>
           </h6>
         <% end %>
+        <% if !@product.origins.nil? and !@product.origins.empty? %>
+          <h6 class="card-text text-muted mt-2 mb-2">
+          <strong>Sources:</strong>
+          <% @product.origins.each do |origin| %>
+            <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
+          <% end %>
+        <% end %>
         <% if !@product.aliases.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
             <strong>Other names:</strong>

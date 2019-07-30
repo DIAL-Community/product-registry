@@ -72,32 +72,36 @@ class DeploysController < ApplicationController
     end
 
     def set_list
-      @deploys = Deploy.where(user_id: current_user.id)
+      if user_signed_in? 
+        @deploys = Deploy.where(user_id: current_user.id)
+      else
+        @deploys = []
+      end
         
-    @deploys.each do |deploy|
-      if (deploy.status == "BUILDING")
-        # Query jenkins
-        status = helpers.queryJenkinsJob(deploy.product.slug, deploy.job_id)
-        if (status == "SUCCESS")
-          deploy.status = "RUNNING"
-          # Read the log data from Jenkins to get the machine info
-          ipAddress= helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
-          # The product.default_url has the format - insert the correct IP address
-          deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
-          if (deploy.url != "0.0.0.0") # If it comes back with this value, something went wrong - re-query
-            # Save the deploy
+      @deploys.each do |deploy|
+        if (deploy.status == "BUILDING")
+          # Query jenkins
+          status = helpers.queryJenkinsJob(deploy.product.slug, deploy.job_id)
+          if (status == "SUCCESS")
+            deploy.status = "RUNNING"
+            # Read the log data from Jenkins to get the machine info
+            ipAddress= helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
+            # The product.default_url has the format - insert the correct IP address
+            deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
+            if (deploy.url != "0.0.0.0") # If it comes back with this value, something went wrong - re-query
+              # Save the deploy
+              deploy.save
+            end
+          elsif (status != nil) 
+            # If status is not nil or SUCCESS, then there is some kind of error
+            deploy.status = "ERROR"
+            errorMsg = helpers.getJenkinsMessage(deploy.product.slug, deploy.job_id, 3)
+            deploy.message = errorMsg
             deploy.save
           end
-        elsif (status != nil) 
-          # If status is not nil or SUCCESS, then there is some kind of error
-          deploy.status = "ERROR"
-          errorMsg = helpers.getJenkinsMessage(deploy.product.slug, deploy.job_id, 3)
-          deploy.message = errorMsg
-          deploy.save
+        end
+        if (deploy.status == "RUNNING")
         end
       end
-      if (deploy.status == "RUNNING")
-      end
-    end
     end
 end

@@ -4,6 +4,7 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :sectors, join_table: :products_sectors
   has_and_belongs_to_many :sustainable_development_goals
   has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks
+  has_and_belongs_to_many :origins, join_table: :products_origins
 
   has_many :include_relationships, -> { where(relationship_type: 'composed')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
   has_many :includes, through: :include_relationships, source: :to_product
