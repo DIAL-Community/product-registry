@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 20190730155346) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.bigint "origins_id"
+    t.bigint "origin_id"
     t.date "start_date"
     t.date "end_date"
     t.decimal "budget", precision: 12, scale: 2
@@ -252,8 +252,8 @@ ActiveRecord::Schema.define(version: 20190730155346) do
     t.datetime "updated_at", null: false
     t.string "name", null: false
     t.string "description", null: false
-    t.string "slug"
-    t.index ["origins_id"], name: "index_projects_on_origins_id"
+    t.string "slug", null: false
+    t.index ["origin_id"], name: "index_projects_on_origin_id"
   end
 
   create_table "projects_locations", id: false, force: :cascade do |t|
@@ -395,7 +395,7 @@ ActiveRecord::Schema.define(version: 20190730155346) do
   add_foreign_key "products_origins", "products", name: "products_origins_product_fk"
   add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
   add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
-  add_foreign_key "projects", "origins", column: "origins_id"
+  add_foreign_key "projects", "origins"
   add_foreign_key "projects_locations", "locations", name: "projects_locations_location_fk"
   add_foreign_key "projects_locations", "projects", name: "projects_locations_project_fk"
   add_foreign_key "projects_organizations", "organizations", name: "projects_organizations_organization_fk"

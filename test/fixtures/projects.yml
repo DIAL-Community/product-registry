@@ -4,6 +4,7 @@ one:
   name: Project A
   description: Project A
   slug: project_a
+  origin: one
   organizations: one
   locations: one
   products: one
@@ -17,6 +18,7 @@ two:
   name: Project B
   description: Project B
   slug: project_b
+  origin: two
   organizations: two
   locations: two
   products: two

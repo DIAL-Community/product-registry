@@ -1,7 +1,7 @@
 class CreateProjects < ActiveRecord::Migration[5.1]
   def change
     create_table :projects do |t|
-      t.references :origins, foreign_key: true
+      t.references :origin, foreign_key: true
       t.date :start_date
       t.date :end_date
       t.decimal :budget, precision: 12, scale: 2

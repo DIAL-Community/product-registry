@@ -14,7 +14,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get show" do
-    get project_url(project)
+    get project_url(@project)
     assert_response :success
   end
 
