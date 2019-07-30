@@ -17,4 +17,8 @@ class Organization < ApplicationRecord
     end
   end
 
+  def to_param  # overridden
+    slug
+  end
+
 end

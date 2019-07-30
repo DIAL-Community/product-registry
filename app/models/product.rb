@@ -26,6 +26,10 @@ class Product < ApplicationRecord
     end
   end
 
+  def to_param  # overridden
+    slug
+  end
+
   def maturity_scores
     @osc_maturity = YAML.load_file("config/maturity_osc.yml")
     @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
