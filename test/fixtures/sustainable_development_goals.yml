@@ -4,8 +4,10 @@ one:
   slug: SDG1
   name: slug1
   long_title: MyString
+  number: 7
 
 two:
   slug: SDG2
   name: slug2
   long_title: MyString
+  number: 8

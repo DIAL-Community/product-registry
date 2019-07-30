@@ -1,8 +1,10 @@
 require 'modules/slugger'
-include Slugger
+require 'modules/sync'
+include Modules::Slugger
+include Modules::Sync
 
 namespace :sync do
-  desc 'Sync the database with the digital public goods list.'
+  desc 'Sync the database with the public goods lists.'
   task :public_goods, [:path] => :environment do |task, params|
 
     puts 'Pulling data from digital public good ...'
@@ -27,7 +29,7 @@ namespace :sync do
         new_product = Product.new
         existing_product = nil
         unless json_data['initialism'].nil?
-          slug_initialism = Slugger.slug_em json_data['initialism']
+          slug_initialism = slug_em json_data['initialism']
           existing_product = Product.find_by(slug: slug_initialism)
 
           if existing_product.nil?
@@ -40,9 +42,9 @@ namespace :sync do
         end
 
         if existing_product.nil?
-          slug_name = Slugger.slug_em json_data['name']
+          slug_name = slug_em json_data['name']
           existing_product = Product.find_by(slug: slug_name)
-          
+
           if existing_product.nil?
             existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['name'])
           end
@@ -84,8 +86,8 @@ namespace :sync do
           section['line'].start_with?("Lorem"))
         next;
       end
-      
-      slug_line = Slugger.slug_em section['line']
+
+      slug_line = slug_em section['line']
       existing_product = Product.find_by(slug: slug_line)
       if existing_product.nil?
         existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: section['line'])
@@ -105,5 +107,17 @@ namespace :sync do
 
     puts "Digital square data synced ..."
 
+  end
+
+  task :osc_digital_good, [:path] => :environment do |task, params|
+    puts "Starting pulling data from open source center ..."
+
+    osc_location = "https://www.osc.dial.community/digital_global_goods.json"
+    osc_uri = URI.parse(osc_location)
+    osc_response = Net::HTTP.get(osc_uri)
+    osc_data = JSON.parse(osc_response)
+    osc_data.each do |product|
+      sync_osc_product product
+    end
   end
 end

@@ -104,15 +104,15 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     get organization_url(@organization)
     assert_response :success
-    
+
     get new_organization_url
     assert_response :redirect
 
     get edit_organization_url(@organization)
-    assert_response :redirect    
+    assert_response :redirect
 
     patch organization_url(@organization), params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: @organization.slug, website: @organization.website, when_endorsed: '11/16/2018' } }
-    assert_response :redirect  
+    assert_response :redirect
 
     delete organization_url(@organization)
     assert_response :redirect
