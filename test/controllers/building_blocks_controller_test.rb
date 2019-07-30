@@ -28,7 +28,8 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
 
   test "should create building_block" do
     assert_difference('BuildingBlock.count') do
-      post building_blocks_url, params: { building_block: { name: @building_block.name, slug: @building_block.slug } }
+      uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+      post building_blocks_url, params: { building_block: { name: @building_block.name, slug: @building_block.slug }, logo: uploaded_file }
     end
 
     assert_redirected_to building_block_url(BuildingBlock.last)
@@ -45,7 +46,8 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update building_block" do
-    patch building_block_url(@building_block), params: { building_block: { name: @building_block.name, slug: @building_block.slug } }
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    patch building_block_url(@building_block), params: { building_block: { name: @building_block.name, slug: @building_block.slug }, logo: uploaded_file }
     assert_redirected_to building_block_url(@building_block)
   end
 
