@@ -1,6 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  name: Project A
+  description: Project A
+  slug: project_a
   organizations: one
   locations: one
   products: one
@@ -11,6 +14,9 @@ one:
   budget: 9.99
 
 two:
+  name: Project B
+  description: Project B
+  slug: project_b
   organizations: two
   locations: two
   products: two
