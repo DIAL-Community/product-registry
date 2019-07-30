@@ -14,10 +14,10 @@
             <%= @project.description %>
           </h6>
         <% end %>
-        <% if !@project.origin.nil? and !@project.origin.empty? %>
+        <% if !@project.origin.nil? %>
           <h6 class="card-text text-muted mt-2 mb-2">
           <strong>Origin:</strong>
-          <%= image_tag("origins/"+project.origin.slug+".png", class: 'origin-img-full') %>
+          <%= image_tag("origins/#{@project.origin.slug}.png", class: 'origin-img-full') %>
         <% end %>
       </div>
     </div>

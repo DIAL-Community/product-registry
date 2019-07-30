@@ -1,10 +1,10 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:destroy]
-  before_action :set_project, only: [:show]
+  before_action :set_project, only: [:show, :destroy]
 
   def index
-    authorize @projects, :view_allowed?
     @projects = Project.all.order(:name)
+    authorize @projects, :view_allowed?
   end
 
   def show
