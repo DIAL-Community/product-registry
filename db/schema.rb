@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190729131806) do
+ActiveRecord::Schema.define(version: 20190730143658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,6 +243,61 @@ ActiveRecord::Schema.define(version: 20190729131806) do
     t.index ["sustainable_development_goal_id", "product_id"], name: "sdgs_prods", unique: true
   end
 
+  create_table "projects", force: :cascade do |t|
+    t.bigint "organizations_id"
+    t.bigint "locations_id"
+    t.bigint "products_id"
+    t.bigint "sectors_id"
+    t.bigint "origins_id"
+    t.bigint "sustainable_development_goals_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.decimal "budget", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["locations_id"], name: "index_projects_on_locations_id"
+    t.index ["organizations_id"], name: "index_projects_on_organizations_id"
+    t.index ["origins_id"], name: "index_projects_on_origins_id"
+    t.index ["products_id"], name: "index_projects_on_products_id"
+    t.index ["sectors_id"], name: "index_projects_on_sectors_id"
+    t.index ["sustainable_development_goals_id"], name: "index_projects_on_sustainable_development_goals_id"
+  end
+
+  create_table "projects_locations", id: false, force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "location_id", null: false
+    t.index ["location_id", "project_id"], name: "locations_projects_idx", unique: true
+    t.index ["project_id", "location_id"], name: "projects_locations_idx", unique: true
+  end
+
+  create_table "projects_organizations", id: false, force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "organization_id", null: false
+    t.index ["organization_id", "project_id"], name: "organizations_projects_idx", unique: true
+    t.index ["project_id", "organization_id"], name: "projects_organizations_idx", unique: true
+  end
+
+  create_table "projects_products", id: false, force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["product_id", "project_id"], name: "products_projects_idx", unique: true
+    t.index ["project_id", "product_id"], name: "projects_products_idx", unique: true
+  end
+
+  create_table "projects_sdgs", id: false, force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "sdg_id", null: false
+    t.index ["project_id", "sdg_id"], name: "projects_sdgs_idx", unique: true
+    t.index ["sdg_id", "project_id"], name: "sdgs_projects_idx", unique: true
+  end
+
+  create_table "projects_sectors", id: false, force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "sector_id", null: false
+    t.index ["project_id", "sector_id"], name: "projects_sectors_idx", unique: true
+    t.index ["sector_id", "project_id"], name: "sectors_projects_idx", unique: true
+  end
+
   create_table "sdg_targets", force: :cascade do |t|
     t.string "name"
     t.string "target_number"
@@ -347,6 +402,17 @@ ActiveRecord::Schema.define(version: 20190729131806) do
   add_foreign_key "products_origins", "products", name: "products_origins_product_fk"
   add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
   add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
+  add_foreign_key "projects", "origins", column: "origins_id"
+  add_foreign_key "projects_locations", "locations", name: "projects_locations_location_fk"
+  add_foreign_key "projects_locations", "projects", name: "projects_locations_project_fk"
+  add_foreign_key "projects_organizations", "organizations", name: "projects_organizations_organization_fk"
+  add_foreign_key "projects_organizations", "projects", name: "projects_organizations_project_fk"
+  add_foreign_key "projects_products", "products", name: "projects_products_product_fk"
+  add_foreign_key "projects_products", "projects", name: "projects_products_project_fk"
+  add_foreign_key "projects_sdgs", "projects", name: "projects_sdgs_project_fk"
+  add_foreign_key "projects_sdgs", "sustainable_development_goals", column: "sdg_id", name: "projects_sdgs_sdg_fk"
+  add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
+  add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
   add_foreign_key "use_cases", "sectors"
   add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
   add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"
