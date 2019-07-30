@@ -38,9 +38,9 @@ test:
   host: localhost
   adapter: postgresql
   encoding: unicode
-  database: <%= ENV["DATABASE_NAME"] %>
-  username: <%= ENV["DATABASE_USER"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
+  database: <%= ENV["TEST_DATABASE_NAME"] %>
+  username: <%= ENV["TEST_DATABASE_USER"] %>
+  password: <%= ENV["TEST_DATABASE_PASSWORD"] %>
 
 
 production:

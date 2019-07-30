@@ -28,7 +28,7 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create sector" do
     assert_difference('Sector.count') do
-      post sectors_url, params: { sector: { name: @sector.name, slug: @sector.slug } }
+      post sectors_url, params: { sector: { name: 'Another sector', slug: 'another_sector' } }
     end
 
     assert_redirected_to sector_url(Sector.last)
@@ -56,7 +56,8 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_difference('Sector.count', -1) do
-      delete use_case_url(@sector)
+      @use_case = use_cases(:one)
+      delete use_case_url(@use_case)
       delete sector_url(@sector)
     end
 
