@@ -32,6 +32,16 @@ public/export.xlsx
 
 public/assets/organizations/fixer*
 public/assets/.sprockets*
+public/assets/**/*.gz
+public/assets/**/*.css
+public/assets/**/*.map
+public/assets/**/*.png
+public/assets/**/*.svg
+public/assets/**/*.json
+public/assets/**/*.webp
+public/assets/**/*.gif
+public/assets/**/*.jpg
+public/assets/**/*.js
 
 /coverage
 
