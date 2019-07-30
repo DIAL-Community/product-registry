@@ -30,23 +30,28 @@
         <div class="card-header bg-secondary text-white small">
           <%= link_to truncate(product.name, length: 25, omission: '&hellip;', escape: false), product,
               'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+
         </div>
         <div class="model-logo">
           <%= link_to(product) do %>
             <%= image_tag(product.image_file, class: 'card-img-top align-middle') %>
           <% end %>
         </div>
+        
         <div class="card-footer">
             <% if !product.website.nil? and !product.website.empty? %>
               <p class="card-text"><small><a href="//<%= product.website %>" target="_new"><%= product.website %> &#x29c9;</a></small><br/>
             <% end %>
             <small>
-              <%= product.interop_relationships.size %> interops,
-              <%= product.include_relationships.size %> includes,
-              <%= product.references.size %> references,
               <%= product.building_blocks.size %> building block(s),
               <%= product.sectors.size %> sector(s)
             </small>
+            <div>
+              <small>Sources: </small>
+              <% product.origins.each do |origin| %>
+                <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img') %>
+              <% end %>
+            </div>
         </div>
       </div>
     </div>

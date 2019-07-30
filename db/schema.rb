@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190725134957) do
+ActiveRecord::Schema.define(version: 20190729131806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,17 @@ ActiveRecord::Schema.define(version: 20190725134957) do
     t.bigint "organization_id", null: false
     t.index ["organization_id", "sector_id"], name: "org_sectors", unique: true
     t.index ["sector_id", "organization_id"], name: "sector_orcs", unique: true
+  end
+
+  create_table "origins", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.string "name"
+    t.string "slug"
+    t.string "description"
+    t.datetime "last_synced"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_origins_on_organization_id"
   end
 
   create_table "product_assessments", force: :cascade do |t|
@@ -209,6 +220,13 @@ ActiveRecord::Schema.define(version: 20190725134957) do
     t.bigint "product_id", null: false
     t.index ["building_block_id", "product_id"], name: "block_prods", unique: true
     t.index ["product_id", "building_block_id"], name: "prod_blocks", unique: true
+  end
+
+  create_table "products_origins", id: false, force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "origin_id", null: false
+    t.index ["origin_id", "product_id"], name: "origins_products_idx", unique: true
+    t.index ["product_id", "origin_id"], name: "products_origins_idx", unique: true
   end
 
   create_table "products_sectors", id: false, force: :cascade do |t|
@@ -325,6 +343,8 @@ ActiveRecord::Schema.define(version: 20190725134957) do
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
   add_foreign_key "products_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"
+  add_foreign_key "products_origins", "origins", name: "products_origins_origin_fk"
+  add_foreign_key "products_origins", "products", name: "products_origins_product_fk"
   add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
   add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
   add_foreign_key "use_cases", "sectors"

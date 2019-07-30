@@ -61,6 +61,11 @@ module Modules
         product_assessment.save
       end
 
+      osc_origin = Origin.find_by(:slug => 'dial_osc')
+      if (!sync_product.origins.exists?(:id => osc_origin.id))
+        sync_product.origins.push(osc_origin)
+      end 
+
       sync_product.save
     end
   end
