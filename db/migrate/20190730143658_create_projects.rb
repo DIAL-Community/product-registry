@@ -1,12 +1,7 @@
 class CreateProjects < ActiveRecord::Migration[5.1]
   def change
     create_table :projects do |t|
-      t.references :organizations
-      t.references :locations
-      t.references :products
-      t.references :sectors
       t.references :origins, foreign_key: true
-      t.references :sustainable_development_goals
       t.date :start_date
       t.date :end_date
       t.decimal :budget, precision: 12, scale: 2

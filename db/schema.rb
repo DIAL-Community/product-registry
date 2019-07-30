@@ -244,23 +244,13 @@ ActiveRecord::Schema.define(version: 20190730143658) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.bigint "organizations_id"
-    t.bigint "locations_id"
-    t.bigint "products_id"
-    t.bigint "sectors_id"
     t.bigint "origins_id"
-    t.bigint "sustainable_development_goals_id"
     t.date "start_date"
     t.date "end_date"
     t.decimal "budget", precision: 12, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["locations_id"], name: "index_projects_on_locations_id"
-    t.index ["organizations_id"], name: "index_projects_on_organizations_id"
     t.index ["origins_id"], name: "index_projects_on_origins_id"
-    t.index ["products_id"], name: "index_projects_on_products_id"
-    t.index ["sectors_id"], name: "index_projects_on_sectors_id"
-    t.index ["sustainable_development_goals_id"], name: "index_projects_on_sustainable_development_goals_id"
   end
 
   create_table "projects_locations", id: false, force: :cascade do |t|
