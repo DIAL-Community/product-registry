@@ -58,6 +58,8 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('Sector.count', -1) do
       @use_case = use_cases(:one)
       delete use_case_url(@use_case)
+      @project = projects(:one)
+      delete project_url(@project)
       delete sector_url(@sector)
     end
 

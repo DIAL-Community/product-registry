@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  
+  resources :projects, only: [:index, :show, :destroy]
+
   get 'deploys/index'
 
   devise_for :users
