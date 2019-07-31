@@ -12,7 +12,9 @@ module Modules
         existing_product = nil
         name_aliases.each do |name_alias|
           # Find by name, and then by aliases and then by slug.
-          existing_product = Product.find_by(name: name_alias)
+          if existing_product.nil?
+            existing_product = Product.find_by(name: name_alias)
+          end
           if existing_product.nil?
             existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: name_alias)
           end
