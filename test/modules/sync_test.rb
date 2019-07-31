@@ -75,6 +75,28 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
   end
 
+  test "sync_digisquare_product should update existing product" do
+    initial_size = Product.count
+    assert_not_nil Product.find_by(slug: 'odk')
+
+    new_product = JSON.parse('{"line": "ODK"}')
+    sync_digisquare_product(new_product)
+
+    assert_not_nil Product.find_by(slug: 'odk')
+    assert_equal Product.count, initial_size
+  end
+
+  test "sync_digisquare_product should save new product" do
+    initial_size = Product.count
+    assert_nil Product.find_by(slug: 'open_data_kit')
+
+    new_product = JSON.parse('{"line": "Open Data Kit"}')
+    sync_digisquare_product(new_product)
+
+    assert_not_nil Product.find_by(slug: 'open_data_kit')
+    assert_equal Product.count, initial_size + 1
+  end
+
   test "update product website" do
     p1 = products(:one)
     p1.website = nil
