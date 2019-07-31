@@ -22,26 +22,37 @@ module Modules
         end
 
         if existing_product.nil?
-          new_product = Product.new
-          new_product.name = name_aliases.first
-          new_product.slug = slug_em new_product.name
-          new_product.website = json_data['website']
-          new_product.aliases = name_aliases.reject{ |x| x == new_product.name }
-          new_product.origins.push(unicef_origin)
-          if new_product.save
-            puts "New product added: #{new_product.name} -> #{new_product.slug}."
-          end
+          existing_product = Product.new
+          existing_product.name = name_aliases.first
+          existing_product.slug = slug_em existing_product.name
+          existing_product.website = json_data['website']
         else
-          existing_product.aliases.concat(name_aliases.reject{ |x| x == existing_product.name }).uniq!
           if (!existing_product.website.nil? && !existing_product.website.empty?)
             existing_product.website = json_data['website']
           end
-          if (!existing_product.origins.exists?(:id => unicef_origin.id))
-            existing_product.origins.push(unicef_origin)
+        end
+
+        # Assign what's left in the alias array as aliases.
+        existing_product.aliases.concat(name_aliases.reject{ |x| x == existing_product.name }).uniq!
+
+        # Set the origin to be 'unicef'
+        if (!existing_product.origins.exists?(:id => unicef_origin.id))
+          existing_product.origins.push(unicef_origin)
+        end
+
+        sdgs = json_data['SDGs']
+        if !sdgs.nil? && !sdgs.empty?
+          sdgs.each do |sdg|
+            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
+            if !sdg_obj.nil? && !existing_product.sustainable_development_goals.include?(sdg_obj)
+              puts "Adding sdg #{sdg} to product"
+              existing_product.sustainable_development_goals << sdg_obj
+            end
           end
-          if existing_product.save
-            puts "Existing product updated: #{existing_product.name} -> #{existing_product.slug}."
-          end
+        end
+
+        if existing_product.save
+          puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
         end
       end
     end
@@ -54,20 +65,17 @@ module Modules
       existing_product = Product.find_by("name = :name OR slug = :slug OR :other_name = ANY(aliases)",
                                           name: candidate_name, slug: candidate_slug, other_name: candidate_name)
       if existing_product.nil?
-        new_product = Product.new
-        new_product.name = candidate_name
-        new_product.slug = candidate_slug
-        new_product.origins.push(digisquare_origin)
-        if new_product.save
-          puts "Added new product: #{new_product.name} -> #{new_product.slug}."
-        end
-      else
-        if (!existing_product.origins.exists?(id: digisquare_origin.id))
-          existing_product.origins.push(digisquare_origin)
-        end
-        if existing_product.save
-          puts "Updating existing product: #{existing_product.name}."
-        end
+        existing_product = Product.new
+        existing_product.name = candidate_name
+        existing_product.slug = candidate_slug
+      end
+
+      if (!existing_product.origins.exists?(id: digisquare_origin.id))
+        existing_product.origins.push(digisquare_origin)
+      end
+
+      if existing_product.save
+        puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
       end
     end
 
