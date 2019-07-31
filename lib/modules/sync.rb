@@ -47,17 +47,16 @@ module Modules
     end
 
     def sync_digisquare_product(section)
-
-      slug_line = slug_em section['line']
-      existing_product = Product.find_by(slug: slug_line)
-      if existing_product.nil?
-        existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: section['line'])
-      end
-
+      digisquare_origin = Origin.find_by(:slug => 'digital_square')
+      
+      candidate_name = section['line']
+      candidate_slug = slug_em(candidate_name)
+      existing_product = Product.find_by("name = :name OR slug = :slug OR :other_name = ANY(aliases)",
+                                          name: candidate_name, slug: candidate_slug, other_name: candidate_name)
       if existing_product.nil?
         new_product = Product.new
-        new_product.name = section['line']
-        new_product.slug = slug_line
+        new_product.name = candidate_name
+        new_product.slug = candidate_slug
         new_product.origins.push(digisquare_origin)
         if new_product.save
           puts "Added new product: #{new_product.name} -> #{new_product.slug}."
@@ -65,9 +64,10 @@ module Modules
       else
         if (!existing_product.origins.exists?(id: digisquare_origin.id))
           existing_product.origins.push(digisquare_origin)
-          existing_product.save
         end
-        puts "Skipping existing product: #{existing_product.name}."
+        if existing_product.save
+          puts "Updating existing product: #{existing_product.name}."
+        end
       end
     end
 

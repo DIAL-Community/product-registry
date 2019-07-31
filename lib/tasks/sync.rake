@@ -41,7 +41,6 @@ namespace :sync do
     digi_square_data = JSON.parse(digi_square_response)
 
     digi_square_data['parse']['sections'].each do |section|
-      digisquare_origin = Origin.find_by(:slug => 'digital_square')
       # only process section 2 & 3 and the toc level 2
       # also skip the lorem ipsum
       if (!section['number'].start_with?("2", "3") ||
