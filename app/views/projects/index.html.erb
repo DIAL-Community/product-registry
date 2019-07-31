@@ -1,0 +1,43 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Budget</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @projects.count > 0 %>
+      <% @projects.each do |project| %>
+        <tr>
+          <td><%= project.name %></td>
+          <td><%= project.description %></td>
+          <td><%= project.start_date %></td>
+          <td><%= project.end_date %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <div class="dropdown-menu">
+              <%= link_to 'View', project, :class =>"dropdown-item"  %>
+              <% if user_signed_in? && policy(project).mod_allowed? %>
+                <div class="dropdown-divider"></div>
+                <%= link_to 'Delete', project, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted">We couldn't find any project in the database.</small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -55,6 +55,8 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy location" do
     assert_difference('Location.count', -1) do
+      @project = projects(:one)
+      delete project_url(@project)
       delete location_url(@location)
     end
 
