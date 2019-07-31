@@ -65,6 +65,9 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
+    uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
+    uploader.store!(params[:logo])
+
     respond_to do |format|
       if @building_block.save
         format.html { redirect_to @building_block, flash: { notice: 'Building Block was successfully created.' }}
@@ -98,6 +101,9 @@ class BuildingBlocksController < ApplicationController
       end
     end
     @building_block.workflows = workflows.to_a
+
+    uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
+    uploader.store!(params[:logo])
 
     respond_to do |format|
       if @building_block.update(building_block_params)

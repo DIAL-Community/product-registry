@@ -5,6 +5,9 @@
     Building Block: <%= @building_block.name %>
   </h5>
   <div class="card-body">
+    <div class="text-center">
+      <%= image_tag(@building_block.image_file, class: 'w-25 rounded mx-auto d-block') %>
+    </div>
     <p class="card-subtitle text-muted mb-3" >
       <strong>Short Description: </strong>
       <%= @bbJson.short_desc %>
