@@ -9,3 +9,8 @@ two:
   name: Unicef
   slug: unicef
   description: Unicef
+
+three:
+  name: Digital Square
+  slug: digital_square
+  description: Digital Square

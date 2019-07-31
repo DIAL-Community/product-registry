@@ -4,6 +4,121 @@ include Modules::Sync
 
 class SyncModuleTest < ActiveSupport::TestCase
 
+  test "sync_unicef_product should update existing product with aliases" do
+    initial_size = Product.count
+
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
+    sync_unicef_product(new_product)
+
+    assert_equal Product.count, initial_size
+    
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.website, "https://opendatakit.org/"
+    assert_equal saved_product.aliases.length, 1
+    assert_equal saved_product.aliases[0], 'Open Data Kit'
+    assert_equal saved_product.slug, 'odk'
+
+    not_saved_product = Product.find_by(slug: 'open_data_kit')
+    assert_nil not_saved_product
+  end
+
+  test "sync_unicef_product should update sdg for existing product" do
+    initial_size = Product.count
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.sustainable_development_goals.length, 0
+
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "SDGs": [7]}')
+    sync_unicef_product(new_product)
+
+    assert_equal Product.count, initial_size
+    
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.sustainable_development_goals.size, 1
+
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [8]}')
+    sync_unicef_product(new_product)
+
+    assert_equal Product.count, initial_size
+    
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.sustainable_development_goals.size, 2
+  end
+
+  test "sync_unicef_product should save new product with initialism" do
+    initial_size = Product.count
+
+    existing_product = products(:three)
+    Product.delete existing_product
+
+    assert_equal Product.count, initial_size - 1
+
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
+    sync_unicef_product(new_product)
+
+    assert_equal Product.count, initial_size
+
+    saved_product = Product.find_by(slug: 'open_data_kit')
+    assert_equal saved_product.name, "Open Data Kit"
+    assert_equal saved_product.slug, 'open_data_kit'
+    assert_equal saved_product.website, "https://opendatakit.org/"
+    assert_equal saved_product.aliases.length, 1
+    assert_equal saved_product.aliases[0], 'ODK'
+
+    not_saved_product = Product.find_by(slug: 'odk')
+    assert_nil not_saved_product
+
+    # Try syncing dupes with the same name.
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "website": "https://opendatakit.org/"}')
+    sync_unicef_product(new_product)
+
+    assert_nil Product.find_by(slug: 'odk')
+    assert_not_nil Product.find_by(slug: 'open_data_kit')
+    assert_equal Product.count, initial_size
+
+    # Try syncing dupes with the same name with one of the alias.
+    new_product = JSON.parse('{"type": ["software"], "name": "ODK", "website": "https://opendatakit.org/"}')
+    sync_unicef_product(new_product)
+
+    assert_nil Product.find_by(slug: 'odk')
+    assert_not_nil Product.find_by(slug: 'open_data_kit')
+    assert_equal Product.count, initial_size
+
+    # Try syncing dupes with the same initialism with one of the alias.
+    new_product = JSON.parse('{"type": ["software"], "name": "OpenDataKit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
+    sync_unicef_product(new_product)
+
+    assert_nil Product.find_by(slug: 'odk')
+    saved_product = Product.find_by(slug: 'open_data_kit')
+    assert_not_nil saved_product
+    assert_equal saved_product.aliases.length, 2
+    assert_equal saved_product.aliases[0], "ODK"
+    assert_equal saved_product.aliases[1], "OpenDataKit"
+
+    assert_equal Product.count, initial_size
+  end
+
+  test "sync_digisquare_product should update existing product" do
+    initial_size = Product.count
+    assert_not_nil Product.find_by(slug: 'odk')
+
+    new_product = JSON.parse('{"line": "ODK"}')
+    sync_digisquare_product(new_product)
+
+    assert_not_nil Product.find_by(slug: 'odk')
+    assert_equal Product.count, initial_size
+  end
+
+  test "sync_digisquare_product should save new product" do
+    initial_size = Product.count
+    assert_nil Product.find_by(slug: 'open_data_kit')
+
+    new_product = JSON.parse('{"line": "Open Data Kit"}')
+    sync_digisquare_product(new_product)
+
+    assert_not_nil Product.find_by(slug: 'open_data_kit')
+    assert_equal Product.count, initial_size + 1
+  end
+
   test "update product website" do
     p1 = products(:one)
     p1.website = nil
