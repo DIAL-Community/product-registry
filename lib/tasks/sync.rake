@@ -24,52 +24,8 @@ namespace :sync do
         next
       end
 
-      if json_data['type'].detect{ |element| element.downcase == 'software' } != nil
-        unicef_origin = Origin.find_by(:slug => 'unicef')
-        aliases = Array.new
-        new_product = Product.new
-        existing_product = nil
-        unless json_data['initialism'].nil?
-          slug_initialism = slug_em json_data['initialism']
-          existing_product = Product.find_by(slug: slug_initialism)
+      sync_unicef_product json_data
 
-          if existing_product.nil?
-            existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['initialism'])
-          end
-
-          aliases.push(json_data['name'])
-          new_product.name = json_data['initialism']
-          new_product.slug = slug_initialism
-        end
-
-        if existing_product.nil?
-          slug_name = slug_em json_data['name']
-          existing_product = Product.find_by(slug: slug_name)
-
-          if existing_product.nil?
-            existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: json_data['name'])
-          end
-
-          aliases.push(json_data['initialism'])
-          new_product.name = json_data['name']
-          new_product.slug = slug_name
-        end
-
-        if existing_product.nil?
-          new_product.aliases = aliases.reject{ |x| x.nil? || x.empty? || x == new_product.name }
-          new_product.origins.push(unicef_origin)
-          if new_product.save
-            puts "Added new product: #{new_product.name} -> #{new_product.slug}."
-          end
-        else
-          puts "Skipping existing product: #{existing_product.name}."
-          if (!existing_product.origins.exists?(:id => unicef_origin.id))
-            existing_product.origins.push(unicef_origin)
-            existing_product.save
-          end
-        end
-
-      end
     end
     puts 'Digital public good data synced ...'
   end
@@ -94,27 +50,7 @@ namespace :sync do
         next;
       end
 
-      slug_line = slug_em section['line']
-      existing_product = Product.find_by(slug: slug_line)
-      if existing_product.nil?
-        existing_product = Product.find_by(":other_name = ANY(aliases)", other_name: section['line'])
-      end
-
-      if existing_product.nil?
-        new_product = Product.new
-        new_product.name = section['line']
-        new_product.slug = slug_line
-        new_product.origins.push(digisquare_origin)
-        if new_product.save
-          puts "Added new product: #{new_product.name} -> #{new_product.slug}."
-        end
-      else
-        if (!existing_product.origins.exists?(id: digisquare_origin.id))
-          existing_product.origins.push(digisquare_origin)
-          existing_product.save
-        end
-        puts "Skipping existing product: #{existing_product.name}."
-      end
+      sync_digisquare_product section
     end
 
     puts "Digital square data synced ..."
