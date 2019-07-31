@@ -22,6 +22,28 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_nil not_saved_product
   end
 
+  test "sync_unicef_product should update sdg for existing product" do
+    initial_size = Product.count
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.sustainable_development_goals.length, 0
+
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "SDGs": [7]}')
+    sync_unicef_product(new_product)
+
+    assert_equal Product.count, initial_size
+    
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.sustainable_development_goals.size, 1
+
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [8]}')
+    sync_unicef_product(new_product)
+
+    assert_equal Product.count, initial_size
+    
+    saved_product = Product.find_by(slug: 'odk')
+    assert_equal saved_product.sustainable_development_goals.size, 2
+  end
+
   test "sync_unicef_product should save new product with initialism" do
     initial_size = Product.count
 
