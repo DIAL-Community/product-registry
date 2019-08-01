@@ -3,6 +3,7 @@ class Organization < ApplicationRecord
   has_and_belongs_to_many :locations, join_table: :organizations_locations
   has_and_belongs_to_many :contacts, join_table: :organizations_contacts
   has_and_belongs_to_many :sectors, join_table: :organizations_sectors
+  has_and_belongs_to_many :projects, join_table: :projects_organizations, dependent: :delete_all
 
   validates :name,  presence: true, length: { maximum: 300 }
 
