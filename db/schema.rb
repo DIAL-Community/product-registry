@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190730155346) do
+ActiveRecord::Schema.define(version: 20190801183150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,15 +51,8 @@ ActiveRecord::Schema.define(version: 20190730155346) do
     t.index ["user_id"], name: "index_deploys_on_user_id"
   end
 
-  create_table "locations", force: :cascade do |t|
-    t.string "name"
-    t.string "slug", null: false
-    t.point "points", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "location_type", limit: 16
-    t.index ["slug"], name: "index_locations_on_slug", unique: true
-  end
+# Could not dump table "locations" because of following StandardError
+#   Unknown type 'location_type' for column 'type_of_location'
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
