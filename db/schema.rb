@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190801183150) do
+ActiveRecord::Schema.define(version: 20190801194208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20190801183150) do
   end
 
 # Could not dump table "locations" because of following StandardError
-#   Unknown type 'location_type' for column 'type_of_location'
+#   Unknown type 'location_type' for column 'location_type'
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
