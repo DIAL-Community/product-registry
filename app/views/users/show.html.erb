@@ -14,6 +14,11 @@
     <p class="card-subtitle text-muted mt-3" >
       <strong>Approved: </strong><%= @user.confirmed_at %>
     </p>
+    <% if @user.role == "admin" %>
+      <p class="card-subtitle text-muted mt-3" >
+        <strong>Receive DB Backup: </strong><%= @user.receive_backup ? 'Yes' : 'No'%>
+      </p>
+    <% end %>
     <p class="card-subtitle text-muted mt-3"> 
       <%= link_to 'Reset Password', edit_user_registration_path, :class => 'btn btn-secondary' %>
     </p>
