@@ -26,6 +26,22 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "creating building_block without logo should not fail" do
+    post building_blocks_url, params: { building_block: { name: "Some Name", slug: 'some_name' }}
+    created_building_block = BuildingBlock.last
+
+    assert_equal created_building_block.name, "Some Name"
+    assert_redirected_to building_block_url(created_building_block)
+  end
+
+  test "updating building_block without logo should not fail" do
+    patch building_block_url(@building_block), params: { building_block: {name: "Some New Name" } }
+
+    updated_building_block = BuildingBlock.find(@building_block.id)
+    assert_equal updated_building_block.name, "Some New Name"
+    assert_redirected_to building_block_url(updated_building_block)
+  end
+
   test "should create building_block" do
     assert_difference('BuildingBlock.count') do
       uploaded_file = fixture_file_upload('files/logo.png', 'image/png')

@@ -43,6 +43,20 @@ public/assets/**/*.gif
 public/assets/**/*.jpg
 public/assets/**/*.js
 
+# Assets from unit tests.
+app/assets/images/building_blocks/.png
+app/assets/images/building_blocks/bb1.png
+app/assets/images/organizations/123456789_011.png
+app/assets/images/organizations/1234_56_789_011.png
+app/assets/images/organizations/abcd_56_789_011.png
+app/assets/images/organizations/abcd_56_789_011_dup1.png
+app/assets/images/organizations/abcd_56_789_011_dup2.png
+app/assets/images/organizations/abcd_56_789_011_dup3.png
+app/assets/images/organizations/testslug.png
+app/assets/images/organizations/organization.png
+app/assets/images/products/product_dup1.png
+app/assets/images/products/product.png
+
 /coverage
 
 setEnv.sh

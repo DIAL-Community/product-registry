@@ -115,8 +115,10 @@ class ProductsController < ApplicationController
       end
     end
 
-    uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @product.save
@@ -192,8 +194,10 @@ class ProductsController < ApplicationController
     end
     @product.sustainable_development_goals = sustainable_development_goals.to_a
 
-    uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @product.update(product_params)

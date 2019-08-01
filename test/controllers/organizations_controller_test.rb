@@ -26,6 +26,22 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "creating organization without logo should not fail" do
+    post organizations_url, params: { organization: { name: "Some Name", slug: 'some_name', when_endorsed: '11/16/2018' }}
+    created_organization = Organization.last
+
+    assert_equal created_organization.name, "Some Name"
+    assert_redirected_to organization_url(created_organization)
+  end
+
+  test "updating organization without logo should not fail" do
+    patch organization_url(@organization), params: { organization: {name: "Some New Name" } }
+
+    updated_organization = Organization.find(@organization.id)
+    assert_equal updated_organization.name, "Some New Name"
+    assert_redirected_to organization_url(updated_organization)
+  end
+
   test "should slug digits" do
     digit_org_name = "1234-56-789 011"
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')

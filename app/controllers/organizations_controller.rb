@@ -137,8 +137,10 @@ class OrganizationsController < ApplicationController
       @organization.locations.push(geocoded_location)
     end
 
-    uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if (params[:logo].present?)
+      uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @organization.save
@@ -206,9 +208,11 @@ class OrganizationsController < ApplicationController
     end
 
     @organization.locations = locations.to_a
-
-    uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    
+    if (params[:logo].present?)
+      uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @organization.update(organization_params)
