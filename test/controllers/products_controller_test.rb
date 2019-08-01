@@ -26,6 +26,22 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "creating product without logo should not fail" do
+    post products_url, params: { product: { name: "Some Name", slug: 'some_name' }}
+    created_product = Product.last
+
+    assert_equal created_product.name, "Some Name"
+    assert_redirected_to product_url(created_product)
+  end
+
+  test "updating product without logo should not fail" do
+    patch product_url(@product), params: { product: {name: "Some New Name" } }
+
+    updated_product = Product.find(@product.id)
+    assert_equal updated_product.name, "Some New Name"
+    assert_redirected_to product_url(updated_product)
+  end
+
   test "should create product" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     assert_difference('Product.count') do

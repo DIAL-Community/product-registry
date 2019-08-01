@@ -65,8 +65,10 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
-    uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @building_block.save
@@ -102,8 +104,10 @@ class BuildingBlocksController < ApplicationController
     end
     @building_block.workflows = workflows.to_a
 
-    uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @building_block.update(building_block_params)
