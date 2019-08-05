@@ -2,7 +2,7 @@
   sub-indicators:
     - name: Country Utilization
       code: digisquare_country_utilization
-      low: 	Less than two countries or states actively use the tool as part of their health information system.
+      low: Less than two countries or states actively use the tool as part of their health information system.
       medium: At least four countries or states actively use the tool as part of their health information system with at least 20% of total nation-wide or state-wide target users routinely using product/service as intended.
       high: At least ten countries or states actively use the tool as part of their health information system with at least 30% of total nation-wide or state-wide target users routinely using product/service as intended.
     - name: Country Strategy

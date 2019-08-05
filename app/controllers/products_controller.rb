@@ -264,7 +264,7 @@ class ProductsController < ApplicationController
       end
       if (params[:digisquare_maturity])
         params[:digisquare_maturity].keys.each do |digisquare_maturity|
-          product_assessment[digisquare_maturity] = params[:digisquare_maturity][digisquare_maturity]
+          product_assessment[digisquare_maturity] = ProductAssessment.digisquare_maturity_levels.key(params[:digisquare_maturity][digisquare_maturity])
         end
       end
       product_assessment.has_osc = (params[:has_osc] == "true")

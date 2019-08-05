@@ -273,15 +273,15 @@
                     <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
                            value="<%= product.product_assessment.send(sub_indicator["code"]) if product.product_assessment  %>"/>
                     <div class="dropdown-menu" aria-labelledby="digisquare-selector">
-                      <div class="dropdown-item" data-sub-indicator="1">
+                      <div class="dropdown-item" data-sub-indicator="low">
                         <h6>Low</h6>
                         <div><%= sub_indicator["low"].html_safe %></div>
                       </div>
-                      <div class="dropdown-item" data-sub-indicator="2">
+                      <div class="dropdown-item" data-sub-indicator="medium">
                         <h6>Medium</h6>
                         <div><%= sub_indicator["medium"].html_safe %></div>
                       </div>
-                      <div class="dropdown-item" data-sub-indicator="3">
+                      <div class="dropdown-item" data-sub-indicator="high">
                         <h6>High</h6>
                         <div><%= sub_indicator["high"].html_safe %></div>
                       </div>
