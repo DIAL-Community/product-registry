@@ -79,7 +79,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.save
-        format.html { redirect_to @location, flash: { notice: 'Location was successfully created.' }}
+        format.html { redirect_to @location, flash: { notice: t('messages.model.created', model: 'Location') }}
         format.json { render :show, status: :created, location: @location }
       else
         format.html { render :new }
@@ -103,7 +103,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.update(location_params)
-        format.html { redirect_to @location, flash: { notice: 'Location was successfully updated.' }}
+        format.html { redirect_to @location, flash: { notice: t('messages.model.updated', model: 'Location') }}
         format.json { render :show, status: :ok, location: @location }
       else
         format.html { render :edit }
@@ -118,7 +118,7 @@ class LocationsController < ApplicationController
     authorize @location, :mod_allowed?
     @location.destroy
     respond_to do |format|
-      format.html { redirect_to locations_url, flash: { notice: 'Location was successfully destroyed.' }}
+      format.html { redirect_to locations_url, flash: { notice: t('messages.model.deleted', model: 'Location') }}
       format.json { head :no_content }
     end
   end

@@ -66,7 +66,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.save
-        format.html { redirect_to @contact, flash: { notice: 'Contact was successfully created.' }}
+        format.html { redirect_to @contact, flash: { notice: t('messages.model.created', model: 'Contact') }}
         format.json { render :show, status: :created, location: @contact }
       else
         format.html { render :new }
@@ -90,7 +90,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.update(contact_params)
-        format.html { redirect_to @contact, flash: { notice: 'Contact was successfully updated.' }}
+        format.html { redirect_to @contact, flash: { notice: t('messages.model.updated', model: 'Contact') }}
         format.json { render :show, status: :ok, location: @contact }
       else
         format.html { render :edit, :locals => { :contact => @contact } }
@@ -105,7 +105,7 @@ class ContactsController < ApplicationController
     authorize @contact, :mod_allowed?
     @contact.destroy
     respond_to do |format|
-      format.html { redirect_to contacts_url, flash: { notice: 'Contact was successfully destroyed.' }}
+      format.html { redirect_to contacts_url, flash: { notice: t('messages.model.deleted', model: 'Contact') }}
       format.json { head :no_content }
     end
   end

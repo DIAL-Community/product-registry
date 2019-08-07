@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
     authorize @project, :mod_allowed?
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to projects_url, flash: { notice: 'Project was successfully destroyed.' }}
+      format.html { redirect_to projects_url, flash: { notice: t('messages.model.deleted', model: 'Project') }}
       format.json { head :no_content }
     end
   end
