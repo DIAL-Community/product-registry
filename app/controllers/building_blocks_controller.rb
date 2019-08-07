@@ -72,7 +72,7 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if @building_block.save
-        format.html { redirect_to @building_block, flash: { notice: 'Building Block was successfully created.' }}
+        format.html { redirect_to @building_block, flash: { notice: t('messages.bb.create') }}
         format.json { render :show, status: :created, location: @building_block }
       else
         format.html { render :new }
@@ -111,7 +111,7 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if @building_block.update(building_block_params)
-        format.html { redirect_to @building_block, flash: { notice: 'Building block was successfully updated.' }}
+        format.html { redirect_to @building_block, flash: { notice: t('messages.bb.update') }}
         format.json { render :show, status: :ok, location: @building_block }
       else
         format.html { render :edit }

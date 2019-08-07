@@ -34,3 +34,7 @@ en:
   pundit:
     mod_allowed?: "The operation is not allowed."
     view_allowed?: "You're not allowed to view this page."
+  messages:
+    bb:
+      create: 'Building block was successfully created.'
+      update: 'Building block was successfully updated.'
