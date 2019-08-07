@@ -72,7 +72,7 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if @building_block.save
-        format.html { redirect_to @building_block, flash: { notice: t('messages.bb.create') }}
+        format.html { redirect_to @building_block, flash: { notice: t('messages.bb.created') }}
         format.json { render :show, status: :created, location: @building_block }
       else
         format.html { render :new }
@@ -111,7 +111,7 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if @building_block.update(building_block_params)
-        format.html { redirect_to @building_block, flash: { notice: t('messages.bb.update') }}
+        format.html { redirect_to @building_block, flash: { notice: t('messages.bb.updated') }}
         format.json { render :show, status: :ok, location: @building_block }
       else
         format.html { render :edit }
@@ -126,7 +126,7 @@ class BuildingBlocksController < ApplicationController
     authorize @building_block, :mod_allowed?
     @building_block.destroy
     respond_to do |format|
-      format.html { redirect_to building_blocks_url, flash: { notice: 'Building block was successfully destroyed.' }}
+      format.html { redirect_to building_blocks_url, flash: { notice: t('messages.bb.deleted') }}
       format.json { head :no_content }
     end
   end

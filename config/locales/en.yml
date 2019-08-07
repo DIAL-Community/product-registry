@@ -36,5 +36,6 @@ en:
     view_allowed?: "You're not allowed to view this page."
   messages:
     bb:
-      create: 'Building block was successfully created.'
-      update: 'Building block was successfully updated.'
+      created: 'Building block was successfully created.'
+      updated: 'Building block was successfully updated.'
+      deleted: 'Building block was successfully deleted.'
