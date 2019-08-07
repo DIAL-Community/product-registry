@@ -40,3 +40,12 @@ en:
       updated: '%{model} was successfully updated.'
       deleted: '%{model} was successfully deleted.'
       delete-failed: 'Could not delete %{model}.'
+  view:
+    general:
+      duplicates: 'One or more %{model} with similar name already exists.'
+    building-block:
+      form:
+        name: Name
+      list:
+      show:
+      

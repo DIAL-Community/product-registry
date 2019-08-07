@@ -140,7 +140,7 @@ class BuildingBlocksController < ApplicationController
         @building_blocks = BuildingBlock.where(slug: current_slug).to_a
       end
     end
-    authorize @building_blocks, :mod_allowed?
+    authorize @building_blocks, :view_allowed?
     render json: @building_blocks, :only => [:name]
   end
 

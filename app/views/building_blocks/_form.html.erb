@@ -1,12 +1,12 @@
 <%= form_with(model: building_block, multipart: true, local: true) do |form| %>
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :building_block_name, :class => "form-control", :placeholder => "Name" %>
-    <%= form.label :name %>
+    <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.building-block.form.name') %>
+    <%= form.label :name, t('view.building-block.form.name') %>
   </fieldset>
 
   <input id="original_name" type="hidden" value="<%= building_block.name %>" />
   <div id="duplicate-warning" class="alert alert-warning">
-    One or more building block(s) with similar name already exists.
+    <%= t('view.general.duplicates', model: 'building block(s)') %>
   </div>
   
   <fieldset class="custom-file mb-2">
