@@ -81,7 +81,7 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.save
-        format.html { redirect_to @use_case, flash: { notice: 'Use case was successfully created.' }}
+        format.html { redirect_to @use_case, flash: { notice: t('messages.model.created', model: 'Use case') }}
         format.json { render :show, status: :created, location: @use_case }
       else
         format.html { render :new }
@@ -115,7 +115,7 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.update(use_case_params)
-        format.html { redirect_to @use_case, flash: { notice: 'Use case was successfully updated.' }}
+        format.html { redirect_to @use_case, flash: { notice: t('messages.model.updated', model: 'Use case') }}
         format.json { render :show, status: :ok, location: @use_case }
       else
         format.html { render :edit }
@@ -130,7 +130,7 @@ class UseCasesController < ApplicationController
     authorize @use_case, :mod_allowed?
     @use_case.destroy
     respond_to do |format|
-      format.html { redirect_to use_cases_url, flash: { notice: 'Use case was successfully destroyed.' }}
+      format.html { redirect_to use_cases_url, flash: { notice: t('messages.model.deleted', model: 'Use case') }}
       format.json { head :no_content }
     end
   end

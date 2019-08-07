@@ -47,7 +47,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       if @user.update(user_hash)
-        format.html { redirect_to @user, flash: { notice: 'User was successfully updated.' }}
+        format.html { redirect_to @user, flash: { notice: t('messages.model.updated', model: 'User') }}
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -65,7 +65,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
         if @user.save
-          format.html { redirect_to @user, flash: { notice: 'User was successfully created.' }}
+          format.html { redirect_to @user, flash: { notice: t('messages.model.created', model: 'User') }}
           format.json { render :show, status: :created, location: @user }
         else
           format.html { render :new }
@@ -77,7 +77,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, flash: { notice: 'User was successfully deleted.' }}
+      format.html { redirect_to users_url, flash: { notice: t('messages.model.deleted', model: 'User') }}
       format.json { head :no_content }
     end
   end

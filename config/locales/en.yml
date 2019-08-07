@@ -39,3 +39,4 @@ en:
       created: '%{model} was successfully created.'
       updated: '%{model} was successfully updated.'
       deleted: '%{model} was successfully deleted.'
+      delete-failed: 'Could not delete %{model}.'

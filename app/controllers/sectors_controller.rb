@@ -128,7 +128,7 @@ class SectorsController < ApplicationController
         format.html { redirect_to sectors_url, flash: { notice: t('messages.model.deleted', model: 'Sector') }}
         format.json { head :no_content }
       else
-        format.html { redirect_to sectors_url, flash: { error: 'Could not destroy sector that is referenced by a use case' }}
+        format.html { redirect_to sectors_url, flash: { error: t('messages.model.delete-failed', model: 'Sector') }}
         format.json { head :no_content }
       end
     end
