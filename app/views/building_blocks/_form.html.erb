@@ -17,13 +17,13 @@
   </fieldset>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    Assigned Products
+    <%= t('view.mult-select.assigned-products.title') %>
   </h6>
   <% if !@product %>
     <fieldset class="form-label-group mt-2">
-      <input type="text" id="product-search" class="form-control" placeholder="Search and assign products ..." />
+      <input type="text" id="product-search" class="form-control" placeholder="<%= t('view.multi-select.assigned-products.label') %>" />
       <label for="building-block-product">
-        Search and assign products ...
+        <%= t('view.multi-select.assigned-products.label') %>
       </label>
     </fieldset>
   <% end %>
@@ -44,9 +44,9 @@
   </div>
 
   <fieldset class="form-label-group mt-2">
-    <input type="text" id="workflow-search" class="form-control" placeholder="Search and assign Workflows ..." />
+    <input type="text" id="workflow-search" class="form-control" placeholder="<%= t('view.multi-select.assigned-workflows.label') %>" />
     <label for="use-case-workflow">
-      Search and assign Workflows ...
+      <%= t('view.multi-select.assigned-workflows.label') %>
     </label>
   </fieldset>
 

@@ -43,8 +43,18 @@ en:
   view:
     general:
       duplicates: 'One or more %{model} with similar name already exists.'
+    multi-select:
+      assigned-products:
+        title: 'Assigned Products'
+        label: 'Search and assign products ...'
+      assigned-workflows:
+        title: 'Assigned Workflows'
+        label: 'Search and assign Workflows ...'
     building-block:
       form:
+        title:
+          edit: 'Edit building block'
+          create: 'Create building block'
         name: Name
         logo: Logo
       list:
