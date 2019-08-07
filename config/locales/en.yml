@@ -46,6 +46,7 @@ en:
     building-block:
       form:
         name: Name
+        logo: Logo
       list:
       show:
       
