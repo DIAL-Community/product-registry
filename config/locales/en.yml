@@ -40,6 +40,19 @@ en:
   pundit:
     mod_allowed?: "The operation is not allowed."
     view_allowed?: "You're not allowed to view this page."
+  model:
+    building-block: building block
+    contact: contact
+    location: location
+    office: office
+    country: country
+    organization: organization
+    product: product
+    project: project
+    sector: sector
+    use-case: use case
+    user: user
+    workflow: workflow
   view:
     building-block:
       form:
@@ -56,6 +69,13 @@ en:
         name: Name
         view: View
       show:
+        title: Building Block
+        short-description: Short Description
+        full-description: Full Description
+        other-names: Other Names
+        key-functionalities:
+        example-of-use:
+        
     general:
       back: 'Back'
       duplicates: 'One or more %{model} with similar name already exists.'

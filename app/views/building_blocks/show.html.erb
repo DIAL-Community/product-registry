@@ -2,7 +2,7 @@
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
   <h5 class="card-header bg-secondary text-white">
-    Building Block: <%= @building_block.name %>
+    <%= "#{t('view.building-block.show.title')} #{@building_block.name}" %>
   </h5>
   <div class="card-body">
     <div class="text-center">
