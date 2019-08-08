@@ -1,29 +1,30 @@
 <%= form_with(model: building_block, multipart: true, local: true) do |form| %>
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.building-block.form.name') %>
-    <%= form.label :name, t('view.building-block.form.name') %>
+    <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
   <input id="original_name" type="hidden" value="<%= building_block.name %>" />
   <div id="duplicate-warning" class="alert alert-warning">
-    <%= t('view.general.duplicates', model: 'building block(s)') %>
+    <%= t('view.general.duplicates', model: t('model.building-block')) %>
   </div>
   
   <fieldset class="custom-file mb-2">
     <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
     <label class="custom-file-label" for="logo-file">
-      <%= t('view.building-block.form.logo') %>
+      <%= t('view.general.logo') %>
     </label>
   </fieldset>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    <%= t('view.multi-select.assigned-products.title') %>
+    <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
   </h6>
   <% if !@product %>
     <fieldset class="form-label-group mt-2">
-      <input type="text" id="product-search" class="form-control" placeholder="<%= t('view.multi-select.assigned-products.label') %>" />
+      <input type="text" id="product-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
       <label for="building-block-product">
-        <%= t('view.multi-select.assigned-products.label') %>
+        <%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>
       </label>
     </fieldset>
   <% end %>
@@ -43,10 +44,15 @@
     </div>
   </div>
 
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('model.workflow').to_s.pluralize.humanize) %>
+  </h6>
+
   <fieldset class="form-label-group mt-2">
-    <input type="text" id="workflow-search" class="form-control" placeholder="<%= t('view.multi-select.assigned-workflows.label') %>" />
+    <input type="text" id="workflow-search" class="form-control"
+           placeholder="<%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>" />
     <label for="use-case-workflow">
-      <%= t('view.multi-select.assigned-workflows.label') %>
+      <%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>
     </label>
   </fieldset>
 

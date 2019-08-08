@@ -6,6 +6,6 @@
   </div>
 <% end %>
 <h5 class="border rounded bg-secondary text-white p-3">
-  <%= t('view.building-block.form.title.edit') %>
+  <%= t('view.general.title.edit', model: t('model.building-block').to_s.titlecase) %>
 </h5>
 <%= render 'form', building_block: @building_block %>

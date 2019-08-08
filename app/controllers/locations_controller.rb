@@ -80,7 +80,7 @@ class LocationsController < ApplicationController
     respond_to do |format|
       if @location.save
         format.html { redirect_to @location,
-                      flash: { notice: t('messages.model.created', model: t('model.location').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.created', model: t('model.location').to_s.humanize) }}
         format.json { render :show, status: :created, location: @location }
       else
         format.html { render :new }
@@ -105,7 +105,7 @@ class LocationsController < ApplicationController
     respond_to do |format|
       if @location.update(location_params)
         format.html { redirect_to @location,
-                      flash: { notice: t('messages.model.updated', model: t('model.location').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.updated', model: t('model.location').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @location }
       else
         format.html { render :edit }
@@ -121,7 +121,7 @@ class LocationsController < ApplicationController
     @location.destroy
     respond_to do |format|
       format.html { redirect_to locations_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.location').to_s.humanize)) }}
+                    flash: { notice: t('messages.model.deleted', model: t('model.location').to_s.humanize) }}
       format.json { head :no_content }
     end
   end

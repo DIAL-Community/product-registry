@@ -145,7 +145,7 @@ class OrganizationsController < ApplicationController
     respond_to do |format|
       if @organization.save
         format.html { redirect_to @organization,
-                      flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -218,7 +218,7 @@ class OrganizationsController < ApplicationController
     respond_to do |format|
       if @organization.update(organization_params)
         format.html { redirect_to @organization,
-                      flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
@@ -234,7 +234,7 @@ class OrganizationsController < ApplicationController
     @organization.destroy
     respond_to do |format|
       format.html { redirect_to organizations_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.organization').to_s.humanize)) }}
+                    flash: { notice: t('messages.model.deleted', model: t('model.organization').to_s.humanize) }}
       format.json { head :no_content }
     end
   end

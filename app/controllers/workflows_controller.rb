@@ -68,7 +68,7 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       if @workflow.save
         format.html { redirect_to @workflow,
-                      flash: { notice: t('messages.model.created', model: t('model.workflow').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.created', model: t('model.workflow').to_s.humanize) }}
         format.json { render :show, status: :created, location: @workflow }
       else
         format.html { render :new }
@@ -103,7 +103,7 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       if @workflow.update(workflow_params)
         format.html { redirect_to @workflow,
-                      flash: { notice: t('messages.model.updated', model: t('model.workflow').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.updated', model: t('model.workflow').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @workflow }
       else
         format.html { render :edit }
@@ -119,7 +119,7 @@ class WorkflowsController < ApplicationController
     @workflow.destroy
     respond_to do |format|
       format.html { redirect_to workflows_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.workflow').to_s.humanize)) }}
+                    flash: { notice: t('messages.model.deleted', model: t('model.workflow').to_s.humanize) }}
       format.json { head :no_content }
     end
   end

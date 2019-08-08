@@ -67,7 +67,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.save
         format.html { redirect_to @contact,
-                      flash: { notice: t('messages.model.created', model: t('model.contact').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.created', model: t('model.contact').to_s.humanize) }}
         format.json { render :show, status: :created, location: @contact }
       else
         format.html { render :new }
@@ -92,7 +92,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.update(contact_params)
         format.html { redirect_to @contact,
-                      flash: { notice: t('messages.model.updated', model: t('model.contact').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.updated', model: t('model.contact').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @contact }
       else
         format.html { render :edit, :locals => { :contact => @contact } }
@@ -108,7 +108,7 @@ class ContactsController < ApplicationController
     @contact.destroy
     respond_to do |format|
       format.html { redirect_to contacts_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.contact').to_s.humanize)) }}
+                    flash: { notice: t('messages.model.deleted', model: t('model.contact').to_s.humanize) }}
       format.json { head :no_content }
     end
   end

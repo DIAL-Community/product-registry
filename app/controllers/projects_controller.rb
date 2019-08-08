@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
     @project.destroy
     respond_to do |format|
       format.html { redirect_to projects_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.project').to_s.humanize)) }}
+                    flash: { notice: t('messages.model.deleted', model: t('model.project').to_s.humanize) }}
       format.json { head :no_content }
     end
   end

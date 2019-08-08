@@ -30,7 +30,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
   messages:
     model:
       created: '%{model} was successfully created.'
@@ -38,8 +37,8 @@ en:
       delete-failed: 'Could not delete %{model}.'
       updated: '%{model} was successfully updated.'
   pundit:
-    mod_allowed?: "The operation is not allowed."
-    view_allowed?: "You're not allowed to view this page."
+    mod_allowed?: The operation is not allowed.
+    view_allowed?: You're not allowed to view this page.
   model:
     building-block: building block
     contact: contact
@@ -56,40 +55,32 @@ en:
   view:
     building-block:
       form:
-        logo: Logo
-        name: Name
-        title:
-          create: 'Create building block'
-          edit: 'Edit building block'
       list:
-        action: Action
-        delete: Delete
         delete-confirm: Are you sure?
-        edit: Edit
-        name: Name
-        view: View
       show:
-        title: Building Block
         short-description: Short Description
         full-description: Full Description
         other-names: Other Names
-        key-functionalities:
-        example-of-use:
-        
+        key-functionalities: Key Digital Functionalities
+        example-of-use: Examples of use in different sectors
     general:
-      back: 'Back'
+      back: Back
+      create: Create New
       duplicates: 'One or more %{model} with similar name already exists.'
+      edit: Edit
       error:
         one: The form contains error.
         other: The form contains errors.
-      search: 'Search'
-      search-placeholder: 'Search %{model} ...'
-      submit: 'Submit'
+      logo: Logo
+      name: Name
+      search: Search
+      search-placeholder: 'Search for %{model}'
+      submit: Submit
+      title:
+        create: 'Create %{model}'
+        edit: 'Edit %{model}'
+      view: View
     multi-select:
-      assigned-products:
-        label: 'Search and assign products ...'
-        title: 'Assigned Products'
-      assigned-workflows:
-        label: 'Search and assign Workflows ...'
-        title: 'Assigned Workflows'
-      
+      assigned:
+        label: 'Search and assign %{model} ...'
+        title: 'Assigned %{model}'

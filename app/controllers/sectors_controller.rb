@@ -76,7 +76,7 @@ class SectorsController < ApplicationController
     respond_to do |format|
       if @sector.save
         format.html { redirect_to @sector,
-                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) }}
         format.json { render :show, status: :created, location: @sector }
       else
         format.html { render :new }
@@ -111,7 +111,7 @@ class SectorsController < ApplicationController
     respond_to do |format|
       if @sector.update(sector_params)
         format.html { redirect_to @sector,
-                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @sector }
       else
         format.html { render :edit }
@@ -128,11 +128,11 @@ class SectorsController < ApplicationController
     respond_to do |format|
       if @sector.destroy
         format.html { redirect_to sectors_url,
-                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize) }}
         format.json { head :no_content }
       else
         format.html { redirect_to sectors_url,
-                      flash: { notice: t('messages.model.delete-failed', model: t('model.sector').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.delete-failed', model: t('model.sector').to_s.humanize) }}
         format.json { head :no_content }
       end
     end

@@ -82,7 +82,7 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       if @use_case.save
         format.html { redirect_to @use_case,
-                      flash: { notice: t('messages.model.created', model: t('model.use-case').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.created', model: t('model.use-case').to_s.humanize) }}
         format.json { render :show, status: :created, location: @use_case }
       else
         format.html { render :new }
@@ -117,7 +117,7 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       if @use_case.update(use_case_params)
         format.html { redirect_to @use_case,
-                      flash: { notice: t('messages.model.updated', model: t('model.use-case').to_s.humanize)) }}
+                      flash: { notice: t('messages.model.updated', model: t('model.use-case').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @use_case }
       else
         format.html { render :edit }
@@ -133,7 +133,7 @@ class UseCasesController < ApplicationController
     @use_case.destroy
     respond_to do |format|
       format.html { redirect_to use_cases_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.use-case').to_s.humanize)) }}
+                    flash: { notice: t('messages.model.deleted', model: t('model.use-case').to_s.humanize) }}
       format.json { head :no_content }
     end
   end
