@@ -39,16 +39,22 @@
         </div>
         
         <div class="card-footer">
-            <small>
-              <%= product.building_blocks.size %> building block(s),
-              <%= product.sectors.size %> sector(s)
-            </small>
-            <div>
-              <small>Sources: </small>
-              <% product.origins.each do |origin| %>
-                <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img') %>
-              <% end %>
+          <small>
+            <div class="row">
+              <div class="col-12">
+                <%= product.building_blocks.size %> building block(s),
+              </div>
+              <div class="col-12">
+                <%= product.sectors.size %> sector(s)
+              </div>
             </div>
+          </small>
+          <div>
+            <small>Sources: </small>
+            <% product.origins.each do |origin| %>
+              <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img') %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
