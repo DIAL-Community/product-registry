@@ -2,9 +2,9 @@
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="float-right pb-2">
   <%= form_tag(building_blocks_path, :method => "get", id: "search-form", class: "form-inline") do %>
-    <%= text_field_tag :search, params[:search], placeholder: "Search building blocks ...", :class => "form-control" %>
+    <%= text_field_tag :search, params[:search], placeholder: t('view.general.search-placeholder', model: 'building blocks'), :class => "form-control" %>
     <div class="input-group-append">
-      <%= submit_tag "Search", :class => "btn btn-secondary" %>
+      <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
     </div>
   <% end %>
 </div>
@@ -12,7 +12,7 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Name</th>
+      <th><%= t('view.building-block.list.name') %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -23,13 +23,16 @@
         <tr>
           <td><%= building_block.name %></td>
           <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+               <%= t('view.building-block.action') %>
+            </a>
             <div class="dropdown-menu">
-              <%= link_to 'View', building_block, :class =>"dropdown-item"  %>
+              <%= link_to t('view.building-block.view'), building_block, :class =>"dropdown-item"  %>
               <% if user_signed_in? && policy(building_block).mod_allowed? %>
-                <%= link_to 'Edit', edit_building_block_path(building_block), :class =>"dropdown-item"  %>
+                <%= link_to t('view.building-block.edit'), edit_building_block_path(building_block), :class =>"dropdown-item"  %>
                 <div class="dropdown-divider"></div>
-                <%= link_to 'Delete', building_block, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+                <%= link_to t('view.building-block.delete'), building_block, method: :delete, data: { confirm: t('view.building-block.list.delete-confirm') }, :class =>"dropdown-item"  %>
               <% end %>
             </div>
           </td>

@@ -31,32 +31,45 @@
 
 en:
   hello: "Hello world"
-  pundit:
-    mod_allowed?: "The operation is not allowed."
-    view_allowed?: "You're not allowed to view this page."
   messages:
     model:
       created: '%{model} was successfully created.'
-      updated: '%{model} was successfully updated.'
       deleted: '%{model} was successfully deleted.'
       delete-failed: 'Could not delete %{model}.'
+      updated: '%{model} was successfully updated.'
+  pundit:
+    mod_allowed?: "The operation is not allowed."
+    view_allowed?: "You're not allowed to view this page."
   view:
-    general:
-      duplicates: 'One or more %{model} with similar name already exists.'
-    multi-select:
-      assigned-products:
-        title: 'Assigned Products'
-        label: 'Search and assign products ...'
-      assigned-workflows:
-        title: 'Assigned Workflows'
-        label: 'Search and assign Workflows ...'
     building-block:
       form:
-        title:
-          edit: 'Edit building block'
-          create: 'Create building block'
-        name: Name
         logo: Logo
+        name: Name
+        title:
+          create: 'Create building block'
+          edit: 'Edit building block'
       list:
+        action: Action
+        delete: Delete
+        delete-confirm: Are you sure?
+        edit: Edit
+        name: Name
+        view: View
       show:
+    general:
+      back: 'Back'
+      duplicates: 'One or more %{model} with similar name already exists.'
+      error:
+        one: The form contains error.
+        other: The form contains errors.
+      search: 'Search'
+      search-placeholder: 'Search %{model} ...'
+      submit: 'Submit'
+    multi-select:
+      assigned-products:
+        label: 'Search and assign products ...'
+        title: 'Assigned Products'
+      assigned-workflows:
+        label: 'Search and assign Workflows ...'
+        title: 'Assigned Workflows'
       
