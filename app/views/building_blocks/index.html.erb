@@ -7,9 +7,9 @@
   <div class="col-4 pr-0">
     <div class="float-right pb-2">
       <%= form_tag(building_blocks_path, :method => "get", id: "search-form", class: "form-inline") do %>
-        <%= text_field_tag :search, params[:search], placeholder: "Search building blocks ...", :class => "form-control" %>
+        <%= text_field_tag :search, params[:search], placeholder: t('view.general.search-placeholder', model: 'building blocks'), :class => "form-control" %>
         <div class="input-group-append">
-          <%= submit_tag "Search", :class => "btn btn-secondary" %>
+          <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
         </div>
       <% end %>
     </div>
