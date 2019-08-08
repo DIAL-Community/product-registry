@@ -77,6 +77,7 @@ en:
         other: The form contains errors.
       logo: Logo
       name: Name
+      not-available: 'We do not have any %{multi} information for this %{model}.'
       search: Search
       search-placeholder: 'Search for %{model}'
       submit: Submit

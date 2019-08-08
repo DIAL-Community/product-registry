@@ -99,6 +99,8 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any Workflow information for this Building Block.</p>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.building-block'), multi: t('model.workflow').to_s.pluralize) %>
+    </p>
   <% end %>
 </div>

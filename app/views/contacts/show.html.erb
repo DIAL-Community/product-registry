@@ -34,6 +34,8 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.contact'), multi: t('model.organization').to_s.pluralize) %>
+    </p>
   <% end %>
 </div>

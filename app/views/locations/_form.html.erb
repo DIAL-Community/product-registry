@@ -1,23 +1,24 @@
   <%= form_with(model: location, local: true) do |form| %>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :location_name, :class => "form-control", :placeholder => "Name" %>
-      <%= form.label :name %>
+      <%= form.text_field :name, id: :location_name, :class => "form-control", :placeholder => t('view.general.name') %>
+      <%= form.label :name, t('view.general.name') %>
     </fieldset>
 
     <input id="original_name" type="hidden" value="<%= location.name %>" />
     <div id="duplicate-warning" class="alert alert-warning">
-      One or more location(s) with similar name already exists.
+      <%= t('view.general.duplicates', model: t('model.location')) %>
     </div>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Assigned Organizations
+      <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
     </h6>
     <% if !@organization %>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
+        <input type="text" id="organization-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
         <label for="country-organization">
-          Search and assign organizations ...
+          <%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>
         </label>
       </fieldset>
     <% end %>
@@ -38,8 +39,8 @@
     </div>
 
     <fieldset class="float-right mt-4">
-      <%= form.submit 'Submit', :class => "btn btn-primary" %>
-      <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
 
