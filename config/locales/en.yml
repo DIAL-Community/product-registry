@@ -54,7 +54,6 @@ en:
     workflow: workflow
   view:
     building-block:
-      form:
       list:
         delete-confirm: Are you sure?
       show:

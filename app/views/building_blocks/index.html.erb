@@ -40,10 +40,10 @@
             <small>
               <div class="row">
                 <div class="col-12">
-                  <%= building_block.products.size %> product(s),
+                  <%= "#{building_block.products.size} #{t('model.product').to_s.pluralize(building_block.products.size)}" %>,
                 </div>
                 <div class="col-12">
-                  <%= building_block.workflows.size %> workflow(s)
+                  <%= "#{building_block.workflows.size}  #{t('model.workflow').to_s.pluralize(building_block.workflows.size)}" %>
                 </div>
               </div>
             </small>
