@@ -64,6 +64,18 @@ en:
       form:
         email: Email
         title: Title
+    organization:
+      form:
+        endorser: Endorser
+        website: Website
+        when-endorsed: When endorsed
+      index:
+        endorser-only: Endorser only
+        endorsed-date: Endorsed in
+        export: Export
+        export-option: Export with contacts info
+        filter: Filter
+        year: Year
     general:
       action: Action
       back: Back

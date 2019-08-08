@@ -7,7 +7,7 @@
   <%= form_tag(locations_path, :method => "get", id: "search-form", class: "form-inline") do %>
   <%= text_field_tag :search, params[:search],
       placeholder: t('view.general.search-placeholder', model: t('model.location').to_s.pluralize),
-      :class => "form-control" %>
+      class: "form-control" %>
   <div class="input-group-append">
     <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
   </div>

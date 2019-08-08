@@ -5,8 +5,10 @@
     <div class="form-row">
       <div class="col-6 mb-3">
         <fieldset class="form-label-group">
-          <%= text_field_tag "search", params[:search], placeholder: "Organization name ...", class: "form-control" %>
-          <%= label_tag "name" %>
+          <%= text_field_tag "search", params[:search],
+              placeholder: t('view.general.name'),
+              class: "form-control" %>
+          <%= label_tag "name", t('view.general.name') %>
         </fieldset>
       </div>
     </div>
@@ -14,14 +16,14 @@
       <div class="col-12">
         <div class="form-check">
           <%= check_box_tag "endorser_only", true, params[:endorser_only], {class: "form-check-input"} %>
-          <%= label_tag "endorser_only", nil, class: "form-check-label" %>
+          <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
         </div>
       </div>
     </div>
     <div class="form-row">
       <div class="col-6">
         <div class="form-group">
-          <%= label_tag "years" %>
+          <%= label_tag "years", t('view.organization.index.year') %>
           <%= select(nil, "years",
                      Organization
                         .all
@@ -33,7 +35,7 @@
         </div>
       </div>
       <div class="col-6 mb-3">
-        <%= label_tag "sectors" %>
+        <%= label_tag "sectors", t('model.sector').to_s.pluralize.humanize %>
         <%= collection_select(nil, "sectors",
                               Sector.all.order(:name), :id, :name,
                               { selected: params[:sectors] },
@@ -42,14 +44,14 @@
     </div>
     <div class="form-row">
       <div class="col-6 mb-3">
-        <%= label_tag "products" %>
+        <%= label_tag "products", t('model.product').to_s.pluralize.humanize %>
         <%= collection_select(nil, "products",
                               Product.all.order(:name), :id, :name,
                               { selected: params[:products] },
                               { multiple: true, class: 'custom-select' }) %>
       </div>
       <div class="col-6 mb-3">
-        <%= label_tag "locations" %>
+        <%= label_tag "locations", t('model.location').to_s.pluralize.humanize %>
         <%= collection_select(nil, "locations",
                               Location.where.not(location_type: 'point').order(:name), :id, :name,
                               { selected: params[:locations] },
