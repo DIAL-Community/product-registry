@@ -84,8 +84,6 @@ en:
       show:
         other-offices: Other offices
     product:
-      index:
-        has-maturity: Has maturity?
       form:
         complete-assessment: Mark assessment as completed.
         default-url: Default url
@@ -100,6 +98,13 @@ en:
         other-names: Other names
         start-assessment: Start assessing this product.
         website: Website
+      index:
+        filter: Filter
+        has-maturity: Has maturity?
+        product-graph: Product Graph
+        sources: Sources
+      launch:
+        auto-launch: Automatically launch an instance this product
     general:
       action: Action
       back: Back

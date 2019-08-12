@@ -3,12 +3,14 @@
 
 <div class="row">
   <div class="col-8">
-    <%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+    <%= link_to t('view.product.index.product-graph'), productmap_path,
+        class: 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
     <% if user_signed_in? && policy(Product).mod_allowed? %>
-      <%= link_to 'Create New', new_product_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+      <%= link_to t('view.general.create'), new_product_path, class: 'btn btn-outline-secondary float-left ml-1' %>
     <% else %>
-      <%= link_to 'Create New', 'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',\
-                  :class => 'btn btn-outline-secondary float-left ml-1', target: :_blank  %>
+      <%= link_to t('view.general.create'),
+          'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
+          class: 'btn btn-outline-secondary float-left ml-1', target: :_blank  %>
     <% end %>
   </div>
   <div class="col-4 pr-0">
@@ -16,7 +18,7 @@
       <button id="filter-toggle" type="button" class="btn btn-secondary"
               data-toggle="collapse" data-target="#filter-options"
               aria-expanded="false" aria-controls="filter-options">
-        Filter
+        <%= t('view.product.index.filter') %>
       </button>
     </div>
   </div>
@@ -42,15 +44,15 @@
           <small>
             <div class="row">
               <div class="col-12">
-                <%= product.building_blocks.size %> building block(s),
+                <%= "#{product.building_blocks.size} #{t('model.building-block').to_s.pluralize(product.building_blocks.size)}" %>,
               </div>
               <div class="col-12">
-                <%= product.sectors.size %> sector(s)
+                <%= "#{product.sectors.size} #{t('model.sector').to_s.pluralize(product.sectors.size)}" %>,
               </div>
             </div>
           </small>
           <div>
-            <small>Sources: </small>
+            <small><%= t('view.product.index.sources') %>:</small>
             <% product.origins.each do |origin| %>
               <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img') %>
             <% end %>
