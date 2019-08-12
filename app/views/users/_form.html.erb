@@ -11,9 +11,18 @@
     <%= form.select(:role, User.roles.keys.map {|role| [role.titleize,role]}, {}, :class => "form-control mb-2") %>
   </fieldset>
 
-  <%= form.hidden_field :is_approved, :value => false %>
-  <%= form.check_box :is_approved, {}, true, false %>
-  <label class="form-label-group mt-2" for="is_approved">Manually approve this user.</label>
+  <% if @user.role == "admin" %>
+  <fieldset>
+    <%= form.check_box :receive_backup, {}, true, false %>
+    <label class="form-label-group mt-2" for="receive_backup">This user will receive DB backups.</label>
+  </fieldset>
+  <% end %>
+
+  <fieldset>
+    <%= form.hidden_field :is_approved, :value => false %>
+    <%= form.check_box :is_approved, {}, true, false %>
+    <label class="form-label-group mt-2" for="is_approved">Manually approve this user.</label>
+  </fieldset>
 
   <fieldset class="float-right mt-4">
     <%= form.submit 'Submit', :class => "btn btn-primary" %>

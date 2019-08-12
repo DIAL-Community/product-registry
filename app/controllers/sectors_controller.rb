@@ -6,11 +6,13 @@ class SectorsController < ApplicationController
   # GET /sectors.json
   def index
     if params[:without_paging]
-      @sectors = Sector
-            .where(nil)
-            .name_contains(params[:search])
-            .order(:name)
+      @sectors = Sector.where(nil)
+      if (params[:search])
+        @sectors = @sectors.name_contains(params[:search])
+      end
       @sectors = params[:display_only].nil? ? @sectors : @sectors.where(is_displayable: true)
+      @sectors = @sectors.order(:name)
+      @sectors
       authorize @sectors, :view_allowed?
       return
     end
