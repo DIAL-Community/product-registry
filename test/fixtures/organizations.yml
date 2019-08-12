@@ -13,3 +13,9 @@ two:
   when_endorsed: 2018-11-16 08:26:18
   website: MyString
   is_endorser: false
+
+three:
+  name: 1984
+  slug: 1984
+  when_endorsed: 2018-11-16 08:26:18
+  website: website

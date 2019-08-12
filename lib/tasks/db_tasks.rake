@@ -51,6 +51,18 @@ namespace :db do
       exec cmd
     end
 
+    desc "Send backup email to admin users that have receive_backup selected"
+    task :send_backup_emails => :environment do
+      cmd = nil
+      with_config do |app, host, db, user, pass|
+        users = User.where(receive_backup: true)
+        users.each do |user|
+          cmd = "curl -s --user 'api:" + Rails.application.secrets.mailgun_api_key + "' https://api.mailgun.net/v3/"+Rails.application.secrets.mailgun_domain+"/messages -F from='Registry <backups@registry.dial.community>' -F to="+user.email+" -F subject='T4D Registry Backup' -F text='Registry dump file' -F attachment=@/t4d/db/backups/registry.dump"
+          system cmd
+        end
+      end
+    end
+
     private
 
     def with_config
