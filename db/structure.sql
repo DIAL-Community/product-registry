@@ -793,7 +793,8 @@ CREATE TABLE public.users (
     unconfirmed_email character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    role public.user_role DEFAULT 'user'::public.user_role NOT NULL
+    role public.user_role DEFAULT 'user'::public.user_role NOT NULL,
+    receive_backup boolean DEFAULT false
 );
 
 
@@ -1803,6 +1804,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190730143658'),
 ('20190730154937'),
 ('20190730155346'),
+('20190731195112'),
 ('20190801194208'),
 ('20190801200432'),
 ('20190805145805'),
