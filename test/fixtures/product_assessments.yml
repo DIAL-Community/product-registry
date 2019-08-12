@@ -3,9 +3,9 @@
 one:
   product: one
   osc_cd10: false
-  digisquare_country_utilization: 1
+  digisquare_country_utilization: 'medium'
 
 two:
   product: two
   osc_cd10: false
-  digisquare_country_utilization: 1
+  digisquare_country_utilization: 'low'
