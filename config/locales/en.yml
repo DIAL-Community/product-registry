@@ -52,6 +52,8 @@ en:
     use-case: use case
     user: user
     workflow: workflow
+    sdg: sdg
+    sustainable-development-goal: sustainable development goal
   view:
     building-block:
       show:
@@ -81,6 +83,23 @@ en:
         all-sectors: All sectors
       show:
         other-offices: Other offices
+    product:
+      index:
+        has-maturity: Has maturity?
+      form:
+        complete-assessment: Mark assessment as completed.
+        default-url: Default url
+        digisquare-maturity: Digital Square Maturity
+        high: high
+        included-products: Included Products
+        interoperable-products: Interoperable Products
+        is-launchable: Check to indicate product is auto-launchable.
+        low: low
+        medium: medium
+        osc-maturity: OSC Maturity
+        other-names: Other names
+        start-assessment: Start assessing this product.
+        website: Website
     general:
       action: Action
       back: Back

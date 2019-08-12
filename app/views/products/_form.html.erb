@@ -1,27 +1,30 @@
   <%= form_with(model: product, multipart: true, local: true) do |form| %>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :product_name, :class => "form-control", :placeholder => "Name" %>
-    <%= form.label :name %>
+    <%= form.text_field :name, id: :product_name, class: "form-control",
+        placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
   <div class="mt-2">
     <input id="original_name" type="hidden" value="<%= product.name %>" />
     <div id="duplicate-warning" class="alert alert-warning">
-      One or more product(s) with similar name already exists.
+      <%= t('view.general.duplicates', model: t('model.product')) %>
     </div>
   </div>
   
   <fieldset class="custom-file">
     <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
-    <label class="custom-file-label" for="logo-file">Pick logo</label>
+    <label class="custom-file-label" for="logo-file">
+      <%= t('view.general.logo') %>
+    </label>
   </fieldset>
 
-  <div id="other-name-label" class="mt-2">Other names:</div>
+  <div id="other-name-label" class="mt-2"><%= "#{t('view.product.form.other-names')}:" %></div>
   <div id="other-names">
     <div id="base-other-name" class="form-inline mt-2 mb-2">
       <input type="text" id="sector-search" name="other_names[]" class="form-control col-10"
-              placeholder="Other name" aria-labelledby="other-name-label" />
+              placeholder="<%= t('view.product.form.other-names') %>" aria-labelledby="other-name-label" />
       <div class="input-group-append">
         <button type="submit" class="btn btn-primary ml-2 add-other-name">+</button>
         <button type="submit" class="btn btn-primary ml-2 remove-other-name">-</button>
@@ -30,26 +33,31 @@
   </div>
   
   <fieldset class="form-label-group mt-2">
-    <%= form.text_field :website, id: :product_website, :class => "form-control", :placeholder => "Website" %>
-    <%= form.label :website %>
+    <%= form.text_field :website, id: :product_website, class: "form-control",
+        placeholder: t('view.product.form.website') %>
+    <%= form.label :website, t('view.product.form.website') %>
   </fieldset>
 
   <%= form.hidden_field :is_launchable, :value => false %>
   <%= form.check_box :is_launchable, {}, true, false %>
-  <label class="form-label-group mt-2" for="is_launchable">Check to indicate product is auto-launchable.</label>
+  <label class="form-label-group mt-2" for="is_launchable">
+    <%= t('view.product.form.is-launchable') %>
+  </label>
   <fieldset class="form-label-group">
-    <%= form.text_field :default_url, id: :default_url, :class => "form-control", :placeholder => "Default Url (use <host_ip> as placeholder)" %>
-    <%= form.label :default_url %>
+    <%= form.text_field :default_url, id: :default_url, class: "form-control",
+        placeholder: t('view.product.form.default-url') %>
+    <%= form.label :default_url, t('view.product.form.default-url') %>
   </fieldset>
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-        Assigned Organizations
+        <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
       </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="organization-search" class="form-control" placeholder="Search and assign organizations ..." />
+        <input type="text" id="organization-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
         <label for="country-organization">
-          Search and assign organizations ...
+          <%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>
         </label>
       </fieldset>
       <div class="row">
@@ -68,12 +76,13 @@
     </div>
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-        Assigned Sectors
+        <%= t('view.multi-select.assigned.title', model: t('model.sector').to_s.pluralize.humanize) %>
       </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="sector-search" class="form-control" placeholder="Search and assign sectors ..." />
+        <input type="text" id="sector-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>" />
         <label for="sector-search">
-          Search and assign sectors ...
+          <%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>
         </label>
       </fieldset>
       <div class="row">
@@ -95,12 +104,13 @@
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-        Building Blocks
+        <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
       </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="building-block-search" class="form-control" placeholder="Search and assign building blocks ..." />
+        <input type="text" id="building-block-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>" />
         <label for="product-building-blocks">
-          Search and assign building blocks ...
+          <%= t('view.multi-select.assigned.label', model: t('model.building-block').to_s.pluralize) %>
         </label>
       </fieldset>
       <div class="row">
@@ -119,12 +129,13 @@
     </div>
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-        SDGs
+        <%= t('view.multi-select.assigned.title', model: t('model.sdg').to_s.upcase.pluralize) %>
       </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="sustainable-development-goal-search" class="form-control" placeholder="Search and assign sustainable development goals ..." />
+        <input type="text" id="sustainable-development-goal-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sustainable-development-goals').to_s.pluralize) %>" />
         <label for="product-sustainable-development-goals">
-          Search and assign sustainable development goals ...
+          <%= t('view.multi-select.assigned.label', model: t('model.sustainable-development-goals').to_s.pluralize) %>
         </label>
       </fieldset>
       <div class="row">
@@ -146,12 +157,13 @@
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-          Interoperable Products
+        <%= t('view.product.form.interoperable-products') %>
       </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="interoperate-search" class="form-control" placeholder="Search and assign interoperable products ..." />
+        <input type="text" id="interoperate-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('view.product.form.interoperable-products').downcase) %>" />
         <label for="interoperable-products">
-          Search and assign interoperable products ...
+          <%= t('view.multi-select.assigned.label', model: t('view.product.form.interoperable-products').downcase) %>
         </label>
       </fieldset>
       <div class="row">
@@ -170,12 +182,13 @@
     </div>
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-        Included Products
+        <%= t('view.product.form.included-products') %>
       </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="include-search" class="form-control" placeholder="Search and assign included products ..." />
+        <input type="text" id="include-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('view.product.form.included-products').downcase) %>" />
         <label for="included-products">
-          Search and assign included products ...
+          <%= t('view.multi-select.assigned.label', model: t('view.product.form.included-products').downcase) %>
         </label>
       </fieldset>
       <div class="row">
@@ -197,9 +210,10 @@
   <div class="custom-control custom-switch">
     <input type="checkbox" class="custom-control-input"
            id="product-assessment" name="product[start_assessment]"
-           value="true"
-           <%= "checked" if product.start_assessment %> />
-    <label class="custom-control-label" for="product-assessment">Start assessing this product.</label>
+           value="true" <%= "checked" if product.start_assessment %> />
+    <label class="custom-control-label" for="product-assessment">
+      <%= t('view.product.form.start-assessment') %>
+    </label>
   </div>
 
   <div id="product-assessment-section" class="card mt-4 mb-4">
@@ -208,13 +222,13 @@
         <li class="nav-item">
           <a class="nav-link maturity-tab active" id="osc-maturity-tab" data-toggle="tab" href="#osc-element" role="tab"
              aria-controls="osc-maturity" aria-selected="true">
-            OSC Maturity
+            <%= t('view.product.form.osc-maturity') %>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link maturity-tab" id="digi-square-tab" data-toggle="tab" href="#digisquare-element" role="tab"
              aria-controls="digi-square" aria-selected="false">
-            Digital Square Maturity
+            <%= t('view.product.form.digisquare-maturity') %>
           </a>
         </li>
       </ul>
@@ -253,7 +267,9 @@
             <input id="osc-completed" type="checkbox" class="form-check-input"
                    name="has_osc" value="true"
                    <%= "checked" if product.product_assessment && product.product_assessment.has_osc %> />
-            <label class="form-check-label ml-1" for="osc-completed">Mark assessment as completed.</label>
+            <label class="form-check-label ml-1" for="osc-completed">
+              <%= t('view.product.form.complete-assessment') %>
+            </label>
           </fieldset>
         </div>
         <div class="tab-pane fade" id="digisquare-element" role="tabpanel" aria-labelledby="digi-square-tab">
@@ -274,15 +290,15 @@
                            value="<%= product.product_assessment.send(sub_indicator["code"]) if product.product_assessment  %>"/>
                     <div class="dropdown-menu" aria-labelledby="digisquare-selector">
                       <div class="dropdown-item" data-sub-indicator="low">
-                        <h6>Low</h6>
+                        <h6><%= t('view.product.form.low').to_s.humanize %></h6>
                         <div><%= sub_indicator["low"].html_safe %></div>
                       </div>
                       <div class="dropdown-item" data-sub-indicator="medium">
-                        <h6>Medium</h6>
+                        <h6><%= t('view.product.form.medium').to_s.humanize %></h6>
                         <div><%= sub_indicator["medium"].html_safe %></div>
                       </div>
                       <div class="dropdown-item" data-sub-indicator="high">
-                        <h6>High</h6>
+                        <h6><%= t('view.product.form.high').to_s.humanize %></h6>
                         <div><%= sub_indicator["high"].html_safe %></div>
                       </div>
                     </div>
@@ -299,7 +315,9 @@
                    name="has_digisquare"
                    value="true"
                    <%= "checked" if product.product_assessment && product.product_assessment.has_digisquare %> />
-            <label class="form-check-label ml-1" for="digisquare-completed">Mark assessment as completed.</label>
+            <label class="form-check-label ml-1" for="digisquare-completed">
+              <%= t('view.product.form.complete-assessment') %>
+            </label>
           </fieldset>
         </div>
       </div>
@@ -307,8 +325,8 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit 'Submit', :class => "btn btn-primary" %>
-    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
 
