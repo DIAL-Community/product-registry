@@ -161,8 +161,9 @@ function sectorCustomAutoComplete(source, callback) {
       );
     },
     select: function(event, ui) {
-      callback(ui.item.id, ui.item.label)
-      $(this).val("")
+      callback(ui.item.id, ui.item.label);
+      $(this).blur();
+      $(this).val("");
       return false;
     }
   }
