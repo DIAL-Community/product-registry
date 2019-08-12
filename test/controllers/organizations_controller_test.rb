@@ -96,6 +96,12 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should show organization with digit only slug" do
+    digit_only_organization = organizations(:three)
+    get organization_url(digit_only_organization)
+    assert_response :success
+  end
+
   test "should get edit" do
     get edit_organization_url(@organization)
     assert_response :success

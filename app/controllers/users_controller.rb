@@ -43,10 +43,9 @@ class UsersController < ApplicationController
     user_hash = {}
     user_hash[:role] = user_params[:role]
     
-    if (user_params[:receive_backup])
+    user_hash[:receive_backup] = false
+    if (user_params[:receive_backup]) && (user_hash[:role] == "admin")
       user_hash[:receive_backup] = user_params[:receive_backup]
-    else 
-      user_hash[:receive_backup] = false
     end
 
     if (user_params[:is_approved] && @user.confirmed_at.nil?)

@@ -14,8 +14,7 @@ module Modules
           # Find by name, and then by aliases and then by slug.
           if existing_product.nil?
             slug = slug_em name_alias
-            existing_product = Product.find_by("name = :name OR slug = :slug OR :other_name = ANY(aliases)",
-                                                name: name_alias, slug: slug, other_name: name_alias)
+            existing_product = Product.first_duplicate(name_alias, slug)
           else
             break
           end
@@ -62,8 +61,7 @@ module Modules
       
       candidate_name = section['line']
       candidate_slug = slug_em(candidate_name)
-      existing_product = Product.find_by("name = :name OR slug = :slug OR :other_name = ANY(aliases)",
-                                          name: candidate_name, slug: candidate_slug, other_name: candidate_name)
+      existing_product = Product.first_duplicate(candidate_name, candidate_slug)
       if existing_product.nil?
         existing_product = Product.new
         existing_product.name = candidate_name
@@ -83,7 +81,7 @@ module Modules
       puts "Syncing #{product['name']} ..."
       product_name = product['name']
       slug = slug_em product_name
-      sync_product = Product.where('lower(name) = lower(?)', product_name)[0]
+      sync_product = Product.first_duplicate(product_name, slug)
       if sync_product.nil?
         sync_product = Product.new
         sync_product.name = product_name
