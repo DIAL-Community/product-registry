@@ -71,11 +71,16 @@ en:
         when-endorsed: When endorsed
       index:
         endorser-only: Endorser only
-        endorsed-date: Endorsed in
+        endorsed-date: Endorsed on
         export: Export
         export-option: Export with contacts info
         filter: Filter
         year: Year
+      map:
+        title: Map of Digital Principles Endorsers
+        all-sectors: All sectors
+      show:
+        other-offices: Other offices
     general:
       action: Action
       back: Back

@@ -1,12 +1,16 @@
 <div class="card">
-  <h5 class="card-header bg-secondary text-white">Map of Digital Principles Endorsers</h5>
+  <h5 class="card-header bg-secondary text-white">
+    <%= t('view.organization.map.title') %>
+  </h5>
 </div>
 <div id="map" class="map" style="height:640px;"></div>
 <div id="popup" class="map-popup"></div>
 
 <fieldset class="form-group float-right">
   <select id="sector" class="custom-select">
-    <option value=-1>All sectors</option>
+    <option value=-1>
+      <%= t('view.organization.map.all-sectors') %>
+    </option>
   </select>
 </fieldset>
 
