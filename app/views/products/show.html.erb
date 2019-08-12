@@ -1,12 +1,12 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to "Product Graph", productmap_path, :class => 'btn btn-outline-secondary float-left ml-1 float-right', target: "_blank" %>
+<%= link_to t('view.product.index.product-graph'), productmap_path, :class => 'btn btn-outline-secondary float-left ml-1 float-right', target: "_blank" %>
 <br clear="both"/>
 
 <div class="card mt-4">
   <h5 class="card-header bg-secondary text-white">
-    Product: <%= @product.name %>
+    <%= "#{t('model.product').to_s.humanize}: #{@product.name}" %>
   </h5>
   <div class="card-body">
     <div class="row">
@@ -18,20 +18,20 @@
       <div class="col-6 mt-4">
         <% if !@product.website.nil? and !@product.website.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-            <strong>Website:</strong>
+            <strong><%= t('view.product.form.website') %>:</strong>
             <a href="//<%= @product.website %>" target="_new"><%= @product.website %> &#x29c9;</a>
           </h6>
         <% end %>
         <% if !@product.origins.nil? and !@product.origins.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-          <strong>Sources:</strong>
+          <strong><%= t('view.product.index.sources') %>:</strong>
           <% @product.origins.each do |origin| %>
             <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
           <% end %>
         <% end %>
         <% if !@product.aliases.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-            <strong>Other names:</strong>
+            <strong><%= t('view.product.form.other-names') %>:</strong>
             <ul>
               <% @product.aliases.each{|other_name| %>
                 <li><%= other_name %></li>
@@ -42,9 +42,9 @@
       </div>
     </div>
     <p class="float-right mb-0" >
-      <%= link_to 'Back', products_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), products_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@product).mod_allowed? %>
-        <%= link_to 'Edit', edit_product_path(@product), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), edit_product_path(@product), :class => "card-link" %>
       <% end %>
     </p>
   </div>
@@ -52,7 +52,7 @@
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Organizations</h5>
+    <h5 class="float-left mb-0"><%= t('model.organization').to_s.humanize.pluralize %></h5>
   </div>
   <% if @product.organizations.count > 0 %>
     <div class="row">
@@ -69,14 +69,16 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any organization information for this product.</p>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.product'), multi: t('model.organization').to_s.pluralize) %>
+    </p>
   <% end %>
 </div>
 
 <div class="card-deck mt-4">
   <div class="card">
     <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left">Interoperable Products</h5>
+      <h5 class="float-left"><%= t('view.product.form.interoperable-products') %></h5>
     </div>
     <div class="card-body">
       <% if @product.interoperates_with.count > 0 %>
@@ -101,14 +103,16 @@
         </div>
         <%end %>
       <% else %>
-        <p class="card-text text-muted">We don't have any interoperating information for this product.</p>
+        <p class="card-text text-muted">
+          <%= t('view.product.show.no-interrop-product') %>
+        </p>
       <% end %>
     </div>
   </div>
 
   <div class="card">
     <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left">Included Products</h5>
+      <h5 class="float-left"><%= t('view.product.form.included-products') %></h5>
     </div>
     <div class="card-body">
       <% if @product.includes.count > 0 %>
@@ -133,14 +137,16 @@
         </div>
         <% end %>
       <% else %>
-        <p class="card-text text-muted">We don't have any includes information for this product.</p>
+        <p class="card-text text-muted">
+          <%= t('view.product.show.no-include-product') %>
+        </p>
       <% end %>
     </div>
   </div>
 
   <div class="card">
     <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left">SDGs</h5>
+      <h5 class="float-left"><%= t('model.sdg').to_s.upcase.pluralize %></h5>
     </div>
     <div class="card-body">
       <% if @product.sustainable_development_goals.count > 0 %>
@@ -163,7 +169,9 @@
         </div>
         <% end %>
       <% else %>
-        <p class="card-text text-muted">We don't have any sustainable development goal information for this product.</p>
+        <p class="card-text text-muted">
+          <%= t('view.general.not-available', model: t('model.product'), multi: t('model.sustainable-development-goal').to_s.pluralize) %>
+        </p>
       <% end %>
     </div>
   </div>
@@ -171,7 +179,7 @@
 
 <div class="card-deck">
     <div class="card">
-      <h5 class="card-header bg-secondary text-white">Digital Square Maturity</h5>
+      <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.digisquare-maturity') %></h5>
       <div class="card-body text-center">
         <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
           <% @digisquare_maturity.each do |digisquare_maturity_category| %>
@@ -183,12 +191,14 @@
             <br clear="both"/>
           <% end %>
         <% else %>
-          <p class="card-text text-muted">This product hasn't been evaluated with Digital Square's maturity model.</p>
+          <p class="card-text text-muted">
+            <%= t('view.product.show.no-digisquare-eval') %>
+          </p>
         <% end %>
       </div>
     </div>
     <div class="card">
-      <h5 class="card-header bg-secondary text-white">Open Source Center Maturity</h5>
+      <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.osc-maturity') %></h5>
       <div class="card-body">
         <% if !@product.product_assessment.nil? and @product.product_assessment.has_osc %>
           <small>
@@ -203,13 +213,15 @@
           </ul>
           </small>
         <% else %>
-          <p class="card-text text-muted">This product hasn't been evaluated with the OSC's maturity model.</p>
+          <p class="card-text text-muted">
+            <%= t('view.product.show.no-osc-eval') %>
+          </p>
         <% end %>
       </div>
     </div>
 
     <div class="card">
-      <h5 class="card-header bg-secondary text-white">Building Blocks</h5>
+      <h5 class="card-header bg-secondary text-white"><%= t('model.building-block').to_s.pluralize.titlecase %></h5>
       <div class="card-body">
         <% if @product.building_blocks.count > 0 %>
           <div class="card h-100">
@@ -220,7 +232,9 @@
             </div>
           </div>
         <% else %>
-          <p class="card-text text-muted">We don't have any building block information for this product.</p>
+          <p class="card-text text-muted">
+            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.building-block').to_s.pluralize) %>
+          </p>
         <% end %>
       </div>
     </div>
@@ -228,13 +242,17 @@
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Automatic Launch</h5>
+    <h5 class="float-left mb-0">
+      <%= t('view.product.show.auto-launch') %>
+    </h5>
   </div id="autolaunch">
   <% if @product.is_launchable %>
     <div id="launchdata">
     <%= render partial: "launch" %>
     </div>
   <% else %>
-    <p class="card-text text-muted">This product is not configured for auto-launch</p>
+    <p class="card-text text-muted">
+      <%= t('view.product.show.not-auto-launch') %>
+    </p>
   <% end %>
 </div>

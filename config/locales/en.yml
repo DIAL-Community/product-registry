@@ -105,6 +105,13 @@ en:
         sources: Sources
       launch:
         auto-launch: Automatically launch an instance this product
+      show:
+        auto-launch: Automatic Launch
+        not-auto-launch: This product is not configured for auto-launch
+        no-digisquare-eval: This product hasn't been evaluated with Digital Square's maturity model.
+        no-include-product: We don't have any includes information for this product.
+        no-interrop-product: We don't have any interoperating information for this product.
+        no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
     general:
       action: Action
       back: Back
