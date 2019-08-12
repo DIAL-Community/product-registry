@@ -71,7 +71,7 @@
         <% end %>
       </div>
     <% else %>
-      <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+      <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.contact').to_s.pluralize) %>
     <% end %>
   </div>
 <% end %>
@@ -93,7 +93,7 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.sector').to_s.pluralize) %>
   <% end %>
 </div>
 
@@ -118,7 +118,7 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any products information for this organization.</p>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.product').to_s.pluralize) %>
   <% end %>
 </div>
 
@@ -139,7 +139,7 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.country').to_s.pluralize) %>
   <% end %>
 </div>
 
