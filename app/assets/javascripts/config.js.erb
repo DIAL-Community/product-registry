@@ -1,0 +1,4 @@
+var esri_api;
+document.addEventListener('turbolinks:load', function() {
+  esri_api = "<%= Rails.configuration.geocode["esri"]["geocode_uri"] %>";
+});
