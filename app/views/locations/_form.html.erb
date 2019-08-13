@@ -1,7 +1,7 @@
   <%= form_with(model: location, local: true) do |form| %>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :location_name, :class => "form-control", :placeholder => t('view.general.name') %>
+      <%= form.text_field :name, id: :location_name, class: "form-control", placeholder: t('view.general.name') %>
       <%= form.label :name, t('view.general.name') %>
     </fieldset>
 

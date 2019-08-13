@@ -121,6 +121,9 @@ en:
         start-date: Start Date
       show:
         origin: Origin
+    sector:
+      index:
+        no-sector: We couldn't find any sector in the database.
     general:
       action: Action
       back: Back
