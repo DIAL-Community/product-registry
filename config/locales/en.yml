@@ -149,6 +149,11 @@ en:
         search-sdg-target: Search and assign SDG Targets
       index:
         no-data: We couldn't find any use case in the database.
+      show:
+        description: Description
+        steps: Steps for this use case include
+        sdg-targets: SDG Targets
+        no-sdg-targets: We don't have any SDG target information for this use case.
     general:
       action: Action
       back: Back

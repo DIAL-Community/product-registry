@@ -4,18 +4,18 @@
 <div class="card">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0">
-      Use Case: <%= @use_case.name %>
+      <%= "#{t('model.use-case').to_s.titlecase}: #{@use_case.name}" %>
     </h5>
   </div>
   <div class="card-body">
     <p class="card-subtitle text-muted mb-0" >
-      <strong>Description: </strong><%= @useCaseJson.desc %>
+      <strong><%= t('view.use-case.show.description') %>: </strong><%= @useCaseJson.desc %>
     </p>
     <p class="card-subtitle text-muted mt-3" >
-      <strong>Sector: </strong><%= @sector_name %>
+      <strong><%= t('model.sector').to_s.titlecase %>: </strong><%= @sector_name %>
     </p>
     <% if @useCaseJson.steps %>
-    <p class="card-subtitle text-muted mt-3" ><strong>Steps for this Use Case include:</strong></p>
+    <p class="card-subtitle text-muted mt-3" ><strong><%= t('view.use-case.show.steps') %>:</strong></p>
       <ul>
       <% @useCaseJson.steps.each do |step| %>
         <li class="text-muted"><%= step %>
@@ -33,7 +33,7 @@
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">SDG Targets</h5>
+    <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
   </div>
   <% if @use_case.sdg_targets.count > 0 %>
     <div class="row">
@@ -49,13 +49,13 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any SDG target information for this Use Case.</p>
+    <p class="card-text text-muted"><%= t('view.use-case.show.no-sdg-targets') %></p>
   <% end %>
 </div>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Workflows</h5>
+    <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
   </div>
   <% if @use_case.workflows.count > 0 %>
     <div class="row">
@@ -70,6 +70,8 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any Workflow information for this Use Case.</p>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.use-case'), multi: t('model.workflow').to_s.pluralize) %>
+    </p>
   <% end %>
 </div>
