@@ -154,6 +154,14 @@ en:
         steps: Steps for this use case include
         sdg-targets: SDG Targets
         no-sdg-targets: We don't have any SDG target information for this use case.
+    user:
+      form:
+        db-backup: This user will receive DB backups.
+        email: Email
+        manual-approval: Manually approve this user.
+        password: Password
+        password-confirmation: Password confirmation
+        role: Role
     general:
       action: Action
       back: Back
