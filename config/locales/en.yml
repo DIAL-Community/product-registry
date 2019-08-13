@@ -133,6 +133,13 @@ en:
       logout: Logout
       product-registry: Product Registry
       profile: Profile Settings
+    sdg:
+      index:
+        no-sdg: We couldn't find a sustainable development goal matching the search phrase.
+        sdg-number: Number
+        view-targets: View Targets
+      show:
+        target: Target
     general:
       action: Action
       back: Back
