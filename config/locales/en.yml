@@ -112,6 +112,15 @@ en:
         no-include-product: We don't have any includes information for this product.
         no-interrop-product: We don't have any interoperating information for this product.
         no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
+    project:
+      index:
+        budget: Budget
+        description: Description
+        end-date: End Date
+        no-project: We couldn't find any project in the database.
+        start-date: Start Date
+      show:
+        origin: Origin
     general:
       action: Action
       back: Back
