@@ -124,6 +124,15 @@ en:
     sector:
       index:
         no-sector: We couldn't find any sector in the database.
+    footer:
+      privacy-policy: Privacy policy
+    header:
+      deploys: Deploys
+      digital-principles: Digital Principles
+      login: Login
+      logout: Logout
+      product-registry: Product Registry
+      profile: Profile Settings
     general:
       action: Action
       back: Back
