@@ -46,9 +46,7 @@
     <% else %>
       <tr>
         <td colspan="4">
-          <small class="text-muted">
-            We couldn't find location matching to the search phrase. Do you want to <%= link_to 'create new location?', new_location_path %>
-          </small>
+          <small class="text-muted"><%= t('view.location.index.no-data') %></small>
         </td>
       </tr>
     <% end %>

@@ -66,6 +66,9 @@ en:
       form:
         email: Email
         title: Title
+    location:
+      index:
+        no-data: We couldn't find any location in the database.
     organization:
       form:
         endorser: Endorser
@@ -135,11 +138,17 @@ en:
       profile: Profile Settings
     sdg:
       index:
-        no-sdg: We couldn't find a sustainable development goal matching the search phrase.
+        no-data: We couldn't find a sustainable development goal matching the search phrase.
         sdg-number: Number
         view-targets: View Targets
       show:
         target: Target
+    use-case:
+      form:
+        assigned-sdg-target: Assigned SDG Targets
+        search-sdg-target: Search and assign SDG Targets
+      index:
+        no-data: We couldn't find any use case in the database.
     general:
       action: Action
       back: Back
