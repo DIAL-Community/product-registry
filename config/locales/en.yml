@@ -30,7 +30,28 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
   pundit:
     mod_allowed?: "The operation is not allowed."
     view_allowed?: "You're not allowed to view this page."
+  view:
+    product:
+      index:
+        is_endorsed: "Used/Maintained by an Endorser"
+        is_deployable: "This product is one-click deployable"
+        source: "Source: "
+        sources: "Sources: "
+        source_dial: "Digital Impact Alliance Open Source Center"
+        source_unicef: "Unicef"
+        source_digital_square: "Digital Square"
+        footer_bb_candidate: "Candidate for "
+        footer_bb: " Building Block"
+        footer_interop: "Compatible with "
+        footer_sdg: "Satisfies SDG "
+        footer_maturity_score: "Overall percentage of criteria met (1-10)"
+        footer_maturity_ds: "Digital Square Global Good Maturity Model Scores (1-10)"
+        footer_maturity_osc: "DIAL Open Source Center Maturity Model Overall Score"
+        footer_osc_score: "Overall percentage of criteria met (1-10)"
+        footer_popover_bb: "Candidate for the following Building Blocks"
+        footer_popover_sdg: "Satisfies the following SDGs"
+        footer_popover_interop: "This product is compatible with"
+        footer_popover_maturity: "Product maturity evaluations"
