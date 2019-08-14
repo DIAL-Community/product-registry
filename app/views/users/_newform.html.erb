@@ -11,8 +11,7 @@
     <%= form.label :password, t('view.user.form.password') %>
     <small class="text-muted">
       <% if @minimum_password_length %>
-        <em>(<%= @minimum_password_length %>
-          characters minimum)</em>
+        <em>(<%= t('view.user.form.minimum-length', minimum: @minimum_password_length) %>)</em>
       <% end %>
     </small>
   </fieldset>

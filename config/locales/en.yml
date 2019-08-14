@@ -159,9 +159,18 @@ en:
         db-backup: This user will receive DB backups.
         email: Email
         manual-approval: Manually approve this user.
+        minimum-length: '%{number} characters minimum.'
         password: Password
         password-confirmation: Password confirmation
         role: Role
+      index:
+        no-data: We couldn't find users matching to the search phrase.
+      show:
+        approved: Approved
+        no: No
+        receive-backup: Receive DB Backup
+        reset-password: Reset Password
+        yes: Yes
     general:
       action: Action
       back: Back
