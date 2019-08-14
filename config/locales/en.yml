@@ -126,7 +126,7 @@ en:
         origin: Origin
     sector:
       index:
-        no-sector: We couldn't find any sector in the database.
+        no-data: We couldn't find any sector in the database.
     footer:
       privacy-policy: Privacy policy
     header:
@@ -171,6 +171,18 @@ en:
         receive-backup: Receive DB Backup
         reset-password: Reset Password
         yes: Yes
+    workflow:
+      form:
+        category: Category
+        description: Description
+        other-names: Other Names
+      index:
+        no-data: We couldn't find workflow matching to the search phrase.
+      show:
+        full-description: Full Description
+        mapping: Sample mappings of workflows to use case
+        other-names: Other Names
+        short-description: Short Description
     general:
       action: Action
       back: Back

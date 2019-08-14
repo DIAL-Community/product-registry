@@ -1,34 +1,39 @@
 <%= form_with(model: workflow, local: true) do |form| %>
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :workflow_name, :class => "form-control", :placeholder => "Name" %>
-    <%= form.label :name %>
+    <%= form.text_field :name, id: :workflow_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
   <div class="mt-2"></div>
   <input id="original_name" type="hidden" value="<%= workflow.name %>" />
   <div id="duplicate-warning" class="alert alert-warning">
-    One or more workflow(s) with similar name already exists.
+    <%= t('view.general.duplicates', model: t('model.workflow')) %>
   </div>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :description, id: :workflow_description, :class => "form-control", :placeholder => "Description" %>
-    <%= form.label :description %>
+    <%= form.text_field :description, id: :workflow_description, class: "form-control", placeholder: t('view.workflow.form.description') %>
+    <%= form.label :description, t('view.workflow.form.description') %>
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :other_names, id: :workflow_other_names, :class => "form-control", :placeholder => "Other Names" %>
-    <%= form.label :other_names %>
+    <%= form.text_field :other_names, id: :workflow_other_names, class: "form-control", placeholder: t('view.workflow.form.other-names') %>
+    <%= form.label :other_names, t('view.workflow.form.other-names') %>
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :category, id: :workflow_category, :class => "form-control", :placeholder => "Category" %>
-    <%= form.label :category %>
+    <%= form.text_field :category, id: :workflow_category, class: "form-control", placeholder: t('view.workflow.form.category') %>
+    <%= form.label :category, t('view.workflow.form.category')%>
   </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize.titlecase) %>
+  </h6>
 
   <fieldset class="form-label-group mt-2">
-    <input type="text" id="use-case-search" class="form-control" placeholder="Search and assign Use Cases ..." />
+    <input type="text" id="use-case-search" class="form-control"
+           placeholder="<%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize) %>" />
     <label for="workflow-use-case">
-      Search and assign Use Cases ...
+      <%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize) %>
     </label>
   </fieldset>
 
@@ -46,10 +51,15 @@
     </div>
   </div>
 
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
+  </h6>
+
   <fieldset class="form-label-group mt-2">
-    <input type="text" id="building-block-search" class="form-control" placeholder="Search and assign Building Blocks ..." />
+    <input type="text" id="building-block-search" class="form-control"
+           placeholder="<%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize) %>" />
     <label for="workflow-building-block">
-      Search and assign Building Blocks ...
+      <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize) %>
     </label>
   </fieldset>
 
@@ -67,8 +77,8 @@
     </div>
   </div>
   <fieldset class="float-right mt-4">
-    <%= form.submit 'Submit', :class => "btn btn-primary" %>
-    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
 
