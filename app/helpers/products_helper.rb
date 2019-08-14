@@ -70,7 +70,10 @@ module ProductsHelper
     content += '<div>'
     images.each do |image|
       if image["gradient"]
-        content += '<div class="digisquare-gauge-med">'
+        content += '<div class="digisquare-gauge-med" title="'+image["tooltip"]+'">'
+        content += '<p class="footer-score-large">'+image["filename"].to_s+'</p></div>'
+      elsif image["osc"]
+        content += '<div class="osc-med" title="'+image["tooltip"]+'">'
         content += '<p class="footer-score-large">'+image["filename"].to_s+'</p></div>'
       else
         if image["id"]
@@ -171,7 +174,7 @@ module ProductsHelper
         end
         total_score = (score*10/total).round
         tooltip = t("view.product.index.footer_osc_score")
-        image = Hash["filename"=>total_score, "tooltip"=>tooltip, "gradient"=>1]
+        image = Hash["filename"=>total_score, "tooltip"=>tooltip, "osc"=>1]
         images.push(image)
       end
     when "sources"

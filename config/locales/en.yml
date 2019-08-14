@@ -44,7 +44,7 @@ en:
         source_unicef: "Unicef"
         source_digital_square: "Digital Square"
         footer_bb_candidate: "Candidate for "
-        footer_bb: " Building Block"
+        footer_bb: " building block"
         footer_interop: "Compatible with "
         footer_sdg: "Satisfies SDG "
         footer_maturity_score: "Overall percentage of criteria met (1-10)"

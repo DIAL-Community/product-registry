@@ -55,6 +55,10 @@
                   <div class="digisquare-gauge-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
                     <p class="footer-score"><%= image["filename"] %></p>
                   </div>
+                <% elsif image["osc"] %>
+                  <div class="osc-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
+                    <p class="osc-footer-score"><%= image["filename"] %></p>
+                  </div>
                 <% else %>
                   <%= image_tag(image["filename"], class: 'footer-img', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
                 <% end %>
@@ -70,6 +74,10 @@
                 <% if image["gradient"] %>
                   <div class="digisquare-gauge-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
                     <p class="footer-score"><%= image["filename"] %></p>
+                  </div>
+                <% elsif image["osc"] %>
+                  <div class="osc-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
+                    <p class="osc-footer-score"><%= image["filename"] %></p>
                   </div>
                 <% else %>
                   <%= image_tag(image["filename"], class: 'footer-img', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
