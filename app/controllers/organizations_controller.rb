@@ -231,6 +231,12 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1.json
   def destroy
     authorize @organization, :mod_allowed?
+
+    # delete any projects associated with this org
+    @organization.projects.each do |project|
+      project.destroy
+    end
+
     @organization.destroy
     respond_to do |format|
       format.html { redirect_to organizations_url,

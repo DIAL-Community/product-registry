@@ -115,8 +115,40 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy organization" do
     assert_difference('Organization.count', -1) do
-      @project = projects(:one)
-      delete project_url(@project)
+      delete organization_url(@organization)
+    end
+
+    assert_redirected_to organizations_url
+  end
+
+  test "should destroy project along with organization" do
+    @project = projects(:one)
+    assert_difference('Project.count', -1) do
+      delete organization_url(@organization)
+    end
+  end
+
+  test "should not destroy sectors when destroying organization" do
+    @sector = sectors(:one)
+    assert_difference('Sector.count', 0) do
+      delete organization_url(@organization)
+    end
+
+    assert_redirected_to organizations_url
+  end
+
+  test "should not destroy products when destroying organization" do
+    @product = products(:one)
+    assert_difference('Product.count', 0) do
+      delete organization_url(@organization)
+    end
+
+    assert_redirected_to organizations_url
+  end
+
+  test "should not destroy contact when destroying organization" do
+    @contact = contacts(:one)
+    assert_difference('Contact.count', 0) do
       delete organization_url(@organization)
     end
 

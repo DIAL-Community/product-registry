@@ -1,5 +1,13 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-8 mb-2">
+    <% if user_signed_in? && policy(Organization).mod_allowed? %>
+      <%= link_to 'Delete this organization', @organization, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-outline-secondary float-left ml-1' %>
+    <% end %>
+  </div>
+</div>
 <div class="border rounded bg-secondary text-white clearfix border card-header">
   <h5 class="float-left mb-0">
     <%= "#{t('model.organization').to_s.humanize}:  #{@organization.name}" %>
