@@ -206,13 +206,13 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs pull-right" id="maturity" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="osc-maturity-tab" data-toggle="tab" href="#osc-element" role="tab"
+          <a class="nav-link maturity-tab active" id="osc-maturity-tab" data-toggle="tab" href="#osc-element" role="tab"
              aria-controls="osc-maturity" aria-selected="true">
             OSC Maturity
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="digi-square-tab" data-toggle="tab" href="#digisquare-element" role="tab"
+          <a class="nav-link maturity-tab" id="digi-square-tab" data-toggle="tab" href="#digisquare-element" role="tab"
              aria-controls="digi-square" aria-selected="false">
             Digital Square Maturity
           </a>
@@ -273,15 +273,15 @@
                     <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
                            value="<%= product.product_assessment.send(sub_indicator["code"]) if product.product_assessment  %>"/>
                     <div class="dropdown-menu" aria-labelledby="digisquare-selector">
-                      <div class="dropdown-item" data-sub-indicator="1">
+                      <div class="dropdown-item" data-sub-indicator="low">
                         <h6>Low</h6>
                         <div><%= sub_indicator["low"].html_safe %></div>
                       </div>
-                      <div class="dropdown-item" data-sub-indicator="2">
+                      <div class="dropdown-item" data-sub-indicator="medium">
                         <h6>Medium</h6>
                         <div><%= sub_indicator["medium"].html_safe %></div>
                       </div>
-                      <div class="dropdown-item" data-sub-indicator="3">
+                      <div class="dropdown-item" data-sub-indicator="high">
                         <h6>High</h6>
                         <div><%= sub_indicator["high"].html_safe %></div>
                       </div>

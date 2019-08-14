@@ -24,6 +24,7 @@
           <%= label_tag "years" %>
           <%= select(nil, "years",
                      Organization
+                        .where.not(when_endorsed: nil)
                         .all
                         .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
                         .uniq!

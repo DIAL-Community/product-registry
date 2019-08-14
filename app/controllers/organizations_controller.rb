@@ -229,6 +229,12 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1.json
   def destroy
     authorize @organization, :mod_allowed?
+
+    # delete any projects associated with this org
+    @organization.projects.each do |project|
+      project.destroy
+    end
+
     @organization.destroy
     respond_to do |format|
       format.html { redirect_to organizations_url, flash: { notice: 'Organization was successfully destroyed.' }}
@@ -258,9 +264,8 @@ class OrganizationsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      if !params[:id].scan(/\D/).empty?
-        @organization = Organization.find_by(slug: params[:id])
-      else
+      @organization = Organization.find_by(slug: params[:id])
+      if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end
     end

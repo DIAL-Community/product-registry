@@ -4,11 +4,11 @@ module ProductsHelper
     if (product_assessment)
       maturity_level = product_assessment.send(digisquare_maturity_yml_element["code"])
       case maturity_level
-        when 1
+        when 'low'
           maturity_text = digisquare_maturity_yml_element["low"]
-        when 2
+        when 'medium'
           maturity_text = digisquare_maturity_yml_element["medium"]
-        when 3
+        when 'high'
           maturity_text = digisquare_maturity_yml_element["high"]
       end
     end
