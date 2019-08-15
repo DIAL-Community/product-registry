@@ -16,7 +16,7 @@ class OrganizationsController < ApplicationController
       return
     end
 
-    filter_organizations
+    search_organizations
   end
 
   def sanitize_filter_values(filter_name)
@@ -31,7 +31,7 @@ class OrganizationsController < ApplicationController
     filter_value
   end
 
-  def filter_organizations
+  def search_organizations
     @organizations = Organization.all.order(:slug)
 
     return unless params.key?('search')
