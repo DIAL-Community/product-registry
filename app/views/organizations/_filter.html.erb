@@ -1,7 +1,6 @@
 <div class="collapse" id="filter-options">
   <hr />
   <%= form_tag(organizations_path, :method => "get") do %>
-    <%= hidden_field nil, 'filter' %>
     <div class="form-row">
       <div class="col-6 mb-3">
         <fieldset class="form-label-group">
@@ -52,10 +51,10 @@
                               { multiple: true, class: 'custom-select' }) %>
       </div>
       <div class="col-6 mb-3">
-        <%= label_tag "locations", t('model.location').to_s.pluralize.humanize %>
-        <%= collection_select(nil, "locations",
+        <%= label_tag "countries" %>
+        <%= collection_select(nil, "countries",
                               Location.where.not(location_type: 'point').order(:name), :id, :name,
-                              { selected: params[:locations] },
+                              { selected: params[:countries] },
                               { multiple: true, class: 'custom-select' }) %>
       </div>
     </div>

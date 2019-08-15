@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def generate_offset(first_duplicate)
-    size = 1;
+    size = 1
     if (!first_duplicate.nil?)
       size = first_duplicate
                 .slug
@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
 
   def take_filter(filter_name)
     session[filter_name.to_s]
+  end
+
+  def put_filter(filter_name, filter_value)
+    session[filter_name.to_s] = filter_value
   end
 
   def prepare_non_organization_filters

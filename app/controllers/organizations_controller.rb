@@ -11,45 +11,52 @@ class OrganizationsController < ApplicationController
       @organizations = Organization
       @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
       @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
-      @organizations = @organizations.eager_load(:sectors, :locations).order(:name);
+      @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
       authorize @organizations, :view_allowed?
       return
     end
 
-    if params[:filter]
-      locations = params[:locations].reject{|x| x.nil? || x.blank? }
-      products = params[:products].reject{|x| x.nil? || x.blank? }
-      sectors = params[:sectors].reject{|x| x.nil? || x.blank? }
-      years = params[:years].reject{|x| x.nil? || x.blank? }
+    filter_organizations
+  end
 
-      @organizations = Organization.all
-      @organizations = @organizations.where('extract(year from when_endorsed) in (?)', years)\
-        if !years.empty?
-      @organizations = @organizations.name_contains(params[:search])\
-        if params[:search].present? && !params[:search].blank?
-      @organizations = @organizations.where(is_endorser: true)\
-        if params[:endorser_only].present?
-      @organizations = @organizations.joins(:locations).where("locations.id in (?)", locations)\
-        if !locations.empty?
-      @organizations = @organizations.joins(:sectors).where("sectors.id in (?)", sectors)\
-        if !sectors.empty?
-      @organizations = @organizations.joins(:products).where("products.id in (?)", products)\
-        if !products.empty?
-      authorize @organizations, :view_allowed?
-      return
+  def filter_organizations
+    @organizations = Organization.all.order(:slug)
+    return unless params.key? 'search'
+
+    countries = params[:countries].reject { |x| x.nil? || x.blank? }
+    products = params[:products].reject { |x| x.nil? || x.blank? }
+    sectors = params[:sectors].reject { |x| x.nil? || x.blank? }
+    years = params[:years].reject { |x| x.nil? || x.blank? }
+
+    unless years.empty?
+      @organizations = @organizations.where('extract(year from when_endorsed) in (?)', years)
+      put_organization_filter('years', years)
     end
 
-    if params[:search]
-      @organizations = Organization
-          .where(nil)
-          .name_contains(params[:search])
-          .order(:name)
-      authorize @organizations, :view_allowed?
-    else
-      @organizations = Organization
-          .order(:slug)
-      authorize @organizations, :view_allowed?
+    @organizations = @organizations.name_contains(params[:search]) unless params[:search].blank?
+
+    if params[:endorser_only].present?
+      @organizations = @organizations.where(is_endorser: true)
+      put_organization_filter('endorser_only', true)
     end
+
+    unless countries.empty?
+      @organizations = @organizations.joins(:locations).where('locations.id in (?)', countries)
+      put_organization_filter('countries', countries)
+    end
+
+    unless sectors.empty?
+      @organizations = @organizations.joins(:sectors).where('sectors.id in (?)', sectors)
+      put_organization_filter('sectors', sectors)
+    end
+
+    unless products.empty?
+      @organizations = @organizations.joins(:products).where('products.id in (?)', products)
+      put_filter('products', products)
+    end
+
+    authorize @organizations, :view_allowed?
+    @organizations
   end
 
   def export
