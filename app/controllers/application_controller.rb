@@ -21,6 +21,24 @@ class ApplicationController < ActionController::Base
     return "_dup#{size.to_s}"
   end
 
+  def take_filter(filter_name)
+    session[filter_name.to_s]
+  end
+
+  def prepare_non_organization_filters
+    non_organization_filters = {}
+    OTHER_FILTER_KEYS.each do |filter|
+      non_organization_filters[filter.to_s] = session[filter.to_s]
+    end
+    non_organization_filters
+  end
+
+  def put_non_organization_filter(filter_name, filter_value)
+    return unless OTHER_FILTER_KEYS.include?(filter_name)
+
+    session[filter_name.to_s] = filter_value
+  end
+
   def prepare_organization_filters
     organization_filters = {}
     ORGANIZATION_FILTER_KEYS.each do |filter|
@@ -34,7 +52,6 @@ class ApplicationController < ActionController::Base
 
     session[filter_name.to_s] = filter_value
   end
-
 
   private
 
