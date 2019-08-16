@@ -58,9 +58,16 @@ class Product < ApplicationRecord
       if self.product_assessment.has_digisquare
         @digisquare_maturity.each do |digisquare_maturity_category|
           cat_total = 0
-          digisquare_maturity_category["sub-indicators"].each do |sub_indicator|
-            if self.product_assessment.send(sub_indicator['code'])
-              cat_total += (self.product_assessment.send(sub_indicator['code']) - 2)
+          digisquare_maturity_category['sub-indicators'].each do |sub_indicator|
+            continue unless product_assessment.send(sub_indicator['code'])
+            indicator = product_assessment.send(sub_indicator['code'])
+            case indicator
+            when ProductAssessment.digisquare_maturity_levels[:low]
+              cat_total += -1
+            when ProductAssessment.digisquare_maturity_levels[:medium]
+              cat_total += 0
+            when ProductAssessment.digisquare_maturity_levels[:high]
+              cat_total += 1
             end
           end
           cat_score = 5 * (cat_total.to_f / digisquare_maturity_category['sub-indicators'].length) + 5
