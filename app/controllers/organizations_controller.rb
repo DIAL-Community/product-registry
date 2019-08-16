@@ -290,7 +290,7 @@ class OrganizationsController < ApplicationController
     end
 
     def geocode(magic_key, auth_token)
-      uri_template = Addressable::Template.new(Rails.configuration.geocode["esri"]["geocode_uri"])
+      uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['geocode_uri']}{?q*}")
       geocode_uri = uri_template.expand({
         "q" => {
           "SingleLine" => magic_key,
