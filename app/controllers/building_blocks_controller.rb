@@ -28,6 +28,13 @@ class BuildingBlocksController < ApplicationController
     end
   end
 
+  def count
+  end
+
+  def view
+    @building_blocks = BuildingBlock.all
+  end
+
   # GET /building_blocks/1
   # GET /building_blocks/1.json
   def show

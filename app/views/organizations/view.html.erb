@@ -1,0 +1,57 @@
+<h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  Years
+</h6>
+<fieldset class="form-label-group mt-2">
+  <input type="text" id="year-search" class="form-control" placeholder="Years" />
+  <label for="year-search">
+    Years
+  </label>
+</fieldset>
+<div class="row">
+  <div id="base-selected-years" class="col-6 col-lg-4 mb-2">
+    <div class="card h-100">
+      <div class="p-2 clearfix">
+        <p class="mb-0 float-left"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+    Number of organization: <span id="organization-count"></span>
+</div>
+
+<button id="apply-filter" type="button" class="btn btn-primary">Apply</button>
+<button id="clear-filter" type="button" class="btn btn-secondary">Clear</button>
+
+<div class="row">
+  <% @organizations.each do |organization| %>
+    <div class="col-lg-2 col-md-4 d-flex align-items-stretch mt-2">
+      <div class="card index-card">
+        <div class="card-header bg-secondary text-white small">
+          <%= link_to truncate(organization.name, length: 23, omission: '&hellip;', escape: false), organization,
+              'title' => organization.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+        </div>
+        <div class="model-logo">
+          <%= link_to(organization) do %>
+            <%= image_tag(organization.image_file, class: 'card-img-top align-middle') %>
+          <% end %>
+        </div>
+        <% if organization.is_endorser %>
+          <div class="card-footer">
+            <% if organization.website.present? %>
+              <small>
+                <a href="<%= "//" + organization.website %>" target="_new">
+                   website &#x29c9;
+                </a>
+              </small><br/>
+            <% end %>
+            <small class="text-muted">
+              <%= image_tag('digiprins.png', width: 16) %> Endorsed in <%= organization.when_endorsed.year %>
+            </small>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

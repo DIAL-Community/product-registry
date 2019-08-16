@@ -19,16 +19,64 @@ class OrganizationsController < ApplicationController
     search_organizations
   end
 
-  def sanitize_filter_values(filter_name)
-    filter_values = []
-    (params.key? filter_name.to_s) && filter_values += params[filter_name.to_s].reject { |value| value.nil? || value.blank? }
-    filter_values
+  def count
+    @organizations = Organization.all.order(:slug)
+    endorser_only = sanitize_session_value 'endorser_only'
+
+    countries = sanitize_session_values 'countries'
+    sectors = sanitize_session_values 'sectors'
+    years = sanitize_session_values 'years'
+
+    endorser_only && @organizations = @organizations.where(is_endorser: true)
+    !countries.empty? && @organizations = @organizations.joins(:locations).where('locations.id in (?)', countries)
+    !sectors.empty? && @organizations = @organizations.joins(:sectors).where('sectors.id in (?)', sectors)
+    !years.empty? && @organizations = @organizations.where('extract(year from when_endorsed) in (?)', years)
+
+    authorize @organizations, :view_allowed?
+    render json: @organizations.count
   end
 
-  def sanitize_filter_value(filter_name)
-    filter_value = nil
-    (params.key? filter_name.to_s) && filter_value = params[filter_name.to_s]
-    filter_value
+  def view
+    @organizations = Organization.all.order(:slug)
+    endorser_only = sanitize_session_value 'endorser_only'
+
+    countries = sanitize_session_values 'countries'
+    sectors = sanitize_session_values 'sectors'
+    years = sanitize_session_values 'years'
+
+    endorser_only && @organizations = @organizations.where(is_endorser: true)
+    !countries.empty? && @organizations = @organizations.joins(:locations).where('locations.id in (?)', countries)
+    !sectors.empty? && @organizations = @organizations.joins(:sectors).where('sectors.id in (?)', sectors)
+    !years.empty? && @organizations = @organizations.where('extract(year from when_endorsed) in (?)', years)
+
+    authorize @organizations, :view_allowed?
+    @organizations
+  end
+
+  def remove_filter
+    return unless params.key? 'filter_name'
+
+    session.delete(params['filter_name'])
+  end
+
+  def add_filter
+    return unless params.key? 'filter_name'
+
+    filter_name = params['filter_name']
+    filter_value = params['filter_value']
+    if filter_name.to_s == 'endorser_only'
+      session[filter_name.to_s] = filter_value
+    else
+      existing_value = session[filter_name.to_s]
+      existing_value.nil? && existing_value = []
+      existing_value.push(filter_value)
+      session[filter_name.to_s] = existing_value
+    end
+  end
+
+  def all_filters
+    @organization_filters = prepare_organization_filters
+    render json: @organization_filters
   end
 
   def search_organizations
@@ -275,6 +323,30 @@ class OrganizationsController < ApplicationController
         @organization = Organization.find(params[:id])
       end
     end
+
+  def sanitize_filter_values(filter_name)
+    filter_values = []
+    (params.key? filter_name.to_s) && filter_values += params[filter_name.to_s].reject { |value| value.nil? || value.blank? }
+    filter_values
+  end
+
+  def sanitize_filter_value(filter_name)
+    filter_value = nil
+    (params.key? filter_name.to_s) && filter_value = params[filter_name.to_s]
+    filter_value
+  end
+
+  def sanitize_session_values(filter_name)
+    filter_values = []
+    (session.key? filter_name.to_s) && filter_values += session[filter_name.to_s]
+    filter_values
+  end
+
+  def sanitize_session_value(filter_name)
+    filter_value = nil
+    (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]
+    filter_value
+  end
 
     def authenticate_user
       uri = URI.parse(Rails.configuration.geocode["esri"]["auth_uri"])
