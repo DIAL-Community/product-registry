@@ -27,7 +27,7 @@
       <div class="col-lg-2 col-md-4 d-flex align-items-stretch mt-2">
         <div class="card index-card">
           <div class="card-header bg-secondary text-white small">
-            <%= link_to truncate(building_block.name, length: 25, omission: '&hellip;', escape: false), building_block,
+            <%= link_to truncate(building_block.name, length: 23, omission: '&hellip;', escape: false), building_block,
                 'title' => building_block.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
           </div>
           <div class="model-logo">
@@ -35,7 +35,7 @@
               <%= image_tag(building_block.image_file, class: 'card-img-top align-middle') %>
             <% end %>
           </div>
-        
+
           <div class="card-footer">
             <small>
               <div class="row">
