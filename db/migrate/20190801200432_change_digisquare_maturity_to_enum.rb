@@ -9,7 +9,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_country_utilization"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
 
     change_column :product_assessments, :digisquare_country_strategy,\
@@ -17,7 +17,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_country_strategy"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_digital_health_interventions,\
@@ -25,7 +25,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_digital_health_interventions"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_source_code_accessibility,\
@@ -33,7 +33,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_source_code_accessibility"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_funding_and_revenue,\
@@ -41,7 +41,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_funding_and_revenue"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_developer_contributor_and_implementor_community_engagement,\
@@ -49,7 +49,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_developer_contributor_and_implementor_community_engagement"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_community_governance,\
@@ -57,7 +57,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_community_governance"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_software_roadmap,\
@@ -65,7 +65,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_software_roadmap"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_user_documentation,\
@@ -73,7 +73,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_user_documentation"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_multilingual_support,\
@@ -81,7 +81,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_multilingual_support"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_technical_documentation,\
@@ -89,7 +89,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_technical_documentation"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_software_productization,\
@@ -97,7 +97,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_software_productization"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_interoperability_and_data_accessibility,\
@@ -105,7 +105,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_interoperability_and_data_accessibility"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_security,\
@@ -113,7 +113,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_security"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
     change_column :product_assessments, :digisquare_scalability,\
@@ -121,7 +121,7 @@ class ChangeDigisquareMaturityToEnum < ActiveRecord::Migration[5.1]
         " (CASE digisquare_scalability"\
         "   WHEN 1 THEN 'low'::digisquare_maturity_level"\
         "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
-        "   WHEN 2 THEN 'medium'::digisquare_maturity_level"\
+        "   WHEN 3 THEN 'high'::digisquare_maturity_level"\
         " END)"
     
   end

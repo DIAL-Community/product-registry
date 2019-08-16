@@ -75,7 +75,7 @@ describe("organizations.js:", function() {
       expect(requests.length).to.be(1);
 
       request = requests.shift();
-      expect(request.url).to.have.string("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest");
+      expect(request.url).to.have.string("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest");
       expect(request.url).to.have.string("text", "some search term");
       expect(request.url).to.have.string("category", "City");
 
