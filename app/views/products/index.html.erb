@@ -25,36 +25,73 @@
 
 <div class="row">
   <% @products.each do |product| %>
-    <div class="col-lg-2 col-md-4 d-flex align-items-stretch mt-2">
+    <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
       <div class="card index-card">
         <div class="card-header bg-secondary text-white small">
           <%= link_to truncate(product.name, length: 25, omission: '&hellip;', escape: false), product,
               'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
-
+          <% if product.is_launchable %>
+            <i class="fa fa-rocket header-img ml-1" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.product.index.is_deployable') %>"></i>
+          <% end %>
+          <% if is_endorsed(product) %>
+            <%= image_tag("digiprins.png", class: 'header-img', 'title' => t('view.product.index.is_endorsed'), 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
+          <% end %>
         </div>
         <div class="model-logo">
           <%= link_to(product) do %>
             <%= image_tag(product.image_file, class: 'card-img-top align-middle') %>
           <% end %>
         </div>
-        
-        <div class="card-footer">
-          <small>
-            <div class="row">
-              <div class="col-12">
-                <%= product.building_blocks.size %> building block(s),
-              </div>
-              <div class="col-12">
-                <%= product.sectors.size %> sector(s)
-              </div>
+
+        <div class="card-footer footer-padding">
+            <% category, images = get_footer_row(product, 1) %>
+            <% if images.count > 0 %>
+              <div class="footer-row" data-toggle="popover" data-placement="bottom" data-html="true" data-content='<%= get_row_popover(category,images) %>'>
+            <% else %>
+              <div class="footer-row">
+            <% end %>
+              <% images.each do |image| %>
+                <% if image["gradient"] %>
+                  <div class="digisquare-gauge-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
+                    <p class="footer-score"><%= image["filename"] %></p>
+                  </div>
+                <% elsif image["osc"] %>
+                  <div class="osc-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
+                    <p class="osc-footer-score"><%= image["filename"] %></p>
+                  </div>
+                <% else %>
+                  <%= image_tag(image["filename"], class: 'footer-img', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
+                <% end %>
+              <% end %>
+            </div>
+            <% category, images = get_footer_row(product, 2) %>
+            <% if images.count > 0 %>
+              <div class="footer-row mt-1" data-toggle="popover" data-placement="bottom" data-html="true" data-content='<%= get_row_popover(category,images) %>'>
+            <% else %>
+              <div class="footer-row mt-1">
+            <% end %>
+              <% images.each do |image| %>
+                <% if image["gradient"] %>
+                  <div class="digisquare-gauge-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
+                    <p class="footer-score"><%= image["filename"] %></p>
+                  </div>
+                <% elsif image["osc"] %>
+                  <div class="osc-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
+                    <p class="osc-footer-score"><%= image["filename"] %></p>
+                  </div>
+                <% else %>
+                  <%= image_tag(image["filename"], class: 'footer-img', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
+                <% end %>
+              <% end %>
+            </div>
+            <% category, images = get_footer_row(product, 3) %>
+            <div class="footer-row" data-container="body" data-toggle="popover" data-placement="bottom">
+              <p class="footer-source"><%= get_source_label(product) %></p>
+              <% images.each do |image| %>
+                <%= image_tag(image["filename"], class: 'footer-img-right', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
+              <% end %>
             </div>
           </small>
-          <div>
-            <small>Sources: </small>
-            <% product.origins.each do |origin| %>
-              <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img') %>
-            <% end %>
-          </div>
         </div>
       </div>
     </div>

@@ -43,6 +43,9 @@ public/assets/**/*.gif
 public/assets/**/*.jpg
 public/assets/**/*.js
 
+# Uploaded assets
+public/uploads
+
 # Assets from unit tests.
 app/assets/images/building_blocks/.png
 app/assets/images/building_blocks/bb1.png
