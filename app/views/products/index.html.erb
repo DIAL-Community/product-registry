@@ -42,7 +42,7 @@
             <%= image_tag(product.image_file, class: 'card-img-top align-middle') %>
           <% end %>
         </div>
-        
+
         <div class="card-footer footer-padding">
             <% category, images = get_footer_row(product, 1) %>
             <% if images.count > 0 %>
@@ -92,12 +92,6 @@
               <% end %>
             </div>
           </small>
-          <div>
-            <small>Sources: </small>
-            <% product.origins.each do |origin| %>
-              <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img') %>
-            <% end %>
-          </div>
         </div>
       </div>
     </div>
