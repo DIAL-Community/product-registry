@@ -1,0 +1,19 @@
+.about-nav {
+    position:fixed;
+    top: 150px;
+    right: 40px;
+}
+
+.side-element {
+    width: 5px;
+    height: 5px;
+    margin-bottom: 75px;
+    display: flex;
+    justify-content: center;
+    opacity: 0.3;
+    transition: opacity .6s;
+}
+
+.nav-highlight {
+    opacity: 1;
+}

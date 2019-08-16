@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :users
   end
   
-  root to: 'organizations#map'
+  root to: 'about#index'
   
   resources :products
 
