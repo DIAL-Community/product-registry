@@ -1,20 +1,23 @@
 Rails.application.routes.draw do
-  
+
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
 
   devise_for :users
-  scope "/admin" do
+  scope '/admin' do
     resources :users
   end
-  
+
   root to: 'organizations#map'
-  
+
   resources :products
 
   resources :building_blocks do
-    resources :workflows
+    post 'add_filter', on: :collection
+    post 'remove_filter', on: :collection
+    get 'count', on: :collection
+    get 'view', on: :collection
   end
 
   resources :sustainable_development_goals, only: [:index, :show]
@@ -24,20 +27,22 @@ Rails.application.routes.draw do
     resources :sdg_targets
     resources :workflows
   end
-  
+
   resources :workflows do
     resources :use_cases
   end
-  
+
   resources :deploys do
     get 'show_messages'
     post 'add_ssh_user'
   end
 
   resources :organizations do
-    resources :contacts
-    resources :locations
-    resources :sectors
+    post 'add_filter', on: :collection
+    post 'remove_filter', on: :collection
+    get 'all_filters', on: :collection
+    get 'count', on: :collection
+    get 'view', on: :collection
   end
 
   resources :locations do
