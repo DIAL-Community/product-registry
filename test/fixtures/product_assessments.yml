@@ -2,10 +2,37 @@
 
 one:
   product: one
+  has_osc: false
+  has_digisquare: true
   osc_cd10: false
+  osc_cd20: true
   digisquare_country_utilization: 'medium'
+  digisquare_country_strategy: 'high'
+  digisquare_digital_health_interventions: 'high'
+  digisquare_source_code_accessibility: 'medium'
 
 two:
   product: two
+  has_osc: true
+  has_digisquare: false
   osc_cd10: false
+  osc_cd20: true
+  osc_qu10: true
+  osc_qu11: true
+  osc_co10: true
+  osc_co20: false
   digisquare_country_utilization: 'low'
+  digisquare_country_strategy: 'high'
+  digisquare_digital_health_interventions: 'high'
+  digisquare_source_code_accessibility: 'high'
+
+three:
+  product: three
+  has_osc: true
+  has_digisquare: true
+  osc_cd10: false
+  osc_cd20: true
+  digisquare_country_utilization: 'low'
+  digisquare_country_strategy: 'medium'
+  digisquare_digital_health_interventions: 'high'
+  digisquare_source_code_accessibility: 'medium'

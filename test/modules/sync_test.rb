@@ -58,6 +58,9 @@ class SyncModuleTest < ActiveSupport::TestCase
   test "sync_unicef_product should save new product with initialism" do
     initial_size = Product.count
 
+    existing_assessment = product_assessments(:three)
+    ProductAssessment.delete existing_assessment
+
     existing_product = products(:three)
     Product.delete existing_product
 
