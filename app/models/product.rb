@@ -59,7 +59,8 @@ class Product < ApplicationRecord
         @digisquare_maturity.each do |digisquare_maturity_category|
           cat_total = 0
           digisquare_maturity_category['sub-indicators'].each do |sub_indicator|
-            continue unless product_assessment.send(sub_indicator['code'])
+            next unless product_assessment.send(sub_indicator['code'])
+
             indicator = product_assessment.send(sub_indicator['code'])
             case indicator
             when ProductAssessment.digisquare_maturity_levels[:low]
