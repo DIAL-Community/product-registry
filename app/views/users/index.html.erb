@@ -1,12 +1,14 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to 'Create New', new_user_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<%= link_to t('view.general.create'), new_user_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
 <div class="float-right pb-2">
   <%= form_tag(users_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search users ...", :class => "form-control" %>
+  <%= text_field_tag :search, params[:search],
+      placeholder: t('view.general.search-placeholder', model: t('model.sector').to_s.pluralize),
+      class: "form-control" %>
   <div class="input-group-append">
-    <%= submit_tag "Search", :class => "btn btn-secondary" %>
+    <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
   </div>
 <% end %>
 </div>
@@ -14,8 +16,8 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Email</th>
-      <th>Role</th>
+      <th><%= t('view.user.form.email') %></th>
+      <th><%= t('view.user.form.role')%></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -27,12 +29,15 @@
           <td><%= user.email %></td>
           <td><%= user.role.capitalize %></td>
           <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+              <%= t('view.general.action') %>
+            </a>
             <div class="dropdown-menu">
-              <%= link_to 'View', user, :class =>"dropdown-item"  %>
-              <%= link_to 'Edit', edit_user_path(user), :class =>"dropdown-item"  %>
+              <%= link_to t('view.general.view'), user, :class =>"dropdown-item"  %>
+              <%= link_to t('view.general.edit'), edit_user_path(user), :class =>"dropdown-item"  %>
               <div class="dropdown-divider"></div>
-              <%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+              <%= link_to t('view.general.delete'), user, method: :delete, data: { confirm: t('view.general.delete-confirm') }, :class =>"dropdown-item" %>
             </div>
           </td>
         </tr>
@@ -41,7 +46,7 @@
       <tr>
         <td colspan="4">
           <small class="text-muted">
-            We couldn't find users matching to the search phrase. Do you want to <%= link_to 'create new user?', new_user_path %>
+            <%= t('view.user.index.no-data') %>
           </small>
         </td>
       </tr>

@@ -30,12 +30,82 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  messages:
+    model:
+      created: '%{model} was successfully created.'
+      deleted: '%{model} was successfully deleted.'
+      delete-failed: 'Could not delete %{model}.'
+      updated: '%{model} was successfully updated.'
   pundit:
-    mod_allowed?: "The operation is not allowed."
-    view_allowed?: "You're not allowed to view this page."
+    mod_allowed?: The operation is not allowed.
+    view_allowed?: You're not allowed to view this page.
+  model:
+    building-block: building block
+    contact: contact
+    location: location
+    office: office
+    country: country
+    organization: organization
+    product: product
+    project: project
+    sector: sector
+    use-case: use case
+    user: user
+    workflow: workflow
+    sdg: sdg
+    sustainable-development-goal: sustainable development goal
   view:
-    product:
+    building-block:
+      show:
+        short-description: Short Description
+        full-description: Full Description
+        other-names: Other Names
+        key-functionalities: Key Digital Functionalities
+        example-of-use: Examples of use in different sectors
+    contact:
+      form:
+        email: Email
+        title: Title
+    location:
       index:
+        no-data: We couldn't find any location in the database.
+    organization:
+      form:
+        endorser: Endorser
+        website: Website
+        when-endorsed: When endorsed
+      index:
+        endorser-only: Endorser only
+        endorsed-date: Endorsed on
+        export: Export
+        export-option: Export with contacts info
+        filter: Filter
+        year: Year
+      map:
+        title: Map of Digital Principles Endorsers
+        all-sectors: All sectors
+        all-years: All Years
+      show:
+        other-offices: Other offices
+    product:
+      form:
+        complete-assessment: Mark assessment as completed.
+        default-url: Default url
+        digisquare-maturity: Digital Square Maturity
+        high: high
+        included-products: Included Products
+        interoperable-products: Interoperable Products
+        is-launchable: Check to indicate product is auto-launchable.
+        low: low
+        medium: medium
+        osc-maturity: OSC Maturity
+        other-names: Other names
+        start-assessment: Start assessing this product.
+        website: Website
+      index:
+        filter: Filter
+        has-maturity: Has maturity?
+        product-graph: Product Graph
         is_endorsed: "Used/Maintained by an Endorser"
         is_deployable: "This product is one-click deployable"
         source: "Source: "
@@ -55,3 +125,110 @@ en:
         footer_popover_sdg: "Satisfies the following SDGs"
         footer_popover_interop: "This product is compatible with"
         footer_popover_maturity: "Product maturity evaluations"
+      launch:
+        auto-launch: Automatically launch an instance this product
+      show:
+        auto-launch: Automatic Launch
+        not-auto-launch: This product is not configured for auto-launch
+        no-digisquare-eval: This product hasn't been evaluated with Digital Square's maturity model.
+        no-include-product: We don't have any includes information for this product.
+        no-interrop-product: We don't have any interoperating information for this product.
+        no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
+    project:
+      index:
+        budget: Budget
+        description: Description
+        end-date: End Date
+        no-project: We couldn't find any project in the database.
+        start-date: Start Date
+      show:
+        origin: Origin
+    sector:
+      index:
+        no-data: We couldn't find any sector in the database.
+    footer:
+      privacy-policy: Privacy policy
+      tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
+    header:
+      deploys: Deploys
+      digital-principles: Digital Principles
+      login: Login
+      logout: Logout
+      product-registry: Product Registry
+      profile: Profile Settings
+    sdg:
+      index:
+        no-data: We couldn't find a sustainable development goal matching the search phrase.
+        sdg-number: Number
+        view-targets: View Targets
+      show:
+        target: Target
+    use-case:
+      form:
+        assigned-sdg-target: Assigned SDG Targets
+        search-sdg-target: Search and assign SDG Targets
+      index:
+        no-data: We couldn't find any use case in the database.
+      show:
+        description: Description
+        steps: Steps for this use case include
+        sdg-targets: SDG Targets
+        no-sdg-targets: We don't have any SDG target information for this use case.
+    user:
+      form:
+        db-backup: This user will receive DB backups.
+        email: Email
+        manual-approval: Manually approve this user.
+        minimum-length: '%{number} characters minimum.'
+        password: Password
+        password-confirmation: Password confirmation
+        role: Role
+      index:
+        no-data: We couldn't find users matching to the search phrase.
+      show:
+        approved: Approved
+        no: No
+        receive-backup: Receive DB Backup
+        reset-password: Reset Password
+        yes: Yes
+    workflow:
+      form:
+        category: Category
+        description: Description
+        other-names: Other Names
+      index:
+        no-data: We couldn't find workflow matching to the search phrase.
+      show:
+        full-description: Full Description
+        mapping: Sample mappings of workflows to use case
+        other-names: Other Names
+        short-description: Short Description
+    general:
+      action: Action
+      back: Back
+      create: Create New
+      delete: Delete
+      delete-confirmation: Are you sure?
+      duplicates: 'One or more %{model} with similar name already exists.'
+      edit: Edit
+      error:
+        one: The form contains error.
+        other: The form contains errors.
+      logo: Logo
+      name: Name
+      not-available: 'We do not have any %{multi} information for this %{model}.'
+      search: Search
+      search-placeholder: 'Search for %{model}'
+      submit: Submit
+      title:
+        create: 'Create %{model}'
+        edit: 'Edit %{model}'
+      view: View
+    multi-select:
+      assigned:
+        label: 'Search and assign %{model} ...'
+        title: 'Assigned %{model}'
+  will_paginate:
+    previous_label: "&#8592; Previous"
+    next_label: "Next &#8594;"
+    page_gap: "&hellip;"

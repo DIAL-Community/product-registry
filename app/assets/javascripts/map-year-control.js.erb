@@ -1,7 +1,7 @@
 mapObject.yearSelector = document.createElement('select');
 
 mapObject.YearSelectorControl = function YearSelectorControl(selectElement) {
-    var yearHTML = '<option value="All">All Years</option>';
+    var yearHTML = '<option value="All"><%= I18n.translate('view.organization.map.all-years') %></option>';
     for (var iy = 2015; iy <= new Date().getFullYear(); iy++) {
       yearHTML += '<option value="' + iy + '">' + iy + '</option>'
     }

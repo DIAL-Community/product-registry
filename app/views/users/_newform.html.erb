@@ -1,47 +1,54 @@
 <%= form_with(model: user, local: true) do |form| %>
   <fieldset class="form-label-group">
-    <%= form.text_field :email, id: :user_email, :class => "form-control", :placeholder => "Email" %>
-    <%= form.label :email %>
+    <%= form.text_field :email, id: :user_email, :class => "form-control",
+        placeholder: t('view.user.form.email')  %>
+    <%= form.label :email, t('view.user.form.email') %>
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= form.password_field :password, autocomplete: "new-password", :class => "form-control", :placeholder => "Password" %>
-    <%= form.label :password %>
+    <%= form.password_field :password, autocomplete: "new-password", :class => "form-control",
+        placeholder: t('view.user.form.password') %>
+    <%= form.label :password, t('view.user.form.password') %>
     <small class="text-muted">
       <% if @minimum_password_length %>
-        <em>(<%= @minimum_password_length %>
-          characters minimum)</em>
+        <em>(<%= t('view.user.form.minimum-length', minimum: @minimum_password_length) %>)</em>
       <% end %>
     </small>
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= form.password_field :password_confirmation, autocomplete: "new-password", :class => "form-control", :placeholder => "Password confirmation" %>
-    <%= form.label :password_confirmation %>
+    <%= form.password_field :password_confirmation, autocomplete: "new-password",
+        class: "form-control",
+        placeholder: t('view.user.form.password-confirmation') %>
+    <%= form.label :password_confirmation, t('view.user.form.password-confirmation') %>
   </fieldset>
 
-  <label for="user-role mb-0" class="placeholder">
-      &nbsp;&nbsp;Role
-  </label>
-  <fieldset class="form-label-group">
-    <%= form.select(:role, User.roles.keys.map {|role| [role.titleize,role]}, {}, :class => "form-control mb-2") %>
+  <fieldset class="form-group">
+    <label for="user-role">
+      <%= t('view.user.form.role') %>
+    </label>
+    <%= form.select(:role, User.roles.keys.map {|role| [role, role]}, {}, :class => "form-control mb-2") %>
   </fieldset>
 
   <% if @user.role == "admin" %>
   <fieldset>
     <%= form.check_box :receive_backup, {}, true, false %>
-    <label class="form-label-group mt-2" for="receive_backup">This user will receive DB backups.</label>
+    <label class="form-label-group mt-2" for="receive_backup">
+      <%= t('view.user.form.db-backup')%>
+    </label>
   </fieldset>
   <% end %>
 
   <fieldset>
     <%= form.hidden_field :is_approved, :value => false %>
     <%= form.check_box :is_approved, {}, true, false %>
-    <label class="form-label-group mt-2" for="is_approved">Manually approve this user.</label>
+    <label class="form-label-group mt-2" for="is_approved">
+      <%= t('view.user.form.manual-approval') %>
+    </label>
   </fieldset>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit 'Submit', :class => "btn btn-primary" %>
-    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>

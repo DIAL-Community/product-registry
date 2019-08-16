@@ -1,27 +1,29 @@
 <%= form_with(model: use_case, local: true) do |form| %>
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :use_case_name, :class => "form-control", :placeholder => "Name" %>
-    <%= form.label :name %>
+    <%= form.text_field :name, id: :use_case_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
   <div class="mt-2"></div>
   <input id="original_name" type="hidden" value="<%= use_case.name %>" />
   <div id="duplicate-warning" class="alert alert-warning">
-    One or more use case(s) with similar name already exists.
+    <%= t('view.general.duplicates', model: t('model.use-case')) %>
   </div>
 
-  <label for="use-case-sector mb-0" class="placeholder">
-      &nbsp;&nbsp;Sector
-  </label>
-  <fieldset class="form-label-group">
+  <fieldset class="form-group">
+    <%= form.label :sector_id, t('model.sector').to_s.titlecase %>
     <% options = options_from_collection_for_select(@sectors, 'id', 'name', use_case.sector_id) %>
     <%= form.select :sector_id, options, {}, :class => "form-control mb-2" %>
   </fieldset>
 
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.use-case.form.assigned-sdg-targets') %>
+  </h6>
   <fieldset class="form-label-group mt-2">
-    <input type="text" id="sdg-target-search" class="form-control" placeholder="Search and assign SDG Targets ..." />
+    <input type="text" id="sdg-target-search" class="form-control"
+           placeholder="<%= t('view.use-case.form.search-sdg-targets') %>" />
     <label for="use-case-sdg-target">
-      Search and assign SDG Targets ...
+      <%= t('view.use-case.form.assigned-sdg-targets') %>
     </label>
   </fieldset>
 
@@ -39,10 +41,15 @@
     </div>
   </div>
 
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('model.workflow').to_s.pluralize.humanize) %>
+  </h6>
+
   <fieldset class="form-label-group mt-2">
-    <input type="text" id="workflow-search" class="form-control" placeholder="Search and assign Workflows ..." />
+    <input type="text" id="workflow-search" class="form-control"
+           placeholder="<%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>" />
     <label for="use-case-workflow">
-      Search and assign Workflows ...
+      <%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>
     </label>
   </fieldset>
 
@@ -61,8 +68,8 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit 'Submit', :class => "btn btn-primary" %>
-    <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
 

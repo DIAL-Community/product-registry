@@ -1,12 +1,11 @@
 <% if @use_case.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
-      The form contains
-      <%= pluralize(@use_case.errors.count, "error") %>.
+      <%= t('view.general.error', count: @use_case.errors.count) %>
     </div>
   </div>
 <% end %>
 <h5 class="border rounded bg-secondary text-white p-3">
-  Create Use Case
+  <%= t('view.general.title.create', model: t('model.use-case')) %>
 </h5>
 <%= render 'form', use_case: @use_case %>

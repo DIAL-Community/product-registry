@@ -4,11 +4,11 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Budget</th>
+      <th><%= t('view.general.name') %></th>
+      <th><%= t('view.project.index.description') %></th>
+      <th><%= t('view.project.index.start-date') %></th>
+      <th><%= t('view.project.index.end-date') %></th>
+      <th><%= t('view.project.index.budget') %></th>
     </tr>
   </thead>
 
@@ -21,12 +21,15 @@
           <td><%= project.start_date %></td>
           <td><%= project.end_date %></td>
           <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+               <%= t('view.general.action') %>
+            </a>
             <div class="dropdown-menu">
-              <%= link_to 'View', project, :class =>"dropdown-item"  %>
+              <%= link_to t('view.general.view'), project, :class =>"dropdown-item"  %>
               <% if user_signed_in? && policy(project).mod_allowed? %>
                 <div class="dropdown-divider"></div>
-                <%= link_to 'Delete', project, method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item" %>
+                <%= link_to t('view.general.delete'), project, method: :delete, data: { confirm: t('view.gneral.delete-confirmation') }, :class =>"dropdown-item" %>
               <% end %>
             </div>
           </td>
@@ -35,7 +38,7 @@
     <% else %>
       <tr>
         <td colspan="4">
-          <small class="text-muted">We couldn't find any project in the database.</small>
+          <small class="text-muted"><%= t('view.project.index.no-project') %></small>
         </td>
       </tr>
     <% end %>

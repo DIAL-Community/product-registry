@@ -1,8 +1,8 @@
 require 'modules/slugger'
 
 class ApplicationController < ActionController::Base
-  include Modules::Slugger
-  include Pundit
+  include Modules::Slugger, Pundit,   HttpAcceptLanguage::AutoLocale
+
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized

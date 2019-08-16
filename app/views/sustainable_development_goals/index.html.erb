@@ -3,9 +3,10 @@
 
 <div class="float-right pb-2">
   <%= form_tag(sustainable_development_goals_path, :method => "get", id: "search-form", class: "form-inline") do %>
-    <%= text_field_tag :search, params[:search], placeholder: "Search SDGs ...", :class => "form-control" %>
+    <%= text_field_tag :search, params[:search], class: "form-control",
+        placeholder: t('view.general.search-placeholder', model: t('model.sdg').to_s.upcase.pluralize) %>
     <div class="input-group-append">
-        <%= submit_tag "Search", :class => "btn btn-secondary" %>
+        <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
     </div>
     <% end %>
 </div>
@@ -13,8 +14,8 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Number</th>
-      <th colspan="4">Name</th>
+      <th><%= t('view.sdg.index.sdg-number') %></th>
+      <th colspan="4"><%= t('view.general.name') %></th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -26,9 +27,12 @@
           <td><%= sustainable_development_goal.number %></td>
           <td><%= sustainable_development_goal.name %></td>
           <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+              <%= t('view.general.action') %>
+            </a>
             <div class="dropdown-menu">
-              <%= link_to 'View Targets', sustainable_development_goal, :class =>"dropdown-item"  %>
+              <%= link_to t('view.sdg.index.view-targets') , sustainable_development_goal, :class =>"dropdown-item"  %>
             </div>
           </td>
         </tr>
@@ -36,9 +40,7 @@
     <% else %>
       <tr>
         <td colspan="4">
-          <small class="text-muted">
-            We couldn't find a sustainable_development_goal matching the search phrase. 
-          </small>
+          <small class="text-muted"><%= t('view.sdg.index.no-data') %></small>
         </td>
       </tr>
     <% end %>

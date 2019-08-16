@@ -2,14 +2,19 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <div class="col-8">
+  <div class="col-6">
+    <% if user_signed_in? && policy(BuildingBlock).mod_allowed? %>
+      <%= link_to t('view.general.create'), new_building_block_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+    <% end %>
   </div>
-  <div class="col-4 pr-0">
+  <div class="col-6 pr-0">
     <div class="float-right pb-2">
       <%= form_tag(building_blocks_path, :method => "get", id: "search-form", class: "form-inline") do %>
-        <%= text_field_tag :search, params[:search], placeholder: "Search building blocks ...", :class => "form-control" %>
+        <%= text_field_tag :search, params[:search],
+            placeholder: t('view.general.search-placeholder', model: t('model.building-block').to_s.pluralize),
+            class: "form-control" %>
         <div class="input-group-append">
-          <%= submit_tag "Search", :class => "btn btn-secondary" %>
+          <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
         </div>
       <% end %>
     </div>
@@ -35,10 +40,10 @@
             <small>
               <div class="row">
                 <div class="col-12">
-                  <%= building_block.products.size %> product(s),
+                  <%= "#{building_block.products.size} #{t('model.product').to_s.pluralize(building_block.products.size)}" %>,
                 </div>
                 <div class="col-12">
-                  <%= building_block.workflows.size %> workflow(s)
+                  <%= "#{building_block.workflows.size}  #{t('model.workflow').to_s.pluralize(building_block.workflows.size)}" %>
                 </div>
               </div>
             </small>

@@ -1,12 +1,11 @@
 <% if @building_block.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
-      The form contains
-      <%= pluralize(@building_block.errors.count, "error") %>.
+      <%= t('view.general.error', count: @building_block.errors.count) %>
     </div>
   </div>
 <% end %>
 <h5 class="border rounded bg-secondary text-white p-3">
-    Create building block
+  <%= t('view.general.title.create', model: t('model.building-block')) %>
 </h5>
 <%= render 'form', building_block: @building_block %>

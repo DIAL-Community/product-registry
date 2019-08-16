@@ -10,7 +10,7 @@
 </div>
 <div class="border rounded bg-secondary text-white clearfix border card-header">
   <h5 class="float-left mb-0">
-    Organization: <%= @organization.name %>
+    <%= "#{t('model.organization').to_s.humanize}:  #{@organization.name}" %>
     <% if @organization.is_endorser %>
       <i class="fas fa-check-circle text-success ml-2"></i>
     <% end %>
@@ -27,16 +27,16 @@
     <% end %>
     <div class="col-lg-8 col-12">
       <p class="m-2">
-        <strong>Endorsed on:</strong>
+        <strong><%= "#{t('view.organization.index.endorsed-date')}:" %></strong>
         <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
       </p>
       <p class="m-2">
-        <strong>Website:</strong>
+        <strong><%= "#{t('view.organization.form.website')}:" %></strong>
         <%= link_to @organization.website.downcase.strip, "//#{@organization.website.downcase.strip}", target: :_blank %>
       </p>
       <% if @organization.locations.find_all{|location| location.location_type == 'point'}.count > 1 %>
         <p class="m-2">
-          <strong>Other offices:</strong>
+          <strong><%= "#{t('view.organization.show.other-offices')}:" %></strong>
           <ul>
           <% @organization.locations
                 .find_all{ |location| location.location_type == 'point' }
@@ -60,7 +60,7 @@
 <% if policy(Contact).view_allowed? %>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0">Contacts</h5>
+      <h5 class="float-left mb-0"><%= t('model.contact').to_s.pluralize.humanize %></h5>
     </div>
     <% if @organization.contacts.count > 0 %>
       <div class="row">
@@ -79,14 +79,14 @@
         <% end %>
       </div>
     <% else %>
-      <p class="card-text text-muted">We don't have any contact information for this organization.</p>
+      <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.contact').to_s.pluralize) %>
     <% end %>
   </div>
 <% end %>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Sectors</h5>
+    <h5 class="float-left mb-0"><%= t('model.sector').to_s.pluralize.humanize %></h5>
   </div>
   <% if @organization.sectors.count > 0 %>
     <div class="row">
@@ -101,14 +101,14 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.sector').to_s.pluralize) %>
   <% end %>
 </div>
 
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Products</h5>
+    <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
   </div>
   <% if @organization.products.count > 0 %>
     <div class="row">
@@ -126,13 +126,13 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any products information for this organization.</p>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.product').to_s.pluralize) %>
   <% end %>
 </div>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Countries</h5>
+    <h5 class="float-left mb-0"><%= t('model.country').to_s.pluralize.humanize %></h5>
   </div>
   <% if @organization.locations.select{|location| location.location_type != 'point'}.count > 0 %>
     <div class="row">
@@ -147,7 +147,7 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any sector information for this organization.</p>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.country').to_s.pluralize) %>
   <% end %>
 </div>
 

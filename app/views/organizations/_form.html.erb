@@ -1,62 +1,74 @@
   <%= form_with(model: organization, multipart: true, local: true) do |form| %>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => "Name" %>
-      <%= form.label :name %>
+      <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => t('view.general.name') %>
+      <%= form.label :name, t('view.general.name') %>
     </fieldset>
 
     <input id="original_name" type="hidden" value="<%= organization.name %>" />
     <div id="duplicate-warning" class="alert alert-warning">
-      One or more organization(s) with similar name already exists.
+      <%= t('view.general.duplicates', model: t('model.organization')) %>
     </div>
   
     <fieldset class="custom-file">
       <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
-      <label class="custom-file-label" for="logo-file">Pick logo</label>
+      <label class="custom-file-label" for="logo-file">
+        <%= t('view.general.logo') %>
+      </label>
     </fieldset>
 
     <fieldset class="form-label-group mt-2">
-      <%= form.text_field :when_endorsed, :value => organization.when_endorsed.blank? ? '' : organization.when_endorsed.strftime("%m/%d/%Y"), id: :organization_when_endorsed, :class => "form-control data-date", :placeholder => "When endorsed" %>
-      <%= form.label :when_endorsed %>
+      <%= form.text_field :when_endorsed,
+          value: organization.when_endorsed.blank? ? '' : organization.when_endorsed.strftime("%m/%d/%Y"),
+          id: :organization_when_endorsed, class: "form-control data-date",
+          placeholder: t('view.organization.form.when-endorsed') %>
+      <%= form.label :when_endorsed, t('view.organization.form.when-endorsed') %>
     </fieldset>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :website, id: :organization_website, :class => "form-control", :placeholder => "Website" %>
-      <%= form.label :website %>
+      <%= form.text_field :website, id: :organization_website, class: "form-control",
+          placeholder: t('view.organization.form.website') %>
+      <%= form.label :website, t('view.organization.form.website') %>
     </fieldset>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Contact
-    </h6>
-
     <% if organization.new_record? %>
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        <%= t('model.contact').to_s.humanize %> 
+      </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="contact-name" name="contact[name]" class="form-control" placeholder="Name" required=true />
+        <input type="text" id="contact-name" name="contact[name]" class="form-control" required="true"
+               placeholder="<%= t('view.general.name') %>" />
         <label for="contact-name">
-          Name
+          <%= t('view.general.name') %>
         </label>
       </fieldset>
 
       <fieldset class="form-label-group">
-        <input type="text" id="contact-email" name="contact[email]" class="form-control" placeholder="Email" />
+        <input type="text" id="contact-email" name="contact[email]" class="form-control"
+               placeholder="<%= t('view.contact.form.email') %>" />
         <label for="contact-email">
-          Email
+          <%= t('view.contact.form.email') %>
         </label>
       </fieldset>
 
       <fieldset class="form-label-group">
-        <input type="text" id="contact-title" name="contact[title]" class="form-control" placeholder="Title" />
+        <input type="text" id="contact-title" name="contact[title]" class="form-control"
+               placeholder="<%= t('view.contact.form.title') %>" />
         <label for="contact-title">
-          Title
+          <%= t('view.contact.form.title') %>
         </label>
       </fieldset>
     <% end %>
 
     <% if organization.persisted? %>
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        <%= t('model.contact').to_s.pluralize.humanize %> 
+      </h6>
       <fieldset class="form-label-group mt-2">
-        <input type="text" id="contact-search" name="contact_label" class="form-control" placeholder="Contacts" />
+        <input type="text" id="contact-search" name="contact_label" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.contact').to_s.pluralize) %>" />
         <label for="contact-label">
-          Contacts
+          <%= t('view.multi-select.assigned.label', model: t('model.contact').to_s.pluralize) %>
         </label>
       </fieldset>
       <div class="row">
@@ -76,12 +88,13 @@
     <% end %>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Offices
+      <%= t('model.office').to_s.pluralize.humanize %> 
     </h6>
     <fieldset class="form-label-group mt-2">
-      <input type="text" id="office-label" name="office_label" class="form-control" placeholder="Office Location" />
+      <input type="text" id="office-label" name="office_label" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.office').to_s.pluralize) %>" />
       <label for="office-label">
-        Office Locations
+        <%= t('view.multi-select.assigned.label', model: t('model.office').to_s.pluralize) %>
       </label>
     </fieldset>
     <div class="row">
@@ -100,17 +113,18 @@
     </div>
 
     <fieldset class="form-group form-check">
-      <%= form.check_box :is_endorser, id: :organization_is_endorser, :class => "form-check-input" %>
-      <%= form.label :is_endorser, :class => "form-check-label" %>
+      <%= form.check_box :is_endorser, id: :organization_is_endorser, class: "form-check-input" %>
+      <%= form.label :is_endorser, t('view.organization.form.endorser'), class: "form-check-label" %>
     </fieldset>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Sectors
+      <%= t('model.sector').to_s.pluralize.humanize %> 
     </h6>
     <fieldset class="form-label-group mt-2">
-      <input type="text" id="sector-search" class="form-control" placeholder="Search and assign sectors ..." />
+      <input type="text" id="sector-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>" />
       <label for="sector-search">
-        Search and assign sectors ...
+        <%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>
       </label>
     </fieldset>
     <div class="row">
@@ -128,12 +142,13 @@
     </div>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Products
+      <%= t('model.product').to_s.pluralize.humanize %> 
     </h6>
     <fieldset class="form-label-group mt-2">
-      <input type="text" id="product-search" class="form-control" placeholder="Search and assign products ..." />
+      <input type="text" id="product-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
       <label for="product-search">
-        Search and assign products ...
+        <%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>
       </label>
     </fieldset>
     <div class="row">
@@ -151,12 +166,13 @@
     </div>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      Countries
+      <%= t('model.country').to_s.pluralize.humanize %> 
     </h6>
     <fieldset class="form-label-group mt-2">
-      <input type="text" id="country-search" class="form-control" placeholder="Search and assign countries ..." />
+      <input type="text" id="country-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>" />
       <label for="country-search">
-        Search and assign countries ...
+        <%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>
       </label>
     </fieldset>
     <div class="row">
@@ -174,8 +190,8 @@
     </div>
 
     <fieldset class="float-right mt-4">
-      <%= form.submit 'Submit', :class => "btn btn-primary" %>
-      <%= link_to 'Back', "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
 
