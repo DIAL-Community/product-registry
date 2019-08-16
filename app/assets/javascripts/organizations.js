@@ -200,7 +200,7 @@ function sourceHandle(request, response) {
     function(sectors) {
       if (sectors.length <= 0) {
         $.getJSON(
-          "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
+          esri_api, {
             f: 'json',
             category: 'City',
             maxSuggestions: 10,

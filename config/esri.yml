@@ -1,7 +1,8 @@
 development:
   esri:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
-    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates{?q*}
+    suggest_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest
+    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates
     client_id: <%= ENV["ESRI_CLIENT_ID"] %>
     client_secret: <%= ENV["ESRI_CLIENT_SECRET"] %>
     grant_type: client_credentials
@@ -9,7 +10,8 @@ development:
 test:
   esri:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
-    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates{?q*}
+    suggest_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest
+    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates
     client_id: <%= ENV["ESRI_CLIENT_ID"] %>
     client_secret: <%= ENV["ESRI_CLIENT_SECRET"] %>
     grant_type: client_credentials
@@ -17,7 +19,8 @@ test:
 production:
   esri:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
-    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates{?q*}
+    suggest_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest
+    geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates
     client_id: <%= ENV["ESRI_CLIENT_ID"] %>
     client_secret: <%= ENV["ESRI_CLIENT_SECRET"] %>
     grant_type: client_credentials
