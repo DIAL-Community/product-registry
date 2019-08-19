@@ -35,6 +35,10 @@
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
     <%= render '/shared/header' %>
     <div id="content" class="container">
+      <% if current_page?(:controller => 'about', :action => 'index') %>
+        <%= render '/shared/sidenav' %>
+      <% end %>
+    
       <%= yield %>
     </div>
     <%= render '/shared/footer' %>
