@@ -95,7 +95,7 @@ en:
       product_desc: "A Product is a specific technology offering that is designed to implement one or more Building Blocks."
       contact: "Contact us"
       contact_text: "For more information, please contact the Digital Impact Alliance ICT4SDG team"
-      itu: "This framework was developed in partnership with ITU"
+      itu: "This framework was developed in partnership with the International Telecommunications Union (ITU)"
     building-block:
       show:
         short-description: Short Description
