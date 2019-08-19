@@ -156,6 +156,12 @@ en:
       logout: Logout
       product-registry: Product Registry
       profile: Profile Settings
+    filternav:
+      sdgs: SDGs
+      use_cases: Use Cases
+      workflows: Workflows
+      building_blocks: Building Blocks
+      products: Products
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

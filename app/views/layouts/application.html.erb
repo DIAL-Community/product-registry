@@ -34,8 +34,15 @@
 
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
     <%= render '/shared/header' %>
-    <div id="content" class="container">
-      <%= yield %>
+    <div id="content">
+      <div class="row">
+        <div class="col-lg-3 p-1">
+          <%= render '/shared/filternav' %>
+        </div>
+        <div class="col-lg-8 p-1">
+          <%= yield %>
+        </div>
+      </div>
     </div>
     <%= render '/shared/footer' %>
   </body>

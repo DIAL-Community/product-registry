@@ -27,6 +27,7 @@ html {
 
 body {
   padding-top: 120px;
+  font-size: .85rem;
 }
 
 a {
@@ -36,6 +37,18 @@ a {
 
 a:hover {
   color: #000043
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: .9rem;
+}
+
+.form-control {
+  font-size: .9rem
 }
 
 .model-logo {

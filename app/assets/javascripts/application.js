@@ -20,6 +20,7 @@
 //= require map-click-control
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/widgets/autocomplete
+//= require jquery-ui/widgets/accordion
 //= require popper
 //= require bootstrap
 //= require_tree .
@@ -46,7 +47,15 @@ function triggerPageEvents() {
         }
 
     });
-});
+  });
+  
+  $('.accordion').accordion({
+    heightStyle: "content",
+    active:false,
+    collapsible: true,
+    icons: false,
+    header:"div.accordianheader"
+  });
 }
 
 $(document).on("turbolinks:load", triggerPageEvents);

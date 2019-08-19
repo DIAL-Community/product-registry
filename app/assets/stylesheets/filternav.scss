@@ -1,0 +1,21 @@
+.ui-state-active {
+    border: none;
+    background: #f0f0f0;
+    font-weight: normal;
+    color: #6c757d;
+}
+
+.ui-state-default {
+    background: #f0f0f0
+}
+
+.ui-state-focus { outline: none; }
+
+.ui-state-active i {
+    color:#6c757d;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
