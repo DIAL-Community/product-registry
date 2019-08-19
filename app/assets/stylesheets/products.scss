@@ -40,6 +40,46 @@
   background: conic-gradient(from 270deg at 50% 100%, red, yellow, green, black, black, black);
 }
 
+.digisquare-gauge-small {
+  position: relative;
+  top: 5px;
+  display: inline-block;
+  height: 20px;
+  width: 30px;
+  background: lightgray;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  background: conic-gradient(from 270deg at 50% 100%, red, yellow, green, black, black, black);
+}
+
+.osc-small {
+  position: relative;
+  top: 5px;
+  display: inline-block;
+  height: 20px;
+  width: 30px;
+}
+
+.digisquare-gauge-med {
+  position: relative;
+  top: 5px;
+  display: inline-block;
+  height: 30px;
+  width: 50px;
+  background: lightgray;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  background: conic-gradient(from 270deg at 50% 100%, red, yellow, green, black, black, black);
+}
+
+.osc-med {
+  position: relative;
+  top: 5px;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+}
+
 .needle {
   height: 75px;
   width: 50px;
@@ -57,7 +97,7 @@
   left: calc(50% - 2.5px);
   height: 50%;
   width: 5px;
-  background: black;
+  background: #000000;
 }
 
 .selected-elements {
@@ -68,11 +108,73 @@
   }
 }
 
-.origin-img {
+.footer-padding {
+  padding: 0.5rem 0.5rem 0.1rem 0.5rem !important;
+}
+
+.footer-row {
+  min-height: 25px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.footer-img {
+  height: 25px;
+}
+
+.footer-img-right {
   float: right;
-  height: 30px;
+  height: 25px;
+  margin-left: 0.5rem;
+  margin-top: 0.2rem;
 }
 
 .origin-img-full {
   height: 50px;
 }
+
+.header-img {
+  float: right;
+  height: 20px;
+  font-size: 20px;
+}
+
+.footer-score {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 0.65rem;
+  cursor: default;
+}
+
+.osc-footer-score {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 0.4rem;
+  cursor: default;
+}
+
+.footer-score-large {
+  font-size: 22px;
+  font-weight: bold;
+  margin-left: 1.1rem;
+  cursor: default;
+}
+
+.footer-source {
+  font-size: 12px;
+  font-weight: bold;
+  position: relative;
+  top: 0.1rem;
+  display: inline-block;
+}
+
+.popover-image {
+  height: 75px;
+  padding: 0.5rem;
+}
+
+.maturity-tab {
+  color: #495057 !important;
+}
+

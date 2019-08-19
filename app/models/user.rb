@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  enum role: [:admin, :ict4sdg, :principle, :user]
+  enum role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle', user: 'user' }
   after_initialize :set_default_role, :if => :new_record?
 
   attr_accessor :is_approved

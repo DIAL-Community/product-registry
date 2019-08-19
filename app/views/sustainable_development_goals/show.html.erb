@@ -9,7 +9,7 @@
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-3">
               <div class="card">
                 <div class="card-header bg-secondary text-white">
-                  Target: <%= sdg_target.target_number %>
+                  <%= "#{t('view.sdg.show.target')}: #{sdg_target.target_number}" %>
                 </div>
                 <div class="card-body">
                   <%= sdg_target.name %>
@@ -20,7 +20,7 @@
       <% end %>
     </div>
     <p class="float-right mb-0" >
-      <%= link_to 'Back', sustainable_development_goals_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), sustainable_development_goals_path, :class => "card-link" %>
     </p>
   </div>
 </div>

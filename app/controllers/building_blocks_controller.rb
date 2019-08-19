@@ -65,12 +65,15 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
-    uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @building_block.save
-        format.html { redirect_to @building_block, flash: { notice: 'Building Block was successfully created.' }}
+        format.html { redirect_to @building_block,
+                      flash: { notice: t('messages.model.created', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :created, location: @building_block }
       else
         format.html { render :new }
@@ -102,12 +105,15 @@ class BuildingBlocksController < ApplicationController
     end
     @building_block.workflows = workflows.to_a
 
-    uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @building_block.update(building_block_params)
-        format.html { redirect_to @building_block, flash: { notice: 'Building block was successfully updated.' }}
+        format.html { redirect_to @building_block,
+                      flash: { notice: t('messages.model.updated', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @building_block }
       else
         format.html { render :edit }
@@ -122,7 +128,8 @@ class BuildingBlocksController < ApplicationController
     authorize @building_block, :mod_allowed?
     @building_block.destroy
     respond_to do |format|
-      format.html { redirect_to building_blocks_url, flash: { notice: 'Building block was successfully destroyed.' }}
+      format.html { redirect_to building_blocks_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.building-block').to_s.humanize) }}
       format.json { head :no_content }
     end
   end
@@ -136,7 +143,7 @@ class BuildingBlocksController < ApplicationController
         @building_blocks = BuildingBlock.where(slug: current_slug).to_a
       end
     end
-    authorize @building_blocks, :mod_allowed?
+    authorize @building_blocks, :view_allowed?
     render json: @building_blocks, :only => [:name]
   end
 

@@ -3,11 +3,85 @@ include Modules::Slugger
 
 module Modules
   module Sync
+    def sync_unicef_product(json_data)
+
+      if json_data['type'].detect{ |element| element.downcase == 'software' } != nil
+        unicef_origin = Origin.find_by(:slug => 'unicef')
+        name_aliases = [json_data['name'], json_data['initialism']].reject{ |x| x.nil? || x.empty? }
+
+        existing_product = nil
+        name_aliases.each do |name_alias|
+          # Find by name, and then by aliases and then by slug.
+          if existing_product.nil?
+            slug = slug_em name_alias
+            existing_product = Product.first_duplicate(name_alias, slug)
+          else
+            break
+          end
+        end
+
+        if existing_product.nil?
+          existing_product = Product.new
+          existing_product.name = name_aliases.first
+          existing_product.slug = slug_em existing_product.name
+          existing_product.website = json_data['website']
+        else
+          if (!existing_product.website.nil? && !existing_product.website.empty?)
+            existing_product.website = json_data['website']
+          end
+        end
+
+        # Assign what's left in the alias array as aliases.
+        existing_product.aliases.concat(name_aliases.reject{ |x| x == existing_product.name }).uniq!
+
+        # Set the origin to be 'unicef'
+        if (!existing_product.origins.exists?(:id => unicef_origin.id))
+          existing_product.origins.push(unicef_origin)
+        end
+
+        sdgs = json_data['SDGs']
+        if !sdgs.nil? && !sdgs.empty?
+          sdgs.each do |sdg|
+            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
+            if !sdg_obj.nil? && !existing_product.sustainable_development_goals.include?(sdg_obj)
+              puts "Adding sdg #{sdg} to product"
+              existing_product.sustainable_development_goals << sdg_obj
+            end
+          end
+        end
+
+        if existing_product.save
+          puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
+        end
+      end
+    end
+
+    def sync_digisquare_product(section)
+      digisquare_origin = Origin.find_by(:slug => 'digital_square')
+      
+      candidate_name = section['line']
+      candidate_slug = slug_em(candidate_name)
+      existing_product = Product.first_duplicate(candidate_name, candidate_slug)
+      if existing_product.nil?
+        existing_product = Product.new
+        existing_product.name = candidate_name
+        existing_product.slug = candidate_slug
+      end
+
+      if (!existing_product.origins.exists?(id: digisquare_origin.id))
+        existing_product.origins.push(digisquare_origin)
+      end
+
+      if existing_product.save
+        puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
+      end
+    end
+
     def sync_osc_product(product)
       puts "Syncing #{product['name']} ..."
       product_name = product['name']
       slug = slug_em product_name
-      sync_product = Product.where('lower(name) = lower(?)', product_name)[0]
+      sync_product = Product.first_duplicate(product_name, slug)
       if sync_product.nil?
         sync_product = Product.new
         sync_product.name = product_name

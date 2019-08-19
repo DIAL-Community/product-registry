@@ -5,3 +5,13 @@
 .inline-form {
     display: inline-block;
 }
+
+.ui-autocomplete {
+  max-height: 10em;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+* html .ui-autocomplete {
+  height: 10em;
+}

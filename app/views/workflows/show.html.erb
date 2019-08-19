@@ -4,24 +4,24 @@
 <div class="card">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0">
-      Workflow: <%= @workflow.name %>
+      <%= "#{t('model.workflow').to_s.titlecase}: #{@workflow.name}" %>
     </h5>
   </div>
   <div class="card-body">
     <p class="card-subtitle text-muted mb-3" >
-      <strong>Short Description: </strong>
+      <strong><%= t('view.workflow.show.short-description') %>: </strong>
       <%= @workflowJson.short_desc %>
     </p>
     <p class="card-subtitle text-muted mb-3" >
-      <strong>Full Description: </strong>
+      <strong><%= t('view.workflow.show.full-description') %>: </strong>
       <%= @workflowJson.full_desc %>
     </p>
     <p class="card-subtitle text-muted mb-3" >
-      <strong>Other names: </strong>
+      <strong><%= t('view.workflow.show.other-names') %>: </strong>
       <%= @workflowJson.other_names %>
     </p>
     <p class="card-subtitle text-muted mb-3" >
-      <strong>Sample mappings of WorkFlows to Use Case: </strong>
+      <strong><%= t('view.workflow.show.mapping') %>: </strong>
       <% if @workflowJson.sample_mappings && @workflowJson.sample_mappings.count > 0 %>
         <ul>
         <% @workflowJson.sample_mappings.each do |mapping| %>
@@ -31,9 +31,9 @@
       <% end %>
     </p>
     <p class="float-right mb-0" >
-      <%= link_to 'Back', workflows_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), workflows_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@workflow).mod_allowed? %>
-        <%= link_to 'Edit', edit_workflow_path(@workflow), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), edit_workflow_path(@workflow), :class => "card-link" %>
       <% end %>
     </p>
   </div>
@@ -41,7 +41,7 @@
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Use Cases</h5>
+    <h5 class="float-left mb-0"><%= t('model.use-case').to_s.titlecase.pluralize %></h5>
   </div>
   <% if @workflow.use_cases.count > 0 %>
     <div class="row">
@@ -58,13 +58,15 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any Use Case information for this Workflow.</p>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.workflow'), multi: t('model.use-case').to_s.pluralize) %>
+    </p>
   <% end %>
 </div>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0">Building Blocks</h5>
+    <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
   </div>
   <% if @workflow.building_blocks.count > 0 %>
     <div class="row">
@@ -79,6 +81,8 @@
       <% end %>
     </div>
   <% else %>
-    <p class="card-text text-muted">We don't have any Building Block information for this Workflow.</p>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.workflow'), multi: t('model.building-block').to_s.pluralize) %>
+    </p>
   <% end %>
 </div>

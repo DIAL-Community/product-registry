@@ -102,4 +102,8 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.i18n.fallbacks = true
+  config.i18n.fallbacks = [:en]
+  config.i18n.fallbacks = {'es' => 'en', 'fr' => 'en'}
 end

@@ -1,12 +1,11 @@
 <% if @product.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
-      The form contains
-      <%= pluralize(@product.errors.count, "error") %>.
+      <%= t('view.general.error', count: @product.errors.count) %>
     </div>
   </div>
 <% end %>
 <h5 class="border rounded bg-secondary text-white p-3">
-  Edit product
+  <%= t('view.general.title.edit', model: t('model.product')) %>
 </h5>
 <%= render 'form', product: @product %>

@@ -1,0 +1,89 @@
+<div class="about-nav">
+    <div id="intro" class="side-element text-muted nav-highlight" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.about.intro') %>" >&#x25cf;</div>
+    <div id="overview" class="side-element text-muted" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.about.overview') %>" >&#x25cf;</div>
+    <div id="donors" class="side-element text-muted" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.about.donors') %>" >&#x25cf;</div>
+    <div id="policy" class="side-element text-muted" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.about.policy_partners') %>">&#x25cf;</div>
+    <div id="ministers" class="side-element text-muted" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.about.ministers_specialists') %>">&#x25cf;</div>
+</div>
+
+<script>
+
+    var introDot = $('#intro');
+    var overviewDot = $('#overview');
+    var donorDot = $('#donors');
+    var policyDot = $('#policy');
+    var ministerDot = $('#ministers');
+
+    $("#intro").click(function() {
+        $('html,body').animate({
+            scrollTop: $("#intro_section").offset().top - 100},
+            'slow');
+    });
+
+    $("#overview").click(function() {
+        $('html,body').animate({
+            scrollTop: $("#overview_section").offset().top - 100},
+            'slow');
+    });
+
+    $("#donors").click(function() {
+        $('html,body').animate({
+            scrollTop: $("#donor_section").offset().top - 100},
+            'slow');
+    });
+
+    $("#policy").click(function() {
+        $('html,body').animate({
+            scrollTop: $("#policy_section").offset().top - 100},
+            'slow');
+    });
+
+    $("#ministers").click(function() {
+        $('html,body').animate({
+            scrollTop: $("#implement_section").offset().top - 100},
+            'slow');
+    });
+
+    $(window).scroll(function(){
+        currPos = $(window).scrollTop() + 500
+
+        if (currPos < $("#overview_section").position().top) {
+            introDot.addClass('nav-highlight');
+            overviewDot.removeClass('nav-highlight');
+            donorDot.removeClass('nav-highlight');
+            policyDot.removeClass('nav-highlight');
+            ministerDot.removeClass('nav-highlight');
+        }
+        if ((currPos > $("#overview_section").position().top) && (currPos < $("#donor_section").position().top)) {
+            introDot.removeClass('nav-highlight');
+            overviewDot.addClass('nav-highlight');
+            donorDot.removeClass('nav-highlight');
+            policyDot.removeClass('nav-highlight');
+            ministerDot.removeClass('nav-highlight');
+        }
+        if ((currPos > $("#donor_section").position().top) && (currPos < $("#policy_section").position().top)) {
+            introDot.removeClass('nav-highlight');
+            overviewDot.removeClass('nav-highlight');
+            donorDot.addClass('nav-highlight');
+            policyDot.removeClass('nav-highlight');
+            ministerDot.removeClass('nav-highlight');
+        }
+
+        if ((currPos > $("#policy_section").position().top) && (currPos < $("#implement_section").position().top)) {
+            introDot.removeClass('nav-highlight');
+            overviewDot.removeClass('nav-highlight');
+            donorDot.removeClass('nav-highlight');
+            policyDot.addClass('nav-highlight');
+            ministerDot.removeClass('nav-highlight');
+        }
+
+        if (currPos > $("#implement_section").position().top) {
+            introDot.removeClass('nav-highlight');
+            overviewDot.removeClass('nav-highlight');
+            donorDot.removeClass('nav-highlight');
+            policyDot.removeClass('nav-highlight');
+            ministerDot.addClass('nav-highlight');
+        }
+    });
+
+</script>

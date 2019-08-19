@@ -42,12 +42,19 @@ class UsersController < ApplicationController
   def update
     user_hash = {}
     user_hash[:role] = user_params[:role]
+    
+    user_hash[:receive_backup] = false
+    if (user_params[:receive_backup]) && (user_hash[:role] == "admin")
+      user_hash[:receive_backup] = user_params[:receive_backup]
+    end
+
     if (user_params[:is_approved] && @user.confirmed_at.nil?)
         user_hash[:confirmed_at] = Time.now.to_s
     end
     respond_to do |format|
       if @user.update(user_hash)
-        format.html { redirect_to @user, flash: { notice: 'User was successfully updated.' }}
+        format.html { redirect_to @user,
+                      flash: { notice: t('messages.model.updated', model: t('model.user').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -65,7 +72,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
         if @user.save
-          format.html { redirect_to @user, flash: { notice: 'User was successfully created.' }}
+          format.html { redirect_to @user,
+                        flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) }}
           format.json { render :show, status: :created, location: @user }
         else
           format.html { render :new }
@@ -77,7 +85,8 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, flash: { notice: 'User was successfully deleted.' }}
+      format.html { redirect_to users_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.user').to_s.humanize) }}
       format.json { head :no_content }
     end
   end
@@ -91,6 +100,6 @@ class UsersController < ApplicationController
 
     def user_params
         params.require(:user)
-        .permit(:email, :role, :is_approved, :confirmed_at, :password, :password_confirmation)
+        .permit(:email, :role, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
     end
 end

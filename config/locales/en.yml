@@ -30,7 +30,243 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  messages:
+    model:
+      created: '%{model} was successfully created.'
+      deleted: '%{model} was successfully deleted.'
+      delete-failed: 'Could not delete %{model}.'
+      updated: '%{model} was successfully updated.'
   pundit:
-    mod_allowed?: "The operation is not allowed."
-    view_allowed?: "You're not allowed to view this page."
+    mod_allowed?: The operation is not allowed.
+    view_allowed?: You're not allowed to view this page.
+  model:
+    building-block: building block
+    contact: contact
+    location: location
+    office: office
+    country: country
+    organization: organization
+    product: product
+    project: project
+    sector: sector
+    use-case: use case
+    user: user
+    workflow: workflow
+    sdg: sdg
+    sustainable-development-goal: sustainable development goal
+  view:
+    building-block:
+      show:
+        short-description: Short Description
+        full-description: Full Description
+        other-names: Other Names
+        key-functionalities: Key Digital Functionalities
+        example-of-use: Examples of use in different sectors
+    contact:
+      form:
+        email: Email
+        title: Title
+    location:
+      index:
+        no-data: We couldn't find any location in the database.
+    organization:
+      form:
+        endorser: Endorser
+        website: Website
+        when-endorsed: When endorsed
+      index:
+        endorser-only: Endorser only
+        endorsed-date: Endorsed on
+        export: Export
+        export-option: Export with contacts info
+        filter: Filter
+        year: Year
+      map:
+        title: Map of Digital Principles Endorsers
+        all-sectors: All sectors
+        all-years: All Years
+      show:
+        other-offices: Other offices
+    product:
+      form:
+        complete-assessment: Mark assessment as completed.
+        default-url: Default url
+        digisquare-maturity: Digital Square Maturity
+        high: high
+        included-products: Included Products
+        interoperable-products: Interoperable Products
+        is-launchable: Check to indicate product is auto-launchable.
+        low: low
+        medium: medium
+        osc-maturity: OSC Maturity
+        other-names: Other names
+        start-assessment: Start assessing this product.
+        website: Website
+      index:
+        filter: Filter
+        has-maturity: Has maturity?
+        product-graph: Product Graph
+        is_endorsed: "Used/Maintained by an Endorser"
+        is_deployable: "This product is one-click deployable"
+        source: "Source: "
+        sources: "Sources: "
+        source_dial: "Digital Impact Alliance Open Source Center"
+        source_unicef: "Unicef"
+        source_digital_square: "Digital Square"
+        footer_bb_candidate: "Candidate for "
+        footer_bb: " building block"
+        footer_interop: "Compatible with "
+        footer_sdg: "Satisfies SDG "
+        footer_maturity_score: "Overall percentage of criteria met (1-10)"
+        footer_maturity_ds: "Digital Square Global Good Maturity Model Scores (1-10)"
+        footer_maturity_osc: "DIAL Open Source Center Maturity Model Overall Score"
+        footer_osc_score: "Overall percentage of criteria met (1-10)"
+        footer_popover_bb: "Candidate for the following Building Blocks"
+        footer_popover_sdg: "Satisfies the following SDGs"
+        footer_popover_interop: "This product is compatible with"
+        footer_popover_maturity: "Product maturity evaluations"
+      launch:
+        auto-launch: Automatically launch an instance this product
+      show:
+        auto-launch: Automatic Launch
+        not-auto-launch: This product is not configured for auto-launch
+        no-digisquare-eval: This product hasn't been evaluated with Digital Square's maturity model.
+        no-include-product: We don't have any includes information for this product.
+        no-interrop-product: We don't have any interoperating information for this product.
+        no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
+    project:
+      index:
+        budget: Budget
+        description: Description
+        end-date: End Date
+        no-project: We couldn't find any project in the database.
+        start-date: Start Date
+      show:
+        origin: Origin
+    sector:
+      index:
+        no-data: We couldn't find any sector in the database.
+    footer:
+      privacy-policy: Privacy policy
+      tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
+    header:
+      deploys: Deploys
+      digital-principles: Digital Principles
+      login: Login
+      logout: Logout
+      product-registry: Product Registry
+      profile: Profile Settings
+    sdg:
+      index:
+        no-data: We couldn't find a sustainable development goal matching the search phrase.
+        sdg-number: Number
+        view-targets: View Targets
+      show:
+        target: Target
+    use-case:
+      form:
+        assigned-sdg-target: Assigned SDG Targets
+        search-sdg-target: Search and assign SDG Targets
+      index:
+        no-data: We couldn't find any use case in the database.
+      show:
+        description: Description
+        steps: Steps for this use case include
+        sdg-targets: SDG Targets
+        no-sdg-targets: We don't have any SDG target information for this use case.
+    user:
+      form:
+        db-backup: This user will receive DB backups.
+        email: Email
+        manual-approval: Manually approve this user.
+        minimum-length: '%{number} characters minimum.'
+        password: Password
+        password-confirmation: Password confirmation
+        role: Role
+      index:
+        no-data: We couldn't find users matching to the search phrase.
+      show:
+        approved: Approved
+        no: No
+        receive-backup: Receive DB Backup
+        reset-password: Reset Password
+        yes: Yes
+    workflow:
+      form:
+        category: Category
+        description: Description
+        other-names: Other Names
+      index:
+        no-data: We couldn't find workflow matching to the search phrase.
+      show:
+        full-description: Full Description
+        mapping: Sample mappings of workflows to use case
+        other-names: Other Names
+        short-description: Short Description
+    general:
+      action: Action
+      back: Back
+      create: Create New
+      delete: Delete
+      delete-confirmation: Are you sure?
+      duplicates: 'One or more %{model} with similar name already exists.'
+      edit: Edit
+      error:
+        one: The form contains error.
+        other: The form contains errors.
+      logo: Logo
+      name: Name
+      not-available: 'We do not have any %{multi} information for this %{model}.'
+      search: Search
+      search-placeholder: 'Search for %{model}'
+      submit: Submit
+      title:
+        create: 'Create %{model}'
+        edit: 'Edit %{model}'
+      view: View
+    multi-select:
+      assigned:
+        label: 'Search and assign %{model} ...'
+        title: 'Assigned %{model}'
+  will_paginate:
+    previous_label: "&#8592; Previous"
+    next_label: "Next &#8594;"
+    page_gap: "&hellip;"
+    about:
+      sdg_title: "SDG Digital Investment Framework"
+      sdg_subtitle: "A Whole-of-Government Approach to Coordinating Investment in Digital Technologies to Achieve the SDGs"
+      explanation1: "Despite significant investment, we have not seen true scale in software platforms and we have not seen coordinated investment in products designed to meet the SDGs. Digital investments and implementations are most often siloed by sector, resulting in significant fragmentation and duplication of effort."
+      explanation2: "This fragmentation makes it difficult for governments to understand where common products could be used, allowing for a whole-of-government approach to investing in digital infrastructure that can deliver reusable digital services at scale with a greater return on investment."
+      explanation3: "This online tool introduces four interrelated layers - providing a step-by-step process allowing organizations to begin to plan enterprise architecture and accelerate progress toward the SDGs."
+      sdgs: "Sustainable Development Goals"
+      use_cases: "Use Cases"
+      bbs: "Building Blocks"
+      products: "Products"
+      ict_bbs: "ICT Building Blocks"
+      workflows: "Workflows"
+      read_more: "Read more"
+      launch: "Launch the App"
+      intro: "Intro"
+      overview: "Overview"
+      policy_partners: "Policy Makers and Implementing Partners"
+      ministers_specialists: "ICT Ministers and Technical Specialists"
+      donors: "Donors"
+      donors_text1: "Donors can use this tool to coordinate investments with other donors. Using the lens of the SDG target, a donor can navigate to a priority SDG target to see what use cases, workflows, and ICT building blocks map support the progression of that target.  Understanding those associations set the groundwork for donors to see the overlap they have with other donors supporting other SDG targets. The tool demonstrates that a handful of work flows and building blocks can deliver a wide range of SDG targets and corresponding use cases."
+      donors_link: "Explore the SDG targets"
+      policy_makers: "Policy Makers"
+      policy_text1: "Policy makers, at any level, can use this tool to explore the different use cases they are interested in implementing to achieve various development outcomes. Each use cases will highlight what workflows and ICT building blocks are needed to support the digital aspect of the use case. Identifying the generic ICT building blocks supports the coordinate across sectors  and ministries, to take a whole of government approach, to making its digital investment."
+      policy_link: "Explore the Use Cases"
+      ict_ministers: "Technology and ICT Ministers"
+      ict_text1: "Technology Ministers can use this tool to map systems and applications currently deployed in country to the ICT Building Blocks to understand what other use cases could be supported using their current technology. Mapping systems to the ICT Building Blocks can also provides a better understanding of what gaps currently exist or opportunities for consolidation."
+      ict_link: "Explore the ICT Building Blocks"
+      specialists: "Technology Specialists"
+      specialists_text1: "Technology specialists can use this tool to help integrate offerings and interoperability hooks to address the end-to-end needs of government programmes. Also, discover existing products that can meet the use cases and workflows for specific programmatic needs, providing insights to the “build or buy” questions for project implementation."
+      specialists_link: "Explore the Products"
+      implementers: "Implementing Partners"
+      implementers_text1: "Implementing Partners can use this tool to identify what ICT Building Blocks and Products deliver various needed workflows, or business process, to deliver development programming or various digital initiatives."
+      implementers_link: "Explore the Workflows"
+      sdg_desc: "The SDGs comprise 17 goals and 169 targets representing global priorities for investment in order to achieve sustainable development."
+      use_case_desc: "A Use Case defines the steps that an individual or system will undertake in order to achieve a business objective."
+      workflow_desc: "A WorkFlow is a generic business process that can be applied to SDG Use Cases across multiple sectors."
+      bb_desc: "An ICT Building Block is an enterprise-ready, reusable software component that provides key functionality to facilitate generic WorkFlows across multiple sectors."
+      product_desc: "A Product is a specific technology offering that is designed to implement one or more Building Blocks."

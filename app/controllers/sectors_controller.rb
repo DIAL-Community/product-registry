@@ -6,11 +6,13 @@ class SectorsController < ApplicationController
   # GET /sectors.json
   def index
     if params[:without_paging]
-      @sectors = Sector
-            .where(nil)
-            .name_contains(params[:search])
-            .order(:name)
+      @sectors = Sector.where(nil)
+      if (params[:search])
+        @sectors = @sectors.name_contains(params[:search])
+      end
       @sectors = params[:display_only].nil? ? @sectors : @sectors.where(is_displayable: true)
+      @sectors = @sectors.order(:name)
+      @sectors
       authorize @sectors, :view_allowed?
       return
     end
@@ -75,7 +77,8 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.save
-        format.html { redirect_to @sector, flash: { notice: 'Sector was successfully created.' }}
+        format.html { redirect_to @sector,
+                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) }}
         format.json { render :show, status: :created, location: @sector }
       else
         format.html { render :new }
@@ -109,7 +112,8 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.update(sector_params)
-        format.html { redirect_to @sector, flash: { notice: 'Sector was successfully updated.' }}
+        format.html { redirect_to @sector,
+                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @sector }
       else
         format.html { render :edit }
@@ -125,10 +129,12 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.destroy
-        format.html { redirect_to sectors_url, flash: { notice: 'Sector was successfully destroyed.' }}
+        format.html { redirect_to sectors_url,
+                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize) }}
         format.json { head :no_content }
       else
-        format.html { redirect_to sectors_url, flash: { error: 'Could not destroy sector that is referenced by a use case' }}
+        format.html { redirect_to sectors_url,
+                      flash: { notice: t('messages.model.delete-failed', model: t('model.sector').to_s.humanize) }}
         format.json { head :no_content }
       end
     end

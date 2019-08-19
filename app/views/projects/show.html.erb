@@ -3,26 +3,26 @@
 
 <div class="card mt-4">
   <h5 class="card-header bg-secondary text-white">
-    Product: <%= @project.name %>
+    <%= "#{t('model.project').to_s.humanize}: #{@project.name}" %>
   </h5>
   <div class="card-body">
     <div class="row">
       <div class="col-6 mt-4">
         <% if !@project.description.nil? and !@project.description.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-            <strong>Description:</strong>
+            <strong><%= "#{t('view.project.show.description')}:" %></strong>
             <%= @project.description %>
           </h6>
         <% end %>
         <% if !@project.origin.nil? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-          <strong>Origin:</strong>
+          <strong><%= "#{t('view.project.show.origin')}:" %></strong>
           <%= image_tag("origins/#{@project.origin.slug}.png", class: 'origin-img-full') %>
         <% end %>
       </div>
     </div>
     <p class="float-right mb-0" >
-      <%= link_to 'Back', projects_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), projects_path, :class => "card-link" %>
     </p>
   </div>
 </div>

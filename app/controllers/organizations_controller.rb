@@ -137,12 +137,15 @@ class OrganizationsController < ApplicationController
       @organization.locations.push(geocoded_location)
     end
 
-    uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if (params[:logo].present?)
+      uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to @organization, flash: { notice: 'Organization was successfully created.' }}
+        format.html { redirect_to @organization,
+                      flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -206,13 +209,16 @@ class OrganizationsController < ApplicationController
     end
 
     @organization.locations = locations.to_a
-
-    uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    
+    if (params[:logo].present?)
+      uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @organization.update(organization_params)
-        format.html { redirect_to @organization, flash: { notice: 'Organization was successfully updated.' }}
+        format.html { redirect_to @organization,
+                      flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
@@ -225,9 +231,16 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1.json
   def destroy
     authorize @organization, :mod_allowed?
+
+    # delete any projects associated with this org
+    @organization.projects.each do |project|
+      project.destroy
+    end
+
     @organization.destroy
     respond_to do |format|
-      format.html { redirect_to organizations_url, flash: { notice: 'Organization was successfully destroyed.' }}
+      format.html { redirect_to organizations_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.organization').to_s.humanize) }}
       format.json { head :no_content }
     end
   end
@@ -254,9 +267,8 @@ class OrganizationsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      if !params[:id].scan(/\D/).empty?
-        @organization = Organization.find_by(slug: params[:id])
-      else
+      @organization = Organization.find_by(slug: params[:id])
+      if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end
     end
@@ -278,7 +290,7 @@ class OrganizationsController < ApplicationController
     end
 
     def geocode(magic_key, auth_token)
-      uri_template = Addressable::Template.new(Rails.configuration.geocode["esri"]["geocode_uri"])
+      uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['geocode_uri']}{?q*}")
       geocode_uri = uri_template.expand({
         "q" => {
           "SingleLine" => magic_key,

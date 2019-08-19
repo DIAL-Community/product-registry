@@ -12,4 +12,4 @@ RAILS_ENV=production
 
 0 3 * * *   /t4d/sync.sh >> /var/log/cron.log 2>&1
 0 4 * * *   rails db:backup >> /var/log/cron.log 2>&1
-0 5 * * *   curl -s --user 'api:47d4bfc8e371c0151af5c4ce36ac06d7-29b7488f-19edcd3a' https://api.mailgun.net/v3/t4d.dial.community/messages -F from='Registry <t4dregistry@t4d.dial.community>' -F to=dmccann@digitalimpactalliance.org -F subject='T4D Registry Backup' -F text='Registry dump file' -F attachment=@/t4d/db/backups/registry.dump >> /var/log/cron.log 2>&1
+0 5 * * *   rails db:send_backup_emails >> /var/log/cron.log 2>&1

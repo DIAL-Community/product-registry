@@ -1,12 +1,11 @@
 <% if @contact.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
-      The form contains
-      <%= pluralize(@contact.errors.count, "error") %>.
+        <%= t('view.general.error', count: @contact.errors.count) %>
     </div>
   </div>
 <% end %>
 <h5 class="border rounded bg-secondary text-white p-3">
-  Edit contact
+  <%= t('view.general.title.edit', model: t('model.contact')) %>
 </h5>
 <%= render 'form', contact: @contact %>

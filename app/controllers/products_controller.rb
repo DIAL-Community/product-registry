@@ -115,12 +115,15 @@ class ProductsController < ApplicationController
       end
     end
 
-    uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @product.save
-        format.html { redirect_to @product, flash: { notice: 'Product was successfully created.' }}
+        format.html { redirect_to @product,
+                      flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) }}
         format.json { render :show, status: :created, location: @product }
       else
         format.html { render :new }
@@ -192,12 +195,15 @@ class ProductsController < ApplicationController
     end
     @product.sustainable_development_goals = sustainable_development_goals.to_a
 
-    uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
-    uploader.store!(params[:logo])
+    if params[:logo].present?
+      uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
+      uploader.store!(params[:logo])
+    end
 
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to @product, flash: { notice: 'Product was successfully updated.' }}
+        format.html { redirect_to @product,
+                      flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }
@@ -212,7 +218,8 @@ class ProductsController < ApplicationController
     authorize @product, :mod_allowed?
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, flash: { notice: 'Product was successfully destroyed.' }}
+      format.html { redirect_to products_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.product').to_s.humanize) }}
       format.json { head :no_content }
     end
   end
@@ -260,7 +267,7 @@ class ProductsController < ApplicationController
       end
       if (params[:digisquare_maturity])
         params[:digisquare_maturity].keys.each do |digisquare_maturity|
-          product_assessment[digisquare_maturity] = params[:digisquare_maturity][digisquare_maturity]
+          product_assessment[digisquare_maturity] = ProductAssessment.digisquare_maturity_levels.key(params[:digisquare_maturity][digisquare_maturity])
         end
       end
       product_assessment.has_osc = (params[:has_osc] == "true")

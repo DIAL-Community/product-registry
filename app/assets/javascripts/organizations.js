@@ -121,9 +121,12 @@ var setupAutoComplete = function() {
   $("#product-search").autocomplete(productAutoComplete);
 
   // Init the autocomplete for the sector field.
-  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector);
+  var sectorAutoComplete = sectorCustomAutoComplete("/sectors.json?without_paging=true", addSector);
   $('#base-selected-sectors').hide();
-  $("#sector-search").autocomplete(sectorAutoComplete);
+  $("#sector-search").autocomplete(sectorAutoComplete)
+                     .focus(function() {
+                       $(this).data("uiAutocomplete").search($(this).val());
+                      });
 
   // Init the autocomplete for the country field.
   var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
@@ -135,6 +138,35 @@ var setupAutoComplete = function() {
   $('#base-selected-contacts').hide();
   $("#contact-search").autocomplete(contactAutoComplete);
 
+}
+
+function sectorCustomAutoComplete(source, callback) {
+  return {
+    minLength: 0,
+    maxShowItems: 8,
+    source: function(request, response) {
+      $.getJSON(
+        source, {
+          search: request.term
+        },
+        function(responses) {
+          response($.map(responses, function(response) {
+            return {
+              id: response.id,
+              label: response.name,
+              value: response.name
+            }
+          }));
+        }
+      );
+    },
+    select: function(event, ui) {
+      callback(ui.item.id, ui.item.label);
+      $(this).blur();
+      $(this).val("");
+      return false;
+    }
+  }
 }
 
 function addOffice(label, officeId, magicKey) {
@@ -168,7 +200,7 @@ function sourceHandle(request, response) {
     function(sectors) {
       if (sectors.length <= 0) {
         $.getJSON(
-          "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest", {
+          esri_api, {
             f: 'json',
             category: 'City',
             maxSuggestions: 10,

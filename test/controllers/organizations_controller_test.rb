@@ -26,6 +26,22 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "creating organization without logo should not fail" do
+    post organizations_url, params: { organization: { name: "Some Name", slug: 'some_name', when_endorsed: '11/16/2018' }}
+    created_organization = Organization.last
+
+    assert_equal created_organization.name, "Some Name"
+    assert_redirected_to organization_url(created_organization)
+  end
+
+  test "updating organization without logo should not fail" do
+    patch organization_url(@organization), params: { organization: {name: "Some New Name" } }
+
+    updated_organization = Organization.find(@organization.id)
+    assert_equal updated_organization.name, "Some New Name"
+    assert_redirected_to organization_url(updated_organization)
+  end
+
   test "should slug digits" do
     digit_org_name = "1234-56-789 011"
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
@@ -80,6 +96,12 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should show organization with digit only slug" do
+    digit_only_organization = organizations(:three)
+    get organization_url(digit_only_organization)
+    assert_response :success
+  end
+
   test "should get edit" do
     get edit_organization_url(@organization)
     assert_response :success
@@ -93,8 +115,40 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy organization" do
     assert_difference('Organization.count', -1) do
-      @project = projects(:one)
-      delete project_url(@project)
+      delete organization_url(@organization)
+    end
+
+    assert_redirected_to organizations_url
+  end
+
+  test "should destroy project along with organization" do
+    @project = projects(:one)
+    assert_difference('Project.count', -1) do
+      delete organization_url(@organization)
+    end
+  end
+
+  test "should not destroy sectors when destroying organization" do
+    @sector = sectors(:one)
+    assert_difference('Sector.count', 0) do
+      delete organization_url(@organization)
+    end
+
+    assert_redirected_to organizations_url
+  end
+
+  test "should not destroy products when destroying organization" do
+    @product = products(:one)
+    assert_difference('Product.count', 0) do
+      delete organization_url(@organization)
+    end
+
+    assert_redirected_to organizations_url
+  end
+
+  test "should not destroy contact when destroying organization" do
+    @contact = contacts(:one)
+    assert_difference('Contact.count', 0) do
       delete organization_url(@organization)
     end
 
