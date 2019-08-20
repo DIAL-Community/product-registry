@@ -1,24 +1,42 @@
-<div class="row mb-2">
+<div id="summary-nav" class="row mb-2">
   <div class="col-12">
     <div class="list-group w-100 flex-fill list-group-horizontal">
-      <a href="#" class="list-group-item w-100 text-center">
-        <%= t('model.sdg').upcase.pluralize %>
-      </a>
-      <a href="#" class="list-group-item w-100 text-center">
-        <%= t('model.use-case').titlecase.pluralize %>
-      </a>
-      <a href="#" class="list-group-item w-100 text-center">
-        <%= t('model.workflow').titlecase.pluralize %>
-      </a>
-      <a href="#" class="list-group-item w-100 text-center">
-        <%= t('model.building-block').titlecase.pluralize %>
-      </a>
-      <a href="#" class="list-group-item w-100 text-center">
-        <%= t('model.product').titlecase.pluralize %>
-      </a>
-      <a href="#" class="list-group-item w-100 text-center">
-        <%= t('model.organization').titlecase.pluralize %>
-      </a>
+      <li class="list-group-item w-100 text-center">
+        <a href="#" >
+          <u><%= t('model.sdg').upcase.pluralize %></u>
+          <span id="sdg-badge" class="badge badge-warning">4</span>
+        </a>
+      </li>
+      <li class="list-group-item w-100 text-center">
+        <a href="#" >
+          <u><%= t('model.use-case').titlecase.pluralize %></u>
+          <span id="use-case-badge" class="badge badge-warning">4</span>
+        </a>
+      </li>
+      <li class="list-group-item w-100 text-center">
+        <a href="#" >
+          <u><%= t('model.workflow').titlecase.pluralize %></u>
+          <span id="workflow-badge" class="badge badge-warning">4</span>
+        </a>
+      </li>
+      <li class="list-group-item w-100 text-center">
+        <a href="#" >
+          <u><%= t('model.building-block').titlecase.pluralize %></u>
+          <span id="bb-badge" class="badge badge-warning">4</span>
+        </a>
+      </li>
+      <li class="list-group-item w-100 text-center">
+        <a href="#" >
+          <u><%= t('model.product').titlecase.pluralize %></u>
+          <span id="product-badge" class="badge badge-warning">4</span>
+        </a>
+      </li>
+      <li class="list-group-item w-100 text-center">
+        <a href="#" >
+          <u><%= t('model.organization').titlecase.pluralize %></u>
+          <span id="org-badge" class="badge badge-warning">4</span>
+        </a>
+      </li>
     </div>
   </div>
 </div>

@@ -7,6 +7,26 @@
     color: #000043;
 }
 
+#summary-nav {
+  font-size: .9rem;
+  font-weight: bolder;
+
+  .badge {
+    font-size: .9rem;
+  }
+
+  .list-group-item {
+    border-left: 1px solid;
+    border-right: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+
+    &:first-child {
+      border-left: 0px;
+    }
+  }
+}
+
 .navbar-nav {
     .nav-link {
         color: white !important;
