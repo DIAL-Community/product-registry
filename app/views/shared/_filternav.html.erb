@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header bg-secondary text-white">
-    <h5>Digital Investment Framework</h5>
+    <h5><%= t('view.filternav.framework') %></h5>
   </div>
   <div class="card-body p-2">
     <div class="accordion">
@@ -36,5 +36,61 @@
         </div>
     </div>
   </div>
-    
+  <div class="card-header bg-secondary text-white">
+    <h5><%= t('view.filternav.registry') %></h5>
+  </div>
+  <div class="card-body p-2">
+    <div class="accordion">
+      <div class="accordianheader">
+        <p class="text-muted m-0"><%= t('view.filternav.geographies') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <p class="text-muted">SDG Filters go here</p>
+      </div>
+      <div class="accordianheader">
+        <p class="text-muted m-0"><%= t('view.filternav.sectors') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <p class="text-muted">SDG Filters go here</p>
+      </div>
+      <div class="accordianheader">
+        <p class="text-muted m-0"><%= t('view.filternav.orgs') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <div class="form-row mb-2">
+          <div class="col-12">
+            <div class="form-check">
+                <%= check_box_tag "endorser_only", true, params[:endorser_only], {class: "form-check-input filter-element", name:"endorser"} %>
+                <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "years", t('view.organization.index.year') %>
+              <%= select(nil, "years",
+                        Organization
+                            .where.not(when_endorsed: nil)
+                            .all
+                            .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
+                            .uniq!
+                            .sort!,
+                        { selected: params[:years] },
+                        { multiple: true, class: 'custom-select filter-element', name: 'years' }) %>
+            </div>
+          </div> 
+        </div>
+      </div>
+      <div class="accordianheader">
+        <p class="text-muted m-0"><%= t('view.filternav.projects') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <p class="text-muted">SDG Filters go here</p>
+      </div>
+      <div class="card-header">
+        <%= link_to t('view.filternav.map'), 'map', :class=>'text-muted p-0 m-0' %>
+      </div>
+    </div>
+  </div>
 </div>

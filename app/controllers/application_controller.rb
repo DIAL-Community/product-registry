@@ -57,6 +57,27 @@ class ApplicationController < ActionController::Base
     session[filter_name.to_s] = filter_value
   end
 
+  def remove_filter
+    return unless params.key? 'filter_name'
+
+    session.delete(params['filter_name'])
+  end
+
+  def add_filter
+    return unless params.key? 'filter_name'
+
+    filter_name = params['filter_name']
+    filter_value = params['filter_value'][0]
+    if filter_name.to_s == 'endorser_only'
+      session[filter_name.to_s] = filter_value
+    else
+      existing_value = session[filter_name.to_s]
+      existing_value.nil? && existing_value = []
+      existing_value.push(filter_value)
+      session[filter_name.to_s] = existing_value
+    end
+  end
+
   private
 
   def user_not_authorized(exception)

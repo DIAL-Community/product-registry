@@ -19,17 +19,7 @@
       <% end %>
     <% end %>
   </div>
-  <div class="col-4 pr-0">
-    <div class="float-right">
-      <button id="filter-toggle" type="button" class="btn btn-secondary"
-              data-toggle="collapse" data-target="#filter-options"
-              aria-expanded="false" aria-controls="filter-options">
-        <%= t('view.organization.index.filter') %>
-      </button>
-    </div>
-  </div>
 </div>
-<%= render 'filter', organizations: @organizations %>
 
 <div class="row">
   <% @organizations.each do |organization| %>

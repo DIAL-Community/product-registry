@@ -157,11 +157,18 @@ en:
       product-registry: Product Registry
       profile: Profile Settings
     filternav:
+      framework: Digital Investment Framework
+      registry: Development Project Registry
       sdgs: SDGs
       use_cases: Use Cases
       workflows: Workflows
       building_blocks: Building Blocks
       products: Products
+      geographies: Geographies
+      sectors: Sectors
+      orgs: Organizations
+      projects: Projects (coming soon)
+      map: Endorser Map
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

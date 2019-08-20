@@ -1,8 +1,6 @@
-<div class="collapse" id="filter-options">
-  <hr />
-  <%= form_tag(organizations_path, :method => "get") do %>
+
     <div class="form-row">
-      <div class="col-6 mb-3">
+      <div class="col-12 mb-3">
         <fieldset class="form-label-group">
           <%= text_field_tag "search", params[:search],
               placeholder: t('view.general.name'),
@@ -11,30 +9,8 @@
         </fieldset>
       </div>
     </div>
-    <div class="form-row mb-2">
-      <div class="col-12">
-        <div class="form-check">
-          <%= check_box_tag "endorser_only", true, params[:endorser_only], {class: "form-check-input"} %>
-          <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-6">
-        <div class="form-group">
-          <%= label_tag "years", t('view.organization.index.year') %>
-          <%= select(nil, "years",
-                     Organization
-                        .where.not(when_endorsed: nil)
-                        .all
-                        .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
-                        .uniq!
-                        .sort!,
-                     { selected: params[:years] },
-                     { multiple: true, class: 'custom-select' }) %>
-        </div>
-      </div>
-      <div class="col-6 mb-3">
+    
+      <div class="col-12 mb-3">
         <%= label_tag "sectors", t('model.sector').to_s.pluralize.humanize %>
         <%= collection_select(nil, "sectors",
                               Sector.all.order(:name), :id, :name,
@@ -43,14 +19,14 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="col-6 mb-3">
+      <div class="col-12 mb-3">
         <%= label_tag "products", t('model.product').to_s.pluralize.humanize %>
         <%= collection_select(nil, "products",
                               Product.all.order(:name), :id, :name,
                               { selected: params[:products] },
                               { multiple: true, class: 'custom-select' }) %>
       </div>
-      <div class="col-6 mb-3">
+      <div class="col-12 mb-3">
         <%= label_tag "countries" %>
         <%= collection_select(nil, "countries",
                               Location.where.not(location_type: 'point').order(:name), :id, :name,
@@ -58,6 +34,10 @@
                               { multiple: true, class: 'custom-select' }) %>
       </div>
     </div>
-  <% end %>
-  <hr />
-</div>
+    <div class="float-right">
+      <button id="filter-toggle" type="button" class="btn btn-secondary"
+              data-toggle="collapse" data-target="#filter-options"
+              aria-expanded="false" aria-controls="filter-options">
+        <%= t('view.organization.index.filter') %>
+      </button>
+    </div>

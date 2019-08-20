@@ -58,6 +58,9 @@ Rails.application.routes.draw do
     resources :organizations
   end
 
+  post '/add_filter', to: 'application#add_filter', as: :add_filter
+  post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
+
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
   get 'contact_duplicates', :to => 'contacts#duplicates'
