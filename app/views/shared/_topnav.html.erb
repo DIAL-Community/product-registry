@@ -22,6 +22,13 @@
                 <div class="dropdown-menu">
                   <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
                   <div class="dropdown-divider"></div>
+                  <% if (policy(current_user).index?) %>
+                    <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.location').to_s.pluralize.titlecase, locations_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
+                    <div class="dropdown-divider"></div>
+                  <% end %>
                   <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
                 </div>
               </li>
