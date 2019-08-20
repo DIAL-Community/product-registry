@@ -59,3 +59,4 @@ function triggerPageEvents() {
 }
 
 $(document).on("turbolinks:load", triggerPageEvents);
+

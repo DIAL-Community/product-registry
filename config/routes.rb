@@ -8,9 +8,9 @@ Rails.application.routes.draw do
   scope '/admin' do
     resources :users
   end
-
-  root to: 'organizations#map'
-
+  
+  root to: 'about#index'
+  
   resources :products
 
   resources :building_blocks do

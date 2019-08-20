@@ -1,0 +1,166 @@
+<div id="intro_section" class="view jarallax main-img">
+    <%= image_tag("ict_cover.png", class:'jarallax-img') %>
+    <div class="mask purple-slight" style="height: 100vh;">
+    <div class="container flex-center text-center">
+        <div class="row mt-4">
+        <div class="col-md-12 col-xl-8 mx-auto">
+            <h1 class="display-3 font-weight-bold mb-2 text-white"><%= t('view.about.sdg_title') %></h1>
+            <h3 class="text-white"><%= t('view.about.sdg_subtitle') %></h3>
+            </h1>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<div id="overview_section" class="container">
+  <div class="row my-5 py-4">
+    <div class="col-md-12 text-center">
+        <p class="text-muted" align="justify"><%= t('view.about.explanation1') %></p>
+        <p class="text-muted" align="justify"><%= t('view.about.explanation2') %></p>
+        <p class="text-muted" align="justify"><%= t('view.about.explanation3') %></p>
+        <div class="row flex-image-center">
+            <div class="col-lg-2 m-2">
+                <%= link_to image_tag("sdgs.png", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "sustainable_development_goals"} %>
+            </div>
+            <div class="col-lg-6 m-2">
+                <h3 class="text-muted ml-1 text-left"><%= link_to t("view.about.sdgs"), sustainable_development_goals_path, class: 'text_muted' %></h3>
+                <p class="text-muted ml-1 text-left"><%= t('view.about.sdg_desc') %><p>
+            </div>
+        </div>
+        <div class="row flex-image-center">
+            <div class="col-lg-2 m-2">
+                <%= link_to image_tag("use_cases.png", width: 150, height: 150, class: "clickable-image"), {action:'index', controller: "use_cases"} %>
+            </div>
+            <div class="col-lg-6 m-2">
+                <h3 class="text-muted ml-1 text-left"><%= link_to t("view.about.use_cases"), use_cases_path, class: 'text_muted' %></h3>
+                <p class="text-muted ml-1 text-left"><%= t('view.about.use_case_desc') %><p>
+            </div>
+        </div>
+        <div class="row flex-image-center">
+            <div class="col-lg-2 m-2">
+                <%= link_to image_tag("workflows.png", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "workflows"} %>
+            </div>
+            <div class="col-lg-6 m-2">
+                <h3 class="text-muted ml-1 text-left"><%= link_to t("view.about.workflows"), workflows_path, class: 'text_muted' %></h3>
+                <p class="text-muted ml-1 text-left"><%= t('view.about.workflow_desc') %><p>
+            </div>
+        </div>
+        <div class="row flex-image-center">
+            <div class="col-lg-2 m-2">
+                <%= link_to image_tag("bbs.png", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "building_blocks"} %>
+            </div>
+            <div class="col-lg-6 m-2">
+                <h3 class="text-muted ml-1 text-left"><%= link_to t("view.about.bbs"), building_blocks_path, class: 'text_muted' %></h3>
+                <p class="text-muted ml-1 text-left"><%= t('view.about.bb_desc') %><p>
+            </div>
+        </div>
+        <div class="row flex-image-center">
+            <div class="col-lg-2 m-2">
+                <%= link_to image_tag("product1.svg", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "products"} %>
+            </div>
+            <div class="col-lg-6 m-2">
+                <h3 class="text-muted ml-1 text-left"><%= link_to t("view.about.products"), products_path, class: 'text_muted' %></h3>
+                <p class="text-muted ml-1 text-left"><%= t('view.about.product_desc') %><p>
+            </div>
+        </div>
+        <div class="row mt-3 mb-1 flex-image-center">
+            <%= link_to t('view.about.read_more'), "https://digitalimpactalliance.org/wp-content/uploads/2019/04/D-STR-DIGITAL.02-2019-PDF-E.pdf", :class => 'btn btn-outline-secondary float-left m-2 col-lg-2 pr-1' %>
+            <%= link_to t('view.about.launch'), use_cases_path, :class => 'btn btn-outline-secondary float-right m-2 col-lg-2 pr-3' %>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="view jarallax" data-speed="1.0" style="height: 100vh;">
+  <%= image_tag("image_2.png", class:'jarallax-img') %>
+</div>
+
+<div id="donor_section" class="container">
+  <div class="row my-5 py-4 justify-content-md-center">
+    <div class="col-md-6 text-center text-muted">
+        <h2><%= t('view.about.donors') %></h2>
+        <p class="text-muted" align="justify"><%= t('view.about.donors_text1') %></p>
+        <%= link_to image_tag("sdgs.png", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "sustainable_development_goals"} %>
+        <h4 class="text-muted mt-2"><%= link_to t("view.about.donors_link"), sustainable_development_goals_path %></h4>
+    </div>
+  </div>
+</div>
+
+<div class="view jarallax" data-speed="1.0" style="height: 100vh;">
+  <%= image_tag("image_3.png", class:'jarallax-img') %>
+</div>
+
+<div id="policy_section" class="container">
+  <div class="row my-5 py-4">
+    <div class="col-md-6 text-center text-muted">
+        <h2><%= t('view.about.policy_makers') %></h2>
+        <p class="text-muted" align="justify"><%= t('view.about.policy_text1') %>
+        </p>
+        <div class="about-image">
+        <%= link_to image_tag("use_cases.png", width: 150, height: 150, class: "clickable-image"), {action:'index', controller: "use_cases"} %>
+        <h4 class="text-muted mt-2"><%= link_to t("view.about.policy_link"), use_cases_path %></h4>
+        </div>
+    </div>
+    <div class="col-md-6 text-center text-muted">
+        <h2><%= t('view.about.implementers') %></h2>
+        <p class="text-muted" align="justify"><%= t('view.about.implementers_text1') %>
+        </p>
+        <p class="pt-5"></p>
+        <div class="about-image">
+        <%= link_to image_tag("workflows.png", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "workflows"} %>
+        <h4 class="text-muted mt-2"><%= link_to t("view.about.implementers_link"), workflows_path %></h4>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="view jarallax" data-speed="1.0" style="height: 100vh;">
+  <%= image_tag("image_4.png", class:'jarallax-img') %>
+</div>
+
+<div id="implement_section" class="container">
+  <div class="row my-5 py-4">
+    <div class="col-md-6 text-center text-muted">
+        <h2><%= t('view.about.ict_ministers') %></h2>
+        <p class="text-muted" align="justify"><%= t('view.about.ict_text1') %>
+        </p>
+        <div class="about-image">
+        <%= link_to image_tag("bbs.png", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "building_blocks"} %>
+        <h4 class="text-muted mt-2"><%= link_to t("view.about.ict_link"), building_blocks_path %></h4>
+        </div>
+    </div>
+    <div class="col-md-6 text-center text-muted">
+        <h2><%= t('view.about.specialists') %></h2>
+        <p class="text-muted" align="justify"><%= t('view.about.specialists_text1') %>
+        </p>
+        <p class="pt-2"></p>
+        <div class="about-image">
+        <%= link_to image_tag("product1.svg", width: 150, height:150, class: "clickable-image"), {action:'index', controller: "products"} %>
+        <h4 class="text-muted mt-2"><%= link_to t("view.about.specialists_link"), products_path %></h4>
+        </div>
+    </div>
+  </div>
+
+  <div id="implement_section" class="container">
+    <div class="row mt-3 mb-1 flex-image-center">
+      <%= link_to t('view.about.contact'), "https://digitalimpactalliance.org/research/sdg-digital-investment-framework/", target: "_blank", :class => 'btn btn-outline-secondary float-left m-2 col-lg-2 pr-1', 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'data-original-title'=>t('view.about.contact_text') %>
+    </div>
+    <div class="row mt-3 mb-1 flex-image-center">
+      <p class="text-muted"><%= t('view.about.itu') %>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* init Jarallax */
+  $('.jarallax').jarallax({
+    speed: 0.2
+  });
+
+  $('.jarallax-keep-img').jarallax({
+    keepImg: true,
+  });
+  
+</script>
