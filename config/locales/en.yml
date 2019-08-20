@@ -93,6 +93,9 @@ en:
       workflow_desc: "A WorkFlow is a generic business process that can be applied to SDG Use Cases across multiple sectors."
       bb_desc: "An ICT Building Block is an enterprise-ready, reusable software component that provides key functionality to facilitate generic WorkFlows across multiple sectors."
       product_desc: "A Product is a specific technology offering that is designed to implement one or more Building Blocks."
+      contact: "Contact us"
+      contact_text: "For more information, please contact the Digital Impact Alliance ICT4SDG team"
+      itu: "This framework was developed in partnership with the International Telecommunications Union (ITU)"
     building-block:
       show:
         short-description: Short Description
