@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
+  get '/get_filters', to: 'application#get_filters', as: :get_filters
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'

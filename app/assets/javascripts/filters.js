@@ -10,7 +10,7 @@ var applyFilter = function() {
     });
 
     $('#clear-filter').click(function() {
-        $.post('/organizations/remove_filter', {
+        $.post('/remove_filter', {
             filter_name: 'years'
         }, function() {
             window.location.reload(true);
@@ -18,22 +18,42 @@ var applyFilter = function() {
     })
 }
 
-var addToList = function(id, value) {
-    var element = $("#"+id);
-    element.parent.append("<div>"+value+"</div>")
+var addToList = function(filterId, value) {
+    if (filterId == "endorser_only") {
+        $("#"+filterId).prop( "checked", value == 't' ? true : false );
+    } else {
+        value.map(function(currValue) {
+            $("#"+filterId).parent().append('<div class="card col-md-5 mt-1"><div class="row"><div class="col-md-9">'+currValue+'</div><div id="remove-'+filterId+currValue+'" class="col-md-2 p-0"><i class="fas fa-window-close"></i></div></div></div>')
+            $("#remove-"+filterId+currValue).on('click', {id: filterId, value: currValue}, removeFilter)
+        })
+    }
+    
+}
+
+var removeFilter = function(event) {
+    $.post('/remove_filter', {
+        filter_name: event.data.id,
+        filter_value: event.data.value
+    }, function() {
+        window.location.reload(true);
+    });
+    
 }
 
 var addFilter = function(id, value) {
     $.post('/add_filter', {
         filter_name: id,
         filter_value: value
-    }, function () {
-        addToList(id, value);
+    }, function (data, status, xhr) {
+        if (data) {
+            addToList(id, value);
+            window.location.reload(true);
+        }
     })
 }
 
 var prepareFilters = function() {
-    
+
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
         var val;
@@ -47,7 +67,12 @@ var prepareFilters = function() {
     });
 
     // Get all filters and add to List
-
+    $.get('/get_filters', function (data) {
+        Object.keys(data).map(function(key) {
+            addToList(key, data[key]);
+        })
+        
+    })
 }
 
 $(document).on('organizations#view:loaded', refreshUiElement);

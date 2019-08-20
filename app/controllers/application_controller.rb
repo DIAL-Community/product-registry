@@ -60,12 +60,20 @@ class ApplicationController < ActionController::Base
   def remove_filter
     return unless params.key? 'filter_name'
 
-    session.delete(params['filter_name'])
+    filter_name = params['filter_name']
+    if params['filter_value']
+      existing_value = session[filter_name.to_s]
+      existing_value.delete(params['filter_value'])
+      session[filter_name.to_s] = existing_value
+    else
+      session.delete(params['filter_name'])
+    end
   end
 
   def add_filter
     return unless params.key? 'filter_name'
 
+    retval = false
     filter_name = params['filter_name']
     filter_value = params['filter_value'][0]
     if filter_name.to_s == 'endorser_only'
@@ -73,9 +81,23 @@ class ApplicationController < ActionController::Base
     else
       existing_value = session[filter_name.to_s]
       existing_value.nil? && existing_value = []
-      existing_value.push(filter_value)
+      if (!existing_value.include? filter_value)
+        existing_value.push(filter_value)
+        retval = true
+      end
       session[filter_name.to_s] = existing_value
     end
+    render json: retval
+  end
+
+  def get_filters
+    filters = Hash.new
+    ORGANIZATION_FILTER_KEYS.each do |key|
+      if session[key]
+        filters[key] = session[key]
+      end
+    end
+    render json: filters
   end
 
   private
