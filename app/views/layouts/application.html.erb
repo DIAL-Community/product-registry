@@ -35,14 +35,20 @@
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
     <%= render '/shared/topnav' %>
     <div id="content" class="container-fluid">
-      <div class="row">
-        <div class="col-3">
-          <%= render '/shared/filternav' %>
+      <% if current_page?(:controller => 'about', :action => 'index') %>
+        <%= render '/shared/sidenav' %>
+        <%= yield %>
+      <% else %>
+        <div class="row">
+          <div class="col-3">
+            <%= render '/shared/filternav' %>
+          </div>
+          <div class="col-9">
+            <%= render '/shared/summarynav' %>
+            <%= yield %>
+          </div>
         </div>
-        <div class="col-9">
-          <%= yield %>
-        </div>
-      </div>
+      <% end %>
     </div>
     <%= render '/shared/footer' %>
   </body>

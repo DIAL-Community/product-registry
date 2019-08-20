@@ -16,6 +16,7 @@
  *= require_self
  */
 
+$font-size-base: 0.85rem;
 @import 'bootstrap';
 
 body,
@@ -27,7 +28,6 @@ html {
 
 body {
   padding-top: 120px;
-  font-size: .85rem;
 }
 
 a {
