@@ -59,7 +59,9 @@ function triggerPageEvents() {
       //get index in cookie on accordion create event
       var cookie_name = $(this).attr('id')
       if(Cookies.get(cookie_name) != null){
-         $(this).accordion({active: parseInt(Cookies.get(cookie_name)), animate: 10});
+        $(this).accordion( "option", "animate", false );
+        $(this).accordion("option", "active", parseInt(Cookies.get(cookie_name)));
+        $(this).accordion( "option", "animate", 200 );
       }
     },
     activate: function(event, ui) {

@@ -4,96 +4,96 @@
   </div>
   <div class="card-body p-2">
     <div id="acc-framework" class="accordion">
-        <div class="accordianheader">
-            <p class="text-muted m-0"><%= t('view.filternav.sdgs') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      <div class="accordianheader">
+          <p class="text-muted m-0"><%= t('view.filternav.sdgs') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
-        <div class="accordianbody">
-          <div class="row">
-            <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
-          </div>
-          <div class="form-row">
-            <div class="col-12">
-              <div class="form-group">
-                <%= label_tag "sdgs", t('view.filternav.sdgs') %>
-                <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
-                    { selected: params[:name] },
-                    { multiple: true, class: 'custom-select filter-element' }) %>
-              </div>
-            </div> 
-          </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "sdgs", t('view.filternav.sdgs') %>
+              <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
         </div>
-        <div class="accordianheader">
-            <p class="m-0 text-muted"><%= t('view.filternav.use_cases') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianheader">
+          <p class="m-0 text-muted"><%= t('view.filternav.use_cases') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
-        <div class="accordianbody">
-          <div class="row">
-            <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
-          </div>
-          <div class="form-row">
-            <div class="col-12">
-              <div class="form-group">
-                <%= label_tag "use_cases", t('view.filternav.use_cases') %>
-                <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
-                    { selected: params[:name] },
-                    { multiple: true, class: 'custom-select filter-element' }) %>
-              </div>
-            </div> 
-          </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "use_cases", t('view.filternav.use_cases') %>
+              <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
         </div>
-        <div class="accordianheader">
-            <p class="m-0 text-muted"><%= t('view.filternav.building_blocks') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianheader">
+          <p class="m-0 text-muted"><%= t('view.filternav.building_blocks') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
-        <div class="accordianbody">
-          <div class="row">
-            <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
-          </div>
-          <div class="form-row">
-            <div class="col-12">
-              <div class="form-group">
-                <%= label_tag "bbs", t('view.filternav.building_blocks') %>
-                <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
-                    { selected: params[:name] },
-                    { multiple: true, class: 'custom-select filter-element' }) %>
-              </div>
-            </div> 
-          </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "bbs", t('view.filternav.building_blocks') %>
+              <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
         </div>
-        <div class="accordianheader">
-            <p class="m-0 text-muted"><%= t('view.filternav.workflows') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianheader">
+          <p class="m-0 text-muted"><%= t('view.filternav.workflows') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
-        <div class="accordianbody">
-          <div class="row">
-            <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
-          </div>
-          <div class="form-row">
-            <div class="col-12">
-              <div class="form-group">
-                <%= label_tag "workflows", t('view.filternav.workflows') %>
-                <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
-                    { selected: params[:name] },
-                    { multiple: true, class: 'custom-select filter-element' }) %>
-              </div>
-            </div> 
-          </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "workflows", t('view.filternav.workflows') %>
+              <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
         </div>
-        <div class="accordianheader">
-            <p class="m-0 text-muted"><%= t('view.filternav.products') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianheader">
+          <p class="m-0 text-muted"><%= t('view.filternav.products') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordianbody">
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
-        <div class="accordianbody">
-          <div class="row">
-            <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
-          </div>
-          <div class="form-row">
-            <div class="col-12">
-              <div class="form-group">
-                <%= label_tag "products", t('view.filternav.products') %>
-                <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
-                    { selected: params[:name] },
-                    { multiple: true, class: 'custom-select filter-element' }) %>
-              </div>
-            </div> 
-          </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "products", t('view.filternav.products') %>
+              <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
         </div>
+      </div>
     </div>
   </div>
   <div class="card-header bg-secondary text-white">
@@ -105,13 +105,37 @@
         <p class="text-muted m-0"><%= t('view.filternav.geographies') %><i class="fa fa-angle-down float-right text-muted"></i></p>
       </div>
       <div class="accordianbody">
-        <p class="text-muted">SDG Filters go here</p>
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "countries", t('view.filternav.geographies') %>
+              <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
+        </div>
       </div>
       <div class="accordianheader">
         <p class="text-muted m-0"><%= t('view.filternav.sectors') %><i class="fa fa-angle-down float-right text-muted"></i></p>
       </div>
       <div class="accordianbody">
-        <p class="text-muted">SDG Filters go here</p>
+        <div class="row">
+          <div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#"><%= t('view.filternav.clear') %></a></div> 
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "sectors", t('view.filternav.sectors') %>
+              <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { multiple: true, class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
+        </div>
       </div>
       <div class="accordianheader">
         <p class="text-muted m-0"><%= t('view.filternav.orgs') %><i class="fa fa-angle-down float-right text-muted"></i></p>
