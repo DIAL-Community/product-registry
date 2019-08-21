@@ -54,7 +54,23 @@ function triggerPageEvents() {
     active:false,
     collapsible: true,
     icons: false,
-    header:"div.accordianheader"
+    header:"div.accordianheader",
+    create: function(event, ui) {
+      //get index in cookie on accordion create event
+      var cookie_name = $(this).attr('id')
+      if(Cookies.get(cookie_name) != null){
+         $(this).accordion({active: parseInt(Cookies.get(cookie_name)), animate: 10});
+      }
+    },
+    activate: function(event, ui) {
+        //set cookie for current index on change event
+        var cookie_name = $(this).attr('id')
+        Cookies.set(cookie_name, null);
+        if (ui.newHeader.length) {
+            var index = $(this).accordion('option', 'active');
+            Cookies.set(cookie_name, index);
+        }
+    }
   });
 }
 
