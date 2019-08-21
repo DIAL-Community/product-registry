@@ -210,6 +210,7 @@ en:
       orgs: Organizations
       projects: Projects (coming soon)
       map: Endorser Map
+      clear: Clear All
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

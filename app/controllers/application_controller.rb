@@ -58,15 +58,22 @@ class ApplicationController < ActionController::Base
   end
 
   def remove_filter
-    return unless params.key? 'filter_name'
+    return unless params.key? 'filter_array'
 
-    filter_name = params['filter_name']
-    if params['filter_value']
-      existing_value = session[filter_name.to_s]
-      existing_value.delete(params['filter_value'])
-      session[filter_name.to_s] = existing_value
-    else
-      session.delete(params['filter_name'])
+    filter_array = params['filter_array']
+    filter_array.each do | filter_item |
+      curr_filter = filter_array[filter_item]
+      filter_name = curr_filter['filter_name']
+      if curr_filter['filter_value']
+        filter_obj = Hash.new
+        filter_obj['value'] = curr_filter['filter_value'][0]
+        filter_obj['label'] = curr_filter['filter_label']
+        existing_value = session[filter_name.to_s]
+        existing_value.delete(filter_obj)
+        session[filter_name.to_s] = existing_value
+      else
+        session.delete(curr_filter['filter_name'])
+      end
     end
   end
 
@@ -75,14 +82,17 @@ class ApplicationController < ActionController::Base
 
     retval = false
     filter_name = params['filter_name']
-    filter_value = params['filter_value'][0]
+    filter_obj = Hash.new
+    filter_obj['value'] = params['filter_value'][0]
+    filter_obj['label'] = params['filter_label']
     if filter_name.to_s == 'endorser_only'
-      session[filter_name.to_s] = filter_value
+      session[filter_name.to_s] = filter_obj
+      retval = true
     else
       existing_value = session[filter_name.to_s]
       existing_value.nil? && existing_value = []
-      if (!existing_value.include? filter_value)
-        existing_value.push(filter_value)
+      if (!existing_value.include? filter_obj)
+        existing_value.push(filter_obj)
         retval = true
       end
       session[filter_name.to_s] = existing_value
@@ -93,6 +103,11 @@ class ApplicationController < ActionController::Base
   def get_filters
     filters = Hash.new
     ORGANIZATION_FILTER_KEYS.each do |key|
+      if session[key]
+        filters[key] = session[key]
+      end
+    end
+    OTHER_FILTER_KEYS.each do |key|
       if session[key]
         filters[key] = session[key]
       end

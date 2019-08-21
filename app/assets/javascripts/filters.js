@@ -18,35 +18,37 @@ var applyFilter = function() {
     })
 }
 
-var addToList = function(filterId, value) {
+var addToList = function(filterId, values) {
     if (filterId == "endorser_only") {
         $("#"+filterId).prop( "checked", value == 't' ? true : false );
     } else {
-        value.map(function(currValue) {
-            $("#"+filterId).parent().append('<div class="card col-md-5 mt-1"><div class="row"><div class="col-md-9">'+currValue+'</div><div id="remove-'+filterId+currValue+'" class="col-md-2 p-0"><i class="fas fa-window-close"></i></div></div></div>')
-            $("#remove-"+filterId+currValue).on('click', {id: filterId, value: currValue}, removeFilter)
+        values.map(function(currValue) {
+            $("#"+filterId).parent().append('<div class="card col-md-10 mt-1"><div class="row"><div class="col-md-9">'+currValue.label+'</div><div id="remove-'+filterId+'-'+currValue.value+'" name="'+currValue.label+'" class="col-md-2 p-0 remove-filter"><i class="fas fa-window-close"></i></div></div></div>')
+            $("#remove-"+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
         })
     }
     
 }
 
 var removeFilter = function(event) {
-    $.post('/remove_filter', {
+    $.post('/remove_filter', { filter_array: [ {
         filter_name: event.data.id,
-        filter_value: event.data.value
-    }, function() {
+        filter_value: event.data.value,
+        filter_label: event.data.label
+    } ] }, function() {
         window.location.reload(true);
     });
     
 }
 
-var addFilter = function(id, value) {
+var addFilter = function(id, value, label) {
     $.post('/add_filter', {
         filter_name: id,
-        filter_value: value
+        filter_value: value,
+        filter_label: label
     }, function (data, status, xhr) {
         if (data) {
-            addToList(id, value);
+            addToList(id, [{value, label}]);
             window.location.reload(true);
         }
     })
@@ -57,13 +59,32 @@ var prepareFilters = function() {
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
         var val;
+        var label;
         if ($(this).is(':checkbox')) {
             val = $(this).is(":checked");
         } else {
-            val = $(this).val();
+            val = $(this).children("option:selected").val();
+            label = $(this).children("option:selected").text();
         }
         
-        addFilter(id, val)
+        addFilter(id, val, label)
+    });
+
+    $('.clear-all').on('click', function() {
+        filterList = [];
+        $(this).parent().parent().find('.remove-filter').each(function(index) {
+            // collect all of the filters to remove
+            filterId = $(this).attr('id').split('-');
+            filterLabel = $(this).attr('name');
+            currFilter = { filter_name: filterId[1], filter_value: filterId[2], filter_label: filterLabel }
+            filterList.push(currFilter);
+        });
+
+        if (filterList.length > 0) {
+            $.post('/remove_filter', { filter_array: filterList }, function() {
+                window.location.reload(true);
+            });
+        }
     });
 
     // Get all filters and add to List
