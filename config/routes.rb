@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
@@ -8,10 +7,12 @@ Rails.application.routes.draw do
   scope '/admin' do
     resources :users
   end
-  
+
   root to: 'about#index'
-  
-  resources :products
+
+  resources :products do
+    get 'count', on: :collection
+  end
 
   resources :building_blocks do
     post 'add_filter', on: :collection
@@ -20,16 +21,18 @@ Rails.application.routes.draw do
     get 'view', on: :collection
   end
 
-  resources :sustainable_development_goals, only: [:index, :show]
+  resources :sustainable_development_goals, only: [:index, :show] do
+    get 'count', on: :collection
+  end
+
   resources :sdg_targets, only: [:index, :show]
 
   resources :use_cases do
-    resources :sdg_targets
-    resources :workflows
+    get 'count', on: :collection
   end
 
   resources :workflows do
-    resources :use_cases
+    get 'count', on: :collection
   end
 
   resources :deploys do

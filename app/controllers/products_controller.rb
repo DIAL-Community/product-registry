@@ -42,6 +42,9 @@ class ProductsController < ApplicationController
     authorize @products, :view_allowed?
   end
 
+  def count
+  end
+
   # GET /products/1
   # GET /products/1.json
   def show

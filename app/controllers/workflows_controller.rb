@@ -28,6 +28,9 @@ class WorkflowsController < ApplicationController
     end
   end
 
+  def count
+  end
+
   # GET /workflows/1
   # GET /workflows/1.json
   def show

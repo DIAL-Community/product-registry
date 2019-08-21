@@ -30,6 +30,9 @@ class SustainableDevelopmentGoalsController < ApplicationController
     end
   end
 
+  def count
+  end
+
   def show
     authorize @sustainable_development_goal, :view_allowed?
   end
