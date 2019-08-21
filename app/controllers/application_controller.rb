@@ -29,16 +29,16 @@ class ApplicationController < ActionController::Base
     session[filter_name.to_s] = filter_value
   end
 
-  def prepare_non_organization_filters
-    non_organization_filters = {}
-    OTHER_FILTER_KEYS.each do |filter|
-      non_organization_filters[filter.to_s] = session[filter.to_s]
+  def prepare_framework_filters
+    framework_filters = {}
+    FRAMEWORK_FILTER_KEYS.each do |filter|
+      framework_filters[filter.to_s] = session[filter.to_s]
     end
-    non_organization_filters
+    framework_filters
   end
 
-  def put_non_organization_filter(filter_name, filter_value)
-    return unless OTHER_FILTER_KEYS.include?(filter_name)
+  def put_framework_filter(filter_name, filter_value)
+    return unless FRAMEWORK_FILTER_KEYS.include?(filter_name)
 
     session[filter_name.to_s] = filter_value
   end
@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
         filters[key] = session[key]
       end
     end
-    OTHER_FILTER_KEYS.each do |key|
+    FRAMEWORK_FILTER_KEYS.each do |key|
       if session[key]
         filters[key] = session[key]
       end
