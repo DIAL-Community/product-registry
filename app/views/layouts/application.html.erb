@@ -34,11 +34,17 @@
 
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
     <%= render '/shared/topnav' %>
-    <div id="content" class="container-fluid">
-      <% if current_page?(:controller => '/about', :action => 'index') %>
+    <% if current_page?('/about') %>
+      <div id="content" class="container">
         <%= render '/shared/sidenav' %>
         <%= yield %>
-      <% else %>
+      </div>
+    <% elsif current_page?('/map') %>
+      <div id="content" class="container">
+        <%= yield %>
+      </div>
+    <% else %>
+      <div id="content" class="container-fluid">
         <div class="row">
           <div class="col-3">
             <%= render '/shared/filternav' %>
@@ -48,8 +54,8 @@
             <%= yield %>
           </div>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
     <%= render '/shared/footer' %>
   </body>
 </html>

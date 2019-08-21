@@ -2,40 +2,40 @@
   <div class="col-12">
     <div class="list-group w-100 flex-fill list-group-horizontal">
       <li class="list-group-item w-100 text-center">
-        <a href="#" >
+        <%= link_to sustainable_development_goals_path do %>
           <u><%= t('model.sdg').upcase.pluralize %></u>
-          <span id="sdg-badge" class="badge badge-warning">4</span>
-        </a>
+          <span id="sdg-badge" class="badge badge-warning">--</span>
+        <% end %>
       </li>
       <li class="list-group-item w-100 text-center">
-        <a href="#" >
+        <%= link_to use_cases_path do %>
           <u><%= t('model.use-case').titlecase.pluralize %></u>
-          <span id="use-case-badge" class="badge badge-warning">4</span>
-        </a>
+          <span id="use-case-badge" class="badge badge-warning">--</span>
+        <% end %>
       </li>
       <li class="list-group-item w-100 text-center">
-        <a href="#" >
+        <%= link_to workflows_path do %>
           <u><%= t('model.workflow').titlecase.pluralize %></u>
-          <span id="workflow-badge" class="badge badge-warning">4</span>
-        </a>
+          <span id="workflow-badge" class="badge badge-warning">--</span>
+        <% end %>
       </li>
       <li class="list-group-item w-100 text-center">
-        <a href="#" >
+        <%= link_to building_blocks_path do %>
           <u><%= t('model.building-block').titlecase.pluralize %></u>
-          <span id="bb-badge" class="badge badge-warning">4</span>
-        </a>
+          <span id="bb-badge" class="badge badge-warning">--</span>
+        <% end %>
       </li>
       <li class="list-group-item w-100 text-center">
-        <a href="#" >
+        <%= link_to products_path do %>
           <u><%= t('model.product').titlecase.pluralize %></u>
-          <span id="product-badge" class="badge badge-warning">4</span>
-        </a>
+          <span id="product-badge" class="badge badge-warning">--</span>
+        <% end %>
       </li>
       <li class="list-group-item w-100 text-center">
-        <a href="#" >
+        <%= link_to organizations_path do %>
           <u><%= t('model.organization').titlecase.pluralize %></u>
-          <span id="org-badge" class="badge badge-warning">4</span>
-        </a>
+          <span id="org-badge" class="badge badge-warning">--</span>
+        <% end %>
       </li>
     </div>
   </div>

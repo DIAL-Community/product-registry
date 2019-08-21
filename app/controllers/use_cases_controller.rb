@@ -29,6 +29,9 @@ class UseCasesController < ApplicationController
     end
   end
 
+  def count
+  end
+
   # GET /use_cases/1
   # GET /use_cases/1.json
   def show
