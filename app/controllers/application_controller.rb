@@ -21,42 +21,6 @@ class ApplicationController < ActionController::Base
     return "_dup#{size.to_s}"
   end
 
-  def take_filter(filter_name)
-    session[filter_name.to_s]
-  end
-
-  def put_filter(filter_name, filter_value)
-    session[filter_name.to_s] = filter_value
-  end
-
-  def prepare_framework_filters
-    framework_filters = {}
-    FRAMEWORK_FILTER_KEYS.each do |filter|
-      framework_filters[filter.to_s] = session[filter.to_s]
-    end
-    framework_filters
-  end
-
-  def put_framework_filter(filter_name, filter_value)
-    return unless FRAMEWORK_FILTER_KEYS.include?(filter_name)
-
-    session[filter_name.to_s] = filter_value
-  end
-
-  def prepare_organization_filters
-    organization_filters = {}
-    ORGANIZATION_FILTER_KEYS.each do |filter|
-      organization_filters[filter.to_s] = session[filter.to_s]
-    end
-    organization_filters
-  end
-
-  def put_organization_filter(filter_name, filter_value)
-    return unless ORGANIZATION_FILTER_KEYS.include?(filter_name)
-
-    session[filter_name.to_s] = filter_value
-  end
-
   def remove_filter
     return unless params.key? 'filter_array'
 
@@ -70,7 +34,8 @@ class ApplicationController < ActionController::Base
         filter_obj['label'] = curr_filter['filter_label']
         existing_value = session[filter_name.to_s]
         existing_value.delete(filter_obj)
-        session[filter_name.to_s] = existing_value
+        existing_value.empty? && session.delete(filter_name.to_s)
+        !existing_value.empty? && session[filter_name.to_s] = existing_value
       else
         session.delete(curr_filter['filter_name'])
       end

@@ -9,7 +9,9 @@ const removeActiveFilter = function(event) {
   const li = $(event.target).closest('li');
   const filter_name = li.attr("id");
   $.post('/remove_filter', {
-    filter_name: filter_name
+    filter_array: [{
+      filter_name: filter_name
+    }]
   }, function() {
     $(li).fadeOut();
   });
