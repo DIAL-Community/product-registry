@@ -280,30 +280,6 @@ class OrganizationsController < ApplicationController
       end
     end
 
-  def sanitize_filter_values(filter_name)
-    filter_values = []
-    (params.key? filter_name.to_s) && filter_values += params[filter_name.to_s].reject { |value| value.nil? || value.blank? }
-    filter_values
-  end
-
-  def sanitize_filter_value(filter_name)
-    filter_value = nil
-    (params.key? filter_name.to_s) && filter_value = params[filter_name.to_s]
-    filter_value
-  end
-
-  def sanitize_session_values(filter_name)
-    filter_values = []
-    (session.key? filter_name.to_s) && filter_values += session[filter_name.to_s]
-    filter_values
-  end
-
-  def sanitize_session_value(filter_name)
-    filter_value = nil
-    (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]
-    filter_value
-  end
-
     def authenticate_user
       uri = URI.parse(Rails.configuration.geocode["esri"]["auth_uri"])
       http = Net::HTTP.new(uri.host, uri.port)

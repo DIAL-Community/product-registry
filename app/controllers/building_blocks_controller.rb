@@ -29,7 +29,10 @@ class BuildingBlocksController < ApplicationController
   end
 
   def count
-    render json: 0
+    @building_blocks = filter_building_blocks
+
+    authorize @building_blocks, :view_allowed?
+    render json: @building_blocks.count
   end
 
   # GET /building_blocks/1
@@ -152,6 +155,23 @@ class BuildingBlocksController < ApplicationController
   end
 
   private
+
+    def filter_building_blocks
+      building_blocks = BuildingBlock.all.order(:slug)
+
+      use_cases = sanitize_session_values 'use_cases'
+      workflows = sanitize_session_values 'workflows'
+      sdgs = sanitize_session_values 'years'
+
+      #!use_cases.empty? && building_blocks = building_blocks.joins(:use_cases).where('use_case.id in (?)', use_cases)
+      !workflows.empty? && building_blocks = building_blocks.joins(:workflows).where('workflow_id in (?)', workflows)
+      #!sdgs.empty? && building_blocks = building_blocks.joins(:sustainable_development_goals).where('sustainable_development_goal.id in (?)', sdgs)
+
+      puts "Count: " + building_blocks.count.to_s
+
+      building_blocks
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])

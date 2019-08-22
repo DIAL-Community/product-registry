@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
       filter_name = curr_filter['filter_name']
       if curr_filter['filter_value']
         filter_obj = Hash.new
-        filter_obj['value'] = curr_filter['filter_value'][0]
+        filter_obj['value'] = curr_filter['filter_value']
         filter_obj['label'] = curr_filter['filter_label']
         existing_value = session[filter_name.to_s]
         existing_value.delete(filter_obj)
@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
     retval = false
     filter_name = params['filter_name']
     filter_obj = Hash.new
-    filter_obj['value'] = params['filter_value'][0]
+    filter_obj['value'] = params['filter_value']
     filter_obj['label'] = params['filter_label']
     if filter_name.to_s == 'endorser_only'
       session[filter_name.to_s] = filter_obj
@@ -113,6 +113,34 @@ class ApplicationController < ActionController::Base
       end
     end
     render json: filters
+  end
+
+  def sanitize_filter_values(filter_name)
+    filter_values = []
+    (params.key? filter_name.to_s) && filter_values += params[filter_name.to_s].reject { |value| value.nil? || value.blank? }
+    filter_values
+  end
+
+  def sanitize_filter_value(filter_name)
+    filter_value = nil
+    (params.key? filter_name.to_s) && filter_value = params[filter_name.to_s]
+    filter_value
+  end
+
+  def sanitize_session_values(filter_name)
+    filter_values = []
+    if (session.key? filter_name.to_s)
+      session[filter_name.to_s].each do |curr_filter|
+        filter_values.push(curr_filter['value'])
+      end
+    end
+    filter_values
+  end
+
+  def sanitize_session_value(filter_name)
+    filter_value = nil
+    (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]
+    filter_value
   end
 
   private
