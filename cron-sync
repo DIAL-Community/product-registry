@@ -11,5 +11,5 @@ HOME=/root
 RAILS_ENV=production
 
 0 3 * * *   /t4d/sync.sh >> /var/log/cron.log 2>&1
-0 4 * * *   rails db:backup >> /var/log/cron.log 2>&1
-0 5 * * *   rails db:send_backup_emails >> /var/log/cron.log 2>&1
+0 4 * * *   source /t4d/setEnv.sh prod && rails db:backup >> /var/log/cron.log 2>&1
+0 5 * * *   source /t4d/setEnv.sh prod && rails db:send_backup_emails >> /var/log/cron.log 2>&1
