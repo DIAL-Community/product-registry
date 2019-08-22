@@ -21,7 +21,7 @@ class BuildingBlocksController < ApplicationController
         .paginate(page: params[:page], per_page: 20)
       authorize @building_blocks, :view_allowed?
     else
-      @building_blocks = BuildingBlock
+      @building_blocks = filter_building_blocks
         .order(:name)
         .paginate(page: params[:page], per_page: 20)
       authorize @building_blocks, :view_allowed?
