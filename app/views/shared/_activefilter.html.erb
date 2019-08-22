@@ -1,11 +1,16 @@
 <div id="active-filter" class="row">
   <div class="col-9 ml-3">
     <ul class="list-group">
-      <li id="active-filter-template" class="list-group-item">
-        <span class="close-icon" data-effect="fadeOut">
-          <i class="fa fa-times text-danger"></i>
-        </span>
-      </li>
+      <% all_filters.each do |filter| %>
+        <% if session.key? filter %>
+          <li id="<%= filter %>" class="list-group-item">
+            <%= session[filter.to_s].sort{ |x, y| x['value'] <=> y['value'] }.map{ |x| "#{x['value']}. #{x['label']}" }.join(', ')%>
+            <span class="close-icon" data-effect="fadeOut">
+              <i class="fa fa-times text-danger"></i>
+            </span>
+          </li>
+        <% end %>
+      <% end %>
     </ul>
   </div>
 </div>

@@ -34,7 +34,7 @@
 
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
     <%= render '/shared/topnav' %>
-    <% if current_page?('/about') %>
+    <% if current_page?('/about') || current_page?(root_path) %>
       <div id="content" class="container">
         <%= render '/shared/sidenav' %>
         <%= yield %>

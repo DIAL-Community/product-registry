@@ -40,4 +40,8 @@ const activeFilter = function() {
   });
 }
 
-$(document).on("turbolinks:load", activeFilter);
+const removeFilterHandler = function() {
+  $('.close-icon').click(removeActiveFilter);
+}
+
+$(document).on("turbolinks:load", removeFilterHandler);
