@@ -32,10 +32,6 @@ class BuildingBlocksController < ApplicationController
     render json: 0
   end
 
-  def view
-    @building_blocks = BuildingBlock.all
-  end
-
   # GET /building_blocks/1
   # GET /building_blocks/1.json
   def show

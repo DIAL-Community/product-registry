@@ -15,10 +15,7 @@ Rails.application.routes.draw do
   end
 
   resources :building_blocks do
-    post 'add_filter', on: :collection
-    post 'remove_filter', on: :collection
     get 'count', on: :collection
-    get 'view', on: :collection
   end
 
   resources :sustainable_development_goals, only: [:index, :show] do
@@ -41,11 +38,7 @@ Rails.application.routes.draw do
   end
 
   resources :organizations do
-    post 'add_filter', on: :collection
-    post 'remove_filter', on: :collection
-    get 'all_filters', on: :collection
     get 'count', on: :collection
-    get 'view', on: :collection
   end
 
   resources :locations do

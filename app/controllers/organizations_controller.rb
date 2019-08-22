@@ -35,48 +35,6 @@ class OrganizationsController < ApplicationController
     render json: @organizations.count
   end
 
-  def view
-    @organizations = Organization.all.order(:slug)
-    endorser_only = sanitize_session_value 'endorser_only'
-
-    countries = sanitize_session_values 'countries'
-    sectors = sanitize_session_values 'sectors'
-    years = sanitize_session_values 'years'
-
-    endorser_only && @organizations = @organizations.where(is_endorser: true)
-    !countries.empty? && @organizations = @organizations.joins(:locations).where('locations.id in (?)', countries)
-    !sectors.empty? && @organizations = @organizations.joins(:sectors).where('sectors.id in (?)', sectors)
-
-    authorize @organizations, :view_allowed?
-    @organizations
-  end
-
-  def remove_filter
-    return unless params.key? 'filter_name'
-
-    session.delete(params['filter_name'])
-  end
-
-  def add_filter
-    return unless params.key? 'filter_name'
-
-    filter_name = params['filter_name']
-    filter_value = params['filter_value']
-    if filter_name.to_s == 'endorser_only'
-      session[filter_name.to_s] = filter_value
-    else
-      existing_value = session[filter_name.to_s]
-      existing_value.nil? && existing_value = []
-      existing_value.push(filter_value)
-      session[filter_name.to_s] = existing_value
-    end
-  end
-
-  def all_filters
-    @organization_filters = prepare_organization_filters
-    render json: @organization_filters
-  end
-
   def search_organizations
     @organizations = Organization.all.order(:slug)
 

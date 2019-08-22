@@ -4,20 +4,6 @@ var refreshUiElement = function() {
     });
 }
 
-var applyFilter = function() {
-    $('#apply-filter').click(function() {
-        window.location.reload(true);
-    });
-
-    $('#clear-filter').click(function() {
-        $.post('/remove_filter', {
-            filter_name: 'years'
-        }, function() {
-            window.location.reload(true);
-        });
-    })
-}
-
 var addToList = function(filterId, values) {
     if (filterId == "endorser_only") {
         $("#"+filterId).prop("checked", value == 't' ? true : false);
@@ -99,5 +85,4 @@ var prepareFilters = function() {
 }
 
 $(document).on('organizations#view:loaded', refreshUiElement);
-$(document).on('organizations#view:loaded', applyFilter);
 $(document).ready(prepareFilters);
