@@ -20,7 +20,7 @@ var applyFilter = function() {
 
 var addToList = function(filterId, values) {
     if (filterId == "endorser_only") {
-        $("#"+filterId).prop( "checked", value == 't' ? true : false );
+        $("#"+filterId).prop("checked", value == 't' ? true : false);
     } else {
         values.map(function(currValue) {
             $("#"+filterId).parent().append('<div class="card col-md-10 offset-md-1 mt-1"><div class="row"><div class="col-md-10">'+currValue.label+'</div><div id="remove-'+filterId+'-'+currValue.value+'" name="'+currValue.label+'" class="col-md-2 p-0 remove-filter"><i class="fas fa-window-close"></i></div></div></div>')
@@ -46,12 +46,14 @@ var addFilter = function(id, value, label) {
         filter_name: id,
         filter_value: value,
         filter_label: label
-    }, function (data, status, xhr) {
+    }, function (data) {
         if (data) {
-            addToList(id, [{value, label}]);
-            window.location.reload(true);
+          var newFilter = [];
+          newFilter.push({value: value, label: label})
+          addToList(id, newFilter);
         }
-    })
+        window.location.reload(true);
+    });
 }
 
 var prepareFilters = function() {
@@ -93,7 +95,7 @@ var prepareFilters = function() {
             addToList(key, data[key]);
         })
         
-    })
+    });
 }
 
 $(document).on('organizations#view:loaded', refreshUiElement);
