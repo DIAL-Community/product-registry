@@ -29,6 +29,7 @@ class WorkflowsController < ApplicationController
   end
 
   def count
+    render json: 0
   end
 
   # GET /workflows/1

@@ -30,16 +30,6 @@ class OrganizationsController < ApplicationController
     endorser_only && @organizations = @organizations.where(is_endorser: true)
     !countries.empty? && @organizations = @organizations.joins(:locations).where('locations.id in (?)', countries)
     !sectors.empty? && @organizations = @organizations.joins(:sectors).where('sectors.id in (?)', sectors)
-    if (!years.empty?)
-      yearorgs = []
-      years.each do |year|
-        currorgs = @organizations.where('extract(year from when_endorsed) = ?', year)
-        currorgs.each do |org|
-          yearorgs.push(org.id)
-        end
-      end
-      @organizations = @organizations.where(id: yearorgs)
-    end
 
     authorize @organizations, :view_allowed?
     render json: @organizations.count
@@ -56,16 +46,6 @@ class OrganizationsController < ApplicationController
     endorser_only && @organizations = @organizations.where(is_endorser: true)
     !countries.empty? && @organizations = @organizations.joins(:locations).where('locations.id in (?)', countries)
     !sectors.empty? && @organizations = @organizations.joins(:sectors).where('sectors.id in (?)', sectors)
-    if (!years.empty?)
-      yearorgs = []
-      years.each do |year|
-        currorgs = @organizations.where('extract(year from when_endorsed) = ?', year)
-        currorgs.each do |org|
-          yearorgs.push(org.id)
-        end
-      end
-      @organizations = @organizations.where(id: yearorgs)
-    end
 
     authorize @organizations, :view_allowed?
     @organizations

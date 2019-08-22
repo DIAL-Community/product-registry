@@ -31,6 +31,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
   end
 
   def count
+    render json: 0
   end
 
   def show

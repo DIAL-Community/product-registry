@@ -43,6 +43,7 @@ class ProductsController < ApplicationController
   end
 
   def count
+    render json: 0
   end
 
   # GET /products/1

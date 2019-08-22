@@ -30,6 +30,7 @@ class UseCasesController < ApplicationController
   end
 
   def count
+    render json: 0
   end
 
   # GET /use_cases/1
