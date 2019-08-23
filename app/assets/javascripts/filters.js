@@ -12,15 +12,15 @@ var addToList = function(filterId, values) {
             $("#"+filterId).parent().append(
               '<div class="card col-12 mt-1">' +
                 '<div class="row">' +
-                  '<div class="col-11">' +
+                  '<div class="col-11 pt-1 pb-1 pl-2">' +
                     currValue.label +
                   '</div>' +
-                  '<div id="remove-'+filterId+'-'+currValue.value+'" name="'+currValue.label+'" class="col-1 p-0 remove-filter">' +
+                  '<div data-effect="fadeOut" class="col-1 text-center p-1 remove-filter">' +
                     '<i class="fas fa-window-close"></i>' +
                   '</div>' +
                 '</div>' +
               '</div>')
-            $("#remove-"+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
+            $(".remove-filter").on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
         })
     }
     
@@ -32,6 +32,9 @@ var removeFilter = function(event) {
         filter_value: event.data.value,
         filter_label: event.data.label
     } ] }, function() {
+        const card = $(event.target).closest('.card');
+        card.fadeOut();
+        
         window.location.reload(true);
     });
     

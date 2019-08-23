@@ -7,6 +7,21 @@
     color: #000043;
 }
 
+#filter-nav {
+  option {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .remove-filter {
+    cursor: pointer;
+  }
+
+  .accordion-body {
+    overflow: hidden;
+  }
+}
+
 #summary-nav {
   font-size: .9rem;
   font-weight: bolder;
