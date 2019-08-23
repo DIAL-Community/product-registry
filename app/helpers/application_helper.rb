@@ -6,8 +6,14 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
+  DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/registrations', 'devise/confirmations'].freeze
+
   def all_filters
     FRAMEWORK_FILTER_KEYS + ORGANIZATION_FILTER_KEYS
+  end
+
+  def display_sidenav
+    current_page?('/map') || DEVISE_CONTROLLERS.include?(params[:controller])
   end
 
   def format_filter(filter_name)
