@@ -1,6 +1,6 @@
 var addToList = function(filterId, values) {
-    if (filterId == "endorser_only") {
-        $("#"+filterId).prop("checked", value == 't' ? true : false);
+    if (filterId === "endorser_only") {
+        $("#"+filterId).prop("checked", values.value === 'true');
     } else {
         values.map(function(currValue) {
             $("#"+filterId).parent().append(
@@ -53,16 +53,13 @@ var prepareFilters = function() {
 
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
-        var val;
-        var label;
         if ($(this).is(':checkbox')) {
-            val = $(this).is(":checked");
+            $(this).is(":checked") ? addFilter(id, true) : removeFilter({data: {id: id}});
         } else {
-            val = $(this).children("option:selected").val();
-            label = $(this).children("option:selected").text();
+            var val = $(this).children("option:selected").val();
+            var label = $(this).children("option:selected").text();
+            addFilter(id, val, label)
         }
-        
-        addFilter(id, val, label)
     });
 
     $('.clear-all').on('click', function() {
