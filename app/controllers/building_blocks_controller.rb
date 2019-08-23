@@ -153,6 +153,12 @@ class BuildingBlocksController < ApplicationController
       workflows = sanitize_session_values 'workflows'
       sdgs = sanitize_session_values 'sdgs'
       bbs = sanitize_session_values 'building_blocks'
+      products = sanitize_session_values 'products'
+
+      filter_set = true;
+      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+        filter_set = false;
+      end
 
       if (!sdgs.empty?)
         # Get use_cases connected to this sdg
@@ -175,18 +181,29 @@ class BuildingBlocksController < ApplicationController
         combined_workflows = workflows
       end
 
-      (!combined_workflows.empty? || use_case_workflows) && building_blocks = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
-
-      if(!bbs.empty?) 
-        if (!building_blocks)
-          filter_bbs = bbs
-        else
-          filter_bbs = bbs+building_blocks
-        end
-        building_blocks = BuildingBlock.all.where('id in (?)', filter_bbs)
+      bb_workflows = BuildingBlock.none
+      if (!combined_workflows.empty? || use_case_workflows) 
+        bb_workflows = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
       end
 
-      !building_blocks && building_blocks = BuildingBlock.all.order(:slug)
+      bb_products = BuildingBlock.none
+      if (!products.empty?)
+        bb_products = BuildingBlock.all.joins(:products).where('product_id in (?)', products)
+        puts "PRODUCTS: " + bb_products.to_s
+      end
+
+      filter_bbs = BuildingBlock.none
+      if(!bbs.empty?) 
+        filter_bbs = BuildingBlock.all.where('id in (?)', bbs).order(:slug)
+      end
+
+      if (filter_set)
+        ids = (bb_workflows + bb_products + filter_bbs).uniq
+        building_blocks = BuildingBlock.where(id: ids)
+        puts "TOTAL: " + building_blocks.to_s
+      else 
+        building_blocks = BuildingBlock.all.order(:slug)
+      end
 
       building_blocks
     end
