@@ -1,9 +1,3 @@
-var refreshUiElement = function() {
-    $.getJSON('/organizations/count', function(data){
-        $('#organization-count').html(data)
-    });
-}
-
 var addToList = function(filterId, values) {
     if (filterId == "endorser_only") {
         $("#"+filterId).prop("checked", value == 't' ? true : false);
@@ -97,5 +91,4 @@ var prepareFilters = function() {
     });
 }
 
-$(document).on('organizations#view:loaded', refreshUiElement);
-$(document).ready(prepareFilters);
+$(document).on("turbolinks:load", prepareFilters);
