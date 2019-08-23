@@ -20,7 +20,7 @@ var addToList = function(filterId, values) {
                   '</div>' +
                 '</div>' +
               '</div>')
-            $(".remove-filter").on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
+            $('#remove-'+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
         })
     }
     
