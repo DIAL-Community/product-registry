@@ -1,7 +1,7 @@
 <div id="active-filter" class="row">
   <div class="col-9 ml-3">
     <ul class="list-group">
-      <% all_filters.sort.each do |filter| %>
+      <% all_filters.each do |filter| %>
         <% if session.key? filter %>
           <li id="<%= filter %>" class="list-group-item">
             <%= format_filter(filter) %>

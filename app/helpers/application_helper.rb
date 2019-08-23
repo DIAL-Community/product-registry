@@ -5,7 +5,7 @@ module ApplicationHelper
   include Modules::Constants
 
   def all_filters
-    ORGANIZATION_FILTER_KEYS + FRAMEWORK_FILTER_KEYS
+    FRAMEWORK_FILTER_KEYS + ORGANIZATION_FILTER_KEYS
   end
 
   def format_filter(filter_name)
