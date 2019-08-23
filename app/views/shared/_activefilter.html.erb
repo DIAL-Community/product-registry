@@ -1,13 +1,13 @@
 <div id="active-filter" class="row">
   <div class="col-9 ml-3">
-    <div class="list-group">
+    <ul class="list-group">
       <% all_filters.sort.each do |filter| %>
         <% if session.key? filter %>
-          <div id="<%= filter %>" class="list-group-item">
+          <li id="<%= filter %>" class="list-group-item">
             <%= format_filter(filter) %>
-          </div>
+          </li>
         <% end %>
       <% end %>
-    </div>
+    </ul>
   </div>
 </div>
