@@ -1,10 +1,10 @@
 <div id="active-filter" class="row">
   <div class="col-9 ml-3">
     <ul class="list-group">
-      <% all_filters.each do |filter| %>
+      <% all_filters.sort.each do |filter| %>
         <% if session.key? filter %>
           <li id="<%= filter %>" class="list-group-item">
-            <%= session[filter.to_s].sort{ |x, y| x['value'] <=> y['value'] }.map{ |x| "#{x['value']}. #{x['label']}" }.join(', ')%>
+            <%= session[filter.to_s].sort{ |x, y| x['value'].to_i <=> y['value'].to_i }.map{ |x| "#{x['value']}. #{x['label']}" }.join(', ')%>
             <span class="close-icon" data-effect="fadeOut">
               <i class="fa fa-times text-danger"></i>
             </span>
