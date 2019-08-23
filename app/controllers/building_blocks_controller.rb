@@ -5,27 +5,18 @@ class BuildingBlocksController < ApplicationController
   # GET /building_blocks
   # GET /building_blocks.json
   def index
-    if params[:without_paging]
-      @building_blocks = BuildingBlock
-        .name_contains(params[:search])
-        .order(:name)
-      authorize @building_blocks, :view_allowed?
-      return
-    end
+    @building_blocks = filter_building_blocks.order(:name)
 
     if params[:search]
-      @building_blocks = BuildingBlock
-        .where(nil)
-        .name_contains(params[:search])
-        .order(:name)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @building_blocks, :view_allowed?
-    else
-      @building_blocks = filter_building_blocks
-        .order(:name)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @building_blocks, :view_allowed?
+      @building_blocks = @building_blocks.where('LOWER("building_blocks"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
+
+    if !params[:without_paging]
+      @building_blocks = @building_blocks.paginate(page: params[:page], per_page: 20)
+    end
+
+    authorize @building_blocks, :view_allowed?
+  
   end
 
   def count
@@ -161,13 +152,30 @@ class BuildingBlocksController < ApplicationController
 
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
-      sdgs = sanitize_session_values 'years'
+      sdgs = sanitize_session_values 'sdgs'
 
-      #!use_cases.empty? && building_blocks = building_blocks.joins(:use_cases).where('use_case.id in (?)', use_cases)
-      !workflows.empty? && building_blocks = building_blocks.joins(:workflows).where('workflow_id in (?)', workflows)
-      #!sdgs.empty? && building_blocks = building_blocks.joins(:sustainable_development_goals).where('sustainable_development_goal.id in (?)', sdgs)
+      if (!sdgs.empty?)
+        # Get use_cases connected to this sdg
+        sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
+        sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
+      end
+      if (sdg_use_cases)
+        combined_use_cases = (use_cases + sdg_use_cases).uniq
+      else
+        combined_use_cases = use_cases
+      end
 
-      puts "Count: " + building_blocks.count.to_s
+      if (!combined_use_cases.empty? || sdg_use_cases)
+        # Get workflows connected to this use case
+        use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases).distinct
+      end 
+      if (use_case_workflows)
+        combined_workflows = (workflows + use_case_workflows).uniq
+      else
+        combined_workflows = workflows
+      end
+
+      (!combined_workflows.empty? || use_case_workflows) && building_blocks = building_blocks.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
 
       building_blocks
     end
