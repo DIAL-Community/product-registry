@@ -54,7 +54,7 @@ function triggerPageEvents() {
     active:false,
     collapsible: true,
     icons: false,
-    header:"div.accordianheader",
+    header:"div.accordion-header",
     create: function(event, ui) {
       //get index in cookie on accordion create event
       var cookie_name = $(this).attr('id')

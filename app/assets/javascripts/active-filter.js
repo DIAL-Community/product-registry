@@ -14,6 +14,7 @@ const removeActiveFilter = function(event) {
     }]
   }, function() {
     $(li).fadeOut();
+    window.location.reload(true);
   });
 };
 

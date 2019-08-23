@@ -9,7 +9,17 @@ var addToList = function(filterId, values) {
         $("#"+filterId).prop("checked", value == 't' ? true : false);
     } else {
         values.map(function(currValue) {
-            $("#"+filterId).parent().append('<div class="card col-md-10 offset-md-1 mt-1"><div class="row"><div class="col-md-10">'+currValue.label+'</div><div id="remove-'+filterId+'-'+currValue.value+'" name="'+currValue.label+'" class="col-md-2 p-0 remove-filter"><i class="fas fa-window-close"></i></div></div></div>')
+            $("#"+filterId).parent().append(
+              '<div class="card col-12 mt-1">' +
+                '<div class="row">' +
+                  '<div class="col-11">' +
+                    currValue.label +
+                  '</div>' +
+                  '<div id="remove-'+filterId+'-'+currValue.value+'" name="'+currValue.label+'" class="col-1 p-0 remove-filter">' +
+                    '<i class="fas fa-window-close"></i>' +
+                  '</div>' +
+                '</div>' +
+              '</div>')
             $("#remove-"+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
         })
     }
