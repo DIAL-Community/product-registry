@@ -39,7 +39,7 @@
         <%= render '/shared/sidenav' %>
         <%= yield %>
       </div>
-    <% elsif current_page?('/map') %>
+    <% elsif display_sidenav %>
       <div id="content" class="container">
         <%= yield %>
       </div>
