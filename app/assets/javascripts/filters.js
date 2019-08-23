@@ -72,6 +72,11 @@ var prepareFilters = function() {
             filterList.push(currFilter);
         });
 
+        $(this).parent().parent().find('input.filter-element').each(function() {
+          filterId = $(this).attr('id');
+          filterList.push({ filter_name: filterId });
+        });
+
         if (filterList.length > 0) {
             $.post('/remove_filter', { filter_array: filterList }, function() {
                 window.location.reload(true);
