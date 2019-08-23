@@ -80,13 +80,23 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     get building_blocks_url
     assert_equal(2, assigns(:building_blocks).count)
     bb1 = assigns(:building_blocks)[0]
-    param = {'filter_name' => 'building_blocks', 'filter_value' => bb1.id, 'filter_label' => bb1.name}
+    bb2 = assigns(:building_blocks)[1]
 
+    param = {'filter_name' => 'building_blocks', 'filter_value' => bb1.id, 'filter_label' => bb1.name}
     post "/add_filter", params: param
 
     # Filter is set, should only load 1
     get building_blocks_url
     assert_equal(1, assigns(:building_blocks).count)
+
+    # Now add a workflow filter
+    param = {'filter_name' => 'workflows', 'filter_value' => bb2.workflows[0].id, 'filter_label' => bb2.workflows[0].name}
+    post "/add_filter", params: param
+
+    # With additional filter, should now load 2
+    get building_blocks_url
+    assert_equal(2, assigns(:building_blocks).count)
+
   end
 
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
