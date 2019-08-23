@@ -19,3 +19,15 @@
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
 }
+
+@-moz-document url-prefix() {
+  .checkbox-align {
+    margin-top: 0 !important;
+  }
+}
+
+@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) { 
+  .selector:not(*:root), .checkbox-align {
+    margin-top: 0.2rem !important;
+  }
+}
