@@ -13,7 +13,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "add filter to session" do
-    param = {'filter_name' => 'test', 'filter_value' => [0], 'filter_label' => 'test'}
+    param = {'filter_name' => 'test', 'filter_value' => 0, 'filter_label' => 'test'}
 
     post "/add_filter", params: param
     assert_response :success

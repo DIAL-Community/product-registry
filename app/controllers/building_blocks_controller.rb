@@ -148,7 +148,6 @@ class BuildingBlocksController < ApplicationController
   private
 
     def filter_building_blocks
-      building_blocks = BuildingBlock.all.order(:slug)
 
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
@@ -176,13 +175,18 @@ class BuildingBlocksController < ApplicationController
         combined_workflows = workflows
       end
 
-      (!combined_workflows.empty? || use_case_workflows) && building_blocks = building_blocks.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
+      (!combined_workflows.empty? || use_case_workflows) && building_blocks = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
 
       if(!bbs.empty?) 
-        filter_bbs = bbs+building_blocks
+        if (!building_blocks)
+          filter_bbs = bbs
+        else
+          filter_bbs = bbs+building_blocks
+        end
         building_blocks = BuildingBlock.all.where('id in (?)', filter_bbs)
-        #building_blocks = filter_bbs + building_blocks
       end
+
+      !building_blocks && building_blocks = BuildingBlock.all.order(:slug)
 
       building_blocks
     end

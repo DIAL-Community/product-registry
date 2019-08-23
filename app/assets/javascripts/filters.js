@@ -15,7 +15,7 @@ var addToList = function(filterId, values) {
                   '<div class="col-11 pt-1 pb-1 pl-2">' +
                     currValue.label +
                   '</div>' +
-                  '<div data-effect="fadeOut" class="col-1 text-center p-1 remove-filter">' +
+                  '<div name="'+currValue.label+'" id="remove-'+filterId+'-'+currValue.value+'" data-effect="fadeOut" class="col-1 text-center p-1 remove-filter">' +
                     '<i class="fas fa-window-close"></i>' +
                   '</div>' +
                 '</div>' +
