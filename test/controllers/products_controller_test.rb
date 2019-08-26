@@ -67,6 +67,51 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to product_url(@product)
   end
 
+  test "should filter products" do
+    # With no filters, should load 2 building blocks
+    get products_url
+    assert_equal(3, assigns(:products).count)
+
+    first_product = products(:one)
+    first_origin = origins(:one)
+    first_product.origins.push(first_origin)
+
+    first_product.save
+
+    # Origin filter: should return only the above product
+    add_parameter = { 'filter_name': 'origins', 'filter_value': first_origin.id, 'filter_label': first_origin.name }
+    post '/add_filter', params: add_parameter
+
+    get products_url
+    assert_equal(1, assigns(:products).count)
+    assert_equal('Product', assigns(:products)[0].name)
+
+    remove_parameter = { 'filter_array': { '0' => { filter_name: 'origins' } } }
+    post '/remove_filter', params: remove_parameter
+
+    get products_url
+    assert_equal(3, assigns(:products).count)
+
+    # Remove first product's assessment information.
+    # * should return 2 products
+    first_product.product_assessment.delete
+    first_product.save
+
+    add_parameter = { 'filter_name': 'with_maturity_assessment', 'filter_value': true }
+    post '/add_filter', params: add_parameter
+
+    get products_url
+    assert_equal(2, assigns(:products).count)
+
+    # Combination assessment with origins:
+    # * should return 3 products
+    add_parameter = { 'filter_name': 'origins', 'filter_value': first_origin.id, 'filter_label': first_origin.name }
+    post '/add_filter', params: add_parameter
+
+    get products_url
+    assert_equal(3, assigns(:products).count)
+  end
+
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
