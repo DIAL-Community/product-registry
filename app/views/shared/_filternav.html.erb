@@ -15,7 +15,7 @@
           <div class="col-12">
             <div class="form-group">
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -32,7 +32,7 @@
           <div class="col-12">
             <div class="form-group">
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -49,7 +49,7 @@
           <div class="col-12">
             <div class="form-group">
               <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -66,7 +66,7 @@
           <div class="col-12">
             <div class="form-group">
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.workflow') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -92,7 +92,7 @@
             <div class="form-group">
               <%= label_tag "origins", t('view.product.index.sources') %>
               <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.origin')},
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -102,7 +102,7 @@
             <div class="form-group">
               <%= label_tag "products", t('model.product').titlecase.pluralize %>:
               <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.product') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -126,7 +126,7 @@
           <div class="col-12">
             <div class="form-group">
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.country') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -143,7 +143,7 @@
           <div class="col-12">
             <div class="form-group">
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
-                  { selected: params[:name] },
+                  { selected: params[:name], include_blank: t('view.filternav.title.sector') },
                   { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
@@ -175,7 +175,7 @@
                             .collect {|o| [ o.when_endorsed.strftime('%Y'), o.when_endorsed.strftime('%Y') ] }
                             .uniq!
                             .sort!,
-                        { selected: params[:years] },
+                        { selected: params[:years], include_blank: t('view.filternav.title.year') },
                         { class: 'custom-select filter-element', name: 'years' }) %>
             </div>
           </div> 

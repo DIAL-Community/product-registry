@@ -212,6 +212,16 @@ en:
       map: Endorser Map
       clear: Clear All
       with-maturity: Product with maturity assessment
+      title:
+        building-block: Building block filter
+        country: Country filter
+        origin: Product source filter
+        product: Product filter
+        sdg: SDG filter
+        sector: Sector filter
+        use-case: Use case filter
+        workflow: Workflow filter
+        year: Year endorsed filter
     active-filter:
       endorser-only: Endorsing organization only
       multi-filter: 'and %{count} others.'
