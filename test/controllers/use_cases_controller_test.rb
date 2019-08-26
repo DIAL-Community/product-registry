@@ -57,6 +57,30 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to use_cases_url
   end
 
+  test "add use_case filter" do
+    # With no filters, should load 2 workflows
+    get use_cases_url
+    assert_equal(2, assigns(:use_cases).count)
+    use_case1 = assigns(:use_cases)[0]
+    use_case2 = assigns(:use_cases)[1]
+
+    param = {'filter_name' => 'use_cases', 'filter_value' => use_case1.id, 'filter_label' => use_case1.name}
+    post "/add_filter", params: param
+
+    # Filter is set, should only load 1
+    get use_cases_url
+    assert_equal(1, assigns(:use_cases).count)
+
+    # Now add a workflow filter
+    param = {'filter_name' => 'use_cases', 'filter_value' => use_case2.workflows[0].id, 'filter_label' => use_case2.workflows[0].name}
+    post "/add_filter", params: param
+
+    # With additional filter, should now load 2
+    get use_cases_url
+    assert_equal(2, assigns(:use_cases).count)
+
+  end
+
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 

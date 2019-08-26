@@ -6,31 +6,24 @@ class UseCasesController < ApplicationController
   # GET /use_cases
   # GET /use_cases.json
   def index
-    if params[:without_paging]
-      @use_cases = UseCase
-          .name_contains(params[:search])
-          .order(:name)
-      authorize @use_cases, :view_allowed?
-      return
-    end
+    @use_cases = filter_use_cases.order(:name)
 
     if params[:search]
-      @use_cases = UseCase
-          .where(nil)
-          .name_contains(params[:search])
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
-      authorize @use_cases, :view_allowed?
-    else
-      @use_cases = UseCase
-          .order(:name)
-          .paginate(page: params[:page], per_page: 20)
-      authorize @use_cases, :view_allowed?
+      @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
+
+    if !params[:without_paging]
+      @use_cases = @use_cases.paginate(page: params[:page], per_page: 20)
+    end
+
+    authorize @use_cases, :view_allowed?
   end
 
   def count
-    render json: 0
+    @use_cases = filter_use_cases
+
+    authorize @use_cases, :view_allowed?
+    render json: @use_cases.count
   end
 
   # GET /use_cases/1
@@ -148,6 +141,66 @@ class UseCasesController < ApplicationController
       @use_case = UseCase.find(params[:id])
       @sector_name = Sector.find(@use_case.sector_id).name
       @useCaseJson = JSON.parse(@use_case.description, object_class: OpenStruct)
+    end
+
+    def filter_use_cases
+
+      use_cases = sanitize_session_values 'use_cases'
+      workflows = sanitize_session_values 'workflows'
+      sdgs = sanitize_session_values 'sdgs'
+      bbs = sanitize_session_values 'building_blocks'
+      products = sanitize_session_values 'products'
+
+      filter_set = true;
+      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+        filter_set = false;
+      end
+
+      sdg_use_cases = UseCase.none
+      if (!sdgs.empty?)
+        # Get use_cases connected to this sdg
+        sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
+        sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
+      end
+      
+      if (!products.empty?)
+        # Find building blocks for selected products and from there join to workflows
+        product_bbs = BuildingBlock.all.joins(:products).where('product_id in (?)', products)
+      end
+      if (product_bbs)
+        combined_bbs = (bbs + product_bbs).uniq
+      else
+        combined_bbs = bbs
+      end
+
+      if (!combined_bbs.empty?)
+        workflow_bbs = Workflow.all.where('id in (select workflow_id from workflows_building_blocks where building_block_id in (?))', combined_bbs).distinct
+      end
+      if (workflow_bbs)
+        combined_workflows = (workflows + workflow_bbs).uniq
+      else
+        combined_workflows = workflows
+      end
+
+      workflow_use_cases = UseCase.none
+      if (!combined_workflows.empty? || workflow_bbs)
+        # Get workflows connected to this use case
+        workflow_use_cases = UseCase.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
+      end 
+
+      filter_use_case = UseCase.none
+      if(!use_cases.empty?) 
+        filter_use_case = UseCase.all.where('id in (?)', use_cases).order(:slug)
+      end
+
+      if (filter_set)
+        ids = (sdg_use_cases + workflow_use_cases + filter_use_case).uniq
+        all_use_cases = UseCase.where(id: ids)
+      else 
+        all_use_cases = UseCase.all.order(:slug)
+      end
+
+      all_use_cases
     end
 
     def set_sectors
