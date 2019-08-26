@@ -247,8 +247,11 @@ class ProductsController < ApplicationController
     sdgs = sanitize_session_values 'sdgs'
     bbs = sanitize_session_values 'building_blocks'
     products = sanitize_session_values 'products'
+    origins = sanitize_session_values 'origins'
 
-    filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+    with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+
+    filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
 
     sdg_products = Product.none
     if !sdgs.empty?
@@ -287,8 +290,18 @@ class ProductsController < ApplicationController
       bb_products = Product.all.joins(:building_blocks).where('building_block_id in (?)', bb_ids)
     end
 
-    if filter_set
-      product_ids = (sdg_products + bb_products + products).uniq
+    origin_products = Product.none
+    if !origins.empty?
+      origin_products = Product.joins(:origins).where('origin_id in (?)', origins).distinct
+    end
+
+    with_maturity_products = Product.none
+    if with_maturity_assessment
+      with_maturity_products = Product.joins(:product_assessment).where('has_osc = true or has_digisquare = true')
+    end
+
+    if filter_set || with_maturity_assessment
+      product_ids = (sdg_products + bb_products + origin_products + with_maturity_products + products).uniq
       products = Product.where(id: product_ids)
     else
       products = Product.all.order(:slug)
