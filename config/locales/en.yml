@@ -211,6 +211,9 @@ en:
       projects: Projects (coming soon)
       map: Endorser Map
       clear: Clear All
+    active-filter:
+      endorser-only: Endorsing organization only
+      multi-filter: 'and %{count} others.'
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

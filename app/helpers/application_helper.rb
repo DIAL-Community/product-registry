@@ -17,6 +17,14 @@ module ApplicationHelper
   end
 
   def format_filter(filter_name)
+    if filter_name == 'endorser_only'
+      filter_label = "#{t('view.active-filter.endorser-only')}
+                      <span class='close-icon' data-effect='fadeOut'>
+                        <i class='fa fa-times text-danger'></i>
+                      </span>"
+      return filter_label.html_safe
+    end
+
     active_filters = session[filter_name]
     if active_filters.count <= 3
       filter_label = active_filters.sort! { |x, y| x['value'].to_i <=> y['value'].to_i }
@@ -35,7 +43,7 @@ module ApplicationHelper
                       <span class='more-others' data-toggle='collapse'
                             href='##{filter_name}' role='button'
                             aria-expanded='true' aria-controls='#{filter_name}'>
-                        and #{active_filters.count - 3} others.
+                        #{t('view.active-filter.multi-filter', count: active_filters.count - 3)}
                       </span>
                       <span class='close-icon' data-effect='fadeOut'>
                         <i class='fa fa-times text-danger'></i>
