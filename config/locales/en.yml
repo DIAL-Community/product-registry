@@ -225,8 +225,8 @@ en:
         target: Target
     use-case:
       form:
-        assigned-sdg-target: Assigned SDG Targets
-        search-sdg-target: Search and assign SDG Targets
+        assigned-sdg-targets: Assigned SDG Targets
+        search-sdg-targets: Search and assign SDG Targets
       index:
         no-data: We couldn't find any use case in the database.
       show:
