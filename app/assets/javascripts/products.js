@@ -73,21 +73,6 @@ function toggleAssessmentSection(checkbox) {
   }
 }
 
-var setupFilter = function() {
-  $('#filter-options').on('show.bs.collapse', function() {
-    $('#filter-toggle').html('Apply')
-                       .removeClass('btn-secondary')
-                       .addClass('btn-primary');
-  });
-  $('#filter-options').on('hide.bs.collapse', function() {
-    $('#filter-toggle').html('Filter')
-                       .removeClass('btn-primary')
-                       .addClass('btn-secondary');
-    $(this).find("form").submit();
-  });
-}
-
 // Attach all of them to the browser, page, and turbolinks event.
-$(document).on('products#index:loaded', setupFilter);
 $(document).on('products#new:loaded', productsReady);
 $(document).on('products#edit:loaded', productsReady);

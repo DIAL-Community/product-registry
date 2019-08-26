@@ -12,7 +12,6 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    reset_session
     @products = Product.eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals, :sectors).order(:name)
     if params[:without_paging]
       @products = @products
@@ -21,30 +20,15 @@ class ProductsController < ApplicationController
       return
     end
 
-    if params[:filter]
-      organizations = params[:organizations].reject{|x| x.nil? || x.blank? }
-
-      @products = Product.all
-      @products = @products.name_contains(params[:search])\
-        if params[:search].present? && !params[:search].blank?
-      @products = @products.where(start_assessment: true)\
-        if params[:has_maturity].present?
-      @products = @products.joins(:organizations).where("organizations.id in (?)", organizations)\
-        if !organizations.empty?
-      authorize @products, :view_allowed?
-      return
-    end
-
-    if params[:search]
-      @products = @products
-          .where(nil)
-          .name_contains(params[:search])
-    end
+    @products = filter_products.order(:name)
     authorize @products, :view_allowed?
   end
 
   def count
-    render json: 0
+    @products = filter_products
+
+    authorize @products, :view_allowed?
+    render json: @products.count
   end
 
   # GET /products/1
@@ -256,6 +240,61 @@ class ProductsController < ApplicationController
         @product = Product.find(params[:id])
       end
     end
+
+  def filter_products
+    use_cases = sanitize_session_values 'use_cases'
+    workflows = sanitize_session_values 'workflows'
+    sdgs = sanitize_session_values 'sdgs'
+    bbs = sanitize_session_values 'building_blocks'
+    products = sanitize_session_values 'products'
+
+    filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+
+    sdg_products = Product.none
+    if !sdgs.empty?
+      sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+
+      # Get use_cases connected to this sdg
+      sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
+      sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
+    end
+
+    if sdg_use_cases
+      combined_use_cases = (use_cases + sdg_use_cases).uniq
+    else
+      combined_use_cases = use_cases
+    end
+
+    if !combined_use_cases.empty?
+      # Get workflows connected to this use case
+      use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases).distinct
+    end
+
+    if use_case_workflows
+      combined_workflows = (workflows + use_case_workflows).uniq
+    else
+      combined_workflows = workflows
+    end
+
+    bb_workflows = BuildingBlock.none
+    if !combined_workflows.empty? || use_case_workflows
+      bb_workflows = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
+    end
+
+    bb_ids = (bb_workflows + bbs).uniq
+    bb_products = Product.none
+    if !bb_ids.empty?
+      bb_products = Product.all.joins(:building_blocks).where('building_block_id in (?)', bb_ids)
+    end
+
+    if filter_set
+      product_ids = (sdg_products + bb_products + products).uniq
+      products = Product.where(id: product_ids)
+    else
+      products = Product.all.order(:slug)
+    end
+    products
+  end
 
     def load_maturity
       @osc_maturity = YAML.load_file("config/maturity_osc.yml")
