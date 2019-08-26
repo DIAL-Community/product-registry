@@ -67,8 +67,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to product_url(@product)
   end
 
-  test "should filter products" do
-    # With no filters, should load 2 building blocks
+  test 'should filter products' do
+    # With no filters, should load 3 products
     get products_url
     assert_equal(3, assigns(:products).count)
 
@@ -110,6 +110,12 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     get products_url
     assert_equal(3, assigns(:products).count)
+
+    remove_parameter = { filter_array: { '0' => { filter_name: 'with_maturity_assessment' } } }
+    post '/remove_filter', params: remove_parameter
+
+    get products_url
+    assert_equal(1, assigns(:products).count)
   end
 
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
