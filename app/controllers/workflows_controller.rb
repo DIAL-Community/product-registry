@@ -5,31 +5,25 @@ class WorkflowsController < ApplicationController
   # GET /workflows
   # GET /workflows.json
   def index
-    if params[:without_paging]
-      @workflows = Workflow
-          .name_contains(params[:search])
-          .order(:name)
-      authorize @workflows, :view_allowed?
-      return
-    end
+
+    @workflows = filter_workflows.order(:name)
 
     if params[:search]
-      @workflows = Workflow
-        .where(nil)
-        .name_contains(params[:search])
-        .order(:name)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @workflows, :view_allowed?
-    else
-      @workflows = Workflow
-        .order(:name)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @workflows, :view_allowed?
+      @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
+
+    if !params[:without_paging]
+      @workflows = @workflows.paginate(page: params[:page], per_page: 20)
+    end
+
+    authorize @workflows, :view_allowed?
   end
 
   def count
-    render json: 0
+    @workflows = filter_workflows
+
+    authorize @workflows, :view_allowed?
+    render json: @workflows.count
   end
 
   # GET /workflows/1
@@ -146,6 +140,66 @@ class WorkflowsController < ApplicationController
     def set_workflow
       @workflow = Workflow.find(params[:id])
       @workflowJson = JSON.parse(@workflow.description, object_class: OpenStruct)
+    end
+
+    def filter_workflows
+
+      use_cases = sanitize_session_values 'use_cases'
+      workflows = sanitize_session_values 'workflows'
+      sdgs = sanitize_session_values 'sdgs'
+      bbs = sanitize_session_values 'building_blocks'
+      products = sanitize_session_values 'products'
+
+      filter_set = true;
+      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+        filter_set = false;
+      end
+
+      if (!sdgs.empty?)
+        # Get use_cases connected to this sdg
+        sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
+        sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
+      end
+      if (sdg_use_cases)
+        combined_use_cases = (use_cases + sdg_use_cases).uniq
+      else
+        combined_use_cases = use_cases
+      end
+
+      use_case_workflows = Workflow.none
+      if (!combined_use_cases.empty? || sdg_use_cases)
+        # Get workflows connected to this use case
+        use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases).distinct
+      end 
+
+      if (!products.empty?)
+        # Find building blocks for selected products and from there join to workflows
+        product_bbs = BuildingBlock.all.joins(:products).where('product_id in (?)', products)
+      end
+      if (product_bbs)
+        combined_bbs = (product_bbs + bbs).uniq
+      else
+        combined_bbs = bbs
+      end
+
+      bb_workflows = Workflow.none
+      if (!bbs.empty? || product_bbs) 
+        bb_workflows = Workflow.all.joins(:building_blocks).where('building_block_id in (?)', combined_bbs).distinct
+      end
+
+      filter_workflow = Workflow.none
+      if(!workflows.empty?) 
+        filter_workflow = Workflow.all.where('id in (?)', workflows).order(:slug)
+      end
+
+      if (filter_set)
+        ids = (use_case_workflows + bb_workflows + filter_workflow).uniq
+        all_workflows = Workflow.where(id: ids)
+      else 
+        all_workflows = Workflow.all.order(:slug)
+      end
+
+      all_workflows
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

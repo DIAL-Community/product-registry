@@ -189,7 +189,6 @@ class BuildingBlocksController < ApplicationController
       bb_products = BuildingBlock.none
       if (!products.empty?)
         bb_products = BuildingBlock.all.joins(:products).where('product_id in (?)', products)
-        puts "PRODUCTS: " + bb_products.to_s
       end
 
       filter_bbs = BuildingBlock.none
@@ -200,7 +199,6 @@ class BuildingBlocksController < ApplicationController
       if (filter_set)
         ids = (bb_workflows + bb_products + filter_bbs).uniq
         building_blocks = BuildingBlock.where(id: ids)
-        puts "TOTAL: " + building_blocks.to_s
       else 
         building_blocks = BuildingBlock.all.order(:slug)
       end
