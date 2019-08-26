@@ -7,24 +7,12 @@
       <%= link_to t('view.general.create'), new_building_block_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
     <% end %>
   </div>
-  <div class="col-6 pr-0">
-    <div class="float-right pb-2">
-      <%= form_tag(building_blocks_path, :method => "get", id: "search-form", class: "form-inline") do %>
-        <%= text_field_tag :search, params[:search],
-            placeholder: t('view.general.search-placeholder', model: t('model.building-block').to_s.pluralize),
-            class: "form-control" %>
-        <div class="input-group-append">
-          <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
-        </div>
-      <% end %>
-    </div>
-  </div>
 </div>
 
 <div class="row">
   <% if @building_blocks.count > 0 %>
     <% @building_blocks.each do |building_block| %>
-      <div class="col-lg-2 col-md-4 d-flex align-items-stretch mt-2">
+      <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
         <div class="card index-card">
           <div class="card-header bg-secondary text-white small">
             <%= link_to truncate(building_block.name, length: 23, omission: '&hellip;', escape: false), building_block,

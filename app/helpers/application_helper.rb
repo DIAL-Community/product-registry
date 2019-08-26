@@ -25,6 +25,14 @@ module ApplicationHelper
       return filter_label.html_safe
     end
 
+    if filter_name == 'with_maturity_assessment'
+      filter_label = "#{t('view.active-filter.with-maturity')}
+                      <span class='close-icon' data-effect='fadeOut'>
+                        <i class='fa fa-times text-danger'></i>
+                      </span>"
+      return filter_label.html_safe
+    end
+
     active_filters = session[filter_name]
     if active_filters.count <= 3
       filter_label = active_filters.sort! { |x, y| x['value'].to_i <=> y['value'].to_i }
