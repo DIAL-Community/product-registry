@@ -1,5 +1,5 @@
 var addToList = function(filterId, values) {
-    if (filterId === "endorser_only") {
+    if (filterId === "endorser_only" || filterId === "with_maturity_assessment") {
         $("#"+filterId).prop("checked", values.value === 'true');
     } else {
         values.map(function(currValue) {
@@ -39,12 +39,7 @@ var addFilter = function(id, value, label) {
         filter_name: id,
         filter_value: value,
         filter_label: label
-    }, function (data) {
-        if (data) {
-          var newFilter = [];
-          newFilter.push({value: value, label: label})
-          addToList(id, newFilter);
-        }
+    }, function () {
         window.location.reload(true);
     });
 }

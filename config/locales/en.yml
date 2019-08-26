@@ -211,9 +211,11 @@ en:
       projects: Projects (coming soon)
       map: Endorser Map
       clear: Clear All
+      with-maturity: Product with maturity assessment
     active-filter:
       endorser-only: Endorsing organization only
       multi-filter: 'and %{count} others.'
+      with-maturity: Product with maturity assessment
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

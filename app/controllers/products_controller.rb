@@ -12,6 +12,7 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
+    reset_session
     @products = Product.eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals, :sectors).order(:name)
     if params[:without_paging]
       @products = @products

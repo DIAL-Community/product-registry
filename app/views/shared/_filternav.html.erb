@@ -16,7 +16,7 @@
             <div class="form-group">
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -33,7 +33,7 @@
             <div class="form-group">
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -50,7 +50,7 @@
             <div class="form-group">
               <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -67,7 +67,7 @@
             <div class="form-group">
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -79,12 +79,31 @@
         <div class="row p-1">
           <div class="col-12 text-muted clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
+        <div class="form-row mb-2">
+          <div class="col-12">
+            <div class="form-check">
+                <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
+                <%= label_tag "with_maturity_assessment", t('view.filternav.with-maturity'), class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
         <div class="form-row">
           <div class="col-12">
             <div class="form-group">
+              <%= label_tag "origins", t('view.product.index.sources') %>
+              <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
+                  { selected: params[:name] },
+                  { class: 'custom-select filter-element' }) %>
+            </div>
+          </div> 
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= label_tag "products", t('model.product').titlecase.pluralize %>:
               <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -108,7 +127,7 @@
             <div class="form-group">
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -125,7 +144,7 @@
             <div class="form-group">
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
                   { selected: params[:name] },
-                  { multiple: true, class: 'custom-select filter-element' }) %>
+                  { class: 'custom-select filter-element' }) %>
             </div>
           </div> 
         </div>
@@ -157,7 +176,7 @@
                             .uniq!
                             .sort!,
                         { selected: params[:years] },
-                        { multiple: true, class: 'custom-select filter-element', name: 'years' }) %>
+                        { class: 'custom-select filter-element', name: 'years' }) %>
             </div>
           </div> 
         </div>
