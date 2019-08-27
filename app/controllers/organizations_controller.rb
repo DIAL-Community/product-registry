@@ -17,6 +17,7 @@ class OrganizationsController < ApplicationController
     end
 
     @organizations = search_organizations
+    params[:search].present? && @organizations = @organizations.name_contains(params[:search])
     authorize @organizations, :view_allowed?
   end
 

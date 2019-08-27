@@ -26,10 +26,7 @@ class ProductsController < ApplicationController
                                      :building_blocks, :sustainable_development_goals, :sectors)
                          .order(:name)
 
-    if params[:search]
-      @products = @products.name_contains(params[:search])
-    end
-
+    params[:search].present? && @products = @products.name_contains(params[:search])
     authorize @products, :view_allowed?
   end
 

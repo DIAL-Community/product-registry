@@ -109,7 +109,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     post '/add_filter', params: add_parameter
 
     get products_url
-    assert_equal(3, assigns(:products).count)
+    assert_equal(0, assigns(:products).count)
 
     remove_parameter = { filter_array: { '0' => { filter_name: 'with_maturity_assessment' } } }
     post '/remove_filter', params: remove_parameter
