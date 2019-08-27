@@ -80,7 +80,7 @@
           <div class="col-12 text-muted clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
         <div class="form-row mb-2">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-check">
                 <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
                 <%= label_tag "with_maturity_assessment", t('view.filternav.with-maturity'), class: "form-check-label" %>
@@ -89,8 +89,8 @@
         </div>
         <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
-              <%= label_tag "origins", t('view.product.index.sources') %>
+            <div class="form-group mb-2">
+              <%= label_tag "origins", t('view.product.index.sources'), class: 'ml-1' %>
               <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.origin')},
                   { class: 'custom-select filter-element' }) %>
@@ -99,8 +99,8 @@
         </div>
         <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
-              <%= label_tag "products", t('model.product').titlecase.pluralize %>:
+            <div class="form-group mb-2">
+              <%= label_tag "products", t('model.product').titlecase.pluralize, class: 'ml-1' %>:
               <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.product') },
                   { class: 'custom-select filter-element' }) %>
@@ -157,7 +157,7 @@
           <div class="col-12 text-muted clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div> 
         </div>
         <div class="form-row mb-2">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-check">
                 <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
                 <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
@@ -167,7 +167,7 @@
         <div class="form-row">
           <div class="col-12">
             <div class="form-group">
-              <%= label_tag "years", t('view.organization.index.endorsed-date') %>
+              <%= label_tag "years", t('view.organization.index.endorsed-date'), class: 'ml-1' %>
               <%= select(nil, "years",
                         Organization
                             .where.not(when_endorsed: nil)
@@ -185,10 +185,21 @@
         <p class="text-muted m-0"><%= t('view.filternav.projects') %><i class="fa fa-angle-down float-right text-muted"></i></p>
       </div>
       <div class="accordion-body p-0">
-        <p class="text-muted">SDG Filters go here</p>
+        <div class="row p-1">
+          <div class="col-12 ml-1">
+            <%= t('view.filternav.view-projects') %>
+          </div>
+        </div>
       </div>
-      <div class="card-header">
-        <%= link_to t('view.filternav.map'), 'map', :class=>'text-muted p-0 m-0' %>
+      <div class="accordion-header">
+        <p class="text-muted m-0"><%= t('view.filternav.map') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+      </div>
+      <div class="accordion-body p-0">
+        <div class="row p-1">
+          <div class="col-12 ml-1">
+            <%= link_to t('view.filternav.view-map'), 'map' %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
