@@ -34,8 +34,7 @@ class ProductsController < ApplicationController
   end
 
   def count
-    @products = filter_products
-
+    @products = filter_products.distinct
     authorize @products, :view_allowed?
     render json: @products.count
   end
@@ -251,70 +250,36 @@ class ProductsController < ApplicationController
     end
 
   def filter_products
+    bbs = sanitize_session_values 'building_blocks'
+    origins = sanitize_session_values 'origins'
+    ids = sanitize_session_values 'products'
+    sdgs = sanitize_session_values 'sdgs'
     use_cases = sanitize_session_values 'use_cases'
     workflows = sanitize_session_values 'workflows'
-    sdgs = sanitize_session_values 'sdgs'
-    bbs = sanitize_session_values 'building_blocks'
-    products = sanitize_session_values 'products'
-    origins = sanitize_session_values 'origins'
 
     with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
 
-    filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
+    products = Product.all.order(:slug)
 
-    sdg_products = Product.none
-    if !sdgs.empty?
-      sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+    sdg_where_clause = 'sustainable_development_goal_id in (?)'
+    !sdgs.empty? && products = products.joins(:sustainable_development_goals).where(sdg_where_clause, sdgs)
 
-      # Get use_cases connected to this sdg
-      sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
-      sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
+    unless use_cases.empty?
+      products = products.joins([building_blocks: [workflows: [use_cases: :sdg_targets]]])
+      if !sdgs.empty?
+        products = products.where('use_cases.id in (?) and sdg_targets.sdg_number in (?)', use_cases, sdgs)
+      else
+        products = products.where('use_cases.id in (?)', use_cases)
+      end
     end
 
-    if sdg_use_cases
-      combined_use_cases = (use_cases + sdg_use_cases).uniq
-    else
-      combined_use_cases = use_cases
-    end
+    maturity_where_clause = 'has_osc = true or has_digisquare = true'
+    with_maturity_assessment && products = products.joins(:product_assessment).where(maturity_where_clause)
 
-    if !combined_use_cases.empty?
-      # Get workflows connected to this use case
-      use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases).distinct
-    end
-
-    if use_case_workflows
-      combined_workflows = (workflows + use_case_workflows).uniq
-    else
-      combined_workflows = workflows
-    end
-
-    bb_workflows = BuildingBlock.none
-    if !combined_workflows.empty? || use_case_workflows
-      bb_workflows = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
-    end
-
-    bb_ids = (bb_workflows + bbs).uniq
-    bb_products = Product.none
-    if !bb_ids.empty?
-      bb_products = Product.all.joins(:building_blocks).where('building_block_id in (?)', bb_ids)
-    end
-
-    origin_products = Product.none
-    if !origins.empty?
-      origin_products = Product.joins(:origins).where('origin_id in (?)', origins).distinct
-    end
-
-    with_maturity_products = Product.none
-    if with_maturity_assessment
-      with_maturity_products = Product.joins(:product_assessment).where('has_osc = true or has_digisquare = true')
-    end
-
-    if filter_set || with_maturity_assessment
-      product_ids = (sdg_products + bb_products + origin_products + with_maturity_products + products).uniq
-      products = Product.where(id: product_ids)
-    else
-      products = Product.all.order(:slug)
-    end
+    !bbs.empty? && products = products.joins(:building_blocks).where('building_blocks.id in (?)', bbs)
+    !origins.empty? && products = products.joins(:origins).where('origins.id in (?)', origins)
+    !workflows.empty? && products = products.joins(building_blocks: :workflows).where('workflows.id in (?)', workflows)
+    !ids.empty? && products = products.where('products.id in (?)', ids)
     products
   end
 
