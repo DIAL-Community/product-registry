@@ -261,8 +261,10 @@ class ProductsController < ApplicationController
 
     products = Product.all.order(:slug)
 
-    sdg_where_clause = 'sustainable_development_goal_id in (?)'
-    !sdgs.empty? && products = products.joins(:sustainable_development_goals).where(sdg_where_clause, sdgs)
+    unless sdgs.empty?
+      sdg_where_clause = 'sustainable_development_goal_id in (?)'
+      products = products.joins(:sustainable_development_goals).where(sdg_where_clause, sdgs)
+    end
 
     unless use_cases.empty?
       products = products.joins([building_blocks: [workflows: [use_cases: :sdg_targets]]])
