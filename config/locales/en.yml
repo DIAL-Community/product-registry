@@ -213,15 +213,15 @@ en:
       clear: Clear All
       with-maturity: Product with maturity assessment
       title:
-        building-block: Building block filter
-        country: Country filter
-        origin: Product source filter
-        product: Product filter
-        sdg: SDG filter
-        sector: Sector filter
-        use-case: Use case filter
-        workflow: Workflow filter
-        year: Year endorsed filter
+        building-block: Filter by Building Block
+        country: Filter by Country
+        origin: Filter by Product Origin
+        product: Filter by Product
+        sdg: Filter by SDG
+        sector: Filter by Sector
+        use-case: Filter by Use Case
+        workflow: Filter by Workflow
+        year: Filter by Year Endorsed
     active-filter:
       endorser-only: Endorsing organization only
       multi-filter: 'and %{count} others.'

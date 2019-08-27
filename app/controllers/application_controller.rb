@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
     filter_obj = Hash.new
     filter_obj['value'] = params['filter_value']
     filter_obj['label'] = params['filter_label']
-    if filter_name.to_s == 'endorser_only' || filter_name.to_s == 'with_maturity_assessment'
+    if params['filter_label'].nil? || params['filter_label'].empty?
       session[filter_name.to_s] = filter_obj
       retval = true
     else

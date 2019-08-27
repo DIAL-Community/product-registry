@@ -1,5 +1,5 @@
 var addToList = function(filterId, values) {
-    if (filterId === "endorser_only" || filterId === "with_maturity_assessment") {
+    if (!Array.isArray(values)) {
         $("#"+filterId).prop("checked", values.value === 'true');
     } else {
         values.map(function(currValue) {
