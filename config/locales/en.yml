@@ -225,8 +225,33 @@ en:
         workflow: Filter by Workflow
         year: Filter by Year Endorsed
     active-filter:
+      building_blocks:
+        one: Building Block
+        other: Building Blocks
+      countries:
+        one: Country
+        other: Countries
       endorser-only: Endorsing organization only
-      multi-filter: 'and %{count} others.'
+      multi-filter: 'and %{count} other %{model}'
+      organizations:
+        one: Organization
+        other: Organizations
+      products:
+        one: Product
+        other: Products
+      sdgs:
+        one: SDG
+        other: SDGs
+      sectors:
+        one: Sector
+        other: Sectors
+      title: 'Filtering by %{model}'
+      use_cases:
+        one: Use Case
+        other: Use Cases
+      workflows:
+        one: Workflow
+        other: Workflows
       with-maturity: Product with maturity assessment
     sdg:
       index:
