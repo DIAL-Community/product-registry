@@ -39,7 +39,8 @@ module BuildingBlocksHelper
 
   def format_image_popover(elements)
     formatted = ''
-    elements.each do |element|
+    elements.sort { |x, y| x[:name] <=> y[:name] }
+            .each do |element|
       formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
                            action: 'show', controller: element[:controller], id: element[:id])
     end
@@ -48,7 +49,8 @@ module BuildingBlocksHelper
 
   def format_text_popover(elements)
     formatted = ''
-    elements.each do |element|
+    elements.sort { |x, y| x[:name] <=> y[:name] }
+            .each do |element|
       formatted += '<div>'
       formatted += link_to(element[:name], action: 'show', controller: element[:controller], id: element[:id])
       formatted += '</div>'
