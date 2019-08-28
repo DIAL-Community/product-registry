@@ -34,11 +34,13 @@ module ApplicationHelper
     end
 
     active_filters = session[filter_name]
-    if active_filters.count <= 3
+    count = active_filters.count
+    if count <= 3
       filter_label = active_filters.sort! { |x, y| x['value'].to_i <=> y['value'].to_i }
                                    .map { |x| format_element(filter_name, x) }
                                    .join(', ')
-      filter_label = "#{filter_label}
+      filter_label = "#{t('view.active-filter.title', model: t("view.active-filter.#{filter_name}", count: count))}:
+                      #{filter_label}
                       <span class='close-icon' data-effect='fadeOut'>
                         <i class='fa fa-times text-danger'></i>
                       </span>"
@@ -47,11 +49,17 @@ module ApplicationHelper
                                    .map { |x| format_element(filter_name, x) }
                                    .slice(0, 3)
                                    .join(', ')
-      filter_label = "<span>#{filter_label} ...</span>
+      filter_label = "<span>
+                        #{t('view.active-filter.title', model: t("view.active-filter.#{filter_name}", count: count))}:
+                        #{filter_label} ...
+                      </span>
                       <span class='more-others' data-toggle='collapse'
                             href='##{filter_name}' role='button'
                             aria-expanded='true' aria-controls='#{filter_name}'>
-                        #{t('view.active-filter.multi-filter', count: active_filters.count - 3)}
+                        <u>
+                        #{t('view.active-filter.multi-filter', count: count - 3,
+                                                               model: t("view.active-filter.#{filter_name}", count: count))}
+                        </u>
                       </span>
                       <span class='close-icon' data-effect='fadeOut'>
                         <i class='fa fa-times text-danger'></i>
@@ -64,9 +72,9 @@ module ApplicationHelper
   private
 
   def format_element(filter_name, element)
-    return "#{element['value']}. #{element['label']}" if filter_name != 'years'
+    return "'#{element['label']}'" if filter_name != 'years'
 
-    element['label'].to_s
+    "'#{element['label']}'"
   end
 
   def build_collapse(filter_name, active_filters)
