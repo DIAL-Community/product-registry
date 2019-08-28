@@ -26,8 +26,6 @@ class ApplicationController < ActionController::Base
 
     filter_array = params['filter_array']
     filter_array.each do | filter_item |
-      puts "FILTER ARRAY: " + filter_array.to_s
-      puts "FILTER ITEM: " + filter_item.to_s
       curr_filter = filter_array[filter_item]
       filter_name = curr_filter['filter_name']
       if curr_filter['filter_value']
