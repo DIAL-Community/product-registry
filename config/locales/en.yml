@@ -209,9 +209,21 @@ en:
       sectors: Sectors
       orgs: Organizations
       projects: Projects (coming soon)
+      view-projects: Coming soon.
       map: Endorser Map
+      view-map: View endorser map
       clear: Clear All
       with-maturity: Product with maturity assessment
+      title:
+        building-block: Filter by Building Block
+        country: Filter by Country
+        origin: Filter by Product Origin
+        product: Filter by Product
+        sdg: Filter by SDG
+        sector: Filter by Sector
+        use-case: Filter by Use Case
+        workflow: Filter by Workflow
+        year: Filter by Year Endorsed
     active-filter:
       endorser-only: Endorsing organization only
       multi-filter: 'and %{count} others.'
@@ -225,8 +237,8 @@ en:
         target: Target
     use-case:
       form:
-        assigned-sdg-target: Assigned SDG Targets
-        search-sdg-target: Search and assign SDG Targets
+        assigned-sdg-targets: Assigned SDG Targets
+        search-sdg-targets: Search and assign SDG Targets
       index:
         no-data: We couldn't find any use case in the database.
       show:

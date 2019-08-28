@@ -19,7 +19,7 @@
   <% @products.each do |product| %>
     <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
       <div class="card index-card">
-        <div class="card-header bg-secondary text-white small">
+        <div class="card-header bg-secondary text-white">
           <%= link_to truncate(product.name, length: 25, omission: '&hellip;', escape: false), product,
               'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
           <% if product.is_launchable %>

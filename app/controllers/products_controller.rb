@@ -26,16 +26,12 @@ class ProductsController < ApplicationController
                                      :building_blocks, :sustainable_development_goals, :sectors)
                          .order(:name)
 
-    if params[:search]
-      @products = @products.name_contains(params[:search])
-    end
-
+    params[:search].present? && @products = @products.name_contains(params[:search])
     authorize @products, :view_allowed?
   end
 
   def count
-    @products = filter_products
-
+    @products = filter_products.distinct
     authorize @products, :view_allowed?
     render json: @products.count
   end
@@ -251,12 +247,12 @@ class ProductsController < ApplicationController
     end
 
   def filter_products
+    bbs = sanitize_session_values 'building_blocks'
+    origins = sanitize_session_values 'origins'
+    ids = sanitize_session_values 'products'
+    sdgs = sanitize_session_values 'sdgs'
     use_cases = sanitize_session_values 'use_cases'
     workflows = sanitize_session_values 'workflows'
-    sdgs = sanitize_session_values 'sdgs'
-    bbs = sanitize_session_values 'building_blocks'
-    products = sanitize_session_values 'products'
-    origins = sanitize_session_values 'origins'
 
     with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
 

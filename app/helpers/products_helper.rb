@@ -66,7 +66,7 @@ module ProductsHelper
     when "Maturity Models"
       header = t("view.product.index.footer_popover_maturity")
     end
-    content = '<div class="card-header bg-secondary text-white small">'+header+'</div>'
+    content = '<div class="card-header bg-secondary text-white">'+header+'</div>'
     content += '<div>'
     images.each do |image|
       if image["gradient"]
