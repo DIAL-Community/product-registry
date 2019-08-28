@@ -249,7 +249,7 @@ class ProductsController < ApplicationController
   def filter_products
     bbs = sanitize_session_values 'building_blocks'
     origins = sanitize_session_values 'origins'
-    ids = sanitize_session_values 'products'
+    products = sanitize_session_values 'products'
     sdgs = sanitize_session_values 'sdgs'
     use_cases = sanitize_session_values 'use_cases'
     workflows = sanitize_session_values 'workflows'
