@@ -103,6 +103,14 @@ en:
         other-names: Other Names
         key-functionalities: Key Digital Functionalities
         example-of-use: Examples of use in different sectors
+      index:
+        bb-product: "Example software: "
+        bb-product-popover:
+          one: Example of Existing Software
+          other: Example of Existing Softwares
+        bb-workflow-popover:
+          one: Mapping to Associated Workflow
+          other: Mapping to Associated Workflow
     contact:
       form:
         email: Email
