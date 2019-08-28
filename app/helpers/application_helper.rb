@@ -6,6 +6,7 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
+  ADMIN_NAV_CONTROLLERS = %w[locations users sectors].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/registrations', 'devise/confirmations'].freeze
 
   def all_filters
@@ -13,7 +14,8 @@ module ApplicationHelper
   end
 
   def display_sidenav
-    current_page?('/map') || DEVISE_CONTROLLERS.include?(params[:controller])
+    current_page?('/map') || DEVISE_CONTROLLERS.include?(params[:controller]) ||
+      ADMIN_NAV_CONTROLLERS.include?(params[:controller])
   end
 
   def format_filter(filter_name)
