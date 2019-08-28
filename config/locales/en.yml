@@ -236,6 +236,9 @@ en:
       organizations:
         one: Organization
         other: Organizations
+      origins:
+        one: Product Source
+        other: Product Sources
       products:
         one: Product
         other: Products
@@ -253,6 +256,9 @@ en:
         one: Workflow
         other: Workflows
       with-maturity: Product with maturity assessment
+      years:
+        one: Year Endorsed
+        other: Years Endorsed
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.
