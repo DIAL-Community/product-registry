@@ -93,9 +93,9 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     param = {'filter_name' => 'workflows', 'filter_value' => bb2.workflows[0].id, 'filter_label' => bb2.workflows[0].name}
     post "/add_filter", params: param
 
-    # With additional filter, should now load 2
+    # With additional filter, should now load 0
     get building_blocks_url
-    assert_equal(2, assigns(:building_blocks).count)
+    assert_equal(0, assigns(:building_blocks).count)
 
   end
 

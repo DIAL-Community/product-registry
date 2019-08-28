@@ -262,55 +262,30 @@ class ProductsController < ApplicationController
 
     filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
 
-    sdg_products = Product.none
+    sdg_products = Product.all
     if !sdgs.empty?
       sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
-
-      # Get use_cases connected to this sdg
-      sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
-      sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
     end
 
-    if sdg_use_cases
-      combined_use_cases = (use_cases + sdg_use_cases).uniq
-    else
-      combined_use_cases = use_cases
+    use_case_bbs = get_bbs_from_use_cases(use_cases)
+    workflow_bbs = get_bbs_from_workflows(workflows)
+
+    if (!bbs.empty?)
+      filter_bbs = BuildingBlock.all.where('id in (?)', bbs)
+      bb_ids = (filter_bbs.ids & use_case_bbs & workflow_bbs).uniq
+    else 
+      bb_ids = (use_case_bbs & workflow_bbs).uniq
     end
 
-    if !combined_use_cases.empty?
-      # Get workflows connected to this use case
-      use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases).distinct
+    bb_products = Product.all
+    if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
+      bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
     end
+    
+    product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
 
-    if use_case_workflows
-      combined_workflows = (workflows + use_case_workflows).uniq
-    else
-      combined_workflows = workflows
-    end
-
-    bb_workflows = BuildingBlock.none
-    if !combined_workflows.empty? || use_case_workflows
-      bb_workflows = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
-    end
-
-    bb_ids = (bb_workflows + bbs).uniq
-    bb_products = Product.none
-    if !bb_ids.empty?
-      bb_products = Product.all.joins(:building_blocks).where('building_block_id in (?)', bb_ids)
-    end
-
-    origin_products = Product.none
-    if !origins.empty?
-      origin_products = Product.joins(:origins).where('origin_id in (?)', origins).distinct
-    end
-
-    with_maturity_products = Product.none
-    if with_maturity_assessment
-      with_maturity_products = Product.joins(:product_assessment).where('has_osc = true or has_digisquare = true')
-    end
-
-    if filter_set || with_maturity_assessment
-      product_ids = (sdg_products + bb_products + origin_products + with_maturity_products + products).uniq
+    if filter_set || product_filter_set
+      product_ids = (sdg_products.ids & bb_products.ids & product_ids).uniq
       products = Product.where(id: product_ids)
     else
       products = Product.all.order(:slug)

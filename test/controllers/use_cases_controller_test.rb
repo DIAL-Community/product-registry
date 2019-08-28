@@ -72,12 +72,12 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_equal(1, assigns(:use_cases).count)
 
     # Now add a workflow filter
-    param = {'filter_name' => 'use_cases', 'filter_value' => use_case2.workflows[0].id, 'filter_label' => use_case2.workflows[0].name}
+    param = {'filter_name' => 'workflows', 'filter_value' => use_case2.workflows[0].id, 'filter_label' => use_case2.workflows[0].name}
     post "/add_filter", params: param
 
-    # With additional filter, should now load 2
+    # With additional filter, should now load 0
     get use_cases_url
-    assert_equal(2, assigns(:use_cases).count)
+    assert_equal(0, assigns(:use_cases).count)
 
   end
 

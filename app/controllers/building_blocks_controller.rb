@@ -154,50 +154,43 @@ class BuildingBlocksController < ApplicationController
       sdgs = sanitize_session_values 'sdgs'
       bbs = sanitize_session_values 'building_blocks'
       products = sanitize_session_values 'products'
+      origins = sanitize_session_values 'origins'
+      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
 
       filter_set = true;
-      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
         filter_set = false;
       end
 
-      if (!sdgs.empty?)
-        # Get use_cases connected to this sdg
-        sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
-        sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
-      end
-      if (sdg_use_cases)
-        combined_use_cases = (use_cases + sdg_use_cases).uniq
-      else
-        combined_use_cases = use_cases
+      sdg_workflows = get_workflows_from_sdgs(sdgs)
+      use_case_workflows = get_workflows_from_use_cases(use_cases)
+
+      if (!workflows.empty?)
+        filter_workflows = Workflow.all.where('id in (?)', workflows)
+        workflow_ids = (filter_workflows.ids & use_case_workflows & sdg_workflows).uniq
+      else 
+        workflow_ids = (use_case_workflows & sdg_workflows).uniq
       end
 
-      if (!combined_use_cases.empty? || sdg_use_cases)
-        # Get workflows connected to this use case
-        use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases).distinct
-      end 
-      if (use_case_workflows)
-        combined_workflows = (workflows + use_case_workflows).uniq
-      else
-        combined_workflows = workflows
+      bb_workflows = BuildingBlock.all
+      if !use_cases.empty? || ! workflows.empty? || !sdgs.empty?
+        bb_workflows = BuildingBlock.all.where('id in (select building_block_id from workflows_building_blocks where workflow_id in (?))', workflow_ids)
       end
 
-      bb_workflows = BuildingBlock.none
-      if (!combined_workflows.empty? || use_case_workflows) 
-        bb_workflows = BuildingBlock.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+
+      bb_products = BuildingBlock.all
+      if !products.empty? || !origins.empty? || with_maturity_assessment
+        bb_products = BuildingBlock.all.where('building_blocks.id in (select building_block_id from products_building_blocks where product_id in (?))', product_ids)
       end
 
-      bb_products = BuildingBlock.none
-      if (!products.empty?)
-        bb_products = BuildingBlock.all.joins(:products).where('product_id in (?)', products)
-      end
-
-      filter_bbs = BuildingBlock.none
+      filter_bbs = BuildingBlock.all
       if(!bbs.empty?) 
         filter_bbs = BuildingBlock.all.where('id in (?)', bbs).order(:slug)
       end
 
       if (filter_set)
-        ids = (bb_workflows + bb_products + filter_bbs).uniq
+        ids = (bb_workflows & bb_products & filter_bbs).uniq
         building_blocks = BuildingBlock.where(id: ids)
       else 
         building_blocks = BuildingBlock.all.order(:slug)

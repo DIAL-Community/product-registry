@@ -64,20 +64,20 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
     workflow1 = assigns(:workflows)[0]
     workflow2 = assigns(:workflows)[1]
 
-    param = {'filter_name' => 'workflows', 'filter_value' => workflow1.id, 'filter_label' => workflow1.name}
+    # Now add a workflow filter
+    param = {'filter_name' => 'use_cases', 'filter_value' => workflow2.use_cases[0].id, 'filter_label' => workflow2.use_cases[0].name}
     post "/add_filter", params: param
 
     # Filter is set, should only load 1
     get workflows_url
     assert_equal(1, assigns(:workflows).count)
 
-    # Now add a workflow filter
-    param = {'filter_name' => 'workflows', 'filter_value' => workflow2.use_cases[0].id, 'filter_label' => workflow2.use_cases[0].name}
+    param = {'filter_name' => 'workflows', 'filter_value' => workflow1.id, 'filter_label' => workflow1.name}
     post "/add_filter", params: param
 
-    # With additional filter, should now load 2
+    # With additional filter, should now load 0
     get workflows_url
-    assert_equal(2, assigns(:workflows).count)
+    assert_equal(0, assigns(:workflows).count)
 
   end
 

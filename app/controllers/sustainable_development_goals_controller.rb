@@ -38,49 +38,45 @@ class SustainableDevelopmentGoalsController < ApplicationController
       sdgs = sanitize_session_values 'sdgs'
       bbs = sanitize_session_values 'building_blocks'
       products = sanitize_session_values 'products'
+      origins = sanitize_session_values 'origins'
+      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
 
       filter_set = true;
-      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty?)
+      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
         filter_set = false;
       end
 
-      if (!bbs.empty?)
-        bb_workflows = Workflow.all.joins(:building_blocks).where('building_block_id in (?)', bbs).distinct
-      end
-      if (bb_workflows)
-        combined_workflows = (bb_workflows + workflows).uniq
-      else
-        combined_workflows = workflows
+      use_case_sdgs = SustainableDevelopmentGoal.all
+
+      workflow_use_cases = get_use_cases_from_workflows(workflows)
+      bb_use_cases = get_use_cases_from_bbs(bbs)
+
+      if (!use_cases.empty?)
+        filter_use_cases = UseCase.all.where('id in (?)', use_cases)
+        use_case_ids = (filter_use_cases.ids & workflow_use_cases & bb_use_cases).uniq
+      else 
+        use_case_ids = (workflow_use_cases & bb_use_cases).uniq
       end
 
-      if (!workflows.empty? || combined_workflows)
-        workflow_use_cases = UseCase.all.joins(:workflows).where('workflow_id in (?)', combined_workflows).distinct
-      end
-      if (workflow_use_cases)
-        combined_use_cases = (workflow_use_cases + use_cases).uniq
-      else
-        combined_use_cases = use_cases
-      end
-
-      use_case_sdgs = SustainableDevelopmentGoal.none
-      if (!use_cases.empty? || combined_use_cases)
-        # Get sdgs connected to this use_case
-        sdg_targets = SdgTarget.all.joins(:use_cases).where('use_case_id in (?)', combined_use_cases)
+      if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
+        sdg_targets = SdgTarget.all.joins(:use_cases).where('use_case_id in (?)', use_case_ids)
         use_case_sdgs = SustainableDevelopmentGoal.all.where('id in (select distinct(sdg_number) from sdg_targets where id in (?))', sdg_targets.ids)
       end
 
-      product_sdgs = SustainableDevelopmentGoal.none
-      if (!products.empty?)
-        product_sdgs = SustainableDevelopmentGoal.all.joins(:products).where('product_id in (?)', products)
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+
+      product_sdgs = SustainableDevelopmentGoal.all
+      if product_filter_set
+        product_sdgs = SustainableDevelopmentGoal.all.where('sustainable_development_goals.id in (select sustainable_development_goal_id from products_sustainable_development_goals where product_id in (?))', product_ids)
       end
 
-      filter_sdgs = SustainableDevelopmentGoal.none
+      filter_sdgs = SustainableDevelopmentGoal.all
       if(!sdgs.empty?) 
         filter_sdgs = SustainableDevelopmentGoal.all.where('id in (?)', sdgs).order(:slug)
       end
 
       if (filter_set)
-        ids = (use_case_sdgs + product_sdgs + filter_sdgs).uniq
+        ids = (use_case_sdgs.ids & product_sdgs.ids & filter_sdgs.ids).uniq
         all_sdgs = SustainableDevelopmentGoal.where(id: ids)
       else 
         all_sdgs = SustainableDevelopmentGoal.all.order(:slug)
