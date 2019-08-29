@@ -4,8 +4,8 @@ class SustainableDevelopmentGoalsController < ApplicationController
   # GET /sustainable_development_goals
   # GET /sustainable_development_goals.json
   def index
-    
-    @sustainable_development_goals = filter_sdgs.order(:name)
+
+    @sustainable_development_goals = filter_sdgs.order(:number)
 
     if params[:search]
       @sustainable_development_goals = @sustainable_development_goals.where('LOWER("sustainable_development_goals"."name") like LOWER(?)', "%" + params[:search] + "%")
@@ -54,7 +54,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
       if (!use_cases.empty?)
         filter_use_cases = UseCase.all.where('id in (?)', use_cases)
         use_case_ids = (filter_use_cases.ids & workflow_use_cases & bb_use_cases).uniq
-      else 
+      else
         use_case_ids = (workflow_use_cases & bb_use_cases).uniq
       end
 
@@ -71,15 +71,15 @@ class SustainableDevelopmentGoalsController < ApplicationController
       end
 
       filter_sdgs = SustainableDevelopmentGoal.all
-      if(!sdgs.empty?) 
-        filter_sdgs = SustainableDevelopmentGoal.all.where('id in (?)', sdgs).order(:slug)
+      if(!sdgs.empty?)
+        filter_sdgs = SustainableDevelopmentGoal.all.where('id in (?)', sdgs).order(:number)
       end
 
       if (filter_set)
         ids = (use_case_sdgs.ids & product_sdgs.ids & filter_sdgs.ids).uniq
         all_sdgs = SustainableDevelopmentGoal.where(id: ids)
-      else 
-        all_sdgs = SustainableDevelopmentGoal.all.order(:slug)
+      else
+        all_sdgs = SustainableDevelopmentGoal.all.order(:number)
       end
 
       all_sdgs

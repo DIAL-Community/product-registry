@@ -1,55 +1,43 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
-<% if user_signed_in? && policy(UseCase).mod_allowed? %>
-  <%= link_to t('view.general.create'), new_use_case_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
-<% end %>
-<div class="float-right pb-2">
-  <%= form_tag(use_cases_path, :method => "get", id: "search-form", class: "form-inline") do %>
-    <%= text_field_tag :search, params[:search],
-        placeholder: t('view.general.search-placeholder', model: t('model.use-case').to_s.pluralize),
-        class: "form-control" %>
-    <div class="input-group-append">
-        <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
-    </div>
+
+<div class="row">
+  <div class="col-6">
+    <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+      <%= link_to t('view.general.create'), new_use_case_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
     <% end %>
+  </div>
 </div>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th><%= t('view.general.name') %></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="row">
+  <% if @use_cases.count > 0 %>
+    <% @use_cases.each do |use_case| %>
+      <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
+        <div class="card index-card">
+          <div class="card-header bg-secondary text-white small">
+            <%= link_to truncate(use_case.name, length: 23, omission: '&hellip;', escape: false), use_case,
+                'title' => use_case.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+          </div>
+          <div class="model-logo">
+            <%= link_to(use_case) do %>
+              <%= image_tag(use_case.image_file, class: 'card-img-top align-middle') %>
+            <% end %>
+          </div>
 
-  <tbody>
-    <% if @use_cases.count > 0 %>
-      <% @use_cases.each do |use_case| %>
-        <tr>
-          <td><%= use_case.name %></td>
-          <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">
-               <%= t('view.general.action') %>
-            </a>
-            <div class="dropdown-menu">
-              <%= link_to t('view.general.view'), use_case, :class =>"dropdown-item"  %>
-              <% if user_signed_in? && policy(use_case).mod_allowed? %>
-                <%= link_to t('view.general.edit'), edit_use_case_path(use_case), :class =>"dropdown-item"  %>
-                <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), use_case, method: :delete, data: { confirm: t('view.general.delete-confirm') }, :class =>"dropdown-item"  %>
-              <% end %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan="4">
-          <small class="text-muted"><%= t('view.use-case.index.no-data') %></small>
-        </td>
-      </tr>
+          <div class="card-footer">
+            <small>
+              <div class="row">
+                <div class="col-12">
+                  <%= "#{use_case.workflows.size} #{t('model.workflow').to_s.pluralize(use_case.workflows.size)}" %>,
+                </div>
+                <div class="col-12">
+                  <%= "#{use_case.sdg_targets.size}  #{t('model.sdg_targets').to_s.pluralize(use_case.sdg_targets.size)}" %>
+                </div>
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </tbody>
-</table>
-<%= will_paginate @use_cases, :class => "float-right digg-pagination" %>
+  <% end %>
+</div>

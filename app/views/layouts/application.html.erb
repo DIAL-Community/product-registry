@@ -29,7 +29,7 @@
         gtag('config', '<%= Rails.application.secrets.google_tracker %>');
       </script>
     <% end %>
-    
+
   </head>
 
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
@@ -46,7 +46,7 @@
     <% else %>
       <div id="content" class="container-fluid">
         <div class="row">
-          <div class="col-3">
+          <div class="col-3 nav-container">
             <%= render '/shared/filternav' %>
           </div>
           <div class="col-9">

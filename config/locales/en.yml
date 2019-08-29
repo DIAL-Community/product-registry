@@ -54,6 +54,7 @@ en:
     workflow: workflow
     sdg: sdg
     sustainable-development-goal: sustainable development goal
+    sdg_target: SDG target
   view:
     about:
       sdg_title: "SDG Digital Investment Framework"

@@ -1,49 +1,32 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<div class="float-right pb-2">
-  <%= form_tag(sustainable_development_goals_path, :method => "get", id: "search-form", class: "form-inline") do %>
-    <%= text_field_tag :search, params[:search], class: "form-control",
-        placeholder: t('view.general.search-placeholder', model: t('model.sdg').to_s.upcase.pluralize) %>
-    <div class="input-group-append">
-        <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
-    </div>
+<div class="row">
+  <% if @sustainable_development_goals.count > 0 %>
+    <% @sustainable_development_goals.order(:number).each do |sustainable_development_goal| %>
+      <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
+        <div class="card index-card">
+          <div class="card-header bg-secondary text-white small">
+            <%= link_to truncate(sustainable_development_goal.name, length: 23, omission: '&hellip;', escape: false), sustainable_development_goal,
+                'title' => sustainable_development_goal.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+          </div>
+          <div class="model-logo">
+            <%= link_to(sustainable_development_goal) do %>
+              <%= image_tag(sustainable_development_goal.image_file, class: 'card-img-top align-middle') %>
+            <% end %>
+          </div>
+
+          <div class="card-footer">
+            <small>
+              <div class="row">
+                <div class="col-12">
+                  <%= "#{sustainable_development_goal.sdg_targets.size} #{t('model.sdg_target').to_s.pluralize(sustainable_development_goal.sdg_targets.size)}" %>
+                </div>
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
     <% end %>
+  <% end %>
 </div>
-
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th><%= t('view.sdg.index.sdg-number') %></th>
-      <th colspan="4"><%= t('view.general.name') %></th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% if @sustainable_development_goals.count > 0 %>
-      <% @sustainable_development_goals.each do |sustainable_development_goal| %>
-        <tr>
-          <td><%= sustainable_development_goal.number %></td>
-          <td><%= sustainable_development_goal.name %></td>
-          <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">
-              <%= t('view.general.action') %>
-            </a>
-            <div class="dropdown-menu">
-              <%= link_to t('view.sdg.index.view-targets') , sustainable_development_goal, :class =>"dropdown-item"  %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan="4">
-          <small class="text-muted"><%= t('view.sdg.index.no-data') %></small>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= will_paginate @use_cases, :class => "float-right digg-pagination" %>
