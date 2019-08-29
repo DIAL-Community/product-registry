@@ -23,6 +23,7 @@
 //= require jquery-ui/widgets/accordion
 //= require popper
 //= require bootstrap
+//= require cookies_eu
 //= require_tree .
 
 function triggerPageEvents() {

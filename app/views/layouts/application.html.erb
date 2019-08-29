@@ -38,10 +38,12 @@
       <div id="content" class="container">
         <%= render '/shared/sidenav' %>
         <%= yield %>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
       </div>
     <% elsif display_sidenav %>
       <div id="content" class="container">
         <%= yield %>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
       </div>
     <% else %>
       <div id="content" class="container-fluid">
@@ -55,8 +57,10 @@
             <%= yield %>
           </div>
         </div>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
       </div>
     <% end %>
+
     <%= render '/shared/footer' %>
   </body>
 </html>
