@@ -3,21 +3,16 @@ var addToList = function(filterId, values) {
         $("#"+filterId).prop("checked", values.value === 'true');
     } else {
         values.map(function(currValue) {
-            $("#"+filterId).parent().append(
-              '<div class="card col-12 mt-1">' +
-                '<div class="row">' +
-                  '<div class="col-11 pt-1 pb-1 pl-2">' +
-                    currValue.label +
-                  '</div>' +
-                  '<div name="'+currValue.label+'" id="remove-'+filterId+'-'+currValue.value+'" data-effect="fadeOut" class="col-1 text-center p-1 remove-filter">' +
-                    '<i class="fas fa-window-close"></i>' +
-                  '</div>' +
-                '</div>' +
-              '</div>')
+            $('#' + filterId).parent().append(
+              '<span class="badge badge-secondary filter-tag">' +
+              currValue.label +
+              '<i name="' + currValue.label + '" id="remove-' + filterId + '-' + currValue.value + '" class="fas fa-window-close remove-filter"></i>' +
+              '</span>'
+            );
             $('#remove-'+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
         })
     }
-    
+
 }
 
 var removeFilter = function(event) {
@@ -26,12 +21,12 @@ var removeFilter = function(event) {
         filter_value: event.data.value,
         filter_label: event.data.label
     } ] }, function() {
-        const card = $(event.target).closest('.card');
+        const card = $(event.target).closest('.badge');
         card.fadeOut();
-        
+
         window.location.reload(true);
     });
-    
+
 }
 
 var addFilter = function(id, value, label) {
@@ -84,7 +79,7 @@ var prepareFilters = function() {
         Object.keys(data).map(function(key) {
             addToList(key, data[key]);
         })
-        
+
     });
 }
 

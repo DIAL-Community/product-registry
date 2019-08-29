@@ -27,7 +27,7 @@ html {
 }
 
 body {
-  padding-top: 120px;
+  padding-top: 102px;
 }
 
 a {
@@ -103,6 +103,10 @@ h6 {
   .form-group {
     display: inline-block;
   }
+}
+
+.p-2 {
+  padding: 0 !important;
 }
 
 #search-form {

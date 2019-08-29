@@ -143,7 +143,7 @@ module ProductsHelper
         images.push(image)
       end
     when "Sustainable Development Goals"
-      product.sustainable_development_goals.order([:number]).each do |sdg|
+      product.sustainable_development_goals.sort { |x, y| x[:number].to_i <=> y[:number].to_i }.each do |sdg|
         tooltip = t("view.product.index.footer_sdg") + sdg.number.to_s + ": " + sdg.name
         image = Hash["filename"=>"sdgs/"+sdg.slug+".png", "tooltip"=>tooltip, "id"=>sdg.id, "controller"=>"sustainable_development_goals"]
         images.push(image)
