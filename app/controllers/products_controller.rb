@@ -14,6 +14,7 @@ class ProductsController < ApplicationController
   def index
     if params[:without_paging]
       @products = Product.eager_load(:references, :include_relationships, :interop_relationships,
+                                     :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals, :sectors)
                          .order(:name)
       @products = @products.name_contains(params[:search])
@@ -23,6 +24,7 @@ class ProductsController < ApplicationController
 
     @products = filter_products.order(:name)
     @products = @products.eager_load(:references, :include_relationships, :interop_relationships,
+                                     :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals, :sectors)
                          .order(:name)
 
