@@ -54,6 +54,7 @@ en:
     workflow: workflow
     sdg: sdg
     sustainable-development-goal: sustainable development goal
+    sdg_target: SDG target
   view:
     about:
       sdg_title: "SDG Digital Investment Framework"
@@ -103,6 +104,14 @@ en:
         other-names: Other Names
         key-functionalities: Key Digital Functionalities
         example-of-use: Examples of use in different sectors
+      index:
+        bb-product: "Example software: "
+        bb-product-popover:
+          one: Example of Existing Software
+          other: Example of Existing Softwares
+        bb-workflow-popover:
+          one: Mapping to Associated Workflow
+          other: Mapping to Associated Workflow
     contact:
       form:
         email: Email
@@ -197,6 +206,68 @@ en:
       logout: Logout
       product-registry: Product Registry
       profile: Profile Settings
+    filternav:
+      framework: Digital Investment Framework
+      registry: Development Project Registry
+      sdgs: SDGs
+      use_cases: Use Cases
+      workflows: Workflows
+      building_blocks: Building Blocks
+      products: Products
+      geographies: Geographies
+      sectors: Sectors
+      orgs: Organizations
+      projects: Projects (coming soon)
+      view-projects: Coming soon.
+      map: Endorser Map
+      view-map: View endorser map
+      clear: Clear All
+      with-maturity: Product with maturity assessment
+      title:
+        building-block: Filter by Building Block
+        country: Filter by Country
+        origin: Filter by Product Origin
+        product: Filter by Product
+        sdg: Filter by SDG
+        sector: Filter by Sector
+        use-case: Filter by Use Case
+        workflow: Filter by Workflow
+        year: Filter by Year Endorsed
+    active-filter:
+      building_blocks:
+        one: Building Block
+        other: Building Blocks
+      countries:
+        one: Country
+        other: Countries
+      endorser-only: Endorsing organization only
+      multi-filter: 'and %{count} other %{model}'
+      organizations:
+        one: Organization
+        other: Organizations
+      origins:
+        one: Product Source
+        other: Product Sources
+      products:
+        one: Product
+        other: Products
+      sdgs:
+        one: SDG
+        other: SDGs
+      sectors:
+        one: Sector
+        other: Sectors
+      title: 'Filtering by %{model}'
+      use_cases:
+        one: Use Case
+        other: Use Cases
+      workflows:
+        one: Workflow
+        other: Workflows
+      with-maturity: Product with maturity assessment
+      years:
+        one: Year Endorsed
+        other: Years Endorsed
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

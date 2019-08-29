@@ -17,6 +17,7 @@
  *= require_self
  */
 
+$font-size-base: 0.85rem;
 @import 'bootstrap';
 
 body,
@@ -27,7 +28,7 @@ html {
 }
 
 body {
-  padding-top: 120px;
+  padding-top: 102px;
 }
 
 a {
@@ -37,6 +38,18 @@ a {
 
 a:hover {
   color: #000043
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: .9rem;
+}
+
+.form-control {
+  font-size: .9rem
 }
 
 .model-logo {
@@ -91,6 +104,10 @@ a:hover {
   .form-group {
     display: inline-block;
   }
+}
+
+.p-2 {
+  padding: 0 !important;
 }
 
 #search-form {
@@ -167,7 +184,7 @@ a:hover {
 }
 
 .card-img-top {
-  padding: 0.5rem;
+  padding: 1.4rem;
 }
 
 .office-popup {

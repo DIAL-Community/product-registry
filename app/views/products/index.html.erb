@@ -2,34 +2,24 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <div class="col-8">
+  <div class="col-12">
     <%= link_to t('view.product.index.product-graph'), productmap_path,
-        class: 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+        class: 'float-right small ml-1', target: "_blank" %>
     <% if user_signed_in? && policy(Product).mod_allowed? %>
-      <%= link_to t('view.general.create'), new_product_path, class: 'btn btn-outline-secondary float-left ml-1' %>
+      <%= link_to t('view.general.create'), new_product_path, class: 'float-right small ml-1' %>
     <% else %>
       <%= link_to t('view.general.create'),
           'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
-          class: 'btn btn-outline-secondary float-left ml-1', target: :_blank  %>
+          class: 'float-right small ml-1', target: :_blank  %>
     <% end %>
   </div>
-  <div class="col-4 pr-0">
-    <div class="float-right">
-      <button id="filter-toggle" type="button" class="btn btn-secondary"
-              data-toggle="collapse" data-target="#filter-options"
-              aria-expanded="false" aria-controls="filter-options">
-        <%= t('view.product.index.filter') %>
-      </button>
-    </div>
-  </div>
 </div>
-<%= render 'filter', products: @products %>
 
 <div class="row">
   <% @products.each do |product| %>
     <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
       <div class="card index-card">
-        <div class="card-header bg-secondary text-white small">
+        <div class="card-header bg-secondary text-white">
           <%= link_to truncate(product.name, length: 25, omission: '&hellip;', escape: false), product,
               'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
           <% if product.is_launchable %>

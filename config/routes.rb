@@ -1,44 +1,45 @@
 Rails.application.routes.draw do
-  
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
   get 'about/cookies'
 
   devise_for :users
-  scope "/admin" do
+  scope '/admin' do
     resources :users
   end
-  
-  root to: 'about#index'
-  
-  resources :products
 
-  resources :building_blocks do
-    resources :workflows
+  root to: 'about#index'
+
+  resources :products do
+    get 'count', on: :collection
   end
 
-  resources :sustainable_development_goals, only: [:index, :show]
+  resources :building_blocks do
+    get 'count', on: :collection
+  end
+
+  resources :sustainable_development_goals, only: [:index, :show] do
+    get 'count', on: :collection
+  end
+
   resources :sdg_targets, only: [:index, :show]
 
   resources :use_cases do
-    resources :sdg_targets
-    resources :workflows
+    get 'count', on: :collection
   end
-  
+
   resources :workflows do
-    resources :use_cases
+    get 'count', on: :collection
   end
-  
+
   resources :deploys do
     get 'show_messages'
     post 'add_ssh_user'
   end
 
   resources :organizations do
-    resources :contacts
-    resources :locations
-    resources :sectors
+    get 'count', on: :collection
   end
 
   resources :locations do
@@ -53,6 +54,10 @@ Rails.application.routes.draw do
   resources :contacts do
     resources :organizations
   end
+
+  post '/add_filter', to: 'application#add_filter', as: :add_filter
+  post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
+  get '/get_filters', to: 'application#get_filters', as: :get_filters
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'

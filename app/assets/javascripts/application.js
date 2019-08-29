@@ -20,6 +20,7 @@
 //= require map-click-control
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/widgets/autocomplete
+//= require jquery-ui/widgets/accordion
 //= require popper
 //= require bootstrap
 //= require cookies_eu
@@ -47,7 +48,33 @@ function triggerPageEvents() {
         }
 
     });
-});
+  });
+  
+  $('.accordion').accordion({
+    heightStyle: "content",
+    active:false,
+    collapsible: true,
+    icons: false,
+    header:"div.accordion-header",
+    create: function(event, ui) {
+      //get index in cookie on accordion create event
+      var cookie_name = $(this).attr('id')
+      if(Cookies.get(cookie_name) != null){
+        $(this).accordion( "option", "animate", false );
+        $(this).accordion("option", "active", parseInt(Cookies.get(cookie_name)));
+        $(this).accordion( "option", "animate", 200 );
+      }
+    },
+    activate: function(event, ui) {
+        //set cookie for current index on change event
+        var cookie_name = $(this).attr('id')
+        Cookies.set(cookie_name, null);
+        if (ui.newHeader.length) {
+            var index = $(this).accordion('option', 'active');
+            Cookies.set(cookie_name, index);
+        }
+    }
+  });
 }
 
 $(document).on("turbolinks:load", triggerPageEvents);

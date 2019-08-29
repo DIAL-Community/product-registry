@@ -155,6 +155,64 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organizations_url
   end
 
+  test 'should filter products' do
+    # With no filters, should load 3 products
+    get organizations_url
+    assert_equal(3, assigns(:organizations).count)
+
+    first_sector = sectors(:one)
+    first_organization = organizations(:one)
+    first_organization.sectors.push(first_sector)
+    first_organization.save
+
+    # Sector filter: should return only the above org
+    add_parameter = { 'filter_name': 'sectors', 'filter_value': first_sector.id, 'filter_label': first_sector.name }
+    post '/add_filter', params: add_parameter
+
+    get organizations_url
+    assert_equal(1, assigns(:organizations).count)
+    assert_equal(first_organization.name, assigns(:organizations)[0].name)
+
+    remove_parameter = { 'filter_array': { '0' => { filter_name: 'sectors' } } }
+    post '/remove_filter', params: remove_parameter
+
+    get organizations_url
+    assert_equal(3, assigns(:organizations).count)
+
+    first_location = locations(:one)
+    second_organization = organizations(:two)
+    second_organization.locations.push(first_location)
+    second_organization.save
+
+    add_parameter = { 'filter_name': 'countries', 'filter_value': first_location.id, 'filter_label': first_location.name }
+    post '/add_filter', params: add_parameter
+
+    # Country filter: should return only the above org
+    get organizations_url
+    assert_equal(1, assigns(:organizations).count)
+    assert_equal(second_organization.name, assigns(:organizations)[0].name)
+
+    # Combination assessment with origins:
+    # * should return 3 products
+    add_parameter = { 'filter_name': 'sectors', 'filter_value': first_sector.id, 'filter_label': first_sector.name }
+    post '/add_filter', params: add_parameter
+
+    get organizations_url
+    assert_equal(0, assigns(:organizations).count)
+
+    remove_parameter = { filter_array: { '0' => { filter_name: 'sectors' } } }
+    post '/remove_filter', params: remove_parameter
+
+    get organizations_url
+    assert_equal(1, assigns(:organizations).count)
+
+    remove_parameter = { filter_array: { '0' => { filter_name: 'countries' } } }
+    post '/remove_filter', params: remove_parameter
+
+    get organizations_url
+    assert_equal(3, assigns(:organizations).count)
+  end
+
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
