@@ -2,9 +2,9 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <div class="col-6">
+  <div class="col-12">
     <% if user_signed_in? && policy(Workflow).mod_allowed? %>
-      <%= link_to t('view.general.create'), new_workflow_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+      <%= link_to t('view.general.create'), new_workflow_path, :class => 'float-right small ml-1' %>
     <% end %>
   </div>
 </div>

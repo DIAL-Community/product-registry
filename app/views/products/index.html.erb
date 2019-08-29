@@ -2,15 +2,15 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <div class="col-8">
+  <div class="col-12">
     <%= link_to t('view.product.index.product-graph'), productmap_path,
-        class: 'btn btn-outline-secondary float-left ml-1', target: "_blank" %>
+        class: 'float-right small ml-1', target: "_blank" %>
     <% if user_signed_in? && policy(Product).mod_allowed? %>
-      <%= link_to t('view.general.create'), new_product_path, class: 'btn btn-outline-secondary float-left ml-1' %>
+      <%= link_to t('view.general.create'), new_product_path, class: 'float-right small ml-1' %>
     <% else %>
       <%= link_to t('view.general.create'),
           'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
-          class: 'btn btn-outline-secondary float-left ml-1', target: :_blank  %>
+          class: 'float-right small ml-1', target: :_blank  %>
     <% end %>
   </div>
 </div>

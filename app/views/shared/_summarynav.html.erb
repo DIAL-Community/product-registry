@@ -1,40 +1,70 @@
-<div id="summary-nav" class="row mb-2">
+<div id="summary-nav" class="row mb-2 bg-dark">
   <div class="col-12">
-    <div class="list-group w-100 flex-fill list-group-horizontal">
-      <li class="list-group-item w-100 text-center">
+    <div class="list-group w-100 flex-fill list-group-horizontal bg-transparent">
+      <li class="list-group-item w-100 text-center bg-transparent">
         <%= link_to sustainable_development_goals_path do %>
-          <u><%= t('model.sdg').upcase.pluralize %></u>
-          <span id="sdg-badge" class="badge badge-warning">--</span>
+          <% if current_page?(:controller => 'sustainable_development_goals', :action => 'index') %>
+            <span class="w-100 btn btn-warning"><%= t('model.sdg').upcase.pluralize %>
+          <% else %>
+            <span class="w-100 btn btn-secondary"><%= t('model.sdg').upcase.pluralize %>
+          <% end %>
+            <span id="sdg-badge" class="badge badge-light">--</span>
+          </span>
         <% end %>
       </li>
-      <li class="list-group-item w-100 text-center">
+      <li class="list-group-item w-100 text-center bg-transparent">
         <%= link_to use_cases_path do %>
-          <u><%= t('model.use-case').titlecase.pluralize %></u>
-          <span id="use-case-badge" class="badge badge-warning">--</span>
+          <% if current_page?(:controller => 'use_cases', :action => 'index') %>
+            <span class="w-100 btn btn-warning"><%= t('model.use-case').titlecase.pluralize %>
+          <% else %>
+            <span class="w-100 btn btn-secondary"><%= t('model.use-case').titlecase.pluralize %>
+          <% end %>
+          <span id="use-case-badge" class="badge badge-light">--</span>
+          </span>
         <% end %>
       </li>
-      <li class="list-group-item w-100 text-center">
+      <li class="list-group-item w-100 text-center bg-transparent">
         <%= link_to workflows_path do %>
-          <u><%= t('model.workflow').titlecase.pluralize %></u>
-          <span id="workflow-badge" class="badge badge-warning">--</span>
+          <% if current_page?(:controller => 'workflows', :action => 'index') %>
+            <span class="w-100 btn btn-warning"><%= t('model.workflow').titlecase.pluralize %>
+          <% else %>
+            <span class="w-100 btn btn-secondary"><%= t('model.workflow').titlecase.pluralize %>
+          <% end %>
+          <span id="workflow-badge" class="badge badge-light">--</span>
+          </span>
         <% end %>
       </li>
-      <li class="list-group-item w-100 text-center">
+      <li class="list-group-item w-100 text-center bg-transparent">
         <%= link_to building_blocks_path do %>
-          <u><%= t('model.building-block').titlecase.pluralize %></u>
-          <span id="bb-badge" class="badge badge-warning">--</span>
+          <% if current_page?(:controller => 'building_blocks', :action => 'index') %>
+            <span class="w-100 btn btn-warning"><%= t('model.building-block').titlecase.pluralize %>
+          <% else %>
+            <span class="w-100 btn btn-secondary"><%= t('model.building-block').titlecase.pluralize %>
+          <% end %>
+          <span id="bb-badge" class="badge badge-light">--</span>
+          </span>
         <% end %>
       </li>
-      <li class="list-group-item w-100 text-center">
+      <li class="list-group-item w-100 text-center bg-transparent">
         <%= link_to products_path do %>
-          <u><%= t('model.product').titlecase.pluralize %></u>
-          <span id="product-badge" class="badge badge-warning">--</span>
+          <% if current_page?(:controller => 'products', :action => 'index') %>
+            <span class="w-100 btn btn-warning"><%= t('model.product').titlecase.pluralize %>
+          <% else %>
+            <span class="w-100 btn btn-secondary"><%= t('model.product').titlecase.pluralize %>
+          <% end %>
+          <span id="product-badge" class="badge badge-light">--</span>
+          </span>
         <% end %>
       </li>
-      <li class="list-group-item w-100 text-center">
+      <li class="list-group-item w-100 text-center bg-transparent">
         <%= link_to organizations_path do %>
-          <u><%= t('model.organization').titlecase.pluralize %></u>
-          <span id="org-badge" class="badge badge-warning">--</span>
+          <% if current_page?(:controller => 'organizations', :action => 'index') %>
+            <span class="w-100 btn btn-warning"><%= t('model.organization').titlecase.pluralize %>
+          <% else %>
+            <span class="w-100 btn btn-secondary"><%= t('model.organization').titlecase.pluralize %>
+          <% end %>
+          <span id="org-badge" class="badge badge-light">--</span>
+          </span>
         <% end %>
       </li>
     </div>
