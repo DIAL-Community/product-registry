@@ -27,31 +27,35 @@
           <div class="card-footer footer-padding">
             <% 
               products = footer(building_block, 'products')
-              content = '<div class="footer-row"'
-              content += "data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{footer_image_popover(products)}'" if products.count > 0
-              content += '>'
-              concat(content.html_safe)
+              if products.count > 0
+                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                                data-html='true' data-content='#{footer_image_popover(products)}'>"
+                concat(content.html_safe)
 
-              products.each do |product|
-                concat(image_tag(product[:filename], title: product[:tooltip],
+                products.each do |product|
+                  concat(image_tag(product[:filename], title: product[:tooltip],
                                  class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                end
+                concat('</div>'.html_safe)
               end
 
-              concat('</div>'.html_safe)
-
               workflows = footer(building_block, 'workflows')
-              content = '<div class="footer-row"'
-              content += "data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{footer_text_popover(workflows)}'" if workflows.count > 0
-              content += '>'
-              concat(content.html_safe)
+              if workflows.count > 0
+                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                                data-html='true' data-content='#{footer_text_popover(workflows)}'>"
+                concat(content.html_safe)
 
-              content = "<span'>
-                           #{building_block.workflows.size} associated #{t('model.workflow').to_s.pluralize(building_block.workflows.size)}
-                         </span'>"
-              concat(content.html_safe)
-              concat('</div>'.html_safe)
+                content = "<span'>
+                             #{building_block.workflows.size} associated #{t('model.workflow').to_s.pluralize(building_block.workflows.size)}
+                           </span'>"
+                concat(content.html_safe)
+                concat('</div>'.html_safe)
+              end
+
+              if workflows.count == 0 || products.count == 0
+                content = '<div class="footer-row"></div>'
+                concat(content.html_safe)
+              end
             %>
           </div>
         </div>
