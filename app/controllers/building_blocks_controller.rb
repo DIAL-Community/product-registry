@@ -14,6 +14,7 @@ class BuildingBlocksController < ApplicationController
     if !params[:without_paging]
       @building_blocks = @building_blocks.paginate(page: params[:page], per_page: 20)
     end
+    @building_blocks = @building_blocks.eager_load(:workflows, :products)
 
     authorize @building_blocks, :view_allowed?
   
