@@ -15,6 +15,6 @@ rails db:run_if_no_db && rails db:create_db_with_public_data
 rails db:migrate
 rails assets:precompile RAILS_ENV=production
 
-cron
+service cron restart
 
 rails server -e production

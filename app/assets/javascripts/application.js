@@ -22,6 +22,7 @@
 //= require jquery-ui/widgets/autocomplete
 //= require popper
 //= require bootstrap
+//= require cookies_eu
 //= require_tree .
 
 function triggerPageEvents() {

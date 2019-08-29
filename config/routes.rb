@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
+  get 'about/cookies'
 
   devise_for :users
   scope "/admin" do
