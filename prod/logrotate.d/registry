@@ -1,6 +1,7 @@
 /t4d/log {
-  rotate 14
+  rotate 10
   daily
+  maxsize 100M
   compress
   missingok
   notifempty
