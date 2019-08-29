@@ -12,10 +12,7 @@ class UseCasesController < ApplicationController
       @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
 
-    if !params[:without_paging]
-      @use_cases = @use_cases.paginate(page: params[:page], per_page: 20)
-    end
-
+    @use_cases = @use_cases.eager_load(:workflows, :sdg_targets)
     authorize @use_cases, :view_allowed?
   end
 

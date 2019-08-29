@@ -11,10 +11,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
       @sustainable_development_goals = @sustainable_development_goals.where('LOWER("sustainable_development_goals"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
 
-    if !params[:without_paging]
-      @sustainable_development_goals = @sustainable_development_goals.paginate(page: params[:page], per_page: 20)
-    end
-
+    @sustainable_development_goals = @sustainable_development_goals.eager_load(:sdg_targets)
     authorize @sustainable_development_goals, :view_allowed?
   end
 
