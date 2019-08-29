@@ -39,6 +39,9 @@ class ApplicationController < ActionController::Base
       else
         session.delete(curr_filter['filter_name'])
       end
+      if filter_name == 'products' || filter_name == 'origins' || filter_name == 'with_maturity_assessment'
+        cookies[:updated_prod_filter] = true
+      end
     end
   end
 
@@ -61,6 +64,9 @@ class ApplicationController < ActionController::Base
         retval = true
       end
       session[filter_name.to_s] = existing_value
+    end
+    if filter_name == 'products' || filter_name == 'origins' || filter_name == 'with_maturity_assessment'
+      cookies[:updated_prod_filter] = true
     end
     render json: retval
   end
@@ -109,24 +115,36 @@ class ApplicationController < ActionController::Base
   end
 
   def get_products_from_filters(products, origins, with_maturity_assessment)
-    filter_products = Product.all
-    if !products.empty?
-      filter_products = Product.all.where('id in (?)', products)
-    end
+    # Check to see if the filter has already been set
+    if cookies[:updated_prod_filter].nil? || cookies[:updated_prod_filter] == 'true'
+      filter_products = Product.all
+      if !products.empty?
+        filter_products = Product.all.where('id in (?)', products)
+      end
 
-    if !origins.empty?
-      filter_products = filter_products.where('id in (select product_id from products_origins where origin_id in (?))', origins)
-    end
+      if !origins.empty?
+        filter_products = filter_products.where('id in (select product_id from products_origins where origin_id in (?))', origins)
+      end
 
-    if with_maturity_assessment
-      filter_products = filter_products.where('id in (select product_id from product_assessments where has_osc = true or has_digisquare = true)')
-    end
+      if with_maturity_assessment
+        filter_products = filter_products.where('id in (select product_id from product_assessments where has_osc = true or has_digisquare = true)')
+      end
 
-    product_filter_set = false
-    if !products.empty? || !origins.empty? || with_maturity_assessment
-      product_filter_set = true
+      product_filter_set = false
+      if !products.empty? || !origins.empty? || with_maturity_assessment
+        product_filter_set = true
+      end
+
+      product_list = filter_products.ids
+      # Set the cookies for caching
+      cookies[:updated_prod_filter] = false
+      cookies[:filter_products] = product_list.join(',')
+      cookies[:prod_filter_set] = product_filter_set
+    else
+      product_filter_set = cookies[:prod_filter_set]
+      product_list = cookies[:filter_products].split(",").map(&:to_i)
     end
-    return filter_products.ids, product_filter_set
+    return product_list, product_filter_set
   end
 
   def get_use_cases_from_workflows(workflows)
