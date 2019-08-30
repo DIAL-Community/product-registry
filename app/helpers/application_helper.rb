@@ -15,7 +15,8 @@ module ApplicationHelper
   end
 
   def display_sidenav
-    current_page?('/map') || DEVISE_CONTROLLERS.include?(params[:controller]) ||
+    current_page?('/map') || current_page?('/about/cookies') ||
+      DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
   end
 
