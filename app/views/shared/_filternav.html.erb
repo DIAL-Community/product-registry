@@ -4,6 +4,7 @@
   </div>
   <div class="card-body p-2 accordion-section">
     <div id="acc-framework" class="accordion">
+
       <div class="accordion-header bg-dark">
         <span class="m-0">
           <%= image_tag "sdgs_icon.png", :width => "20px", :height => "20px" %>
@@ -12,18 +13,21 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "sdgs", t('view.filternav.sdgs') %>:
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
       </div>
+
       <div class="accordion-header bg-dark">
           <span class="m-0">
             <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px" %>
@@ -32,18 +36,21 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "use_cases", t('view.filternav.use_cases') %>:
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
       </div>
+
       <div class="accordion-header bg-dark">
           <span class="m-0">
             <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px" %>
@@ -52,18 +59,21 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "building_blocks", t('view.filternav.building_blocks') %>:
               <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
       </div>
+
       <div class="accordion-header bg-dark">
           <span class="m-0">
             <%= image_tag "workflows_icon.png", :width => "20px", :height => "20px" %>
@@ -72,18 +82,21 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "workflows", t('view.filternav.workflows') %>:
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.workflow') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
       </div>
+
       <div class="accordion-header bg-dark">
           <span class="m-0">
             <%= image_tag "products_icon.png", :width => "20px", :height => "20px" %>
@@ -92,33 +105,37 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row mb-2">
-          <div class="col-12 ml-1">
-            <div class="form-check">
-                <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
-                <%= label_tag "with_maturity_assessment", t('view.filternav.with-maturity'), class: "form-check-label" %>
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group mb-2">
-              <%= label_tag "origins", t('view.product.index.sources'), class: 'ml-1' %>
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "origins", t('view.product.index.sources') %>
               <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.origin')},
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
         </div>
-        <div class="form-row">
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
+        <div class="row p-1 mt-1">
           <div class="col-12">
-            <div class="form-group mb-2">
-              <%= label_tag "products", t('model.product').titlecase.pluralize, class: 'ml-1' %>:
+            <div class="form-group mb-1">
+              <%= label_tag "products", t('model.product').titlecase.pluralize %>:
               <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.product') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
+        <div class="row p-1">
+          <div class="col-12">
+            <div class="form-check">
+              <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
+              <%= label_tag "with_maturity_assessment", t('view.filternav.with-maturity'), class: "form-check-label" %>
             </div>
           </div>
         </div>
@@ -138,16 +155,18 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "countries", t('view.filternav.geographies') %>:
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.country') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
+        </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
         </div>
       </div>
       <div class="accordion-header bg-dark">
@@ -158,16 +177,18 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "sectors", t('view.filternav.sectors') %>:
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sector') },
-                  { class: 'custom-select filter-element' }) %>
+                  { class: 'form-control filter-element' }) %>
             </div>
           </div>
+        </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
         </div>
       </div>
       <div class="accordion-header bg-dark">
@@ -178,20 +199,10 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
-        </div>
-        <div class="form-row mb-2">
-          <div class="col-12 ml-1">
-            <div class="form-check">
-                <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
-                <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
           <div class="col-12">
-            <div class="form-group">
-              <%= label_tag "years", t('view.organization.index.endorsed-date'), class: 'ml-1' %>
+            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <div class="form-group mb-1">
+              <%= label_tag "years", t('view.organization.index.endorsed-date') %>
               <%= select(nil, "years",
                         Organization
                             .where.not(when_endorsed: nil)
@@ -200,7 +211,18 @@
                             .uniq!
                             .sort!,
                         { selected: params[:years], include_blank: t('view.filternav.title.year') },
-                        { class: 'custom-select filter-element', name: 'years' }) %>
+                        { class: 'form-control filter-element', name: 'years' }) %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
+        <div class="row p-1">
+          <div class="col-12">
+            <div class="form-check">
+                <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
+                <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
             </div>
           </div>
         </div>

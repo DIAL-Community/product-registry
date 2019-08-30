@@ -36,18 +36,14 @@ div.nav-container {
     .ui-accordion-header {
       color: white;
       margin: 0 !important;
-      border: none;
+      border-top: none;
+      border-bottom:  solid 1px rgb(70, 70, 70) !important;
+      border-left:  solid 1px rgb(70, 70, 70) !important;
+      border-right:  solid 1px rgb(70, 70, 70) !important;
       border-radius: 0 !important;
 
-      &.ui-state-hover.ui-accordion-header-collapsed {
-        border: solid 1px rgb(70, 70, 70);
-      }
-
       &.ui-accordion-header-active {
-        border-top:  solid 1px rgb(70, 70, 70);
-        border-left:  solid 1px rgb(70, 70, 70);
-        border-right:  solid 1px rgb(70, 70, 70);
-        border-bottom: none;
+        border-bottom: none !important;
       }
     }
 
@@ -64,7 +60,8 @@ div.nav-container {
       border-radius: 0;
 
       select {
-        width:auto;
+        width: auto;
+        max-width: 100%;
       }
     }
 
