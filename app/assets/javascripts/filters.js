@@ -54,9 +54,7 @@ var prepareFilters = function() {
 
     $('.clear-all').on('click', function() {
         filterList = [];
-        $(this).parents(".row").next('.row').find('.remove-filter').each(function(index) {
-            const card = $(this).closest('.badge');
-            card.fadeOut();
+        $(this).parents(".row").next('.row').find('.remove-filter').each(function() {
             // collect all of the filters to remove
             filterId = $(this).attr('id').split('-');
             filterLabel = $(this).attr('name');
@@ -71,7 +69,10 @@ var prepareFilters = function() {
 
         if (filterList.length > 0) {
             $.post('/remove_filter', { filter_array: filterList }, function() {
-                window.location.reload(true);
+              const card = $(this).parents(".row").next('.row');
+              card.fadeOut();
+              
+              window.location.reload(true);
             });
         }
     });
