@@ -54,7 +54,7 @@ var prepareFilters = function() {
 
     $('.clear-all').on('click', function() {
         filterList = [];
-        $(this).parents(".row").next('.row').find('.remove-filter').each(function() {
+        $(this).parents(".accordion-body").find('.remove-filter').not('input').each(function() {
             // collect all of the filters to remove
             filterId = $(this).attr('id').split('-');
             filterLabel = $(this).attr('name');

@@ -6,9 +6,16 @@
     <div id="acc-framework" class="accordion">
 
       <div class="accordion-header bg-dark">
-        <span class="m-0">
+        <span class="m-0 align-middle">
           <%= image_tag "sdgs_icon.png", :width => "20px", :height => "20px" %>
-          <%= t('view.filternav.sdgs') %><i class="fa fa-angle-down float-right text-muted"></i>
+          <span class="align-middle"><%= t('view.filternav.sdgs') %></span>
+          <%
+            counter = filter_count('sdgs')
+            if counter > 0
+              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+            end
+           %>
+          <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -28,9 +35,16 @@
       </div>
 
       <div class="accordion-header bg-dark">
-          <span class="m-0">
+          <span class="m-0 align-middle">
             <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px" %>
-            <%= t('view.filternav.use_cases') %><i class="fa fa-angle-down float-right text-muted"></i>
+            <span class="align-middle"><%= t('view.filternav.use_cases') %></span>
+            <%
+              counter = filter_count('use_cases')
+              if counter > 0
+                concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              end
+            %>
+            <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -50,9 +64,16 @@
       </div>
 
       <div class="accordion-header bg-dark">
-          <span class="m-0">
+          <span class="m-0 align-middle">
             <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px" %>
-            <%= t('view.filternav.building_blocks') %><i class="fa fa-angle-down float-right text-muted"></i>
+          <span class="align-middle"><%= t('view.filternav.building_blocks') %></span>
+          <%
+            counter = filter_count('building_blocks')
+            if counter > 0
+              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+            end
+          %>
+          <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -72,9 +93,16 @@
       </div>
 
       <div class="accordion-header bg-dark">
-          <span class="m-0">
+          <span class="m-0 align-middle">
             <%= image_tag "workflows_icon.png", :width => "20px", :height => "20px" %>
-            <%= t('view.filternav.workflows') %><i class="fa fa-angle-down float-right text-muted"></i>
+            <span class="align-middle"><%= t('view.filternav.workflows') %></span>
+            <%
+              counter = filter_count('workflows')
+              if counter > 0
+                concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              end
+            %>
+            <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -94,9 +122,16 @@
       </div>
 
       <div class="accordion-header bg-dark">
-          <span class="m-0">
+          <span class="m-0 align-middle">
             <%= image_tag "products_icon.png", :width => "20px", :height => "20px" %>
-            <%= t('view.filternav.products') %><i class="fa fa-angle-down float-right text-muted"></i>
+            <span class="align-middle"><%= t('view.filternav.products') %></span>
+            <%
+              counter = filter_count('origins') + filter_count('products') + filter_count('with_maturity_assessment')
+              if counter > 0
+                concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              end
+            %>
+            <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -144,9 +179,16 @@
   <div class="card-body p-2">
     <div id="acc-registry" class="accordion">
       <div class="accordion-header bg-dark">
-        <span class="m-0">
+        <span class="m-0 align-middle">
           <%= image_tag "geographies_icon.png", :width => "20px", :height => "20px" %>
-          <%= t('view.filternav.geographies') %><i class="fa fa-angle-down float-right text-muted"></i>
+          <span class="align-middle"><%= t('view.filternav.geographies') %></span>
+          <%
+            counter = filter_count('countries')
+            if counter > 0
+              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+            end
+          %>
+          <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -165,9 +207,16 @@
         </div>
       </div>
       <div class="accordion-header bg-dark">
-        <span class="m-0">
+        <span class="m-0 align-middle">
           <%= image_tag "sectors_icon.png", :width => "20px", :height => "20px" %>
-          <%= t('view.filternav.sectors') %><i class="fa fa-angle-down float-right text-muted"></i>
+          <span class="align-middle"><%= t('view.filternav.sectors') %></span>
+          <%
+            counter = filter_count('sectors')
+            if counter > 0
+              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+            end
+          %>
+          <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -186,9 +235,16 @@
         </div>
       </div>
       <div class="accordion-header bg-dark">
-        <span class="m-0">
+        <span class="m-0 align-middle">
           <%= image_tag "organizations_icon.png", :width => "20px", :height => "20px" %>
-          <%= t('view.filternav.orgs') %><i class="fa fa-angle-down float-right text-muted"></i>
+          <span class="align-middle"><%= t('view.filternav.orgs') %></span>
+          <%
+            counter = filter_count('years') + filter_count('endorser_only')
+            if counter > 0
+              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+            end
+          %>
+          <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
@@ -222,7 +278,10 @@
         </div>
       </div>
       <div class="accordion-header bg-dark">
-        <p class="m-0"><%= t('view.filternav.projects') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+        <span class="m-0 align-middle">
+          <span class="align-middle"><%= t('view.filternav.projects') %></span>
+          <i class="fa fa-angle-down float-right text-muted"></i>
+        </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
@@ -232,7 +291,10 @@
         </div>
       </div>
       <div class="accordion-header bg-dark">
-        <p class="m-0"><%= t('view.filternav.map') %><i class="fa fa-angle-down float-right text-muted"></i></p>
+        <span class="m-0 align-middle">
+          <span class="align-middle"><%= t('view.filternav.map') %></span>
+          <i class="fa fa-angle-down float-right text-muted"></i>
+        </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">

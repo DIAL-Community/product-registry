@@ -30,6 +30,19 @@ module ApplicationHelper
       id_path: "#{base_path}/#{params[:id]}", id_label: params[:id].titlecase }
   end
 
+  def filter_count(filter_name)
+    active_filters = session[filter_name]
+
+    counter = 0
+    unless active_filters.nil?
+      counter = 1
+      if active_filters.is_a?(Array)
+        counter = active_filters.size
+      end
+    end
+    counter
+  end
+
   def format_filter(filter_name)
     if filter_name == 'endorser_only'
       filter_label = "#{t('view.active-filter.endorser-only')}
