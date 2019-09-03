@@ -12,34 +12,30 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = Product.eager_load(:references, :include_relationships, :interop_relationships, :building_blocks, :sustainable_development_goals, :sectors).order(:name)
     if params[:without_paging]
-      @products = @products
-          .name_contains(params[:search])
+      @products = Product.eager_load(:references, :include_relationships, :includes, :interop_relationships,
+                                     :interoperates_with, :product_assessment, :origins, :organizations,
+                                     :building_blocks, :sustainable_development_goals, :sectors)
+                         .order(:name)
+      @products = @products.name_contains(params[:search])
       authorize @products, :view_allowed?
       return
     end
 
-    if params[:filter]
-      organizations = params[:organizations].reject{|x| x.nil? || x.blank? }
+    @products = filter_products.order(:name)
+    @products = @products.eager_load(:references, :include_relationships, :includes, :interop_relationships,
+                                     :interoperates_with, :product_assessment, :origins, :organizations,
+                                     :building_blocks, :sustainable_development_goals, :sectors)
+                         .order(:name)
 
-      @products = Product.all
-      @products = @products.name_contains(params[:search])\
-        if params[:search].present? && !params[:search].blank?
-      @products = @products.where(start_assessment: true)\
-        if params[:has_maturity].present?
-      @products = @products.joins(:organizations).where("organizations.id in (?)", organizations)\
-        if !organizations.empty?
-      authorize @products, :view_allowed?
-      return
-    end
-
-    if params[:search]
-      @products = @products
-          .where(nil)
-          .name_contains(params[:search])
-    end
+    params[:search].present? && @products = @products.name_contains(params[:search])
     authorize @products, :view_allowed?
+  end
+
+  def count
+    @products = filter_products.distinct
+    authorize @products, :view_allowed?
+    render json: @products.count
   end
 
   # GET /products/1
@@ -251,6 +247,49 @@ class ProductsController < ApplicationController
         @product = Product.find(params[:id])
       end
     end
+
+  def filter_products
+    bbs = sanitize_session_values 'building_blocks'
+    origins = sanitize_session_values 'origins'
+    products = sanitize_session_values 'products'
+    sdgs = sanitize_session_values 'sdgs'
+    use_cases = sanitize_session_values 'use_cases'
+    workflows = sanitize_session_values 'workflows'
+
+    with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+
+    filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
+
+    sdg_products = Product.all
+    if !sdgs.empty?
+      sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+    end
+
+    use_case_bbs = get_bbs_from_use_cases(use_cases)
+    workflow_bbs = get_bbs_from_workflows(workflows)
+
+    if (!bbs.empty?)
+      filter_bbs = BuildingBlock.all.where('id in (?)', bbs)
+      bb_ids = (filter_bbs.ids & use_case_bbs & workflow_bbs).uniq
+    else 
+      bb_ids = (use_case_bbs & workflow_bbs).uniq
+    end
+
+    bb_products = Product.all
+    if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
+      bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
+    end
+    
+    product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+
+    if filter_set || product_filter_set
+      product_ids = (sdg_products.ids & bb_products.ids & product_ids).uniq
+      products = Product.where(id: product_ids)
+    else
+      products = Product.all.order(:slug)
+    end
+    products
+  end
 
     def load_maturity
       @osc_maturity = YAML.load_file("config/maturity_osc.yml")

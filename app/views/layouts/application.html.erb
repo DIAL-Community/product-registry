@@ -29,18 +29,38 @@
         gtag('config', '<%= Rails.application.secrets.google_tracker %>');
       </script>
     <% end %>
-    
+
   </head>
 
   <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
-    <%= render '/shared/header' %>
-    <div id="content" class="container">
-      <% if current_page?(:controller => '/about', :action => 'index') %>
+    <%= render '/shared/topnav' %>
+    <% if current_page?('/about') || current_page?(root_path) %>
+      <div id="content" class="container">
         <%= render '/shared/sidenav' %>
-      <% end %>
-    
-      <%= yield %>
-    </div>
+        <%= yield %>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+      </div>
+    <% elsif display_sidenav %>
+      <div id="content" class="container">
+        <%= yield %>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+      </div>
+    <% else %>
+      <div id="content" class="container-fluid">
+        <div class="row">
+          <div class="col-3 nav-container bg-dark">
+            <%= render '/shared/filternav' %>
+          </div>
+          <div class="col-9">
+            <%= render '/shared/summarynav' %>
+            <%= render '/shared/activefilter' %>
+            <%= yield %>
+          </div>
+        </div>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+      </div>
+    <% end %>
+
     <%= render '/shared/footer' %>
   </body>
 </html>

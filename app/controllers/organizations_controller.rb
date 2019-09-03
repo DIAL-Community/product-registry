@@ -11,45 +11,37 @@ class OrganizationsController < ApplicationController
       @organizations = Organization
       @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
       @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
-      @organizations = @organizations.eager_load(:sectors, :locations).order(:name);
+      @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
       authorize @organizations, :view_allowed?
       return
     end
 
-    if params[:filter]
-      locations = params[:locations].reject{|x| x.nil? || x.blank? }
-      products = params[:products].reject{|x| x.nil? || x.blank? }
-      sectors = params[:sectors].reject{|x| x.nil? || x.blank? }
-      years = params[:years].reject{|x| x.nil? || x.blank? }
+    @organizations = search_organizations
+    params[:search].present? && @organizations = @organizations.name_contains(params[:search])
+    authorize @organizations, :view_allowed?
+  end
 
-      @organizations = Organization.all
-      @organizations = @organizations.where('extract(year from when_endorsed) in (?)', years)\
-        if !years.empty?
-      @organizations = @organizations.name_contains(params[:search])\
-        if params[:search].present? && !params[:search].blank?
-      @organizations = @organizations.where(is_endorser: true)\
-        if params[:endorser_only].present?
-      @organizations = @organizations.joins(:locations).where("locations.id in (?)", locations)\
-        if !locations.empty?
-      @organizations = @organizations.joins(:sectors).where("sectors.id in (?)", sectors)\
-        if !sectors.empty?
-      @organizations = @organizations.joins(:products).where("products.id in (?)", products)\
-        if !products.empty?
-      authorize @organizations, :view_allowed?
-      return
-    end
+  def count
+    organizations = search_organizations
+    authorize organizations, :view_allowed?
+    render json: organizations.count
+  end
 
-    if params[:search]
-      @organizations = Organization
-          .where(nil)
-          .name_contains(params[:search])
-          .order(:name)
-      authorize @organizations, :view_allowed?
-    else
-      @organizations = Organization
-          .order(:slug)
-      authorize @organizations, :view_allowed?
-    end
+  def search_organizations
+    organizations = Organization.all.order(:slug)
+
+    endorser_only = sanitize_session_value 'endorser_only'
+    countries = sanitize_session_values 'countries'
+    products = sanitize_session_values 'products'
+    sectors = sanitize_session_values 'sectors'
+    years = sanitize_session_values 'years'
+
+    endorser_only && organizations = organizations.where(is_endorser: true)
+    !countries.empty? && organizations = organizations.joins(:locations).where('locations.id in (?)', countries)
+    !products.empty? && organizations = organizations.joins(:products).where('products.id in (?)', products)
+    !sectors.empty? && organizations = organizations.joins(:sectors).where('sectors.id in (?)', sectors)
+    !years.empty? && organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
+    organizations
   end
 
   def export

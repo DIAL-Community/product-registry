@@ -1,0 +1,45 @@
+<div id="header-outer" data-turbolinks-permanent>
+  <div id="header-widget">
+    <nav id="header" class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container-fluid">
+        <a href="/">
+          <%= image_tag "logo-dial.svg", :alt => "DIAL Logo", :width => "231px", :height => "86px" %>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav ml-auto">
+            <% if user_signed_in? %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle-avatar" data-toggle="dropdown" href="#" role="button">
+                  <div class="avatar-circle">
+                    <span class="initials">
+                      <%= current_user.email[0].upcase %>
+                    </span>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
+                  <div class="dropdown-divider"></div>
+                  <% if (policy(current_user).index?) %>
+                    <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.location').to_s.pluralize.titlecase, locations_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
+                    <div class="dropdown-divider"></div>
+                  <% end %>
+                  <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+                </div>
+              </li>
+            <% else %>
+              <li class="mt-1">
+                <strong><%= link_to t('view.header.login'), new_user_session_path, :class => 'nav-link' %></strong>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
