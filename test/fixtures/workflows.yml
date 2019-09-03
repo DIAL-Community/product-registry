@@ -4,8 +4,10 @@ one:
   name: Workflow1
   slug: slug1
   description: '{}'
+  use_cases: one
 
 two:
   name: Workflow2
   slug: slug2
   description: '{}'
+  use_cases: two

@@ -1,55 +1,43 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<% if user_signed_in? && policy(Workflow).mod_allowed? %>
-  <%= link_to t('view.general.create'), new_workflow_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
-<% end %>
-<div class="float-right pb-2">
-  <%= form_tag(workflows_path, :method => "get", id: "search-form", class: "form-inline") do %>
-    <%= text_field_tag :search, params[:search], class: "form-control",
-        placeholder: t('view.general.search-placeholder', model: t('model.workflow').to_s.pluralize) %>
-    <div class="input-group-append">
-        <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
-    </div>
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(Workflow).mod_allowed? %>
+      <%= link_to t('view.general.create'), new_workflow_path, :class => 'float-right small ml-1' %>
     <% end %>
+  </div>
 </div>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th><%= t('view.general.name') %></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="row">
+  <% if @workflows.count > 0 %>
+    <% @workflows.each do |workflow| %>
+      <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
+        <div class="card index-card">
+          <div class="card-header bg-secondary text-white small">
+            <%= link_to truncate(workflow.name, length: 23, omission: '&hellip;', escape: false), workflow,
+                'title' => workflow.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+          </div>
+          <div class="model-logo">
+            <%= link_to(workflow) do %>
+              <%= image_tag(workflow.image_file, class: 'card-img-top align-middle') %>
+            <% end %>
+          </div>
 
-  <tbody>
-    <% if @workflows.count > 0 %>
-      <% @workflows.each do |workflow| %>
-        <tr>
-          <td><%= workflow.name %></td>
-          <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">
-              <%= t('view.general.action') %>
-            </a>
-            <div class="dropdown-menu">
-              <%= link_to t('view.general.view') , workflow, :class =>"dropdown-item"  %>
-              <% if user_signed_in? && policy(workflow).mod_allowed? %>
-                <%= link_to t('view.general.edit') , edit_workflow_path(workflow), :class =>"dropdown-item"  %>
-                <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete') , workflow, method: :delete, data: { confirm: t('view.general.delete-confirm')  }, :class =>"dropdown-item"  %>
-              <% end %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan="4">
-          <small class="text-muted"><%= t('view.workflow.index.no-data') %></small>
-        </td>
-      </tr>
+          <div class="card-footer">
+            <small>
+              <div class="row">
+                <div class="col-12">
+                  <%= "#{workflow.use_cases.size} #{t('model.use-case').to_s.pluralize(workflow.use_cases.size)}" %>,
+                </div>
+                <div class="col-12">
+                  <%= "#{workflow.building_blocks.size}  #{t('model.building-block').to_s.pluralize(workflow.building_blocks.size)}" %>
+                </div>
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </tbody>
-</table>
-<%= will_paginate @workflows, :class => "float-right digg-pagination" %>
+  <% end %>
+</div>

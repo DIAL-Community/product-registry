@@ -5,27 +5,21 @@ class BuildingBlocksController < ApplicationController
   # GET /building_blocks
   # GET /building_blocks.json
   def index
-    if params[:without_paging]
-      @building_blocks = BuildingBlock
-        .name_contains(params[:search])
-        .order(:name)
-      authorize @building_blocks, :view_allowed?
-      return
-    end
+    @building_blocks = filter_building_blocks.order(:name)
 
     if params[:search]
-      @building_blocks = BuildingBlock
-        .where(nil)
-        .name_contains(params[:search])
-        .order(:name)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @building_blocks, :view_allowed?
-    else
-      @building_blocks = BuildingBlock
-        .order(:name)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @building_blocks, :view_allowed?
+      @building_blocks = @building_blocks.where('LOWER("building_blocks"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
+
+    @building_blocks = @building_blocks.eager_load(:workflows, :products)
+    authorize @building_blocks, :view_allowed?
+  end
+
+  def count
+    @building_blocks = filter_building_blocks
+
+    authorize @building_blocks, :view_allowed?
+    render json: @building_blocks.count
   end
 
   # GET /building_blocks/1
@@ -148,6 +142,59 @@ class BuildingBlocksController < ApplicationController
   end
 
   private
+
+    def filter_building_blocks
+
+      use_cases = sanitize_session_values 'use_cases'
+      workflows = sanitize_session_values 'workflows'
+      sdgs = sanitize_session_values 'sdgs'
+      bbs = sanitize_session_values 'building_blocks'
+      products = sanitize_session_values 'products'
+      origins = sanitize_session_values 'origins'
+      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+
+      filter_set = true;
+      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
+        filter_set = false;
+      end
+
+      sdg_workflows = get_workflows_from_sdgs(sdgs)
+      use_case_workflows = get_workflows_from_use_cases(use_cases)
+
+      if (!workflows.empty?)
+        filter_workflows = Workflow.all.where('id in (?)', workflows)
+        workflow_ids = (filter_workflows.ids & use_case_workflows & sdg_workflows).uniq
+      else 
+        workflow_ids = (use_case_workflows & sdg_workflows).uniq
+      end
+
+      bb_workflows = BuildingBlock.all
+      if !use_cases.empty? || ! workflows.empty? || !sdgs.empty?
+        bb_workflows = BuildingBlock.all.where('id in (select building_block_id from workflows_building_blocks where workflow_id in (?))', workflow_ids)
+      end
+
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+
+      bb_products = BuildingBlock.all
+      if !products.empty? || !origins.empty? || with_maturity_assessment
+        bb_products = BuildingBlock.all.where('building_blocks.id in (select building_block_id from products_building_blocks where product_id in (?))', product_ids)
+      end
+
+      filter_bbs = BuildingBlock.all
+      if(!bbs.empty?) 
+        filter_bbs = BuildingBlock.all.where('id in (?)', bbs).order(:slug)
+      end
+
+      if (filter_set)
+        ids = (bb_workflows & bb_products & filter_bbs).uniq
+        building_blocks = BuildingBlock.where(id: ids)
+      else 
+        building_blocks = BuildingBlock.all.order(:slug)
+      end
+
+      building_blocks
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])

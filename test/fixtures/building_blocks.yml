@@ -3,7 +3,9 @@
 one:
   name: BuildingBlock1
   slug: bb1
+  workflows: one
 
 two:
   name: BuildingBlock2
   slug: bb2
+  workflows: two
