@@ -109,9 +109,10 @@ en:
         bb-product-popover:
           one: Example of Existing Software
           other: Example of Existing Softwares
+        bb-workflow: "Example workflow: "
         bb-workflow-popover:
           one: Mapping to Associated Workflow
-          other: Mapping to Associated Workflow
+          other: Mapping to Associated Workflows
     contact:
       form:
         email: Email
