@@ -1,10 +1,60 @@
 #header {
     background-color: #000043;
-    margin-bottom: 1rem;
 }
 
 #header .dropdown-item {
     color: #000043;
+}
+
+#filter-nav {
+  option {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .remove-filter {
+    cursor: pointer;
+  }
+
+  .accordion-body {
+    overflow: hidden;
+  }
+}
+
+#summary-nav {
+  font-size: .9rem;
+  font-weight: bolder;
+
+  .badge {
+    font-size: .9rem;
+  }
+
+  .list-group-item {
+    border: 0px;
+    padding: 0.25rem;
+    white-space: nowrap;
+
+    &:first-child {
+      border-left: 0px;
+    }
+  }
+}
+
+#active-filter {
+  .close-icon {
+    cursor: pointer;
+  }
+
+  .more-others {
+    font-style: italic;
+    cursor: pointer;
+  }
+
+  .list-group-item {
+    border: 0px;
+    display: list-item;
+    padding: 0.25rem;
+  }
 }
 
 .navbar-nav {

@@ -75,6 +75,30 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to building_blocks_url
   end
 
+  test "add building block filter" do
+    # With no filters, should load 2 building blocks
+    get building_blocks_url
+    assert_equal(2, assigns(:building_blocks).count)
+    bb1 = assigns(:building_blocks)[0]
+    bb2 = assigns(:building_blocks)[1]
+
+    param = {'filter_name' => 'building_blocks', 'filter_value' => bb1.id, 'filter_label' => bb1.name}
+    post "/add_filter", params: param
+
+    # Filter is set, should only load 1
+    get building_blocks_url
+    assert_equal(1, assigns(:building_blocks).count)
+
+    # Now add a workflow filter
+    param = {'filter_name' => 'workflows', 'filter_value' => bb2.workflows[0].id, 'filter_label' => bb2.workflows[0].name}
+    post "/add_filter", params: param
+
+    # With additional filter, should now load 0
+    get building_blocks_url
+    assert_equal(0, assigns(:building_blocks).count)
+
+  end
+
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
