@@ -27,8 +27,21 @@ module ApplicationHelper
   def build_breadcrumbs(params)
     base_path = params[:controller]
     base_path == 'users' && base_path = 'admin/users'
+
+    object_class = params[:controller].classify.constantize
+    object_class.column_names.include?('slug') && object_record = object_class.find_by(slug: params[:id])
+    if object_record.nil? && params[:id].scan(/\D/).empty?
+      object_record = object_class.find(params[:id])
+    end
+
+    if base_path == 'admin/users'
+      id_label = object_record.email
+    else
+      id_label = object_record.name
+    end
+
     { base_path: base_path, base_label: params[:controller].titlecase,
-      id_path: "#{base_path}/#{params[:id]}", id_label: params[:id].titlecase }
+      id_path: "#{base_path}/#{params[:id]}", id_label: id_label }
   end
 
   def format_filter(filter_name)
