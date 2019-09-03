@@ -16,7 +16,6 @@
           <div class="col-12">
             <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
-              <%= label_tag "sdgs", t('view.filternav.sdgs') %>:
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
                   { class: 'form-control filter-element' }) %>
@@ -39,7 +38,6 @@
           <div class="col-12">
             <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
-              <%= label_tag "use_cases", t('view.filternav.use_cases') %>:
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
                   { class: 'form-control filter-element' }) %>
@@ -62,7 +60,6 @@
           <div class="col-12">
             <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
-              <%= label_tag "building_blocks", t('view.filternav.building_blocks') %>:
               <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
                   { class: 'form-control filter-element' }) %>
@@ -85,7 +82,6 @@
           <div class="col-12">
             <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
-              <%= label_tag "workflows", t('view.filternav.workflows') %>:
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.workflow') },
                   { class: 'form-control filter-element' }) %>
@@ -158,7 +154,6 @@
           <div class="col-12">
             <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
-              <%= label_tag "countries", t('view.filternav.geographies') %>:
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.country') },
                   { class: 'form-control filter-element' }) %>
@@ -180,7 +175,6 @@
           <div class="col-12">
             <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
-              <%= label_tag "sectors", t('view.filternav.sectors') %>:
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sector') },
                   { class: 'form-control filter-element' }) %>
