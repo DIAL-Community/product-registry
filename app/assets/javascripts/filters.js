@@ -54,7 +54,9 @@ var prepareFilters = function() {
 
     $('.clear-all').on('click', function() {
         filterList = [];
-        $(this).parent().parent().find('.remove-filter').each(function(index) {
+        $(this).parents(".row").next('.row').find('.remove-filter').each(function(index) {
+            const card = $(this).closest('.badge');
+            card.fadeOut();
             // collect all of the filters to remove
             filterId = $(this).attr('id').split('-');
             filterLabel = $(this).attr('name');
@@ -62,7 +64,7 @@ var prepareFilters = function() {
             filterList.push(currFilter);
         });
 
-        $(this).parent().parent().find('input.filter-element').each(function() {
+        $(this).parents(".row").next('.row').find('input.filter-element').each(function() {
           filterId = $(this).attr('id');
           filterList.push({ filter_name: filterId });
         });

@@ -14,7 +14,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
@@ -36,7 +36,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
@@ -58,7 +58,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
@@ -80,7 +80,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.workflow') },
@@ -102,7 +102,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= label_tag "origins", t('view.product.index.sources') %>
               <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
@@ -152,7 +152,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.country') },
@@ -173,7 +173,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sector') },
@@ -194,7 +194,7 @@
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
           <div class="col-12">
-            <a class="float-right small" href="#"><%= t('view.filternav.clear') %></a>
+            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= label_tag "years", t('view.organization.index.endorsed-date') %>
               <%= select(nil, "years",
