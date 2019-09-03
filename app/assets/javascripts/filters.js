@@ -62,7 +62,7 @@ var prepareFilters = function() {
             filterList.push(currFilter);
         });
 
-        $(this).parents(".row").next('.row').find('input.filter-element').each(function() {
+        $(this).parents(".accordion-body").find('input.filter-element').each(function() {
           filterId = $(this).attr('id');
           filterList.push({ filter_name: filterId });
         });
