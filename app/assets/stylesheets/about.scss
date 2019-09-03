@@ -61,3 +61,17 @@
 .text-left {
     text-align: left !important;
 }
+
+.icon-inline {
+  display: inline;
+}
+
+.top-no-hover {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.no-hover:hover {
+  text-decoration: none !important;
+}
