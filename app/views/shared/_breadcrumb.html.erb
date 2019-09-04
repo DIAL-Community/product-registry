@@ -1,0 +1,27 @@
+<% #  style="top: 102px; position: sticky; z-index: 1024;" %>
+<nav id="breadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="/">
+        <%= t('view.breadcrumb.home') %>
+      </a>
+    </li>
+    <% breadcrumbs = build_breadcrumbs(params) %>
+    <li class="breadcrumb-item">
+      <a href='/<%= breadcrumbs[:base_path] %>'>
+        <%= breadcrumbs[:base_label] %>
+      </a>
+    </li>
+    <% if params[:id] && params[:action] == 'show'%>
+      <li class="breadcrumb-item active" aria-current="page">
+        <%= breadcrumbs[:id_label] %>
+      </li>
+    <% else %>
+      <li class="breadcrumb-item" aria-current="page">
+        <a href='/<%= breadcrumbs[:id_path] %>'>
+          <%= breadcrumbs[:id_label] %>
+        </a>
+      </li>
+    <% end %>
+  </ol>
+</nav>

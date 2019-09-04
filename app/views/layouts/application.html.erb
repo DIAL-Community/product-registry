@@ -45,6 +45,12 @@
         <%= yield %>
         <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
       </div>
+    <% elsif display_breadcrumb %>
+      <div id="content" class="container">
+        <%= render '/shared/breadcrumb' %>
+        <%= yield %>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+      </div>
     <% else %>
       <div id="content" class="container-fluid">
         <div class="row">

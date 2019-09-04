@@ -7,6 +7,7 @@ module ApplicationHelper
   include Modules::Constants
 
   ADMIN_NAV_CONTROLLERS = %w[locations users sectors].freeze
+  ACTION_WITH_BREADCRUMBS = %w[show edit create].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/registrations', 'devise/confirmations'].freeze
 
   def all_filters
@@ -15,7 +16,31 @@ module ApplicationHelper
 
   def display_sidenav
     current_page?('/map') || DEVISE_CONTROLLERS.include?(params[:controller]) ||
-      ADMIN_NAV_CONTROLLERS.include?(params[:controller])
+      (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
+  end
+
+  def display_breadcrumb
+    ACTION_WITH_BREADCRUMBS.include?(params[:action])
+  end
+
+  def build_breadcrumbs(params)
+    base_path = params[:controller]
+    base_path == 'users' && base_path = 'admin/users'
+    { base_path: base_path, base_label: params[:controller].titlecase,
+      id_path: "#{base_path}/#{params[:id]}", id_label: params[:id].titlecase }
+  end
+
+  def filter_count(filter_name)
+    active_filters = session[filter_name]
+
+    counter = 0
+    unless active_filters.nil?
+      counter = 1
+      if active_filters.is_a?(Array)
+        counter = active_filters.size
+      end
+    end
+    counter
   end
 
   def format_filter(filter_name)

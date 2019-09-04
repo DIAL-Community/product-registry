@@ -3,7 +3,7 @@ var addToList = function(filterId, values) {
         $("#"+filterId).prop("checked", values.value === 'true');
     } else {
         values.map(function(currValue) {
-            $('#' + filterId).parent().append(
+            $('#' + filterId).parents(".row").next('.row').find('.badges').append(
               '<span class="badge badge-secondary filter-tag">' +
               currValue.label +
               '<i name="' + currValue.label + '" id="remove-' + filterId + '-' + currValue.value + '" class="fas fa-window-close remove-filter"></i>' +
@@ -54,7 +54,7 @@ var prepareFilters = function() {
 
     $('.clear-all').on('click', function() {
         filterList = [];
-        $(this).parent().parent().find('.remove-filter').each(function(index) {
+        $(this).parents(".accordion-body").find('.remove-filter').not('input').each(function() {
             // collect all of the filters to remove
             filterId = $(this).attr('id').split('-');
             filterLabel = $(this).attr('name');
@@ -62,14 +62,17 @@ var prepareFilters = function() {
             filterList.push(currFilter);
         });
 
-        $(this).parent().parent().find('input.filter-element').each(function() {
+        $(this).parents(".accordion-body").find('input.filter-element').each(function() {
           filterId = $(this).attr('id');
           filterList.push({ filter_name: filterId });
         });
 
         if (filterList.length > 0) {
             $.post('/remove_filter', { filter_array: filterList }, function() {
-                window.location.reload(true);
+              const card = $(this).parents(".row").next('.row');
+              card.fadeOut();
+              
+              window.location.reload(true);
             });
         }
     });

@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
 
   def remove_filter
     return unless params.key? 'filter_array'
+
     filter_array = params['filter_array']
     filter_array.each do | filter_item |
       curr_filter = filter_array[filter_item]
@@ -38,10 +39,13 @@ class ApplicationController < ActionController::Base
       else
         session.delete(curr_filter['filter_name'])
       end
+
       if filter_name == 'products' || filter_name == 'origins' || filter_name == 'with_maturity_assessment'
         cookies[:updated_prod_filter] = true
       end
     end
+
+    render json: true
   end
 
   def add_filter
