@@ -45,9 +45,9 @@
             <%
               counter = filter_count('use_cases')
               if counter > 0
-                concat "<span id='accordian-use-cases-count' class='badge badge-light'>#{counter}</span>".html_safe 
+                concat "<span id='accordian-use_cases-count' class='badge badge-light'>#{counter}</span>".html_safe 
               else 
-                concat "<span id='accordian-use-cases-count' class='badge badge-light'></span>".html_safe 
+                concat "<span id='accordian-use_cases-count' class='badge badge-light'></span>".html_safe 
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
@@ -78,9 +78,9 @@
           <%
             counter = filter_count('building_blocks')
             if counter > 0
-              concat "<span id='accordian-building-blocks-count' class='badge badge-light'>#{counter}</span>".html_safe 
+              concat "<span id='accordian-building_blocks-count' class='badge badge-light'>#{counter}</span>".html_safe 
             else 
-              concat "<span id='accordian-building-blocks-count' class='badge badge-light'></span>".html_safe 
+              concat "<span id='accordian-building_blocks-count' class='badge badge-light'></span>".html_safe 
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>
