@@ -8,11 +8,11 @@
     <% end %>
     <%= form_with(url: export_path, :method => :get, :data => {remote: false}, :class => 'inline-form'  ) do | form | %>
       <%= form.hidden_field :export_contacts, :value => false %>
-      <%= form.submit t('view.organization.index.export'), :class => 'float-right small ml-1', data: { disable_with: false } %>
+      <%= form.submit t('view.organization.index.export'), class: 'btn btn-link float-right pt-0', style: 'color: #fbab18', data: { disable_with: false } %>
       <% if user_signed_in? && policy(Organization).export_contacts_allowed? %>
-        <fieldset class="form-group form-check">
-          <%= form.check_box :export_contacts, {}, true, false %>
-          <label class="form-label-group text-muted mt-2" for="is_approved">
+        <fieldset class="form-check">
+          <%= form.check_box :export_contacts, {id: 'export_contacts', class: "form-check-input checkbox-align"}, true, false %>
+          <label class="form-check-label text-muted" for="export_contacts">
             <%= t('view.organization.index.export-option') %>
           </label>
         </fieldset>
