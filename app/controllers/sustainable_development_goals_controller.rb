@@ -63,7 +63,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
       product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
 
       product_sdgs = SustainableDevelopmentGoal.all
-      if product_filter_set
+      if product_filter_set == true
         product_sdgs = SustainableDevelopmentGoal.all.where('sustainable_development_goals.id in (select sustainable_development_goal_id from products_sustainable_development_goals where product_id in (?))', product_ids)
       end
 
