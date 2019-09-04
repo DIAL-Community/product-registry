@@ -37,13 +37,13 @@ div.nav-container {
       color: white;
       margin: 0 !important;
       border-top: none;
-      border-bottom:  solid 1px rgb(70, 70, 70) !important;
-      border-left:  solid 1px rgb(70, 70, 70) !important;
-      border-right:  solid 1px rgb(70, 70, 70) !important;
       border-radius: 0 !important;
 
       &.ui-accordion-header-active {
         border-bottom: none !important;
+        border-bottom:  solid 1px rgb(70, 70, 70) !important;
+        border-left:  solid 1px rgb(70, 70, 70) !important;
+        border-right:  solid 1px rgb(70, 70, 70) !important;
       }
     }
 
