@@ -38,6 +38,7 @@ div.nav-container {
       margin: 0 !important;
       border: none;
       border-radius: 0 !important;
+      border: solid 1px #343a40;
 
       &.ui-state-hover.ui-accordion-header-collapsed {
         border: solid 1px rgb(70, 70, 70);
