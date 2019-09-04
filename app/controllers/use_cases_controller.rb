@@ -175,8 +175,8 @@ class UseCasesController < ApplicationController
       end
 
       workflow_use_cases = UseCase.all
-      if product_filter_set || ! workflows.empty? || !bbs.empty?
-        workflow_use_cases = UseCase.all.joins(:workflows).where('workflow_id in (?)', workflow_ids)
+      if (product_filter_set == true || !workflows.empty? || !bbs.empty?)
+        workflow_use_cases = UseCase.all.where('id in (select use_case_id from workflows_use_cases where workflow_id in (?))', workflow_ids)
       end 
 
       filter_use_case = UseCase.all
@@ -185,7 +185,7 @@ class UseCasesController < ApplicationController
       end
 
       if (filter_set)
-        ids = (sdg_use_cases & workflow_use_cases & filter_use_case).uniq
+        ids = (sdg_use_cases.ids & workflow_use_cases.ids & filter_use_case.ids).uniq
         all_use_cases = UseCase.where(id: ids)
       else 
         all_use_cases = UseCase.all.order(:slug)

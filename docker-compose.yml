@@ -24,6 +24,7 @@ services:
   restart: always
   volumes:
    - .:/t4d
+   - ./prod/logrotate.d/registry:/etc/logrotate.d/registry
   ports:
    - 3000:3000
   depends_on:
