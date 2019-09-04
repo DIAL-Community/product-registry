@@ -2,10 +2,10 @@
 
 one:
   name: BuildingBlock1
-  slug: bb1
+  slug: elearning
   workflows: one
 
 two:
   name: BuildingBlock2
-  slug: bb2
+  slug: bb_placeholder
   workflows: two
