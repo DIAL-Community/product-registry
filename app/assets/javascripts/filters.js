@@ -14,6 +14,40 @@ var addToList = function(filterId, values) {
     }
 }
 
+var incrementFilterCount = function(filterId) {
+  if (filterId == "products") {
+    filterId = "origins"
+  }
+  currVal = parseInt($("#accordian-"+filterId+"-count").html())
+  if (!currVal) {
+    currVal = 0
+  }
+  $("#accordian-"+filterId+"-count").html(currVal+1)
+}
+
+var decrementFilterCount = function(filterId) {
+  if (filterId == "products") {
+    filterId = "origins"
+  }
+  currVal = parseInt($("#accordian-"+filterId+"-count").html())
+  if (currVal == 1) {
+    $("#accordian-"+filterId+"-count").html("")
+  } else {
+    $("#accordian-"+filterId+"-count").html(currVal-1)
+  }
+}
+
+var clearFilterCount = function(filterId) {
+  if (filterId == "products") {
+    filterId = "origins"
+  }
+  $("#accordian-"+filterId+"-count").html("")
+}
+
+var clearFilterItems = function(filterId) {
+  $('#' + filterId).parents(".row").next('.row').find('.badges').remove()
+}
+
 var removeFilter = function(event) {
     $.post('/remove_filter', { filter_array: [ {
         filter_name: event.data.id,
@@ -23,6 +57,7 @@ var removeFilter = function(event) {
         const card = $(event.target).closest('.badge');
         card.fadeOut();
         updateCount();
+        decrementFilterCount(event.data.id)
         loadMainDiv();
     });
 
@@ -37,6 +72,7 @@ var addFilter = function(id, value, label) {
         updateCount();
         currValue = [{ value: value, label: label }]
         addToList(id, currValue)
+        incrementFilterCount(id)
         loadMainDiv();
     });
 }
@@ -81,6 +117,7 @@ var prepareFilters = function() {
         const card = $(elem).closest('.badge');
         card.remove();
       });
+      clearFilterCount(filterId[1])
       filter_array = []
       if (filter_name == 'organizations') {
         filter_array.push({filter_name: 'years'})

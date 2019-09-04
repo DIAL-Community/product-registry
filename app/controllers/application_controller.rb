@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
       else
         filter_obj = Hash.new
         existing_value = session[filter_name.to_s]
-        existing_value.delete(filter_obj)
+        existing_value && existing_value.delete(filter_obj)
         session.delete(filter_name.to_s)
       end
       update_cookies(filter_name)

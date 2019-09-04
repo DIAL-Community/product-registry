@@ -16,6 +16,8 @@ const removeActiveFilter = function(event) {
     $(li).fadeOut();
     updateCount();
     loadMainDiv();
+    clearFilterCount(filter_name);
+    clearFilterItems(filter_name)
   });
 };
 
