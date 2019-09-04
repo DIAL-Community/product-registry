@@ -36,14 +36,18 @@ div.nav-container {
     .ui-accordion-header {
       color: white;
       margin: 0 !important;
-      border-top: none;
+      border: none;
       border-radius: 0 !important;
 
+      &.ui-state-hover.ui-accordion-header-collapsed {
+        border: solid 1px rgb(70, 70, 70);
+      }
+
       &.ui-accordion-header-active {
-        border-bottom: none !important;
-        border-bottom:  solid 1px rgb(70, 70, 70) !important;
-        border-left:  solid 1px rgb(70, 70, 70) !important;
-        border-right:  solid 1px rgb(70, 70, 70) !important;
+        border-top:  solid 1px rgb(70, 70, 70);
+        border-left:  solid 1px rgb(70, 70, 70);
+        border-right:  solid 1px rgb(70, 70, 70);
+        border-bottom: none;
       }
     }
 
