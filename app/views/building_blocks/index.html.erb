@@ -30,7 +30,7 @@
               products = footer(building_block, 'products')
               if products.count > 0
                 content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{footer_image_popover(products)}'>"
+                                data-html='true' data-content='#{footer_image_popover(products, 'view.building-block.index.bb-product-popover')}'>"
                 concat(content.html_safe)
 
                 products.each do |product|
@@ -43,13 +43,16 @@
               workflows = footer(building_block, 'workflows')
               if workflows.count > 0
                 content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{footer_image_popover(workflows)}'>"
+                                data-html='true' data-content='#{footer_image_popover(workflows, 'view.building-block.index.bb-workflow-popover')}'>"
                 concat(content.html_safe)
+                concat(image_tag(workflows[0][:filename], class: 'footer-img'))
+                concat(" #{building_block.workflows.size} #{t('model.workflow').titlecase.pluralize(building_block.workflows.size)}")
 
-                workflows.each do |workflow|
-                  concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-                                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-                end
+                # When we have image for each workflow, we can use the following code.
+                # workflows.each do |workflow|
+                #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
+                #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                # end
                 concat('</div>'.html_safe)
               end
 

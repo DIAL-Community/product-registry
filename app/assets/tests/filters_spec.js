@@ -8,20 +8,23 @@ describe('filters.js:', function() {
     xhr.onCreate = function (req) { requests.push(req); };
 
     fixture.set(
-      '<div class="row">' +
-      '<div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#">Clear</a></div>' +
-      '</div>' +
-      '<div class="form-row">' +
-      '<div class="col-12">' +
-        '<div class="form-group">'+
-          '<label for="sectors">Sectors</label>' +
-          '<input name="sectors[]" type="hidden" value=""></input>' +
-          '<select multiple="multiple" class="custom-select filter-element" name="sectors[]" id="sectors">' +
-          '<option value="1">Advocacy</option>' +
-          '<option value="2">Agriculture</option>' +
-          '<option value="3">Anti-corruption</option>' +
+        '<div class="row">' +
+          '<div class="col-md-4 offset-md-8 text-muted clear-all"><a href="#">Clear</a></div>' +
+          '<div class="col-12">' +
+            '<div class="form-group">'+
+              '<label for="sectors">Sectors</label>' +
+              '<input name="sectors[]" type="hidden" value=""></input>' +
+              '<select multiple="multiple" class="custom-select filter-element" name="sectors[]" id="sectors">' +
+              '<option value="1">Advocacy</option>' +
+              '<option value="2">Agriculture</option>' +
+              '<option value="3">Anti-corruption</option>' +
+              '</select>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-      '</div>'
+        '<div class="row">' +
+          '<div id="test" class="col-12 badges">a</div>' +
+        '</div>'
     );
 
     prepareFilters();
@@ -53,7 +56,7 @@ describe('filters.js:', function() {
     newFilter.push({value: "test", label: "test"})
     addToList('sectors', newFilter);
 
-    expect($(".remove-filter", fixture.el).attr('id')).to.be("remove-sectors-test");
+    expect($(".remove-filter").attr('id')).to.be("remove-sectors-test");
 
   });
 

@@ -30,6 +30,7 @@ class ApplicationController < ActionController::Base
 
   def remove_filter
     return unless params.key? 'filter_array'
+
     filter_array = params['filter_array']
     filter_array.each do | filter_item |
       curr_filter = filter_array[filter_item]
@@ -50,6 +51,8 @@ class ApplicationController < ActionController::Base
       end
       update_cookies(filter_name)
     end
+
+    render json: true
   end
 
   def add_filter

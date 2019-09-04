@@ -14,7 +14,7 @@ module BuildingBlocksHelper
       building_block.workflows.each do |workflow|
         next if workflow.nil?
 
-        tooltip = t('view.building-block.index.bb-product') + workflow.name
+        tooltip = t('view.building-block.index.bb-workflow') + workflow.name
         image = Hash[filename: workflow.image_file, tooltip: tooltip, id: workflow.id, controller: 'workflows']
         images.push(image)
       end
@@ -22,9 +22,9 @@ module BuildingBlocksHelper
     images
   end
 
-  def footer_image_popover(elements)
+  def footer_image_popover(elements, title)
     content = '<div class="border rounded bg-secondary text-white clearfix border card-header">' +
-              t('view.building-block.index.bb-product-popover', count: elements.count) +
+              t(title, count: elements.count) +
               '</div><div>' + format_image_popover(elements) + '</div>'
     content.html_safe
   end

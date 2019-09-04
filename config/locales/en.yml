@@ -59,6 +59,7 @@ en:
     about:
       sdg_title: "SDG Digital Investment Framework"
       sdg_subtitle: "A Whole-of-Government Approach to Coordinating Investment in Digital Technologies to Achieve the SDGs"
+      enter_catalog: "Explore the Catalog"
       explanation1: "Despite significant investment, we have not seen true scale in software platforms and we have not seen coordinated investment in products designed to meet the SDGs. Digital investments and implementations are most often siloed by sector, resulting in significant fragmentation and duplication of effort."
       explanation2: "This fragmentation makes it difficult for governments to understand where common products could be used, allowing for a whole-of-government approach to investing in digital infrastructure that can deliver reusable digital services at scale with a greater return on investment."
       explanation3: "This online tool introduces four interrelated layers - providing a step-by-step process allowing organizations to begin to plan enterprise architecture and accelerate progress toward the SDGs."
@@ -109,9 +110,10 @@ en:
         bb-product-popover:
           one: Example of Existing Software
           other: Example of Existing Softwares
+        bb-workflow: "Example workflow: "
         bb-workflow-popover:
           one: Mapping to Associated Workflow
-          other: Mapping to Associated Workflow
+          other: Mapping to Associated Workflows
     contact:
       form:
         email: Email
@@ -268,6 +270,8 @@ en:
       years:
         one: Year Endorsed
         other: Years Endorsed
+    breadcrumb:
+      home: Home
     sdg:
       index:
         no-data: We couldn't find a sustainable development goal matching the search phrase.

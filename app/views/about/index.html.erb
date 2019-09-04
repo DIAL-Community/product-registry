@@ -2,13 +2,19 @@
     <%= image_tag("ict_cover.png", class:'jarallax-img') %>
     <div class="mask purple-slight" style="height: 100vh;">
     <div class="container flex-center text-center">
-        <div class="row mt-4">
+      <div class="top-no-hover">
+      <%= link_to products_path, class: 'no-hover' do %>
+        <h5 class="text-white icon-inline"><%= t("view.about.enter_catalog") %></h5>
+        <i class="fas fa-external-link-alt text-white icon-inline"></i>
+      <% end %>
+      </div>
+      <div class="row mt-4">
         <div class="col-md-12 col-xl-8 mx-auto">
-            <h1 class="display-3 font-weight-bold mb-2 text-white"><%= t('view.about.sdg_title') %></h1>
-            <h3 class="text-white"><%= t('view.about.sdg_subtitle') %></h3>
-            </h1>
+          <h1 class="display-3 font-weight-bold mb-2 text-white"><%= t('view.about.sdg_title') %></h1>
+          <h3 class="text-white"><%= t('view.about.sdg_subtitle') %></h3>
+          </h1>
         </div>
-        </div>
+      </div>
     </div>
     </div>
 </div>
