@@ -234,7 +234,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_bbs_from_products(products, filters_set)
-    if filters_set
+    if filters_set == true
       product_bbs = BuildingBlock.all.where('id in (select building_block_id from products_building_blocks where product_id in (?))', products)
     else
       product_bbs = BuildingBlock.all
