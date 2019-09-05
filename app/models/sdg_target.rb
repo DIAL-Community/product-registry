@@ -7,7 +7,7 @@ class SdgTarget < ApplicationRecord
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
 
   def image_file
-    png_filename = "GOAL_#{sdg_number}_TARGET_#{target_number.upcase}.png"
+    png_filename = "goal_#{sdg_number}_target_#{target_number}.png"
     if File.exist?(File.join('app', 'assets', 'images', 'sdg_targets', png_filename))
       return "sdg_targets/#{png_filename}"
     else

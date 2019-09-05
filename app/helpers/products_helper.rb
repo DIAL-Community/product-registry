@@ -77,9 +77,9 @@ module ProductsHelper
         content += '<p class="footer-score-large">'+image["filename"].to_s+'</p></div>'
       else
         if image["id"]
-          content += link_to image_tag(image["filename"], class: 'popover-image-only', 'title' => image["tooltip"]), {action:'show', controller: image["controller"], id: image["id"]}
+          content += link_to image_tag(image["filename"], class: 'popover-image', 'title' => image["tooltip"]), {action:'show', controller: image["controller"], id: image["id"]}
         else
-          content += image_tag(image["filename"], class: 'popover-image-only', 'title' => image["tooltip"])
+          content += image_tag(image["filename"], class: 'popover-image', 'title' => image["tooltip"])
         end
       end
     end
