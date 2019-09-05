@@ -120,6 +120,7 @@
 }
 
 .footer-img {
+  cursor: pointer;
   height: 25px;
 }
 
@@ -170,6 +171,12 @@
 }
 
 .popover-image {
+  cursor: pointer;
+  height: 75px;
+  padding: 0.5rem;
+}
+
+.popover-image-only {
   height: 75px;
   padding: 0.5rem;
 }
