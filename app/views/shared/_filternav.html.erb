@@ -21,11 +21,11 @@
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-sdgs" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
@@ -54,11 +54,11 @@
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-use_cases" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
@@ -87,11 +87,11 @@
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-building_blocks" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
@@ -120,11 +120,11 @@
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-workflows" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.workflow') },
@@ -153,7 +153,7 @@
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-products" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="form-row mb-2">
@@ -214,11 +214,11 @@
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-countries" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.country') },
@@ -246,11 +246,11 @@
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-sectors" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sector') },
@@ -278,7 +278,7 @@
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
           <div id="clear-organizations" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
         <div class="form-row mb-2">
