@@ -11,7 +11,7 @@ class SdgTarget < ApplicationRecord
     if File.exist?(File.join('app', 'assets', 'images', 'sdg_targets', png_filename))
       return "sdg_targets/#{png_filename}"
     else
-      return "sdg_targets/prod_placeholder.png"
+      return 'sdg_targets/sdg_target_placeholder.png'
     end
   end
 end
