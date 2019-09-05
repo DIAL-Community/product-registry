@@ -1,21 +1,13 @@
-module UseCasesHelper
-  def footer(use_case, category)
+module SustainableDevelopmentGoalsHelper
+  def footer(sustainable_development_goal, category)
     images = []
     case category
     when 'sdg_targets'
-      use_case.sdg_targets.each do |sdg_target|
+      sustainable_development_goal.sdg_targets.each do |sdg_target|
         next if sdg_target.nil?
 
         tooltip = sdg_target.name
         image = Hash[filename: sdg_target.image_file, tooltip: tooltip, id: sdg_target.id, controller: 'sdg_targets']
-        images.push(image)
-      end
-    when 'workflows'
-      use_case.workflows.each do |workflow|
-        next if workflow.nil?
-
-        tooltip = workflow.name
-        image = Hash[filename: workflow.image_file, tooltip: tooltip, id: workflow.id, controller: 'workflows']
         images.push(image)
       end
     end

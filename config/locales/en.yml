@@ -285,6 +285,12 @@ en:
         search-sdg-targets: Search and assign SDG Targets
       index:
         no-data: We couldn't find any use case in the database.
+        sdg-target-popover:
+          one: SDG Target
+          other: SDG Targets
+        workflow-popover:
+          one: Mapped Workflow
+          other: Mapped Workflows
       show:
         description: Description
         steps: Steps for this use case include

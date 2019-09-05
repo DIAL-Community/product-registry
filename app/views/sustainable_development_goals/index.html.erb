@@ -16,14 +16,27 @@
             <% end %>
           </div>
 
-          <div class="card-footer">
-            <small>
-              <div class="row">
-                <div class="col-12">
-                  <%= "#{sustainable_development_goal.sdg_targets.size} #{t('model.sdg_target').to_s.pluralize(sustainable_development_goal.sdg_targets.size)}" %>
-                </div>
-              </div>
-            </small>
+
+          <div class="card-footer p-1">
+            <%
+              sdg_targets = footer(sustainable_development_goal, 'sdg_targets')
+              if sdg_targets.count > 0
+                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                                data-html='true' data-content='#{footer_image_popover(sdg_targets, 'view.use-case.index.sdg-target-popover')}'>"
+                concat(content.html_safe)
+
+                sdg_targets.each do |sdg_target|
+                  concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip],
+                                   class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                end
+                concat('</div>'.html_safe)
+              end
+
+              if sdg_targets.count == 0
+                content = '<div class="footer-row"></div>'
+                concat(content.html_safe)
+              end
+            %>
           </div>
         </div>
       </div>
