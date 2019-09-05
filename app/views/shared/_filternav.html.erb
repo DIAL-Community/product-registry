@@ -12,16 +12,20 @@
           <%
             counter = filter_count('sdgs')
             if counter > 0
-              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              concat "<span id='accordian-sdgs-count' class='badge badge-light'>#{counter}</span>".html_safe 
+            else 
+              concat "<span id='accordian-sdgs-count' class='badge badge-light'></span>".html_safe 
             end
            %>
           <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
-          <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
+        <div class="row">
+          <div id="clear-sdgs" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="row">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
@@ -41,48 +45,23 @@
             <%
               counter = filter_count('use_cases')
               if counter > 0
-                concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+                concat "<span id='accordian-use_cases-count' class='badge badge-light'>#{counter}</span>".html_safe 
+              else 
+                concat "<span id='accordian-use_cases-count' class='badge badge-light'></span>".html_safe 
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
-          <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
+        <div class="row">
+          <div id="clear-use_cases" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="row">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
-                  { class: 'form-control filter-element' }) %>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 badges"></div>
-        </div>
-      </div>
-
-      <div class="accordion-header bg-dark">
-          <span class="m-0 align-middle">
-            <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px" %>
-          <span class="align-middle"><%= t('view.filternav.building_blocks') %></span>
-          <%
-            counter = filter_count('building_blocks')
-            if counter > 0
-              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
-            end
-          %>
-          <i class="fa fa-angle-down float-right text-muted"></i>
-          </span>
-      </div>
-      <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
-          <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
-            <div class="form-group mb-1">
-              <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
-                  { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
                   { class: 'form-control filter-element' }) %>
             </div>
           </div>
@@ -99,19 +78,56 @@
             <%
               counter = filter_count('workflows')
               if counter > 0
-                concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+                concat "<span id='accordian-workflows-count' class='badge badge-light'>#{counter}</span>".html_safe 
+              else 
+                concat "<span id='accordian-workflows-count' class='badge badge-light'></span>".html_safe 
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
-          <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
+        <div class="row">
+          <div id="clear-workflows" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="row">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "workflows", Workflow.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.workflow') },
+                  { class: 'form-control filter-element' }) %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
+      </div>
+
+      <div class="accordion-header bg-dark">
+          <span class="m-0 align-middle">
+            <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px" %>
+          <span class="align-middle"><%= t('view.filternav.building_blocks') %></span>
+          <%
+            counter = filter_count('building_blocks')
+            if counter > 0
+              concat "<span id='accordian-building_blocks-count' class='badge badge-light'>#{counter}</span>".html_safe 
+            else 
+              concat "<span id='accordian-building_blocks-count' class='badge badge-light'></span>".html_safe 
+            end
+          %>
+          <i class="fa fa-angle-down float-right text-muted"></i>
+          </span>
+      </div>
+      <div class="accordion-body p-0 bg-dark">
+        <div class="row">
+          <div id="clear-building_blocks" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="row">
+          <div class="col-12 ml-1">
+            <div class="form-group mb-1">
+              <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
+                  { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
                   { class: 'form-control filter-element' }) %>
             </div>
           </div>
@@ -128,16 +144,28 @@
             <%
               counter = filter_count('origins') + filter_count('products') + filter_count('with_maturity_assessment')
               if counter > 0
-                concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+                concat "<span id='accordian-origins-count' class='badge badge-light'>#{counter}</span>".html_safe 
+              else 
+                concat "<span id='accordian-origins-count' class='badge badge-light'></span>".html_safe 
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
           </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
+          <div id="clear-products" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="form-row mb-2">
+          <div class="col-12 ml-1">
+            <div class="form-check">
+                <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
+                <%= label_tag "with_maturity_assessment", t('view.filternav.with-maturity'), class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= label_tag "origins", t('view.product.index.sources') %>
               <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
@@ -162,14 +190,6 @@
         <div class="row">
           <div class="col-12 badges"></div>
         </div>
-        <div class="row p-1">
-          <div class="col-12">
-            <div class="form-check">
-              <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
-              <%= label_tag "with_maturity_assessment", t('view.filternav.with-maturity'), class: "form-check-label" %>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -185,16 +205,20 @@
           <%
             counter = filter_count('countries')
             if counter > 0
-              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              concat "<span id='accordian-countries-count' class='badge badge-light'>#{counter}</span>".html_safe 
+            else 
+              concat "<span id='accordian-countries-count' class='badge badge-light'></span>".html_safe 
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
-          <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
+        <div class="row">
+          <div id="clear-countries" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="row">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.country') },
@@ -213,16 +237,20 @@
           <%
             counter = filter_count('sectors')
             if counter > 0
-              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              concat "<span id='accordian-sectors-count' class='badge badge-light'>#{counter}</span>".html_safe 
+            else 
+              concat "<span id='accordian-sectors-count' class='badge badge-light'></span>".html_safe 
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
-          <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
+        <div class="row">
+          <div id="clear-sectors" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="row">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= collection_select(nil, "sectors", Sector.all.order(:name), :id, :name,
                   { selected: params[:name], include_blank: t('view.filternav.title.sector') },
@@ -241,16 +269,28 @@
           <%
             counter = filter_count('years') + filter_count('endorser_only')
             if counter > 0
-              concat "<span class='badge badge-light'>#{counter}</span>".html_safe 
+              concat "<span id='accordian-years-count' class='badge badge-light'>#{counter}</span>".html_safe 
+            else 
+              concat "<span id='accordian-years-count' class='badge badge-light'></span>".html_safe 
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
-        <div class="row p-1">
+        <div class="row">
+          <div id="clear-organizations" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
+        </div>
+        <div class="form-row mb-2">
+          <div class="col-12 ml-1">
+            <div class="form-check">
+                <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
+                <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-12">
-            <a class="float-right small clear-all" href="#"><%= t('view.filternav.clear') %></a>
             <div class="form-group mb-1">
               <%= label_tag "years", t('view.organization.index.endorsed-date') %>
               <%= select(nil, "years",
@@ -267,14 +307,6 @@
         </div>
         <div class="row">
           <div class="col-12 badges"></div>
-        </div>
-        <div class="row p-1">
-          <div class="col-12">
-            <div class="form-check">
-                <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
-                <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
-            </div>
-          </div>
         </div>
       </div>
       <div class="accordion-header bg-dark">

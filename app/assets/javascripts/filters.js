@@ -12,7 +12,46 @@ var addToList = function(filterId, values) {
             $('#remove-'+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
         })
     }
+}
 
+var incrementFilterCount = function(filterId) {
+  if (filterId == "products") {
+    filterId = "origins"
+  }
+  currVal = parseInt($("#accordian-"+filterId+"-count").html())
+  if (!currVal) {
+    currVal = 0
+  }
+  $("#accordian-"+filterId+"-count").html(currVal+1)
+}
+
+var decrementFilterCount = function(filterId) {
+  if (filterId == "products") {
+    filterId = "origins"
+  }
+  currVal = parseInt($("#accordian-"+filterId+"-count").html())
+  if (currVal == 1) {
+    $("#accordian-"+filterId+"-count").html("")
+  } else {
+    $("#accordian-"+filterId+"-count").html(currVal-1)
+  }
+}
+
+var clearFilterCount = function(filterId) {
+  if (filterId == "products") {
+    filterId = "origins"
+  }
+  $("#accordian-"+filterId+"-count").html("")
+}
+
+var clearFilterItems = function(filterId) {
+  if (filterId == 'with_maturity_assessment') {
+    $('#with_maturity_assessment').prop('checked', false);
+  } else if (filterId == 'endorser_only') {
+    $('#endorser_only').prop('checked', false);
+  } else {
+    $('#' + filterId).parents(".row").next('.row').find('.badges').remove()
+  }
 }
 
 var removeFilter = function(event) {
@@ -23,8 +62,9 @@ var removeFilter = function(event) {
     } ] }, function() {
         const card = $(event.target).closest('.badge');
         card.fadeOut();
-
-        window.location.reload(true);
+        updateCount();
+        decrementFilterCount(event.data.id)
+        loadMainDiv();
     });
 
 }
@@ -35,12 +75,35 @@ var addFilter = function(id, value, label) {
         filter_value: value,
         filter_label: label
     }, function () {
-        window.location.reload(true);
+        updateCount();
+        currValue = [{ value: value, label: label }]
+        addToList(id, currValue)
+        incrementFilterCount(id)
+        loadMainDiv();
     });
 }
 
-var prepareFilters = function() {
+var loadFilters = function() {
+  // Get all filters and add to List
+  $.get('/get_filters', function (data) {
+    Object.keys(data).map(function(key) {
+        addToList(key, data[key]);
+    })
+  });
+}
 
+var loadMainDiv = function() {
+  $.get(window.location.pathname, function (data) {
+    var tempDom = $('<div>').append($.parseHTML(data));
+    var currentList = $('#current-list', tempDom);
+    var activeFilter = $('#active-filter', tempDom)
+    $("#current-list").replaceWith(currentList)
+    $("#active-filter").replaceWith(activeFilter)
+    removeFilterHandler();
+  });
+}
+
+var prepareFilters = function() {
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
         if ($(this).is(':checkbox')) {
@@ -52,38 +115,37 @@ var prepareFilters = function() {
         }
     });
 
-    $('.clear-all').on('click', function() {
-        filterList = [];
-        $(this).parents(".accordion-body").find('.remove-filter').not('input').each(function() {
-            // collect all of the filters to remove
-            filterId = $(this).attr('id').split('-');
-            filterLabel = $(this).attr('name');
-            currFilter = { filter_name: filterId[1], filter_value: filterId[2], filter_label: filterLabel }
-            filterList.push(currFilter);
-        });
-
-        $(this).parents(".accordion-body").find('input.filter-element').each(function() {
-          filterId = $(this).attr('id');
-          filterList.push({ filter_name: filterId });
-        });
-
-        if (filterList.length > 0) {
-            $.post('/remove_filter', { filter_array: filterList }, function() {
-              const card = $(this).parents(".row").next('.row');
-              card.fadeOut();
-              
-              window.location.reload(true);
-            });
-        }
+    $('.clear-all').on('click', function(e) {
+      e.preventDefault();
+      filterId = $(this).attr('id').split('-');
+      const filter_name = filterId[1];
+      $(this).parent().parent().find('.remove-filter').each(function(index, elem) {
+        const card = $(elem).closest('.badge');
+        card.remove();
+      });
+      clearFilterCount(filterId[1])
+      filter_array = []
+      if (filter_name == 'organizations') {
+        filter_array.push({filter_name: 'years'})
+        filter_array.push({filter_name: 'endorser_only'})
+        $('#endorser_only').prop('checked', false);
+      } else if (filter_name == 'products') {
+        filter_array.push({filter_name: 'origins'})
+        filter_array.push({filter_name: 'products'})
+        filter_array.push({filter_name: 'with_maturity_assessment'})
+        $('#with_maturity_assessment').prop('checked', false);
+      } else {
+        filter_array.push({filter_name: filter_name})
+      }
+      $.post('/remove_filter', {
+        filter_array: filter_array
+      }, function() {
+        updateCount();
+        loadMainDiv();
+      });
     });
 
-    // Get all filters and add to List
-    $.get('/get_filters', function (data) {
-        Object.keys(data).map(function(key) {
-            addToList(key, data[key]);
-        })
-
-    });
+    loadFilters();
 }
 
 $(document).on("turbolinks:load", prepareFilters);

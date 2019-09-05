@@ -14,7 +14,10 @@ const removeActiveFilter = function(event) {
     }]
   }, function() {
     $(li).fadeOut();
-    window.location.reload(true);
+    updateCount();
+    loadMainDiv();
+    clearFilterCount(filter_name);
+    clearFilterItems(filter_name)
   });
 };
 

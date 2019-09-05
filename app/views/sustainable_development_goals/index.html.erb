@@ -1,6 +1,7 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<div id="current-list">
 <div class="row">
   <% if @sustainable_development_goals.count > 0 %>
     <% @sustainable_development_goals.order(:number).each do |sustainable_development_goal| %>
@@ -29,4 +30,5 @@
       </div>
     <% end %>
   <% end %>
+</div>
 </div>

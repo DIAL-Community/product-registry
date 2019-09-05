@@ -21,6 +21,13 @@ class ApplicationController < ActionController::Base
     return "_dup#{size.to_s}"
   end
 
+  def update_cookies(filter_name)
+    case filter_name
+    when 'products', 'origins', 'with_maturity_assessment'
+      cookies[:updated_prod_filter] = true
+    end
+  end
+
   def remove_filter
     return unless params.key? 'filter_array'
 
@@ -37,12 +44,12 @@ class ApplicationController < ActionController::Base
         existing_value.empty? && session.delete(filter_name.to_s)
         !existing_value.empty? && session[filter_name.to_s] = existing_value
       else
-        session.delete(curr_filter['filter_name'])
+        filter_obj = Hash.new
+        existing_value = session[filter_name.to_s]
+        existing_value && existing_value.delete(filter_obj)
+        session.delete(filter_name.to_s)
       end
-
-      if filter_name == 'products' || filter_name == 'origins' || filter_name == 'with_maturity_assessment'
-        cookies[:updated_prod_filter] = true
-      end
+      update_cookies(filter_name)
     end
 
     render json: true
@@ -68,9 +75,7 @@ class ApplicationController < ActionController::Base
       end
       session[filter_name.to_s] = existing_value
     end
-    if filter_name == 'products' || filter_name == 'origins' || filter_name == 'with_maturity_assessment'
-      cookies[:updated_prod_filter] = true
-    end
+    update_cookies(filter_name)
     render json: retval
   end
 
