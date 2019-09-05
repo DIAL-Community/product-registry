@@ -24,7 +24,7 @@
 <div class="row">
   <% @organizations.each do |organization| %>
     <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
-      <div class="card index-card">
+      <div class="card index-card small">
         <div class="card-header bg-secondary text-white">
           <%= link_to truncate(organization.name, length: 30, omission: '&hellip;', escape: false), organization,
               'title' => organization.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
