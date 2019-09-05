@@ -15,7 +15,8 @@ module WorkflowsHelper
         next if building_block.nil?
 
         tooltip = building_block.name
-        image = Hash[filename: building_block.image_file, tooltip: tooltip, id: building_block.id, controller: 'building_blocks']
+        image = Hash[filename: building_block.image_file, tooltip: tooltip, id: building_block.id,
+                     controller: 'building_blocks']
         images.push(image)
 
       end
@@ -36,7 +37,11 @@ module WorkflowsHelper
     formatted = ''
     elements.sort_by { |x| x[:name] }
             .each do |element|
-      formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
+      popover_class = 'popover-image-link'
+      if element[:controller] == 'building_blocks'
+        popover_class += ' popover-image-small'
+      end
+      formatted += link_to(image_tag(element[:filename], class: popover_class, title: element[:tooltip]),
                            action: 'show', controller: element[:controller], id: element[:id])
     end
     formatted

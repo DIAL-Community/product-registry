@@ -39,7 +39,7 @@ module UseCasesHelper
       if element[:controller] == 'sdg_targets'
         formatted += image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
       else
-        formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
+        formatted += link_to(image_tag(element[:filename], class: 'popover-image-link', title: element[:tooltip]),
                              action: 'show', controller: element[:controller], id: element[:id])
       end
     end

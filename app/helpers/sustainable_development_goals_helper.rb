@@ -28,7 +28,7 @@ module SustainableDevelopmentGoalsHelper
     formatted = ''
     elements.sort_by { |x| x[:name] }
             .each do |element|
-      formatted += image_tag(element[:filename], class: 'popover-image-only', title: element[:tooltip])
+      formatted += image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
     end
     formatted
   end

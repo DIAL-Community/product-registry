@@ -22,7 +22,7 @@
               sdg_targets = sdg_footer(sustainable_development_goal, 'sdg_targets')
               if sdg_targets.count > 0
                 content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{sdg_footer_popover(sdg_targets, 'view.use-case.index.sdg-target-popover')}'>"
+                                data-html='true' data-content='#{sdg_footer_popover(sdg_targets, 'view.sdg.index.sdg-target-popover')}'>"
                 concat(content.html_safe)
 
                 sdg_targets.each do |sdg_target|

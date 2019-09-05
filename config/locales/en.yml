@@ -277,6 +277,9 @@ en:
         no-data: We couldn't find a sustainable development goal matching the search phrase.
         sdg-number: Number
         view-targets: View Targets
+        sdg-target-popover:
+          one: SDG Target
+          other: SDG Targets
       show:
         target: Target
     use-case:
@@ -320,6 +323,12 @@ en:
         other-names: Other Names
       index:
         no-data: We couldn't find workflow matching to the search phrase.
+        use-case-popover:
+          one: Mapped Use Case
+          other: Mapped Use Cases
+        building-block-popover:
+          one: Mapped Building Block
+          other: Mapped Building Blocks
       show:
         full-description: Full Description
         mapping: Sample mappings of workflows to use case

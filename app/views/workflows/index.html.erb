@@ -51,7 +51,7 @@
 
                 building_blocks.each do |building_block|
                   concat(image_tag(building_block[:filename], title: building_block[:tooltip],
-                                   class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                                   class: 'footer-img-small mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
                 end
                 concat('</div>'.html_safe)
               end
