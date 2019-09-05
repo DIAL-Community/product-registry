@@ -45,7 +45,13 @@ var clearFilterCount = function(filterId) {
 }
 
 var clearFilterItems = function(filterId) {
-  $('#' + filterId).parents(".row").next('.row').find('.badges').remove()
+  if (filterId == 'with_maturity_assessment') {
+    $('#with_maturity_assessment').prop('checked', false);
+  } else if (filterId == 'endorser_only') {
+    $('#endorser_only').prop('checked', false);
+  } else {
+    $('#' + filterId).parents(".row").next('.row').find('.badges').remove()
+  }
 }
 
 var removeFilter = function(event) {
