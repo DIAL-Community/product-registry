@@ -17,12 +17,12 @@
           </div>
 
 
-          <div class="card-footer p-1">
+          <div class="card-footer footer-padding">
             <%
-              sdg_targets = footer(sustainable_development_goal, 'sdg_targets')
+              sdg_targets = sdg_footer(sustainable_development_goal, 'sdg_targets')
               if sdg_targets.count > 0
-                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{footer_image_popover(sdg_targets, 'view.use-case.index.sdg-target-popover')}'>"
+                content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
+                                data-html='true' data-content='#{sdg_footer_popover(sdg_targets, 'view.use-case.index.sdg-target-popover')}'>"
                 concat(content.html_safe)
 
                 sdg_targets.each do |sdg_target|
@@ -33,7 +33,7 @@
               end
 
               if sdg_targets.count == 0
-                content = '<div class="footer-row"></div>'
+                content = '<div class="footer-row mb-2"></div>'
                 concat(content.html_safe)
               end
             %>

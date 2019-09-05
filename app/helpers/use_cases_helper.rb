@@ -1,5 +1,5 @@
 module UseCasesHelper
-  def footer(use_case, category)
+  def uc_footer(use_case, category)
     images = []
     case category
     when 'sdg_targets'
@@ -22,22 +22,26 @@ module UseCasesHelper
     images
   end
 
-  def footer_image_popover(elements, title)
+  def uc_footer_popover(elements, title)
     content = '<div class="border rounded bg-secondary text-white clearfix border card-header">' +
               t(title, count: elements.count) +
               '</div>' \
-              '<div>' + format_image_popover(elements) + '</div>'
+              '<div>' + uc_format_popover(elements) + '</div>'
     content.html_safe
   end
 
   private
 
-  def format_image_popover(elements)
+  def uc_format_popover(elements)
     formatted = ''
-    elements.sort { |x, y| x[:name] <=> y[:name] }
+    elements.sort_by { |x| x[:name] }
             .each do |element|
-      formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
-                           action: 'show', controller: element[:controller], id: element[:id])
+      if element[:controller] == 'sdg_targets'
+        formatted += image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
+      else
+        formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
+                             action: 'show', controller: element[:controller], id: element[:id])
+      end
     end
     formatted
   end
