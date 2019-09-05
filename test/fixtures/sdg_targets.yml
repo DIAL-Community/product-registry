@@ -4,8 +4,10 @@ one:
   name: MyString
   slug: slug1
   sdg_number: 1
+  target_number: 1.a
 
 two:
   name: MyString
   slug: slug2
   sdg_number: 2
+  target_number: 2.a

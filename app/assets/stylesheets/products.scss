@@ -120,7 +120,13 @@
 }
 
 .footer-img {
+  cursor: pointer;
   height: 25px;
+
+  &-small {
+    @extend .footer-img;
+    height: 15px;
+  }
 }
 
 .footer-img-right {
@@ -172,6 +178,11 @@
 .popover-image {
   height: 75px;
   padding: 0.5rem;
+
+  &-small {
+    @extend .popover-image;
+    height: 50px;
+  }
 }
 
 .maturity-tab {

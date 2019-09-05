@@ -27,26 +27,28 @@
 
           <div class="card-footer footer-padding">
             <%
-              products = footer(building_block, 'products')
+              products = bb_footer(building_block, 'products')
               if products.count > 0
                 content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{footer_image_popover(products, 'view.building-block.index.bb-product-popover')}'>"
+                                data-html='true' data-content='#{bb_footer_popover(products, 'view.building-block.index.bb-product-popover')}'>"
                 concat(content.html_safe)
 
                 products.each do |product|
                   concat(image_tag(product[:filename], title: product[:tooltip],
-                                 class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                                 class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
                 end
                 concat('</div>'.html_safe)
               end
 
-              workflows = footer(building_block, 'workflows')
+              workflows = bb_footer(building_block, 'workflows')
               if workflows.count > 0
                 content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{footer_image_popover(workflows, 'view.building-block.index.bb-workflow-popover')}'>"
+                                data-html='true' data-content='#{bb_footer_popover(workflows, 'view.building-block.index.bb-workflow-popover')}'>"
                 concat(content.html_safe)
                 concat(image_tag(workflows[0][:filename], class: 'footer-img'))
-                concat(" #{building_block.workflows.size} #{t('model.workflow').titlecase.pluralize(building_block.workflows.size)}")
+                
+                content = "<span class='small text-muted ml-1'>#{building_block.workflows.size} #{t('model.workflow').titlecase.pluralize(building_block.workflows.size)}</span>"
+                concat(content.html_safe)
 
                 # When we have image for each workflow, we can use the following code.
                 # workflows.each do |workflow|
