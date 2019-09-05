@@ -15,8 +15,11 @@ var addToList = function(filterId, values) {
 }
 
 var incrementFilterCount = function(filterId) {
-  if (filterId == "products") {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment")) {
     filterId = "origins"
+  }
+  if (filterId == "endorser_only") {
+    filterId = "years"
   }
   currVal = parseInt($("#accordian-"+filterId+"-count").html())
   if (!currVal) {
@@ -26,8 +29,11 @@ var incrementFilterCount = function(filterId) {
 }
 
 var decrementFilterCount = function(filterId) {
-  if (filterId == "products") {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment")) {
     filterId = "origins"
+  }
+  if (filterId == "endorser_only") {
+    filterId = "years"
   }
   currVal = parseInt($("#accordian-"+filterId+"-count").html())
   if (currVal == 1) {
@@ -38,8 +44,11 @@ var decrementFilterCount = function(filterId) {
 }
 
 var clearFilterCount = function(filterId) {
-  if (filterId == "products") {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment")) {
     filterId = "origins"
+  }
+  if (filterId == "endorser_only") {
+    filterId = "years"
   }
   $("#accordian-"+filterId+"-count").html("")
 }
