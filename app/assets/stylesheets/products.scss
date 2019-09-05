@@ -179,11 +179,6 @@
   height: 75px;
   padding: 0.5rem;
 
-  &-link {
-    @extend .popover-image;
-    cursor: pointer;
-  }
-
   &-small {
     @extend .popover-image;
     height: 50px;
