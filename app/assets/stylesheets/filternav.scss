@@ -83,6 +83,14 @@ div.nav-container {
         margin-left: 0.2rem;
       }
     }
+
+    .header-link-button {
+      display: inline;
+    }
+
+    .header-link-button span:hover {
+      text-decoration: underline;
+    }
 }
 
 @-moz-document url-prefix() {
