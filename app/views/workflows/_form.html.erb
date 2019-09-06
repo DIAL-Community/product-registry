@@ -36,21 +36,18 @@
       <%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize) %>
     </label>
   </fieldset>
-
   <div class="row">
-    <div id="base-selected-use-cases" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="px-1 clearfix badge badge-secondary">
-          <p class="mb-0 float-left"></p>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt"></i>
-            </a>
-          <input type="hidden"/>
-        </div>
-      </div>
+    <div class="col-12">
+      <span id="base-selected-use-cases" class="selected-element badge badge-secondary px-1 mb-1">
+        <span class="text-label"></span>
+        <a onclick="remove(this);" style="cursor: pointer;">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        <input type="hidden"/>
+      </span>
     </div>
   </div>
-
+  
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
   </h6>
@@ -62,18 +59,15 @@
       <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize) %>
     </label>
   </fieldset>
-
   <div class="row">
-    <div id="base-selected-building-blocks" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="px-1 clearfix badge badge-secondary">
-          <p class="mb-0 float-left"></p>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt"></i>
-            </a>
-          <input type="hidden"/>
-        </div>
-      </div>
+    <div class="col-12">
+      <span id="base-selected-building-blocks" class="selected-element badge badge-secondary px-1 mb-1">
+        <span class="text-label"></span>
+        <a onclick="remove(this);" style="cursor: pointer;">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        <input type="hidden"/>
+      </span>
     </div>
   </div>
   <fieldset class="float-right mt-4">

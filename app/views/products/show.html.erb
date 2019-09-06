@@ -59,7 +59,7 @@
       <% @product.organizations.each do |organization| %>
         <div class="col-6 col-lg-2 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1 snug">
+            <div class="card-body snug">
               <%= link_to organization do %>
                 <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
               <% end %>
