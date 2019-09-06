@@ -55,12 +55,12 @@
   <% if @building_block.products %>
     <% @building_block.products.each do |product| %>
       <div class="col-6 col-lg-4 mt-2">
-        <div class="card h-100">
-          <div class="card-body px-2 py-2">
-            <%= link_to product do %>
-              <%= image_tag(product.image_file, height: 75, class: 'align-middle') %>
-              <h5 class="card-title ml-3" style="display:inline;"><%= link_to product.name, product %></h5>
-            <% end %>
+        <div class="card flex-row">
+          <%= link_to product do %>
+            <%= image_tag(product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+          <% end %>
+          <div class="card-body align-middle my-auto px-2 py-2">
+            <%= link_to product.name, product %>
           </div>
         </div>
       </div>
