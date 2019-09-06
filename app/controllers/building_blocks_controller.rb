@@ -199,18 +199,13 @@ class BuildingBlocksController < ApplicationController
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])
       @bbJson = JSON.parse(@building_block.description, object_class: OpenStruct)
-      if @bbJson.digital_function
-        @digital_functions = @bbJson.digital_function.split("•").drop(1)
-      else
-        @digital_functions = []
-      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def building_block_params
       params
         .require(:building_block)
-        .permit(:name, :confirmation)
+        .permit(:name, :confirmation, :description)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

@@ -201,7 +201,7 @@ class UseCasesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def use_case_params
       params.require(:use_case)
-      .permit(:name, :slug, :sector_id)
+      .permit(:name, :slug, :sector_id, :description)
       .tap do |attr|
         if (params[:reslug].present?)
           attr[:slug] = slug_em(attr[:name])

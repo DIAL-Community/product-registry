@@ -1,4 +1,4 @@
-<%= form_with(model: use_case, local: true) do |form| %>
+<%= form_with(model: use_case, local: true, html: { id: 'use-case-form' }) do |form| %>
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :use_case_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
@@ -15,6 +15,10 @@
     <% options = options_from_collection_for_select(@sectors, 'id', 'name', use_case.sector_id) %>
     <%= form.select :sector_id, options, {}, :class => "form-control mb-2" %>
   </fieldset>
+
+  <%= form.hidden_field :description, id: :use_case_desc %>
+  <div class="wysiwyg-editor">
+  </div>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.use-case.form.assigned-sdg-targets') %>
@@ -80,4 +84,11 @@
   <% use_case.workflows.order("name").each do |workflow| %>
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
+
+  var editor = setUpEditor("<%= use_case.description %>");
+  var form = document.querySelector('#use-case-form');
+  form.onsubmit = function() {
+    var useCaseDesc = $('#use_case_desc');
+    useCaseDesc.val(JSON.stringify(editor.getContents()));
+  };
 </script>

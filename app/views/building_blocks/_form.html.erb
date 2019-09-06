@@ -1,4 +1,4 @@
-<%= form_with(model: building_block, multipart: true, local: true) do |form| %>
+<%= form_with(model: building_block, multipart: true, local: true, html: { id: 'bb-form' }) do |form| %>
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
@@ -15,6 +15,10 @@
       <%= t('view.general.logo') %>
     </label>
   </fieldset>
+
+  <%= form.hidden_field :description, id: :building_block_desc %>
+  <div class="wysiwyg-editor">
+  </div>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
@@ -83,4 +87,12 @@
   <% building_block.workflows.order("name").each do |workflow| %>
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
+
+  var editor = setUpEditor("<%= building_block.description %>");
+  var form = document.querySelector('#bb-form');
+  form.onsubmit = function() {
+    var bbDesc = $('#building_block_desc');
+    bbDesc.val(JSON.stringify(editor.getContents()));
+  };
+
 </script>

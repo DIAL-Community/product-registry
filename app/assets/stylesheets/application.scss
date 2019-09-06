@@ -13,6 +13,7 @@
 
  *= require jquery-ui
  *= require cookies_eu
+ *= require quill.snow
  *= require_tree .
  *= require_self
  */
@@ -321,4 +322,8 @@ h6 {
         flex: 0 0 20%;
         float: left;
     }
+}
+
+.wysiwyg-viewer.ql-container.ql-snow {
+  border: none;
 }

@@ -8,38 +8,8 @@
     <div class="text-center">
       <%= image_tag(@building_block.image_file, class: 'w-25 rounded mx-auto d-block') %>
     </div>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.building-block.show.short-description') %>: </strong>
-      <%= @bbJson.short_desc %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.building-block.show.full-description') %>: </strong>
-      <%= @bbJson.full_description %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.building-block.show.other-names') %>: </strong>
-      <%= @bbJson.other_names %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.building-block.show.key-functionalities') %>: </strong>
-      <% if @digital_functions.count > 0 %>
-        <ul>
-        <% @digital_functions.each do |digital_func| %>
-          <li class="text-muted"><%= digital_func %></li>
-        <% end %>
-        </ul>
-      <% end %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.building-block.show.example-of-use') %>: </strong>
-      <% if @bbJson.sector_use && @bbJson.sector_use.count > 0 %>
-        <ul>
-        <% @bbJson.sector_use.each do |sector| %>
-          <li class="text-muted"><strong><%= sector.name %>: </strong><%= sector.description %>
-        <% end %>
-        </ul>
-      <% end %>
-    </p>
+    <div id="bb-viewer" class="wysiwyg-viewer">
+    </div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), building_blocks_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@building_block).mod_allowed? %>
@@ -63,17 +33,6 @@
               <%= image_tag(product.image_file, height: 75, class: 'align-middle') %>
               <h5 class="card-title ml-3" style="display:inline;"><%= link_to product.name, product %></h5>
             <% end %>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
-  <% if @bbJson.commercial_software %>
-    <% @bbJson.commercial_software.each do |product| %>
-      <div class="col-6 col-lg-4 mt-2">
-        <div class="card h-100">
-          <div class="card-body pb-1" style="display:flex; align-items:center;">
-            <h5 class="card-title text-muted"><%= product %></h5>
           </div>
         </div>
       </div>
@@ -104,3 +63,7 @@
     </p>
   <% end %>
 </div>
+
+<script>
+        setUpViewer("<%= @building_block.description %>")
+</script>

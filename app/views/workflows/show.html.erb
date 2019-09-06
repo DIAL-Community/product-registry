@@ -8,28 +8,8 @@
     </h5>
   </div>
   <div class="card-body">
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.short-description') %>: </strong>
-      <%= @workflowJson.short_desc %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.full-description') %>: </strong>
-      <%= @workflowJson.full_desc %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.other-names') %>: </strong>
-      <%= @workflowJson.other_names %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.mapping') %>: </strong>
-      <% if @workflowJson.sample_mappings && @workflowJson.sample_mappings.count > 0 %>
-        <ul>
-        <% @workflowJson.sample_mappings.each do |mapping| %>
-          <li class="text-muted"><strong><%= mapping.name %>: </strong><%= mapping.description %>
-        <% end %>
-        </ul>
-      <% end %>
-    </p>
+  <div id="workflow-viewer" class="wysiwyg-viewer">
+  </div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), workflows_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@workflow).mod_allowed? %>
@@ -86,3 +66,7 @@
     </p>
   <% end %>
 </div>
+
+<script>
+        setUpViewer("<%= @workflow.description %>")
+</script>

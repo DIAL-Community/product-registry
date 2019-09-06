@@ -8,20 +8,8 @@
     </h5>
   </div>
   <div class="card-body">
-    <p class="card-subtitle text-muted mb-0" >
-      <strong><%= t('view.use-case.show.description') %>: </strong><%= @useCaseJson.desc %>
-    </p>
-    <p class="card-subtitle text-muted mt-3" >
-      <strong><%= t('model.sector').to_s.titlecase %>: </strong><%= @sector_name %>
-    </p>
-    <% if @useCaseJson.steps %>
-    <p class="card-subtitle text-muted mt-3" ><strong><%= t('view.use-case.show.steps') %>:</strong></p>
-      <ul>
-      <% @useCaseJson.steps.each do |step| %>
-        <li class="text-muted"><%= step %>
-      <% end %>
-      </ul>
-    <% end %>
+  <div id="usecase-viewer" class="wysiwyg-viewer">
+  </div>
     <p class="float-right mb-0" >
       <%= link_to 'Back', use_cases_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@use_case).mod_allowed? %>
@@ -75,3 +63,7 @@
     </p>
   <% end %>
 </div>
+
+<script>
+        setUpViewer("<%= @use_case.description %>")
+</script>
