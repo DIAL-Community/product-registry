@@ -67,9 +67,9 @@
         <% @organization.contacts.order("name").each do |contact| %>
           <div class="col-6 col-lg-4 mt-2">
             <div class="card h-100">
-              <div class="card-body pb-1">
+              <div class="card-body py-2">
                 <h5 class="card-title"><%= link_to contact.name, contact %></h5>
-                <h6 class="card-subtitle text-muted mb-2"><%= contact.email %></h6>
+                <h6 class="card-subtitle text-muted"><%= contact.email %></h6>
                 <% if contact.title %>
                   <p class="card-text"><%= contact.title %></p>
                 <% end %>
@@ -93,8 +93,8 @@
       <% @organization.sectors.order("name").each do |sector| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-2 pt-2">
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to sector.name, sector %></p>
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= link_to sector.name, sector %></p>
             </div>
           </div>
         </div>
@@ -113,13 +113,13 @@
   <% if @organization.products.count > 0 %>
     <div class="row">
       <% @organization.products.each do |product| %>
-        <div class="col-6 col-lg-2 mt-2">
-          <div class="card">
-            <h5 class="card-header"><%= product.name %></h5>
-            <div class="card-body snug">
-              <%= link_to product do %>
-                <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
-              <% end %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card flex-row">
+            <%= link_to product do %>
+              <%= image_tag(product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+            <% end %>
+            <div class="card-body align-middle my-auto px-2 py-2">
+              <%= link_to product.name, product %>
             </div>
           </div>
         </div>
@@ -139,8 +139,8 @@
       <% @organization.locations.where.not(location_type: 'point').order("name").each do |country| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-2 pt-2">
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to country.name, country %></p>
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= link_to country.name, country %></p>
             </div>
           </div>
         </div>
