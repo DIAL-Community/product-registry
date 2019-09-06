@@ -6,19 +6,17 @@ class LocationsController < ApplicationController
   # GET /locations.json
   def index
     if params[:without_paging]
-      @locations = Location
-          .where.not(location_type: 'point')
-          .name_contains(params[:search])
-          .order(:name)
+      @locations = Location.where.not(location_type: 'point')
+                           .name_contains(params[:search])
+                           .order(:name)
       authorize @locations, :view_allowed?
       return
     end
 
     if params[:office_only]
-      @locations = Location
-          .where(location_type: 'point')
-          .name_contains(params[:search])
-          .order(:name)
+      @locations = Location.where(location_type: 'point')
+                           .name_contains(params[:search])
+                           .order(:name)
       authorize @locations, :view_allowed?
       return
     end

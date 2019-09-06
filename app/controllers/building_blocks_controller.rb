@@ -5,6 +5,13 @@ class BuildingBlocksController < ApplicationController
   # GET /building_blocks
   # GET /building_blocks.json
   def index
+    if params[:without_paging]
+      @building_blocks = BuildingBlock.name_contains(params[:search])
+                                      .order(:name)
+      authorize @building_blocks, :view_allowed?
+      return
+    end
+
     @building_blocks = filter_building_blocks.order(:name)
 
     if params[:search]
