@@ -34,7 +34,7 @@
                             { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
   </fieldset>
 
-  <%= recaptcha_tags callback: 'enableRegistration', site_key: '6LcJcbcUAAAAAJIfKD5RFtSmO-7oI4J7GVDV-r9-' %>
+  <%= recaptcha_tags callback: 'enableRegistration', site_key: Rails.application.secrets.captcha_site_key %>
 
   <%= f.submit t('view.header.sign-up'), id: 'submit-registration', :class => "btn btn-block btn-secondary", disabled: true %>
 <% end %>

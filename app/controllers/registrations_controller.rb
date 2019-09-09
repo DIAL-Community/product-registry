@@ -5,7 +5,7 @@ class RegistrationsController < Devise::RegistrationsController
   private
 
   def check_captcha_and_organization
-    verified = verify_recaptcha secret_key: '6LcJcbcUAAAAAIf48XvFsFC8As_YLUp13FhjNLS4'
+    verified = verify_recaptcha secret_key: Rails.application.secrets.captcha_secret_key
 
     if verified
       user_email = params[:user][:email]
