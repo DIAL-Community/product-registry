@@ -8,7 +8,7 @@ module ApplicationHelper
 
   ADMIN_NAV_CONTROLLERS = %w[locations users sectors].freeze
   ACTION_WITH_BREADCRUMBS = %w[show edit create].freeze
-  DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/registrations', 'devise/confirmations'].freeze
+  DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/registrations', 'devise/confirmations', 'registrations'].freeze
 
   def all_filters
     FRAMEWORK_FILTER_KEYS + ORGANIZATION_FILTER_KEYS

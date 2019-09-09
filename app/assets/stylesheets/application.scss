@@ -31,6 +31,12 @@ body {
   padding-top: 102px;
 }
 
+.g-recaptcha {
+  :first-child {
+    height: 84px !important;
+  }
+}
+
 a {
   /* color: #000043; */
   color: #fbab18;
