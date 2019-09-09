@@ -13,9 +13,18 @@ class Organization < ApplicationRecord
   def image_file
     if File.exist?(File.join('app','assets','images','organizations',"#{slug}.png"))
       return "organizations/#{slug}.png"
+    elsif File.exist?(File.join('public','assets','organizations',"#{slug}.png"))
+      return "/assets/organizations/#{slug}.png"
     else
       return "organizations/org_placeholder.png"
     end
+  end
+
+  def is_image_compiled
+    if File.exist?(File.join('public','assets','organizations',"#{slug}.png"))
+      return false
+    end
+    return true
   end
 
   def to_param  # overridden

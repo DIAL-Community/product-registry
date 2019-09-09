@@ -32,7 +32,11 @@
         </div>
         <div class="model-logo">
           <%= link_to(organization) do %>
-            <%= image_tag(organization.image_file, class: 'card-img-top align-middle') %>
+            <% if organization.is_image_compiled %>
+              <%= image_tag(organization.image_file, class: 'card-img-top align-middle') %>
+            <% else %>
+              <%= image_tag(organization.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
+            <% end %>
           <% end %>
         </div>
         <% if organization.is_endorser %>
