@@ -30,7 +30,7 @@
 
   <fieldset class="form-label-group">
     <%= f.collection_select(:organization_id, Organization.all.order(:name), :id, :name,
-                            { selected: :organization_id, include_blank: 'Select your organization.' },
+                            { include_blank: 'Select your organization.' },
                             { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
   </fieldset>
 

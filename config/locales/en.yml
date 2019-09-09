@@ -121,7 +121,9 @@ en:
     devise:
       email: Email
       password: Password
-      password-confirmation: Password confirmation 
+      password-confirmation: Password confirmation
+      organization-required: Organization information is required when signing up as organization editor.
+      organization-nomatch: "Organization website doesn't match your email address." 
     location:
       index:
         no-data: We couldn't find any location in the database.
