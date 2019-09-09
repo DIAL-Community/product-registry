@@ -256,7 +256,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_registration_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:role, :organization])
+    logger.info 'Configuring custom registration parameters.'
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:organization_id, :role])
   end
 
   private

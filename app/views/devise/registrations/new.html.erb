@@ -29,9 +29,9 @@
 
 
   <fieldset class="form-label-group">
-    <%= collection_select(nil, "organization", Organization.all.order(:name), :id, :name,
-        { selected: params[:name], include_blank: 'Select your organization.' },
-        { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
+    <%= f.collection_select(:organization_id, Organization.all.order(:name), :id, :name,
+                            { selected: :organization_id, include_blank: 'Select your organization.' },
+                            { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
   </fieldset>
 
   <%= recaptcha_tags callback: 'enableRegistration', site_key: '6LcJcbcUAAAAAJIfKD5RFtSmO-7oI4J7GVDV-r9-' %>
