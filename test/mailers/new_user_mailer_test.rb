@@ -33,7 +33,7 @@ class NewUserMailerTest < ActionMailer::TestCase
     assert_not_nil mail
   end
 
-  test 'should allow not DIAL email address.' do
+  test 'should not allow non DIAL email address with invalid organization.' do
     sign_in FactoryBot.create(:user, role: :admin)
     @user = User.new({
       'email': 'user1@example.org',
@@ -42,5 +42,16 @@ class NewUserMailerTest < ActionMailer::TestCase
       'organization_id': organizations(:one).id
     })
     assert_equal(@user.valid?, false)
+  end
+
+  test 'should allow non DIAL email address with valid organization.' do
+    sign_in FactoryBot.create(:user, role: :admin)
+    @user = User.new({
+      'email': 'mailuser@fourth-organization.com',
+      'password': '12345678',
+      'password_confirmation': '12345678',
+      'organization_id': organizations(:four).id
+    })
+    assert_equal(@user.valid?, true)
   end
 end
