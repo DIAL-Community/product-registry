@@ -201,7 +201,7 @@ class OrganizationsController < ApplicationController
     end
 
     @organization.locations = locations.to_a
-    
+
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       uploader.store!(params[:logo])
@@ -310,7 +310,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :slug, :logo)
+        .permit(policy(@organization).permitted_attributes)
         .tap do |attr|
           if (attr[:website].present?)
             # Handle both:
