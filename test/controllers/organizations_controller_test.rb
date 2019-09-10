@@ -158,7 +158,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   test 'should filter products' do
     # With no filters, should load 3 products
     get organizations_url
-    assert_equal(3, assigns(:organizations).count)
+    assert_equal(4, assigns(:organizations).count)
 
     first_sector = sectors(:one)
     first_organization = organizations(:one)
@@ -177,7 +177,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(3, assigns(:organizations).count)
+    assert_equal(4, assigns(:organizations).count)
 
     first_location = locations(:one)
     second_organization = organizations(:two)
@@ -210,7 +210,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(3, assigns(:organizations).count)
+    assert_equal(4, assigns(:organizations).count)
   end
 
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do

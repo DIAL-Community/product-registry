@@ -2,7 +2,6 @@ require 'test_helper'
 require 'active_support/test_case'
 
 class NewUserMailerTest < ActionMailer::TestCase
-
   VALID_AUTHENTICATION_TOKEN = 'AbCdEfGhIjKlMnOpQrSt'.freeze
 
   include Devise::Test::IntegrationHelpers
@@ -23,7 +22,8 @@ class NewUserMailerTest < ActionMailer::TestCase
     @mail ||= begin
       @user = User.create!({
         'email': 'mailuser1@digitalimpactalliance.org',
-        'password': '12345678'
+        'password': '12345678',
+        'password_confirmation': '12345678'
       })
       ActionMailer::Base.deliveries.first
     end
@@ -33,11 +33,13 @@ class NewUserMailerTest < ActionMailer::TestCase
     assert_not_nil mail
   end
 
-  test 'should not allow save of invalid email address' do
+  test 'should allow not DIAL email address.' do
     sign_in FactoryBot.create(:user, role: :admin)
     @user = User.new({
       'email': 'user1@example.org',
-      'password': '12345678'
+      'password': '12345678',
+      'password_confirmation': '12345678',
+      'organization_id': organizations(:one).id
     })
     assert_equal(@user.valid?, false)
   end

@@ -310,7 +310,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(policy(@organization).permitted_attributes)
+        .permit(policy(Organization).permitted_attributes)
         .tap do |attr|
           if attr[:website].present?
             # Handle both:
@@ -324,7 +324,7 @@ class OrganizationsController < ApplicationController
           if attr[:when_endorsed].present?
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
           end
-          if params[:reslug].present? && policy(@organization).permitted_attributes.include?(:slug)
+          if params[:reslug].present? && policy(Organization).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
             if params[:duplicate].present?
               first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first
