@@ -1,0 +1,24 @@
+<div class="row m-3">
+  <h5><%= t('view.audit.audit-log') %><%= @curr_type %></h5>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th><%= @curr_type %> <%= t('view.general.name') %></th>
+        <th><%= t('view.audit.username') %></th>
+        <th><%= t('view.audit.action') %></th>
+        <th><%= t('view.audit.changes') %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @audit_list.each do |audit| %>
+        <tr>
+            <td><%= audit.associated_id %></td>
+            <td><%= audit.username %></td>
+            <td><%= audit.action %></td>
+            <td><%= audit.audit_changes %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
