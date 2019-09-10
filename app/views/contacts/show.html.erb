@@ -2,17 +2,15 @@
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
   <h5 class="card-header bg-secondary text-white"><%= @contact.name %></h5>
-  <div class="card-body">
-    <h6 class="card-subtitle text-muted mb-2"><%= @contact.email %></h6>
+  <div class="card-body py-2">
+    <div class="text-muted"><%= @contact.email %></div>
     <% if @contact.title %>
-      <p class="card-text"><%= @contact.title %></p>
+      <div class="card-text"><%= @contact.title %></div>
     <% end %>
-  </div>
-  <div class="card-footer">
-    <p class="float-right mb-0" >
+    <div class="float-right" >
       <%= link_to t('view.general.back'), contacts_path, :class => "card-link" %>
       <%= link_to t('view.general.edit'), edit_contact_path(@contact), :class => "card-link" %>
-    </p>
+    </div>
   </div>
 </div>
 
@@ -25,9 +23,9 @@
       <% @contact.organizations.each.with_index do |organization, index| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1">
+            <div class="card-body py-2">
               <h5 class="card-title"><%= link_to organization.name, organization %></h5>
-              <h6 class="card-subtitle text-muted mb-2"><%= organization.website %></h6>
+              <h6 class="card-subtitle text-muted"><%= organization.website %></h6>
             </div>
           </div>
         </div>

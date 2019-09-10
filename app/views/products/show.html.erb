@@ -59,7 +59,7 @@
       <% @product.organizations.each do |organization| %>
         <div class="col-6 col-lg-2 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1 snug">
+            <div class="card-body snug">
               <%= link_to organization do %>
                 <%= image_tag(organization.image_file, width: 200, class: 'card-img-top align-middle') %>
               <% end %>
@@ -179,20 +179,19 @@
 
 <div class="card-deck">
     <div class="card">
-      <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.digisquare-maturity') %></h5>
-      <div class="card-body text-center">
-        <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
-          <% @digisquare_maturity.each do |digisquare_maturity_category| %>
-            <div class="digisquare-gauge">
-             <div class="needle" style="transform: rotate(<%= 90 + 18*(@product.maturity_scores[digisquare_maturity_category['core']])%>deg)"></div>
+      <h5 class="card-header bg-secondary text-white"><%= t('model.building-block').to_s.pluralize.titlecase %></h5>
+      <div class="card-body">
+        <% if @product.building_blocks.count > 0 %>
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <% @product.building_blocks.each do |building_block| %>
+                <h5 class="card-text text-muted mb-1"><small><%= link_to building_block.name, building_block %></small></h5>
+              <% end %>
             </div>
-            <br clear="both"/>
-            <small><%= digisquare_maturity_category['core'] %>:<%= @product.maturity_scores[digisquare_maturity_category['core']] %></small>
-            <br clear="both"/>
-          <% end %>
+          </div>
         <% else %>
           <p class="card-text text-muted">
-            <%= t('view.product.show.no-digisquare-eval') %>
+            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.building-block').to_s.pluralize) %>
           </p>
         <% end %>
       </div>
@@ -219,21 +218,21 @@
         <% end %>
       </div>
     </div>
-
     <div class="card">
-      <h5 class="card-header bg-secondary text-white"><%= t('model.building-block').to_s.pluralize.titlecase %></h5>
-      <div class="card-body">
-        <% if @product.building_blocks.count > 0 %>
-          <div class="card h-100">
-            <div class="card-body pb-2 pt-2">
-              <% @product.building_blocks.each do |building_block| %>
-                <h5 class="card-text text-muted mb-1"><small><%= link_to building_block.name, building_block %></small></h5>
-              <% end %>
+      <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.digisquare-maturity') %></h5>
+      <div class="card-body text-center">
+        <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
+          <% @digisquare_maturity.each do |digisquare_maturity_category| %>
+            <div class="digisquare-gauge">
+             <div class="needle" style="transform: rotate(<%= 90 + 18*(@product.maturity_scores[digisquare_maturity_category['core']])%>deg)"></div>
             </div>
-          </div>
+            <br clear="both"/>
+            <small><%= digisquare_maturity_category['core'] %>:<%= @product.maturity_scores[digisquare_maturity_category['core']] %></small>
+            <br clear="both"/>
+          <% end %>
         <% else %>
           <p class="card-text text-muted">
-            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.building-block').to_s.pluralize) %>
+            <%= t('view.product.show.no-digisquare-eval') %>
           </p>
         <% end %>
       </div>
