@@ -312,7 +312,7 @@ class OrganizationsController < ApplicationController
         .require(:organization)
         .permit(policy(@organization).permitted_attributes)
         .tap do |attr|
-          if (attr[:website].present?)
+          if attr[:website].present?
             # Handle both:
             # * http:// or https://
             # * (and the typo) http//: or https//:
@@ -321,12 +321,12 @@ class OrganizationsController < ApplicationController
                                            .sub(/^https?\/\/\:/i,'')
                                            .sub(/\/$/, '')
           end
-          if (attr[:when_endorsed].present?)
-            attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+          if attr[:when_endorsed].present?
+            attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
           end
-          if (params[:reslug].present?)
+          if params[:reslug].present? && policy(@organization).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
-            if (params[:duplicate].present?)
+            if params[:duplicate].present?
               first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first
               attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
             end
