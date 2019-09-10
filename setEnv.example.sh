@@ -15,3 +15,5 @@ export JENKINS_USER=<jenkins user>
 export JENKINS_PASSWORD=<jenkins password>
 export MAILGUN_API_KEY=<mailgun api key>
 export MAILGUN_DOMAIN=<mailgun domain>
+export CAPTCHA_SITE_KEY=<your captcha site key>
+export CAPTCHA_SECRET_KEY=<your captcha secret key>
