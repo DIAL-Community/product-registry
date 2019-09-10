@@ -100,12 +100,8 @@
   background: #000000;
 }
 
-.selected-elements {
-  padding-right: 0px !important;
-
-  &:nth-child(odd) {
-    padding-right: 15px !important;
-  }
+.selected-element {
+  margin-right: 0.2rem;
 }
 
 .footer-padding {

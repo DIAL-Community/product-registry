@@ -2,7 +2,7 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="card">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
+  <div class="bg-secondary text-white card-header">
     <h5 class="float-left mb-0">
       <%= "#{t('model.workflow').to_s.titlecase}: #{@workflow.name}" %>
     </h5>
@@ -30,12 +30,12 @@
         </ul>
       <% end %>
     </p>
-    <p class="float-right mb-0" >
+    <div class="float-right" >
       <%= link_to t('view.general.back'), workflows_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@workflow).mod_allowed? %>
         <%= link_to t('view.general.edit'), edit_workflow_path(@workflow), :class => "card-link" %>
       <% end %>
-    </p>
+    </div>
   </div>
 </div>
 
@@ -49,9 +49,10 @@
         <% useCaseJson = JSON.parse(use_case.description) %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
+            <%= image_tag(use_case.image_file, class: 'card-img-top mx-auto w-25 px-0 pt-2 pb-0') %>
             <div class="card-body pb-2 pt-2">
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to use_case.name, use_case %></p>
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= useCaseJson['desc'] %></p>
+              <div class="card-text"><%= link_to use_case.name, use_case %></div>
+              <div class="card-text text-muted"><%= useCaseJson['desc'] %></div>
             </div>
           </div>
         </div>
@@ -73,8 +74,11 @@
       <% @workflow.building_blocks.order("name").each do |building_block| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-2 pt-2">
-              <p class="card-text text-muted mb-0" style="flex: 1"><%= link_to building_block.name, building_block %></p>
+            <div class="card-body px-1 py-1">
+              <%= image_tag(building_block.image_file, class: 'footer-img-small') %>
+              <span class="card-text text-muted mb-0">
+                <%= link_to building_block.name, building_block %>
+              </span>
             </div>
           </div>
         </div>
