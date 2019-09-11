@@ -7,7 +7,7 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    if user.role == 'admin' || user.role == 'principle'
+    if user.role == 'admin'
       [:id, :name, :is_launchable, :website, :slug, :aliases, :default_url, :logo, :start_assessment]
     else
       [:logo, :start_assessment]

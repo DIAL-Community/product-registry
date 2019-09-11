@@ -118,12 +118,56 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(1, assigns(:products).count)
   end
 
+  test 'Policy test: should follow product policy for user' do
+    product = products(:one)
+    sign_in FactoryBot.create(:user, email: 'user@some-email.com', products: [product])
+
+    get product_url(product)
+    assert_response :success
+    assert_equal(product.name, assigns(:product).name)
+
+    get edit_product_url(product)
+    assert_response :success
+
+    get edit_product_url(products(:two))
+    assert_response :redirect
+
+    sector = sectors(:one)
+
+    patch_params = { product: {
+      name: 'Some new product name',
+      website: 'some-fancy-website.com',
+    }, selected_sectors: {
+      "#{sector.id}": sector.id
+    }, other_names: ['', ' ', 'some-alias'] }
+
+    patch(product_url(product), params: patch_params)
+    get product_url(product)
+
+    assert_not_equal('Some new product name', assigns(:product).name)
+    assert_not_equal('some-fancy-website.com', assigns(:product).website)
+
+    assert_equal('Product', assigns(:product).name)
+    assert_equal('website.org', assigns(:product).website)
+
+    assert_equal(1, assigns(:product).sectors.length)
+
+    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', role: :admin)
+
+    patch(product_url(product), params: patch_params)
+    get product_url(product)
+
+    assert_equal('Some new product name', assigns(:product).name)
+    assert_equal('some-fancy-website.com', assigns(:product).website)
+
+  end
+
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
     get product_url(@product)
     assert_response :success
-    
+
     get new_product_url
     assert_response :redirect
 
@@ -136,5 +180,4 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     delete product_url(@product)
     assert_response :redirect
   end
-
 end

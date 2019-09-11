@@ -258,6 +258,17 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     # Should be able to edit the rest of the fields.
     assert_equal(1, assigns(:organization).locations.length)
+
+    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', role: :admin)
+
+    patch(organization_url(organization), params: patch_params)
+    get organization_url(organization)
+
+    # Patching should not update is_endorser, name, website and year.
+    assert_equal(false, assigns(:organization).is_endorser)
+    assert_equal('Some random new name', assigns(:organization).name)
+    assert_equal('some-fancy-website.com', assigns(:organization).website)
+    assert_equal(2018, assigns(:organization).when_endorsed.year)
   end
 
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
