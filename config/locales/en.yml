@@ -207,6 +207,8 @@ en:
     footer:
       privacy-policy: Privacy policy
       tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
+      fa-icons: "Icons provided unmodified by FontAwesome"
+      sdg-icons: "Icons provided unmodified by The Global Goals for Sustainable Development"
     header:
       deploys: Deploys
       digital-principles: Digital Principles
