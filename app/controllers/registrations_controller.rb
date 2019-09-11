@@ -12,7 +12,7 @@ class RegistrationsController < Devise::RegistrationsController
       end
       hash[:products] = products
     end
-    self.resource = resource_class.new_with_session(hash, session)
+    self.resource = resource_class.new_with_session(hash.except(:product_id), session)
   end
 
   private

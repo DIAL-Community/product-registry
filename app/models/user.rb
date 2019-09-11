@@ -1,5 +1,7 @@
 class User < ApplicationRecord
-  enum role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle', user: 'user', org_user: 'org_user' }
+  enum role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle',
+               user: 'user', org_user: 'org_user', org_product_user: 'org_product_user',
+               product_user: 'product_user' }
   after_initialize :set_default_role, if: :new_record?
 
   has_and_belongs_to_many :products, join_table: :users_products
@@ -8,7 +10,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true
 
   # Custom function validation
-  validate :validate_product, :validate_organization
+  validate :validate_organization, :validate_product 
 
   attr_accessor :is_approved
 
@@ -20,10 +22,10 @@ class User < ApplicationRecord
     # Skip organization validation when the email is DIAL email.
     return if /\A[^@\s]+@digitalimpactalliance.org/.match?(email)
 
-    # Skip organization validation when the user is signing up to be product owner.
-    return unless products.empty?
-
     if organization_id.nil?
+      # Skip organization validation when the user is signing up to be product owner.
+      return unless products.empty?
+
       logger.info 'User need to select organization to register without DIAL email.'
       errors.add(:organization_id, I18n.translate('view.devise.organization-required'))
     else
@@ -39,6 +41,8 @@ class User < ApplicationRecord
   def validate_product
     return if products.empty?
 
+    organization_id.nil? && self.role = User.roles[:product_user]
+    !organization_id.nil? && self.role = User.roles[:org_product_user]
     skip_confirmation_notification!
   end
 

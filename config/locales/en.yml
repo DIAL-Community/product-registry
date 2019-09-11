@@ -309,6 +309,14 @@ en:
         sdg-targets: SDG Targets
         no-sdg-targets: We don't have any SDG target information for this use case.
     user:
+      role:
+        admin: Administrator
+        ict4sdg: ICT 4 SDG User
+        principle: Principle User
+        user: Basic User
+        org_user: Organization User
+        org_product_user: Organization & Product User
+        product_user: Product User
       form:
         db-backup: This user will receive DB backups.
         email: Email
