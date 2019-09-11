@@ -11,13 +11,15 @@ module Auditable
     audit_log.associated_type = self.class.name
     audit_log.associated_id = self.slug
     audit_log.action = action
-    if action == "UPDATED" && self.id_changed?
+    if action == "UPDATED" && self.saved_change_to_id?
       audit_log.action = "CREATED"
     end
     current_user = get_current_user
-    audit_log.user_id = current_user.id
-    audit_log.user_role = current_user.role
-    audit_log.username = current_user.email
+    if (current_user)
+      audit_log.user_id = current_user.id
+      audit_log.user_role = current_user.role
+      audit_log.username = current_user.email
+    end
     audit_changes = []
     if !self.saved_changes.empty?
       audit_changes.push(self.saved_changes)
