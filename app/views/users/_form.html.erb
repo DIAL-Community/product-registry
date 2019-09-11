@@ -21,12 +21,9 @@
   <% end %>
 
   <% if !@user.is_approved %>
-    <fieldset>
-      <%= form.hidden_field :is_approved, :value => false %>
-      <%= form.check_box :is_approved, {}, true, false %>
-      <label class="form-label-group mt-2" for="is_approved">
-        <%= t('view.user.form.manual-approval') %>
-      </label>
+    <fieldset class="form-group form-check">
+      <%= form.check_box :is_approved, class: "form-check-input" %>
+      <%= form.label :is_approved, t('view.user.form.manual-approval'), class: "form-check-label" %>
     </fieldset>
   <% end %>
 

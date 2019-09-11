@@ -6,8 +6,9 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :products, join_table: :users_products
 
-  validates :password, confirmation: true
-  validates :password_confirmation, presence: true
+  validates :password, confirmation: true, on: :create
+  validates :password_confirmation, presence: true, on: :create
+  validates :password_confirmation, presence: true, on: :update, if: :password_changed?
 
   # Custom function validation
   validate :validate_organization, :validate_product 
@@ -16,6 +17,10 @@ class User < ApplicationRecord
 
   def set_default_role
     self.role ||= :user
+  end
+
+  def password_changed?
+    !password.blank?
   end
 
   def validate_organization

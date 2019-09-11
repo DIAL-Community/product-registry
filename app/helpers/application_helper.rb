@@ -7,14 +7,14 @@ module ApplicationHelper
   include Modules::Constants
 
   ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects].freeze
-  ACTION_WITH_BREADCRUMBS = %w[show edit create].freeze
-  DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/registrations', 'devise/confirmations', 'registrations'].freeze
+  ACTION_WITH_BREADCRUMBS = %w[show edit create update].freeze
+  DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations'].freeze
 
   def all_filters
     FRAMEWORK_FILTER_KEYS + ORGANIZATION_FILTER_KEYS
   end
 
-  def display_sidenav
+  def hide_sidenav
     current_page?('/map') || current_page?('/about/cookies') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')

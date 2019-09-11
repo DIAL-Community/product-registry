@@ -49,7 +49,9 @@ CREATE TYPE public.user_role AS ENUM (
     'ict4sdg',
     'principle',
     'user',
-    'org_user'
+    'org_user',
+    'org_product_user',
+    'product_user'
 );
 
 
@@ -820,6 +822,16 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: users_products; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_products (
+    user_id bigint NOT NULL,
+    product_id bigint NOT NULL
+);
+
+
+--
 -- Name: workflows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1374,6 +1386,13 @@ CREATE UNIQUE INDEX products_projects_idx ON public.projects_products USING btre
 
 
 --
+-- Name: products_users_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX products_users_idx ON public.users_products USING btree (product_id, user_id);
+
+
+--
 -- Name: projects_locations_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1455,6 +1474,13 @@ CREATE UNIQUE INDEX usecases_sdgs ON public.use_cases_sdg_targets USING btree (u
 --
 
 CREATE UNIQUE INDEX usecases_workflows ON public.workflows_use_cases USING btree (use_case_id, workflow_id);
+
+
+--
+-- Name: users_products_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_products_idx ON public.users_products USING btree (user_id, product_id);
 
 
 --
@@ -1744,6 +1770,22 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: users_products users_products_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_products
+    ADD CONSTRAINT users_products_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: users_products users_products_user_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_products
+    ADD CONSTRAINT users_products_user_fk FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: workflows_building_blocks workflows_bbs_bb_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1820,6 +1862,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190805145805'),
 ('20190805161659'),
 ('20190909152506'),
-('20190909191546');
+('20190909191546'),
+('20190911150425'),
+('20190911194639');
 
 

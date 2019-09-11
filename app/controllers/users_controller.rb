@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   def update
     user_hash = {}
     user_hash[:role] = user_params[:role]
-    
+
     user_hash[:receive_backup] = false
     if (user_params[:receive_backup]) && (user_hash[:role] == "admin")
       user_hash[:receive_backup] = user_params[:receive_backup]
@@ -99,7 +99,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-        params.require(:user)
-        .permit(:email, :role, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
+      params.require(:user)
+            .permit(:email, :role, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
     end
 end
