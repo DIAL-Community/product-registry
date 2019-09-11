@@ -10,7 +10,7 @@ const changeProductHandler = function() {
     var label = $(this).children("option:selected").text();
     $(this).next('.row').find('.badges').append(
       '<span class="badge badge-secondary mr-1">' + label +
-      ' <input type="hidden" name="user[products][]" value="' + value + '"/>' +
+      ' <input type="hidden" name="user[product_id][]" value="' + value + '"/>' +
       ' <i class="fas fa-window-close"></i>' +
       '</span>'
     );
