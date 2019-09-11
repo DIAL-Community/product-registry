@@ -27,11 +27,28 @@
     <%= f.label :password_confirmation, t('view.devise.password-confirmation') %>
   </fieldset>
 
+  <fieldset class="form-group">
+    <%= f.label :organization_id, t('model.organization').titlecase %>:
+    <span class="input-group">
+      <%= f.collection_select(:organization_id, Organization.all.order(:name), :id, :name,
+                              { include_blank: 'Select your organization.' },
+                              { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
+      <i class="fa fa-info-circle pl-2 mt-3 align-middle"
+         data-toggle="tooltip" data-html="true"
+         title="<%= t('view.devise.organization-tooltip') %>"></i>
+    </span>
+  </fieldset>
 
-  <fieldset class="form-label-group">
-    <%= f.collection_select(:organization_id, Organization.all.order(:name), :id, :name,
-                            { include_blank: 'Select your organization.' },
-                            { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
+  <fieldset class="form-group">
+    <%= f.label :product_id, t('model.product').titlecase %>:
+    <span class="input-group">
+      <%= f.collection_select(:product_id, Product.all.order(:name), :id, :name,
+                              { include_blank: 'Select your product.' },
+                              { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
+      <i class="fa fa-info-circle pl-2 mt-3 align-middle"
+         data-toggle="tooltip" data-html="true"
+         title="<%= t('view.devise.product-tooltip') %>"></i>
+    </span>
   </fieldset>
 
   <%= recaptcha_tags callback: 'enableRegistration', site_key: Rails.application.secrets.captcha_site_key %>

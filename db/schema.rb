@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190909191546) do
+ActiveRecord::Schema.define(version: 20190911150425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(version: 20190909191546) do
   add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
   add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"
   add_foreign_key "users", "organizations", name: "user_organization_fk"
+  add_foreign_key "users", "products", name: "user_product_fk"
   add_foreign_key "workflows_building_blocks", "building_blocks", name: "workflows_bbs_bb_fk"
   add_foreign_key "workflows_building_blocks", "workflows", name: "workflows_bbs_workflow_fk"
   add_foreign_key "workflows_use_cases", "use_cases", name: "workflows_usecases_usecase_fk"
