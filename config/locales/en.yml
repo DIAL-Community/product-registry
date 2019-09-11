@@ -125,7 +125,7 @@ en:
       organization-required: Organization information is required when signing up as organization editor.
       organization-nomatch: "Organization website doesn't match your email address."
       organization-tooltip: "Apply to be the owner for the organization which will allow you to update the organization information."
-      product-tooltip: "Apply to be the editor for the product page. You will need to be verified to do this."
+      product-tooltip: "Optionally apply as a product owner. You will need to be verified by our team member to do this."
     location:
       index:
         no-data: We couldn't find any location in the database.
