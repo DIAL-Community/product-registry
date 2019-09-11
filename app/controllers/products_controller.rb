@@ -319,15 +319,14 @@ class ProductsController < ApplicationController
     def product_params
       params
         .require(:product)
-        .permit(:name, :website, :is_launchable, :default_url, :has_osc, :osc_maturity, :has_digisquare,
-                :start_assessment, :digisquare_maturity, :confirmation, :slug, :logo)
+        .permit(policy(Product).permitted_attributes)
         .tap do |attr|
-          if (params[:other_names].present?)
-            attr[:aliases] = params[:other_names].reject {|x|x.empty?}
+          if params[:other_names].present? && policy(Product).permitted_attributes.include?(:aliases)
+            attr[:aliases] = params[:other_names].reject(&:empty?)
           end
-          if (params[:reslug].present?)
+          if params[:reslug].present? && policy(Product).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
-            if (params[:duplicate].present?)
+            if params[:duplicate].present?
               first_duplicate = Product.slug_starts_with(attr[:slug]).order(slug: :desc).first
               attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
             end
