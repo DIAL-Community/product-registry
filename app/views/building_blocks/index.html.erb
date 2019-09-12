@@ -15,8 +15,8 @@
     <% @building_blocks.each do |building_block| %>
       <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
         <div class="card index-card small">
-          <div class="card-header bg-secondary text-white">
-            <%= link_to truncate(building_block.name, length: 30, omission: '&hellip;', escape: false), building_block,
+          <div class="card-header bg-secondary text-white truncate-parent">
+            <%= link_to building_block.name, building_block, class: 'truncate-text',
                 'title' => building_block.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
           </div>
           <div class="model-logo">
