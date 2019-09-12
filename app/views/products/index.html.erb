@@ -32,11 +32,7 @@
         </div>
         <div class="model-logo">
           <%= link_to(product) do %>
-            <% if product.is_image_compiled %>
-              <%= image_tag(product.image_file, class: 'card-img-top align-middle') %>
-            <% else %>
-              <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
-            <% end %>
+            <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
           <% end %>
         </div>
 

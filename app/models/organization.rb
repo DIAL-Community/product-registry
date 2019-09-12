@@ -11,20 +11,11 @@ class Organization < ApplicationRecord
   scope :slug_starts_with, -> (slug) { where("LOWER(organizations.slug) like LOWER(?)", "#{slug}\\_%")}
 
   def image_file
-    if File.exist?(File.join('app','assets','images','organizations',"#{slug}.png"))
-      return "organizations/#{slug}.png"
-    elsif File.exist?(File.join('public','assets','organizations',"#{slug}.png"))
+    if File.exist?(File.join('public','assets','organizations',"#{slug}.png"))
       return "/assets/organizations/#{slug}.png"
     else
-      return "organizations/org_placeholder.png"
+      return "/assets/organizations/org_placeholder.png"
     end
-  end
-
-  def is_image_compiled
-    if File.exist?(File.join('public','assets','organizations',"#{slug}.png"))
-      return false
-    end
-    return true
   end
 
   def to_param  # overridden

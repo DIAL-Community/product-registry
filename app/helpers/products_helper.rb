@@ -134,12 +134,12 @@ module ProductsHelper
     when "Compatibility"
       product.interoperates_with.each do |interop|
         tooltip = t("view.product.index.footer_interop") + interop.name
-        image = Hash["filename"=>"products/"+interop.slug+".png", "tooltip"=>tooltip, "id"=>interop.id, "controller"=>"products"]
+        image = Hash["filename"=>"/assets/products/"+interop.slug+".png", "tooltip"=>tooltip, "id"=>interop.id, "controller"=>"products"]
         images.push(image)
       end
       product.includes.each do |interop|
         tooltip = t("view.product.index.footer_interop") + interop.name
-        image = Hash["filename"=>"products/"+interop.slug+".png", "tooltip"=>tooltip, "id"=>interop.id, "controller"=>"products"]
+        image = Hash["filename"=>"/assets/products/"+interop.slug+".png", "tooltip"=>tooltip, "id"=>interop.id, "controller"=>"products"]
         images.push(image)
       end
     when "Sustainable Development Goals"
