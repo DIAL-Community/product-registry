@@ -30,17 +30,22 @@
 public/export.xls
 public/export.xlsx
 
+public/assets/*.png
+public/assets/jquery-ui/*.png
 public/assets/organizations/fixer*
 public/assets/.sprockets*
+public/assets/building_blocks/*
+public/assets/use_cases/*
+public/assets/origins/*
+public/assets/sdgs/*
+public/assets/sdg_targets/*
+public/assets/workflows/*
 public/assets/**/*.gz
 public/assets/**/*.css
 public/assets/**/*.map
-public/assets/**/*.png
 public/assets/**/*.svg
 public/assets/**/*.json
 public/assets/**/*.webp
-public/assets/**/*.gif
-public/assets/**/*.jpg
 public/assets/**/*.js
 
 # Uploaded assets
