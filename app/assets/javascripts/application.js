@@ -24,6 +24,7 @@
 //= require popper
 //= require bootstrap
 //= require cookies_eu
+//= require quill
 //= require_tree .
 
 function triggerPageEvents() {

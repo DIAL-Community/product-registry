@@ -3,6 +3,7 @@ class OrganizationsController < ApplicationController
 
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :set_current_user, only: [:edit, :update, :destroy]
 
   # GET /organizations
   # GET /organizations.json
@@ -75,6 +76,7 @@ class OrganizationsController < ApplicationController
   def create
     authorize Organization, :mod_allowed?
     @organization = Organization.new(organization_params)
+    @organization.set_current_user(current_user)
 
     if (params[:selected_sectors].present?)
       params[:selected_sectors].keys.each do |sector_id|
@@ -132,6 +134,7 @@ class OrganizationsController < ApplicationController
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       uploader.store!(params[:logo])
+      @organization.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
@@ -205,6 +208,7 @@ class OrganizationsController < ApplicationController
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       uploader.store!(params[:logo])
+      @organization.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
@@ -263,6 +267,10 @@ class OrganizationsController < ApplicationController
       if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end
+    end
+
+    def set_current_user
+      @organization.set_current_user(current_user)
     end
 
     def authenticate_user

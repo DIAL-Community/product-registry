@@ -2,6 +2,7 @@ class ProductsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
+  before_action :set_current_user, only: [:edit, :update, :destroy]
 
   def map
     @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
@@ -60,6 +61,7 @@ class ProductsController < ApplicationController
   def create
     authorize Product, :mod_allowed?
     @product = Product.new(product_params)
+    @product.set_current_user(current_user)
 
     if product_params[:start_assessment] == "true"
       assign_maturity
@@ -110,6 +112,7 @@ class ProductsController < ApplicationController
     if params[:logo].present?
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
       uploader.store!(params[:logo])
+      @product.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
@@ -190,6 +193,7 @@ class ProductsController < ApplicationController
     if params[:logo].present?
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
       uploader.store!(params[:logo])
+      @product.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
@@ -244,48 +248,52 @@ class ProductsController < ApplicationController
       end
     end
 
-  def filter_products
-    bbs = sanitize_session_values 'building_blocks'
-    origins = sanitize_session_values 'origins'
-    products = sanitize_session_values 'products'
-    sdgs = sanitize_session_values 'sdgs'
-    use_cases = sanitize_session_values 'use_cases'
-    workflows = sanitize_session_values 'workflows'
-
-    with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
-
-    filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
-
-    sdg_products = Product.all
-    if !sdgs.empty?
-      sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+    def set_current_user
+      @product.set_current_user(current_user)
     end
 
-    use_case_bbs = get_bbs_from_use_cases(use_cases)
-    workflow_bbs = get_bbs_from_workflows(workflows)
+    def filter_products
+      bbs = sanitize_session_values 'building_blocks'
+      origins = sanitize_session_values 'origins'
+      products = sanitize_session_values 'products'
+      sdgs = sanitize_session_values 'sdgs'
+      use_cases = sanitize_session_values 'use_cases'
+      workflows = sanitize_session_values 'workflows'
 
-    if (!bbs.empty?)
-      filter_bbs = BuildingBlock.all.where('id in (?)', bbs)
-      bb_ids = (filter_bbs.ids & use_case_bbs & workflow_bbs).uniq
-    else 
-      bb_ids = (use_case_bbs & workflow_bbs).uniq
-    end
+      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
 
-    bb_products = Product.all
-    if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
-      bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
-    end
-    
-    product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+      filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
 
-    if filter_set || product_filter_set
-      product_ids = (sdg_products.ids & bb_products.ids & product_ids).uniq
-      products = Product.where(id: product_ids)
-    else
-      products = Product.all.order(:slug)
+      sdg_products = Product.all
+      if !sdgs.empty?
+        sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+      end
+
+      use_case_bbs = get_bbs_from_use_cases(use_cases)
+      workflow_bbs = get_bbs_from_workflows(workflows)
+
+      if (!bbs.empty?)
+        filter_bbs = BuildingBlock.all.where('id in (?)', bbs)
+        bb_ids = (filter_bbs.ids & use_case_bbs & workflow_bbs).uniq
+      else 
+        bb_ids = (use_case_bbs & workflow_bbs).uniq
+      end
+
+      bb_products = Product.all
+      if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
+        bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
+      end
+      
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+
+      if filter_set || product_filter_set
+        product_ids = (sdg_products.ids & bb_products.ids & product_ids).uniq
+        products = Product.where(id: product_ids)
+      else
+        products = Product.all.order(:slug)
+      end
+      products
     end
-    products
-  end
 
     def load_maturity
       @osc_maturity = YAML.load_file("config/maturity_osc.yml")
