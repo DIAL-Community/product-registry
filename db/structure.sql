@@ -48,7 +48,8 @@ CREATE TYPE public.user_role AS ENUM (
     'admin',
     'ict4sdg',
     'principle',
-    'user'
+    'user',
+    'org_user'
 );
 
 
@@ -794,7 +795,8 @@ CREATE TABLE public.users (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     role public.user_role DEFAULT 'user'::public.user_role NOT NULL,
-    receive_backup boolean DEFAULT false
+    receive_backup boolean DEFAULT false,
+    organization_id bigint
 );
 
 
@@ -1734,6 +1736,14 @@ ALTER TABLE ONLY public.use_cases_sdg_targets
 
 
 --
+-- Name: users user_organization_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT user_organization_fk FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
 -- Name: workflows_building_blocks workflows_bbs_bb_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1808,6 +1818,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190801194208'),
 ('20190801200432'),
 ('20190805145805'),
-('20190805161659');
+('20190805161659'),
+('20190909152506'),
+('20190909191546');
 
 

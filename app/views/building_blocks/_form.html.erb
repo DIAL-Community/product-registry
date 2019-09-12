@@ -31,22 +31,18 @@
         <%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>
       </label>
     </fieldset>
-  <% end %>
-  <div class="row">
-    <div id="base-selected-products" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-          <% if !@product %>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-            </a>
-          <% end %>
+    <% end %>
+    <div class="row">
+      <div class="col-12">
+        <span id="base-selected-products" class="selected-element badge badge-secondary px-1 mb-1">
+          <span class="text-label"></span>
+          <a onclick="remove(this);" style="cursor: pointer;">
+            <i class="fas fa-trash-alt"></i>
+          </a>
           <input type="hidden"/>
-        </div>
+        </span>
       </div>
     </div>
-  </div>
 
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.workflow').to_s.pluralize.humanize) %>
@@ -61,16 +57,14 @@
   </fieldset>
 
   <div class="row">
-    <div id="base-selected-workflows" class="col-6 col-lg-4 mb-2">
-      <div class="card h-100">
-        <div class="p-2 clearfix">
-          <p class="mb-0 float-left"></p>
-            <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-              <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-            </a>
-          <input type="hidden"/>
-        </div>
-      </div>
+    <div class="col-12">
+      <span id="base-selected-workflows" class="selected-element badge badge-secondary px-1 mb-1">
+        <span class="text-label"></span>
+        <a onclick="remove(this);" style="cursor: pointer;">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        <input type="hidden"/>
+      </span>
     </div>
   </div>
 

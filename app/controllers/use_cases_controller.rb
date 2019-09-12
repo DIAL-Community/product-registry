@@ -6,6 +6,12 @@ class UseCasesController < ApplicationController
   # GET /use_cases
   # GET /use_cases.json
   def index
+    if params[:without_paging]
+      @use_cases = UseCase.name_contains(params[:search])
+      authorize @use_cases, :view_allowed?
+      return
+    end
+
     @use_cases = filter_use_cases.order(:name)
 
     if params[:search]

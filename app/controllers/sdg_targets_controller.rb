@@ -4,26 +4,22 @@ class SdgTargetsController < ApplicationController
 
   def index
     if params[:without_paging]
-      @sdg_targets = SdgTarget
-          .name_contains(params[:search])
-          .order(:target_number)
+      @sdg_targets = SdgTarget.name_contains(params[:search])
+                              .order(:target_number)
       authorize @sdg_targets, :view_allowed?
       return
     end
 
     if params[:search]
-      @sdg_targets = SdgTarget
-          .where(nil)
-          .name_contains(params[:search])
-          .order(:target_number)
-          .paginate(page: params[:page], per_page: 20)
-      authorize @sdg_targets, :view_allowed?
+      @sdg_targets = SdgTarget.where(nil)
+                              .name_contains(params[:search])
+                              .order(:target_number)
+                              .paginate(page: params[:page], per_page: 20)
     else
-      @sdg_targets = SdgTarget
-          .order(:target_number)
-          .paginate(page: params[:page], per_page: 20)
-      authorize @sdg_targets, :view_allowed?
+      @sdg_targets = SdgTarget.order(:target_number)
+                              .paginate(page: params[:page], per_page: 20)
     end
+    authorize @sdg_targets, :view_allowed?
   end
 
   def show

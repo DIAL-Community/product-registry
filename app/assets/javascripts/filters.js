@@ -157,4 +157,9 @@ var prepareFilters = function() {
     loadFilters();
 }
 
-$(document).on("turbolinks:load", prepareFilters);
+$(document).on('sustainable_development_goals#index:loaded', prepareFilters);
+$(document).on('use_cases#index:loaded', prepareFilters);
+$(document).on('workflows#index:loaded', prepareFilters);
+$(document).on('building_blocks#index:loaded', prepareFilters);
+$(document).on('products#index:loaded', prepareFilters);
+$(document).on('organizations#index:loaded', prepareFilters);

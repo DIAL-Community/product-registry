@@ -24,10 +24,10 @@ class Product < ApplicationRecord
   end
 
   def image_file
-    if File.exist?(File.join('app','assets','images','products',"#{slug}.png"))
-      return "products/#{slug}.png"
+    if File.exist?(File.join('public','assets','products',"#{slug}.png"))
+      return "/assets/products/#{slug}.png"
     else
-      return "products/prod_placeholder.png"
+      return "/assets/products/prod_placeholder.png"
     end
   end
 

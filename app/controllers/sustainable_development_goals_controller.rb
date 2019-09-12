@@ -4,13 +4,16 @@ class SustainableDevelopmentGoalsController < ApplicationController
   # GET /sustainable_development_goals
   # GET /sustainable_development_goals.json
   def index
-
-    @sustainable_development_goals = filter_sdgs.order(:number)
-
-    if params[:search]
-      @sustainable_development_goals = @sustainable_development_goals.where('LOWER("sustainable_development_goals"."name") like LOWER(?)', "%" + params[:search] + "%")
+    if params[:without_paging]
+      @sustainable_development_goals = SustainableDevelopmentGoal.all
+      unless params[:search].blank?
+        @sustainable_development_goals = @sustainable_development_goals.name_contains(params[:search])
+      end
+      @sustainable_development_goals = @sustainable_development_goals.order(:name)
+      return
     end
 
+    @sustainable_development_goals = filter_sdgs.order(:number)
     @sustainable_development_goals = @sustainable_development_goals.eager_load(:sdg_targets)
     authorize @sustainable_development_goals, :view_allowed?
   end

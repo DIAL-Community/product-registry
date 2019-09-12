@@ -5,6 +5,11 @@ class WorkflowsController < ApplicationController
   # GET /workflows
   # GET /workflows.json
   def index
+    if params[:without_paging]
+      @workflows = Workflow.name_contains(params[:search])
+      authorize @workflows, :view_allowed?
+      return
+    end
 
     @workflows = filter_workflows.order(:name)
 

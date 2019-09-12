@@ -7,13 +7,13 @@
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
 
   <fieldset class="form-label-group">
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", :class => "form-control", :placeholder => "Email" %>
-    <%= f.label :email %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", :class => "form-control", :placeholder => t('view.devise.email') %>
+    <%= f.label :email, t('view.devise.email') %>
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= f.password_field :password, autocomplete: "new-password", :class => "form-control", :placeholder => "Password" %>
-    <%= f.label :password %>
+    <%= f.password_field :password, autocomplete: "new-password", :class => "form-control", :placeholder => t('view.devise.password') %>
+    <%= f.label :password, t('view.devise.password') %>
     <small class="text-muted">
       <% if @minimum_password_length %>
         <em>(<%= @minimum_password_length %>
@@ -23,11 +23,20 @@
   </fieldset>
 
   <fieldset class="form-label-group">
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", :class => "form-control", :placeholder => "Password confirmation" %>
-    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", :class => "form-control", :placeholder => t('view.devise.password-confirmation') %>
+    <%= f.label :password_confirmation, t('view.devise.password-confirmation') %>
   </fieldset>
 
-  <%= f.submit "Sign up", :class => "btn btn-block btn-primary" %>
+
+  <fieldset class="form-label-group">
+    <%= f.collection_select(:organization_id, Organization.all.order(:name), :id, :name,
+                            { include_blank: 'Select your organization.' },
+                            { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
+  </fieldset>
+
+  <%= recaptcha_tags callback: 'enableRegistration', site_key: Rails.application.secrets.captcha_site_key %>
+
+  <%= f.submit t('view.header.sign-up'), id: 'submit-registration', :class => "btn btn-block btn-secondary", disabled: true %>
 <% end %>
 
 <%= render "devise/shared/links" %>
