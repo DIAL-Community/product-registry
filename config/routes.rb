@@ -42,6 +42,8 @@ Rails.application.routes.draw do
     get 'count', on: :collection
   end
 
+  resources :audits, only: [:index]
+
   resources :locations do
     resources :organizations
   end
