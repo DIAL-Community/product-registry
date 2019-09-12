@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
+  before_action :configure_registration_parameters, if: :devise_controller?
+
   def generate_offset(first_duplicate)
     size = 1
     if (!first_duplicate.nil?)
@@ -251,6 +253,12 @@ class ApplicationController < ActionController::Base
     product_bbs.ids
   end
 
+  protected
+
+  def configure_registration_parameters
+    logger.info 'Configuring custom registration parameters.'
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:organization_id, :role])
+  end
 
   private
 

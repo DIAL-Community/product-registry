@@ -34,7 +34,10 @@
                 </div>
               </li>
             <% else %>
-              <li class="mt-1">
+              <li>
+                <strong><%= link_to t('view.header.sign-up'), new_user_registration_path, :class => 'nav-link' %></strong>
+              </li>
+              <li>
                 <strong><%= link_to t('view.header.login'), new_user_session_path, :class => 'nav-link' %></strong>
               </li>
             <% end %>
