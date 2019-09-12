@@ -165,7 +165,7 @@
         <div class="row">
           <div id="clear-products" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
-        <div class="form-row mb-2">
+        <div class="row mb-2">
           <div class="col-12 ml-1">
             <div class="form-check">
                 <%= check_box_tag "with_maturity_assessment", true, params[:with_maturity_assessment], class: "form-check-input filter-element checkbox-align" %>
@@ -174,7 +174,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= label_tag "origins", t('view.product.index.sources') %>
               <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
@@ -292,7 +292,7 @@
         <div class="row">
           <div id="clear-organizations" class="col-12 small clear-all"><a class="float-right" href="#"><%= t('view.filternav.clear') %></a></div>
         </div>
-        <div class="form-row mb-2">
+        <div class="row mb-2">
           <div class="col-12 ml-1">
             <div class="form-check">
                 <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
@@ -301,7 +301,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 ml-1">
             <div class="form-group mb-1">
               <%= label_tag "years", t('view.organization.index.endorsed-date') %>
               <%= select(nil, "years",

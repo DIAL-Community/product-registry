@@ -128,7 +128,7 @@ module ProductsHelper
     when "Building Blocks"
       product.building_blocks.each do |bb|
         tooltip = t("view.product.index.footer_bb_candidate") + bb.name + t("view.product.index.footer_bb")
-        image = Hash["filename"=>"building_blocks/"+bb.slug+".png", "tooltip"=>tooltip, "id"=>bb.id, "controller"=>"building_blocks"]
+        image = Hash["filename"=>bb.image_file, "tooltip"=>tooltip, "id"=>bb.id, "controller"=>"building_blocks"]
         images.push(image)
       end
     when "Compatibility"
@@ -145,7 +145,7 @@ module ProductsHelper
     when "Sustainable Development Goals"
       product.sustainable_development_goals.sort { |x, y| x[:number].to_i <=> y[:number].to_i }.each do |sdg|
         tooltip = t("view.product.index.footer_sdg") + sdg.number.to_s + ": " + sdg.name
-        image = Hash["filename"=>"sdgs/"+sdg.slug+".png", "tooltip"=>tooltip, "id"=>sdg.id, "controller"=>"sustainable_development_goals"]
+        image = Hash["filename"=>sdg.image_file, "tooltip"=>tooltip, "id"=>sdg.id, "controller"=>"sustainable_development_goals"]
         images.push(image)
       end
     when "Maturity Models"

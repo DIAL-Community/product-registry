@@ -2,7 +2,7 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="card">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
+  <div class="bg-secondary text-white card-header">
     <h5 class="float-left mb-0">
       <%= "#{t('model.user').to_s.titlecase}: #{@user.email}" %>
     </h5>
@@ -19,12 +19,12 @@
         <strong><%= t('view.user.show.receive-backup') %>: </strong><%= @user.receive_backup ? t('view.user.show.yes') : t('view.user.show.no') %>
       </p>
     <% end %>
-    <p class="card-subtitle text-muted mt-3"> 
-      <%= link_to t('view.user.show.reset-password'), edit_user_registration_path, :class => 'btn btn-secondary' %>
+    <p class="card-subtitle mt-3"> 
+      <%= link_to t('view.user.show.reset-password'), edit_user_registration_path, :class => 'btn btn-secondary text-white' %>
     </p>
-    <p class="float-right mb-0" >
+    <div class="float-right" >
       <%= link_to t('view.general.back'), users_path, :class => "card-link" %>
       <%= link_to t('view.general.edit'), edit_user_path(@user), :class => "card-link" %>
-    </p>
+    </div>
   </div>
 </div>

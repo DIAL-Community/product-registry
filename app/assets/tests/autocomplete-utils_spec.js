@@ -6,10 +6,10 @@ describe("autocomplete-utils.js: ", function() {
         '<div class="row">' +
           '<div id="base-selected-offices" class="col-6 col-lg-4 mb-2">' +
             '<div class="card h-100">' +
-              '<div class="p-2 clearfix">' +
+              '<div class="px-1 clearfix badge badge-secondary">' +
                 '<p class="mb-0 float-left"></p>' +
                 '<a class="float-right" onclick="remove(this);" style="cursor: pointer;">' +
-                  '<i class="fas fa-trash-alt" style="color: #6c757d;"></i>' +
+                  '<i class="fas fa-trash-alt"></i>' +
                 '</a>' +
                 '<input type="hidden"/>' +
               '</div>' +
@@ -25,10 +25,10 @@ describe("autocomplete-utils.js: ", function() {
         '<div class="row">' +
           '<div id="base-selected-organizations" class="col-6 col-lg-4 mb-2">' +
             '<div class="card h-100">' +
-              '<div class="p-2 clearfix">' +
+              '<div class="px-1 clearfix badge badge-secondary">' +
                 '<p class="mb-0 float-left"></p>' +
                 '<a class="float-right" onclick="remove(this);" style="cursor: pointer;">' +
-                  '<i class="fas fa-trash-alt" style="color: #6c757d;"></i>' +
+                  '<i class="fas fa-trash-alt"></i>' +
                 '</a>' +
                 '<input type="hidden"/>' +
               '</div>' +

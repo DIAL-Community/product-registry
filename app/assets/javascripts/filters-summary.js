@@ -16,4 +16,10 @@ var updateCount = function() {
   });
 }
 
-$(document).on("turbolinks:load", updateCount);
+
+$(document).on('sustainable_development_goals#index:loaded', updateCount);
+$(document).on('use_cases#index:loaded', updateCount);
+$(document).on('workflows#index:loaded', updateCount);
+$(document).on('building_blocks#index:loaded', updateCount);
+$(document).on('products#index:loaded', updateCount);
+$(document).on('organizations#index:loaded', updateCount);
