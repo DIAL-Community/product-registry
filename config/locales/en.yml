@@ -128,7 +128,9 @@ en:
       password: Password
       password-confirmation: Password confirmation
       organization-required: Organization information is required when signing up as organization editor.
-      organization-nomatch: "Organization website doesn't match your email address." 
+      organization-nomatch: "Organization website doesn't match your email address."
+      organization-tooltip: "Apply to be the owner for the organization which will allow you to update the organization information."
+      product-tooltip: "Optionally apply as a product owner. You will need to be verified by our team member to do this."
     location:
       index:
         no-data: We couldn't find any location in the database.
@@ -315,6 +317,14 @@ en:
         sdg-targets: SDG Targets
         no-sdg-targets: We don't have any SDG target information for this use case.
     user:
+      role:
+        admin: Administrator
+        ict4sdg: ICT 4 SDG User
+        principle: Principle User
+        user: Basic User
+        org_user: Organization User
+        org_product_user: Organization & Product User
+        product_user: Product User
       form:
         db-backup: This user will receive DB backups.
         email: Email

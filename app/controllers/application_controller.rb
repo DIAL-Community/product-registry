@@ -257,14 +257,15 @@ class ApplicationController < ActionController::Base
 
   def configure_registration_parameters
     logger.info 'Configuring custom registration parameters.'
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:organization_id, :role])
+    devise_parameter_sanitizer.permit(:sign_up) do |user_params|
+      user_params.permit(:email, :password, :password_confirmation, :organization_id, :role, product_id: [])
+    end
   end
 
   private
 
   def user_not_authorized(exception)
-    policy_name = exception.policy.class.to_s.underscore
-    flash[:error] = t "#{exception.query}", scope: "pundit", default: :default
+    flash[:error] = t exception.query.to_s, scope: 'pundit', default: :default
     redirect_to(request.referrer || root_path)
   end
 end

@@ -40,7 +40,7 @@
         <%= yield %>
         <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
       </div>
-    <% elsif display_sidenav %>
+    <% elsif hide_sidenav %>
       <div id="content" class="container">
         <%= yield %>
         <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>

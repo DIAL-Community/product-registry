@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190909195732) do
+ActiveRecord::Schema.define(version: 20190911194639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "audits", force: :cascade do |t|
-    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -27,7 +26,7 @@ ActiveRecord::Schema.define(version: 20190909195732) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "audit_id", "version"], name: "auditable_index"
+    t.index ["action", "id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -267,6 +266,13 @@ ActiveRecord::Schema.define(version: 20190909195732) do
 # Could not dump table "users" because of following StandardError
 #   Unknown type 'user_role' for column 'role'
 
+  create_table "users_products", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["product_id", "user_id"], name: "products_users_idx", unique: true
+    t.index ["user_id", "product_id"], name: "users_products_idx", unique: true
+  end
+
   create_table "workflows", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -323,6 +329,8 @@ ActiveRecord::Schema.define(version: 20190909195732) do
   add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
   add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"
   add_foreign_key "users", "organizations", name: "user_organization_fk"
+  add_foreign_key "users_products", "products", name: "users_products_product_fk"
+  add_foreign_key "users_products", "users", name: "users_products_user_fk"
   add_foreign_key "workflows_building_blocks", "building_blocks", name: "workflows_bbs_bb_fk"
   add_foreign_key "workflows_building_blocks", "workflows", name: "workflows_bbs_workflow_fk"
   add_foreign_key "workflows_use_cases", "use_cases", name: "workflows_usecases_usecase_fk"

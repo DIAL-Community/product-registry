@@ -2,6 +2,19 @@
 class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :check_captcha, only: [:create]
 
+  # Overriding how devise build the user object here.
+  def build_resource(hash = {})
+    if hash[:product_id].present?
+      products = []
+      hash[:product_id].each do |product_id|
+        product = Product.find(product_id)
+        !product.nil? && products.push(product)
+      end
+      hash[:products] = products
+    end
+    self.resource = resource_class.new_with_session(hash.except(:product_id), session)
+  end
+
   private
 
   def check_captcha

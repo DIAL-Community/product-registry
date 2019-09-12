@@ -9,10 +9,10 @@
   </div>
   <div class="card-body">
     <p class="card-subtitle text-muted mb-0" >
-      <strong><%= t('view.user.form.role') %>: </strong><%= @user.role.capitalize %>
+      <strong><%= t('view.user.form.role') %>: </strong><%= t("view.user.role.#{@user.role}") %>
     </p>
     <p class="card-subtitle text-muted mt-3" >
-      <strong><%= t('view.user.show.approved') %>: </strong><%= @user.confirmed_at %>
+      <strong><%= t('view.user.show.approved') %>: </strong><%= !@user.confirmed_at.nil? && @user.confirmed_at.strftime('%m/%d/%Y - %H:%M') %>
     </p>
     <% if @user.role == "admin" %>
       <p class="card-subtitle text-muted mt-3" >
