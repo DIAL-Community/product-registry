@@ -4,13 +4,13 @@
   <h5 class="card-header bg-secondary text-white">
     <%= "#{t('model.location').to_s.humanize}: #{@location.name}" %>
   </h5>
-  <div class="card-body">
-    <p class="float-right mb-0" >
+  <div class="card-body py-2">
+    <div class="float-right">
       <%= link_to t('view.general.back'), locations_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@location).mod_allowed? %>
         <%= link_to t('view.general.edit'), edit_location_path(@location), :class => "card-link" %>
       <% end %>
-    </p>
+    </div>
   </div>
 </div>
 
@@ -23,9 +23,9 @@
       <% @location.organizations.each do |organization| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-1">
+            <div class="card-body py-1">
               <h5 class="card-title"><%= link_to organization.name, organization %></h5>
-              <h6 class="card-subtitle text-muted mb-2"><%= organization.website %></h6>
+              <h6 class="card-subtitle text-muted"><%= organization.website %></h6>
             </div>
           </div>
         </div>

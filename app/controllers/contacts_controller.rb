@@ -6,9 +6,8 @@ class ContactsController < ApplicationController
   # GET /contacts.json
   def index
     if params[:without_paging]
-      @contacts = Contact
-          .name_contains(params[:search])
-          .order(:name)
+      @contacts = Contact.name_contains(params[:search])
+                         .order(:name)
       authorize @contacts, :view_allowed?
       return
     end

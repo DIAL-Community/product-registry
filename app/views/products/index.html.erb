@@ -24,7 +24,7 @@
     <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
       <div class="card index-card small">
         <div class="card-header bg-secondary text-white">
-          <%= link_to truncate(product.name, length: 25, omission: '&hellip;', escape: false), product,
+          <%= link_to truncate(product.name, length: 30, omission: '&hellip;', escape: false), product,
               'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
           <% if product.is_launchable %>
             <i class="fa fa-rocket header-img ml-1" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.product.index.is_deployable') %>"></i>
@@ -35,7 +35,7 @@
         </div>
         <div class="model-logo">
           <%= link_to(product) do %>
-            <%= image_tag(product.image_file, class: 'card-img-top align-middle') %>
+            <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
           <% end %>
         </div>
 

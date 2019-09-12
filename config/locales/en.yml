@@ -123,6 +123,12 @@ en:
       form:
         email: Email
         title: Title
+    devise:
+      email: Email
+      password: Password
+      password-confirmation: Password confirmation
+      organization-required: Organization information is required when signing up as organization editor.
+      organization-nomatch: "Organization website doesn't match your email address." 
     location:
       index:
         no-data: We couldn't find any location in the database.
@@ -214,6 +220,7 @@ en:
       logout: Logout
       product-registry: Product Registry
       profile: Profile Settings
+      sign-up: Sign Up
     filternav:
       framework: Digital Investment Framework
       registry: Development Project Registry

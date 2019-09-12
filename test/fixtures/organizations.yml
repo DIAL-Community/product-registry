@@ -19,3 +19,10 @@ three:
   slug: 1984
   when_endorsed: 2018-11-16 08:26:18
   website: website
+
+four:
+  name: Fourth Organization
+  slug: fourth_organization
+  when_endorsed: 2019-08-01 08:00:00
+  website: fourth-organization.com
+  is_endorser: true

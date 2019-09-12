@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'deploys/index'
   get 'about/cookies'
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
   scope '/admin' do
     resources :users
   end

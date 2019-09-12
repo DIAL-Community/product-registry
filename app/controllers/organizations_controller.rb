@@ -10,8 +10,8 @@ class OrganizationsController < ApplicationController
   def index
     if params[:without_paging]
       @organizations = Organization
-      @organizations = params[:sector_id].nil? ? @organizations : @organizations.joins(:sectors).where("sectors.id = ?", params[:sector_id])
-      @organizations = params[:search].nil? ? @organizations : @organizations.name_contains(params[:search])
+      !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
+      !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
       @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
       authorize @organizations, :view_allowed?
       return
@@ -204,7 +204,7 @@ class OrganizationsController < ApplicationController
     end
 
     @organization.locations = locations.to_a
-    
+
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       uploader.store!(params[:logo])
@@ -318,9 +318,9 @@ class OrganizationsController < ApplicationController
     def organization_params
       params
         .require(:organization)
-        .permit(:id, :name, :is_endorser, :when_endorsed, :website, :slug, :logo)
+        .permit(policy(Organization).permitted_attributes)
         .tap do |attr|
-          if (attr[:website].present?)
+          if attr[:website].present?
             # Handle both:
             # * http:// or https://
             # * (and the typo) http//: or https//:
@@ -329,12 +329,12 @@ class OrganizationsController < ApplicationController
                                            .sub(/^https?\/\/\:/i,'')
                                            .sub(/\/$/, '')
           end
-          if (attr[:when_endorsed].present?)
-            attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], "%m/%d/%Y")
+          if attr[:when_endorsed].present?
+            attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
           end
-          if (params[:reslug].present?)
+          if params[:reslug].present? && policy(Organization).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
-            if (params[:duplicate].present?)
+            if params[:duplicate].present?
               first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first
               attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
             end

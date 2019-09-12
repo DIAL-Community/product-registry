@@ -158,7 +158,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   test 'should filter products' do
     # With no filters, should load 3 products
     get organizations_url
-    assert_equal(3, assigns(:organizations).count)
+    assert_equal(4, assigns(:organizations).count)
 
     first_sector = sectors(:one)
     first_organization = organizations(:one)
@@ -177,7 +177,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(3, assigns(:organizations).count)
+    assert_equal(4, assigns(:organizations).count)
 
     first_location = locations(:one)
     second_organization = organizations(:two)
@@ -210,7 +210,54 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(3, assigns(:organizations).count)
+    assert_equal(4, assigns(:organizations).count)
+  end
+
+  test 'Policy test: should reject edit for organization user' do
+    organization = organizations(:four)
+    sign_in FactoryBot.create(:user, email: 'user@fourth-organization.com', organization_id: organization.id)
+
+    get organization_url(organization)
+    assert_response :success
+    assert_equal(0, assigns(:organization).locations.length)
+
+    # Should be able to go to edit page for the organization
+    get edit_organization_url(organization)
+    assert_response :success
+
+    # Should not be able to go to edit page for other organization.
+    get edit_organization_url(organizations(:two))
+    assert_response :redirect
+
+    assert_equal(organization.is_endorser, true)
+
+    location = locations(:one)
+
+    patch_params = { organization: {
+      is_endorser: false,
+      name: 'Some random new name',
+      website: 'some-fancy-website.com',
+      when_endorsed: '11/16/2018'
+    }, selected_countries: {
+      "#{location.id}": location.id
+    } }
+
+    patch(organization_url(organization), params: patch_params)
+    get organization_url(organization)
+
+    # Patching should not update is_endorser, name, website and year.
+    assert_not_equal(false, assigns(:organization).is_endorser)
+    assert_not_equal('Some random new name', assigns(:organization).name)
+    assert_not_equal('some-fancy-website.com', assigns(:organization).website)
+    assert_not_equal(2018, assigns(:organization).when_endorsed.year)
+
+    assert_equal(true, assigns(:organization).is_endorser)
+    assert_equal('Fourth Organization', assigns(:organization).name)
+    assert_equal('fourth-organization.com', assigns(:organization).website)
+    assert_equal(2019, assigns(:organization).when_endorsed.year)
+
+    # Should be able to edit the rest of the fields.
+    assert_equal(1, assigns(:organization).locations.length)
   end
 
   test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do

@@ -3,7 +3,7 @@ require 'rails/test_help'
 require 'factory_bot'
 
 class ActiveSupport::TestCase
-  
+
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
