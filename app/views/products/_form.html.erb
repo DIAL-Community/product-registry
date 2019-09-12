@@ -325,6 +325,9 @@
   <% product.building_blocks.order("name").each do |block| %>
     addBuildingBlock('<%= block.id %>', '<%= block.name %>');
   <% end %>
+  <% product.sectors.order("name").each do |sector| %>
+    addSector('<%= sector.id %>', '<%= sector.name %>');
+  <% end %>
   <% product.interoperates_with.order("name").each do |interop| %>
     addInteropProduct('<%= interop.id %>', '<%= interop.name %>');
   <% end %>
