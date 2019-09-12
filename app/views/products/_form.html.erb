@@ -23,7 +23,7 @@
   <div id="other-name-label" class="mt-2"><%= "#{t('view.product.form.other-names')}:" %></div>
   <div id="other-names">
     <div id="base-other-name" class="form-inline mt-2 mb-2">
-      <input type="text" id="sector-search" name="other_names[]" class="form-control col-10"
+      <input type="text" name="other_names[]" class="form-control col-10"
               placeholder="<%= t('view.product.form.other-names') %>" aria-labelledby="other-name-label" />
       <div class="input-group-append">
         <button type="submit" class="btn btn-primary ml-2 add-other-name">+</button>
@@ -61,16 +61,14 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-organizations" class="selected-elements col-6 mb-2">
-          <div class="card h-100">
-            <div class="p-2 clearfix">
-              <p class="mb-0 float-left"></p>
-                <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-                </a>
-              <input type="hidden"/>
-            </div>
-          </div>
+        <div class="col-12">
+          <span id="base-selected-organizations" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
         </div>
       </div>
     </div>
@@ -86,16 +84,14 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-sectors" class="selected-elements col-6 mb-2">
-          <div class="card h-100">
-            <div class="p-2 clearfix">
-              <p class="mb-0 float-left"></p>
-              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-              </a>
-              <input type="hidden"/>
-            </div>
-          </div>
+        <div class="col-12">
+          <span id="base-selected-sectors" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
         </div>
       </div>
     </div>
@@ -114,16 +110,14 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-building-blocks" class="selected-elements col-6 mb-2">
-          <div class="card h-100">
-            <div class="p-2 clearfix">
-              <p class="mb-0 float-left"></p>
-                <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-                </a>
-              <input type="hidden"/>
-            </div>
-          </div>
+        <div class="col-12">
+          <span id="base-selected-building-blocks" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
         </div>
       </div>
     </div>
@@ -139,16 +133,14 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-sustainable-development-goals" class="selected-elements col-6 mb-2">
-          <div class="card h-100">
-            <div class="p-2 clearfix">
-              <p class="mb-0 float-left"></p>
-                <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                  <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-                </a>
-              <input type="hidden"/>
-            </div>
-          </div>
+        <div class="col-12">
+          <span id="base-selected-sustainable-development-goals" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
         </div>
       </div>
     </div>
@@ -167,16 +159,14 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-interoperable-products" class="selected-elements col-6 mb-2">
-          <div class="card h-100">
-            <div class="p-2 clearfix">
-              <p class="mb-0 float-left"></p>
-              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-              </a>
-              <input type="hidden"/>
-            </div>
-          </div>
+        <div class="col-12">
+          <span id="base-selected-interoperable-products" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
         </div>
       </div>
     </div>
@@ -192,16 +182,14 @@
         </label>
       </fieldset>
       <div class="row">
-        <div id="base-selected-included-products" class="selected-elements col-6 mb-2">
-          <div class="card h-100">
-            <div class="p-2 clearfix">
-              <p class="mb-0 float-left"></p>
-              <a class="float-right" onclick="remove(this);" style="cursor: pointer;">
-                <i class="fas fa-trash-alt" style="color: #6c757d;"></i>
-              </a>
-              <input type="hidden"/>
-            </div>
-          </div>
+        <div class="col-12">
+          <span id="base-selected-included-products" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
         </div>
       </div>
     </div>

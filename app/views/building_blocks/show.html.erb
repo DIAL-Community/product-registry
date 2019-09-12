@@ -4,10 +4,8 @@
   <h5 class="card-header bg-secondary text-white">
     <%= "#{t('model.building-block').to_s.titlecase}: #{@building_block.name}" %>
   </h5>
+  <%= image_tag(@building_block.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
-    <div class="text-center">
-      <%= image_tag(@building_block.image_file, class: 'w-25 rounded mx-auto d-block') %>
-    </div>
     <p class="card-subtitle text-muted mb-3" >
       <strong><%= t('view.building-block.show.short-description') %>: </strong>
       <%= @bbJson.short_desc %>
@@ -57,12 +55,12 @@
   <% if @building_block.products %>
     <% @building_block.products.each do |product| %>
       <div class="col-6 col-lg-4 mt-2">
-        <div class="card h-100">
-          <div class="card-body pb-1">
-            <%= link_to product do %>
-              <%= image_tag(product.image_file, height: 75, class: 'align-middle') %>
-              <h5 class="card-title ml-3" style="display:inline;"><%= link_to product.name, product %></h5>
-            <% end %>
+        <div class="card flex-row">
+          <%= link_to product do %>
+            <%= image_tag(product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+          <% end %>
+          <div class="card-body align-middle my-auto px-2 py-2">
+            <%= link_to product.name, product %>
           </div>
         </div>
       </div>
@@ -72,8 +70,8 @@
     <% @bbJson.commercial_software.each do |product| %>
       <div class="col-6 col-lg-4 mt-2">
         <div class="card h-100">
-          <div class="card-body pb-1" style="display:flex; align-items:center;">
-            <h5 class="card-title text-muted"><%= product %></h5>
+          <div class="card-body px-2 py-2" style="display:flex; align-items:center;">
+            <h5 class="text-muted m-0"><%= product %></h5>
           </div>
         </div>
       </div>
@@ -91,8 +89,9 @@
       <% @building_block.workflows.order("name").each do |workflow| %>
         <div class="col-6 col-lg-4 mt-1">
           <div class="card h-100">
-            <div class="card-body pb-2 pt-2">
-              <p class="card-text text-muted mb-1" style="flex: 1"><%= link_to workflow.name, workflow %></p>
+            <div class="card-body px-2 py-2">
+              <%= image_tag(workflow.image_file, class: 'footer-img') %>
+              <span class="card-text text-muted"><%= link_to workflow.name, workflow %></span>
             </div>
           </div>
         </div>

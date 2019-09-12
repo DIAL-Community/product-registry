@@ -37,7 +37,7 @@ module WorkflowsHelper
     formatted = ''
     elements.sort_by { |x| x[:name] }
             .each do |element|
-      popover_class = 'popover-image-link'
+      popover_class = 'popover-image'
       if element[:controller] == 'building_blocks'
         popover_class += ' popover-image-small'
       end

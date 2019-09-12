@@ -173,7 +173,7 @@ function addOffice(label, officeId, magicKey) {
   var copy = $("#base-selected-offices").clone();
 
   $(copy).removeAttr("id");
-  $(copy).find("p").html(label);
+  $(copy).find(".text-label").html(label);
 
   if (officeId) {
     var input = $(copy).find("input").first();
