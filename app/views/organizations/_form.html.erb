@@ -1,7 +1,9 @@
   <%= form_with(model: organization, multipart: true, local: true) do |form| %>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :organization_name, :class => "form-control", :placeholder => t('view.general.name') %>
+      <%= form.text_field :name, id: :organization_name,
+                          disabled: !policy(organization).permitted_attributes.include?(:name),
+                          class: "form-control", placeholder: t('view.general.name') %>
       <%= form.label :name, t('view.general.name') %>
     </fieldset>
 
@@ -19,6 +21,7 @@
 
     <fieldset class="form-label-group mt-2">
       <%= form.text_field :when_endorsed,
+          disabled: !policy(organization).permitted_attributes.include?(:when_endorsed),
           value: organization.when_endorsed.blank? ? '' : organization.when_endorsed.strftime("%m/%d/%Y"),
           id: :organization_when_endorsed, class: "form-control data-date",
           placeholder: t('view.organization.form.when-endorsed') %>
@@ -26,8 +29,9 @@
     </fieldset>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :website, id: :organization_website, class: "form-control",
-          placeholder: t('view.organization.form.website') %>
+      <%= form.text_field :website, id: :organization_website,
+          disabled: !policy(organization).permitted_attributes.include?(:website),
+          class: "form-control", placeholder: t('view.organization.form.website') %>
       <%= form.label :website, t('view.organization.form.website') %>
     </fieldset>
 
@@ -108,7 +112,9 @@
     </div>
 
     <fieldset class="form-group form-check">
-      <%= form.check_box :is_endorser, id: :organization_is_endorser, class: "form-check-input" %>
+      <%= form.check_box :is_endorser, id: :organization_is_endorser,
+          disabled: !policy(organization).permitted_attributes.include?(:is_endorser),
+          class: "form-check-input" %>
       <%= form.label :is_endorser, t('view.organization.form.endorser'), class: "form-check-label" %>
     </fieldset>
 

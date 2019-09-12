@@ -3,27 +3,16 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
-    if params[:without_paging]
-      @users = User
-          .name_contains(params[:search])
-          .order(:email)
-      authorize @users
-      return
-    end
-
     if params[:search]
-      @users = User
-        .where(nil)
-        .email_contains(params[:search])
-        .order(:email)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @users
+      @users = User.where(nil)
+                   .email_contains(params[:search])
+                   .order(:email)
+                   .paginate(page: params[:page], per_page: 20)
     else
-      @users = User
-        .order(:email)
-        .paginate(page: params[:page], per_page: 20)
-      authorize @users
+      @users = User.order(:email)
+                   .paginate(page: params[:page], per_page: 20)
     end
+    authorize @users
   end
 
   def show
@@ -49,7 +38,7 @@ class UsersController < ApplicationController
     end
 
     if (user_params[:is_approved] && @user.confirmed_at.nil?)
-        user_hash[:confirmed_at] = Time.now.to_s
+      user_hash[:confirmed_at] = Time.now.to_s
     end
     respond_to do |format|
       if @user.update(user_hash)
@@ -66,21 +55,21 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if (user_params[:is_approved])
+    if user_params[:is_approved]
       @user.confirmed_at = Time.now.to_s
     end
 
     respond_to do |format|
-        if @user.save
-          format.html { redirect_to @user,
-                        flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) }}
-          format.json { render :show, status: :created, location: @user }
-        else
-          format.html { render :new }
-          format.json { render json: @user.errors, status: :unprocessable_entity }
-        end
+      if @user.save
+        format.html { redirect_to @user,
+                      flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) }}
+        format.json { render :show, status: :created, location: @user }
+      else
+        format.html { render :new }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
-  end 
+    end
+  end
 
   def destroy
     @user.destroy
