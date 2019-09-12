@@ -72,6 +72,44 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: audits; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.audits (
+    id bigint NOT NULL,
+    associated_id character varying,
+    associated_type character varying,
+    user_id integer,
+    user_role character varying,
+    username character varying,
+    action character varying,
+    audit_changes jsonb,
+    version integer DEFAULT 0,
+    comment character varying,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: audits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.audits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: audits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.audits_id_seq OWNED BY public.audits.id;
+
+
+--
 -- Name: building_blocks; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -885,6 +923,13 @@ CREATE TABLE public.workflows_use_cases (
 
 
 --
+-- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audits ALTER COLUMN id SET DEFAULT nextval('public.audits_id_seq'::regclass);
+
+
+--
 -- Name: building_blocks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1002,6 +1047,14 @@ ALTER TABLE ONLY public.workflows ALTER COLUMN id SET DEFAULT nextval('public.wo
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: audits audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audits
+    ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
 
 
 --
@@ -1141,6 +1194,20 @@ ALTER TABLE ONLY public.workflows
 
 
 --
+-- Name: associated_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX associated_index ON public.audits USING btree (associated_type, associated_id);
+
+
+--
+-- Name: auditable_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX auditable_index ON public.audits USING btree (action, id, version);
+
+
+--
 -- Name: bbs_workflows; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1152,6 +1219,13 @@ CREATE UNIQUE INDEX bbs_workflows ON public.workflows_building_blocks USING btre
 --
 
 CREATE UNIQUE INDEX block_prods ON public.products_building_blocks USING btree (building_block_id, product_id);
+
+
+--
+-- Name: index_audits_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_audits_on_created_at ON public.audits USING btree (created_at);
 
 
 --
@@ -1474,6 +1548,13 @@ CREATE UNIQUE INDEX usecases_sdgs ON public.use_cases_sdg_targets USING btree (u
 --
 
 CREATE UNIQUE INDEX usecases_workflows ON public.workflows_use_cases USING btree (use_case_id, workflow_id);
+
+
+--
+-- Name: user_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_index ON public.audits USING btree (user_id, user_role);
 
 
 --
@@ -1863,6 +1944,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190805161659'),
 ('20190909152506'),
 ('20190909191546'),
+('20190909195732'),
 ('20190911150425'),
 ('20190911194639');
 
