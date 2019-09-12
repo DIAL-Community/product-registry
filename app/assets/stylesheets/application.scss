@@ -333,3 +333,17 @@ h6 {
 .wysiwyg-viewer.ql-container.ql-snow {
   border: none;
 }
+
+.truncate-parent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.truncate-text {
+  overflow: hidden;
+    padding: 5px;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

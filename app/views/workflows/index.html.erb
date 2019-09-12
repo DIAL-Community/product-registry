@@ -15,8 +15,8 @@
     <% @workflows.each do |workflow| %>
       <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
         <div class="card index-card">
-          <div class="card-header bg-secondary text-white small">
-            <%= link_to truncate(workflow.name, length: 30, omission: '&hellip;', escape: false), workflow,
+          <div class="card-header bg-secondary text-white small truncate-parent">
+            <%= link_to workflow.name, workflow, class: 'truncate-text',
                 'title' => workflow.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
           </div>
           <div class="model-logo">
