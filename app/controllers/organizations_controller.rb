@@ -9,8 +9,8 @@ class OrganizationsController < ApplicationController
   def index
     if params[:without_paging]
       @organizations = Organization
-      @organizations = params[:sector_id].nil? && @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
-      @organizations = params[:search].nil? && @organizations.name_contains(params[:search])
+      !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
+      !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
       @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
       authorize @organizations, :view_allowed?
       return
