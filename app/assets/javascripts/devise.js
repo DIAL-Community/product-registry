@@ -11,9 +11,15 @@ const changeProductHandler = function() {
     $(this).next('.row').find('.badges').append(
       '<span class="badge badge-secondary mr-1">' + label +
       ' <input type="hidden" name="user[product_id][]" value="' + value + '"/>' +
-      ' <i class="fas fa-window-close"></i>' +
+      ' <i class="fas fa-window-close remove-product"></i>' +
       '</span>'
     );
+
+    $('.remove-product').on('click', function() {
+      $(this).closest('.badge').fadeOut("slow", function() {
+        $(this).remove();
+      });
+    })
   });
 }
 
