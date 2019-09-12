@@ -50,4 +50,9 @@ const removeFilterHandler = function() {
   $('.close-icon').click(removeActiveFilter);
 }
 
-$(document).on("turbolinks:load", removeFilterHandler);
+$(document).on('sustainable_development_goals#index:loaded', removeFilterHandler);
+$(document).on('use_cases#index:loaded', removeFilterHandler);
+$(document).on('workflows#index:loaded', removeFilterHandler);
+$(document).on('building_blocks#index:loaded', removeFilterHandler);
+$(document).on('products#index:loaded', removeFilterHandler);
+$(document).on('organizations#index:loaded', removeFilterHandler);

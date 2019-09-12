@@ -4,7 +4,7 @@
  * this will be called on sectors, locations, and contacts.
  */
 function remove(self) {
-  var baseCard = $(self).parent().parent();
+  var baseCard = $(self).closest('.selected-element');
   $(baseCard).remove();
 }
 
@@ -16,7 +16,7 @@ function addElement(baseElementId, inputElementName, value, label) {
   var copy = $("#" + baseElementId).clone();
 
   $(copy).removeAttr("id");
-  $(copy).find("p").html(label);
+  $(copy).find(".text-label").html(label);
 
   var input = $(copy).find("input");
   $(input).attr("name",  inputElementName + "[" + value + "]");

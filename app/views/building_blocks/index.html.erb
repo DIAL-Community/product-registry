@@ -47,7 +47,7 @@
                 concat(content.html_safe)
                 concat(image_tag(workflows[0][:filename], class: 'footer-img'))
                 
-                content = "<span class='small text-muted ml-1'>#{building_block.workflows.size} #{t('model.workflow').titlecase.pluralize(building_block.workflows.size)}</span>"
+                content = "<span class='text-muted ml-1'>#{building_block.workflows.size} #{t('model.workflow').titlecase.pluralize(building_block.workflows.size)}</span>"
                 concat(content.html_safe)
 
                 # When we have image for each workflow, we can use the following code.
