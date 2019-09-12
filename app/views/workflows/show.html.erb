@@ -7,30 +7,11 @@
       <%= "#{t('model.workflow').to_s.titlecase}: #{@workflow.name}" %>
     </h5>
   </div>
+  <%= image_tag(@workflow.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.short-description') %>: </strong>
-      <%= @workflowJson.short_desc %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.full-description') %>: </strong>
-      <%= @workflowJson.full_desc %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.other-names') %>: </strong>
-      <%= @workflowJson.other_names %>
-    </p>
-    <p class="card-subtitle text-muted mb-3" >
-      <strong><%= t('view.workflow.show.mapping') %>: </strong>
-      <% if @workflowJson.sample_mappings && @workflowJson.sample_mappings.count > 0 %>
-        <ul>
-        <% @workflowJson.sample_mappings.each do |mapping| %>
-          <li class="text-muted"><strong><%= mapping.name %>: </strong><%= mapping.description %>
-        <% end %>
-        </ul>
-      <% end %>
-    </p>
-    <div class="float-right" >
+    <div id="workflow-viewer" class="wysiwyg-viewer">
+    </div>
+    <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), workflows_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@workflow).mod_allowed? %>
         <%= link_to t('view.general.edit'), edit_workflow_path(@workflow), :class => "card-link" %>
@@ -90,3 +71,7 @@
     </p>
   <% end %>
 </div>
+
+<script>
+        setUpViewer("<%= @workflow.description %>")
+</script>
