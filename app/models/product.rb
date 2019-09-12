@@ -1,18 +1,20 @@
 class Product < ApplicationRecord
+  include Auditable
+  
   has_one :product_assessment
-  has_and_belongs_to_many :organizations
-  has_and_belongs_to_many :sectors, join_table: :products_sectors
-  has_and_belongs_to_many :sustainable_development_goals
-  has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks
-  has_and_belongs_to_many :origins, join_table: :products_origins
+  has_and_belongs_to_many :organizations, after_add: :association_add, before_remove: :association_remove
+  has_and_belongs_to_many :sectors, join_table: :products_sectors, after_add: :association_add, before_remove: :association_remove
+  has_and_belongs_to_many :sustainable_development_goals, after_add: :association_add, before_remove: :association_remove
+  has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks, after_add: :association_add, before_remove: :association_remove
+  has_and_belongs_to_many :origins, join_table: :products_origins, after_add: :association_add, before_remove: :association_remove
 
   has_many :include_relationships, -> { where(relationship_type: 'composed')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
-  has_many :includes, through: :include_relationships, source: :to_product
+  has_many :includes, through: :include_relationships, source: :to_product, after_add: :association_add, before_remove: :association_remove
 
   has_many :interop_relationships, -> { where(relationship_type: 'interoperates')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
-  has_many :interoperates_with, through: :interop_relationships, source: :to_product
+  has_many :interoperates_with, through: :interop_relationships, source: :to_product, after_add: :association_add, before_remove: :association_remove
 
-  has_many :references, foreign_key: :to_product_id, class_name: 'ProductProductRelationship'
+  has_many :references, foreign_key: :to_product_id, class_name: 'ProductProductRelationship', after_add: :association_add, before_remove: :association_remove
 
   validates :name,  presence: true, length: { maximum: 300 }
 

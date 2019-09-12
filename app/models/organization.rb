@@ -12,41 +12,6 @@ class Organization < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(organizations.name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(organizations.slug) like LOWER(?)", "#{slug}\\_%")}
 
-  def association_add(new_obj)
-    initialize_association_changes
-    curr_change = {id: new_obj.slug, action: "ADD"}
-    log_association(curr_change, new_obj.class.name)
-  end
-
-  def association_remove(old_obj)
-    initialize_association_changes
-    curr_change = {id: old_obj.slug, action: "REMOVE"}
-    log_association(curr_change, old_obj.class.name)
-  end
-
-  def log_association(curr_change, obj_name)
-    case obj_name
-    when "Sector"
-      @association_changes[:sectors] << curr_change
-    when "Product"
-      @association_changes[:products] << curr_change
-    when "Location"
-      @association_changes[:locations] << curr_change
-    when "Contact"
-      @association_changes[:contacts] << curr_change
-    when "Project"
-      @association_changes[:projects] << curr_change
-    end
-  end
-
-  def initialize_association_changes
-    @association_changes = {sectors: [], products: [], locations: [], contacts: [], projects: []} if @association_changes.nil?
-  end
-
-  def association_changes
-    @association_changes
-  end
-
   def image_file
     if File.exist?(File.join('app','assets','images','organizations',"#{slug}.png"))
       return "organizations/#{slug}.png"
