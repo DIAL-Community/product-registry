@@ -7,7 +7,7 @@ class WorkflowPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == "admin" || user.role == "ict4sdg"
+    user.role == 'admin' || user.role == 'ict4sdg'
   end
 
   def view_allowed?

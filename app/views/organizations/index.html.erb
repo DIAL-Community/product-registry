@@ -3,17 +3,24 @@
 
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(Organization).mod_allowed? %>
-      <%= link_to t('view.general.create'), new_organization_path, :class => 'float-right small ml-1' %>
-      <%= link_to t('view.organization.index.view-audit'), audits_path("Organization"), :class => 'float-right small ml-1' %>
-    <% end %>
+    <div class="float-right">
+      <% if user_signed_in? && policy(Organization).mod_allowed? %>
+        <%= link_to t('view.general.create'), new_organization_path, :class => 'small mr-1' %>
+        <span class="small mr-1">&nbsp;|</span>
+        <%= link_to t('view.organization.index.view-audit'), audits_path("Organization"), :class => 'small mr-1' %>
+      <% end %>
+      <% if !user_signed_in? %>
+        <%= link_to t('view.general.create'), new_candidate_organization_path, :class => 'small mr-1' %>
+      <% end %>
+    </div>
     <%= form_with(url: export_path, :method => :get, :data => {remote: false}, :class => 'inline-form'  ) do | form | %>
       <%= form.hidden_field :export_contacts, :value => false %>
-      <%= form.submit t('view.organization.index.export'), class: 'btn btn-link float-right pt-0', style: 'color: #fbab18', data: { disable_with: false } %>
+      <%= form.submit t('view.organization.index.export'), class: 'btn btn-link float-right px-1 py-0',
+                      style: 'color: #fbab18; font-size: 80%;', data: { disable_with: false } %>
       <% if user_signed_in? && policy(Organization).export_contacts_allowed? %>
-        <fieldset class="form-check">
+        <fieldset class="form-check" style="margin-top: -1px;">
           <%= form.check_box :export_contacts, {id: 'export_contacts', class: "form-check-input checkbox-align"}, true, false %>
-          <label class="form-check-label text-muted" for="export_contacts">
+          <label class="form-check-label text-muted" for="export_contacts" style="font-size: 80%;">
             <%= t('view.organization.index.export-option') %>
           </label>
         </fieldset>

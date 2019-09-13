@@ -12,13 +12,11 @@ class CandidateOrganizationsController < ApplicationController
   # GET /candidate_organizations/1
   # GET /candidate_organizations/1.json
   def show
-    authorize @candidate_organization, :view_allowed?
   end
 
   # GET /candidate_organizations/new
   def new
     @candidate_organization = CandidateOrganization.new
-    authorize @candidate_organization, :view_allowed?
   end
 
   # GET /candidate_organizations/1/edit
@@ -30,7 +28,6 @@ class CandidateOrganizationsController < ApplicationController
   # POST /candidate_organizations.json
   def create
     # Everyone including unregistered user can post and create candidate organization.
-    authorize CandidateOrganization, :view_allowed?
     @candidate_organization = CandidateOrganization.new(candidate_organization_params)
 
     respond_to do |format|
@@ -79,8 +76,8 @@ class CandidateOrganizationsController < ApplicationController
         @candidate_organizations = CandidateOrganization.where(slug: current_slug).to_a
       end
     end
-    authorize @organizations, :view_allowed?
-    render json: @organizations, only: [:name]
+    authorize @candidate_organizations, :view_allowed?
+    render json: @candidate_organizations, only: [:name]
   end
 
   private

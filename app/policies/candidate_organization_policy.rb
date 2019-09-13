@@ -11,6 +11,6 @@ class CandidateOrganizationPolicy < ApplicationPolicy
   end
 
   def view_allowed?
-    true
+    !user.nil? && user.role == 'admin'
   end
 end
