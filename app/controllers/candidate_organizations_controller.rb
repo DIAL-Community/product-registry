@@ -80,6 +80,12 @@ class CandidateOrganizationsController < ApplicationController
     render json: @candidate_organizations, only: [:name]
   end
 
+  def approve
+  end
+
+  def reject
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

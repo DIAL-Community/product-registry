@@ -18,8 +18,12 @@
   <div class="row">
     <div class="col-lg-8 col-12">
       <p class="m-2">
-        <strong><%= "#{t('view.organization.form.website')}:" %></strong>
+        <strong><%= "#{t('view.candidate-organization.index.website')}:" %></strong>
         <%= link_to @candidate_organization.website.downcase.strip, "//#{@candidate_organization.website.downcase.strip}", target: :_blank %>
+      </p>
+      <p class="m-2">
+        <strong><%= "#{t('view.candidate-organization.index.status')}:" %></strong>
+        <%= @candidate_organization.rejected %>
       </p>
     </div>
   </div>
