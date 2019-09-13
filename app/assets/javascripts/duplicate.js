@@ -48,6 +48,10 @@ function duplicateCheck(trigerInputId, duplicateCheckUrl) {
   });
 };
 
+var candidateDuplicateCheck = function() {
+  duplicateCheck("candidate_organization_name", "/candidate_organization_duplicates.json");
+}
+
 var contactDuplicateCheck = function() {
   duplicateCheck("contact_name", "/contact_duplicates.json");
 }
@@ -80,6 +84,8 @@ var workflowDuplicateCheck = function() {
   duplicateCheck("workflow_name", "/workflow_duplicates.json");
 }
 
+$(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
+$(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
 $(document).on('contacts#new:loaded', contactDuplicateCheck);
 $(document).on('locations#edit:loaded', locationDuplicateCheck);

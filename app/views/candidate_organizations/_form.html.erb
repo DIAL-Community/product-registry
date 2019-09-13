@@ -1,0 +1,24 @@
+<%= form_with(model: candidate_organization, local: true) do |form| %>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :name, id: :candidate_organization_name,
+                          class: "form-control", placeholder: t('view.general.name') %>
+      <%= form.label :name, t('view.general.name') %>
+    </fieldset>
+
+    <input id="original_name" type="hidden" value="<%= candidate_organization.name %>" />
+    <div id="duplicate-warning" class="alert alert-warning">
+      <%= t('view.general.duplicates', model: t('model.candidate_organization')) %>
+    </div>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :website, id: :candidate_organization_website,
+          class: "form-control", placeholder: t('view.organization.form.website') %>
+      <%= form.label :website, t('view.organization.form.website') %>
+    </fieldset>
+
+    <fieldset class="float-right mt-4">
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
+<% end %>

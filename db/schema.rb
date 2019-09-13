@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190911194639) do
+ActiveRecord::Schema.define(version: 20190913164128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(version: 20190911194639) do
     t.datetime "updated_at", null: false
     t.jsonb "description", default: "{}", null: false
     t.index ["slug"], name: "index_building_blocks_on_slug", unique: true
+  end
+
+  create_table "candidate_organizations", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.text "website"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contacts", force: :cascade do |t|

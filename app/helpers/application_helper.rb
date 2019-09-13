@@ -6,8 +6,8 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects].freeze
-  ACTION_WITH_BREADCRUMBS = %w[show edit create update].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations].freeze
+  ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations'].freeze
 
   def all_filters
@@ -30,14 +30,16 @@ module ApplicationHelper
 
     object_class = params[:controller].classify.constantize
     object_class.column_names.include?('slug') && object_record = object_class.find_by(slug: params[:id])
-    if object_record.nil? && params[:id].scan(/\D/).empty?
+    if object_record.nil? && params[:id].present? && params[:id].scan(/\D/).empty?
       object_record = object_class.find(params[:id])
     end
 
-    if base_path == 'admin/users'
-      id_label = object_record.email
-    else
-      id_label = object_record.name
+    unless object_record.nil?
+      if base_path == 'admin/users'
+        id_label = object_record.email
+      else
+        id_label = object_record.name
+      end
     end
 
     { base_path: base_path, base_label: params[:controller].titlecase,

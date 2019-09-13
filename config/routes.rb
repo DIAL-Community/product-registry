@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :candidate_organizations
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
@@ -63,6 +64,7 @@ Rails.application.routes.draw do
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
+  get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
   get 'contact_duplicates', :to => 'contacts#duplicates'
   get 'location_duplicates', :to => 'locations#duplicates'
   get 'sector_duplicates', :to => 'sectors#duplicates'

@@ -41,6 +41,7 @@ en:
     view_allowed?: You're not allowed to view this page.
   model:
     building-block: building block
+    candidate-organization: candidate organization
     contact: contact
     location: location
     office: office
@@ -119,6 +120,9 @@ en:
         bb-workflow-popover:
           one: Mapping to Associated Workflow
           other: Mapping to Associated Workflows
+    candidate-organization:
+      index:
+        no-data: "We couldn't find any candidate organization in the database."
     contact:
       form:
         email: Email
