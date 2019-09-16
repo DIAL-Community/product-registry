@@ -93,6 +93,8 @@ module Auditable
     case self.class.name
     when "Organization"
       @association_changes = {sectors: [], products: [], locations: [], contacts: [], projects: []} if @association_changes.nil?
+    when 'CandidateOrganization'
+      @association_changes = { sectors: [], products: [], locations: [], contacts: [], projects: [] } if @association_changes.nil?
     when "Product"
       @association_changes = {sectors: [], organizations: [], sdgs: [], building_blocks: [], origins: [], products: []} if @association_changes.nil?
     end

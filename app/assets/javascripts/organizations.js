@@ -132,12 +132,6 @@ var setupAutoComplete = function() {
   var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
-
-  // Init the autocomplete for the country field.
-  var contactAutoComplete = autoComplete("/contacts.json?without_paging=true", addContact)
-  $('#base-selected-contacts').hide();
-  $("#contact-search").autocomplete(contactAutoComplete);
-
 }
 
 function sectorCustomAutoComplete(source, callback) {

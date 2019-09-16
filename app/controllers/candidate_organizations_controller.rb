@@ -45,7 +45,7 @@ class CandidateOrganizationsController < ApplicationController
         contact.slug = contact.slug + generate_offset(first_duplicate).to_s
       end
 
-      @candidate_organization.contacts.push(contact)
+      @candidate_organization.contacts << contact
     end
 
     respond_to do |format|
@@ -63,6 +63,16 @@ class CandidateOrganizationsController < ApplicationController
   # PATCH/PUT /candidate_organizations/1.json
   def update
     authorize @candidate_organization, :mod_allowed?
+
+    if params[:selected_contacts].present?
+      contacts = Set.new
+      params[:selected_contacts].keys.each do |contact_id|
+        contact = Contact.find(contact_id)
+        contacts.add(contact)
+      end
+      @candidate_organization.contacts = contacts.to_a
+    end
+
     respond_to do |format|
       if @candidate_organization.update(candidate_organization_params)
         format.html { redirect_to @candidate_organization, notice: 'Candidate organization was successfully updated.' }
@@ -114,7 +124,7 @@ class CandidateOrganizationsController < ApplicationController
       organization.slug = organization.slug + generate_offset(first_duplicate).to_s
     end
 
-    organization.contacts = @candidate_organization.contacts
+    organization.contacts += @candidate_organization.contacts
 
     respond_to do |format|
       if organization.save && @candidate_organization.destroy
