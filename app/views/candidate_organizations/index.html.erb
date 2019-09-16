@@ -32,9 +32,11 @@
           <td><%= candidate_organization.name %></td>
           <td><%= candidate_organization.website %></td>
           <td>
-            <%= candidate_organization.rejected ?
-                t('view.candidate-organization.index.status-rejected') :
-                t('view.candidate-organization.index.status-new')
+            <%= candidate_organization.rejected.nil? ?
+                t('view.candidate-organization.index.status-new') :
+                candidate_organization.rejected ?
+                  t('view.candidate-organization.index.status-rejected') :
+                  t('view.candidate-organization.index.status-approved')
             %>
           </td>
           <td class="nav-item dropdown">
@@ -47,13 +49,21 @@
               <% if user_signed_in? && policy(candidate_organization).mod_allowed? %>
                 <%= link_to t('view.general.edit'), edit_candidate_organization_path(candidate_organization), :class =>"dropdown-item"  %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('view.candidate-organization.index.approve'),
-                            approve_candidate_organization_path(candidate_organization),
-                            method: :post, :class =>"dropdown-item"  %>
-                <%= link_to t('view.candidate-organization.index.reject'),
-                            reject_candidate_organization_path(candidate_organization),
-                            method: :post, :class =>"dropdown-item"  %>
-                <div class="dropdown-divider"></div>
+                <% if candidate_organization.rejected.nil? %>
+                  <%= link_to t('view.candidate-organization.index.approve'),
+                              approve_candidate_organization_path(candidate_organization),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <%= link_to t('view.candidate-organization.index.reject'),
+                              reject_candidate_organization_path(candidate_organization),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <% if candidate_organization.rejected %>
+                  <%= link_to t('view.candidate-organization.index.approve'),
+                              approve_candidate_organization_path(candidate_organization),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
                 <%= link_to t('view.general.delete'), candidate_organization, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
               <% end %>
             </div>

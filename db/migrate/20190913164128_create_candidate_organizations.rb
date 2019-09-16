@@ -8,6 +8,8 @@ class CreateCandidateOrganizations < ActiveRecord::Migration[5.1]
       t.boolean :rejected
       t.datetime :rejected_date
       t.references :rejected_by, index: true, foreign_key: { to_table: :users }
+      t.datetime :approved_date
+      t.references :approved_by, index: true, foreign_key: { to_table: :users }
 
       t.timestamps
     end

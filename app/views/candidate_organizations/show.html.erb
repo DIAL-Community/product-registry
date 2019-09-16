@@ -4,7 +4,9 @@
 <div class="row">
   <div class="col-8 mb-2">
     <% if user_signed_in? && policy(@candidate_organization).mod_allowed? %>
-      <%= link_to 'Delete this organization', @organization, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-outline-secondary float-left ml-1' %>
+      <%= link_to 'Delete candidate organization', @candidate_organization, method: :delete,
+                                                                            data: { confirm: 'Are you sure?' },
+                                                                            class: 'btn btn-outline-secondary float-left ml-1' %>
     <% end %>
   </div>
 </div>
@@ -23,9 +25,11 @@
       </p>
       <p class="m-2">
         <strong><%= "#{t('view.candidate-organization.index.status')}:" %></strong>
-        <%= @candidate_organization.rejected ?
-            t('view.candidate-organization.index.status-rejected') :
-            t('view.candidate-organization.index.status-new')
+        <%= @candidate_organization.rejected.nil? ?
+            t('view.candidate-organization.index.status-new') :
+            @candidate_organization.rejected ?
+              t('view.candidate-organization.index.status-rejected') :
+              t('view.candidate-organization.index.status-approved')
         %>
       </p>
     </div>

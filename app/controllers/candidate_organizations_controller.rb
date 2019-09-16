@@ -98,10 +98,10 @@ class CandidateOrganizationsController < ApplicationController
   def duplicates
     @candidate_organizations = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
       if current_slug != original_slug
-        @candidate_organizations = CandidateOrganization.where(slug: current_slug).to_a
+        @candidate_organizations = CandidateOrganization.where(slug: current_slug).select(:name, :slug).to_a
       end
     end
     authorize @candidate_organizations, :view_allowed?
@@ -127,11 +127,14 @@ class CandidateOrganizationsController < ApplicationController
     organization.contacts += @candidate_organization.contacts
 
     respond_to do |format|
-      if organization.save && @candidate_organization.destroy
-        format.html { redirect_to organization_url(organization), notice: 'Organization created.' }
+      # Don't re-approve approved candidate.
+      if (@candidate_organization.rejected.nil? || @candidate_organization.rejected) &&
+         organization.save && @candidate_organization.update(rejected: false, approved_date: Time.now,
+                                                             approved_by_id: current_user.id)
+        format.html { redirect_to organization_url(organization), notice: 'Candidate promoted to organization.' }
         format.json { render :show, status: :created, location: @organization }
       else
-        format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was not.' }
+        format.html { redirect_to candidate_organizations_url, flash: { error: 'Unable to approve candidate.' } }
         format.json { head :no_content }
       end
     end
@@ -141,10 +144,12 @@ class CandidateOrganizationsController < ApplicationController
     set_candidate_organization
     authorize @candidate_organization, :mod_allowed?
     respond_to do |format|
-      if @candidate_organization.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
+      # Can only approve new submission.
+      if @candidate_organization.rejected.nil? &&
+         @candidate_organization.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
         format.html { redirect_to candidate_organizations_url, notice: 'Candidate rejected.' }
       else
-        format.html { redirect_to candidate_organizations_url, notice: 'Candidate rejection failed.' }
+        format.html { redirect_to candidate_organizations_url, flash: { error: 'Unable to reject candidate.' } }
       end
       format.json { head :no_content }
     end

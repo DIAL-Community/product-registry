@@ -48,8 +48,11 @@ ActiveRecord::Schema.define(version: 20190916175633) do
     t.boolean "rejected"
     t.datetime "rejected_date"
     t.bigint "rejected_by_id"
+    t.datetime "approved_date"
+    t.bigint "approved_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_candidate_organizations_on_approved_by_id"
     t.index ["rejected_by_id"], name: "index_candidate_organizations_on_rejected_by_id"
   end
 
@@ -316,6 +319,7 @@ ActiveRecord::Schema.define(version: 20190916175633) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"

@@ -128,6 +128,7 @@ en:
         no-data: "We couldn't find any candidate organization in the database."
         reject: Reject
         status: Status
+        status-approved: Approved
         status-new: New Submission
         status-rejected: Rejected
         website: Website
