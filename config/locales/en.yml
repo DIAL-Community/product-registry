@@ -121,6 +121,8 @@ en:
           one: Mapping to Associated Workflow
           other: Mapping to Associated Workflows
     candidate-organization:
+      form:
+        created: Thank you for your submission. We will carefully review your submission. Approved submission will become available in the organization list.
       index:
         website: Website
         status: Status

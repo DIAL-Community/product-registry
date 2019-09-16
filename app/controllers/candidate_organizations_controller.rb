@@ -31,8 +31,8 @@ class CandidateOrganizationsController < ApplicationController
     @candidate_organization = CandidateOrganization.new(candidate_organization_params)
 
     respond_to do |format|
-      if @candidate_organization.save
-        format.html { redirect_to @candidate_organization, notice: 'Candidate organization was successfully created.' }
+      if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && @candidate_organization.save
+        format.html { redirect_to @candidate_organization, notice: t('view.candidate-organization.form.created') }
         format.json { render :show, status: :created, location: @candidate_organization }
       else
         format.html { render :new }
