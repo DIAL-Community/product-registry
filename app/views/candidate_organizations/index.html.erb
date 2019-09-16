@@ -31,7 +31,12 @@
         <tr>
           <td><%= candidate_organization.name %></td>
           <td><%= candidate_organization.website %></td>
-          <td><%= candidate_organization.rejected && t('view.candidate-organization.index.status-rejected') %></td>
+          <td>
+            <%= candidate_organization.rejected ?
+                t('view.candidate-organization.index.status-rejected') :
+                t('view.candidate-organization.index.status-new')
+            %>
+          </td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">
@@ -41,6 +46,8 @@
               <%= link_to t('view.general.view'), candidate_organization, :class =>"dropdown-item"  %>
               <% if user_signed_in? && policy(candidate_organization).mod_allowed? %>
                 <%= link_to t('view.general.edit'), edit_candidate_organization_path(candidate_organization), :class =>"dropdown-item"  %>
+                <div class="dropdown-divider"></div>
+                <%= link_to t('view.candidate-organization.index.reject'), reject_candidate_organization_path(candidate_organization), method: :post, :class =>"dropdown-item"  %>
                 <div class="dropdown-divider"></div>
                 <%= link_to t('view.general.delete'), candidate_organization, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
               <% end %>

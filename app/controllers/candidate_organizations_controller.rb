@@ -62,7 +62,7 @@ class CandidateOrganizationsController < ApplicationController
     authorize @candidate_organization, :mod_allowed?
     @candidate_organization.destroy
     respond_to do |format|
-      format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was successfully destroyed.' }
+      format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was.' }
       format.json { head :no_content }
     end
   end
@@ -81,9 +81,19 @@ class CandidateOrganizationsController < ApplicationController
   end
 
   def approve
+    set_candidate_organization
   end
 
   def reject
+    set_candidate_organization
+    respond_to do |format|
+      if @candidate_organization.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
+        format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was.' }
+      else
+        format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was not.' }
+      end
+      format.json { head :no_content }
+    end
   end
 
   private

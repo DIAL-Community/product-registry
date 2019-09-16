@@ -23,7 +23,10 @@
       </p>
       <p class="m-2">
         <strong><%= "#{t('view.candidate-organization.index.status')}:" %></strong>
-        <%= @candidate_organization.rejected %>
+        <%= @candidate_organization.rejected ?
+            t('view.candidate-organization.index.status-rejected') :
+            t('view.candidate-organization.index.status-new')
+        %>
       </p>
     </div>
   </div>

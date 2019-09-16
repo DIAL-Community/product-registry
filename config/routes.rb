@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :candidate_organizations
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
@@ -11,6 +10,13 @@ Rails.application.routes.draw do
   end
 
   root to: 'about#index'
+
+  resources :candidate_organizations do
+    member do
+      post 'reject'
+      post 'approve'
+    end
+  end
 
   resources :products do
     get 'count', on: :collection
