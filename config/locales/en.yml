@@ -124,6 +124,7 @@ en:
       form:
         created: Thank you for your submission. We will carefully review your submission. Approved submission will become available in the organization list.
       index:
+        approve: Approve
         no-data: "We couldn't find any candidate organization in the database."
         reject: Reject
         status: Status

@@ -82,15 +82,39 @@ class CandidateOrganizationsController < ApplicationController
 
   def approve
     set_candidate_organization
+    authorize @candidate_organization, :mod_allowed?
+
+    organization = Organization.new
+    organization.name = @candidate_organization.name
+    organization.website = @candidate_organization.website
+
+    organization.slug = @candidate_organization.slug
+
+    duplicates = Organization.where(slug: organization.slug)
+    if duplicates.count > 0
+      first_duplicate = Organization.slug_starts_with(organization.slug).order(slug: :desc).first
+      organization.slug = organization.slug + generate_offset(first_duplicate).to_s
+    end
+
+    respond_to do |format|
+      if organization.save && @candidate_organization.destroy
+        format.html { redirect_to organization_url(organization), notice: 'Organization created.' }
+        format.json { render :show, status: :created, location: @organization }
+      else
+        format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was not.' }
+        format.json { head :no_content }
+      end
+    end
   end
 
   def reject
     set_candidate_organization
+    authorize @candidate_organization, :mod_allowed?
     respond_to do |format|
       if @candidate_organization.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
-        format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was.' }
+        format.html { redirect_to candidate_organizations_url, notice: 'Candidate rejected.' }
       else
-        format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was not.' }
+        format.html { redirect_to candidate_organizations_url, notice: 'Candidate rejection failed.' }
       end
       format.json { head :no_content }
     end
