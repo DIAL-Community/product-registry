@@ -1,5 +1,7 @@
 class CandidateOrganization < ApplicationRecord
   include Auditable
+  has_and_belongs_to_many(:contacts, join_table: :candidate_organizations_contacts,
+                                     after_add: :association_add, before_remove: :association_remove)
 
   validates :name, presence: true, length: { maximum: 300 }
 

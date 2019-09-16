@@ -29,6 +29,24 @@ class CandidateOrganizationsController < ApplicationController
   def create
     # Everyone including unregistered user can post and create candidate organization.
     @candidate_organization = CandidateOrganization.new(candidate_organization_params)
+    @candidate_organization.set_current_user(current_user)
+
+    if params[:contact].present?
+      contact = Contact.new
+      contact.name = params[:contact][:name]
+      contact.email = params[:contact][:email]
+      contact.title = params[:contact][:title]
+
+      contact.slug = slug_em(params[:contact][:name])
+
+      dupe_count = Contact.where(slug: contact.slug).count
+      if dupe_count > 0
+        first_duplicate = Contact.slug_starts_with(contact.slug).order(slug: :desc).first
+        contact.slug = contact.slug + generate_offset(first_duplicate).to_s
+      end
+
+      @candidate_organization.contacts.push(contact)
+    end
 
     respond_to do |format|
       if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && @candidate_organization.save
@@ -95,6 +113,8 @@ class CandidateOrganizationsController < ApplicationController
       first_duplicate = Organization.slug_starts_with(organization.slug).order(slug: :desc).first
       organization.slug = organization.slug + generate_offset(first_duplicate).to_s
     end
+
+    organization.contacts = @candidate_organization.contacts
 
     respond_to do |format|
       if organization.save && @candidate_organization.destroy
