@@ -44,6 +44,13 @@
         <%= t('view.contact.form.title') %>
       </label>
     </fieldset>
+
+    <%= recaptcha_tags callback: 'enableCandidateSubmission', site_key: Rails.application.secrets.captcha_site_key %>
+
+    <fieldset class="float-right mt-4">
+      <%= form.submit t('view.general.submit'), id: 'submit-candidate', :class => "btn btn-secondary", disabled: true %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
   <% end %>
 
   <% if candidate_organization.persisted? %>
@@ -68,16 +75,12 @@
         </span>
       </div>
     </div>
-  <% end %>
-  
-  <% if candidate_organization.new_record? %>
-    <%= recaptcha_tags callback: 'enableCandidateSubmission', site_key: Rails.application.secrets.captcha_site_key %>
-  <% end %>
 
-  <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), id: 'submit-candidate', :class => "btn btn-secondary", disabled: true %>
-    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
-  </fieldset>
+    <fieldset class="float-right mt-4">
+      <%= form.submit t('view.general.submit'), id: 'submit-candidate', :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
+  <% end %>
 <% end %>
 
 <script>
