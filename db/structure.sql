@@ -143,6 +143,56 @@ ALTER SEQUENCE public.building_blocks_id_seq OWNED BY public.building_blocks.id;
 
 
 --
+-- Name: candidate_organizations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.candidate_organizations (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    website text,
+    rejected boolean,
+    rejected_date timestamp without time zone,
+    rejected_by_id bigint,
+    approved_date timestamp without time zone,
+    approved_by_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: candidate_organizations_contacts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.candidate_organizations_contacts (
+    candidate_organization_id bigint NOT NULL,
+    contact_id bigint NOT NULL,
+    started_at timestamp without time zone,
+    ended_at timestamp without time zone
+);
+
+
+--
+-- Name: candidate_organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.candidate_organizations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: candidate_organizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.candidate_organizations_id_seq OWNED BY public.candidate_organizations.id;
+
+
+--
 -- Name: contacts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -937,6 +987,13 @@ ALTER TABLE ONLY public.building_blocks ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: candidate_organizations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_organizations ALTER COLUMN id SET DEFAULT nextval('public.candidate_organizations_id_seq'::regclass);
+
+
+--
 -- Name: contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1063,6 +1120,14 @@ ALTER TABLE ONLY public.audits
 
 ALTER TABLE ONLY public.building_blocks
     ADD CONSTRAINT building_blocks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: candidate_organizations candidate_organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_organizations
+    ADD CONSTRAINT candidate_organizations_pkey PRIMARY KEY (id);
 
 
 --
@@ -1233,6 +1298,34 @@ CREATE INDEX index_audits_on_created_at ON public.audits USING btree (created_at
 --
 
 CREATE UNIQUE INDEX index_building_blocks_on_slug ON public.building_blocks USING btree (slug);
+
+
+--
+-- Name: index_candidate_contacts_on_candidate_id_and_contact_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_contacts_on_candidate_id_and_contact_id ON public.candidate_organizations_contacts USING btree (candidate_organization_id, contact_id);
+
+
+--
+-- Name: index_candidate_contacts_on_contact_id_and_candidate_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_contacts_on_contact_id_and_candidate_id ON public.candidate_organizations_contacts USING btree (contact_id, candidate_organization_id);
+
+
+--
+-- Name: index_candidate_organizations_on_approved_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_organizations_on_approved_by_id ON public.candidate_organizations USING btree (approved_by_id);
+
+
+--
+-- Name: index_candidate_organizations_on_rejected_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_organizations_on_rejected_by_id ON public.candidate_organizations USING btree (rejected_by_id);
 
 
 --
@@ -1587,6 +1680,14 @@ ALTER TABLE ONLY public.deploys
 
 
 --
+-- Name: candidate_organizations fk_rails_246998b230; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_organizations
+    ADD CONSTRAINT fk_rails_246998b230 FOREIGN KEY (rejected_by_id) REFERENCES public.users(id);
+
+
+--
 -- Name: projects fk_rails_45a5b9baa8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1608,6 +1709,14 @@ ALTER TABLE ONLY public.deploys
 
 ALTER TABLE ONLY public.product_assessments
     ADD CONSTRAINT fk_rails_c1059f487a FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: candidate_organizations fk_rails_d0cf117a92; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_organizations
+    ADD CONSTRAINT fk_rails_d0cf117a92 FOREIGN KEY (approved_by_id) REFERENCES public.users(id);
 
 
 --
@@ -1946,6 +2055,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190909191546'),
 ('20190909195732'),
 ('20190911150425'),
-('20190911194639');
+('20190911194639'),
+('20190913164128'),
+('20190916175633');
 
 
