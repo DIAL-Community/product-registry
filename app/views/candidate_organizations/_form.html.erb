@@ -19,7 +19,7 @@
 
   <% if candidate_organization.new_record? %>
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      <%= t('model.contact').to_s.humanize %> 
+      <%= t('model.contact').to_s.humanize %>
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="contact-name" name="contact[name]" class="form-control" required="true"
@@ -55,7 +55,7 @@
 
   <% if candidate_organization.persisted? %>
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      <%= t('model.contact').to_s.pluralize.humanize %> 
+      <%= t('model.contact').to_s.pluralize.humanize %>
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="contact-search" name="contact_label" class="form-control"
@@ -77,7 +77,7 @@
     </div>
 
     <fieldset class="float-right mt-4">
-      <%= form.submit t('view.general.submit'), id: 'submit-candidate', :class => "btn btn-primary" %>
+      <%= form.submit t('view.general.submit'), id: 'submit-candidate', :class => "btn btn-primary", disabled: !(candidate_organization.rejected.nil? || candidate_organization.rejected) %>
       <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
