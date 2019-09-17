@@ -1,4 +1,4 @@
-class DeployPolicy < ApplicationPolicy
+class CandidateOrganizationPolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
@@ -7,10 +7,10 @@ class DeployPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == 'admin' || user.role == 'principle' || user.role == 'ict4sdg'
+    user.role == 'admin'
   end
 
   def view_allowed?
-    !user.nil? && user.role != 'user'
+    !user.nil? && user.role == 'admin'
   end
 end

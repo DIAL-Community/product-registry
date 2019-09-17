@@ -11,6 +11,13 @@ Rails.application.routes.draw do
 
   root to: 'about#index'
 
+  resources :candidate_organizations do
+    member do
+      post 'reject'
+      post 'approve'
+    end
+  end
+
   resources :products do
     get 'count', on: :collection
   end
@@ -63,6 +70,7 @@ Rails.application.routes.draw do
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
+  get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
   get 'contact_duplicates', :to => 'contacts#duplicates'
   get 'location_duplicates', :to => 'locations#duplicates'
   get 'sector_duplicates', :to => 'sectors#duplicates'

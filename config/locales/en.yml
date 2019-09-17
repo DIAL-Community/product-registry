@@ -41,6 +41,7 @@ en:
     view_allowed?: You're not allowed to view this page.
   model:
     building-block: building block
+    candidate-organization: candidate organization
     contact: contact
     location: location
     office: office
@@ -119,6 +120,18 @@ en:
         bb-workflow-popover:
           one: Mapping to Associated Workflow
           other: Mapping to Associated Workflows
+    candidate-organization:
+      form:
+        created: Thank you for your submission. We will carefully review your submission. Approved submission will become available in the organization list.
+      index:
+        approve: Approve
+        no-data: "We couldn't find any candidate organization in the database."
+        reject: Reject
+        status: Status
+        status-approved: Approved
+        status-new: New Submission
+        status-rejected: Rejected
+        website: Website
     contact:
       form:
         email: Email

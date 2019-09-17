@@ -91,11 +91,11 @@ class OrganizationsController < ApplicationController
       contact.email = params[:contact][:email]
       contact.title = params[:contact][:title]
 
-      contact_slug = slug_em(params[:contact][:name]);
+      contact_slug = slug_em(params[:contact][:name])
       dupe_count = Contact.where(slug: contact_slug).count
-      if (dupe_count > 0)
+      if dupe_count > 0
         first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
-        contact.slug = contact_slug + "_" + generate_offset(first_duplicate).to_s
+        contact.slug = contact_slug + generate_offset(first_duplicate).to_s
       else
         contact.slug = contact_slug
       end

@@ -32,6 +32,11 @@ body {
   padding-top: 102px;
 }
 
+p.text-success, p.text-error {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .g-recaptcha {
   :first-child {
     height: 84px !important;

@@ -6,8 +6,8 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects].freeze
-  ACTION_WITH_BREADCRUMBS = %w[show edit create update].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations].freeze
+  ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations'].freeze
 
   def all_filters
@@ -26,21 +26,32 @@ module ApplicationHelper
 
   def build_breadcrumbs(params)
     base_path = params[:controller]
+    # Special case for the users base path because we have way to view/edit users
     base_path == 'users' && base_path = 'admin/users'
+
+    # Special case for the candidate organizations.
+    # * Non registered user should go to organizations list instead of candidate list in the crumb.
+    base_label = params[:controller].titlecase
+    if base_path == 'candidate_organizations' && !policy(CandidateOrganization).view_allowed?
+      base_path = 'organizations'
+      base_label = 'Organizations'
+    end
 
     object_class = params[:controller].classify.constantize
     object_class.column_names.include?('slug') && object_record = object_class.find_by(slug: params[:id])
-    if object_record.nil? && params[:id].scan(/\D/).empty?
+    if object_record.nil? && params[:id].present? && params[:id].scan(/\D/).empty?
       object_record = object_class.find(params[:id])
     end
 
-    if base_path == 'admin/users'
-      id_label = object_record.email
-    else
-      id_label = object_record.name
+    unless object_record.nil?
+      if base_path == 'admin/users'
+        id_label = object_record.email
+      else
+        id_label = object_record.name
+      end
     end
 
-    { base_path: base_path, base_label: params[:controller].titlecase,
+    { base_path: base_path, base_label: base_label,
       id_path: "#{base_path}/#{params[:id]}", id_label: id_label }
   end
 

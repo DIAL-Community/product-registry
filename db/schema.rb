@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190911194639) do
+ActiveRecord::Schema.define(version: 20190916175633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,30 @@ ActiveRecord::Schema.define(version: 20190911194639) do
     t.datetime "updated_at", null: false
     t.jsonb "description", default: "{}", null: false
     t.index ["slug"], name: "index_building_blocks_on_slug", unique: true
+  end
+
+  create_table "candidate_organizations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.text "website"
+    t.boolean "rejected"
+    t.datetime "rejected_date"
+    t.bigint "rejected_by_id"
+    t.datetime "approved_date"
+    t.bigint "approved_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_candidate_organizations_on_approved_by_id"
+    t.index ["rejected_by_id"], name: "index_candidate_organizations_on_rejected_by_id"
+  end
+
+  create_table "candidate_organizations_contacts", id: false, force: :cascade do |t|
+    t.bigint "candidate_organization_id", null: false
+    t.bigint "contact_id", null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.index ["candidate_organization_id", "contact_id"], name: "index_candidate_contacts_on_candidate_id_and_contact_id"
+    t.index ["contact_id", "candidate_organization_id"], name: "index_candidate_contacts_on_contact_id_and_candidate_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -295,6 +319,8 @@ ActiveRecord::Schema.define(version: 20190911194639) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
+  add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"

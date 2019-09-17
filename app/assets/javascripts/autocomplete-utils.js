@@ -165,6 +165,12 @@ var workflowsAutoCompleteReady = function() {
   $("#workflow-search").autocomplete(workflowsAutoComplete);
 }
 
+var contactAutoCompleteReady = function() {
+  var contactAutoComplete = autoComplete("/contacts.json?without_paging=true", addContact)
+  $('#base-selected-contacts').hide();
+  $("#contact-search").autocomplete(contactAutoComplete);
+}
+
 $(document).on('turbolinks:load', organizationAutoCompleteReady);
 $(document).on('turbolinks:load', buildingBlockAutoCompleteReady);
 $(document).on('turbolinks:load', sectorAutoCompleteReady);
@@ -175,3 +181,4 @@ $(document).on('turbolinks:load', sdgsAutoCompleteReady);
 $(document).on('turbolinks:load', sdgTargetsAutoCompleteReady);
 $(document).on('turbolinks:load', useCasesAutoCompleteReady);
 $(document).on('turbolinks:load', workflowsAutoCompleteReady);
+$(document).on('turbolinks:load', contactAutoCompleteReady);

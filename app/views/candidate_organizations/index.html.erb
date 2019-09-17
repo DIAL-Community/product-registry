@@ -1,0 +1,84 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<% if user_signed_in? %>
+  <%= link_to t('view.general.create'), new_candidate_organization_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
+<div class="float-right pb-2">
+  <%= form_tag(candidate_organizations_path, :method => "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search],
+        placeholder: t('view.general.search-placeholder', model: t('model.candidate-organization').to_s.pluralize),
+        class: "form-control" %>
+    <div class="input-group-append">
+      <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th><%= t('view.general.name') %></th>
+      <th><%= t('view.candidate-organization.index.website') %></th>
+      <th><%= t('view.candidate-organization.index.status') %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @candidate_organizations.count > 0 %>
+      <% @candidate_organizations.each do |candidate_organization| %>
+        <tr>
+          <td><%= candidate_organization.name %></td>
+          <td><%= candidate_organization.website %></td>
+          <td>
+            <%= candidate_organization.rejected.nil? ?
+                t('view.candidate-organization.index.status-new') :
+                candidate_organization.rejected ?
+                  t('view.candidate-organization.index.status-rejected') :
+                  t('view.candidate-organization.index.status-approved')
+            %>
+          </td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+              <%= t('view.general.action') %>
+            </a>
+            <div class="dropdown-menu">
+              <%= link_to t('view.general.view'), candidate_organization, :class =>"dropdown-item"  %>
+              <% if user_signed_in? && policy(candidate_organization).mod_allowed? %>
+                <% if candidate_organization.rejected.nil? || candidate_organization.rejected %>
+                  <%= link_to t('view.general.edit'), edit_candidate_organization_path(candidate_organization), :class =>"dropdown-item"  %>
+                <% end %>
+                <div class="dropdown-divider"></div>
+                <% if candidate_organization.rejected.nil? %>
+                  <%= link_to t('view.candidate-organization.index.approve'),
+                              approve_candidate_organization_path(candidate_organization),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <%= link_to t('view.candidate-organization.index.reject'),
+                              reject_candidate_organization_path(candidate_organization),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <% if candidate_organization.rejected %>
+                  <%= link_to t('view.candidate-organization.index.approve'),
+                              approve_candidate_organization_path(candidate_organization),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <%= link_to t('view.general.delete'), candidate_organization, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted"><%= t('view.candidate-organization.index.no-data') %></small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @candidate_organizations, :class => "float-right digg-pagination" %>
