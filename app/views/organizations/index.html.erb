@@ -43,21 +43,22 @@
             <%= image_tag(organization.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
           <% end %>
         </div>
-        <% if organization.is_endorser %>
-          <div class="card-footer">
-            <% if organization.website.present? %>
-              <small>
-                <a href="<%= "//" + organization.website %>" target="_new">
-                  <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
-                </a>
-              </small>
-              <br/>
-            <% end %>
-            <small class="text-muted">
-              <%= raw "#{image_tag('digiprins.png', width: 16)} #{t('view.organization.index.endorsed-date')}  #{organization.when_endorsed.year}" %>
+
+        <div class="card-footer">
+          <% if organization.website.present? %>
+            <small>
+              <a href="<%= "//" + organization.website %>" target="_new">
+                <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
+              </a>
             </small>
-          </div>
-        <% end %>
+            <br/>
+          <% end %>
+          <% if organization.is_endorser %>
+          <small class="text-muted">
+            <%= raw "#{image_tag('digiprins.png', width: 16)} #{t('view.organization.index.endorsed-date')}  #{organization.when_endorsed.year}" %>
+          </small>
+          <% end %>
+        </div>
       </div>
     </div>
   <% end %>
