@@ -30,6 +30,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  errors:
+    messages:
+      extension_whitelist_error: 'This image format is not supported. Please upload a jpg, jpeg, png or gif.'
   messages:
     model:
       created: '%{model} was successfully created.'

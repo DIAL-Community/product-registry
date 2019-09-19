@@ -31,7 +31,7 @@ class LogoUploader < CarrierWave::Uploader::Base
 
   process resize_image: 640
   def resize_image(size)
-    manipulate! do |image|                 
+    manipulate! do |image|
       if image[:width] < image[:height]
         if image[:height] > size
           image.resize("x#{size}>")
@@ -66,7 +66,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg png)
+    %w(jpg jpeg png gif)
   end
 
   def content_type_whitelist

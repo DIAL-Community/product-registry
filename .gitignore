@@ -64,6 +64,15 @@ app/assets/images/organizations/testslug.png
 app/assets/images/organizations/organization.png
 app/assets/images/products/product_dup1.png
 app/assets/images/products/product.png
+public/assets/organizations/123456789_011.png
+public/assets/organizations/1234_56_789_011.png
+public/assets/organizations/abcd_56_789_011.png
+public/assets/organizations/abcd_56_789_011_dup1.png
+public/assets/organizations/abcd_56_789_011_dup2.png
+public/assets/organizations/abcd_56_789_011_dup3.png
+public/assets/organizations/testslug.png
+public/assets/products/product.png
+public/assets/products/product_dup1.png
 
 /coverage
 

@@ -60,6 +60,9 @@ module Modules
       digisquare_origin = Origin.find_by(:slug => 'digital_square')
       
       candidate_name = section['line']
+      if candidate_name == 'Open Source LIS Community of Practice' #TODO: expand to blacklist
+        return
+      end
       candidate_slug = slug_em(candidate_name)
       existing_product = Product.first_duplicate(candidate_name, candidate_slug)
       if existing_product.nil?
