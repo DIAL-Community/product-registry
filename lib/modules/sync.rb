@@ -9,6 +9,13 @@ module Modules
         unicef_origin = Origin.find_by(:slug => 'unicef')
         name_aliases = [json_data['name'], json_data['initialism']].reject{ |x| x.nil? || x.empty? }
 
+        blacklist = YAML.load_file("config/product_blacklist.yml")
+        blacklist.each do |blacklist_item|
+          if json_data['name'] == blacklist_item['item']
+            puts "skipping #{json_data['name']}"
+            return
+          end
+        end
         existing_product = nil
         name_aliases.each do |name_alias|
           # Find by name, and then by aliases and then by slug.
@@ -58,10 +65,14 @@ module Modules
 
     def sync_digisquare_product(section)
       digisquare_origin = Origin.find_by(:slug => 'digital_square')
-      
+
       candidate_name = section['line']
-      if candidate_name == 'Open Source LIS Community of Practice' #TODO: expand to blacklist
-        return
+      blacklist = YAML.load_file("config/product_blacklist.yml")
+      blacklist.each do |blacklist_item|
+        if candidate_name == blacklist_item['item']
+          puts "skipping #{candidate_name}"
+          return
+        end
       end
       candidate_slug = slug_em(candidate_name)
       existing_product = Product.first_duplicate(candidate_name, candidate_slug)
@@ -141,7 +152,7 @@ module Modules
       osc_origin = Origin.find_by(:slug => 'dial_osc')
       if (!sync_product.origins.exists?(:id => osc_origin.id))
         sync_product.origins.push(osc_origin)
-      end 
+      end
 
       sync_product.save
     end
