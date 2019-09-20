@@ -44,8 +44,7 @@ namespace :sync do
       # only process section 2 & 3 and the toc level 2
       # also skip the lorem ipsum
       if (!section['number'].start_with?("2", "3") ||
-          section['toclevel'] != 2 ||
-          section['line'].start_with?("Lorem"))
+          section['toclevel'] != 2)
         next;
       end
 
