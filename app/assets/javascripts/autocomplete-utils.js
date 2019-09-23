@@ -147,8 +147,37 @@ var sdgsAutoCompleteReady = function() {
   $("#sustainable-development-goal-search").autocomplete(sdgsAutoComplete);
 }
 
+function sdgTargetCustomAutoComplete(source, callback) {
+  return {
+    minLength: 0,
+    maxShowItems: 8,
+    source: function(request, response) {
+      $.getJSON(
+        source, {
+          search: request.term
+        },
+        function(responses) {
+          response($.map(responses, function(response) {
+            return {
+              id: response.id,
+              label: response.target_number + ' : ' + response.name,
+              value: response.target_number + ' : ' + response.name,
+            }
+          }));
+        }
+      );
+    },
+    select: function(event, ui) {
+      callback(ui.item.id, ui.item.label);
+      $(this).blur();
+      $(this).val("");
+      return false;
+    }
+  }
+}
+
 var sdgTargetsAutoCompleteReady = function() {
-  var sdgTargetsAutoComplete = autoComplete("/sdg_targets.json?without_paging=true", addSdgTarget)
+  var sdgTargetsAutoComplete = sdgTargetCustomAutoComplete("/sdg_targets.json?without_paging=true", addSdgTarget);
   $("#base-selected-sdg-targets").hide();
   $("#sdg-target-search").autocomplete(sdgTargetsAutoComplete);
 }

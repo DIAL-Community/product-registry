@@ -73,7 +73,7 @@
 
 <script>
   <% use_case.sdg_targets.order("target_number").each do |sdg_target| %>
-    addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.name %>');
+    addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.target_number %> : <%= sdg_target.name %>');
   <% end %>
   <% use_case.workflows.order("name").each do |workflow| %>
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');

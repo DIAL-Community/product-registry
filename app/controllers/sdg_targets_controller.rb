@@ -4,15 +4,14 @@ class SdgTargetsController < ApplicationController
 
   def index
     if params[:without_paging]
-      @sdg_targets = SdgTarget.name_contains(params[:search])
+      @sdg_targets = SdgTarget.where('LOWER("sdg_targets"."name") like LOWER(?) OR target_number like ?', '%' + params[:search] + '%', params[:search] + '%')
                               .order(:target_number)
       authorize @sdg_targets, :view_allowed?
       return
     end
 
     if params[:search]
-      @sdg_targets = SdgTarget.where(nil)
-                              .name_contains(params[:search])
+      @sdg_targets = SdgTarget.where('LOWER("sdg_targets"."name") like LOWER(?) OR target_number like ?', '%' + params[:search] + '%', params[:search] + '%')
                               .order(:target_number)
                               .paginate(page: params[:page], per_page: 20)
     else
