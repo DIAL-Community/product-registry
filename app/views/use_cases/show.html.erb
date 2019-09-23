@@ -9,22 +9,21 @@
   </div>
   <%= image_tag(@use_case.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
-  <div id="usecase-viewer" class="wysiwyg-viewer">
-  </div>
+    <div id="usecase-viewer" class="wysiwyg-viewer">
+    </div>
     <p class="float-right mb-0" >
       <%= link_to 'Back', use_cases_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@use_case).mod_allowed? %>
         <%= link_to 'Edit', edit_use_case_path(@use_case), :class => "card-link" %>
       <% end %>
-    </div>
   </div>
 </div>
 
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
-  </div>
-  <% if @use_case.sdg_targets.count > 0 %>
+<% if @use_case.sdg_targets.count > 0 %>
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
+    </div>
     <div class="row">
       <% @use_case.sdg_targets.order("target_number").each do |sdg_target| %>
         <div class="col-6 col-lg-4 mt-2">
@@ -38,16 +37,15 @@
         </div>
       <% end %>
     </div>
-  <% else %>
-    <p class="card-text text-muted"><%= t('view.use-case.show.no-sdg-targets') %></p>
-  <% end %>
-</div>
-
-<div class="mt-4">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
   </div>
-  <% if @use_case.workflows.count > 0 %>
+<% end %>
+
+
+<% if @use_case.workflows.count > 0 %>
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
+    </div>
     <div class="row">
       <% @use_case.workflows.order("name").each do |workflow| %>
         <div class="col-6 col-lg-4 mt-2">
@@ -62,12 +60,9 @@
         </div>
       <% end %>
     </div>
-  <% else %>
-    <p class="card-text text-muted">
-      <%= t('view.general.not-available', model: t('model.use-case'), multi: t('model.workflow').to_s.pluralize) %>
-    </p>
-  <% end %>
-</div>
+  </div>
+<% end %>
+
 
 <script>
         setUpViewer("<%= @use_case.description %>")
