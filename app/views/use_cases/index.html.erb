@@ -27,24 +27,6 @@
 
           <div class="card-footer footer-padding">
             <%
-              workflows = uc_footer(use_case, 'workflows')
-              if workflows.count > 0
-                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{uc_footer_popover(workflows, 'view.use-case.index.workflow-popover')}'>"
-                concat(content.html_safe)
-                concat(image_tag(workflows[0][:filename], class: 'footer-img mb-1'))
-                
-                content = "<span class='small text-muted ml-1'>#{use_case.workflows.size} #{t('model.workflow').titlecase.pluralize(use_case.workflows.size)}</span>"
-                concat(content.html_safe)
-
-                # When we have image for each workflow, we can use the following code.
-                # workflows.each do |workflow|
-                #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-                #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-                # end
-                concat('</div>'.html_safe)
-              end
-
               sdg_targets = uc_footer(use_case, 'sdg_targets')
               if sdg_targets.count > 0
                 content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
@@ -55,6 +37,24 @@
                   concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip],
                                    class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
                 end
+                concat('</div>'.html_safe)
+              end
+
+              workflows = uc_footer(use_case, 'workflows')
+              if workflows.count > 0
+                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                                data-html='true' data-content='#{uc_footer_popover(workflows, 'view.use-case.index.workflow-popover')}'>"
+                concat(content.html_safe)
+                concat(image_tag(workflows[0][:filename], class: 'footer-img mb-1'))
+
+                content = "<span class='small text-muted ml-1'>#{use_case.workflows.size} #{t('model.workflow').titlecase.pluralize(use_case.workflows.size)}</span>"
+                concat(content.html_safe)
+
+                # When we have image for each workflow, we can use the following code.
+                # workflows.each do |workflow|
+                #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
+                #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                # end
                 concat('</div>'.html_safe)
               end
 
