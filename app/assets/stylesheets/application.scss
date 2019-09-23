@@ -352,3 +352,8 @@ h6 {
     white-space: nowrap;
 }
 
+.selected-element.badge {
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
