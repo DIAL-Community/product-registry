@@ -32,11 +32,11 @@ namespace :db do
       exec cmd
     end
 
-    desc "Creates a database the first time the app is run - from db/APP_NAME_init.dump."
+    desc "Creates a database the first time the app is run - from db/APP_NAME_public.dump."
     task :create_db_with_public_data => :environment do
       cmd = nil
       with_config do |app, host, db, user, pass|
-        cmd = "export PGPASSWORD=#{pass} && pg_restore --verbose --host #{host} --username #{user} --clean --no-owner --no-acl --dbname #{db} #{Rails.root}/db/backups/#{app}_init.dump"
+        cmd = "export PGPASSWORD=#{pass} && pg_restore --verbose --host #{host} --username #{user} --clean --no-owner --no-acl --dbname #{db} #{Rails.root}/db/backups/#{app}_public.dump"
       end
       Rake::Task["db:create"].invoke
       exec cmd
@@ -46,7 +46,7 @@ namespace :db do
     task :dump_public_db => :environment do
       cmd = nil
       with_config do |app, host, db, user, pass|
-        cmd = "export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} --exclude-table-data=users --exclude-table-data=contacts --exclude-table-data=organizations_contacts --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}_init.dump"
+        cmd = "export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} --exclude-table-data=users --exclude-table-data=contacts --exclude-table-data=organizations_contacts --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}_public.dump"
       end
       exec cmd
     end
