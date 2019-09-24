@@ -233,6 +233,10 @@ en:
       tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
       fa-icons: "Icons provided unmodified by FontAwesome"
       sdg-icons: "Icons provided unmodified by The Global Goals for Sustainable Development"
+      dial-social-media: "Follow DIAL on social media"
+      gitlab: "View this project on Gitlab"
+      osc-forum: "Discuss on the Open Source Center Forum"
+      ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
     header:
       deploys: Deploys
       digital-principles: Digital Principles
