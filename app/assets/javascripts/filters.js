@@ -3,6 +3,7 @@ var addToList = function(filterId, values) {
         $("#"+filterId).prop("checked", values.value === 'true');
     } else {
         values.map(function(currValue) {
+          if (currValue.value) {
             $('#' + filterId).parents(".row").next('.row').find('.badges').append(
               '<span class="badge badge-secondary filter-tag">' +
               currValue.label +
@@ -10,7 +11,9 @@ var addToList = function(filterId, values) {
               '</span>'
             );
             $('#remove-'+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
-        })
+          }
+        });
+        $('#' + filterId).val($('#' + filterId + ' option:first').val());
     }
 }
 
