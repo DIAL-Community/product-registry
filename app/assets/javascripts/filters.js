@@ -1,19 +1,18 @@
 var addToList = function(filterId, values) {
     if (!Array.isArray(values)) {
-        $("#"+filterId).prop("checked", values.value === 'true');
+      $("#"+filterId).prop("checked", values.value === 'true');
     } else {
-        values.map(function(currValue) {
-          if (currValue.value) {
-            $('#' + filterId).parents(".row").next('.row').find('.badges').append(
-              '<span class="badge badge-secondary filter-tag">' +
-              currValue.label +
-              '<i name="' + currValue.label + '" id="remove-' + filterId + '-' + currValue.value + '" class="fas fa-window-close remove-filter"></i>' +
-              '</span>'
-            );
-            $('#remove-'+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
-          }
-        });
-        $('#' + filterId).val($('#' + filterId + ' option:first').val());
+      values.map(function(currValue) {
+        if (currValue.value) {
+          $('#' + filterId).parents(".row").next('.row').find('.badges').append(
+            '<span class="badge badge-secondary filter-tag">' +
+            currValue.label +
+            '<i name="' + currValue.label + '" id="remove-' + filterId + '-' + currValue.value + '" class="fas fa-window-close remove-filter"></i>' +
+            '</span>'
+          );
+          $('#remove-'+filterId+'-'+currValue.value).on('click', {id: filterId, value: currValue.value, label: currValue.label}, removeFilter)
+        }
+      });
     }
 }
 
@@ -82,6 +81,7 @@ var removeFilter = function(event) {
 }
 
 var addFilter = function(id, value, label) {
+  if (value && !$('#remove-' + id + '-' + value).length) {
     $.post('/add_filter', {
         filter_name: id,
         filter_value: value,
@@ -93,6 +93,8 @@ var addFilter = function(id, value, label) {
         incrementFilterCount(id)
         loadMainDiv();
     });
+  }
+  $('#' + id).val('');
 }
 
 var loadFilters = function() {
