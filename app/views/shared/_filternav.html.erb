@@ -13,9 +13,9 @@
           <%
             counter = filter_count('sdgs')
             if counter > 0
-              concat "<span id='accordian-sdgs-count' class='badge badge-light'>#{counter}</span>".html_safe 
-            else 
-              concat "<span id='accordian-sdgs-count' class='badge badge-light'></span>".html_safe 
+              concat "<span id='accordian-sdgs-count' class='badge badge-light'>#{counter}</span>".html_safe
+            else
+              concat "<span id='accordian-sdgs-count' class='badge badge-light'></span>".html_safe
             end
            %>
           <i class="fa fa-angle-down float-right text-muted"></i>
@@ -28,7 +28,7 @@
         <div class="row">
           <div class="col-12 ml-1">
             <div class="form-group mb-1">
-              <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:name), :id, :name,
+              <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:number), :id, :option_label,
                   { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
                   { class: 'form-control filter-element' }) %>
             </div>
@@ -48,9 +48,9 @@
             <%
               counter = filter_count('use_cases')
               if counter > 0
-                concat "<span id='accordian-use_cases-count' class='badge badge-light'>#{counter}</span>".html_safe 
-              else 
-                concat "<span id='accordian-use_cases-count' class='badge badge-light'></span>".html_safe 
+                concat "<span id='accordian-use_cases-count' class='badge badge-light'>#{counter}</span>".html_safe
+              else
+                concat "<span id='accordian-use_cases-count' class='badge badge-light'></span>".html_safe
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
@@ -83,9 +83,9 @@
             <%
               counter = filter_count('workflows')
               if counter > 0
-                concat "<span id='accordian-workflows-count' class='badge badge-light'>#{counter}</span>".html_safe 
-              else 
-                concat "<span id='accordian-workflows-count' class='badge badge-light'></span>".html_safe 
+                concat "<span id='accordian-workflows-count' class='badge badge-light'>#{counter}</span>".html_safe
+              else
+                concat "<span id='accordian-workflows-count' class='badge badge-light'></span>".html_safe
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
@@ -118,9 +118,9 @@
             <%
               counter = filter_count('building_blocks')
               if counter > 0
-                concat "<span id='accordian-building_blocks-count' class='badge badge-light'>#{counter}</span>".html_safe 
-              else 
-                concat "<span id='accordian-building_blocks-count' class='badge badge-light'></span>".html_safe 
+                concat "<span id='accordian-building_blocks-count' class='badge badge-light'>#{counter}</span>".html_safe
+              else
+                concat "<span id='accordian-building_blocks-count' class='badge badge-light'></span>".html_safe
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
@@ -153,9 +153,9 @@
             <%
               counter = filter_count('origins') + filter_count('products') + filter_count('with_maturity_assessment')
               if counter > 0
-                concat "<span id='accordian-origins-count' class='badge badge-light'>#{counter}</span>".html_safe 
-              else 
-                concat "<span id='accordian-origins-count' class='badge badge-light'></span>".html_safe 
+                concat "<span id='accordian-origins-count' class='badge badge-light'>#{counter}</span>".html_safe
+              else
+                concat "<span id='accordian-origins-count' class='badge badge-light'></span>".html_safe
               end
             %>
             <i class="fa fa-angle-down float-right text-muted"></i>
@@ -214,9 +214,9 @@
           <%
             counter = filter_count('countries')
             if counter > 0
-              concat "<span id='accordian-countries-count' class='badge badge-light'>#{counter}</span>".html_safe 
-            else 
-              concat "<span id='accordian-countries-count' class='badge badge-light'></span>".html_safe 
+              concat "<span id='accordian-countries-count' class='badge badge-light'>#{counter}</span>".html_safe
+            else
+              concat "<span id='accordian-countries-count' class='badge badge-light'></span>".html_safe
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>
@@ -246,9 +246,9 @@
           <%
             counter = filter_count('sectors')
             if counter > 0
-              concat "<span id='accordian-sectors-count' class='badge badge-light'>#{counter}</span>".html_safe 
-            else 
-              concat "<span id='accordian-sectors-count' class='badge badge-light'></span>".html_safe 
+              concat "<span id='accordian-sectors-count' class='badge badge-light'>#{counter}</span>".html_safe
+            else
+              concat "<span id='accordian-sectors-count' class='badge badge-light'></span>".html_safe
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>
@@ -280,9 +280,9 @@
           <%
             counter = filter_count('years') + filter_count('endorser_only')
             if counter > 0
-              concat "<span id='accordian-years-count' class='badge badge-light'>#{counter}</span>".html_safe 
-            else 
-              concat "<span id='accordian-years-count' class='badge badge-light'></span>".html_safe 
+              concat "<span id='accordian-years-count' class='badge badge-light'>#{counter}</span>".html_safe
+            else
+              concat "<span id='accordian-years-count' class='badge badge-light'></span>".html_safe
             end
           %>
           <i class="fa fa-angle-down float-right text-muted"></i>

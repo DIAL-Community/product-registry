@@ -11,4 +11,8 @@ class SustainableDevelopmentGoal < ApplicationRecord
 
     "sdgs/sdg_placeholder.png"
   end
+
+  def option_label
+    "#{number}. #{name}"
+  end
 end
