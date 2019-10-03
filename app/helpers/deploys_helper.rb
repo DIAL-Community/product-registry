@@ -23,40 +23,42 @@ module DeploysHelper
     end
 
     def getDataFromJenkins(method, url)
-        jenkinsUrl = Rails.application.secrets.jenkins_url
-        jenkinsUser = Rails.application.secrets.jenkins_user
-        jenkinsPassword = Rails.application.secrets.jenkins_password
+      jenkinsUrl = Rails.application.secrets.jenkins_url
+      jenkinsUser = Rails.application.secrets.jenkins_user
+      jenkinsPassword = Rails.application.secrets.jenkins_password
 
-        crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
+      crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
 
-        uri = URI.parse(jenkinsUrl+url)
-        http = Net::HTTP.new(uri.host, uri.port)
-        case method
-        when "GET"
-            request = Net::HTTP::Get.new(uri.request_uri)
-        when "POST"
-            request = Net::HTTP::Post.new(uri.request_uri)
-        end
-        request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
-        request["Jenkins-Crumb"] = crumb
+      uri = URI.parse(jenkinsUrl+url)
+      https = Net::HTTP.new(uri.host, uri.port)
+      https.use_ssl = uri.scheme == 'https'
+      case method
+      when "GET"
+          request = Net::HTTP::Get.new(uri.request_uri)
+      when "POST"
+          request = Net::HTTP::Post.new(uri.request_uri)
+      end
+      request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
+      request["Jenkins-Crumb"] = crumb
 
-        response = http.request(request)
-    end
+      response = https.request(request)
+  end
 
-    def getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword) 
+  def getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword) 
 
-        crumbUrl = jenkinsUrl+"/crumbIssuer/api/json"
-        uri = URI.parse(crumbUrl)
-        http = Net::HTTP.new(uri.host, uri.port)
-        request = Net::HTTP::Get.new(uri.request_uri)
-        request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
+      crumbUrl = jenkinsUrl+"/crumbIssuer/api/json"
+      uri = URI.parse(crumbUrl)
+      https = Net::HTTP.new(uri.host, uri.port)
+      https.use_ssl = uri.scheme == 'https'
+      request = Net::HTTP::Get.new(URI(crumbUrl))
+      request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
 
-        response = http.request(request)
-        responseData = JSON.parse(response.body, object_class: OpenStruct)
-        jenkinsCrumb = responseData.crumb
-        
-        return jenkinsCrumb
-    end
+      response = https.request(request)
+      responseData = JSON.parse(response.body, object_class: OpenStruct)
+      jenkinsCrumb = responseData.crumb
+      
+      return jenkinsCrumb
+  end
 
     def jenkinsDeleteMachine(instanceName)
 
