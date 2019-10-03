@@ -1,12 +1,33 @@
-version: '2.0'
+version: '3.7'
 services:
   jenkins-master:
+    build:
+      context: .
+      target: t4d-jenkins
     container_name: t4d-jenkins
     restart: always
     ports:
-        - '80:8080'
+        - '8080:8080'
         - '50000:50000'
     image: t4d/jenkins
     volumes:
         - /var/jenkins_home:/var/jenkins_home
         - /var/run/docker.sock:/var/run/docker.sock
+  nginx:
+   image: nginx:1.15-alpine
+   restart: unless-stopped
+   volumes:
+    - ./ssl/data/nginx:/etc/nginx/conf.d
+    - ./ssl/data/certbot/conf:/etc/letsencrypt
+    - ./ssl/data/certbot/www:/var/www/certbot
+   ports:
+    - 80:80
+    - 443:443
+   command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+   image: certbot/certbot
+   restart: unless-stopped
+   volumes:
+    - ./ssl/data/certbot/conf:/etc/letsencrypt
+    - ./ssl/data/certbot/www:/var/www/certbot
+   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
