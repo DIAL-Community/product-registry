@@ -6,7 +6,7 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations deploys].freeze
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations'].freeze
 
@@ -19,9 +19,8 @@ module ApplicationHelper
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
   end
-
   def display_breadcrumb
-    ACTION_WITH_BREADCRUMBS.include?(params[:action])
+    ACTION_WITH_BREADCRUMBS.include?(params[:action]) && params[:controller] != 'deploys'
   end
 
   def build_breadcrumbs(params)
