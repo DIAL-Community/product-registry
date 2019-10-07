@@ -53,41 +53,47 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 
-docker-compose -v &amp;&amp; docker-machine -v
+docker-compose -v && docker-machine -v
 
-MACHINE_NAME=$ORG_ID&quot;-mifos&quot;
+MACHINE_NAME=$ORG_ID"-mifos"
  
 # set-up: clean up any previous machine failures
 docker-machine stop $MACHINE_NAME || {
-  docker-machine rm -y $MACHINE_NAME || echo &quot;Nothing to destroy&quot;
-  echo &quot;creating new container&quot;
+  docker-machine rm -y $MACHINE_NAME || echo "Nothing to destroy"
+  echo "creating new container"
   
   docker-machine create --driver digitalocean --digitalocean-access-token $AUTH_TOKEN --digitalocean-size 4gb --digitalocean-tags t4dlaunched $MACHINE_NAME
   #docker-machine create --driver amazonec2 --amazonec2-access-key $AUTH_TOKEN --amazonec2-secret-key $SECRET_KEY $MACHINE_NAME
 }
  
-# use docker-machine to create and configure &apos;test&apos; environment
+# use docker-machine to create and configure 'test' environment
 # add a -D (debug) if having issues
-docker-machine start $MACHINE_NAME || echo &quot;container started&quot;
+docker-machine start $MACHINE_NAME || echo "container started"
 
 
 eval $(docker-machine env --shell sh $MACHINE_NAME)
  
 # build
 
-cd fineract
 docker-compose build
 
 docker-compose up -d
 
-docker-machine scp -r fineract-db $MACHINE_NAME:/var/jenkins_home/workspace/mifos/fineract
+docker-machine scp -r fineract-db $MACHINE_NAME:/var/jenkins_home/workspace/mifos
+
+git clone https://github.com/openMF/community-app.git
+cd community-app
+docker build -t mifos-community-app .
+cd ..
+rm -rf community-app
+docker run --name mifos-ui -it -d -p 80:80 mifos-community-app
 
 sleep 30s
 
 # The last line of the build output should always be the docker-machine IP
 # This will be used by the T4D app to give the user a link
 
-echo &quot;mifos instance&quot;
+echo "mifos instance"
 docker-machine ip $MACHINE_NAME</command>
     </hudson.tasks.Shell>
   </builders>
