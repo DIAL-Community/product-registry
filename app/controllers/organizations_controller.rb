@@ -133,17 +133,25 @@ class OrganizationsController < ApplicationController
 
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @organization.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
       @organization.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
-      if @organization.save
+      if !@organization.errors.any? && @organization.save
         format.html { redirect_to @organization,
                       flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :created, location: @organization }
       else
-        format.html { render :new }
+        errMsg = ""
+        @organization.errors.each do |attr, err|
+          errMsg = err
+        end
+        format.html { redirect_to new_organization_url, flash: { error: errMsg } }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
@@ -207,12 +215,16 @@ class OrganizationsController < ApplicationController
 
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @organization.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
       @organization.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
-      if @organization.update(organization_params)
+      if !@organization.errors.any? && @organization.update(organization_params)
         format.html { redirect_to @organization,
                       flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @organization }
