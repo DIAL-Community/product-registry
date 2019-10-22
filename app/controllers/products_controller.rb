@@ -111,17 +111,25 @@ class ProductsController < ApplicationController
 
     if params[:logo].present?
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @product.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
       @product.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
-      if @product.save
+      if !@product.errors.any? && @product.save
         format.html { redirect_to @product,
                       flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) }}
         format.json { render :show, status: :created, location: @product }
       else
-        format.html { render :new }
+        errMsg = ""
+        @product.errors.each do |attr, err|
+          errMsg = err
+        end
+        format.html { redirect_to new_product_url, flash: { error: errMsg } }
         format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
@@ -192,12 +200,16 @@ class ProductsController < ApplicationController
 
     if params[:logo].present?
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @product.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
       @product.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
-      if @product.update(product_params)
+      if !@product.errors.any? && @product.update(product_params)
         format.html { redirect_to @product,
                       flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @product }

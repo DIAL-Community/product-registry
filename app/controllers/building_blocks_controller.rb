@@ -68,16 +68,24 @@ class BuildingBlocksController < ApplicationController
 
     if params[:logo].present?
       uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
     end
 
     respond_to do |format|
-      if @building_block.save
+      if !@building_block.errors.any? && @building_block.save
         format.html { redirect_to @building_block,
                       flash: { notice: t('messages.model.created', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :created, location: @building_block }
       else
-        format.html { render :new }
+        errMsg = ""
+        @organization.errors.each do |attr, err|
+          errMsg = err
+        end
+        format.html { redirect_to new_building_block_url, flash: { error: errMsg } }
         format.json { render json: @building_block.errors, status: :unprocessable_entity }
       end
     end
@@ -108,11 +116,15 @@ class BuildingBlocksController < ApplicationController
 
     if params[:logo].present?
       uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
     end
 
     respond_to do |format|
-      if @building_block.update(building_block_params)
+      if !@building_block.errors.any? && @building_block.update(building_block_params)
         format.html { redirect_to @building_block,
                       flash: { notice: t('messages.model.updated', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @building_block }

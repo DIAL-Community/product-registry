@@ -2,6 +2,9 @@
   <div id="error_explanation">
     <div class="alert alert-danger">
       <%= t('view.general.error', count: @building_block.errors.count) %>
+      <% @building_block.errors.each do |attr, err| %>
+        <%= err %>
+      <% end %>
     </div>
   </div>
 <% end %>
