@@ -6,10 +6,10 @@ class BuildingBlock < ApplicationRecord
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
 
   def image_file
-    if File.exist?(File.join('app','assets','images','building_blocks',"#{slug}.png"))
-      return "building_blocks/#{slug}.png"
+    if File.exist?(File.join('public', 'assets', 'building_blocks', "#{slug}.png"))
+      return "/assets/building_blocks/#{slug}.png"
     else
-      return "building_blocks/bb_placeholder.png"
+      return '/assets/building_blocks/bb_placeholder.png'
     end
   end
 

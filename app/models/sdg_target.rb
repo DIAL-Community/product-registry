@@ -8,10 +8,10 @@ class SdgTarget < ApplicationRecord
 
   def image_file
     png_filename = "goal_#{sdg_number}_target_#{target_number}.png"
-    if File.exist?(File.join('app', 'assets', 'images', 'sdg_targets', png_filename))
-      return "sdg_targets/#{png_filename}"
+    if File.exist?(File.join('public', 'assets', 'sdg_targets', png_filename))
+      return "/assets/sdg_targets/#{png_filename}"
     else
-      return 'sdg_targets/sdg_target_placeholder.png'
+      return '/assets/sdg_targets/sdg_target_placeholder.png'
     end
   end
 end

@@ -5,11 +5,11 @@ class SustainableDevelopmentGoal < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
 
   def image_file
-    if File.exist?(File.join('app','assets','images','sdgs',"#{slug}.png"))
-      return "sdgs/#{slug}.png"
+    if File.exist?(File.join('public', 'assets', 'sdgs', "#{slug}.png"))
+      return "/assets/sdgs/#{slug}.png"
     end
 
-    "sdgs/sdg_placeholder.png"
+    '/assets/sdgs/sdg_placeholder.png'
   end
 
   def option_label
