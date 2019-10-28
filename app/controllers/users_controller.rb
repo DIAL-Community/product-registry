@@ -39,6 +39,8 @@ class UsersController < ApplicationController
 
     if (user_params[:is_approved] && @user.confirmed_at.nil?)
       user_hash[:confirmed_at] = Time.now.to_s
+      # If this user registered to be a product owner and was just approved, send an email to them
+      send_notification(@user.email)
     end
     respond_to do |format|
       if @user.update(user_hash)
@@ -90,5 +92,12 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user)
             .permit(:email, :role, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
+    end
+
+    def send_notification(user_email)
+      AdminMailer
+        .with(user_email: user_email)
+        .notify_product_owner_approval
+        .deliver_later
     end
 end
