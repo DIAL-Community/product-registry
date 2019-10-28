@@ -117,6 +117,11 @@ var loadMainDiv = function() {
   });
 }
 
+var addProductFilter = function(value, label) {
+  var id = 'products';
+  addFilter(id, value, label)
+}
+
 var prepareFilters = function() {
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
@@ -158,6 +163,9 @@ var prepareFilters = function() {
         loadMainDiv();
       });
     });
+
+    var productAutoComplete = autoComplete("/products.json?without_paging=true", addProductFilter)
+    $("#products").autocomplete(productAutoComplete);
 
     loadFilters();
 }

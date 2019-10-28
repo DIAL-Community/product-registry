@@ -133,17 +133,25 @@ class OrganizationsController < ApplicationController
 
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @organization.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
       @organization.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
-      if @organization.save
+      if !@organization.errors.any? && @organization.save
         format.html { redirect_to @organization,
                       flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :created, location: @organization }
       else
-        format.html { render :new }
+        errMsg = ""
+        @organization.errors.each do |attr, err|
+          errMsg = err
+        end
+        format.html { redirect_to new_organization_url, flash: { error: errMsg } }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
@@ -207,12 +215,20 @@ class OrganizationsController < ApplicationController
 
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
-      uploader.store!(params[:logo])
+      begin
+        uploader.store!(params[:logo])
+      rescue StandardError => e
+        @organization.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
+      end
       @organization.set_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
-      if @organization.update(organization_params)
+      
+      if !@organization.errors.any? 
+        if (organization_params)
+          @organization.update(organization_params)
+        end
         format.html { redirect_to @organization,
                       flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @organization }
@@ -231,6 +247,17 @@ class OrganizationsController < ApplicationController
     # delete any projects associated with this org
     @organization.projects.each do |project|
       project.destroy
+    end
+
+    users = User.where(organization_id: @organization.id)
+    users.each do |user|
+      if user.products.empty?
+        user.destroy
+      else
+        user.organization_id = nil
+        user.role == User.roles[:org_product_user] && user.role = User.roles[:product_user]
+        user.save
+      end
     end
 
     @organization.destroy

@@ -121,6 +121,47 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organizations_url
   end
 
+  test 'should destroy org_user when destroying organization' do
+    organization = organizations(:four)
+
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+
+    fourth_user = users(:four)
+    fourth_user.role = User.roles[:org_user]
+    fourth_user.organization_id = organization.id
+    fourth_user.save!
+
+    assert_equal(User.where(organization_id: organization.id).count, 1)
+
+    delete organization_url(organization)
+
+    assert_redirected_to organizations_url
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+    assert_equal(User.where(id: fourth_user.id).count, 0)
+  end
+
+  test 'should not destroy product_org_user when destroying organization' do
+    organization = organizations(:four)
+
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+
+    fourth_user = users(:four)
+    fourth_user.role = User.roles[:product_org_user]
+    fourth_user.products = [products(:one)]
+    fourth_user.organization_id = organization.id
+    fourth_user.save!
+
+    assert_equal(User.where(organization_id: organization.id).count, 1)
+
+    delete organization_url(organization)
+
+    assert_redirected_to organizations_url
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+    assert_equal(User.where(id: fourth_user.id).count, 1)
+    updated_fourth_user = User.find(fourth_user.id)
+    assert_nil(updated_fourth_user.organization_id)
+  end
+
   test "should destroy project along with organization" do
     @project = projects(:one)
     assert_difference('Project.count', -1) do
@@ -245,14 +286,13 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     patch(organization_url(organization), params: patch_params)
     get organization_url(organization)
 
-    # Patching should not update is_endorser, name, website and year.
+    # Patching should not update is_endorser, website and year.
     assert_not_equal(false, assigns(:organization).is_endorser)
-    assert_not_equal('Some random new name', assigns(:organization).name)
     assert_not_equal('some-fancy-website.com', assigns(:organization).website)
     assert_not_equal(2018, assigns(:organization).when_endorsed.year)
 
     assert_equal(true, assigns(:organization).is_endorser)
-    assert_equal('Fourth Organization', assigns(:organization).name)
+    assert_equal('Some random new name', assigns(:organization).name)
     assert_equal('fourth-organization.com', assigns(:organization).website)
     assert_equal(2019, assigns(:organization).when_endorsed.year)
 

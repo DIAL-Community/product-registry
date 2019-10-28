@@ -40,14 +40,15 @@
   </div>
 <% end %>
 
-
 <% if @use_case.workflows.count > 0 %>
+  <% building_blocks = [] %>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
     </div>
     <div class="row">
       <% @use_case.workflows.order("name").each do |workflow| %>
+        <% building_blocks = building_blocks | workflow.building_blocks %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
             <div class="card-body px-1 py-1">
@@ -61,9 +62,28 @@
       <% end %>
     </div>
   </div>
+
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
+    </div>
+    <div class="row">
+      <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body px-1 py-1">
+              <%= image_tag(building_block.image_file, class: 'footer-img-small') %>
+              <span class="card-text text-muted mb-0">
+                <%= link_to building_block.name, building_block %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
 
-
 <script>
-        setUpViewer("<%= @use_case.description %>")
+        setUpViewer("<%= @ucDesc.description %>")
 </script>

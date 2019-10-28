@@ -16,7 +16,7 @@
     <%= form.select :sector_id, options, {}, :class => "form-control mb-2" %>
   </fieldset>
 
-  <%= form.hidden_field :description, id: :use_case_desc %>
+  <%= form.hidden_field :uc_desc, id: :use_case_desc %>
   <div class="wysiwyg-editor">
   </div>
 
@@ -79,7 +79,7 @@
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 
-  var editor = setUpEditor("<%= use_case.description %>");
+  var editor = setUpEditor("<%= @ucDesc.description %>");
   var form = document.querySelector('#use-case-form');
   form.onsubmit = function() {
     var useCaseDesc = $('#use_case_desc');

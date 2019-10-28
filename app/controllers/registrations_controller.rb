@@ -1,6 +1,7 @@
 # Adding override for the default registration to display captcha.
 class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :check_captcha, only: [:create]
+  after_action :send_notification, only: [:create]
 
   # Overriding how devise build the user object here.
   def build_resource(hash = {})
@@ -28,5 +29,12 @@ class RegistrationsController < Devise::RegistrationsController
 
       respond_with_navigational(resource) { render :new }
     end
+  end
+
+  def send_notification
+    AdminMailer
+      .with(user: sign_up_params)
+      .notify_product_owner_request
+      .deliver_later
   end
 end

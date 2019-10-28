@@ -11,6 +11,6 @@ class ContactPolicy < ApplicationPolicy
   end
 
   def view_allowed?
-    !user.nil? && user.role != 'user'
+    user.role == 'admin' || user.role == 'principle'
   end
 end

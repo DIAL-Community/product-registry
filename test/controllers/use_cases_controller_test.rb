@@ -28,7 +28,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create use_case" do
     assert_difference('UseCase.count') do
-      post use_cases_url, params: { use_case: { description: @use_case.description, name: @use_case.name, sector_id: @use_case.sector_id, slug: @use_case.slug } }
+      post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name, sector_id: @use_case.sector_id, slug: @use_case.slug } }
     end
 
     assert_redirected_to use_case_url(UseCase.last)
@@ -45,7 +45,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update use_case" do
-    patch use_case_url(@use_case), params: { use_case: { description: @use_case.description, name: @use_case.name, sector_id: @use_case.sector_id, slug: @use_case.slug } }
+    patch use_case_url(@use_case), params: { use_case: { uc_desc: @use_case.description, name: @use_case.name, sector_id: @use_case.sector_id, slug: @use_case.slug } }
     assert_redirected_to use_case_url(@use_case)
   end
 
