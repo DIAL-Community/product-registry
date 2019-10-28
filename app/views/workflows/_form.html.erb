@@ -10,7 +10,7 @@
     <%= t('view.general.duplicates', model: t('model.workflow')) %>
   </div>
 
-  <%= form.hidden_field :description, id: :workflow_desc %>
+  <%= form.hidden_field :wf_desc, id: :workflow_desc %>
   <div class="wysiwyg-editor">
   </div>
 
@@ -73,7 +73,7 @@
     addBuildingBlock('<%= building_block.id %>', '<%= building_block.name %>');
   <% end %>
 
-  var editor = setUpEditor("<%= workflow.description %>");
+  var editor = setUpEditor("<%= @wfDesc.description %>");
   var form = document.querySelector('#workflow-form');
   form.onsubmit = function() {
     var workflowDesc = $('#workflow_desc');

@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190916175633) do
+ActiveRecord::Schema.define(version: 20191022134914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "audits", force: :cascade do |t|
+    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -26,10 +27,17 @@ ActiveRecord::Schema.define(version: 20190916175633) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "id", "version"], name: "auditable_index"
+    t.index ["action", "audit_id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
+  end
+
+  create_table "building_block_descriptions", force: :cascade do |t|
+    t.bigint "building_block_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.index ["building_block_id"], name: "index_building_block_descriptions_on_building_block_id"
   end
 
   create_table "building_blocks", force: :cascade do |t|
@@ -270,6 +278,13 @@ ActiveRecord::Schema.define(version: 20190916175633) do
     t.index ["slug"], name: "index_sdgs_on_slug", unique: true
   end
 
+  create_table "use_case_descriptions", force: :cascade do |t|
+    t.bigint "use_case_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.index ["use_case_id"], name: "index_use_case_descriptions_on_use_case_id"
+  end
+
   create_table "use_cases", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -297,6 +312,13 @@ ActiveRecord::Schema.define(version: 20190916175633) do
     t.index ["user_id", "product_id"], name: "users_products_idx", unique: true
   end
 
+  create_table "workflow_descriptions", force: :cascade do |t|
+    t.bigint "workflow_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.index ["workflow_id"], name: "index_workflow_descriptions_on_workflow_id"
+  end
+
   create_table "workflows", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -319,6 +341,7 @@ ActiveRecord::Schema.define(version: 20190916175633) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "building_block_descriptions", "building_blocks"
   add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "deploys", "products"
@@ -351,12 +374,14 @@ ActiveRecord::Schema.define(version: 20190916175633) do
   add_foreign_key "projects_sdgs", "sustainable_development_goals", column: "sdg_id", name: "projects_sdgs_sdg_fk"
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
+  add_foreign_key "use_case_descriptions", "use_cases"
   add_foreign_key "use_cases", "sectors"
   add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
   add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"
   add_foreign_key "users", "organizations", name: "user_organization_fk"
   add_foreign_key "users_products", "products", name: "users_products_product_fk"
   add_foreign_key "users_products", "users", name: "users_products_user_fk"
+  add_foreign_key "workflow_descriptions", "workflows"
   add_foreign_key "workflows_building_blocks", "building_blocks", name: "workflows_bbs_bb_fk"
   add_foreign_key "workflows_building_blocks", "workflows", name: "workflows_bbs_workflow_fk"
   add_foreign_key "workflows_use_cases", "use_cases", name: "workflows_usecases_usecase_fk"

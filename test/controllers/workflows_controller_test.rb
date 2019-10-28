@@ -28,7 +28,7 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create workflow" do
     assert_difference('Workflow.count') do
-      post workflows_url, params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
+      post workflows_url, params: { workflow: { wf_desc: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
     end
 
     assert_redirected_to workflow_url(Workflow.last)
@@ -45,7 +45,7 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update workflow" do
-    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
+    patch workflow_url(@workflow), params: { workflow: { wf_desc: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
     assert_redirected_to workflow_url(@workflow)
   end
 
@@ -93,7 +93,7 @@ class WorkflowsControllerTest < ActionDispatch::IntegrationTest
     get edit_workflow_url(@workflow)
     assert_response :redirect    
 
-    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
+    patch workflow_url(@workflow), params: { workflow: { wf_desc: @workflow.description, name: @workflow.name, slug: @workflow.slug } }
     assert_response :redirect  
 
     delete workflow_url(@workflow)

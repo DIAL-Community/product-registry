@@ -10,6 +10,15 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_action :configure_registration_parameters, if: :devise_controller?
+  before_action :set_locale
+
+  def set_locale
+    accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
+    if accept_language
+      accept_language.scan(/[a-z]{2}(?=;)/).first
+      I18n.locale = accept_language[0..1].to_sym
+    end
+  end
 
   def generate_offset(first_duplicate)
     size = 1

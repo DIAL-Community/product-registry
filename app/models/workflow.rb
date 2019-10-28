@@ -6,6 +6,8 @@ class Workflow < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
 
+  attr_accessor :wf_desc
+
   def image_file
     if File.exist?(File.join('app','assets','images','workflows',"#{slug}.png"))
       return "workflows/#{slug}.png"

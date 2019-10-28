@@ -5,6 +5,8 @@ class BuildingBlock < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
 
+  attr_accessor :bb_desc
+
   def image_file
     if File.exist?(File.join('app','assets','images','building_blocks',"#{slug}.png"))
       return "building_blocks/#{slug}.png"

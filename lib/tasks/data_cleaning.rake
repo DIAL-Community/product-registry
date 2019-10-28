@@ -41,4 +41,31 @@ namespace :data do
       update_use_case_desc(use_case['slug'], use_case['description'])
     end
   end
+
+  task :i18n_desc => :environment do
+      I18n.locale = :en
+      BuildingBlock.all.each do |bb|
+        bb_desc = BuildingBlockDescription.new
+        bb_desc.building_block_id = bb.id
+        bb_desc.description = bb.description
+        bb_desc.locale = I18n.locale
+        bb_desc.save
+      end
+
+      UseCase.all.each do |uc|
+        uc_desc = UseCaseDescription.new
+        uc_desc.use_case_id = uc.id
+        uc_desc.description = uc.description
+        uc_desc.locale = I18n.locale
+        uc_desc.save
+      end
+
+      Workflow.all.each do |wf|
+        wf_desc = WorkflowDescription.new
+        wf_desc.workflow_id = wf.id
+        wf_desc.description = wf.description
+        wf_desc.locale = I18n.locale
+        wf_desc.save
+      end
+  end
 end
