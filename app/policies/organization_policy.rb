@@ -9,6 +9,8 @@ class OrganizationPolicy < ApplicationPolicy
   def permitted_attributes
     if user.role == 'admin' || user.role == 'principle'
       [:id, :name, :is_endorser, :when_endorsed, :website, :slug, :logo]
+    elsif user.role == 'org_user'
+      [:name, :logo]
     else
       [:logo]
     end

@@ -224,7 +224,11 @@ class OrganizationsController < ApplicationController
     end
 
     respond_to do |format|
-      if !@organization.errors.any? && @organization.update(organization_params)
+      
+      if !@organization.errors.any? 
+        if (organization_params)
+          @organization.update(organization_params)
+        end
         format.html { redirect_to @organization,
                       flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @organization }

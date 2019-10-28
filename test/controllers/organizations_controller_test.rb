@@ -245,14 +245,13 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     patch(organization_url(organization), params: patch_params)
     get organization_url(organization)
 
-    # Patching should not update is_endorser, name, website and year.
+    # Patching should not update is_endorser, website and year.
     assert_not_equal(false, assigns(:organization).is_endorser)
-    assert_not_equal('Some random new name', assigns(:organization).name)
     assert_not_equal('some-fancy-website.com', assigns(:organization).website)
     assert_not_equal(2018, assigns(:organization).when_endorsed.year)
 
     assert_equal(true, assigns(:organization).is_endorser)
-    assert_equal('Fourth Organization', assigns(:organization).name)
+    assert_equal('Some random new name', assigns(:organization).name)
     assert_equal('fourth-organization.com', assigns(:organization).website)
     assert_equal(2019, assigns(:organization).when_endorsed.year)
 

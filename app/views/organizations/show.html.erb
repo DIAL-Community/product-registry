@@ -57,7 +57,7 @@
   </p>
 </div>
 
-<% if user_signed_in? && policy(Contact).view_allowed? %>
+<% if user_signed_in? && (policy(Contact).view_allowed? || policy(@organization).mod_allowed?) %>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.contact').to_s.pluralize.humanize %></h5>
