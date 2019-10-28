@@ -27,14 +27,17 @@ module Modules
           end
         end
 
+        # clear http:// or https:// off of website - all of ours are normalized
+        uri = URI.parse(json_data['website'])
+
         if existing_product.nil?
           existing_product = Product.new
           existing_product.name = name_aliases.first
           existing_product.slug = slug_em existing_product.name
-          existing_product.website = json_data['website']
+          existing_product.website = uri.host
         else
           if (!existing_product.website.nil? && !existing_product.website.empty?)
-            existing_product.website = json_data['website']
+            existing_product.website = uri.host
           end
         end
 
