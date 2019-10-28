@@ -11,10 +11,10 @@ class UseCase < ApplicationRecord
   attr_accessor :uc_desc
 
   def image_file
-    if File.exist?(File.join('app','assets','images','use_cases',"#{slug}.png"))
-      return "use_cases/#{slug}.png"
+    if File.exist?(File.join('public', 'assets', 'use_cases', "#{slug}.png"))
+      return "/assets/use_cases/#{slug}.png"
     else
-      return "use_cases/use_case_placeholder.png"
+      return '/assets/use_cases/use_case_placeholder.png'
     end
   end
 end
