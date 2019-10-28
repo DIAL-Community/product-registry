@@ -39,6 +39,7 @@ class UseCasesController < ApplicationController
   def new
     authorize UseCase, :mod_allowed?
     @use_case = UseCase.new
+    @ucDesc = UseCaseDescription.new
   end
 
   # GET /use_cases/1/edit
@@ -64,6 +65,7 @@ class UseCasesController < ApplicationController
   def create
     authorize UseCase, :mod_allowed?
     @use_case = UseCase.new(use_case_params)
+    @ucDesc = UseCaseDescription.new
 
     if (params[:selected_sdg_targets])
       params[:selected_sdg_targets].keys.each do |sdg_target_id|
@@ -81,6 +83,12 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.save
+        if (use_case_params[:bb_desc])
+          @ucDesc.use_case_id = @use_case.id
+          @ucDesc.locale = I18n.locale
+          @ucDesc.description = use_case_params[:uc_desc]
+          @ucDesc.save
+        end
         format.html { redirect_to @use_case,
                       flash: { notice: t('messages.model.created', model: t('model.use-case').to_s.humanize) }}
         format.json { render :show, status: :created, location: @use_case }
@@ -114,6 +122,13 @@ class UseCasesController < ApplicationController
     end
     @use_case.workflows = workflows.to_a
 
+    if (use_case_params[:uc_desc])
+      @ucDesc.use_case_id = @use_case.id
+      @ucDesc.locale = I18n.locale
+      @ucDesc.description = use_case_params[:uc_desc]
+      @ucDesc.save
+    end
+
     respond_to do |format|
       if @use_case.update(use_case_params)
         format.html { redirect_to @use_case,
@@ -143,7 +158,10 @@ class UseCasesController < ApplicationController
     def set_use_case
       @use_case = UseCase.find(params[:id])
       @sector_name = Sector.find(@use_case.sector_id).name
-      @useCaseJson = JSON.parse(@use_case.description, object_class: OpenStruct)
+      @ucDesc = UseCaseDescription.where(use_case_id: params[:id], locale: I18n.locale).first
+      if !@ucDesc
+        @ucDesc = UseCaseDescription.new
+      end
     end
 
     def filter_use_cases
@@ -207,7 +225,7 @@ class UseCasesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def use_case_params
       params.require(:use_case)
-      .permit(:name, :slug, :sector_id, :description)
+      .permit(:name, :slug, :sector_id, :uc_desc)
       .tap do |attr|
         if (params[:reslug].present?)
           attr[:slug] = slug_em(attr[:name])

@@ -39,6 +39,7 @@ class BuildingBlocksController < ApplicationController
   def new
     authorize BuildingBlock, :mod_allowed?
     @building_block = BuildingBlock.new
+    @bbDesc = BuildingBlockDescription.new
   end
 
   # GET /building_blocks/1/edit
@@ -51,6 +52,7 @@ class BuildingBlocksController < ApplicationController
   def create
     authorize BuildingBlock, :mod_allowed?
     @building_block = BuildingBlock.new(building_block_params)
+    @bbDesc = BuildingBlockDescription.new
 
     if (params[:selected_products])
       params[:selected_products].keys.each do |product_id|
@@ -77,6 +79,12 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if !@building_block.errors.any? && @building_block.save
+        if (building_block_params[:bb_desc])
+          @bbDesc.building_block_id = @building_block.id
+          @bbDesc.locale = I18n.locale
+          @bbDesc.description = building_block_params[:bb_desc]
+          @bbDesc.save
+        end
         format.html { redirect_to @building_block,
                       flash: { notice: t('messages.model.created', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :created, location: @building_block }
@@ -121,6 +129,13 @@ class BuildingBlocksController < ApplicationController
       rescue StandardError => e
         @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
+    end
+
+    if (building_block_params[:bb_desc])
+      @bbDesc.building_block_id = @building_block.id
+      @bbDesc.locale = I18n.locale
+      @bbDesc.description = building_block_params[:bb_desc]
+      @bbDesc.save
     end
 
     respond_to do |format|
@@ -217,14 +232,17 @@ class BuildingBlocksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
       @building_block = BuildingBlock.find(params[:id])
-      @bbJson = JSON.parse(@building_block.description, object_class: OpenStruct)
+      @bbDesc = BuildingBlockDescription.where(building_block_id: params[:id], locale: I18n.locale).first
+      if !@bbDesc
+        @bbDesc = BuildingBlockDescription.new
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def building_block_params
       params
         .require(:building_block)
-        .permit(:name, :confirmation, :description)
+        .permit(:name, :confirmation, :bb_desc)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

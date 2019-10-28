@@ -16,7 +16,7 @@
     </label>
   </fieldset>
 
-  <%= form.hidden_field :description, id: :building_block_desc %>
+  <%= form.hidden_field :bb_desc, id: :building_block_desc %>
   <div class="wysiwyg-editor">
   </div>
 
@@ -82,7 +82,7 @@
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 
-  var editor = setUpEditor("<%= building_block.description %>");
+  var editor = setUpEditor("<%= @bbDesc.description %>");
   var form = document.querySelector('#bb-form');
   form.onsubmit = function() {
     var bbDesc = $('#building_block_desc');

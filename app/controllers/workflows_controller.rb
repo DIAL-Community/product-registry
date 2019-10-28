@@ -41,6 +41,7 @@ class WorkflowsController < ApplicationController
   def new
     authorize Workflow, :mod_allowed?
     @workflow = Workflow.new
+    @wfDesc = WorkflowDescription.new
   end
 
   # GET /workflows/1/edit
@@ -53,6 +54,7 @@ class WorkflowsController < ApplicationController
   def create
     authorize Workflow, :mod_allowed?
     @workflow = Workflow.new(workflow_params)
+    @wfDesc = WorkflowDescription.new
 
     if (params[:selected_use_cases])
       params[:selected_use_cases].keys.each do |use_case_id|
@@ -70,6 +72,13 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       if @workflow.save
+        if (workflow_params[:wf_desc])
+          @wfDesc.workflow_id = @workflow.id
+          @wfDesc.locale = I18n.locale
+          @wfDesc.description = workflow_params[:wf_desc]
+          @wfDesc.save
+        end
+
         format.html { redirect_to @workflow,
                       flash: { notice: t('messages.model.created', model: t('model.workflow').to_s.humanize) }}
         format.json { render :show, status: :created, location: @workflow }
@@ -102,6 +111,13 @@ class WorkflowsController < ApplicationController
       end
     end
     @workflow.building_blocks = building_blocks.to_a
+
+    if (workflow_params[:wf_desc])
+      @wfDesc.workflow_id = @workflow.id
+      @wfDesc.locale = I18n.locale
+      @wfDesc.description = workflow_params[:wf_desc]
+      @wfDesc.save
+    end
 
     respond_to do |format|
       if @workflow.update(workflow_params)
@@ -144,7 +160,10 @@ class WorkflowsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_workflow
       @workflow = Workflow.find(params[:id])
-      @workflowJson = JSON.parse(@workflow.description, object_class: OpenStruct)
+      @wfDesc = WorkflowDescription.where(workflow_id: params[:id], locale: I18n.locale).first
+      if !@wfDesc
+        @wfDesc = WorkflowDescription.new
+      end
     end
 
     def filter_workflows
@@ -203,7 +222,7 @@ class WorkflowsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def workflow_params
       params.require(:workflow)
-      .permit(:name, :slug, :description, :other_names, :category)
+      .permit(:name, :slug, :wf_desc, :other_names, :category)
       .tap do |attr|
         if (params[:reslug].present?)
           attr[:slug] = slug_em(attr[:name])

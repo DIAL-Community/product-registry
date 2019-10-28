@@ -45,13 +45,11 @@
   <% if @sector.use_cases.count > 0 %>
     <div class="row">
       <% @sector.use_cases.order("name").each do |use_case| %>
-        <% useCaseJson = JSON.parse(use_case.description) %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
             <%= image_tag(use_case.image_file, class: 'card-img-top mx-auto w-25 px-0 pt-2 pb-0') %>
             <div class="card-body py-2">
               <div class="card-text"><%= link_to use_case.name, use_case %></div>
-              <div class="card-text text-muted"><%= useCaseJson['desc'] %></div>
             </div>
           </div>
         </div>
