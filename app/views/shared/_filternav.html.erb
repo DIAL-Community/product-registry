@@ -190,9 +190,8 @@
           <div class="col-12">
             <div class="form-group mb-1">
               <%= label_tag "products", t('model.product').titlecase.pluralize %>:
-              <%= collection_select(nil, "products", Product.all.order(:name), :id, :name,
-                  { selected: params[:name], include_blank: t('view.filternav.title.product') },
-                  { class: 'form-control filter-element' }) %>
+              <input type="text" id="products" class="form-control filter-element"
+                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
             </div>
           </div>
         </div>
