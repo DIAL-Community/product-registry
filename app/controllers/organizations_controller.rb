@@ -249,6 +249,17 @@ class OrganizationsController < ApplicationController
       project.destroy
     end
 
+    users = User.where(organization_id: @organization.id)
+    users.each do |user|
+      if user.products.empty?
+        user.destroy
+      else
+        user.organization_id = nil
+        user.role == User.roles[:org_product_user] && user.role = User.roles[:product_user]
+        user.save
+      end
+    end
+
     @organization.destroy
     respond_to do |format|
       format.html { redirect_to organizations_url,

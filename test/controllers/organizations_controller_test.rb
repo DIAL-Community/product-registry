@@ -121,6 +121,47 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organizations_url
   end
 
+  test 'should destroy org_user when destroying organization' do
+    organization = organizations(:four)
+
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+
+    fourth_user = users(:four)
+    fourth_user.role = User.roles[:org_user]
+    fourth_user.organization_id = organization.id
+    fourth_user.save!
+
+    assert_equal(User.where(organization_id: organization.id).count, 1)
+
+    delete organization_url(organization)
+
+    assert_redirected_to organizations_url
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+    assert_equal(User.where(id: fourth_user.id).count, 0)
+  end
+
+  test 'should not destroy product_org_user when destroying organization' do
+    organization = organizations(:four)
+
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+
+    fourth_user = users(:four)
+    fourth_user.role = User.roles[:product_org_user]
+    fourth_user.products = [products(:one)]
+    fourth_user.organization_id = organization.id
+    fourth_user.save!
+
+    assert_equal(User.where(organization_id: organization.id).count, 1)
+
+    delete organization_url(organization)
+
+    assert_redirected_to organizations_url
+    assert_equal(User.where(organization_id: organization.id).count, 0)
+    assert_equal(User.where(id: fourth_user.id).count, 1)
+    updated_fourth_user = User.find(fourth_user.id)
+    assert_nil(updated_fourth_user.organization_id)
+  end
+
   test "should destroy project along with organization" do
     @project = projects(:one)
     assert_difference('Project.count', -1) do
