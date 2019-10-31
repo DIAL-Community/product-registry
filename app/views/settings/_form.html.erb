@@ -1,0 +1,23 @@
+<%= form_with(model: setting, local: true) do |form| %>
+    <fieldset class="form-label-group">
+      <%= form.text_field :name, id: :setting_name, class: "form-control",
+                                 placeholder: t('view.general.name'), disabled: true %>
+      <%= form.label :name, t('view.general.name') %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :description, id: :setting_description, class: "form-control",
+                                        placeholder: t('view.general.description'), disabled: true %>
+      <%= form.label :description, t('view.general.description') %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :value, id: :setting_value, class: "form-control", placeholder: t('view.general.value') %>
+      <%= form.label :value, t('view.general.value') %>
+    </fieldset>
+
+    <fieldset class="float-right mt-4">
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
+<% end %>

@@ -1,0 +1,16 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white">
+    <%= "#{t('model.setting').to_s.titlecase}: #{@setting.name}" %>
+  </h5>
+  <div class="card-body py-2">
+    <%= @setting.description %>
+    <div class="float-right" >
+      <%= link_to t('view.general.back'), settings_path, :class => "card-link" %>
+      <% if user_signed_in? && policy(@setting).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_setting_path(@setting), :class => "card-link" %>
+      <% end %>
+    </div>
+  </div>
+</div>

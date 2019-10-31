@@ -53,6 +53,7 @@ en:
     product: product
     project: project
     sector: sector
+    setting: setting
     use-case: use case
     user: user
     workflow: workflow
@@ -228,6 +229,9 @@ en:
     sector:
       index:
         no-data: We couldn't find any sector in the database.
+    setting:
+      index:
+        no-data: No settings currently defined in the database
     footer:
       privacy-policy: Privacy policy
       tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
@@ -357,10 +361,10 @@ en:
         no-data: We couldn't find users matching to the search phrase.
       show:
         approved: Approved
-        no: No
+        'no': 'No'
         receive-backup: Receive DB Backup
         reset-password: Reset Password
-        yes: Yes
+        'yes': 'Yes'
     workflow:
       form:
         category: Category
@@ -385,6 +389,7 @@ en:
       create: Create New
       delete: Delete
       delete-confirmation: Are you sure?
+      description: Description
       duplicates: 'One or more %{model} with similar name already exists.'
       edit: Edit
       error:
@@ -399,6 +404,7 @@ en:
       title:
         create: 'Create %{model}'
         edit: 'Edit %{model}'
+      value: Value
       view: View
     multi-select:
       assigned:

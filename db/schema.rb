@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191022134914) do
+ActiveRecord::Schema.define(version: 20191030153507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "audits", force: :cascade do |t|
-    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -27,7 +26,7 @@ ActiveRecord::Schema.define(version: 20191022134914) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "audit_id", "version"], name: "auditable_index"
+    t.index ["action", "id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -268,6 +267,15 @@ ActiveRecord::Schema.define(version: 20191022134914) do
     t.index ["slug"], name: "index_sectors_on_slug", unique: true
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "description", null: false
+    t.text "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sustainable_development_goals", force: :cascade do |t|
     t.string "slug"
     t.string "name"
@@ -342,10 +350,8 @@ ActiveRecord::Schema.define(version: 20191022134914) do
   end
 
   add_foreign_key "building_block_descriptions", "building_blocks"
-  add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "deploys", "products"
-  add_foreign_key "deploys", "users"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"

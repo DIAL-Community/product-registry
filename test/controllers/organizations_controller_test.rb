@@ -197,9 +197,9 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should filter products' do
-    # With no filters, should load 3 products
+    # With no filters, should load 5 products
     get organizations_url
-    assert_equal(4, assigns(:organizations).count)
+    assert_equal(5, assigns(:organizations).count)
 
     first_sector = sectors(:one)
     first_organization = organizations(:one)
@@ -218,7 +218,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(4, assigns(:organizations).count)
+    assert_equal(5, assigns(:organizations).count)
 
     first_location = locations(:one)
     second_organization = organizations(:two)
@@ -251,7 +251,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(4, assigns(:organizations).count)
+    assert_equal(5, assigns(:organizations).count)
   end
 
   test 'Policy test: should reject edit for organization user' do

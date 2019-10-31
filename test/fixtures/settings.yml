@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  slug: MyString
+  description: MyString
+  value: MyText
+
+two:
+  name: MyString
+  slug: MyString
+  description: MyString
+  value: MyText
+
+two:
+  name: Default Organization
+  slug: default_organization
+  description: This is the default organization.
+  value: digital_impact_alliance_dial

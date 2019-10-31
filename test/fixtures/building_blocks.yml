@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: BuildingBlock1
-  slug: elearning
+  name: Building Block1
+  slug: building_block1
   workflows: one
 
 two:
-  name: BuildingBlock2
-  slug: bb_placeholder
+  name: Building Block2
+  slug: building_block2
   workflows: two
