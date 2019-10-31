@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :settings, only: [:index, :edit, :show, :update]
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'

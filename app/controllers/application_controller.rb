@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 require 'modules/constants'
 
@@ -10,6 +12,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_action :configure_registration_parameters, if: :devise_controller?
+  before_action :check_password_expiry, if: :devise_controller?
   before_action :set_locale
 
   def set_locale
@@ -18,6 +21,15 @@ class ApplicationController < ActionController::Base
       accept_language.scan(/[a-z]{2}(?=;)/).first
       I18n.locale = accept_language[0..1].to_sym
     end
+  end
+
+  def check_password_expiry
+    return if !current_user || !current_user.password_expire?
+
+    @expiring_user = current_user
+    reset_token = @expiring_user.generate_reset_token
+    sign_out(current_user)
+    redirect_to(edit_password_url(@expiring_user, reset_password_token: reset_token))
   end
 
   def generate_offset(first_duplicate)

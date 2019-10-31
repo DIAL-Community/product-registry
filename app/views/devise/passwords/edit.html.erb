@@ -7,7 +7,7 @@
 <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
   <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
+  <fieldset class="form-label-group">
     <%= f.password_field :password, autofocus: true, autocomplete: "new-password", :class => "form-control", :placeholder => "New password" %>
     <%= f.label :password, "New password" %>
     <small class="text-muted">
@@ -15,7 +15,7 @@
         <em>(<%= @minimum_password_length %> characters minimum)</em><br />
       <% end %>
     </small>
-  </div>
+  </fieldset>
 
   <fieldset class="form-label-group">
     <%= f.password_field :password_confirmation, autocomplete: "off", :class => "form-control", :placeholder => "Confirm new password" %>

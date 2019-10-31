@@ -22,9 +22,9 @@ class SyncModuleTest < ActiveSupport::TestCase
     capture_stdout { sync_unicef_product(new_product) }
 
     assert_equal Product.count, initial_size
-    
+
     saved_product = Product.find_by(slug: 'odk')
-    assert_equal saved_product.website, "https://opendatakit.org/"
+    assert_equal saved_product.website, "opendatakit.org"
     assert_equal saved_product.aliases.length, 1
     assert_equal saved_product.aliases[0], 'Open Data Kit'
     assert_equal saved_product.slug, 'odk'
@@ -38,19 +38,19 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.length, 0
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "SDGs": [7]}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "SDGs": [7], "website": "https://opendatakit.org/"}')
     capture_stdout { sync_unicef_product(new_product) }
 
     assert_equal Product.count, initial_size
-    
+
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.size, 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [8]}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [8], "website": "https://opendatakit.org/"}')
     capture_stdout { sync_unicef_product(new_product) }
 
     assert_equal Product.count, initial_size
-    
+
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.size, 2
   end
@@ -74,7 +74,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'open_data_kit')
     assert_equal saved_product.name, "Open Data Kit"
     assert_equal saved_product.slug, 'open_data_kit'
-    assert_equal saved_product.website, "https://opendatakit.org/"
+    assert_equal saved_product.website, "opendatakit.org"
     assert_equal saved_product.aliases.length, 1
     assert_equal saved_product.aliases[0], 'ODK'
 
@@ -256,5 +256,4 @@ class SyncModuleTest < ActiveSupport::TestCase
     capture_stdout { sync_osc_product(JSON.parse('{ "name":"Product", "website": "foo.org"}')) }
     assert_equal Product.where(name: 'Product')[0].website, 'foo.org'
   end
-
 end

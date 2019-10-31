@@ -26,3 +26,10 @@ four:
   when_endorsed: 2019-08-01 08:00:00
   website: fourth-organization.com
   is_endorser: true
+
+five:
+  name: Digital Impact Alliance (DIAL)
+  slug: digital_impact_alliance_dial
+  when_endorsed: 2019-08-01 08:00:00
+  website: digitalimpactalliance.org
+  is_endorser: true

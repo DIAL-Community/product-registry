@@ -11,7 +11,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, on: :update, if: :password_changed?
 
   # Custom function validation
-  validate :validate_organization, :validate_product 
+  validate :validate_organization, :validate_product
 
   attr_accessor :is_approved
 
@@ -19,13 +19,53 @@ class User < ApplicationRecord
     self.role ||= :user
   end
 
+  def after_database_authentication
+    if expired && reset_password_token.nil?
+      self.expired = false
+      self.expired_at = nil
+      save(validate: false)
+    end
+  end
+
+  def password_expire?
+    return true if expired && !reset_password_token.nil?
+    return true if email == Rails.configuration.settings['admin_email'] && updated_at.nil?
+
+    today = Date.today
+    !confirmed_at.nil? && !updated_at.nil? && updated_at + 90 < today
+  end
+
+  def generate_reset_token
+    # Implementation from recoverable.rb -> set_reset_password_token.
+    raw, enc = Devise.token_generator.generate(self.class, :reset_password_token)
+
+    current_time = Time.now.utc
+    self.reset_password_token   = enc
+    self.reset_password_sent_at = current_time
+    self.expired                = true
+    self.expired_at             = current_time
+    save(validate: false)
+    raw
+  end
+
   def password_changed?
     !password.blank?
   end
 
   def validate_organization
-    # Skip organization validation when the email is DIAL email.
-    return if /\A[^@\s]+@digitalimpactalliance.org/.match?(email)
+    # Skip organization validation for default admin username.
+    return if email == Rails.configuration.settings['admin_email']
+
+    # Find the default organization and allow installation organization to register
+    # with their email address.
+    organization_setting = Setting.find_by(slug: Rails.configuration.settings['install_org_key'])
+    if organization_setting
+      installation_organization = Organization.find_by(slug: organization_setting.value)
+      if installation_organization && email.end_with?(installation_organization.website)
+        self.organization_id = installation_organization.id
+        return
+      end
+    end
 
     if organization_id.nil?
       # Skip organization validation when the user is signing up to be product owner.

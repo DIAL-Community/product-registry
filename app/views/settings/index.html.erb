@@ -1,0 +1,44 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th><%= t('view.general.name') %></th>
+      <th><%= t('view.general.description') %></th>
+      <th><%= t('view.general.value') %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @settings.count > 0 %>
+      <% @settings.each do |setting| %>
+        <tr>
+          <td><%= setting.name %></td>
+          <td><%= setting.description %></td>
+          <td><%= setting.value %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+               <%= t('view.general.action') %>
+            </a>
+            <div class="dropdown-menu">
+              <%= link_to t('view.general.view'), setting, :class =>"dropdown-item" %>
+              <% if user_signed_in? && policy(setting).mod_allowed? %>
+                <%= link_to t('view.general.edit'), edit_setting_path(setting), :class =>"dropdown-item" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted"><%= t('view.setting.index.no-data') %></small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @settings, :class => "float-right digg-pagination" %>
