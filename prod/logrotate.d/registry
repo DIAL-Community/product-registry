@@ -5,4 +5,5 @@
   compress
   missingok
   notifempty
+  create 644 root root
 }
