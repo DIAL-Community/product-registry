@@ -1,4 +1,4 @@
-/t4d/log {
+/t4d/log/production.log {
   rotate 10
   daily
   maxsize 100M
