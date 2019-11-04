@@ -17,7 +17,7 @@ var addToList = function(filterId, values) {
 }
 
 var incrementFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment")) {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
   if (filterId == "endorser_only") {
@@ -31,7 +31,7 @@ var incrementFilterCount = function(filterId) {
 }
 
 var decrementFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment")) {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
   if (filterId == "endorser_only") {
@@ -46,7 +46,7 @@ var decrementFilterCount = function(filterId) {
 }
 
 var clearFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment")) {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
   if (filterId == "endorser_only") {
@@ -60,6 +60,8 @@ var clearFilterItems = function(filterId) {
     $('#with_maturity_assessment').prop('checked', false);
   } else if (filterId == 'endorser_only') {
     $('#endorser_only').prop('checked', false);
+  } else if (filterId == 'is_launchable') {
+    $('#is_launchable').prop('checked', false);
   } else {
     $('#' + filterId).parents(".row").next('.row').find('.badges').remove()
   }
@@ -151,6 +153,8 @@ var prepareFilters = function() {
       } else if (filter_name == 'products') {
         filter_array.push({filter_name: 'origins'})
         filter_array.push({filter_name: 'products'})
+        filter_array.push({filter_name: 'is_launchable'})
+        $('#is_launchable').prop('checked', false);
         filter_array.push({filter_name: 'with_maturity_assessment'})
         $('#with_maturity_assessment').prop('checked', false);
       } else {

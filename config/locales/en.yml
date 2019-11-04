@@ -266,6 +266,7 @@ en:
       view-map: View endorser map
       clear: Clear All
       with-maturity: Product with maturity assessment
+      is-launchable: Product can be deployed and launched
       title:
         building-block: Filter by Building Block
         country: Filter by Country
@@ -308,6 +309,7 @@ en:
         one: Workflow
         other: Workflows
       with-maturity: Product with maturity assessment
+      is-launchable: Product can be deployed and launched
       years:
         one: Year Endorsed
         other: Years Endorsed

@@ -173,6 +173,7 @@ class UseCasesController < ApplicationController
       products = sanitize_session_values 'products'
       origins = sanitize_session_values 'origins'
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+      is_launchable = sanitize_session_value 'is_launchable'
 
       filter_set = true;
       if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
@@ -188,7 +189,7 @@ class UseCasesController < ApplicationController
       
       workflow_bbs = get_workflows_from_bbs(bbs)
       
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
       workflow_products = get_workflows_from_products(product_ids, product_filter_set)
 
       if (!workflows.empty?)

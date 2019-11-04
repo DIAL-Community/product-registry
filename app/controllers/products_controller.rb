@@ -273,6 +273,7 @@ class ProductsController < ApplicationController
       workflows = sanitize_session_values 'workflows'
 
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+      is_launchable = sanitize_session_value 'is_launchable'
 
       filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
 
@@ -296,7 +297,7 @@ class ProductsController < ApplicationController
         bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
       end
       
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       if filter_set || product_filter_set
         product_ids = (sdg_products.ids & bb_products.ids & product_ids).uniq
