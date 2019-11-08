@@ -57,8 +57,6 @@ CREATE TYPE public.user_role AS ENUM (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
-
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
@@ -355,8 +353,28 @@ CREATE TABLE public.organizations_contacts (
     organization_id bigint NOT NULL,
     contact_id bigint NOT NULL,
     started_at timestamp without time zone,
-    ended_at timestamp without time zone
+    ended_at timestamp without time zone,
+    id bigint NOT NULL
 );
+
+
+--
+-- Name: organizations_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_contacts_id_seq OWNED BY public.organizations_contacts.id;
 
 
 --
@@ -1158,6 +1176,13 @@ ALTER TABLE ONLY public.organizations ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: organizations_contacts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_contacts ALTER COLUMN id SET DEFAULT nextval('public.organizations_contacts_id_seq'::regclass);
+
+
+--
 -- Name: origins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1317,6 +1342,14 @@ ALTER TABLE ONLY public.deploys
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organizations_contacts organizations_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_contacts
+    ADD CONSTRAINT organizations_contacts_pkey PRIMARY KEY (id);
 
 
 --
@@ -2294,6 +2327,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190916175633'),
 ('20191022134914'),
 ('20191030125538'),
-('20191030153507');
+('20191030153507'),
+('20191104191625');
 
 
