@@ -1,9 +1,11 @@
 class Organization < ApplicationRecord
   include Auditable
 
+  has_many :organizations_contacts, -> { joins(:contact) }
+  has_many :contacts, through: :organizations_contacts
+
   has_and_belongs_to_many :products, join_table: :organizations_products, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :locations, join_table: :organizations_locations, after_add: :association_add, before_remove: :association_remove
-  has_and_belongs_to_many :contacts, join_table: :organizations_contacts, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :sectors, join_table: :organizations_sectors, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :projects, join_table: :projects_organizations, dependent: :delete_all, after_add: :association_add, before_remove: :association_remove
 

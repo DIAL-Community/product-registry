@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191030153507) do
+ActiveRecord::Schema.define(version: 20191104191625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20191030153507) do
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
-  create_table "organizations_contacts", id: false, force: :cascade do |t|
+  create_table "organizations_contacts", force: :cascade do |t|
     t.bigint "organization_id", null: false
     t.bigint "contact_id", null: false
     t.datetime "started_at"
@@ -350,8 +350,10 @@ ActiveRecord::Schema.define(version: 20191030153507) do
   end
 
   add_foreign_key "building_block_descriptions", "building_blocks"
+  add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "deploys", "products"
+  add_foreign_key "deploys", "users"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"
