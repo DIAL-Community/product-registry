@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
 
   def update_cookies(filter_name)
     case filter_name
-    when 'products', 'origins', 'with_maturity_assessment'
+    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable'
       cookies[:updated_prod_filter] = true
     end
   end
@@ -145,7 +145,7 @@ class ApplicationController < ActionController::Base
     filter_value
   end
 
-  def get_products_from_filters(products, origins, with_maturity_assessment)
+  def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
     # Check to see if the filter has already been set
     if cookies[:updated_prod_filter].nil? || cookies[:updated_prod_filter] == 'true'
       filter_products = Product.all
@@ -157,12 +157,16 @@ class ApplicationController < ActionController::Base
         filter_products = filter_products.where('id in (select product_id from products_origins where origin_id in (?))', origins)
       end
 
+      if is_launchable
+        filter_products = filter_products.where('is_launchable is true')
+      end
+
       if with_maturity_assessment
         filter_products = filter_products.where('id in (select product_id from product_assessments where has_osc = true or has_digisquare = true)')
       end
 
       product_filter_set = false
-      if !products.empty? || !origins.empty? || with_maturity_assessment
+      if !products.empty? || !origins.empty? || with_maturity_assessment || is_launchable
         product_filter_set = true
       end
 
