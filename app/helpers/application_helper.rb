@@ -6,7 +6,7 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations settings].freeze
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
 
@@ -71,6 +71,14 @@ module ApplicationHelper
   def format_filter(filter_name)
     if filter_name == 'endorser_only'
       filter_label = "#{t('view.active-filter.endorser-only')}
+                      <span class='close-icon' data-effect='fadeOut'>
+                        <i class='fa fa-times text-danger'></i>
+                      </span>"
+      return filter_label.html_safe
+    end
+
+    if filter_name == 'is_launchable'
+      filter_label = "#{t('view.active-filter.is-launchable')}
                       <span class='close-icon' data-effect='fadeOut'>
                         <i class='fa fa-times text-danger'></i>
                       </span>"

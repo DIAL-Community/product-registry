@@ -62,17 +62,27 @@
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.contact').to_s.pluralize.humanize %></h5>
     </div>
-    <% if @organization.contacts.count > 0 %>
+    <% if @organization.organizations_contacts.count > 0 %>
       <div class="row">
-        <% @organization.contacts.order("name").each do |contact| %>
+        <% @organization.organizations_contacts.order('contacts.name').each do |organization_contact| %>
           <div class="col-6 col-lg-4 mt-2">
             <div class="card h-100">
               <div class="card-body py-2">
-                <h5 class="card-title"><%= link_to contact.name, contact %></h5>
-                <h6 class="card-subtitle text-muted"><%= contact.email %></h6>
-                <% if contact.title %>
-                  <p class="card-text"><%= contact.title %></p>
+                <h5 class="card-title"><%= link_to organization_contact.contact.name, organization_contact.contact %></h5>
+                <h6 class="card-subtitle text-muted"><%= organization_contact.contact.email %></h6>
+                <% if !organization_contact.contact.title.blank? %>
+                  <p class="card-text"><%= organization_contact.contact.title %></p>
                 <% end %>
+                <p class="card-text text-muted small">
+                <%= t('view.organization.show.with-org') %>:
+                <%= organization_contact.started_at.nil? ?
+                    t('view.organization.show.unknown') :
+                    organization_contact.started_at.strftime("%m/%d/%Y") %>
+                  -
+                <%= organization_contact.ended_at.nil? ?
+                    t('view.organization.show.current') :
+                    organization_contact.ended_at.strftime("%m/%d/%Y") %>
+                </p>
               </div>
             </div>
           </div>

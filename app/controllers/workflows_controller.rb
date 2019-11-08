@@ -175,6 +175,7 @@ class WorkflowsController < ApplicationController
       products = sanitize_session_values 'products'
       origins = sanitize_session_values 'origins'
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+      is_launchable = sanitize_session_value 'is_launchable'
 
       filter_set = true;
       if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
@@ -192,7 +193,7 @@ class WorkflowsController < ApplicationController
 
       use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', use_case_ids).distinct 
 
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
       product_bbs = get_bbs_from_products(product_ids, product_filter_set)
 
       if !bbs.empty?

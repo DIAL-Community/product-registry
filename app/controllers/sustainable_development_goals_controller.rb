@@ -44,6 +44,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
       products = sanitize_session_values 'products'
       origins = sanitize_session_values 'origins'
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+      is_launchable = sanitize_session_value 'is_launchable'
 
       filter_set = true;
       if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
@@ -67,7 +68,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
         use_case_sdgs = SustainableDevelopmentGoal.all.where('id in (select distinct(sdg_number) from sdg_targets where id in (?))', sdg_targets.ids)
       end
 
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment)
+      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       product_sdgs = SustainableDevelopmentGoal.all
       if product_filter_set == true

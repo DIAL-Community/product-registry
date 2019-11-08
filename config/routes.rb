@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :settings, only: [:index, :edit, :show, :update]
   resources :projects, only: [:index, :show, :destroy]
 
   get 'deploys/index'
@@ -70,6 +71,7 @@ Rails.application.routes.draw do
 
   get 'export', :to => 'organizations#export'
   get 'map', :to => 'organizations#map'
+  get 'map_fs', :to => 'organizations#map_fs'
   get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
   get 'contact_duplicates', :to => 'contacts#duplicates'
   get 'location_duplicates', :to => 'locations#duplicates'

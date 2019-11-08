@@ -22,6 +22,21 @@ namespace :data do
     Location.where(location_type: 'point').update_all(type: 'point')
   end
 
+  task :associate_with_organization => :environment do
+    organization_setting = Setting.find_by(slug: Rails.configuration.settings['install_org_key'])
+    if organization_setting
+      installation_organization = Organization.find_by(slug: organization_setting.value)
+      return if installation_organization.nil?
+
+      unassociated_users = User.where('role NOT IN (?)', ['org_user', 'org_product_user', 'product_user'])
+      unassociated_users.each do |user|
+        # Update the organization and skip the validation.
+        user.organization_id = installation_organization.id
+        user.save(validate: false)
+      end
+    end
+  end
+
   task :update_desc => :environment do
     bb_data = File.read('utils/building_blocks.json')
     json_bb = JSON.parse(bb_data)

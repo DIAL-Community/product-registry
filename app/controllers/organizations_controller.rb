@@ -100,7 +100,11 @@ class OrganizationsController < ApplicationController
         contact.slug = contact_slug
       end
 
-      @organization.contacts.push(contact)
+      organization_contact = OrganizationsContact.new
+      organization_contact.contact = contact
+      organization_contact.started_at = Time.now.utc
+
+      @organization.organizations_contacts.push(organization_contact)
     end
 
     if (params[:selected_countries].present?)
@@ -170,13 +174,53 @@ class OrganizationsController < ApplicationController
       @organization.sectors = sectors.to_a
     end
 
-    if (params[:selected_contacts].present?)
-      contacts = Set.new
-      params[:selected_contacts].keys.each do |contact_id|
-        contact = Contact.find(contact_id)
-        contacts.add(contact)
+    if params[:selected_contacts].present?
+      @organization.organizations_contacts.each do |organization_contact|
+        contact_id = organization_contact.contact.id
+        unless params[:selected_contacts].include?(contact_id.to_s)
+          organization_contact.update(ended_at: Time.now.utc)
+        end
       end
-      @organization.contacts = contacts.to_a
+
+      organization_contacts = []
+      params[:selected_contacts].each do |selected_contact|
+        organization_contact = @organization.organizations_contacts.find_by(contact_id: selected_contact)
+        if organization_contact && organization_contact.ended_at.nil?
+          next
+        end
+
+        # The flow for this one:
+        # * Contact worked for an organization and then left.
+        # * Now we're adding the same person again to the organization.
+        # * We need to duplicate the same person and connect it to the org.
+        existing_contact = Contact.find(selected_contact)
+        if organization_contact && !organization_contact.ended_at.nil?
+          contact = Contact.new
+          contact.name = existing_contact.name
+          contact.email = existing_contact.email
+          contact.title = existing_contact.title
+
+          contact_slug = existing_contact.slug
+          dupe_count = Contact.where(slug: contact_slug).count
+          if dupe_count.positive?
+            first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
+            contact.slug = contact_slug + generate_offset(first_duplicate).to_s
+          else
+            contact.slug = contact_slug
+          end
+          existing_contact = contact
+        end
+
+        organization_contact = OrganizationsContact.new
+        organization_contact.contact = existing_contact
+        organization_contact.started_at = Time.now.utc
+        organization_contacts.push(organization_contact)
+      end
+
+      @organization.organizations_contacts << organization_contacts
+    else
+      OrganizationsContact.where(organization_id: @organization.id)
+                          .update(ended_at: Time.now.utc)
     end
 
     locations = Set.new
@@ -270,6 +314,12 @@ class OrganizationsController < ApplicationController
 
   def map
     @organizations = Organization.eager_load(:locations)
+    authorize @organizations, :view_allowed?
+  end
+
+  def map_fs
+    @organizations = Organization.eager_load(:locations)
+    response.set_header('Content-Security-Policy', 'frame-ancestors localhost:3000 digitalprinciples.org')
     authorize @organizations, :view_allowed?
   end
 

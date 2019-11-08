@@ -57,8 +57,6 @@ CREATE TYPE public.user_role AS ENUM (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
-
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
@@ -107,6 +105,37 @@ CREATE SEQUENCE public.audits_id_seq
 --
 
 ALTER SEQUENCE public.audits_id_seq OWNED BY public.audits.id;
+
+
+--
+-- Name: building_block_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.building_block_descriptions (
+    id bigint NOT NULL,
+    building_block_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL
+);
+
+
+--
+-- Name: building_block_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.building_block_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: building_block_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.building_block_descriptions_id_seq OWNED BY public.building_block_descriptions.id;
 
 
 --
@@ -324,8 +353,28 @@ CREATE TABLE public.organizations_contacts (
     organization_id bigint NOT NULL,
     contact_id bigint NOT NULL,
     started_at timestamp without time zone,
-    ended_at timestamp without time zone
+    ended_at timestamp without time zone,
+    id bigint NOT NULL
 );
+
+
+--
+-- Name: organizations_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_contacts_id_seq OWNED BY public.organizations_contacts.id;
 
 
 --
@@ -790,6 +839,40 @@ ALTER SEQUENCE public.sectors_id_seq OWNED BY public.sectors.id;
 
 
 --
+-- Name: settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.settings (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    description character varying NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.settings_id_seq OWNED BY public.settings.id;
+
+
+--
 -- Name: sustainable_development_goals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -821,6 +904,37 @@ CREATE SEQUENCE public.sustainable_development_goals_id_seq
 --
 
 ALTER SEQUENCE public.sustainable_development_goals_id_seq OWNED BY public.sustainable_development_goals.id;
+
+
+--
+-- Name: use_case_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.use_case_descriptions (
+    id bigint NOT NULL,
+    use_case_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL
+);
+
+
+--
+-- Name: use_case_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.use_case_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: use_case_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.use_case_descriptions_id_seq OWNED BY public.use_case_descriptions.id;
 
 
 --
@@ -886,7 +1000,9 @@ CREATE TABLE public.users (
     updated_at timestamp without time zone NOT NULL,
     role public.user_role DEFAULT 'user'::public.user_role NOT NULL,
     receive_backup boolean DEFAULT false,
-    organization_id bigint
+    organization_id bigint,
+    expired boolean,
+    expired_at timestamp without time zone
 );
 
 
@@ -917,6 +1033,37 @@ CREATE TABLE public.users_products (
     user_id bigint NOT NULL,
     product_id bigint NOT NULL
 );
+
+
+--
+-- Name: workflow_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.workflow_descriptions (
+    id bigint NOT NULL,
+    workflow_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL
+);
+
+
+--
+-- Name: workflow_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.workflow_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: workflow_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.workflow_descriptions_id_seq OWNED BY public.workflow_descriptions.id;
 
 
 --
@@ -980,6 +1127,13 @@ ALTER TABLE ONLY public.audits ALTER COLUMN id SET DEFAULT nextval('public.audit
 
 
 --
+-- Name: building_block_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.building_block_descriptions ALTER COLUMN id SET DEFAULT nextval('public.building_block_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: building_blocks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1019,6 +1173,13 @@ ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.lo
 --
 
 ALTER TABLE ONLY public.organizations ALTER COLUMN id SET DEFAULT nextval('public.organizations_id_seq'::regclass);
+
+
+--
+-- Name: organizations_contacts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_contacts ALTER COLUMN id SET DEFAULT nextval('public.organizations_contacts_id_seq'::regclass);
 
 
 --
@@ -1071,10 +1232,24 @@ ALTER TABLE ONLY public.sectors ALTER COLUMN id SET DEFAULT nextval('public.sect
 
 
 --
+-- Name: settings id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.settings ALTER COLUMN id SET DEFAULT nextval('public.settings_id_seq'::regclass);
+
+
+--
 -- Name: sustainable_development_goals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sustainable_development_goals ALTER COLUMN id SET DEFAULT nextval('public.sustainable_development_goals_id_seq'::regclass);
+
+
+--
+-- Name: use_case_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_descriptions ALTER COLUMN id SET DEFAULT nextval('public.use_case_descriptions_id_seq'::regclass);
 
 
 --
@@ -1089,6 +1264,13 @@ ALTER TABLE ONLY public.use_cases ALTER COLUMN id SET DEFAULT nextval('public.us
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: workflow_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_descriptions ALTER COLUMN id SET DEFAULT nextval('public.workflow_descriptions_id_seq'::regclass);
 
 
 --
@@ -1112,6 +1294,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.audits
     ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: building_block_descriptions building_block_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.building_block_descriptions
+    ADD CONSTRAINT building_block_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1152,6 +1342,14 @@ ALTER TABLE ONLY public.deploys
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organizations_contacts organizations_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_contacts
+    ADD CONSTRAINT organizations_contacts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1227,11 +1425,27 @@ ALTER TABLE ONLY public.sectors
 
 
 --
+-- Name: settings settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.settings
+    ADD CONSTRAINT settings_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sustainable_development_goals sustainable_development_goals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sustainable_development_goals
     ADD CONSTRAINT sustainable_development_goals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: use_case_descriptions use_case_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_descriptions
+    ADD CONSTRAINT use_case_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1248,6 +1462,14 @@ ALTER TABLE ONLY public.use_cases
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workflow_descriptions workflow_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_descriptions
+    ADD CONSTRAINT workflow_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1291,6 +1513,13 @@ CREATE UNIQUE INDEX block_prods ON public.products_building_blocks USING btree (
 --
 
 CREATE INDEX index_audits_on_created_at ON public.audits USING btree (created_at);
+
+
+--
+-- Name: index_building_block_descriptions_on_building_block_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_building_block_descriptions_on_building_block_id ON public.building_block_descriptions USING btree (building_block_id);
 
 
 --
@@ -1448,6 +1677,13 @@ CREATE UNIQUE INDEX index_sectors_on_slug ON public.sectors USING btree (slug);
 
 
 --
+-- Name: index_use_case_descriptions_on_use_case_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_use_case_descriptions_on_use_case_id ON public.use_case_descriptions USING btree (use_case_id);
+
+
+--
 -- Name: index_use_cases_on_sector_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1473,6 +1709,13 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: index_workflow_descriptions_on_workflow_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_workflow_descriptions_on_workflow_id ON public.workflow_descriptions USING btree (workflow_id);
 
 
 --
@@ -1672,6 +1915,14 @@ CREATE UNIQUE INDEX workflows_usecases ON public.workflows_use_cases USING btree
 
 
 --
+-- Name: building_block_descriptions fk_rails_1e30d5f2cb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.building_block_descriptions
+    ADD CONSTRAINT fk_rails_1e30d5f2cb FOREIGN KEY (building_block_id) REFERENCES public.building_blocks(id);
+
+
+--
 -- Name: deploys fk_rails_1ffce4bab2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1696,11 +1947,27 @@ ALTER TABLE ONLY public.projects
 
 
 --
+-- Name: workflow_descriptions fk_rails_69d7772842; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.workflow_descriptions
+    ADD CONSTRAINT fk_rails_69d7772842 FOREIGN KEY (workflow_id) REFERENCES public.workflows(id);
+
+
+--
 -- Name: deploys fk_rails_7995634207; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.deploys
     ADD CONSTRAINT fk_rails_7995634207 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: use_case_descriptions fk_rails_94ea5f52ff; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_descriptions
+    ADD CONSTRAINT fk_rails_94ea5f52ff FOREIGN KEY (use_case_id) REFERENCES public.use_cases(id);
 
 
 --
@@ -2057,6 +2324,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190911150425'),
 ('20190911194639'),
 ('20190913164128'),
-('20190916175633');
+('20190916175633'),
+('20191022134914'),
+('20191030125538'),
+('20191030153507'),
+('20191104191625');
 
 

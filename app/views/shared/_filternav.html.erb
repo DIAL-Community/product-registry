@@ -173,6 +173,14 @@
             </div>
           </div>
         </div>
+        <div class="row mb-2">
+          <div class="col-12 ml-1">
+            <div class="form-check">
+                <%= check_box_tag "is_launchable", true, params[:is_launchable], class: "form-check-input filter-element checkbox-align" %>
+                <%= label_tag "is_launchable", t('view.filternav.is-launchable'), class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-12 ml-1">
             <div class="form-group mb-1">
@@ -299,6 +307,7 @@
             </div>
           </div>
         </div>
+        <% if Organization.count > 1 %>
         <div class="row">
           <div class="col-12 ml-1">
             <div class="form-group mb-1">
@@ -315,6 +324,7 @@
             </div>
           </div>
         </div>
+        <% end %>
         <div class="row">
           <div class="col-12 badges"></div>
         </div>

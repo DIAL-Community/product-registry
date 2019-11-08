@@ -105,5 +105,5 @@ Rails.application.configure do
 
   config.i18n.fallbacks = true
   config.i18n.fallbacks = [:en]
-  config.i18n.fallbacks = {'es' => 'en', 'fr' => 'en'}
+  config.i18n.fallbacks = { 'es' => 'en', 'fr' => 'en' }
 end
