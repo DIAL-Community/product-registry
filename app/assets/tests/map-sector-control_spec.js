@@ -18,7 +18,7 @@ describe("map-sector-control.js: ", function() {
   });
 
   it("should prepare the options for the sector.", function() {
-    mapReady();
+    sectorSelectionReady();
 
     expect(requests.length).to.be(1);
     expect($("#sector").children().size()).to.be(1);
