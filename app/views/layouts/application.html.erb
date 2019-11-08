@@ -31,8 +31,17 @@
     <% end %>
     <link rel="icon" type="image/png" href="/favicon.png">
   </head>
-
-  <body id="main-body" data-controller="<%= controller.controller_name %>" data-action="<%= controller.action_name %>">
+<% if controller.action_name == 'map_fs'%>
+  <body id="main-body"
+        data-controller="<%= controller.controller_name %>"
+        data-action="<%= controller.action_name %>"
+        style="padding-top:0 !important">
+    <%= yield %>
+  </body>
+<% else %>
+  <body id="main-body"
+        data-controller="<%= controller.controller_name %>"
+        data-action="<%= controller.action_name %>">
     <%= render '/shared/topnav' %>
     <% if current_page?('/about') || current_page?(root_path) %>
       <div id="content" class="container">
@@ -69,4 +78,5 @@
 
     <%= render '/shared/footer' %>
   </body>
+<% end %>
 </html>

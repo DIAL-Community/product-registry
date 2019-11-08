@@ -16,39 +16,46 @@ mapObject.clickHandler = function(evt) {
     if (feature.get("organizations").length == 1) {
       org = feature.get("organizations")[0];
       var content =
-      '<div class="card map-popup" style="bottom: -9rem; padding: 0">' +
-      '<h6 class="card-header p-2">' + org.name + '</h6>' +
-      '<p class="text-muted mt-2 ml-2 mb-0"><a href="//'+org.website + '" target="_blank">' + org.website + '</a></p>' +
-      '<p class="text-muted mt-2 ml-2 mb-0">Endorser since ' + org.when_endorsed + '</p>' +
-      '<p class="text-muted mt-2 ml-2 mb-2"><a href="/organizations/' + org.id + '"><small>View organization</small></a></p>' +
-      '</div>';
+      `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
+        <h6 class="card-header py-2 px-2">${org.name}</h6>
+        <p class="small py-2 px-2 mb-0">
+          <a href="//${org.website}" target="_blank">${org.website}</a> <br />
+          Endorser since ${org.when_endorsed} <br />
+          <a href="/organizations/${org.id}"><small>View organization</small></a> <br />
+        </p>
+      </div>`;
       mapObject.showCountries(org.countries);
       $(element).html(content);
     } else {
       orgs = feature.get("organizations");
-      var contentDiv = $('<div class="card map-popup" style="padding: 0"/>');
-      var contentHeader = $('<h6 class="card-header p-2">' + orgs.length + ' Organizations</h6>');
+      var contentDiv = $('<div class="card map-popup" style="overflow: hidden; max-height: 20rem; bottom: -7rem; padding: 0"/>');
+      var contentHeader = $('<h6 class="card-header py-2 px-2">' + orgs.length + ' Organizations</h6>');
       contentDiv.append(contentHeader);
-      var orgListEl = $('<ul/>');
-      contentDiv.append(orgListEl);
+      var orgElements = $('<div class="list-group" style="overflow-y: auto;" />');
+      contentDiv.append(orgElements);
       orgs.forEach(function (org) {
-        var orgLi = $('<li/>');
-        var orgA = $('<a href="#">' + org.name + '</a>');
-        orgA.click(function(e) {
-          $($(e.target).parents('ul')[0]).find('.org-details').hide();
-          $(e.target).parent().find('.org-details').show();
+        var orgInfo = $('<div class="list-group-item list-group-item-action py-2 px-2" />');
+        orgInfo.click(function() {
+          $(this).parents(".list-group").find('.org-details').hide();
+          $(this).find('.org-details').show();
           mapObject.hideCountries();
           mapObject.showCountries(org.countries);
         });
-        orgLi.append(orgA);
-        orgLi.append('<p class="org-details" style="display:none"><small><a href="'+org.website + '" target="_blank">' + org.website + '</a>' + ', since ' + org.when_endorsed +
-        '. <a href="/organizations/' + org.id + '">View organization</a></small></p>')
-        orgListEl.append(orgLi);
+        orgInfo.append(`<strong>${org.name}</strong>`);
+        orgInfo.append(`<p class="org-details mb-0" style="display:none">
+                        <small>
+                          <a href="//${org.website}" target="_blank">${org.website}</a> <br />
+                          Endorser since ${org.when_endorsed}. <br />
+                          <a href="/organizations/${org.id}">View organization</a> <br />
+                        </small>
+                      </p>`)
+        orgElements.append(orgInfo);
       });
       $(element).empty();
       $(element).append(contentDiv);
     }
-    mapObject.popup.setPosition(feature.get("coordinate"));
+
+    mapObject.popup.setPosition(evt.coordinate);
   } else {
     mapObject.popup.setPosition(undefined);
     mapObject.hideCountries();
