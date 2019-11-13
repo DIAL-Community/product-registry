@@ -7,8 +7,8 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    if user.role == 'admin' || user.role == 'principle'
-      [:id, :name, :is_endorser, :when_endorsed, :website, :slug, :logo]
+    if user.role == 'admin' || user.role == 'principle' || user.role == 'mni'
+      [:id, :name, :is_endorser, :is_mni, :when_endorsed, :website, :slug, :logo]
     elsif user.role == 'org_user'
       [:name, :logo]
     else
@@ -21,11 +21,42 @@ class OrganizationPolicy < ApplicationPolicy
       return true
     end
 
-    user.role == 'admin' || user.role == 'principle'
+    if user.role == 'principle' && record.is_a?(Organization) && record.is_endorser
+      return true
+    end
+
+    if user.role == 'mni' && record.is_a?(Organization) && record.is_mni
+      return true
+    end
+
+    user.role == 'admin'
+  end
+
+  def view_capabilities_allowed?
+    if !user
+      return false
+    end
+
+    if (user.role == 'mni' || user.role == 'admin')
+      return true
+    end
+
+    if user.organization_id == record.id
+      return true
+    end
+  
+    # get the org for the user 
+    userOrg = Organization.where(:id => user.organization_id).first
+    puts "ORG: " + userOrg[:is_mni].to_s
+    if userOrg[:is_mni]
+      return false
+    else
+      return true
+    end
   end
 
   def export_contacts_allowed?
-    user.role == 'admin' || user.role == 'principle'
+    user.role == 'admin' || user.role == 'principle' || user.role == 'mni'
   end
 
   def view_allowed?

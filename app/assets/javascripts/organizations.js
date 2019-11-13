@@ -243,9 +243,159 @@ var setupFormView = function() {
   });
 };
 
+var editServices = function (e) {
+  var country_service = e.currentTarget.id.split('_')
+  var orgId=$("#orgId").text()
+
+  $.get("/service_capabilities?country="+country_service[0]+"&service="+country_service[1], function(data) {
+    var capabilityList = data.capability_list
+    var operatorList = data.operator_list
+
+    elementsToCheck = []
+    $.get("/agg_capabilities?country="+country_service[0]+"&service="+country_service[1]+"&org="+orgId, function (data) {
+      if (data.length == 0) {
+        data = []
+        operatorList.map(function(currOperator) {
+          data.push({"name":currOperator.name, "id":currOperator.id, "capabilities": []})
+        })
+      }
+    
+      var newHtml = "<div class='mni-accordion'>"
+      data.map(function(currService) {
+        newHtml += "<h3 class='country-service'>"+currService.name+"</h3>"
+        newHtml += "<div>"
+        // Get all capabilities per service
+        capabilityList.map(function(currCapability) {
+          var elementId = orgId+"_"+country_service[0]+"_"+country_service[1]+"_"+currService.id+"_"+currCapability.replace(/\s+/g, '-')
+          newHtml += "<input id='"+elementId+"' class='capability_checkbox' type='checkbox'>"+currCapability+"<br></br>"
+        })
+        currService.capabilities.map(function(currCap) {
+          var elementId = orgId+"_"+country_service[0]+"_"+country_service[1]+"_"+currService.id+"_"+currCap.replace(/\s+/g, '-')
+          elementsToCheck.push(elementId)
+        })
+        newHtml += "</div>"
+      });
+      newHtml += "</div>"
+      $("#"+e.currentTarget.id).next(".capability").empty()
+      $("#"+e.currentTarget.id).next(".capability").append(newHtml)
+      elementsToCheck.map(function(elementId) {
+        $("#"+elementId).prop('checked', true);
+      })
+      $("#"+e.currentTarget.id).next(".capability").find(".mni-accordion").accordion(
+        {
+          collapsible: true,
+          active: false,
+          autoHeight:false,
+          heightStyle: "content",
+          animate: false
+        }
+      )
+      $('.capability_checkbox').change(function() {
+        serviceData = this.id.split('_')
+        // serviceData is orgId, countryId, core_service, operator, capability
+        $.get("/update_capability?orgId="+serviceData[0]+"&country="+serviceData[1]+"&service="+serviceData[2]+"&operator="+serviceData[3]+"&capability="+serviceData[4]+"&checked="+this.checked, function (data) {
+
+        })
+      })
+    })
+  })
+  }
+
+var lookupServices = function (e) {
+  var country_service = e.currentTarget.id.split('_')
+  var orgId=$("#orgId").text()
+  $.get("/agg_capabilities?country="+country_service[0]+"&service="+country_service[1]+"&org="+orgId, function (data) {
+      if (data.length == 0)
+        return
+      newHtml = "<div class='mni-accordion'>"
+      data.map(function(currService) {
+        newHtml += "<h3 class='country-service'>"+currService.name+"</h3>"
+        newHtml += "<div>"
+        currService.capabilities.map(function(currCap) {
+          newHtml += "<input type='checkbox' disabled checked>"+currCap+"<br></br>"
+        });
+        newHtml += "</div>"
+      });
+      newHtml += "</div>"
+      $("#"+e.currentTarget.id).next(".capability").empty()
+      $("#"+e.currentTarget.id).next(".capability").append(newHtml)
+      $("#"+e.currentTarget.id).next(".capability").find(".mni-accordion").accordion(
+        {
+          collapsible: true,
+          active: false,
+          autoHeight:false,
+          heightStyle: "content",
+          animate: false
+        }
+      )
+    })
+  }
+
+var setUpAggregatorsView = function() {
+  setUpAggregators(false)
+}
+
+var setUpAggregatorsEdit = function() {
+  setUpAggregators(true)
+}
+
+var setUpAggregators = function(isEdit) {
+  $(".mni-accordion").accordion({
+    collapsible: true,
+    active: false,
+    autoHeight:false,
+    heightStyle: "content",
+    animate: false
+  });
+  var icons = $(".mni-accordion").accordion("option", "icons");
+  
+  $('.ui-accordion-header').click(function () {
+    $('.open').removeAttr("disabled");
+    $('.close').removeAttr("disabled");
+  });
+
+  $('.country-list').click(function (e) {
+    var country = e.currentTarget.id
+    var orgId=$("#orgId").text()
+    $.get("/agg_services?country="+country+"&org="+orgId, function (data) {
+      if (data.length == 0)
+        return
+      $("#"+e.currentTarget.id).next().empty()
+      newHtml = "<div><div class='mni-accordion'>"
+      data.map(function(currService) {
+        newHtml += "<h3 class='country-service' id='"+country+"_"+currService.name+"'>"+currService.name
+        if (currService.count > 0) {
+          newHtml += "<span class='badge badge-light agg-badge'>"+currService.count+"</span>"
+        }
+        newHtml += "</h3><div class='capability'></div>"
+      })
+      newHtml += "</div></div>"
+      $("#"+e.currentTarget.id).next().append(newHtml)
+
+      $("#"+e.currentTarget.id).next().find(".mni-accordion").accordion(
+        {
+          collapsible: true,
+          active: false,
+          autoHeight:false,
+          heightStyle: "content",
+          animate: false
+        }
+      )
+      if (isEdit) {
+        $('.country-service').click(editServices);
+      } else {
+        $('.country-service').click(lookupServices); 
+      }
+    })
+  });
+}
+
 $(document).on('organizations#new:loaded', setupFormView);
 $(document).on('organizations#show:loaded', setupMapView);
 $(document).on('organizations#edit:loaded', setupFormView);
 
 $(document).on('organizations#new:loaded', setupAutoComplete);
 $(document).on('organizations#edit:loaded', setupAutoComplete);
+
+$(document).on('organizations#show:loaded', setUpAggregatorsView);
+$(document).on('organizations#edit:loaded', setUpAggregatorsEdit);

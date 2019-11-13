@@ -26,14 +26,18 @@
       </div>
     <% end %>
     <div class="col-lg-8 col-12">
-      <p class="m-2">
-        <strong><%= "#{t('view.organization.index.endorsed-date')}:" %></strong>
-        <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
-      </p>
-      <p class="m-2">
-        <strong><%= "#{t('view.organization.form.website')}:" %></strong>
-        <%= link_to @organization.website.downcase.strip, "//#{@organization.website.downcase.strip}", target: :_blank %>
-      </p>
+      <% if !@organization.is_mni %>
+        <p class="m-2">
+          <strong><%= "#{t('view.organization.index.endorsed-date')}:" %></strong>
+          <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
+        </p>
+      <% end %>
+      <% if !@organization.website.nil? %>
+        <p class="m-2">
+          <strong><%= "#{t('view.organization.form.website')}:" %></strong>
+          <%= link_to @organization.website.downcase.strip, "//#{@organization.website.downcase.strip}", target: :_blank %>
+        </p>
+      <% end %>
       <% if @organization.locations.find_all{|location| location.location_type == 'point'}.count > 1 %>
         <p class="m-2">
           <strong><%= "#{t('view.organization.show.other-offices')}:" %></strong>
@@ -94,6 +98,7 @@
   </div>
 <% end %>
 
+<% if !@organization.is_mni ### Start for non-MNI data section. ### %>
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.sector').to_s.pluralize.humanize %></h5>
@@ -114,7 +119,6 @@
     <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.sector').to_s.pluralize) %>
   <% end %>
 </div>
-
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
@@ -139,6 +143,7 @@
     <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.product').to_s.pluralize) %>
   <% end %>
 </div>
+<% end ### End for non-MNI data section. ### %>
 
 <div class="mt-4">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
@@ -161,6 +166,31 @@
   <% end %>
 </div>
 
+<% if @organization.is_mni && @can_view_mni %>
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.operator_services').to_s.pluralize.humanize %></h5>
+    </div>
+    <div id="orgId" style="display:none"><%= @organization.id %></div>
+    <div id="agg-nav" class="card-body p-2 col-6 col-lg-4 mt-2 ml-4 accordion-section ">
+      <div class="mni-accordion">
+        <% @organization.locations.each do |country| %>
+          <h3 class="country-list" id="<%= country.id %>"><%= country.name %></h3>
+          <div>
+            <div class="mni-accordion">
+              <% @core_services.each do |service| %>
+                <h3 class="country-service" id="<%= country.id %>_<%= service %>"><%= service %></h3>
+                <div class="capability">
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <script>
   <%
     office = @organization.locations.find{|location| location.location_type == 'point'}
@@ -172,4 +202,5 @@
 
     $(document).on('organizations#show:loaded', updateMapMarker)
   <% end %>
+    
 </script>

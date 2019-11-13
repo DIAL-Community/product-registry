@@ -1,0 +1,42 @@
+  <%= form_with(model: operator_service, multipart: true, local: true) do |form| %>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :name, id: :operator_name,
+                          class: "form-control", placeholder: t('view.general.name') %>
+      <%= form.label :name, t('view.general.name') %>
+    </fieldset>
+
+
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <%= t('model.country').to_s.pluralize.humanize %> 
+    </h6>
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="country-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>" />
+      <label for="country-search">
+        <%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>
+      </label>
+    </fieldset>
+    <div class="row">
+      <div class="col-12">
+        <span id="base-selected-countries" class="selected-element badge badge-secondary px-1 mb-1">
+          <span class="text-label"></span>
+          <a onclick="remove(this);" style="cursor: pointer;">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+          <input type="hidden"/>
+        </span>
+      </div>
+    </div>
+
+    <fieldset class="float-right mt-4">
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
+  <% end %>
+
+<script>
+  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
+  $('#base-selected-countries').hide();
+  $("#country-search").autocomplete(countryAutoComplete);
+</script>

@@ -12,4 +12,4 @@
 <h5 class="border rounded bg-secondary text-white p-3">
   <%= t('view.general.title.edit', model: t('model.organization')) %>
 </h5>
-<%= render 'form', organization: @organization %>
+<%= render 'form', organization: @organization, can_view_mni: @can_view_mni %>

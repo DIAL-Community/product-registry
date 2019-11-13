@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white">
+    Operator: <%= @operator_name %>
+  </h5>
+  <div class="card-body">
+    <p class="float-right mb-0 mr-2" >
+      <%= link_to 'Back', operator_services_path, :class => "card-link" %>
+      <% if user_signed_in? && policy(@curr_operator).mod_allowed? %>
+        <%= link_to 'Edit', edit_operator_service_path(@curr_operator.name), :class => "card-link" %>
+      <% end %>
+    </p>
+  </div>
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.location').to_s.pluralize.humanize %></h5>
+    </div>
+    <% if @operator_countries.count > 0 %>
+      <div class="row mb-2">
+        <% @operator_countries.order("name").each do |country| %>
+          <div class="col-6 col-lg-4 mt-2">
+            <div class="card h-100">
+              <div class="card-body py-2">
+                <p class="card-text text-muted" style="flex: 1"><%= country.name %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <div>
+</div>
+

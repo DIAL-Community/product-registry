@@ -20,7 +20,7 @@ var incrementFilterCount = function(filterId) {
   if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
-  if (filterId == "endorser_only") {
+  if (filterId == "endorser_only" || filterId == "aggregator_only") {
     filterId = "years"
   }
   currVal = parseInt($("#accordian-"+filterId+"-count").html())
@@ -34,7 +34,7 @@ var decrementFilterCount = function(filterId) {
   if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
-  if (filterId == "endorser_only") {
+  if (filterId == "endorser_only" || filterId == "aggregator_only") {
     filterId = "years"
   }
   currVal = parseInt($("#accordian-"+filterId+"-count").html())
@@ -49,7 +49,7 @@ var clearFilterCount = function(filterId) {
   if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
-  if (filterId == "endorser_only") {
+  if (filterId == "endorser_only" || filterId == "aggregator_only") {
     filterId = "years"
   }
   $("#accordian-"+filterId+"-count").html("")
@@ -60,6 +60,8 @@ var clearFilterItems = function(filterId) {
     $('#with_maturity_assessment').prop('checked', false);
   } else if (filterId == 'endorser_only') {
     $('#endorser_only').prop('checked', false);
+  } else if (filterId == 'aggregator_only') {
+    $('#aggregator_only').prop('checked', false);
   } else if (filterId == 'is_launchable') {
     $('#is_launchable').prop('checked', false);
   } else {
@@ -150,6 +152,8 @@ var prepareFilters = function() {
         filter_array.push({filter_name: 'years'})
         filter_array.push({filter_name: 'endorser_only'})
         $('#endorser_only').prop('checked', false);
+        filter_array.push({filter_name: 'aggregator_only'})
+        $('#aggregator_only').prop('checked', false);
       } else if (filter_name == 'products') {
         filter_array.push({filter_name: 'origins'})
         filter_array.push({filter_name: 'products'})

@@ -1,0 +1,47 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<% if user_signed_in? && policy(OperatorService).mod_allowed? %>
+  <%= link_to t('view.general.create'), new_operator_service_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
+<div class="float-right pb-2">
+  <%= form_tag(operator_services_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search],
+      placeholder: t('view.general.search-placeholder', model: t('model.operator_services').to_s.pluralize),
+      class: "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
+  </div>
+<% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th><%= t('view.general.name') %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @operators.each do |operator| %>
+      <tr>
+        <td><%= operator.name %></td>
+        <td class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+             aria-haspopup="true" aria-expanded="false">
+            <%= t('view.general.action') %>
+          </a>
+          <div class="dropdown-menu">
+            <%= link_to t('view.general.view'), operator_service_path(operator.name), :class =>"dropdown-item"  %>
+            <% if user_signed_in? && policy(operator).mod_allowed? %>
+              <%= link_to t('view.general.edit'), edit_operator_service_path(operator.name), :class =>"dropdown-item"  %>
+              <div class="dropdown-divider"></div>
+              <%= link_to t('view.general.delete'), operator_service_path(operator.name), method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

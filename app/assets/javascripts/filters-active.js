@@ -2,6 +2,10 @@ const configs = {
   endorser_only: {
     text: 'Contributed to / used by endorser organizations.',
     multi: false
+  },
+  aggregator_only: {
+    text: 'Mobile Network aggregator organizations.',
+    multi: false
   }
 };
 

@@ -1,0 +1,34 @@
+<div class="card">
+  <h5 class="card-header bg-secondary text-white">
+    <%= t('view.organization.map.aggregators') %>
+  </h5>
+</div>
+<div id="map" class="map" style="height:480px;"></div>
+<div id="popup" class="map-popup"></div>
+
+<div class="form-inline">
+  <div class="form-group col-12">
+    <div class="float-right">
+      <select id="aggregators" class="custom-select">
+        <option value=-1>
+          <%= t('view.organization.map.all-aggregators') %>
+        </option>
+      </select>
+      <select id="operators" class="custom-select">
+        <option value=-1>
+          <%= t('view.organization.map.all-operators') %>
+        </option>
+      </select>
+      <select id="services" class="custom-select">
+        <option value=-1>
+          <%= t('view.organization.map.all-services') %>
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    aggregator.init();
+</script>
