@@ -332,7 +332,7 @@ class OrganizationsController < ApplicationController
 
   def map_fs
     @organizations = Organization.eager_load(:locations)
-    response.set_header('Content-Security-Policy', 'frame-ancestors localhost:3000 digitalprinciples.org')
+    response.set_header('Content-Security-Policy', 'frame-ancestors digitalprinciples.org')
     authorize @organizations, :view_allowed?
   end
 

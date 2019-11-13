@@ -21,7 +21,7 @@ mapObject.clickHandler = function(evt) {
         <p class="small py-2 px-2 mb-0">
           <a href="//${org.website}" target="_blank">${org.website}</a> <br />
           Endorser since ${org.when_endorsed} <br />
-          <a href="/organizations/${org.id}"><small>View organization</small></a> <br />
+          <a href="/organizations/${org.id}" target="_blank"><small>View organization</small></a> <br />
         </p>
       </div>`;
       mapObject.showCountries(org.countries);
@@ -46,7 +46,7 @@ mapObject.clickHandler = function(evt) {
                         <small>
                           <a href="//${org.website}" target="_blank">${org.website}</a> <br />
                           Endorser since ${org.when_endorsed}. <br />
-                          <a href="/organizations/${org.id}">View organization</a> <br />
+                          <a href="/organizations/${org.id}" target="_blank">View organization</a> <br />
                         </small>
                       </p>`)
         orgElements.append(orgInfo);
