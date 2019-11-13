@@ -50,6 +50,8 @@ Rails.application.routes.draw do
     get 'count', on: :collection
   end
 
+  resources :operator_services
+
   resources :audits, only: [:index]
 
   resources :locations do
@@ -68,8 +70,13 @@ Rails.application.routes.draw do
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
   get '/get_filters', to: 'application#get_filters', as: :get_filters
+  get '/agg_capabilities', to: 'organizations#agg_capabilities', as: :agg_capabilities
+  get '/agg_services', to: 'organizations#agg_services', as: :agg_services
+  get '/service_capabilities', to: 'organizations#service_capabilities', as: :service_capabilities
+  get '/update_capability', to: 'organizations#update_capability', as: :update_capability
 
   get 'export', :to => 'organizations#export'
+  get 'map_aggregators', :to => 'organizations#map_aggregators'
   get 'map', :to => 'organizations#map'
   get 'map_fs', :to => 'organizations#map_fs'
   get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'

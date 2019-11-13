@@ -33,4 +33,8 @@ class UserPolicy < ApplicationPolicy
   def destroy?
     @current_user.role == "admin"
   end
+
+  def mni?
+    @current_user.role == "admin" || @current_user.role == "mni"
+  end
 end

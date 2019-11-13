@@ -285,7 +285,7 @@
           <span class="align-middle"><%= t('view.filternav.orgs') %></span>
           </div>
           <%
-            counter = filter_count('years') + filter_count('endorser_only')
+            counter = filter_count('years') + filter_count('endorser_only') + filter_count('aggregator_only')
             if counter > 0
               concat "<span id='accordian-years-count' class='badge badge-light'>#{counter}</span>".html_safe
             else
@@ -303,7 +303,15 @@
           <div class="col-12 ml-1">
             <div class="form-check">
                 <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
-                <%= label_tag "endorser_only", t('view.organization.index.endorser-only'), class: "form-check-label" %>
+                <%= label_tag "endorser_only", t('view.organization.index.endorsers'), class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-12 ml-1">
+            <div class="form-check">
+                <%= check_box_tag "aggregator_only", true, params[:aggregator_only], { class: "form-check-input filter-element checkbox-align", name:"aggregator"} %>
+                <%= label_tag "aggregator_only", t('view.organization.index.aggregators'), class: "form-check-label" %>
             </div>
           </div>
         </div>
@@ -350,8 +358,11 @@
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 ml-1">
-            <%= link_to t('view.filternav.view-map'), 'map' %>
+          <div class="col-12 ml-3">
+            <%= link_to t('view.filternav.endorser-map'), 'map' %>
+          </div>
+          <div class="col-12 ml-3 mt-2">
+            <%= link_to t('view.filternav.aggregator-map'), 'map_aggregators' %>
           </div>
         </div>
       </div>

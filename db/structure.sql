@@ -10,6 +10,81 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: agg_capabilities; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.agg_capabilities AS ENUM (
+    'Transfer to Subscribers',
+    'Transfer to Business',
+    'Balance Check',
+    'Delivery Notification',
+    'Reporting',
+    'SMPP',
+    'HTTP',
+    'HTTPS',
+    'XML-RPC',
+    'FTP',
+    'GUI-Self Service',
+    'Data Integrity',
+    'VPN',
+    'Other API Support',
+    'Content Management',
+    'Subscription Management',
+    'Campaign Management',
+    'Portal Management',
+    'Recommendation Engine',
+    'Advertisement Platform',
+    'Analytics and Reporting',
+    'URL-IP Configuration',
+    'Standard Billing',
+    'Zero Rated',
+    'Reverse Billing',
+    'Private APN Provisioning',
+    'Business to Subscriber',
+    'Subscriber to Business',
+    'Bulk Transfer',
+    'Alarm Support',
+    'Consolidated Reports',
+    'Automated realtime alerts',
+    'Configure & Monitor Message length',
+    'Threshold Monitoring',
+    'Spam Control',
+    'WhatsApp',
+    'Facebook Messenger',
+    'Media Streaming',
+    'Reliability percent',
+    'High Availability',
+    'Redundancy',
+    'Support',
+    'Security Policies',
+    'One Way',
+    'Two Way',
+    'Bulk SMS',
+    'Delivery Reports',
+    'Sender ID Configuration',
+    'Number Masking',
+    'Premium Billing',
+    'Zero Rating',
+    'Dedicated Short Code Provisioning',
+    'Shared Short Code',
+    'Long Code Provisioning',
+    'SMS Spam filter',
+    'Automated regulatory compliance',
+    'Traffic-Capacity-Bandwidth',
+    'Graphical User Interface',
+    'Customized User Creation',
+    'Session Reports',
+    'Hosted Menu',
+    'IVR Inbound',
+    'IVR Outbound',
+    'Leased Lines',
+    'VOIP',
+    'Hosted IVR Menu',
+    'Short Code Provisioning'
+);
+
+
+--
 -- Name: digisquare_maturity_level; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -27,6 +102,26 @@ CREATE TYPE public.digisquare_maturity_level AS ENUM (
 CREATE TYPE public.location_type AS ENUM (
     'country',
     'point'
+);
+
+
+--
+-- Name: mobile_services; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.mobile_services AS ENUM (
+    'Airtime',
+    'API',
+    'HS',
+    'Mobile-Internet',
+    'Mobile-Money',
+    'Ops-Maintenance',
+    'OTT',
+    'SLA',
+    'SMS',
+    'User-Interface',
+    'USSD',
+    'Voice'
 );
 
 
@@ -56,6 +151,39 @@ CREATE TYPE public.user_role AS ENUM (
 
 
 SET default_tablespace = '';
+
+--
+-- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.aggregator_capabilities (
+    id bigint NOT NULL,
+    aggregator_id bigint,
+    operator_services_id bigint,
+    service public.mobile_services,
+    capability public.agg_capabilities,
+    country_name character varying
+);
+
+
+--
+-- Name: aggregator_capabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.aggregator_capabilities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: aggregator_capabilities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.aggregator_capabilities_id_seq OWNED BY public.aggregator_capabilities.id;
+
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -330,6 +458,37 @@ ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
 
 
 --
+-- Name: operator_services; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.operator_services (
+    id bigint NOT NULL,
+    name character varying,
+    locations_id bigint,
+    service public.mobile_services
+);
+
+
+--
+-- Name: operator_services_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.operator_services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: operator_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.operator_services_id_seq OWNED BY public.operator_services.id;
+
+
+--
 -- Name: organizations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -341,7 +500,8 @@ CREATE TABLE public.organizations (
     website character varying,
     is_endorser boolean,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_mni boolean DEFAULT false
 );
 
 
@@ -402,8 +562,28 @@ ALTER SEQUENCE public.organizations_id_seq OWNED BY public.organizations.id;
 
 CREATE TABLE public.organizations_locations (
     location_id bigint NOT NULL,
-    organization_id bigint NOT NULL
+    organization_id bigint NOT NULL,
+    id bigint NOT NULL
 );
+
+
+--
+-- Name: organizations_locations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_locations_id_seq OWNED BY public.organizations_locations.id;
 
 
 --
@@ -1120,6 +1300,13 @@ CREATE TABLE public.workflows_use_cases (
 
 
 --
+-- Name: aggregator_capabilities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aggregator_capabilities ALTER COLUMN id SET DEFAULT nextval('public.aggregator_capabilities_id_seq'::regclass);
+
+
+--
 -- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1169,6 +1356,13 @@ ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.lo
 
 
 --
+-- Name: operator_services id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.operator_services ALTER COLUMN id SET DEFAULT nextval('public.operator_services_id_seq'::regclass);
+
+
+--
 -- Name: organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1176,6 +1370,10 @@ ALTER TABLE ONLY public.organizations ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: organizations_locations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_locations ALTER COLUMN id SET DEFAULT nextval('public.organizations_locations_id_seq'::regclass);
 -- Name: organizations_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1281,6 +1479,14 @@ ALTER TABLE ONLY public.workflows ALTER COLUMN id SET DEFAULT nextval('public.wo
 
 
 --
+-- Name: aggregator_capabilities aggregator_capabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aggregator_capabilities
+    ADD CONSTRAINT aggregator_capabilities_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1345,6 +1551,20 @@ ALTER TABLE ONLY public.locations
 
 
 --
+-- Name: operator_services operator_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.operator_services
+    ADD CONSTRAINT operator_services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organizations_locations organizations_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_locations
+    ADD CONSTRAINT organizations_locations_pkey PRIMARY KEY (id);
+    
 -- Name: organizations_contacts organizations_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1481,6 +1701,13 @@ ALTER TABLE ONLY public.workflows
 
 
 --
+-- Name: agg_cap_operator_capability_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX agg_cap_operator_capability_index ON public.aggregator_capabilities USING btree (aggregator_id, operator_services_id, capability);
+
+
+--
 -- Name: associated_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1506,6 +1733,20 @@ CREATE UNIQUE INDEX bbs_workflows ON public.workflows_building_blocks USING btre
 --
 
 CREATE UNIQUE INDEX block_prods ON public.products_building_blocks USING btree (building_block_id, product_id);
+
+
+--
+-- Name: index_aggregator_capabilities_on_aggregator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_aggregator_capabilities_on_aggregator_id ON public.aggregator_capabilities USING btree (aggregator_id);
+
+
+--
+-- Name: index_aggregator_capabilities_on_operator_services_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_aggregator_capabilities_on_operator_services_id ON public.aggregator_capabilities USING btree (operator_services_id);
 
 
 --
@@ -1583,6 +1824,20 @@ CREATE INDEX index_deploys_on_user_id ON public.deploys USING btree (user_id);
 --
 
 CREATE UNIQUE INDEX index_locations_on_slug ON public.locations USING btree (slug);
+
+
+--
+-- Name: index_operator_services_on_locations_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_operator_services_on_locations_id ON public.operator_services USING btree (locations_id);
+
+
+--
+-- Name: index_operator_services_on_name_and_locations_id_and_service; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_operator_services_on_name_and_locations_id_and_service ON public.operator_services USING btree (name, locations_id, service);
 
 
 --
@@ -1971,6 +2226,22 @@ ALTER TABLE ONLY public.use_case_descriptions
 
 
 --
+-- Name: aggregator_capabilities fk_rails_9fcd7b6d41; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aggregator_capabilities
+    ADD CONSTRAINT fk_rails_9fcd7b6d41 FOREIGN KEY (aggregator_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: aggregator_capabilities fk_rails_aa5b2f5e59; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aggregator_capabilities
+    ADD CONSTRAINT fk_rails_aa5b2f5e59 FOREIGN KEY (operator_services_id) REFERENCES public.operator_services(id);
+
+
+--
 -- Name: product_assessments fk_rails_c1059f487a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1992,6 +2263,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 ALTER TABLE ONLY public.use_cases
     ADD CONSTRAINT fk_rails_d2fed50240 FOREIGN KEY (sector_id) REFERENCES public.sectors(id);
+
+
+--
+-- Name: operator_services fk_rails_e7154c9b46; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.operator_services
+    ADD CONSTRAINT fk_rails_e7154c9b46 FOREIGN KEY (locations_id) REFERENCES public.locations(id);
 
 
 --
@@ -2326,6 +2605,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190913164128'),
 ('20190916175633'),
 ('20191022134914'),
+('20191028211046');
 ('20191030125538'),
 ('20191030153507'),
 ('20191104191625');

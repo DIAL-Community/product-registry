@@ -1,8 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: Building Block1
-  slug: building_block1
+  name: BuildingBlock1
+  slug: bb_one
   workflows: one
 
 two:
