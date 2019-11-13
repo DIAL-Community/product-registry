@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191104191625) do
+ActiveRecord::Schema.define(version: 20191111123008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,8 +125,6 @@ ActiveRecord::Schema.define(version: 20191104191625) do
     t.bigint "contact_id", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.index ["contact_id", "organization_id"], name: "index_organizations_contacts_on_contact_id_and_organization_id", unique: true
-    t.index ["organization_id", "contact_id"], name: "index_organizations_contacts_on_organization_id_and_contact_id", unique: true
   end
 
   create_table "organizations_locations", force: :cascade do |t|

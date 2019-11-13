@@ -197,30 +197,8 @@ class OrganizationsController < ApplicationController
           next
         end
 
-        # The flow for this one:
-        # * Contact worked for an organization and then left.
-        # * Now we're adding the same person again to the organization.
-        # * We need to duplicate the same person and connect it to the org.
-        existing_contact = Contact.find(selected_contact)
-        if organization_contact && !organization_contact.ended_at.nil?
-          contact = Contact.new
-          contact.name = existing_contact.name
-          contact.email = existing_contact.email
-          contact.title = existing_contact.title
-
-          contact_slug = existing_contact.slug
-          dupe_count = Contact.where(slug: contact_slug).count
-          if dupe_count.positive?
-            first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
-            contact.slug = contact_slug + generate_offset(first_duplicate).to_s
-          else
-            contact.slug = contact_slug
-          end
-          existing_contact = contact
-        end
-
         organization_contact = OrganizationsContact.new
-        organization_contact.contact = existing_contact
+        organization_contact.contact = Contact.find(selected_contact)
         organization_contact.started_at = Time.now.utc
         organization_contacts.push(organization_contact)
       end
