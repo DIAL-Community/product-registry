@@ -85,7 +85,6 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1
   # PATCH/PUT /sectors/1.json
   def update
-
     authorize @sector, :mod_allowed?
     if (params[:selected_organizations])
       organizations = Set.new

@@ -84,6 +84,10 @@ var workflowDuplicateCheck = function() {
   duplicateCheck("workflow_name", "/workflow_duplicates.json");
 }
 
+var glossaryDuplicateCheck = function() {
+  duplicateCheck("glossary_name", "/glossary_duplicates.json");
+}
+
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
@@ -102,3 +106,5 @@ $(document).on('use_cases#edit:loaded', useCaseDuplicateCheck);
 $(document).on('use_cases#new:loaded', useCaseDuplicateCheck);
 $(document).on('workflows#edit:loaded', workflowDuplicateCheck);
 $(document).on('workflows#new:loaded', workflowDuplicateCheck);
+$(document).on('glossaries#edit:loaded', glossaryDuplicateCheck);
+$(document).on('glossaries#new:loaded', glossaryDuplicateCheck);

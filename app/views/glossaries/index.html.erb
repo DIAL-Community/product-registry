@@ -1,0 +1,40 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(Glossary).mod_allowed? %>
+      <%= link_to t('view.general.create'), new_glossary_path, :class => 'btn btn-outline-secondary float-left' %>
+    <% end %>
+    <div class="form-group float-right mb-0">
+      <%= form_tag(glossaries_path, method: "get", id: "search-form", class: "form-inline") do %>
+        <%= text_field_tag :search, params[:search], class: "form-control",
+            placeholder: t('view.general.search-placeholder', model: t('model.glossary').to_s.pluralize) %>
+        <div class="input-group-append">
+          <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% @glossaries.each do |glossary| %>
+  <div class="card mt-2">
+    <div class="card-body py-3 px-3">
+      <h5>
+        <%= "#{glossary.name}" %>
+      </h5>
+      <div id="<%= glossary.slug %>" class="wysiwyg-viewer"></div>
+      <p class="float-right mb-0">
+        <%= link_to t('view.general.show'), glossary, :class => "card-link" %>
+        <% if user_signed_in? && policy(glossary).mod_allowed? %>
+          <%= link_to t('view.general.edit'), edit_glossary_path(glossary), :class => "card-link" %>
+        <% end %>
+      </p>
+    </div>
+    <script>
+      setViewerForElement('<%= glossary.slug %>', '<%= glossary.description %>')
+    </script>
+  </div>
+<% end %>
+
