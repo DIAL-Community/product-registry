@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
+  post '/remove_all_filters', to: 'application#remove_all_filters', as: :remove_all_filters
   get '/get_filters', to: 'application#get_filters', as: :get_filters
   get '/agg_capabilities', to: 'organizations#agg_capabilities', as: :agg_capabilities
   get '/agg_services', to: 'organizations#agg_services', as: :agg_services

@@ -50,8 +50,35 @@ const activeFilter = function() {
   });
 }
 
+const createLink = function() {
+  var url = window.location.href + "?urlFilter=true&"
+  $.get('/get_filters', function(filters) {
+    Object.keys(filters).map(function(filterKey) {
+      if (Array.isArray(filters[filterKey])) {
+        url += filterKey+"="
+        filters[filterKey].map(function(arrayFilter) {
+          url += arrayFilter.value+"-"+arrayFilter.label+"--"
+        })
+        url = url.slice(0, -2); 
+        url+="&"
+      } else {
+        url += filterKey+"="+filters[filterKey].value+"&"
+      }
+    })
+    url = url.slice(0, -1); 
+    navigator.clipboard.writeText(url).then(function() {
+      $("#share-link").next().text("Link has been copied to your clipboard")
+    })
+  })
+}
+
 const removeFilterHandler = function() {
   $('.close-icon').click(removeActiveFilter);
+  // set up handler for share link as well
+  $("#share-link").on('click', function(e) {
+    e.preventDefault()
+    createLink();
+  })
 }
 
 $(document).on('sustainable_development_goals#index:loaded', removeFilterHandler);

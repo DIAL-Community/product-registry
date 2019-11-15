@@ -325,6 +325,8 @@ en:
       years:
         one: Year Endorsed
         other: Years Endorsed
+      share-link: Share link
+      share-link-tooltip: Click here to create a URL that can be shared to show the current page, including filters
     breadcrumb:
       home: Home
     sdg:
