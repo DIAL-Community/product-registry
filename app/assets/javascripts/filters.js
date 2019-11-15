@@ -55,6 +55,16 @@ var clearFilterCount = function(filterId) {
   $("#accordian-"+filterId+"-count").html("")
 }
 
+var clearFilterCount = function(filterId) {
+  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
+    filterId = "origins"
+  }
+  if (filterId == "endorser_only" || filterId == "aggregator_only") {
+    filterId = "years"
+  }
+  $("#accordian-"+filterId+"-count").html("")
+}
+
 var clearFilterItems = function(filterId) {
   if (filterId == 'with_maturity_assessment') {
     $('#with_maturity_assessment').prop('checked', false);
@@ -101,13 +111,45 @@ var addFilter = function(id, value, label) {
   $('#' + id).val('');
 }
 
+var getUrlParams = function()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
 var loadFilters = function() {
-  // Get all filters and add to List
-  $.get('/get_filters', function (data) {
-    Object.keys(data).map(function(key) {
-        addToList(key, data[key]);
+  // Check to see if filters are passed on URL. If so, set them in session
+  urlParams = getUrlParams()
+  if (urlParams.urlFilter) {
+    delete urlParams['urlFilter']
+    $.post('/remove_all_filters', { }, function() {
+      Object.keys(urlParams).map(function(urlParam) {
+        clearFilterCount(urlParam)
+        if (urlParam == 'use_cases' || urlParam == 'workflows' || urlParam == 'building_blocks' || urlParam == 'sdgs' || urlParam == 'products' || urlParam == 'years' || urlParam == 'origins') {
+          paramValues = urlParams[urlParam].split('--')
+          paramValues.map(function(paramValue) {
+            paramValueLabel = paramValue.split('-')
+            addFilter(urlParam, paramValueLabel[0], decodeURIComponent(paramValueLabel[1]))
+          })
+        } else {
+          addFilter(urlParam, urlParams[urlParam], '')
+        }
+      })
     })
-  });
+  } else {
+    // Get all filters and add to List
+    $.get('/get_filters', function (data) {
+      Object.keys(data).map(function(key) {
+          addToList(key, data[key]);
+      })
+    });
+  }
 }
 
 var loadMainDiv = function() {
