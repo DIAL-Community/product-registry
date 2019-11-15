@@ -32,6 +32,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   process resize_image: 640
   def resize_image(size)
     manipulate! do |image|
+      image.strip
       if image[:width] < image[:height]
         if image[:height] > size
           image.resize("x#{size}>")
