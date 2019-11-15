@@ -1,0 +1,21 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="card">
+  <div class="card-body px-3 py-3">
+    <h5>
+      <%= "#{t('model.glossary').to_s.titlecase}: #{@glossary.name}" %>
+    </h5>
+    <div id="glossary-viewer" class="wysiwyg-viewer"></div>
+    <p class="float-right mb-0" >
+      <%= link_to t('view.general.back'), glossaries_path, :class => "card-link" %>
+      <% if user_signed_in? && policy(@glossary).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_glossary_path(@glossary), :class => "card-link" %>
+      <% end %>
+    </p>
+  </div>
+</div>
+
+<script>
+  setUpViewer("<%= @glossary.description %>")
+</script>

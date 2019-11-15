@@ -46,9 +46,10 @@ en:
     building-block: building block
     candidate-organization: candidate organization
     contact: contact
+    country: country
+    glossary: glossary
     location: location
     office: office
-    country: country
     organization: organization
     product: product
     project: project
@@ -149,6 +150,7 @@ en:
       organization-nomatch: "Organization website doesn't match your email address."
       organization-tooltip: "Apply to be the owner for the organization which will allow you to update the organization information."
       product-tooltip: "Optionally apply as a product owner. You will need to be verified by our team member to do this."
+
     location:
       index:
         no-data: We couldn't find any location in the database.
@@ -416,6 +418,7 @@ en:
       not-available: 'We do not have any %{multi} information for this %{model}.'
       search: Search
       search-placeholder: 'Search for %{model}'
+      show: Show
       submit: Submit
       title:
         create: 'Create %{model}'

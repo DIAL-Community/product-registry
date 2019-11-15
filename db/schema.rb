@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191111123008) do
+ActiveRecord::Schema.define(version: 20191114192918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,15 @@ ActiveRecord::Schema.define(version: 20191111123008) do
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_deploys_on_product_id"
     t.index ["user_id"], name: "index_deploys_on_user_id"
+  end
+
+  create_table "glossaries", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 # Could not dump table "locations" because of following StandardError

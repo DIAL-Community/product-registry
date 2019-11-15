@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :glossaries
   resources :settings, only: [:index, :edit, :show, :update]
   resources :projects, only: [:index, :show, :destroy]
 
@@ -89,6 +90,7 @@ Rails.application.routes.draw do
   get 'organization_duplicates', :to => 'organizations#duplicates'
   get 'use_case_duplicates', :to => 'use_cases#duplicates'
   get 'workflow_duplicates', :to => 'workflows#duplicates'
+  get 'glossary_duplicates', :to => 'glossaries#duplicates'
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
 
   get 'productmap', :to => 'products#map'

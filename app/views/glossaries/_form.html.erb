@@ -1,0 +1,30 @@
+<%= form_with(model: glossary, local: true, html: { id: 'glossary-form' }) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :glossary_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= glossary.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.glossary')) %>
+  </div>
+
+  <%= form.hidden_field :description, id: :glossary_description %>
+  <div class="wysiwyg-editor">
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var editor = setUpEditor("<%= glossary.description %>");
+  var form = document.querySelector('#glossary-form');
+  form.onsubmit = function() {
+    var description = $('#glossary_description');
+    description.val(JSON.stringify(editor.getContents()));
+  };
+</script>

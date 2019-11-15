@@ -424,6 +424,40 @@ ALTER SEQUENCE public.deploys_id_seq OWNED BY public.deploys.id;
 
 
 --
+-- Name: glossaries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.glossaries (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: glossaries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.glossaries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: glossaries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.glossaries_id_seq OWNED BY public.glossaries.id;
+
+
+--
 -- Name: locations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1349,6 +1383,13 @@ ALTER TABLE ONLY public.deploys ALTER COLUMN id SET DEFAULT nextval('public.depl
 
 
 --
+-- Name: glossaries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.glossaries ALTER COLUMN id SET DEFAULT nextval('public.glossaries_id_seq'::regclass);
+
+
+--
 -- Name: locations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1370,14 +1411,17 @@ ALTER TABLE ONLY public.organizations ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: organizations_locations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.organizations_locations ALTER COLUMN id SET DEFAULT nextval('public.organizations_locations_id_seq'::regclass);
 -- Name: organizations_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.organizations_contacts ALTER COLUMN id SET DEFAULT nextval('public.organizations_contacts_id_seq'::regclass);
+
+
+--
+-- Name: organizations_locations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_locations ALTER COLUMN id SET DEFAULT nextval('public.organizations_locations_id_seq'::regclass);
 
 
 --
@@ -1543,6 +1587,14 @@ ALTER TABLE ONLY public.deploys
 
 
 --
+-- Name: glossaries glossaries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.glossaries
+    ADD CONSTRAINT glossaries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1559,17 +1611,19 @@ ALTER TABLE ONLY public.operator_services
 
 
 --
--- Name: organizations_locations organizations_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.organizations_locations
-    ADD CONSTRAINT organizations_locations_pkey PRIMARY KEY (id);
-    
 -- Name: organizations_contacts organizations_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.organizations_contacts
     ADD CONSTRAINT organizations_contacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organizations_locations organizations_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_locations
+    ADD CONSTRAINT organizations_locations_pkey PRIMARY KEY (id);
 
 
 --
@@ -1838,20 +1892,6 @@ CREATE INDEX index_operator_services_on_locations_id ON public.operator_services
 --
 
 CREATE UNIQUE INDEX index_operator_services_on_name_and_locations_id_and_service ON public.operator_services USING btree (name, locations_id, service);
-
-
---
--- Name: index_organizations_contacts_on_contact_id_and_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_organizations_contacts_on_contact_id_and_organization_id ON public.organizations_contacts USING btree (contact_id, organization_id);
-
-
---
--- Name: index_organizations_contacts_on_organization_id_and_contact_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_organizations_contacts_on_organization_id_and_contact_id ON public.organizations_contacts USING btree (organization_id, contact_id);
 
 
 --
@@ -2605,9 +2645,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190913164128'),
 ('20190916175633'),
 ('20191022134914'),
-('20191028211046');
+('20191028211046'),
 ('20191030125538'),
 ('20191030153507'),
-('20191104191625');
+('20191104191625'),
+('20191111123008'),
+('20191114192918');
 
 
