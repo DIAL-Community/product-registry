@@ -27,7 +27,10 @@ module DeploysHelper
       jenkinsUser = Rails.application.secrets.jenkins_user
       jenkinsPassword = Rails.application.secrets.jenkins_password
 
-      crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
+      # Latest version of Jenkins fails on crumb authentication, so pulling it out for now
+      # Try again when Jenkins updates/fixes the issue
+      # Will need to re-enable CSRF in Jenkins
+      #crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
 
       uri = URI.parse(jenkinsUrl+url)
       https = Net::HTTP.new(uri.host, uri.port)
@@ -39,7 +42,9 @@ module DeploysHelper
           request = Net::HTTP::Post.new(uri.request_uri)
       end
       request["Authorization"] = "Basic " + Base64.encode64(jenkinsUser + ":" + jenkinsPassword).chomp
-      request["Jenkins-Crumb"] = crumb
+      # Latest version of Jenkins fails on crumb authentication, so pulling it out for now
+      # Try again when Jenkins updates/fixes the issue
+      #request["Jenkins-Crumb"] = crumb
 
       response = https.request(request)
   end
