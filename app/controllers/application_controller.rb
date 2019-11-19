@@ -102,6 +102,21 @@ class ApplicationController < ActionController::Base
     render json: retval
   end
 
+  def remove_all_filters
+    puts "REMOVE ALL FILTERS"
+    ORGANIZATION_FILTER_KEYS.each do |key|
+      if session[key]
+        session.delete(key)
+      end
+    end
+    FRAMEWORK_FILTER_KEYS.each do |key|
+      if session[key]
+        session.delete(key)
+      end
+    end
+    render json: true
+  end
+
   def get_filters
     filters = Hash.new
     ORGANIZATION_FILTER_KEYS.each do |key|
@@ -111,6 +126,7 @@ class ApplicationController < ActionController::Base
     end
     FRAMEWORK_FILTER_KEYS.each do |key|
       if session[key]
+        puts "SESSION: "+session[key].to_s
         filters[key] = session[key]
       end
     end

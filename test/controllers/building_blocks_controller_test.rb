@@ -14,7 +14,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get building_blocks_url(:search=>"Building Block1")
+    get building_blocks_url(:search=>"BuildingBlock1")
     assert_equal(1, assigns(:building_blocks).count)
 
     get building_blocks_url(:search=>"InvalidBB")

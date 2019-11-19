@@ -46,9 +46,10 @@ en:
     building-block: building block
     candidate-organization: candidate organization
     contact: contact
+    country: country
+    glossary: glossary
     location: location
     office: office
-    country: country
     organization: organization
     product: product
     project: project
@@ -60,6 +61,7 @@ en:
     sdg: sdg
     sustainable-development-goal: sustainable development goal
     sdg_target: SDG target
+    operator_services: Operator Services
   view:
     about:
       sdg_title: "SDG Digital Investment Framework"
@@ -148,16 +150,19 @@ en:
       organization-nomatch: "Organization website doesn't match your email address."
       organization-tooltip: "Apply to be the owner for the organization which will allow you to update the organization information."
       product-tooltip: "Optionally apply as a product owner. You will need to be verified by our team member to do this."
+
     location:
       index:
         no-data: We couldn't find any location in the database.
     organization:
       form:
         endorser: Endorser
+        aggregator: Aggregator
         website: Website
         when-endorsed: When endorsed
       index:
-        endorser-only: Endorser only
+        endorsers: Endorsers
+        aggregators: Aggregators
         endorsed-date: Endorsed on
         export: Export
         export-option: Export with contacts info
@@ -165,8 +170,12 @@ en:
         year: Year
         view-audit: View audit log
       map:
+        aggregators: Aggregator & Operator Coverage Map
         title: Map of Digital Principles Endorsers
-        all-sectors: All sectors
+        all-aggregators: All Aggregators
+        all-operators: All Operators
+        all-services: All Services
+        all-sectors: All Sectors
         all-years: All Years
       show:
         other-offices: Other offices
@@ -265,8 +274,9 @@ en:
       orgs: Organizations
       projects: Projects (coming soon)
       view-projects: Coming soon.
-      map: Endorser Map
-      view-map: View endorser map
+      map: Map Views
+      endorser-map: View endorser map
+      aggregator-map: View aggregator map
       clear: Clear All
       with-maturity: Product with maturity assessment
       is-launchable: Product can be deployed and launched
@@ -287,7 +297,8 @@ en:
       countries:
         one: Country
         other: Countries
-      endorser-only: Endorsing organization only
+      endorsers: Endorsing Organizations
+      aggregators: Mobile Network Aggregators
       multi-filter: 'and %{count} other %{model}'
       organizations:
         one: Organization
@@ -316,6 +327,8 @@ en:
       years:
         one: Year Endorsed
         other: Years Endorsed
+      share-link: Share link
+      share-link-tooltip: Click here to create a URL that can be shared to show the current page, including filters
     breadcrumb:
       home: Home
     sdg:
@@ -405,6 +418,7 @@ en:
       not-available: 'We do not have any %{multi} information for this %{model}.'
       search: Search
       search-placeholder: 'Search for %{model}'
+      show: Show
       submit: Submit
       title:
         create: 'Create %{model}'

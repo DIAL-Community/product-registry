@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :glossaries
   resources :settings, only: [:index, :edit, :show, :update]
   resources :projects, only: [:index, :show, :destroy]
 
@@ -50,6 +51,8 @@ Rails.application.routes.draw do
     get 'count', on: :collection
   end
 
+  resources :operator_services
+
   resources :audits, only: [:index]
 
   resources :locations do
@@ -67,9 +70,15 @@ Rails.application.routes.draw do
 
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
+  post '/remove_all_filters', to: 'application#remove_all_filters', as: :remove_all_filters
   get '/get_filters', to: 'application#get_filters', as: :get_filters
+  get '/agg_capabilities', to: 'organizations#agg_capabilities', as: :agg_capabilities
+  get '/agg_services', to: 'organizations#agg_services', as: :agg_services
+  get '/service_capabilities', to: 'organizations#service_capabilities', as: :service_capabilities
+  get '/update_capability', to: 'organizations#update_capability', as: :update_capability
 
   get 'export', :to => 'organizations#export'
+  get 'map_aggregators', :to => 'organizations#map_aggregators'
   get 'map', :to => 'organizations#map'
   get 'map_fs', :to => 'organizations#map_fs'
   get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
@@ -81,6 +90,7 @@ Rails.application.routes.draw do
   get 'organization_duplicates', :to => 'organizations#duplicates'
   get 'use_case_duplicates', :to => 'use_cases#duplicates'
   get 'workflow_duplicates', :to => 'workflows#duplicates'
+  get 'glossary_duplicates', :to => 'glossaries#duplicates'
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
 
   get 'productmap', :to => 'products#map'

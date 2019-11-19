@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   enum role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle',
                user: 'user', org_user: 'org_user', org_product_user: 'org_product_user',
-               product_user: 'product_user' }
+               product_user: 'product_user', mni: 'mni' }
   after_initialize :set_default_role, if: :new_record?
 
   has_and_belongs_to_many :products, join_table: :users_products

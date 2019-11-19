@@ -6,7 +6,8 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations settings].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations operator_services settings glossaries].freeze
+
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
 
@@ -15,7 +16,7 @@ module ApplicationHelper
   end
 
   def hide_sidenav
-    current_page?('/map') || current_page?('/about/cookies') ||
+    current_page?('/about/cookies') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
   end
@@ -68,9 +69,17 @@ module ApplicationHelper
     counter
   end
 
-  def format_filter(filter_name)
+  def format_filter(filter_name) 
     if filter_name == 'endorser_only'
-      filter_label = "#{t('view.active-filter.endorser-only')}
+      filter_label = "#{t('view.active-filter.endorsers')}
+                      <span class='close-icon' data-effect='fadeOut'>
+                        <i class='fa fa-times text-danger'></i>
+                      </span>"
+      return filter_label.html_safe
+    end
+
+    if filter_name == 'aggregator_only'
+      filter_label = "#{t('view.active-filter.aggregators')}
                       <span class='close-icon' data-effect='fadeOut'>
                         <i class='fa fa-times text-danger'></i>
                       </span>"

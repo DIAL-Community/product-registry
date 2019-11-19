@@ -10,10 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191104191625) do
+ActiveRecord::Schema.define(version: 20191114192918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+# Could not dump table "aggregator_capabilities" because of following StandardError
+#   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
     t.string "associated_id"
@@ -99,8 +102,20 @@ ActiveRecord::Schema.define(version: 20191104191625) do
     t.index ["user_id"], name: "index_deploys_on_user_id"
   end
 
+  create_table "glossaries", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 # Could not dump table "locations" because of following StandardError
 #   Unknown type 'location_type' for column 'location_type'
+
+# Could not dump table "operator_services" because of following StandardError
+#   Unknown type 'mobile_services' for column 'service'
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
@@ -110,6 +125,7 @@ ActiveRecord::Schema.define(version: 20191104191625) do
     t.boolean "is_endorser"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_mni", default: false
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
@@ -118,11 +134,9 @@ ActiveRecord::Schema.define(version: 20191104191625) do
     t.bigint "contact_id", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.index ["contact_id", "organization_id"], name: "index_organizations_contacts_on_contact_id_and_organization_id", unique: true
-    t.index ["organization_id", "contact_id"], name: "index_organizations_contacts_on_organization_id_and_contact_id", unique: true
   end
 
-  create_table "organizations_locations", id: false, force: :cascade do |t|
+  create_table "organizations_locations", force: :cascade do |t|
     t.bigint "location_id", null: false
     t.bigint "organization_id", null: false
     t.index ["location_id", "organization_id"], name: "loc_orcs", unique: true
@@ -349,11 +363,14 @@ ActiveRecord::Schema.define(version: 20191104191625) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "aggregator_capabilities", "operator_services", column: "operator_services_id"
+  add_foreign_key "aggregator_capabilities", "organizations", column: "aggregator_id"
   add_foreign_key "building_block_descriptions", "building_blocks"
   add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
+  add_foreign_key "operator_services", "locations", column: "locations_id"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"

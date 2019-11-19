@@ -21,6 +21,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
+                  <%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'dropdown-item' %>
                   <div class="dropdown-divider"></div>
                   <% if (policy(current_user).index?) %>
                     <%= link_to t('model.contact').to_s.pluralize.titlecase, contacts_path, :class => 'dropdown-item' %>
@@ -30,6 +31,9 @@
                     <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
                     <div class="dropdown-divider"></div>
                     <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, candidate_organizations_path, :class => 'dropdown-item' %>
+                    <% if (policy(current_user).mni?) %>
+                      <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
+                    <% end %>
                     <%= link_to t('model.setting').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
                     <div class="dropdown-divider"></div>
                   <% end %>

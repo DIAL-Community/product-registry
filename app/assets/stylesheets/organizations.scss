@@ -15,3 +15,48 @@
 * html .ui-autocomplete {
   height: 10em;
 }
+
+#agg-nav .accordion-expand-holder {
+  margin:10px 0;
+}
+
+#agg-nav .accordion-expand-holder .open, .accordion-expand-holder .close {
+  margin:0 10px 0 0;
+}
+
+#agg-nav .accordion-section {
+  margin-bottom: 50px;
+}
+
+#agg-nav .ui-accordion .ui-accordion-content {
+  padding: 0 0 0 1.8em;
+  line-height: 0.7;
+  overflow: auto;
+}
+
+#agg-nav .ui-accordion .ui-accordion-content input[type="checkbox"] {
+  margin: 0.3em;
+}
+
+#agg-nav .ui-state-active, .ui-widget-content .ui-state-active {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+#agg-nav .ui-state-default, .ui-widget-content .ui-state-default {
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+#agg-nav .ui-accordion-header {
+  color: #6c757d;;
+}
+
+#agg-nav .ui-accordion-content{
+  height:auto;
+}
+
+#agg-nav .agg-badge{
+  display:inline;
+  margin-left: 5px;
+}

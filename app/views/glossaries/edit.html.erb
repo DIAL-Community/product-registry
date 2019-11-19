@@ -1,0 +1,11 @@
+<% if @glossary.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <%= t('view.general.error', count: @glossary.errors.count) %>
+    </div>
+  </div>
+<% end %>
+<h5 class="border rounded bg-secondary text-white p-3">
+  <%= t('view.general.title.edit', model: t('model.glossary')) %>
+</h5>
+<%= render 'form', glossary: @glossary %>

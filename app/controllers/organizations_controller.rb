@@ -4,12 +4,14 @@ class OrganizationsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_current_user, only: [:edit, :update, :destroy]
+  before_action :set_core_services, only: [:show, :edit, :update, :new]
 
   # GET /organizations
   # GET /organizations.json
   def index
     if params[:without_paging]
       @organizations = Organization
+      !params[:mni_only].nil? && @organizations = @organizations.where('is_mni is true') 
       !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
       !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
       @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
@@ -32,12 +34,18 @@ class OrganizationsController < ApplicationController
     organizations = Organization.all.order(:slug)
 
     endorser_only = sanitize_session_value 'endorser_only'
+    aggregator_only = sanitize_session_value 'aggregator_only'
     countries = sanitize_session_values 'countries'
     products = sanitize_session_values 'products'
     sectors = sanitize_session_values 'sectors'
     years = sanitize_session_values 'years'
 
-    endorser_only && organizations = organizations.where(is_endorser: true)
+    if (endorser_only && aggregator_only)
+      organizations = organizations.where(is_endorser: true).or(organizations.where(is_mni: true))
+    else
+      endorser_only && organizations = organizations.where(is_endorser: true)
+      aggregator_only && organizations = organizations.where(is_mni: true)
+    end
     !countries.empty? && organizations = organizations.joins(:locations).where('locations.id in (?)', countries)
     !products.empty? && organizations = organizations.joins(:products).where('products.id in (?)', products)
     !sectors.empty? && organizations = organizations.joins(:sectors).where('sectors.id in (?)', sectors)
@@ -189,30 +197,8 @@ class OrganizationsController < ApplicationController
           next
         end
 
-        # The flow for this one:
-        # * Contact worked for an organization and then left.
-        # * Now we're adding the same person again to the organization.
-        # * We need to duplicate the same person and connect it to the org.
-        existing_contact = Contact.find(selected_contact)
-        if organization_contact && !organization_contact.ended_at.nil?
-          contact = Contact.new
-          contact.name = existing_contact.name
-          contact.email = existing_contact.email
-          contact.title = existing_contact.title
-
-          contact_slug = existing_contact.slug
-          dupe_count = Contact.where(slug: contact_slug).count
-          if dupe_count.positive?
-            first_duplicate = Contact.slug_starts_with(contact_slug).order(slug: :desc).first
-            contact.slug = contact_slug + generate_offset(first_duplicate).to_s
-          else
-            contact.slug = contact_slug
-          end
-          existing_contact = contact
-        end
-
         organization_contact = OrganizationsContact.new
-        organization_contact.contact = existing_contact
+        organization_contact.contact = Contact.find(selected_contact)
         organization_contact.started_at = Time.now.utc
         organization_contacts.push(organization_contact)
       end
@@ -312,6 +298,11 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def map_aggregators
+    @organizations = Organization.eager_load(:locations)
+    authorize @organizations, :view_allowed?
+  end
+
   def map
     @organizations = Organization.eager_load(:locations)
     authorize @organizations, :view_allowed?
@@ -319,7 +310,7 @@ class OrganizationsController < ApplicationController
 
   def map_fs
     @organizations = Organization.eager_load(:locations)
-    response.set_header('Content-Security-Policy', 'frame-ancestors localhost:3000 digitalprinciples.org')
+    response.set_header('Content-Security-Policy', 'frame-ancestors digitalprinciples.org')
     authorize @organizations, :view_allowed?
   end
 
@@ -336,6 +327,63 @@ class OrganizationsController < ApplicationController
     render json: @organizations, :only => [:name]
   end
 
+  def agg_services
+    all_services = []
+    country_name = Location.select(:name).where(id: params[:country]).map(&:name).uniq
+    services_list = AggregatorCapability.select(:service).where(aggregator_id: params[:org]).map(&:service).uniq
+    services_list.each do |service|
+      capability_list = AggregatorCapability.select(:capability).where(service: service, aggregator_id: params[:org], country_name: country_name).sort_by(&:capability).map(&:capability).uniq
+      all_services.push({ "name" => service, "count" => capability_list.count})
+    end
+    if (services_list.empty?)
+      set_core_services
+      @core_services.each do |service|
+        all_services.push({ "name" => service, "count" => 0})
+      end
+    end
+    render json: all_services
+  end
+
+  def service_capabilities
+    capability_list = AggregatorCapability.select(:capability).where(service: params[:service]).sort_by(&:capability).map(&:capability).uniq
+    operator_list = OperatorService.select(:name, :id).where(locations_id: params[:country], service: params[:service]).uniq
+    render json: { "capability_list" => capability_list, "operator_list" => operator_list }
+  end
+
+  def agg_capabilities
+    operator_services = OperatorService.select(:id, :name).where(service: params[:service], locations_id: params[:country]).uniq
+    puts operator_services.inspect
+    @capabilities = AggregatorCapability.where(aggregator_id: params[:org], service: params[:service], operator_services_id: operator_services)
+    capability_list = []
+    operator_services.each do |operator|
+      curr_capabilities = @capabilities.where(operator_services_id: operator.id)
+      if (!curr_capabilities.empty?) then
+        agg_cap = curr_capabilities.select(:capability).sort_by(&:capability).map(&:capability).uniq
+        capability_list.push({ "name" => operator.name, "id" => operator.id, "capabilities" => agg_cap })
+      end
+    end
+    render json: capability_list
+  end
+
+  def update_capability
+    operator_service = OperatorService.where(id: params[:operator]).first
+    puts params[:checked].to_s
+    if (params[:checked] == "true")
+      country = Location.where(id: params[:country]).first
+      agg_capability = AggregatorCapability.new
+      agg_capability.aggregator_id = params[:orgId]
+      agg_capability.operator_services_id = params[:operator]
+      agg_capability.service = params[:service]
+      agg_capability.capability = params[:capability].gsub("-"," ")
+      agg_capability.country_name = country.name
+      agg_capability.save
+    else
+      agg_capability = AggregatorCapability.where(operator_services_id: params[:operator], capability: params[:capability].gsub("-"," "), aggregator_id: params[:orgId]).first
+      agg_capability.destroy
+    end
+    render json: agg_capability
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.
@@ -343,6 +391,15 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find_by(slug: params[:id])
       if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
+      end
+      if @organization.is_mni 
+        #operator_services_ids = @organization.aggregator_capabilities.all.select(:operator_services_id).map(&:operator_services_id).uniq
+        #@operator_services = OperatorService.where('id in (?)', operator_services_ids)
+        # Build the list of countries where they work
+        #country_list = @operator_services.select(:locations_id).map(&:locations_id).uniq
+        #country_list = @organization.aggregator_capabilities.select(:country_name).map(&:country_name).uniq
+        #@countries = Location.where('name in (?)', country_list)
+        @can_view_mni = policy(@organization).view_capabilities_allowed?
       end
     end
 
@@ -389,6 +446,10 @@ class OrganizationsController < ApplicationController
 
       Location.new(name: location_name, slug: location_slug, :location_type => :point,
           points: [ActiveRecord::Point.new(location_y, location_x)])
+    end
+
+    def set_core_services
+      @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT', 'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice'];
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
