@@ -126,6 +126,16 @@ en:
         bb-workflow-popover:
           one: Mapping to Associated Workflow
           other: Mapping to Associated Workflows
+        definition: Building blocks are enterprise-ready, reusable software components providing key functionality facilitating generic WorkFlows across multiple sectors.
+        characteristics: |
+          Reusable software components  
+          Can be open-source, commercial off-the-shelf (COTS), or freely available with open access to data  
+          Facilitates one or more generic WorkFlows  
+          Applicable to multiple UseCases across multiple sectors  
+          Interoperable with other ICT Building Blocks  
+          Designed for scalability and extensibility  
+          Standards-based
+        description: Each ICT Building Block page includes a description, key digital functionalities, sector-specific examples, example software products, and mappings to WorkFlows defined in this framework. The list of ICT Building Blocks, exemplar software products, and mappings is not exhaustive and more will be added in future releases. Please note that the software product examples are for illustrative purposes only. Further mapping and ranking of existing products based on maturity, sustainability and applicability to the ICT Building Blocks will be addressed overtime. 
     candidate-organization:
       form:
         created: Thank you for your submission. We will carefully review your submission. Approved submission will become available in the organization list.
@@ -220,6 +230,7 @@ en:
         footer_popover_sdg: "Satisfies the following SDGs"
         footer_popover_interop: "This product is compatible with"
         footer_popover_maturity: "Product maturity evaluations"
+        definition: A product is a software solution that may fulfill one ore more building blockas
       launch:
         auto-launch: Automatically launch an instance this product
       show:
@@ -339,6 +350,7 @@ en:
         sdg-target-popover:
           one: SDG Target
           other: SDG Targets
+        definition: The SDGs comprise 17 goals and 169 targets representing global priorities for investment in order to achieve sustainable development. The SDGs were set in 2015 by the United Nations General Assembly and intended to be achieved by the year 2030.
       show:
         target: Target
     use-case:
@@ -353,6 +365,14 @@ en:
         workflow-popover:
           one: Mapped Workflow
           other: Mapped Workflows
+        definition: A Use Case is the steps that an individual or system will undertake in order to achieve a business objective.
+        characteristics: |
+          User-centric description of the steps or user journeys required to deliver an outcome  
+          Identifies one or more SDG Targets as its business objective  
+          Describes the generic WorkFlows and business processes involved in each step in the Use Case  
+          Typically sector-specific  
+          Able to be improved through digital technology 
+        description: Each Use Case model describes primary actors, key steps involved in achieving a specified business objective, descriptions of the WorkFlows and ICT Building Blocks involved in each step, and mappings to SDG Targets. The list of Use Case models is not exhaustive and more will be added in future releases. 
       show:
         description: Description
         steps: Steps for this use case include
@@ -396,6 +416,12 @@ en:
         building-block-popover:
           one: Mapped Building Block
           other: Mapped Building Blocks
+        definition: A generic business process that contributes to SDG Use Cases across multiple sectors and can be developed as a set of organizational capabilities.  
+        characteristics: |
+          Common business process used to help an organization carry out its overall function  
+          Applicable to multiple Use Cases in various sectors 
+          Powered by one or more ICT Building Blocks 
+        description: Each WorkFlow includes a description, sector-specific examples, and mappings to Use Cases defined in this framework. The list of WorkFlows is not exhaustive, and more will be added in future releases. 
       show:
         full-description: Full Description
         mapping: Sample mappings of workflows to use case
@@ -425,6 +451,12 @@ en:
         edit: 'Edit %{model}'
       value: Value
       view: View
+      definitions: Click to see more terms and definitions
+      map-legend: Click for information on how to read the product cards
+      characteristics: Characteristics
+      description: Description
+      show-more: Show more
+      show-less: Show less
     multi-select:
       assigned:
         label: 'Search and assign %{model} ...'

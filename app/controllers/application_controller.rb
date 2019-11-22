@@ -19,7 +19,9 @@ class ApplicationController < ActionController::Base
     accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
     if accept_language
       accept_language.scan(/[a-z]{2}(?=;)/).first
-      I18n.locale = accept_language[0..1].to_sym
+      if (I18n.available_locales.index(accept_language[0..1].to_sym))
+        I18n.locale = accept_language[0..1].to_sym
+      end
     end
   end
 

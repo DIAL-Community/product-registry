@@ -2,6 +2,19 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
+  <section class="hero bg-secondary mb-2 ml-3 mr-3">
+    <div class="col-12 ml-4 mt-2 text-white">
+      <h5><strong><%= t('model.product').to_s.titleize.pluralize %></strong></h5>
+      <div id="prod-desc">
+        <p class="mr-4"><%= t('view.product.index.definition').to_s %></p>
+        <a href="#" class="wf-show-hide" id="wf-show-more">
+          <p class="float-left"><%= t('view.general.map-legend').to_s %></p>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="row">
   <div class="col-12">
     <div class="float-right">
     <%= link_to t('view.product.index.product-graph'), productmap_path, class: 'small mr-1', target: "_blank" %>
