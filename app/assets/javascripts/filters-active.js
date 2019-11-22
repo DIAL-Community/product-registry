@@ -68,6 +68,8 @@ const createLink = function() {
     url = url.slice(0, -1); 
     navigator.clipboard.writeText(url).then(function() {
       $("#share-link").next().text("Link has been copied to your clipboard")
+    }, function() {
+      $("#share-link").next().text("You may share this view using the following url: "+url)
     })
   })
 }
