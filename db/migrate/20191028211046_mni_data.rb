@@ -22,6 +22,15 @@ class MniData < ActiveRecord::Migration[5.1]
       'IVR Inbound', 'IVR Outbound', 'Leased Lines', 'VOIP', 'Hosted IVR Menu', 'Short Code Provisioning');
     DDL
 
+    execute <<-SQL
+      ALTER TABLE users ALTER role DROP DEFAULT;
+      ALTER TYPE user_role rename TO user_role_;
+      CREATE TYPE user_role AS ENUM ('admin', 'ict4sdg', 'principle', 'user', 'org_user', 'org_product_user', 'product_user', 'mni');
+      ALTER TABLE users ALTER COLUMN role TYPE user_role USING role::text::user_role;
+      ALTER TABLE users ALTER COLUMN role SET DEFAULT 'user';
+      DROP TYPE user_role_;
+    SQL
+
     create_table :operator_services do |t|
       t.string :name
       t.references :locations, foreign_key: true
@@ -50,6 +59,15 @@ class MniData < ActiveRecord::Migration[5.1]
     remove_column :organizations, :is_mni
     remove_column :organizations_locations, :id, :primary_key
     
+    execute <<-SQL
+      ALTER TABLE users ALTER role DROP DEFAULT;
+      ALTER TYPE user_role rename TO user_role_;
+      CREATE TYPE user_role AS ENUM ('admin', 'ict4sdg', 'principle', 'user', 'org_user', 'org_product_user', 'product_user');
+      ALTER TABLE users ALTER COLUMN role TYPE user_role USING role::text::user_role;
+      ALTER TABLE users ALTER COLUMN role SET DEFAULT 'user';
+      DROP TYPE user_role_;
+    SQL
+
     execute "DROP TYPE mobile_services;"
     execute "DROP TYPE agg_capabilities;"
   end
