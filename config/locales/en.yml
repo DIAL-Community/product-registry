@@ -388,6 +388,7 @@ en:
         org_user: Organization User
         org_product_user: Organization & Product User
         product_user: Product User
+        mni: MNI User
       form:
         db-backup: This user will receive DB backups.
         email: Email
