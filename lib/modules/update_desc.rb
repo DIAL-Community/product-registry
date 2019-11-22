@@ -29,5 +29,15 @@ module Modules
         end
       end
     end
+
+    def update_sdg_desc(sdg_number, desc)
+      sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg_number)
+      if !sdg_obj.nil?
+        sdg_obj['long_title'] = desc
+        if sdg_obj.save
+          puts "Sustainable Development Goal updated: #{sdg_obj['number']}."
+        end
+      end
+    end
   end
 end
