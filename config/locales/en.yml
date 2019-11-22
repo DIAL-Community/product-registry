@@ -230,7 +230,8 @@ en:
         footer_popover_sdg: "Satisfies the following SDGs"
         footer_popover_interop: "This product is compatible with"
         footer_popover_maturity: "Product maturity evaluations"
-        definition: A product is a software solution that may fulfill one ore more building blockas
+        definition: A product is a software solution that may fulfill one ore more building blocks
+        footer_help: The footer of the product card contains 3 rows. Hover over any icon to get more information about the data that is displayed. The first two rows may contain information about what Sustainable Development Goals this product addresses, which building blocks the products are a candidate for, product maturity information as measured by DIAL's Open Source Center or Digital Square, and what other products this product interoperates with. The bottom row will always contain information about data sources from this product - currently we retreive product data from the DIAL Open Source Center, Digital Square, and Unicef's Global Goods Candidate list.
       launch:
         auto-launch: Automatically launch an instance this product
       show:

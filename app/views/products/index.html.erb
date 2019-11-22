@@ -3,12 +3,26 @@
 
 <div class="row">
   <section class="hero bg-secondary mb-2 ml-3 mr-3">
-    <div class="col-12 ml-4 mt-2 text-white">
+    <div class="col-12 ml-2 mt-2 text-white">
       <h5><strong><%= t('model.product').to_s.titleize.pluralize %></strong></h5>
       <div id="prod-desc">
         <p class="mr-4"><%= t('view.product.index.definition').to_s %></p>
-        <a href="#" class="wf-show-hide" id="wf-show-more">
+        <div id="prod-more" class="hidden">
+          <div class="row">
+            <div class="col-lg-6">
+              <%= image_tag("/assets/products/ProductLegend1.png", class: 'card-img-top align-middle p-0') %>
+            </div>
+            <div class="col-lg-6">
+              <%= image_tag("/assets/products/ProductLegend2.png", class: 'card-img-top align-middle p-0') %>
+            </div>
+          </div>
+          <p class="mr-4 mt-2"><%= t('view.product.index.footer_help').to_s %></p>
+        </div>
+        <a href="#" class="prod-show-hide" id="prod-show-more">
           <p class="float-left"><%= t('view.general.map-legend').to_s %></p>
+        </a>
+        <a href="#" id="prod-show-less" class="prod-show-hide hidden">
+          <p class="float-left"><%= t('view.general.show-less').to_s %></p>
         </a>
       </div>
     </div>
@@ -110,3 +124,12 @@
   <% end %>
 </div>
 </div>
+
+<script>
+  $(".prod-show-hide").on('click', function(e) {
+    e.preventDefault()
+    $("#prod-more").toggleClass('hidden')
+    $("#prod-show-more").toggleClass('hidden')
+    $("#prod-show-less").toggleClass('hidden')
+  })
+</script>
