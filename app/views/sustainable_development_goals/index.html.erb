@@ -1,6 +1,14 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<div class="row">
+  <section class="hero bg-secondary mb-2 ml-3 mr-3">
+    <div class="col-12 ml-4 mt-2 text-white">
+      <h5><%= t('model.sustainable-development-goal').to_s.titleize.pluralize %></h5>
+      <p class="mr-4"><%= t('view.sdg.index.definition').to_s %></p>
+    </div>
+  </section>
+</div>
 <div id="current-list">
 <div class="row">
   <% if @sustainable_development_goals.count > 0 %>
@@ -16,7 +24,6 @@
               <%= image_tag(sustainable_development_goal.image_file, class: 'card-img-top align-middle px-2 py-2') %>
             <% end %>
           </div>
-
 
           <div class="card-footer footer-padding">
             <%
