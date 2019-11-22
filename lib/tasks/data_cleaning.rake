@@ -83,4 +83,12 @@ namespace :data do
         wf_desc.save
       end
   end
+
+  task :sdg_desc => :environment do
+    sdg_data = File.read('utils/sdgs.json')
+    json_sdg = JSON.parse(sdg_data)
+    json_sdg.each do |sdg|
+      update_sdg_desc(sdg['code'], sdg['description'])
+    end
+  end
 end
