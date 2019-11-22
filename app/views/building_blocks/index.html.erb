@@ -1,12 +1,15 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="row">
-  <section class="hero bg-secondary mb-2 ml-3 mr-3">
-    <div class="col-12 ml-4 mt-2 text-white">
-      <h5><strong><%= t('model.building-block').to_s.titleize.pluralize %></strong></h5>
-      <div id="bb-desc">
-        <p class="mr-4"><%= t('view.building-block.index.definition').to_s %></p>
-        <div id="bb-more" class="hidden">
+  <a href="#" class="bb-show-hide ml-4" id="bb-show-more">
+    <p class="float-left"><%= t('view.general.show-bb').to_s %></p>
+  </a>
+  <div id="bb-more" class="hidden">
+    <section class="hero bg-secondary mb-2 ml-3 mr-3">
+      <div class="col-12 ml-4 mt-2 text-white">
+        <h5><strong><%= t('model.building-block').to_s.titleize.pluralize %></strong></h5>
+        <div id="bb-desc">
+          <p class="mr-4"><%= t('view.building-block.index.definition').to_s %></p>
           <strong><%= t('view.general.characteristics').to_s %></strong>
           <ul>
             <% t('view.building-block.index.characteristics').each_line do |point| %>
@@ -15,16 +18,13 @@
           </ul>
           <strong><%= t('view.general.description').to_s %></strong>
           <p class="mr-4"><%= t('view.building-block.index.description').to_s %></p>
+          <a href="#" id="bb-show-less" class="bb-show-hide hidden">
+            <p class="float-left"><%= t('view.general.show-less').to_s %></p>
+          </a>
         </div>
-        <a href="#" class="bb-show-hide" id="bb-show-more">
-          <p class="float-left"><%= t('view.general.show-more').to_s %></p>
-        </a>
-        <a href="#" id="bb-show-less" class="bb-show-hide hidden">
-          <p class="float-left"><%= t('view.general.show-less').to_s %></p>
-        </a>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </div>
 <div class="row">
   <div class="col-12">
