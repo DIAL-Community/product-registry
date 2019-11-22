@@ -2,12 +2,15 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <section class="hero bg-secondary mb-2 ml-3 mr-3">
-    <div class="col-12 ml-4 mt-2 text-white">
-      <h5><strong><%= t('model.workflow').to_s.titleize.pluralize %></strong></h5>
-      <div id="wf-desc">
-        <p class="mr-4"><%= t('view.workflow.index.definition').to_s %></p>
-        <div id="wf-more" class="hidden">
+  <a href="#" class="wf-show-hide ml-4" id="wf-show-more">
+    <p class="float-left"><%= t('view.general.show-workflow').to_s %></p>
+  </a>
+  <div id="wf-more" class="hidden">
+    <section class="hero bg-secondary mb-2 ml-3 mr-3">
+      <div class="col-12 ml-4 mt-2 text-white">
+        <h5><strong><%= t('model.workflow').to_s.titleize.pluralize %></strong></h5>
+        <div id="wf-desc">
+          <p class="mr-4"><%= t('view.workflow.index.definition').to_s %></p>
           <strong><%= t('view.general.characteristics').to_s %></strong>
           <ul>
             <% t('view.workflow.index.characteristics').each_line do |point| %>
@@ -16,16 +19,13 @@
           </ul>
           <strong><%= t('view.general.description').to_s %></strong>
           <p class="mr-4"><%= t('view.workflow.index.description').to_s %></p>
+          <a href="#" id="wf-show-less" class="wf-show-hide hidden">
+            <p class="float-left"><%= t('view.general.show-less').to_s %></p>
+          </a>
         </div>
-        <a href="#" class="wf-show-hide" id="wf-show-more">
-          <p class="float-left"><%= t('view.general.show-more').to_s %></p>
-        </a>
-        <a href="#" id="wf-show-less" class="wf-show-hide hidden">
-          <p class="float-left"><%= t('view.general.show-less').to_s %></p>
-        </a>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </div>
 <div class="row">
   <div class="col-12">

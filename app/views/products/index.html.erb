@@ -2,12 +2,15 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <section class="hero bg-secondary mb-2 ml-3 mr-3">
-    <div class="col-12 ml-2 mt-2 text-white">
-      <h5><strong><%= t('model.product').to_s.titleize.pluralize %></strong></h5>
-      <div id="prod-desc">
-        <p class="mr-4"><%= t('view.product.index.definition').to_s %></p>
-        <div id="prod-more" class="hidden">
+  <a href="#" class="prod-show-hide ml-4" id="prod-show-more">
+    <p class="float-left"><%= t('view.general.show-product').to_s %></p>
+  </a>
+  <div id="prod-more" class="hidden">
+    <section class="hero bg-secondary mb-2 ml-3 mr-3">
+      <div class="col-12 ml-2 mt-2 text-white">
+        <h5><strong><%= t('model.product').to_s.titleize.pluralize %></strong></h5>
+        <div id="prod-desc">
+          <p class="mr-4"><%= t('view.product.index.definition').to_s %></p>
           <div class="row">
             <div class="col-lg-6">
               <%= image_tag("/assets/products/ProductLegend1.png", class: 'card-img-top align-middle p-0') %>
@@ -17,16 +20,13 @@
             </div>
           </div>
           <p class="mr-4 mt-2"><%= t('view.product.index.footer_help').to_s %></p>
+          <a href="#" id="prod-show-less" class="prod-show-hide hidden">
+            <p class="float-left"><%= t('view.general.show-less').to_s %></p>
+          </a>
         </div>
-        <a href="#" class="prod-show-hide" id="prod-show-more">
-          <p class="float-left"><%= t('view.general.map-legend').to_s %></p>
-        </a>
-        <a href="#" id="prod-show-less" class="prod-show-hide hidden">
-          <p class="float-left"><%= t('view.general.show-less').to_s %></p>
-        </a>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </div>
 <div class="row">
   <div class="col-12">
