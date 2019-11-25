@@ -2,12 +2,15 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <section class="hero bg-secondary mb-2 ml-3 mr-3">
-    <div class="col-12 ml-4 mt-2 text-white">
-      <h5><strong><%= t('model.use-case').to_s.titleize.pluralize %></strong></h5>
-      <div id="uc-desc">
-        <p class="mr-4"><%= t('view.use-case.index.definition').to_s %></p>
-        <div id="uc-more" class="hidden">
+  <a href="#" class="uc-show-hide ml-4" id="uc-show-more">
+    <p class="float-left"><%= t('view.general.show-use-case').to_s %></p>
+  </a>
+  <div id="uc-more" class="hidden">
+    <section class="hero bg-secondary mb-2 ml-3 mr-3">
+      <div class="col-12 ml-4 mt-2 text-white">
+        <h5><strong><%= t('model.use-case').to_s.titleize.pluralize %></strong></h5>
+        <div id="uc-desc">
+          <p class="mr-4"><%= t('view.use-case.index.definition').to_s %></p>
           <strong><%= t('view.general.characteristics').to_s %></strong>
           <ul>
             <% t('view.use-case.index.characteristics').each_line do |point| %>
@@ -17,15 +20,12 @@
           <strong><%= t('view.general.description').to_s %></strong>
           <p class="mr-4"><%= t('view.use-case.index.description').to_s %></p>
         </div>
-        <a href="#" class="uc-show-hide" id="uc-show-more">
-          <p class="float-left"><%= t('view.general.show-more').to_s %></p>
-        </a>
         <a href="#" id="uc-show-less" class="uc-show-hide hidden">
           <p class="float-left"><%= t('view.general.show-less').to_s %></p>
         </a>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </div>
 <div class="row">
   <div class="col-12">

@@ -457,8 +457,12 @@ en:
       map-legend: Click for information on how to read the product cards
       characteristics: Characteristics
       description: Description
-      show-more: Show more
-      show-less: Show less
+      show-use-case: What is a Use Case?
+      show-sdg: What is a Sustainable Development Goal?
+      show-workflow: What is a Workflow?
+      show-bb: What is a Building Block?
+      show-product: How to read the product cards
+      show-less: Close
     multi-select:
       assigned:
         label: 'Search and assign %{model} ...'
