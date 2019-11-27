@@ -286,6 +286,10 @@ h6 {
   display: none;
 }
 
+.hidden {
+  display: none;
+}
+
 /* Extend bootstrap to allow 5 equal columns in a row */
 .col-xs-5ths,
 .col-sm-5ths,
@@ -352,4 +356,9 @@ h6 {
   max-width: 20rem;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
 }

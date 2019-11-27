@@ -1,8 +1,10 @@
+
 <div id="active-filter" class="row">
   <div class="col-9">
     <ul class="list-group ml-3">
       <% all_filters.each do |filter| %>
         <% if session.key? filter %>
+          <% @filters_exist = true %>
           <li id="<%= filter %>" class="list-group-item">
             <%= format_filter(filter) %>
           </li>
@@ -11,7 +13,11 @@
     </ul>
   </div>
   <div class="col-3">
+    <% if @filters_exist %>
     <a id="share-link" href="#" class="float-right" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= t('view.active-filter.share-link-tooltip') %>"><%= t('view.active-filter.share-link') %></a>
     <div class="float-right"></div>
+    <textarea class="copytextarea hidden"></textarea>
+    <button id="doclick" class="hidden"></button>
+    <% end %>
   </div>
 </div>

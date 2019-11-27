@@ -1,6 +1,22 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<div class="row">
+  <a href="#" class="sdg-show-hide ml-4" id="sdg-show-more">
+    <p class="float-left"><%= t('view.general.show-sdg').to_s %></p>
+  </a>
+  <div id="sdg-more" class="hidden">
+    <section class="hero bg-secondary mb-2 ml-3 mr-3">
+      <div class="col-12 ml-4 mt-2 text-white">
+        <h5><%= t('model.sustainable-development-goal').to_s.titleize.pluralize %></h5>
+        <p class="mr-4"><%= t('view.sdg.index.definition').to_s %></p>
+        <a href="#" id="sdg-show-less" class="sdg-show-hide hidden">
+          <p class="float-left"><%= t('view.general.show-less').to_s %></p>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
 <div id="current-list">
 <div class="row">
   <% if @sustainable_development_goals.count > 0 %>
@@ -16,7 +32,6 @@
               <%= image_tag(sustainable_development_goal.image_file, class: 'card-img-top align-middle px-2 py-2') %>
             <% end %>
           </div>
-
 
           <div class="card-footer footer-padding">
             <%
@@ -45,3 +60,12 @@
   <% end %>
 </div>
 </div>
+
+<script>
+  $(".sdg-show-hide").on('click', function(e) {
+    e.preventDefault()
+    $("#sdg-more").toggleClass('hidden')
+    $("#sdg-show-more").toggleClass('hidden')
+    $("#sdg-show-less").toggleClass('hidden')
+  })
+</script>
