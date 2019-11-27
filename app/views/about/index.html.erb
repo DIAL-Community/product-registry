@@ -72,8 +72,24 @@
             </div>
         </div>
         <div class="row mt-3 mb-1 flex-image-center">
-            <%= link_to t('view.about.read_more'), "https://digitalimpactalliance.org/wp-content/uploads/2019/04/D-STR-DIGITAL.02-2019-PDF-E.pdf", :class => 'btn btn-outline-secondary float-left m-2 col-lg-2 pr-1' %>
+            <%= link_to t('view.about.read_more'), "https://digitalimpactalliance.org/wp-content/uploads/2019/04/D-STR-DIGITAL.02-2019-PDF-E.pdf", :class => 'btn btn-outline-secondary float-left m-2 col-lg-2 pr-1', target: :_blank %>
+            <button type="button" class="btn btn-outline-secondary float-left m-2 col-lg-2 pr-1" data-toggle="modal" data-target="#myModal"><%= t('view.about.watch_video') %></button>
             <%= link_to t('view.about.launch'), use_cases_path, :class => 'btn btn-outline-secondary float-right m-2 col-lg-2 pr-3' %>
+        </div>
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <iframe src="https://www.youtube.com/embed/_wcv1C_QowQ?rel=0&autoplay=0&enablejsapi=1" width=400 height=300></iframe>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%= t('view.about.close') %></button>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
   </div>
@@ -168,5 +184,8 @@
   $('.jarallax-keep-img').jarallax({
     keepImg: true,
   });
+
+  
+});
   
 </script>
