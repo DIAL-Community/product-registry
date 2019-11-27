@@ -68,7 +68,7 @@
     </div>
     <% if @organization.organizations_contacts.count > 0 %>
       <div class="row">
-        <% @organization.organizations_contacts.order('contacts.name').each do |organization_contact| %>
+        <% @organization.organizations_contacts.joins(:contact).order('contacts.name').each do |organization_contact| %>
           <div class="col-6 col-lg-4 mt-2">
             <div class="card h-100">
               <div class="card-body py-2">

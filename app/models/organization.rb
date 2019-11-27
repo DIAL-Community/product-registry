@@ -22,7 +22,7 @@ class Organization < ApplicationRecord
                                      dependent: :delete_all,
                                      after_add: :association_add,
                                      before_remove: :association_remove
-  has_many :organizations_contacts, -> { joins(:contact) }
+  has_many :organizations_contacts
   has_many :contacts, through: :organizations_contacts
 
   validates :name, presence: true, length: { maximum: 300 }
