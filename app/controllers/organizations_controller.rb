@@ -112,7 +112,7 @@ class OrganizationsController < ApplicationController
       organization_contact.contact = contact
       organization_contact.started_at = Time.now.utc
 
-      @organization.organizations_contacts.push(organization_contact)
+      @organization.organizations_contacts << organization_contact
     end
 
     if (params[:selected_countries].present?)

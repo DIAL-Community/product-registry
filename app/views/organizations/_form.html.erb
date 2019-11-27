@@ -257,7 +257,7 @@
   <% organization.locations.where(location_type: 'point').order("name").each do |location| %>
     addOffice('<%= location.name %>', '<%= location.id %>', null);
   <% end %>
-  <% organization.organizations_contacts.where('ended_at is null').order('contacts.name').each do |organizations_contact| %>
+  <% organization.organizations_contacts.joins(:contact).where('ended_at is null').order('contacts.name').each do |organizations_contact| %>
     addContact('<%= organizations_contact.contact.id %>', '<%= organizations_contact.contact.name %>');
   <% end %>
 </script>
