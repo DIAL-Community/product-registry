@@ -1,0 +1,47 @@
+<style>
+.step {
+  display: none;
+}
+
+.step-indicator {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.step-indicator.active {
+  opacity: 1;
+}
+</style>
+
+<div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="Help Modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body bg-secondary">
+        <div class="step">
+          <%= image_tag('help/filter-help.png', class: 'align-middle', style: 'width: 49rem;') %>
+        </div>
+        <div class="step">
+          <%= image_tag('help/filter-active.png', class: 'align-middle', style: 'width: 48rem;') %>
+        </div>
+        <div class="step">
+          <%= image_tag('help/filter-counter.png', class: 'align-middle', style: 'width: 49rem;') %>
+        </div>
+        <div class="text-center pt-2">
+          <span class="step-indicator"></span>
+          <span class="step-indicator"></span>
+          <span class="step-indicator"></span>
+        </div>
+        <fieldset class="text-center pt-2">
+          <button type="button" id="prevButton" class="btn btn-light">Previous</button>
+          <button type="button" id="nextButton" class="btn btn-primary">Next</button>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
