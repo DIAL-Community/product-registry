@@ -146,7 +146,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(User.where(organization_id: organization.id).count, 0)
 
     fourth_user = users(:four)
-    fourth_user.role = User.roles[:product_org_user]
+    fourth_user.role = User.roles[:org_product_user]
     fourth_user.products = [products(:one)]
     fourth_user.organization_id = organization.id
     fourth_user.save!
