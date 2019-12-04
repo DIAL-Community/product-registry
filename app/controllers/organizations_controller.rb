@@ -392,7 +392,7 @@ class OrganizationsController < ApplicationController
       if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end
-      if @organization.is_mni 
+      if !@organization.nil? && @organization.is_mni 
         #operator_services_ids = @organization.aggregator_capabilities.all.select(:operator_services_id).map(&:operator_services_id).uniq
         #@operator_services = OperatorService.where('id in (?)', operator_services_ids)
         # Build the list of countries where they work

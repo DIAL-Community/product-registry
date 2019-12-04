@@ -53,6 +53,9 @@ class User < ApplicationRecord
   end
 
   def validate_organization
+    # Skip validation for already created user, only for new user.
+    return if persisted?
+
     # Skip organization validation for default admin username.
     return if email == Rails.configuration.settings['admin_email']
 
@@ -84,6 +87,9 @@ class User < ApplicationRecord
   end
 
   def validate_product
+    # Skip validation for already created user, only for new user.
+    return if persisted?
+
     return if products.empty?
 
     organization_id.nil? && self.role = User.roles[:product_user]

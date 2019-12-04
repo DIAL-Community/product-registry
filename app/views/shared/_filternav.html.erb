@@ -1,5 +1,6 @@
 <div id="filter-nav" class="card">
   <div class="card-header bg-secondary text-white">
+    <i class="fas fa-question-circle float-right" style="margin-top: 4px; cursor: pointer;" data-toggle="modal" data-target="#help-modal"></i>
     <h5 class="nav-header"><%= t('view.filternav.framework') %></h5>
   </div>
   <div class="card-body p-0 accordion-section">
@@ -369,3 +370,5 @@
     </div>
   </div>
 </div>
+
+<%= render 'shared/help' %>
