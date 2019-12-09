@@ -14,12 +14,12 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     if params[:without_paging]
-      @products = Product.name_contains(params[:search])
+      @products = Product.name_contains(params[:search]).order(Product.arel_table['name'].lower.asc)
       authorize @products, :view_allowed?
       return
     end
 
-    @products = filter_products.order(:name)
+    @products = filter_products.order(Product.arel_table['name'].lower.asc)
     @products = @products.eager_load(:references, :include_relationships, :includes, :interop_relationships,
                                      :interoperates_with, :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals, :sectors)
