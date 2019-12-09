@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
   before_action :check_password_expiry, if: :devise_controller?
   before_action :set_locale
 
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+  
   def set_locale
     accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
     if accept_language

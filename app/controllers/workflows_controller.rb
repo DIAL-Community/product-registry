@@ -159,7 +159,7 @@ class WorkflowsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_workflow
-      @workflow = Workflow.find(params[:id])
+      @workflow = Workflow.find_by(id: params[:id]) or not_found
       @wfDesc = WorkflowDescription.where(workflow_id: params[:id], locale: I18n.locale).first
       if !@wfDesc
         @wfDesc = WorkflowDescription.new

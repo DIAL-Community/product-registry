@@ -388,7 +388,7 @@ class OrganizationsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      @organization = Organization.find_by(slug: params[:id])
+      @organization = Organization.find_by(slug: params[:id]) or not_found
       if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end
