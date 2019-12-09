@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
   .rails-default-error-page {
-    background-color: #EFEFEF;
+    background-color: #fff;
     color: #2E2F30;
     text-align: center;
     font-family: arial, sans-serif;
@@ -23,7 +23,7 @@
     border-right-color: #999;
     border-left-color: #999;
     border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
+    border-top: #fbab18 solid 4px;
     border-top-left-radius: 9px;
     border-top-right-radius: 9px;
     background-color: white;
@@ -33,14 +33,14 @@
 
   .rails-default-error-page h1 {
     font-size: 100%;
-    color: #730E15;
+    color: #444;
     line-height: 1.5em;
   }
 
   .rails-default-error-page div.dialog > p {
     margin: 0 0 1em;
     padding: 1em;
-    background-color: #F7F7F7;
+    background-color: #fff;
     border: 1px solid #CCC;
     border-right-color: #999;
     border-left-color: #999;
@@ -51,11 +51,34 @@
     color: #666;
     box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
   }
+
+  .navbar {
+    background-color: #000043;
+    margin-bottom: 1rem;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+  }
+
+  .container {
+    margin-left: 10rem;
+  }
   </style>
 </head>
 
 <body class="rails-default-error-page">
   <!-- This file lives in public/404.html -->
+  <div id="header-outer" data-turbolinks-permanent>
+    <div id="header-widget">
+      <nav id="header" class="navbar">
+        <div class="container">
+          <img src="/logo-dial.svg" style="width:231px;height:86px" %>
+        </div>
+      </nav>
+    </div>
+  </div>
   <div class="dialog">
     <div>
       <h1>The page you were looking for doesn't exist.</h1>

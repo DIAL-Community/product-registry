@@ -232,7 +232,7 @@ class BuildingBlocksController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
-      @building_block = BuildingBlock.find(params[:id])
+      @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
       @bbDesc = BuildingBlockDescription.where(building_block_id: params[:id], locale: I18n.locale).first
       if !@bbDesc
         @bbDesc = BuildingBlockDescription.new

@@ -27,22 +27,17 @@ module Modules
           end
         end
 
-        uri = URI.parse("http://")
-        if (json_data['website'])
-          # clear http:// or https:// off of website - all of ours are normalized
-          uri = URI.parse(json_data['website'])
-        end
+        website = cleanup_url(json_data['website'])
+        repository = cleanup_url(json_data['repo_main'])
 
         if existing_product.nil?
           existing_product = Product.new
           existing_product.name = name_aliases.first
           existing_product.slug = slug_em existing_product.name
-          existing_product.website = uri.host
-        else
-          if (!existing_product.website.nil? && !existing_product.website.empty?)
-            existing_product.website = uri.host
-          end
         end
+
+        existing_product.website = website
+        existing_product.repository = repository
 
         # Assign what's left in the alias array as aliases.
         existing_product.aliases.concat(name_aliases.reject{ |x| x == existing_product.name }).uniq!
@@ -161,6 +156,101 @@ module Modules
       end
 
       sync_product.save
+    end
+
+    def cleanup_url(maybe_url)
+      cleaned_url = ''
+      unless maybe_url.blank?
+        cleaned_url = maybe_url.strip
+                               .sub(/^https?\:\/\//i, '')
+                               .sub(/^https?\/\/\:/i, '')
+                               .sub(/\/$/, '')
+      end
+      cleaned_url
+    end
+
+    def sync_product_versions(product)
+      return if product.repository.blank?
+
+      puts "*********************************"
+      puts "Processing: #{product.repository}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product.repository.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      github_uri = URI.parse('https://api.github.com/graphql')
+      http = Net::HTTP.new(github_uri.host, github_uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(github_uri.path)
+      request.basic_auth('nribeka', 'eddc3fcb3ea5c168a51e24b922d8bec3cf7a8d6f')
+      request.body = { 'query' => graph_ql_request_body(owner, repo, nil) }.to_json
+
+      response = http.request(request)
+
+      response_json = JSON.parse(response.body)
+      counter = ProductVersion.where(product_id: product.id).maximum(:version_order)
+      if counter.nil?
+        counter = 0
+      end
+
+      process_current_page(response_json, counter, product)
+      process_next_page(response_json, http, request, owner, repo)
+
+      if product.save!
+        puts "Product versions saved: #{product.product_versions.size}."
+      end
+    end
+
+    def process_current_page(response_json, counter, product)
+      releases_data = response_json['data']['repository']['releases']['edges']
+      return if releases_data.empty?
+
+      releases_data.each do |release_data|
+        version_code = release_data['node']['tagName']
+        next if product.product_versions.exists?(version: version_code)
+
+        product_version = ProductVersion.new(version: version_code, version_order: counter += + 1)
+        product.product_versions << product_version
+      end
+    end
+
+    def process_next_page(response_json, http, request, owner, repo)
+      releases_info = response_json['data']['repository']['releases']
+      return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage']
+
+      offset = releases_info['pageInfo']['endCursor']
+      request.body = { 'query' => graph_ql_request_body(owner, repo, offset) }.to_json
+      response = http.request(request)
+
+      response_json = JSON.parse(response.body)
+
+      process_current_page(response_json)
+      process_next_page(response_json, http, request, owner, repo)
+    end
+
+    def graph_ql_request_body(owner, repo, offset)
+      offset_clause = ') {'
+      unless offset.blank?
+        offset_clause = ', after:"' + offset + '") {'
+      end
+      '{'\
+      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
+      '    releases(first: 100' + offset_clause + ''\
+      '      totalCount'\
+      '      pageInfo {'\
+      '        endCursor'\
+      '        hasNextPage'\
+      '      }'\
+      '      edges {'\
+      '        node {'\
+      '          tagName'\
+      '        }'\
+      '      }'\
+      '    }'\
+      '  }'\
+      '}'
     end
   end
 end

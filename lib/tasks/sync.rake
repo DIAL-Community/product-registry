@@ -66,4 +66,12 @@ namespace :sync do
       sync_osc_product product
     end
   end
+
+  task :update_version_data, [] => :environment do
+    puts 'Starting to pull version data ...'
+
+    Product.all.each do |product|
+      sync_product_versions(product)
+    end
+  end
 end
