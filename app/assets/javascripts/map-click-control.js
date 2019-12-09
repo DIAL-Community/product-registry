@@ -19,9 +19,9 @@ mapObject.clickHandler = function(evt) {
       `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
         <h6 class="card-header py-2 px-2">${org.name}</h6>
         <p class="small py-2 px-2 mb-0">
-          <a href="//${org.website}" target="_blank">${org.website}</a> <br />
+          <a href="//${org.website}" target="_blank" rel="noreferrer noopener">${org.website}</a> <br />
           Endorser since ${org.when_endorsed} <br />
-          <a href="/organizations/${org.id}" target="_blank"><small>View organization</small></a> <br />
+          <a href="/organizations/${org.id}" target="_blank" rel="noreferrer noopener"><small>View organization</small></a> <br />
         </p>
       </div>`;
       mapObject.showCountries(org.countries);
@@ -44,9 +44,9 @@ mapObject.clickHandler = function(evt) {
         orgInfo.append(`<strong>${org.name}</strong>`);
         orgInfo.append(`<p class="org-details mb-0" style="display:none">
                         <small>
-                          <a href="//${org.website}" target="_blank">${org.website}</a> <br />
+                          <a href="//${org.website}" target="_blank" rel="noreferrer noopener">${org.website}</a> <br />
                           Endorser since ${org.when_endorsed}. <br />
-                          <a href="/organizations/${org.id}" target="_blank">View organization</a> <br />
+                          <a href="/organizations/${org.id}" target="_blank" rel="noreferrer noopener">View organization</a> <br />
                         </small>
                       </p>`)
         orgElements.append(orgInfo);
