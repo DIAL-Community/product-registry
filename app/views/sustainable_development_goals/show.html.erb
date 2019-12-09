@@ -21,6 +21,24 @@
                     <%= sdg_target.name %>
                   </div>
                 </div>
+                <% use_cases = use_case_names(sdg_target) %>
+                <% if (use_cases.count > 0) %>
+                  <div class="card-footer">
+                    <div class="card-text">
+                      Use Cases
+                    </div>
+                    <div class="card-text text-muted">
+                      
+                      <ul>
+                      <% use_cases.each do |use_case| %>
+                        <li>
+                        <%= link_to(use_case[:name], use_case_path(use_case[:id])) %>
+                        </li>
+                      <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                <% end %>
               </div>
             </div>
           <% end %>
