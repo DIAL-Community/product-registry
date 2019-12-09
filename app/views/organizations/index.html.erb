@@ -47,7 +47,7 @@
         <div class="card-footer">
           <% if organization.website.present? %>
             <small>
-              <a href="<%= "//" + organization.website %>" target="_new">
+              <a href="<%= "//" + organization.website %>" target="_blank" rel="noreferrer noopener">
                 <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
               </a>
             </small>

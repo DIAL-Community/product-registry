@@ -1,7 +1,9 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to t('view.product.index.product-graph'), productmap_path, :class => 'btn btn-outline-secondary float-left ml-1 float-right', target: "_blank" %>
+<%= link_to t('view.product.index.product-graph'), productmap_path,
+            :class => 'btn btn-outline-secondary float-left ml-1 float-right',
+            target: "_blank", rel: "noreferrer noopener" %>
 <br clear="both"/>
 
 <div class="card mt-4">
@@ -19,7 +21,7 @@
         <% if !@product.website.nil? and !@product.website.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
             <strong><%= t('view.product.form.website') %>:</strong>
-            <a href="//<%= @product.website %>" target="_new"><%= @product.website %> &#x29c9;</a>
+            <a href="//<%= @product.website %>" target="_blank" rel="noreferrer noopener"><%= @product.website %> &#x29c9;</a>
           </h6>
         <% end %>
         <% if !@product.origins.nil? and !@product.origins.empty? %>
