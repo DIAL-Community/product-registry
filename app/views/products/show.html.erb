@@ -22,6 +22,18 @@
             <a href="//<%= @product.website %>" target="_new"><%= @product.website %> &#x29c9;</a>
           </h6>
         <% end %>
+        <% if !@product.repository.nil? and !@product.repository.empty? %>
+          <h6 class="card-text text-muted mt-2 mb-2">
+            <strong><%= t('view.product.form.repository') %>:</strong>
+            <a href="//<%= @product.repository %>" target="_new"><%= @product.repository %> &#x29c9;</a>
+          </h6>
+        <% end %>
+        <% if !@product.product_versions.nil? and !@product.product_versions.empty? %>
+          <h6 class="card-text text-muted mt-2 mb-2">
+            <strong><%= t('view.product.show.active-version') %>:</strong>
+            <%= @product.product_versions.last.version %>
+          </h6>
+        <% end %>
         <% if !@product.origins.nil? and !@product.origins.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
           <strong><%= t('view.product.index.sources') %>:</strong>

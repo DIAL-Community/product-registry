@@ -42,6 +42,13 @@
                         class: "form-control", placeholder: t('view.product.form.website') %>
     <%= form.label :website, t('view.product.form.website') %>
   </fieldset>
+  
+  <fieldset class="form-label-group mt-2">
+    <%= form.text_field :repository, id: :repository,
+                        disabled: !policy(product).permitted_attributes.include?(:repository),
+                        class: "form-control", placeholder: t('view.product.form.repository') %>
+    <%= form.label :repository, t('view.product.form.repository') %>
+  </fieldset>
 
   <%= form.hidden_field :is_launchable, :value => false %>
   <%= form.check_box :is_launchable, { disabled: !policy(product).permitted_attributes.include?(:is_launchable) }, true, false %>

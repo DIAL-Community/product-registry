@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191114192918) do
+ActiveRecord::Schema.define(version: 20191206150613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,6 +174,13 @@ ActiveRecord::Schema.define(version: 20191114192918) do
 # Could not dump table "product_product_relationships" because of following StandardError
 #   Unknown type 'relationship_type' for column 'relationship_type'
 
+  create_table "product_versions", force: :cascade do |t|
+    t.bigint "product_id"
+    t.string "version", null: false
+    t.integer "version_order", null: false
+    t.index ["product_id"], name: "index_product_versions_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.string "slug", null: false
@@ -184,6 +191,7 @@ ActiveRecord::Schema.define(version: 20191114192918) do
     t.boolean "start_assessment"
     t.string "default_url", default: "http://<host_ip>", null: false
     t.string "aliases", default: [], array: true
+    t.string "repository"
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 
@@ -382,6 +390,7 @@ ActiveRecord::Schema.define(version: 20191114192918) do
   add_foreign_key "product_assessments", "products"
   add_foreign_key "product_product_relationships", "products", column: "from_product_id", name: "from_product_fk"
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
+  add_foreign_key "product_versions", "products"
   add_foreign_key "products_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"
   add_foreign_key "products_origins", "origins", name: "products_origins_origin_fk"
