@@ -254,9 +254,9 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       if !params[:id].scan(/\D/).empty?
-        @product = Product.find_by(slug: params[:id])
+        @product = Product.find_by(slug: params[:id]) or not_found
       else
-        @product = Product.find(params[:id])
+        @product = Product.find_by(id: params[:id]) or not_found
       end
     end
 
