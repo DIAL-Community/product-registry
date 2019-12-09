@@ -14,12 +14,12 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     if params[:without_paging]
-      @products = Product.name_contains(params[:search])
+      @products = Product.name_contains(params[:search]).order(Product.arel_table['name'].lower.asc)
       authorize @products, :view_allowed?
       return
     end
 
-    @products = filter_products.order(:name)
+    @products = filter_products.order(Product.arel_table['name'].lower.asc)
     @products = @products.eager_load(:references, :include_relationships, :includes, :interop_relationships,
                                      :interoperates_with, :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals, :sectors)
@@ -138,14 +138,13 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-
     authorize @product, :mod_allowed?
-    if (!product_params[:start_assessment].nil? && product_params[:start_assessment] == "true") || @product.start_assessment
+    if (!product_params[:start_assessment].nil? && product_params[:start_assessment] == 'true') || @product.start_assessment
       assign_maturity
     end
 
     organizations = Set.new
-    if (params[:selected_organizations])
+    if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
         organizations.add(organization)
@@ -154,7 +153,7 @@ class ProductsController < ApplicationController
     @product.organizations = organizations.to_a
 
     sectors = Set.new
-    if (params[:selected_sectors].present?)
+    if params[:selected_sectors].present?
       params[:selected_sectors].keys.each do |sector_id|
         sector = Sector.find(sector_id)
         sectors.add(sector)
@@ -163,7 +162,7 @@ class ProductsController < ApplicationController
     @product.sectors = sectors.to_a
 
     products = Set.new
-    if (params[:selected_interoperable_products])
+    if params[:selected_interoperable_products].present?
       params[:selected_interoperable_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
@@ -172,7 +171,7 @@ class ProductsController < ApplicationController
     @product.interoperates_with = products.to_a
 
     products = Set.new
-    if (params[:selected_included_products])
+    if params[:selected_included_products].present?
       params[:selected_included_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
@@ -181,7 +180,7 @@ class ProductsController < ApplicationController
     @product.includes = products.to_a
 
     building_blocks = Set.new
-    if (params[:selected_building_blocks])
+    if params[:selected_building_blocks].present?
       params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
         building_blocks.add(building_block)
@@ -190,7 +189,7 @@ class ProductsController < ApplicationController
     @product.building_blocks = building_blocks.to_a
 
     sustainable_development_goals = Set.new
-    if (params[:selected_sustainable_development_goals])
+    if params[:selected_sustainable_development_goals].present?
       params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
         sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
         sustainable_development_goals.add(sustainable_development_goal)
@@ -251,12 +250,13 @@ class ProductsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       if !params[:id].scan(/\D/).empty?
-        @product = Product.find_by(slug: params[:id])
+        @product = Product.find_by(slug: params[:id]) or not_found
       else
-        @product = Product.find(params[:id])
+        @product = Product.find_by(id: params[:id]) or not_found
       end
     end
 
@@ -338,6 +338,21 @@ class ProductsController < ApplicationController
         .require(:product)
         .permit(policy(Product).permitted_attributes)
         .tap do |attr|
+          if attr[:website].present?
+            # Handle both:
+            # * http:// or https://
+            # * (and the typo) http//: or https//:
+            attr[:website] = attr[:website].strip
+                                           .sub(/^https?\:\/\//i, '')
+                                           .sub(/^https?\/\/\:/i, '')
+                                           .sub(/\/$/, '')
+          end
+          if attr[:repository].present?
+            attr[:repository] = attr[:repository].strip
+                                                 .sub(/^https?\:\/\//i, '')
+                                                 .sub(/^https?\/\/\:/i, '')
+                                                 .sub(/\/$/, '')
+          end
           if params[:other_names].present? && policy(Product).permitted_attributes.include?(:aliases)
             attr[:aliases] = params[:other_names].reject(&:empty?)
           end

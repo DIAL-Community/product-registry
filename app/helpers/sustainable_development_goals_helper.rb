@@ -2,6 +2,17 @@ module SustainableDevelopmentGoalsHelper
   def sdg_footer(sustainable_development_goal, category)
     images = []
     case category
+    when 'use_cases'
+      sustainable_development_goal.sdg_targets.each do |sdg_target|
+        sdg_target.use_cases.each do |use_case|
+          next if use_case.nil?
+
+          tooltip = use_case.name
+          image = Hash[filename: use_case.image_file, tooltip: tooltip, id: use_case.id, controller: 'use_cases']
+          images.push(image)
+        end
+      end
+      @use_case_count = images.size
     when 'sdg_targets'
       sustainable_development_goal.sdg_targets.each do |sdg_target|
         next if sdg_target.nil?
@@ -12,6 +23,15 @@ module SustainableDevelopmentGoalsHelper
       end
     end
     images
+  end
+
+  def use_case_names(sdg_target)
+    names = []
+    sdg_target.use_cases.each do |use_case|
+      uc = Hash[name: use_case.name, id: use_case.id]
+      names.push(uc)
+    end
+    names
   end
 
   def sdg_footer_popover(elements, title)

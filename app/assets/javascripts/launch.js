@@ -38,7 +38,7 @@ var launchData = {
                 var offset = data.indexOf("docker-machine ip " + jenkinsData.orgId+"-"+jenkinsData.jobName, offset1) + 21
                 offset += jenkinsData.orgId.length
                 offset += jenkinsData.jobName.length
-                $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Your machine is here: </p><a class="card-text text-muted" target="_blank" href=\'http://'+data.substring(offset, offset+15)+'\'>http://'+data.substring(offset, offset+15)+'</a>');
+                $("#launchDiv").append('<p id="launchStatus" class="card-text text-muted">Your machine is here: </p><a class="card-text text-muted" target="_blank" rel="noreferrer noopener" href=\'http://'+data.substring(offset, offset+15)+'\'>http://'+data.substring(offset, offset+15)+'</a>');
             }
         });
     },
@@ -246,8 +246,8 @@ var launchData = {
         $("#secretKey").css('display', 'inline')
         $("#launchForm").append('<button id="launchButton" class="btn btn-primary mt-3 col-4">Launch</button>')
         $("#instPopup").append('<p class="card-text text-muted ml-2">For information on how to create an authentication token or access key, visit these links: </p>')
-        $("#instPopup").append('<p><a class="ml-5 card-text text-muted" target="_blank" href="https://www.digitalocean.com/docs/api/create-personal-access-token/">Digital Ocean</a></p>')
-        $("#instPopup").append('<p><a class="ml-5 card-text text-muted" target="_blank" href="https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">AWS</a></p>')
+        $("#instPopup").append('<p><a class="ml-5 card-text text-muted" target="_blank" rel="noreferrer noopener" href="https://www.digitalocean.com/docs/api/create-personal-access-token/">Digital Ocean</a></p>')
+        $("#instPopup").append('<p><a class="ml-5 card-text text-muted" target="_blank" rel="noreferrer noopener" href="https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">AWS</a></p>')
 
         // Hide AWS field by default
         $("#accessKey").hide()

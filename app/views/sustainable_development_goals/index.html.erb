@@ -48,8 +48,26 @@
                 concat('</div>'.html_safe)
               end
 
+              use_cases = sdg_footer(sustainable_development_goal, 'use_cases')
+              if use_cases.count > 0
+                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                                data-html='true' data-content='#{sdg_footer_popover(use_cases, 'view.workflow.index.use-case-popover')}'>"
+                concat(content.html_safe)
+                concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1'))
+                
+                content = "<span class='small text-muted ml-1'>#{@use_case_count} #{t('model.use-case').titlecase.pluralize(@use_case_count)}</span>"
+                concat(content.html_safe)
+                
+                concat('</div>'.html_safe)
+              end
+
               if sdg_targets.count == 0
                 content = '<div class="footer-row mb-2"></div>'
+                concat(content.html_safe)
+              end
+
+              if use_cases.count == 0
+                content = '<div class="footer-row"></div>'
                 concat(content.html_safe)
               end
             %>

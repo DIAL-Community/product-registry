@@ -207,6 +207,7 @@ en:
         medium: medium
         osc-maturity: OSC Maturity
         other-names: Other names
+        repository: Code repository
         start-assessment: Start assessing this product.
         website: Website
       index:
@@ -243,6 +244,7 @@ en:
         no-include-product: We don't have any includes information for this product.
         no-interrop-product: We don't have any interoperating information for this product.
         no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
+        active-version: Latest version
     project:
       index:
         budget: Budget
