@@ -813,6 +813,37 @@ ALTER SEQUENCE public.product_product_relationships_id_seq OWNED BY public.produ
 
 
 --
+-- Name: product_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_versions (
+    id bigint NOT NULL,
+    product_id bigint,
+    version character varying NOT NULL,
+    version_order integer NOT NULL
+);
+
+
+--
+-- Name: product_versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_versions_id_seq OWNED BY public.product_versions.id;
+
+
+--
 -- Name: products; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -826,7 +857,8 @@ CREATE TABLE public.products (
     is_launchable boolean DEFAULT false,
     start_assessment boolean,
     default_url character varying DEFAULT 'http://<host_ip>'::character varying NOT NULL,
-    aliases character varying[] DEFAULT '{}'::character varying[]
+    aliases character varying[] DEFAULT '{}'::character varying[],
+    repository character varying
 );
 
 
@@ -1446,6 +1478,13 @@ ALTER TABLE ONLY public.product_product_relationships ALTER COLUMN id SET DEFAUL
 
 
 --
+-- Name: product_versions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_versions ALTER COLUMN id SET DEFAULT nextval('public.product_versions_id_seq'::regclass);
+
+
+--
 -- Name: products id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1656,6 +1695,14 @@ ALTER TABLE ONLY public.product_assessments
 
 ALTER TABLE ONLY public.product_product_relationships
     ADD CONSTRAINT product_product_relationships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_versions product_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_versions
+    ADD CONSTRAINT product_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1927,6 +1974,13 @@ CREATE INDEX index_origins_on_organization_id ON public.origins USING btree (org
 --
 
 CREATE INDEX index_product_assessments_on_product_id ON public.product_assessments USING btree (product_id);
+
+
+--
+-- Name: index_product_versions_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_versions_on_product_id ON public.product_versions USING btree (product_id);
 
 
 --
@@ -2239,6 +2293,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT fk_rails_45a5b9baa8 FOREIGN KEY (origin_id) REFERENCES public.origins(id);
+
+
+--
+-- Name: product_versions fk_rails_496b84c2bc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_versions
+    ADD CONSTRAINT fk_rails_496b84c2bc FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
 --
@@ -2650,6 +2712,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191030153507'),
 ('20191104191625'),
 ('20191111123008'),
-('20191114192918');
+('20191114192918'),
+('20191206145611'),
+('20191206150613');
 
 
