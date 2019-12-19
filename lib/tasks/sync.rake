@@ -74,4 +74,12 @@ namespace :sync do
       sync_product_versions(product)
     end
   end
+
+  task :update_license_data, [] => :environment do
+    puts 'Starting to pull license data ...'
+
+    Product.all.each do |product|
+      sync_license_information(product)
+    end
+  end
 end

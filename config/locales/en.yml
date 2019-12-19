@@ -245,6 +245,9 @@ en:
         no-interrop-product: We don't have any interoperating information for this product.
         no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
         active-version: Latest version
+        license: License
+        license-unknown: Unknown
+        na: N/A
     project:
       index:
         budget: Budget
