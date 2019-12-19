@@ -22,6 +22,8 @@ gem 'http_accept_language'
 gem 'cookies_eu'
 gem 'haml'
 
+gem 'licensee'
+
 gem "recaptcha"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

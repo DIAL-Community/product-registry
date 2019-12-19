@@ -26,6 +26,8 @@ if [ "${user_env:0:1}" == "d" ] || [ "${user_env:0:1}" == "D" ]; then
   export MAILGUN_DOMAIN=<mailgun domain>
   export CAPTCHA_SITE_KEY=<your captcha site key>
   export CAPTCHA_SECRET_KEY=<your captcha secret key>
+  export GITHUB_USERNAME=<your github username>
+  export GITHUB_PERSONAL_TOKEN=<your github personal token>
 fi
 if [ "${user_env:0:1}" == "t" ] || [ "${user_env:0:1}" == "T" ]; then
   export SECRET_KEY_BASE=<devise secret key>
@@ -45,6 +47,8 @@ if [ "${user_env:0:1}" == "t" ] || [ "${user_env:0:1}" == "T" ]; then
   export MAILGUN_DOMAIN=<mailgun domain>
   export CAPTCHA_SITE_KEY=<your captcha site key>
   export CAPTCHA_SECRET_KEY=<your captcha secret key>
+  export GITHUB_USERNAME=<your github username>
+  export GITHUB_PERSONAL_TOKEN=<your github personal token>
 fi
 if [ "${user_env:0:1}" == "p" ] || [ "${user_env:0:1}" == "P" ]; then
   export SECRET_KEY_BASE=<devise secret key>
@@ -64,4 +68,6 @@ if [ "${user_env:0:1}" == "p" ] || [ "${user_env:0:1}" == "P" ]; then
   export MAILGUN_DOMAIN=<mailgun domain>
   export CAPTCHA_SITE_KEY=<your captcha site key>
   export CAPTCHA_SECRET_KEY=<your captcha secret key>
+  export GITHUB_USERNAME=<your github username>
+  export GITHUB_PERSONAL_TOKEN=<your github personal token>
 fi
