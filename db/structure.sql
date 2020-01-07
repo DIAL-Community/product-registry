@@ -858,7 +858,9 @@ CREATE TABLE public.products (
     start_assessment boolean,
     default_url character varying DEFAULT 'http://<host_ip>'::character varying NOT NULL,
     aliases character varying[] DEFAULT '{}'::character varying[],
-    repository character varying
+    repository character varying,
+    license character varying,
+    license_analysis character varying
 );
 
 
@@ -2714,6 +2716,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191111123008'),
 ('20191114192918'),
 ('20191206145611'),
-('20191206150613');
+('20191206150613'),
+('20191210210550');
 
 

@@ -172,7 +172,6 @@ module Modules
     def sync_product_versions(product)
       return if product.repository.blank?
 
-      puts "*********************************"
       puts "Processing: #{product.repository}"
       repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
       return unless (match = product.repository.match(repo_regex))
@@ -184,7 +183,7 @@ module Modules
       http.use_ssl = true
 
       request = Net::HTTP::Post.new(github_uri.path)
-      request.basic_auth('nribeka', 'eddc3fcb3ea5c168a51e24b922d8bec3cf7a8d6f')
+      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
       request.body = { 'query' => graph_ql_request_body(owner, repo, nil) }.to_json
 
       response = http.request(request)
@@ -251,6 +250,31 @@ module Modules
       '    }'\
       '  }'\
       '}'
+    end
+
+    def sync_license_information(product)
+      return if product.repository.blank?
+
+      puts "Processing: #{product.repository}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product.repository.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      command = "OCTOKIT_ACCESS_TOKEN=#{ENV['GITHUB_PERSONAL_TOKEN']} licensee detect --remote #{owner}/#{repo}"
+      stdout, = Open3.capture3(command)
+
+      return if stdout.blank?
+
+      license_analysis = stdout
+      license = stdout.lines.first.split(/\s+/)[1]
+
+      product.license_analysis = license_analysis
+      product.license = license
+
+      if product.save!
+        puts "Product license information saved: #{product.license}."
+      end
     end
   end
 end
