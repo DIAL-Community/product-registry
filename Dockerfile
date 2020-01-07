@@ -1,4 +1,4 @@
-FROM ruby:2.6.3 AS build-web
+FROM ruby:2.6 AS build-web
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update -qq && apt-get install -y cron git imagemagick build-essential libpq-dev nodejs logrotate cmake
