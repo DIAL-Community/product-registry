@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191210210550) do
+ActiveRecord::Schema.define(version: 20200105125805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,21 @@ ActiveRecord::Schema.define(version: 20191210210550) do
 
 # Could not dump table "product_product_relationships" because of following StandardError
 #   Unknown type 'relationship_type' for column 'relationship_type'
+
+  create_table "product_suites", force: :cascade do |t|
+    t.string "name"
+    t.string "slug", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "product_suites_product_versions", id: false, force: :cascade do |t|
+    t.bigint "product_suite_id", null: false
+    t.bigint "product_version_id", null: false
+    t.index ["product_suite_id", "product_version_id"], name: "product_suites_products_versions"
+    t.index ["product_version_id", "product_suite_id"], name: "products_versions_product_suites"
+  end
 
   create_table "product_versions", force: :cascade do |t|
     t.bigint "product_id"
@@ -392,6 +407,8 @@ ActiveRecord::Schema.define(version: 20191210210550) do
   add_foreign_key "product_assessments", "products"
   add_foreign_key "product_product_relationships", "products", column: "from_product_id", name: "from_product_fk"
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
+  add_foreign_key "product_suites_product_versions", "product_suites", name: "pspv_product_suites_fk"
+  add_foreign_key "product_suites_product_versions", "product_versions", name: "pspv_product_versions_fk"
   add_foreign_key "product_versions", "products"
   add_foreign_key "products_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"

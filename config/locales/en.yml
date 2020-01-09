@@ -52,6 +52,8 @@ en:
     office: office
     organization: organization
     product: product
+    product-suite: product suite
+    product-version: product version
     project: project
     sector: sector
     setting: setting
@@ -248,6 +250,9 @@ en:
         license: License
         license-unknown: Unknown
         na: N/A
+    product-suite:
+      index:
+        no-data: We couldn't find any product suite in the database.
     project:
       index:
         budget: Budget

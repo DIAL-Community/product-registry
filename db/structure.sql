@@ -813,6 +813,49 @@ ALTER SEQUENCE public.product_product_relationships_id_seq OWNED BY public.produ
 
 
 --
+-- Name: product_suites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_suites (
+    id bigint NOT NULL,
+    name character varying,
+    slug character varying NOT NULL,
+    description character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: product_suites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_suites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_suites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_suites_id_seq OWNED BY public.product_suites.id;
+
+
+--
+-- Name: product_suites_product_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_suites_product_versions (
+    product_suite_id bigint NOT NULL,
+    product_version_id bigint NOT NULL
+);
+
+
+--
 -- Name: product_versions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1480,6 +1523,13 @@ ALTER TABLE ONLY public.product_product_relationships ALTER COLUMN id SET DEFAUL
 
 
 --
+-- Name: product_suites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites ALTER COLUMN id SET DEFAULT nextval('public.product_suites_id_seq'::regclass);
+
+
+--
 -- Name: product_versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1697,6 +1747,14 @@ ALTER TABLE ONLY public.product_assessments
 
 ALTER TABLE ONLY public.product_product_relationships
     ADD CONSTRAINT product_product_relationships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_suites product_suites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites
+    ADD CONSTRAINT product_suites_pkey PRIMARY KEY (id);
 
 
 --
@@ -2133,6 +2191,13 @@ CREATE UNIQUE INDEX product_rel_index ON public.product_product_relationships US
 
 
 --
+-- Name: product_suites_products_versions; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX product_suites_products_versions ON public.product_suites_product_versions USING btree (product_suite_id, product_version_id);
+
+
+--
 -- Name: products_origins_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2151,6 +2216,13 @@ CREATE UNIQUE INDEX products_projects_idx ON public.projects_products USING btre
 --
 
 CREATE UNIQUE INDEX products_users_idx ON public.users_products USING btree (product_id, user_id);
+
+
+--
+-- Name: products_versions_product_suites; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX products_versions_product_suites ON public.product_suites_product_versions USING btree (product_version_id, product_suite_id);
 
 
 --
@@ -2578,6 +2650,22 @@ ALTER TABLE ONLY public.projects_sectors
 
 
 --
+-- Name: product_suites_product_versions pspv_product_suites_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites_product_versions
+    ADD CONSTRAINT pspv_product_suites_fk FOREIGN KEY (product_suite_id) REFERENCES public.product_suites(id);
+
+
+--
+-- Name: product_suites_product_versions pspv_product_versions_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites_product_versions
+    ADD CONSTRAINT pspv_product_versions_fk FOREIGN KEY (product_version_id) REFERENCES public.product_versions(id);
+
+
+--
 -- Name: product_product_relationships to_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2717,6 +2805,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191114192918'),
 ('20191206145611'),
 ('20191206150613'),
-('20191210210550');
+('20191210210550'),
+('20200105125805');
 
 

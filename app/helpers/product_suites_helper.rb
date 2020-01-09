@@ -1,0 +1,2 @@
+module ProductSuitesHelper
+end
