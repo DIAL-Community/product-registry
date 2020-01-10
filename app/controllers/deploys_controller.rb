@@ -101,6 +101,24 @@ class DeploysController < ApplicationController
           end
         end
         if (deploy.status == "RUNNING")
+          # Verify that the instance is still alive and running
+          ipAddress= helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
+          deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
+          if (ipAddress == "0.0.0.0")
+            # This means that the virtual machine is no longer responding. Set status to OFFLINE
+            deploy.status = "OFFLINE"
+            deploy.save
+          end
+        end
+        if (deploy.status == "OFFLINE")
+          # Verify that the instance is still alive and running
+          ipAddress= helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
+          deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
+          if (ipAddress != "0.0.0.0")
+            # This means that the virtual machine is no longer responding. Set status to OFFLINE
+            deploy.status = "RUNNING"
+            deploy.save
+          end
         end
       end
     end

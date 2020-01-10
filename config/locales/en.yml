@@ -47,6 +47,7 @@ en:
     candidate-organization: candidate organization
     contact: contact
     country: country
+    deploys: deploy
     glossary: glossary
     location: location
     office: office
