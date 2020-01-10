@@ -45,7 +45,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test "should create product" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     assert_difference('Product.count') do
-      post products_url, params: { product: { name: @product.name, website: @product.website }, duplicate: true, reslug: true, logo: uploaded_file }
+      post products_url, params: { product: { name: @product.name, website: @product.website },
+                                   duplicate: true, reslug: true, logo: uploaded_file }
     end
 
     assert_redirected_to product_url(Product.last)
@@ -159,10 +160,9 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal('Some new product name', assigns(:product).name)
     assert_equal('some-fancy-website.com', assigns(:product).website)
-
   end
 
-  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+  test "Policy tests: Should only allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
     get product_url(@product)

@@ -121,7 +121,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organizations_url
   end
 
-  test 'should destroy org_user when destroying organization' do
+  test 'should destroy org_user when destroying org' do
     organization = organizations(:four)
 
     assert_equal(User.where(organization_id: organization.id).count, 0)
@@ -140,7 +140,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(User.where(id: fourth_user.id).count, 0)
   end
 
-  test 'should not destroy product_org_user when destroying organization' do
+  test 'should not destroy product_org_user when destroying org' do
     organization = organizations(:four)
 
     assert_equal(User.where(organization_id: organization.id).count, 0)
@@ -311,7 +311,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(2018, assigns(:organization).when_endorsed.year)
   end
 
-  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+  test "Policy tests: Should only allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
     get organization_url(@organization)

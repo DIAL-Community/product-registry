@@ -352,7 +352,6 @@ class OrganizationsController < ApplicationController
 
   def agg_capabilities
     operator_services = OperatorService.select(:id, :name).where(service: params[:service], locations_id: params[:country]).uniq
-    puts operator_services.inspect
     @capabilities = AggregatorCapability.where(aggregator_id: params[:org], service: params[:service], operator_services_id: operator_services)
     capability_list = []
     operator_services.each do |operator|
