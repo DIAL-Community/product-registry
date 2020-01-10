@@ -6,7 +6,8 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations operator_services settings glossaries].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations
+                             product_suites operator_services settings glossaries].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze

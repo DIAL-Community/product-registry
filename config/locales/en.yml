@@ -47,11 +47,14 @@ en:
     candidate-organization: candidate organization
     contact: contact
     country: country
+    deploys: deploy
     glossary: glossary
     location: location
     office: office
     organization: organization
     product: product
+    product-suite: product suite
+    product-version: product version
     project: project
     sector: sector
     setting: setting
@@ -207,10 +210,12 @@ en:
         medium: medium
         osc-maturity: OSC Maturity
         other-names: Other names
+        description-placeholder: Enter product description here
         repository: Code repository
         start-assessment: Start assessing this product.
         website: Website
       index:
+        description: Description
         filter: Filter
         has-maturity: Has maturity?
         product-graph: Product Graph
@@ -245,6 +250,12 @@ en:
         no-interrop-product: We don't have any interoperating information for this product.
         no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
         active-version: Latest version
+        license: License
+        license-unknown: Unknown
+        na: N/A
+    product-suite:
+      index:
+        no-data: We couldn't find any product suite in the database.
     project:
       index:
         budget: Budget

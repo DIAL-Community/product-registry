@@ -1,7 +1,10 @@
 class Product < ApplicationRecord
   include Auditable
 
+  attr_accessor :product_description
+
   has_one :product_assessment
+  has_many :product_descriptions
   has_many :product_versions
   has_and_belongs_to_many :organizations, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :sectors, join_table: :products_sectors, after_add: :association_add, before_remove: :association_remove

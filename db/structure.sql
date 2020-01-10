@@ -782,6 +782,39 @@ ALTER SEQUENCE public.product_assessments_id_seq OWNED BY public.product_assessm
 
 
 --
+-- Name: product_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_descriptions (
+    id bigint NOT NULL,
+    product_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: product_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_descriptions_id_seq OWNED BY public.product_descriptions.id;
+
+
+--
 -- Name: product_product_relationships; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -810,6 +843,49 @@ CREATE SEQUENCE public.product_product_relationships_id_seq
 --
 
 ALTER SEQUENCE public.product_product_relationships_id_seq OWNED BY public.product_product_relationships.id;
+
+
+--
+-- Name: product_suites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_suites (
+    id bigint NOT NULL,
+    name character varying,
+    slug character varying NOT NULL,
+    description character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: product_suites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_suites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_suites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_suites_id_seq OWNED BY public.product_suites.id;
+
+
+--
+-- Name: product_suites_product_versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_suites_product_versions (
+    product_suite_id bigint NOT NULL,
+    product_version_id bigint NOT NULL
+);
 
 
 --
@@ -858,7 +934,9 @@ CREATE TABLE public.products (
     start_assessment boolean,
     default_url character varying DEFAULT 'http://<host_ip>'::character varying NOT NULL,
     aliases character varying[] DEFAULT '{}'::character varying[],
-    repository character varying
+    repository character varying,
+    license character varying,
+    license_analysis character varying
 );
 
 
@@ -1471,10 +1549,24 @@ ALTER TABLE ONLY public.product_assessments ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: product_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_descriptions ALTER COLUMN id SET DEFAULT nextval('public.product_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: product_product_relationships id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_product_relationships ALTER COLUMN id SET DEFAULT nextval('public.product_product_relationships_id_seq'::regclass);
+
+
+--
+-- Name: product_suites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites ALTER COLUMN id SET DEFAULT nextval('public.product_suites_id_seq'::regclass);
 
 
 --
@@ -1690,11 +1782,27 @@ ALTER TABLE ONLY public.product_assessments
 
 
 --
+-- Name: product_descriptions product_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_descriptions
+    ADD CONSTRAINT product_descriptions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: product_product_relationships product_product_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_product_relationships
     ADD CONSTRAINT product_product_relationships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_suites product_suites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites
+    ADD CONSTRAINT product_suites_pkey PRIMARY KEY (id);
 
 
 --
@@ -1977,6 +2085,13 @@ CREATE INDEX index_product_assessments_on_product_id ON public.product_assessmen
 
 
 --
+-- Name: index_product_descriptions_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_descriptions_on_product_id ON public.product_descriptions USING btree (product_id);
+
+
+--
 -- Name: index_product_versions_on_product_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2131,6 +2246,13 @@ CREATE UNIQUE INDEX product_rel_index ON public.product_product_relationships US
 
 
 --
+-- Name: product_suites_products_versions; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX product_suites_products_versions ON public.product_suites_product_versions USING btree (product_suite_id, product_version_id);
+
+
+--
 -- Name: products_origins_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2149,6 +2271,13 @@ CREATE UNIQUE INDEX products_projects_idx ON public.projects_products USING btre
 --
 
 CREATE UNIQUE INDEX products_users_idx ON public.users_products USING btree (product_id, user_id);
+
+
+--
+-- Name: products_versions_product_suites; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX products_versions_product_suites ON public.product_suites_product_versions USING btree (product_version_id, product_suite_id);
 
 
 --
@@ -2341,6 +2470,14 @@ ALTER TABLE ONLY public.aggregator_capabilities
 
 ALTER TABLE ONLY public.aggregator_capabilities
     ADD CONSTRAINT fk_rails_aa5b2f5e59 FOREIGN KEY (operator_services_id) REFERENCES public.operator_services(id);
+
+
+--
+-- Name: product_descriptions fk_rails_c0bc9f9c8a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_descriptions
+    ADD CONSTRAINT fk_rails_c0bc9f9c8a FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
 --
@@ -2576,6 +2713,22 @@ ALTER TABLE ONLY public.projects_sectors
 
 
 --
+-- Name: product_suites_product_versions pspv_product_suites_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites_product_versions
+    ADD CONSTRAINT pspv_product_suites_fk FOREIGN KEY (product_suite_id) REFERENCES public.product_suites(id);
+
+
+--
+-- Name: product_suites_product_versions pspv_product_versions_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_suites_product_versions
+    ADD CONSTRAINT pspv_product_versions_fk FOREIGN KEY (product_version_id) REFERENCES public.product_versions(id);
+
+
+--
 -- Name: product_product_relationships to_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2714,6 +2867,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191111123008'),
 ('20191114192918'),
 ('20191206145611'),
-('20191206150613');
+('20191206150613'),
+('20191210210550'),
+('20200105125805'),
+('20200107135217');
 
 

@@ -10,17 +10,17 @@
     <%= t('view.general.duplicates', model: t('model.use-case')) %>
   </div>
 
-  <fieldset class="form-group">
-    <%= form.label :sector_id, t('model.sector').to_s.titlecase %>
+  <fieldset class="form-group mb-0">
+    <%= form.label :sector_id, t('model.sector').to_s.titlecase, class: 'custom-label' %>:
     <% options = options_from_collection_for_select(@sectors, 'id', 'name', use_case.sector_id) %>
-    <%= form.select :sector_id, options, {}, :class => "form-control mb-2" %>
+    <%= form.select :sector_id, options, {}, :class => "custom-select mb-2" %>
   </fieldset>
 
   <%= form.hidden_field :uc_desc, id: :use_case_desc %>
   <div class="wysiwyg-editor">
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
     <%= t('view.use-case.form.assigned-sdg-targets') %>
   </h6>
   <fieldset class="form-label-group mt-2">

@@ -34,9 +34,15 @@
                     <% if (policy(current_user).mni?) %>
                       <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
                     <% end %>
+                    <%= link_to t('model.product-suite').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
                     <%= link_to t('model.setting').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
                     <div class="dropdown-divider"></div>
+                    <%= link_to t('model.deploys').to_s.pluralize.titlecase, deploys_path, :class => 'dropdown-item' %>
+                    <div class="dropdown-divider"></div>
                   <% end %>
+                  <% if (policy(current_user).mni?) %>
+                    <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
+                  <% end %>                  
                   <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
                 </div>
               </li>
@@ -46,6 +52,9 @@
               </li>
               <li>
                 <strong><%= link_to t('view.header.login'), new_user_session_path, :class => 'nav-link' %></strong>
+              </li>
+              <li>
+                <strong><%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'nav-link' %></strong>
               </li>
             <% end %>
           </ul>

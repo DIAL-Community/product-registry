@@ -1,0 +1,57 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<% if user_signed_in? && policy(ProductSuite).mod_allowed? %>
+  <%= link_to t('view.general.create'), new_product_suite_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
+<div class="form-group float-right">
+  <%= form_tag(product_suites_path, method: "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search], class: "form-control",
+        placeholder: t('view.general.search-placeholder', model: t('model.product-suite').to_s.pluralize) %>
+    <div class="input-group-append">
+      <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th><%= t('view.general.name') %></th>
+      <th colspan="2"><%= t('view.general.description') %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @product_suites.count > 0 %>
+      <% @product_suites.each do |product_suite| %>
+        <tr>
+          <td><%= product_suite.name %></td>
+          <td colspan="2"><%= product_suite.description %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+               <%= t('view.general.action') %>
+            </a>
+            <div class="dropdown-menu">
+              <%= link_to t('view.general.view'), product_suite, :class =>"dropdown-item" %>
+              <% if user_signed_in? && policy(product_suite).mod_allowed? %>
+                <%= link_to t('view.general.edit'), edit_product_suite_path(product_suite), :class =>"dropdown-item" %>
+                <div class="dropdown-divider"></div>
+                <%= link_to t('view.general.delete'), product_suite, method: :delete, data: { confirm: t('view.general.delete-confirm') }, class: "dropdown-item" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted"><%= t('view.product-suite.index.no-data') %></small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @product_suite, :class => "float-right digg-pagination" %>
