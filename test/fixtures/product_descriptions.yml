@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: Product
+  locale: MyString
+  description: This is a Product
+
+two:
+  product: ODK
+  locale: MyString
+  description: ODK does things

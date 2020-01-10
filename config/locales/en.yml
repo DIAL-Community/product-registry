@@ -210,10 +210,12 @@ en:
         medium: medium
         osc-maturity: OSC Maturity
         other-names: Other names
+        description-placeholder: Enter product description here
         repository: Code repository
         start-assessment: Start assessing this product.
         website: Website
       index:
+        description: Description
         filter: Filter
         has-maturity: Has maturity?
         product-graph: Product Graph

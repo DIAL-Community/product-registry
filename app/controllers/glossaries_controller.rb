@@ -6,9 +6,11 @@ class GlossariesController < ApplicationController
   def index
     if params[:search]
       @glossaries = Glossary.name_contains(params[:search])
+                            .where(locale: I18n.locale)
                             .order(:name)
     else
-      @glossaries = Glossary.order(:name)
+      @glossaries = Glossary.where(locale: I18n.locale)
+                            .order(:name)
     end
     authorize @glossaries, :view_allowed?
   end

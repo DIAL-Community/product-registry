@@ -33,7 +33,7 @@ function setViewerForElement(elementId, viewJson) {
   }
 }
 
-function setUpEditor(viewJson) {
+function setUpEditor(viewJson, placeholderText) {
   var quill = new Quill('.wysiwyg-editor', {
     modules: {
       toolbar: [
@@ -50,9 +50,9 @@ function setUpEditor(viewJson) {
       
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
         [{ 'font': [] }],
-    
       ]
     },
+    placeholder: placeholderText,
     theme: 'snow'
   });
 

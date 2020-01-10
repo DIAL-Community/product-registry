@@ -47,7 +47,7 @@
         <% end %>
         <% if !@product.origins.nil? and !@product.origins.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
-          <strong><%= t('view.product.index.sources') %>:</strong>
+          <strong><%= t('view.product.index.sources') %></strong>
           <% @product.origins.each do |origin| %>
             <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
           <% end %>
@@ -60,6 +60,12 @@
                 <li><%= other_name %></li>
               <%}%>
             </ul>
+          </h6>
+        <% end %>
+        <% if !@product_description.description.nil? and !@product_description.description.empty? %>
+          <h6 class="card-text text-muted mt-2 mb-2">
+            <strong><%= t('view.product.index.description') %>:</strong>
+            <div id="product-viewer" class="wysiwyg-viewer"></div>
           </h6>
         <% end %>
       </div>
@@ -341,3 +347,7 @@
   <div class="card" style="border:none;">
   </div>
 </div>
+
+<script>
+  setUpViewer("<%= @product_description.description %>")
+</script>
