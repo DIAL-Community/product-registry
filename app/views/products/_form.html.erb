@@ -1,4 +1,4 @@
-  <%= form_with(model: product, multipart: true, local: true) do |form| %>
+  <%= form_with(model: product, multipart: true, local: true, html: { id: 'product-form' }) do |form| %>
 
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :product_name,
@@ -13,20 +13,14 @@
       <%= t('view.general.duplicates', model: t('model.product')) %>
     </div>
   </div>
-  
-  <fieldset class="custom-file">
-    <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
-    <label class="custom-file-label" for="logo-file">
-      <%= t('view.general.logo') %>
-    </label>
-  </fieldset>
 
   <div id="other-name-label" class="mt-2"><%= "#{t('view.product.form.other-names')}:" %></div>
   <div id="other-names">
     <div id="base-other-name" class="form-inline mt-2 mb-2">
       <input type="text" name="other_names[]" class="form-control col-10"
-              <% !policy(product).permitted_attributes.include?(:aliases) && concat('disabled') %>
-              placeholder="<%= t('view.product.form.other-names') %>" aria-labelledby="other-name-label" />
+             style="height: calc(1.5em + 0.75rem + 12px);" 
+             <% !policy(product).permitted_attributes.include?(:aliases) && concat('disabled') %>
+             placeholder="<%= t('view.product.form.other-names') %>" aria-labelledby="other-name-label" />
       <div class="input-group-append">
         <% if policy(product).permitted_attributes.include?(:aliases) %>
           <button type="submit" class="btn btn-primary ml-2 add-other-name">+</button>
@@ -35,6 +29,17 @@
       </div>
     </div>
   </div>
+
+  <%= form.hidden_field :product_description, id: :product_description %>
+  <div class="wysiwyg-editor">
+  </div>
+  
+  <fieldset class="custom-file mt-2">
+    <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file"/>
+    <label class="custom-file-label" for="logo-file">
+      <%= t('view.general.logo') %>
+    </label>
+  </fieldset>
   
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :website, id: :product_website,
@@ -283,12 +288,13 @@
                   <h5 class="mb-1"><%= sub_indicator["name"] %></h5>
                   <div class="dropdown">
                     <button class="btn btn-block btn-outline-secondary dropdown-toggle disable-hover" type="button"
-                            id="digisquare-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            id="digisquare-selector[sub='<%= sub_indicator["name"] %>']" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
                       <%= digisquare_maturity_level_text(product.product_assessment, sub_indicator) %>
                     </button>
                     <input type="hidden" name="<%= "digisquare_maturity[" + sub_indicator["code"] + "]" %>"
                            value="<%= product.product_assessment.send(sub_indicator["code"]) if product.product_assessment  %>"/>
-                    <div class="dropdown-menu" aria-labelledby="digisquare-selector">
+                    <div class="dropdown-menu" aria-labelledby="digisquare-selector[sub='<%= sub_indicator["name"] %>']">
                       <div class="dropdown-item" data-sub-indicator="low">
                         <h6><%= t('view.product.form.low').to_s.humanize %></h6>
                         <div><%= sub_indicator["low"].html_safe %></div>
@@ -352,4 +358,12 @@
   <% product.aliases.each {|other_name| %>
     addOtherName('<%= other_name %>');
   <% } %>
+
+  var editor = setUpEditor("<%= @product_description.description %>", '<%= t('view.product.form.description-placeholder') %>');
+  var form = document.querySelector('#product-form');
+  form.onsubmit = function() {
+    var productDescription = $('#product_description');
+    console.log(editor.getContents());
+    productDescription.val(JSON.stringify(editor.getContents()));
+  };
 </script>

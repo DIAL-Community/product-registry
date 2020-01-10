@@ -782,6 +782,39 @@ ALTER SEQUENCE public.product_assessments_id_seq OWNED BY public.product_assessm
 
 
 --
+-- Name: product_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_descriptions (
+    id bigint NOT NULL,
+    product_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: product_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_descriptions_id_seq OWNED BY public.product_descriptions.id;
+
+
+--
 -- Name: product_product_relationships; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1516,6 +1549,13 @@ ALTER TABLE ONLY public.product_assessments ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: product_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_descriptions ALTER COLUMN id SET DEFAULT nextval('public.product_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: product_product_relationships id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1739,6 +1779,14 @@ ALTER TABLE ONLY public.origins
 
 ALTER TABLE ONLY public.product_assessments
     ADD CONSTRAINT product_assessments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_descriptions product_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_descriptions
+    ADD CONSTRAINT product_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2034,6 +2082,13 @@ CREATE INDEX index_origins_on_organization_id ON public.origins USING btree (org
 --
 
 CREATE INDEX index_product_assessments_on_product_id ON public.product_assessments USING btree (product_id);
+
+
+--
+-- Name: index_product_descriptions_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_descriptions_on_product_id ON public.product_descriptions USING btree (product_id);
 
 
 --
@@ -2415,6 +2470,14 @@ ALTER TABLE ONLY public.aggregator_capabilities
 
 ALTER TABLE ONLY public.aggregator_capabilities
     ADD CONSTRAINT fk_rails_aa5b2f5e59 FOREIGN KEY (operator_services_id) REFERENCES public.operator_services(id);
+
+
+--
+-- Name: product_descriptions fk_rails_c0bc9f9c8a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_descriptions
+    ADD CONSTRAINT fk_rails_c0bc9f9c8a FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
 --
@@ -2806,6 +2869,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191206145611'),
 ('20191206150613'),
 ('20191210210550'),
-('20200105125805');
+('20200105125805'),
+('20200107135217');
 
 

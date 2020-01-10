@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200105125805) do
+ActiveRecord::Schema.define(version: 20200107135217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,15 @@ ActiveRecord::Schema.define(version: 20200105125805) do
 
 # Could not dump table "product_assessments" because of following StandardError
 #   Unknown type 'digisquare_maturity_level' for column 'digisquare_country_utilization'
+
+  create_table "product_descriptions", force: :cascade do |t|
+    t.bigint "product_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_descriptions_on_product_id"
+  end
 
 # Could not dump table "product_product_relationships" because of following StandardError
 #   Unknown type 'relationship_type' for column 'relationship_type'
@@ -405,6 +414,7 @@ ActiveRecord::Schema.define(version: 20200105125805) do
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
   add_foreign_key "product_assessments", "products"
+  add_foreign_key "product_descriptions", "products"
   add_foreign_key "product_product_relationships", "products", column: "from_product_id", name: "from_product_fk"
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
   add_foreign_key "product_suites_product_versions", "product_suites", name: "pspv_product_suites_fk"

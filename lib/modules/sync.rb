@@ -59,12 +59,13 @@ module Modules
         end
 
         if existing_product.save
-          puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
+          update_product_description(existing_product, json_data['description'])
         end
       end
     end
 
     def sync_digisquare_product(section)
+      puts section
       digisquare_origin = Origin.find_by(:slug => 'digital_square')
 
       candidate_name = section['line']
@@ -88,6 +89,7 @@ module Modules
       end
 
       if existing_product.save
+        update_product_description(existing_product, nil)
         puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
       end
     end
@@ -155,7 +157,9 @@ module Modules
         sync_product.origins.push(osc_origin)
       end
 
-      sync_product.save
+      if sync_product.save
+        update_product_description(sync_product, nil)
+      end
     end
 
     def cleanup_url(maybe_url)
@@ -167,6 +171,29 @@ module Modules
                                .sub(/\/$/, '')
       end
       cleaned_url
+    end
+
+    def update_product_description(existing_product, sync_description)
+      product_description = ProductDescription.where(product_id: existing_product, locale: I18n.locale)
+                                                  .first || ProductDescription.new
+        product_description.product_id = existing_product.id
+        product_description.locale = I18n.locale
+
+        if !sync_description.nil?
+          product_description.description = JSON.generate('ops': [{ 'insert': sync_description }])
+        elsif product_description.description.nil?
+          product_descriptions = YAML.load_file('config/product_description.yml')
+          product_descriptions['products'].each do |pd|
+            if existing_product.slug == pd['slug']
+              product_description.description = pd['description']
+              puts "Assigning description from yml for: #{existing_product.slug}"
+            end
+          end
+        end
+        
+        product_description.save
+
+        puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
     def sync_product_versions(product)

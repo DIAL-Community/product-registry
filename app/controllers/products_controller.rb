@@ -49,6 +49,7 @@ class ProductsController < ApplicationController
   def new
     authorize Product, :mod_allowed?
     @product = Product.new
+    @product_description = ProductDescription.new
   end
 
   # GET /products/1/edit
@@ -121,6 +122,14 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if !@product.errors.any? && @product.save
+
+        if product_params[:product_description].present?
+          @product_description.product_id = @product.id
+          @product_description.locale = I18n.locale
+          @product_description.description = product_params[:product_description]
+          @product_description.save
+        end
+
         format.html { redirect_to @product,
                       flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) }}
         format.json { render :show, status: :created, location: @product }
@@ -207,8 +216,15 @@ class ProductsController < ApplicationController
       @product.set_image_changed(params[:logo].original_filename)
     end
 
+    if product_params[:product_description].present?
+      @product_description.product_id = @product.id
+      @product_description.locale = I18n.locale
+      @product_description.description = product_params[:product_description]
+      @product_description.save
+    end
+
     respond_to do |format|
-      if !@product.errors.any? && @product.update(product_params)
+      if @product.errors.none? && @product.update(product_params)
         format.html { redirect_to @product,
                       flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @product }
@@ -258,6 +274,11 @@ class ProductsController < ApplicationController
       else
         @product = Product.find_by(id: params[:id]) or not_found
       end
+      @product_description = ProductDescription.where(product_id: @product, locale: I18n.locale)
+                                               .first
+      if @product_description.nil?
+        @product_description = ProductDescription.new
+      end
     end
 
     def set_current_user
@@ -296,7 +317,7 @@ class ProductsController < ApplicationController
       if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
         bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
       end
-      
+
       product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       if filter_set || product_filter_set

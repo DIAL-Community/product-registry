@@ -1,0 +1,49 @@
+products:
+  - slug: openstreetmap
+    description: OpenStreetMap is a map of the world, created by people like you and free to use under an open license.
+  - slug: publiclab
+    description: Public Lab is a community and a non-profit, democratizing science to address environmental issues that affect people.
+  - slug: osm_analytics
+    description: OSM Analytics is a tool for visualising and analysing mapping progress.
+  - slug: odoo_openerp
+    description: Odoo is an all-in-one business software including CRM, website/e-commerce, billing, accounting, manufacturing, warehouse - and project management, and inventory. The Community version is the open source version, while the Enterprise version supplements the Community edition with proprietary features and services.
+  - slug: drools
+    description: Drools is a business rule management system with a forward and backward chaining inference based rules engine, more correctly known as a production rule system, using an enhanced implementation of the Rete algorithm.
+  - slug: aida
+    description: AIDA is a chatbot builder that allows you to create interactive chatbots that can engage populations on popular chat apps like Facebook messenger. Chatbots built by AIDA can send surveys, respond to keyword triggers, and schedule outgoing messages. AIDA stands for “artificial intelligence development assistant” and helps humanitarians and development professionals engage with constituencies on widely adopted messenger apps.
+  - slug: mspray
+    description: 
+  - slug: mobile_wach
+    description: 
+  - slug: flowminder
+    description: 
+  - slug: tasking_manager
+    description: 
+  - slug: opencrvs
+    description: OpenCRVS is a global solution to civil registration. We are on a mission to ensure that every individual on the planet is recognised, protected and provided for from birth.
+  - slug: openhie
+    description: 
+  - slug: the_tor_project
+    description: We advance human rights and defend your privacy online through free software and open networks. 
+  - slug: syncope
+    description: Apache Syncope is an Open Source system for managing digital identities in enterprise environments, implemented in Java EE technology and released under Apache 2.0 license. Identity management (or IdM) means to manage user data on systems and applications, using the combination of business processes and IT. IdM involves considering user attributes, roles, resources and entitlements in trying to answer the following thorny question. Who has access to What, When, How, and Why?
+  - slug: mediawiki
+    description: MediaWiki is a free and open-source wiki engine.
+  - slug: akezi
+    description: 
+  - slug: quantum_gis
+    description: Quantum GIS is a free and open-source cross-platform desktop geographic information system application that supports viewing, editing, and analysis of geospatial data.
+  - slug: tensorflow
+    description: TensorFlow is a free and open-source software library for dataflow and differentiable programming across a range of tasks. It is a symbolic math library, and is also used for machine learning applications such as neural networks.
+  - slug: resourcemap
+    description: 
+  - slug: healthsites
+    description: 
+  - slug: drupal
+    description: Drupal is a free and open-source content management framework written in PHP and distributed under the GNU General Public License. Drupal provides a back-end framework for at least 2.3% of all websites worldwide – ranging from personal blogs to corporate, political, and government sites.
+  - slug: export_tool
+    description: 
+  - slug: flowkit
+    description: Flowkit was uniquely designed for Figma, Sketch, and XD using best practices and workflows for each individual platform.
+  - slug: wordpress
+    description: WordPress is a content management system based on PHP and MySQL that is usually used with the MySQL or MariaDB database servers but can also use the SQLite database engine. Features include a plugin architecture and a template system, referred to inside WordPress as Themes. 
