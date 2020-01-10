@@ -12,7 +12,7 @@ module Modules
         blacklist = YAML.load_file("config/product_blacklist.yml")
         blacklist.each do |blacklist_item|
           if json_data['name'] == blacklist_item['item']
-            puts "skipping #{json_data['name']}"
+            puts "Skipping #{json_data['name']}"
             return
           end
         end
