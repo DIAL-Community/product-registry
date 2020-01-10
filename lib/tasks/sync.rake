@@ -67,6 +67,49 @@ namespace :sync do
     end
   end
 
+  task :purge_removed_products, [:path] => :environment do |task, params|
+
+    puts 'Pulling data from digital public good ...'
+
+    unicef_origin = Origin.find_by(:slug => 'unicef')
+    unicefList = []
+    Dir.entries(params[:path]).select{ |item| item.include? '.json' }.each do |entry|
+      entry_data = File.read(File.join(params[:path], entry))
+
+      begin
+        json_data = JSON.parse(entry_data)
+      rescue JSON::ParserError
+        puts "Skipping unparseable json file: #{entry}"
+        next
+      end
+
+      if !json_data.key?('type') && !json_data.key?('name')
+        puts "Skipping unrecognized json file: #{entry}"
+        next
+      end
+
+      unicefList.push(json_data['name'])
+      if json_data.key?('initialism')
+        unicefList.push(json_data['initialism'])
+      end
+    end
+    unicefProducts = Product.all.joins(:products_origins).where('origin_id=?', unicef_origin.id)
+    unicefProducts.each do |product|
+      if product.origins.count == 1
+        # the product's only origin is Unicef
+        if !unicefList.include?(product.name)
+          # Send email to admin to remove this product
+          msgString = "Product " + product.name + " is no longer in the Unicef list. Please remove from catalog"
+          users = User.where(receive_backup: true)
+          users.each do |user|
+            cmd = "curl -s --user 'api:" + Rails.application.secrets.mailgun_api_key + "' https://api.mailgun.net/v3/"+Rails.application.secrets.mailgun_domain+"/messages -F from='Registry <backups@registry.dial.community>' -F to="+user.email+" -F subject='Sync task - delete product' -F text='"+msgString+"'"
+            system cmd
+          end
+        end
+      end
+    end
+  end
+
   task :update_version_data, [] => :environment do
     puts 'Starting to pull version data ...'
 
