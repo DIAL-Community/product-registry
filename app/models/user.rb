@@ -28,6 +28,7 @@ class User < ApplicationRecord
   end
 
   def password_expire?
+    logger.info('Checking if user record is expired!')
     return true if expired && !reset_password_token.nil?
     return true if email == Rails.configuration.settings['admin_email'] && updated_at.nil?
 
