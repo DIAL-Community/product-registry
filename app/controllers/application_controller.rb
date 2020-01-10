@@ -12,13 +12,13 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_action :configure_registration_parameters, if: :devise_controller?
-  before_action :check_password_expiry, if: :devise_controller?
+  before_action :check_password_expiry
   before_action :set_locale
 
   def not_found
     raise ActionController::RoutingError.new('Not Found')
   end
-  
+
   def set_locale
     accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
     if accept_language
@@ -30,7 +30,11 @@ class ApplicationController < ActionController::Base
   end
 
   def check_password_expiry
+    # Only execute this check when user is trying to log into the application.
+    return if params[:controller] != 'devise/sessions' || !%w[new create].include?(params[:action])
     return if !current_user || !current_user.password_expire?
+
+    logger.info('User is expired! Forcing user to change their password!')
 
     @expiring_user = current_user
     reset_token = @expiring_user.generate_reset_token
