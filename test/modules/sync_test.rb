@@ -15,7 +15,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     fake.string
   end
 
-  test "sync_unicef_product should update existing product with aliases" do
+  test "sync_unicef_product should update product with aliases" do
     initial_size = Product.count
 
     new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
@@ -55,7 +55,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal saved_product.sustainable_development_goals.size, 2
   end
 
-  test "sync_unicef_product should save new product with initialism" do
+  test "sync_unicef_product should save product with initialism" do
     initial_size = Product.count
 
     existing_assessment = product_assessments(:three)
