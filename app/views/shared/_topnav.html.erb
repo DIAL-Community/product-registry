@@ -48,6 +48,9 @@
               <li>
                 <strong><%= link_to t('view.header.login'), new_user_session_path, :class => 'nav-link' %></strong>
               </li>
+              <li>
+                <strong><%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'nav-link' %></strong>
+              </li>
             <% end %>
           </ul>
         </div>
