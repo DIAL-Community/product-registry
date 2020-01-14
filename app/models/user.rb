@@ -20,7 +20,7 @@ class User < ApplicationRecord
   end
 
   def after_database_authentication
-    if expired && reset_password_token.nil?
+    if expired 
       self.expired = false
       self.expired_at = nil
       save(validate: false)
@@ -33,7 +33,7 @@ class User < ApplicationRecord
     return true if email == Rails.configuration.settings['admin_email'] && updated_at.nil?
 
     today = Date.today
-    !confirmed_at.nil? && !updated_at.nil? && updated_at + 90 < today
+    !confirmed_at.nil? && !updated_at.nil? && updated_at + 365 < today
   end
 
   def generate_reset_token
