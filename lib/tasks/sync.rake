@@ -126,7 +126,7 @@ namespace :sync do
     end
   end
 
-  task :update_statistic_data, [] => :environment do
+  task :update_statistics_data, [] => :environment do
     puts 'Starting to pull statistic data ...'
 
     Product.all.each do |product|
