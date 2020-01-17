@@ -5,12 +5,36 @@
         <a href="/">
           <%= image_tag "logo-dial.svg", :alt => "DIAL Logo", :width => "231px", :height => "86px" %>
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav ml-auto">
             <% if user_signed_in? %>
+              <% if (policy(current_user).index?) %>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle mt-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                     aria-haspopup="true" aria-expanded="false">
+                    <strong><%= t('view.header.admin-data') %></strong>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <%= link_to t('model.contact').to_s.pluralize.titlecase, contacts_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.location').to_s.pluralize.titlecase, locations_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
+                    <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, candidate_organizations_path, :class => 'dropdown-item' %>
+                    <% if (policy(current_user).mni?) %>
+                      <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
+                    <% end %>
+                    <%= link_to t('model.product-suite').to_s.pluralize.titlecase, product_suites_path, :class => 'dropdown-item' %>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to t('model.deploys').to_s.pluralize.titlecase, deploys_path, :class => 'dropdown-item' %>
+                  </div>
+                </li>
+              <% end %>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle-avatar" data-toggle="dropdown" href="#" role="button">
                   <div class="avatar-circle">
@@ -25,26 +49,12 @@
                     <%= t('view.header.documentation') %>
                   </a>
                   <div class="dropdown-divider"></div>
-                  <% if (policy(current_user).index?) %>
-                    <%= link_to t('model.contact').to_s.pluralize.titlecase, contacts_path, :class => 'dropdown-item' %>
-                    <%= link_to t('model.location').to_s.pluralize.titlecase, locations_path, :class => 'dropdown-item' %>
-                    <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
-                    <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
-                    <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
-                    <div class="dropdown-divider"></div>
-                    <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, candidate_organizations_path, :class => 'dropdown-item' %>
-                    <% if (policy(current_user).mni?) %>
-                      <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
-                    <% end %>
-                    <%= link_to t('model.product-suite').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
+                  <% if (policy(current_user).index?) %>   
                     <%= link_to t('model.setting').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
-                    <div class="dropdown-divider"></div>
-                    <%= link_to t('model.deploys').to_s.pluralize.titlecase, deploys_path, :class => 'dropdown-item' %>
-                    <div class="dropdown-divider"></div>
                   <% end %>
-                  <% if (policy(current_user).mni?) %>
-                    <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
-                  <% end %>                  
+                  <%= link_to t('view.header.feedback'),
+                              'mailto:incoming+dial-t4d-product-backlog-product-registry-9056306-issue-@incoming.gitlab.com',
+                              target: '_blank', class: 'dropdown-item' %>
                   <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
                 </div>
               </li>
@@ -59,6 +69,13 @@
                 <a target="_blank" rel="noreferrer noopener" href="https://docs.osc.dial.community/projects/product-registry/en/latest/" class="nav-link">
                   <strong><%= t('view.header.documentation') %></strong>
                 </a>
+              </li>
+              <li>
+                <strong>
+                  <%= link_to t('view.header.feedback'),
+                              'mailto:incoming+dial-t4d-product-backlog-product-registry-9056306-issue-@incoming.gitlab.com',
+                              target: '_blank', class: 'nav-link' %>
+                </strong>
               </li>
             <% end %>
           </ul>

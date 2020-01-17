@@ -294,8 +294,10 @@ en:
       osc-forum: "Discuss on the Open Source Center Forum"
       ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
     header:
+      admin-data: Admin Data
       deploys: Deploys
       digital-principles: Digital Principles
+      feedback: Report an Issue
       login: Login
       logout: Logout
       product-registry: Product Registry
