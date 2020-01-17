@@ -33,7 +33,7 @@ class User < ApplicationRecord
     return true if email == Rails.configuration.settings['admin_email'] && updated_at.nil?
 
     today = Date.today
-    !confirmed_at.nil? && !updated_at.nil? && updated_at + 365 < today
+    !confirmed_at.nil? && !updated_at.nil? && updated_at + 365.days < today
   end
 
   def generate_reset_token
