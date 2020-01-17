@@ -305,5 +305,75 @@ module Modules
         puts "Product license information saved: #{product.license}."
       end
     end
+
+    def sync_product_statistics(product)
+      return if product.repository.blank?
+
+      puts "Processing: #{product.repository}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product.repository.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      github_uri = URI.parse('https://api.github.com/graphql')
+      http = Net::HTTP.new(github_uri.host, github_uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(github_uri.path)
+      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
+      request.body = { 'query' => graph_ql_statistics(owner, repo) }.to_json
+
+      response = http.request(request)
+      product.statistics = JSON.parse(response.body)
+
+      if product.save!
+        puts "Product statistics saved: #{product.name}."
+      end
+    end
+
+    def graph_ql_statistics(owner, repo)
+      '{'\
+      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
+      '    stargazers {'\
+      '      totalCount'\
+      '    },'\
+      '    watchers {'\
+      '      totalCount'\
+      '    },'\
+      '    forkCount,'\
+      '    isFork,'\
+      '    createdAt,'\
+      '    updatedAt,'\
+      '    pushedAt,'\
+      '    closedPullRequestCount: pullRequests(states: CLOSED) {'\
+      '      totalCount'\
+      '    },'\
+      '    openPullRequestCount: pullRequests(states: OPEN) {'\
+      '      totalCount'\
+      '    },'\
+      '    mergedPullRequestCount: pullRequests(states: MERGED) {'\
+      '      totalCount'\
+      '    },'\
+      '    releases(last: 1) {'\
+      '      totalCount,'\
+      '      edges {'\
+      '        node {'\
+      '          name,'\
+      '          createdAt,'\
+      '          description,'\
+      '          url,'\
+      '          releaseAssets (last: 1) {'\
+      '            edges {'\
+      '              node {'\
+      '                downloadCount'\
+      '              }'\
+      '            }'\
+      '          }'\
+      '        }'\
+      '      }'\
+      '    }'\
+      '  }'\
+      '}'\
+    end
   end
 end
