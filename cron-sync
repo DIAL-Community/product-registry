@@ -1,17 +1,17 @@
 SHELL=/bin/bash
-PATH=/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PATH=/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUBY_MAJOR=2.6
-RUBY_VERSION=2.6.3
-RUBY_DOWNLOAD_SHA256=11a83f85c03d3f0fc9b8a9b6cad1b2674f26c5aaa43ba858d4b0fcc2b54171e1
+RUBY_VERSION=2.6.5
+RUBY_DOWNLOAD_SHA256=d5d6da717fd48524596f9b78ac5a2eeb9691753da5c06923a6c31190abe01a62
 GEM_HOME=/usr/local/bundle
 BUNDLE_PATH=/usr/local/bundle
 BUNDLE_SILENCE_ROOT_WARNING=1
 BUNDLE_APP_CONFIG=/usr/local/bundle
-BUNDLER_VERSION=2.0.1
+BUNDLER_VERSION=2.1.4
 HOME=/root
 RAILS_ENV=production
 
-0 3 * * *   source /t4d/setEnv.sh prod && /t4d/sync.sh >> /var/log/cron.log 2>&1
+0 3 * * *   source /t4d/setEnv.sh prod && bundle install && /t4d/sync.sh >> /var/log/cron.log 2>&1
 0 4 * * *   source /t4d/setEnv.sh prod && cd /t4d && rake db:backup >> /var/log/cron.log 2>&1
 0 5 * * *   source /t4d/setEnv.sh prod && cd /t4d && rake db:send_backup_emails >> /var/log/cron.log 2>&1
 0 6 * * *   source /t4d/setEnv.sh prod && cd /t4d && rake data:associate_with_organization >> /var/log/cron.log 2>&1
