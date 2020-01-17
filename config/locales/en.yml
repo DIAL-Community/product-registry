@@ -295,6 +295,9 @@ en:
       ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
     header:
       admin-data: Admin Data
+      principle-data: Principles Data
+      mni-data: MNI Data
+      ict4sdg-data: ICT4SDG Data
       deploys: Deploys
       digital-principles: Digital Principles
       feedback: Report an Issue
