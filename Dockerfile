@@ -18,7 +18,7 @@ WORKDIR /t4d
 COPY Gemfile /t4d/Gemfile
 COPY Gemfile.lock /t4d/Gemfile.lock
 
-ENV BUNDLER_VERSION 2.0.1
+ENV BUNDLER_VERSION 2.1.4
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 COPY . /t4d
