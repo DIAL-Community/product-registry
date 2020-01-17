@@ -63,5 +63,5 @@
 <% end %>
 
 <script>
-    setUpViewer("<%= @bbDesc.description %>")
+    setUpViewer(<%= raw JSON.generate(@bbDesc.description) %>)
 </script>

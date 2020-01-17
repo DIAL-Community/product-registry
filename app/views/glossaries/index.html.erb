@@ -33,7 +33,7 @@
       </p>
     </div>
     <script>
-      setViewerForElement('<%= glossary.slug %>', '<%= glossary.description %>')
+      setViewerForElement('<%= glossary.slug %>', <%= raw JSON.generate(glossary.description) %>)
     </script>
   </div>
 <% end %>

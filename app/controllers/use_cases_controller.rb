@@ -86,7 +86,7 @@ class UseCasesController < ApplicationController
         if (use_case_params[:bb_desc])
           @ucDesc.use_case_id = @use_case.id
           @ucDesc.locale = I18n.locale
-          @ucDesc.description = use_case_params[:uc_desc]
+          @ucDesc.description = JSON.parse(use_case_params[:uc_desc])
           @ucDesc.save
         end
         format.html { redirect_to @use_case,
@@ -125,7 +125,7 @@ class UseCasesController < ApplicationController
     if (use_case_params[:uc_desc])
       @ucDesc.use_case_id = @use_case.id
       @ucDesc.locale = I18n.locale
-      @ucDesc.description = use_case_params[:uc_desc]
+      @ucDesc.description = JSON.parse(use_case_params[:uc_desc])
       @ucDesc.save
     end
 

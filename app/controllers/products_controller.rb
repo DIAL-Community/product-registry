@@ -126,7 +126,7 @@ class ProductsController < ApplicationController
         if product_params[:product_description].present?
           @product_description.product_id = @product.id
           @product_description.locale = I18n.locale
-          @product_description.description = product_params[:product_description]
+          @product_description.description = JSON.parse(product_params[:product_description])
           @product_description.save
         end
 
@@ -219,7 +219,7 @@ class ProductsController < ApplicationController
     if product_params[:product_description].present?
       @product_description.product_id = @product.id
       @product_description.locale = I18n.locale
-      @product_description.description = product_params[:product_description]
+      @product_description.description = JSON.parse(product_params[:product_description])
       @product_description.save
     end
 

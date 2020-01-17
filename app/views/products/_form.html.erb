@@ -359,7 +359,7 @@
     addOtherName('<%= other_name %>');
   <% } %>
 
-  var editor = setUpEditor("<%= @product_description.description %>", '<%= t('view.product.form.description-placeholder') %>');
+  var editor = setUpEditor(<%= raw JSON.generate(@product_description.description) %>, '<%= t('view.product.form.description-placeholder') %>');
   var form = document.querySelector('#product-form');
   form.onsubmit = function() {
     var productDescription = $('#product_description');

@@ -103,13 +103,16 @@ class GlossariesController < ApplicationController
       .require(:glossary)
       .permit(:name, :slug, :locale, :description)
       .tap do |attr|
-      if params[:reslug].present?
-        attr[:slug] = slug_em(attr[:name])
-        if params[:duplicate].present?
-          first_duplicate = Glossary.slug_starts_with(attr[:slug]).order(slug: :desc).first
-          attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+        if attr[:description].present?
+          attr[:description] = JSON.parse(attr[:description])
+        end
+        if params[:reslug].present?
+          attr[:slug] = slug_em(attr[:name])
+          if params[:duplicate].present?
+            first_duplicate = Glossary.slug_starts_with(attr[:slug]).order(slug: :desc).first
+            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+          end
         end
       end
-    end
   end
 end
