@@ -3,13 +3,14 @@ include Modules::Slugger
 
 module Modules
   module Sync
+    @@product_list = []
+
     def sync_unicef_product(json_data)
+      if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
+        unicef_origin = Origin.find_by(slug: 'unicef')
+        name_aliases = [json_data['name'], json_data['initialism']].reject { |x| x.nil? || x.empty? }
 
-      if json_data['type'].detect{ |element| element.downcase == 'software' } != nil
-        unicef_origin = Origin.find_by(:slug => 'unicef')
-        name_aliases = [json_data['name'], json_data['initialism']].reject{ |x| x.nil? || x.empty? }
-
-        blacklist = YAML.load_file("config/product_blacklist.yml")
+        blacklist = YAML.load_file('config/product_blacklist.yml')
         blacklist.each do |blacklist_item|
           if json_data['name'] == blacklist_item['item']
             puts "Skipping #{json_data['name']}"
@@ -19,12 +20,10 @@ module Modules
         existing_product = nil
         name_aliases.each do |name_alias|
           # Find by name, and then by aliases and then by slug.
-          if existing_product.nil?
-            slug = slug_em name_alias
-            existing_product = Product.first_duplicate(name_alias, slug)
-          else
-            break
-          end
+          break unless existing_product.nil?
+
+          slug = slug_em name_alias
+          existing_product = Product.first_duplicate(name_alias, slug)
         end
 
         website = cleanup_url(json_data['website'])
@@ -34,16 +33,17 @@ module Modules
           existing_product = Product.new
           existing_product.name = name_aliases.first
           existing_product.slug = slug_em existing_product.name
+          @@product_list << existing_product.name
         end
 
         existing_product.website = website
         existing_product.repository = repository
 
         # Assign what's left in the alias array as aliases.
-        existing_product.aliases.concat(name_aliases.reject{ |x| x == existing_product.name }).uniq!
+        existing_product.aliases.concat(name_aliases.reject { |x| x == existing_product.name }).uniq!
 
         # Set the origin to be 'unicef'
-        if (!existing_product.origins.exists?(:id => unicef_origin.id))
+        if !existing_product.origins.exists?(id: unicef_origin.id)
           existing_product.origins.push(unicef_origin)
         end
 
@@ -66,10 +66,10 @@ module Modules
 
     def sync_digisquare_product(section)
       puts section
-      digisquare_origin = Origin.find_by(:slug => 'digital_square')
+      digisquare_origin = Origin.find_by(slug: 'digital_square')
 
       candidate_name = section['line']
-      blacklist = YAML.load_file("config/product_blacklist.yml")
+      blacklist = YAML.load_file('config/product_blacklist.yml')
       blacklist.each do |blacklist_item|
         if candidate_name == blacklist_item['item']
           puts "skipping #{candidate_name}"
@@ -82,9 +82,10 @@ module Modules
         existing_product = Product.new
         existing_product.name = candidate_name
         existing_product.slug = candidate_slug
+        @@product_list << existing_product.name
       end
 
-      if (!existing_product.origins.exists?(id: digisquare_origin.id))
+      if !existing_product.origins.exists?(id: digisquare_origin.id)
         existing_product.origins.push(digisquare_origin)
       end
 
@@ -106,6 +107,7 @@ module Modules
         if sync_product.save
           puts "  Added new product: #{sync_product.name} -> #{sync_product.slug}"
         end
+        @@product_list << sync_product.name
       end
 
       website = product['website']
@@ -140,7 +142,7 @@ module Modules
       if !maturity.nil?
         product_assessment = sync_product.product_assessment
         if product_assessment.nil?
-          puts "  Creating new maturity assessment"
+          puts '  Creating new maturity assessment'
           product_assessment = ProductAssessment.new
           product_assessment.product = sync_product
           product_assessment.save
@@ -152,8 +154,8 @@ module Modules
         product_assessment.save
       end
 
-      osc_origin = Origin.find_by(:slug => 'dial_osc')
-      if (!sync_product.origins.exists?(:id => osc_origin.id))
+      osc_origin = Origin.find_by(slug: 'dial_osc')
+      if !sync_product.origins.exists?(id: osc_origin.id)
         sync_product.origins.push(osc_origin)
       end
 
@@ -175,25 +177,23 @@ module Modules
 
     def update_product_description(existing_product, sync_description)
       product_description = ProductDescription.where(product_id: existing_product, locale: I18n.locale)
-                                                  .first || ProductDescription.new
-        product_description.product_id = existing_product.id
-        product_description.locale = I18n.locale
-
-        if !sync_description.nil?
-          product_description.description = JSON.generate('ops': [{ 'insert': sync_description }])
-        elsif product_description.description.nil?
-          product_descriptions = YAML.load_file('config/product_description.yml')
-          product_descriptions['products'].each do |pd|
-            if existing_product.slug == pd['slug']
-              product_description.description = pd['description']
-              puts "Assigning description from yml for: #{existing_product.slug}"
-            end
+                                              .first || ProductDescription.new
+      product_description.product_id = existing_product.id
+      product_description.locale = I18n.locale
+      if !sync_description.nil?
+        product_description.description = JSON.generate('ops': [{ 'insert': sync_description }])
+      elsif product_description.description.nil?
+        product_descriptions = YAML.load_file('config/product_description.yml')
+        product_descriptions['products'].each do |pd|
+          if existing_product.slug == pd['slug']
+            product_description.description = pd['description']
+            puts "Assigning description from yml for: #{existing_product.slug}"
           end
         end
-        
-        product_description.save
+      end
 
-        puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
+      product_description.save
+      puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
     def sync_product_versions(product)
@@ -303,6 +303,24 @@ module Modules
 
       if product.save!
         puts "Product license information saved: #{product.license}."
+      end
+    end
+
+    def send_notification
+      if !@@product_list.empty?
+        admin_users = User.where(role: 'admin')
+        email_body = "New product(s) added by the nightly sync process: <br />#{@@product_list.join('<br />')}."
+        admin_users.each do |user|
+          cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
+                " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
+                " -F from='Registry <backups@registry.dial.community>'"\
+                " -F to=#{user.email}"\
+                " -F subject='Sync task - delete product'"\
+                " -F html='#{email_body}'"
+          puts cmd
+          system cmd
+        end
+        @@product_list.clear
       end
     end
 
