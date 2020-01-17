@@ -79,7 +79,7 @@
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 
-  var editor = setUpEditor("<%= @ucDesc.description %>");
+  var editor = setUpEditor(<%= raw JSON.generate(@ucDesc.description) %>);
   var form = document.querySelector('#use-case-form');
   form.onsubmit = function() {
     var useCaseDesc = $('#use_case_desc');

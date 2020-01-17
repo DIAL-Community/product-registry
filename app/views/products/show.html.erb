@@ -402,5 +402,5 @@
 </div>
 
 <script>
-  setUpViewer("<%= @product_description.description %>")
+  setUpViewer(<%= raw JSON.generate(@product_description.description) %>)
 </script>

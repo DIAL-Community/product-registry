@@ -82,7 +82,7 @@
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 
-  var editor = setUpEditor("<%= @bbDesc.description %>");
+  var editor = setUpEditor(<%= raw JSON.generate(@bbDesc.description) %>);
   var form = document.querySelector('#bb-form');
   form.onsubmit = function() {
     var bbDesc = $('#building_block_desc');

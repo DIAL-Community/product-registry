@@ -9,8 +9,10 @@ function setUpViewer(viewJson) {
       theme: 'snow'
     });
 
-    var editorContent = viewJson.replace(/&quot;/g,'"').replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
-    var editorJson = JSON.parse(editorContent)
+    var editorJson = viewJson;
+    if (typeof viewJson === 'string' || viewJson instanceof String) {
+      editorJson = JSON.parse(viewJson);
+    }
     quill.setContents(editorJson, 'api');
   }
 }
@@ -27,8 +29,10 @@ function setViewerForElement(elementId, viewJson) {
       theme: 'snow'
     });
 
-    var editorContent = viewJson.replace(/&quot;/g,'"').replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
-    var editorJson = JSON.parse(editorContent)
+    var editorJson = viewJson;
+    if (typeof viewJson === 'string' || viewJson instanceof String) {
+      editorJson = JSON.parse(viewJson);
+    }
     quill.setContents(editorJson, 'api');
   }
 }
@@ -56,8 +60,10 @@ function setUpEditor(viewJson, placeholderText) {
     theme: 'snow'
   });
 
-  var editorContent = viewJson.replace(/&quot;/g,'"').replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
-  var editorJson = JSON.parse(editorContent)
+  var editorJson = viewJson;
+  if (typeof viewJson === 'string' || viewJson instanceof String) {
+    editorJson = JSON.parse(viewJson);
+  }
   quill.setContents(editorJson, 'api');
   
   return quill;

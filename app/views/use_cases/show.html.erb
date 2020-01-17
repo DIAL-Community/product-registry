@@ -85,5 +85,5 @@
 <% end %>
 
 <script>
-        setUpViewer("<%= @ucDesc.description %>")
+        setUpViewer(<%= raw JSON.generate(@ucDesc.description) %>)
 </script>

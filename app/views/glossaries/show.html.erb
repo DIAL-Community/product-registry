@@ -17,5 +17,5 @@
 </div>
 
 <script>
-  setUpViewer("<%= @glossary.description %>")
+  setUpViewer(<%= raw JSON.generate(@glossary.description) %>)
 </script>
