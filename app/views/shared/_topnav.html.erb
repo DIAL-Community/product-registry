@@ -21,7 +21,9 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
-                  <%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'dropdown-item' %>
+                  <a target="_blank" rel="noreferrer noopener" href="https://docs.osc.dial.community/projects/product-registry/en/latest/" class="dropdown-item">
+                    <%= t('view.header.documentation') %>
+                  </a>
                   <div class="dropdown-divider"></div>
                   <% if (policy(current_user).index?) %>
                     <%= link_to t('model.contact').to_s.pluralize.titlecase, contacts_path, :class => 'dropdown-item' %>
@@ -54,7 +56,9 @@
                 <strong><%= link_to t('view.header.login'), new_user_session_path, :class => 'nav-link' %></strong>
               </li>
               <li>
-                <strong><%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'nav-link' %></strong>
+                <a target="_blank" rel="noreferrer noopener" href="https://docs.osc.dial.community/projects/product-registry/en/latest/" class="nav-link">
+                  <strong><%= t('view.header.documentation') %></strong>
+                </a>
               </li>
             <% end %>
           </ul>
