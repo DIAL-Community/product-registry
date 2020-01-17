@@ -125,4 +125,12 @@ namespace :sync do
       sync_license_information(product)
     end
   end
+
+  task :update_statistic_data, [] => :environment do
+    puts 'Starting to pull statistic data ...'
+
+    Product.all.each do |product|
+      sync_product_statistics(product)
+    end
+  end
 end

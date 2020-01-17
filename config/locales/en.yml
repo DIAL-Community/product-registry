@@ -252,6 +252,19 @@ en:
         active-version: Latest version
         license: License
         license-unknown: Unknown
+        statistics: Statistics
+        star: Stars
+        watcher: Watcher Count
+        fork: Fork Count
+        current-version: Current Version
+        created: Created
+        last-updated: Last Updated
+        open-pr: Open Pull Requests
+        merged-pr: Merged Pull Requests
+        no-version-data: Data Not Available
+        very-active: Very Active Repository
+        not-very-active: Not Very Active Repository
+        inactive: Inactive Repository
         na: N/A
     product-suite:
       index:
