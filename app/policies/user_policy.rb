@@ -37,4 +37,12 @@ class UserPolicy < ApplicationPolicy
   def mni?
     @current_user.role == "admin" || @current_user.role == "mni"
   end
+
+  def principle?
+    @current_user.role == "admin" || @current_user.role == "principle"
+  end
+
+  def ict4sdg?
+    @current_user.role == "admin" || @current_user.role == "ict4sdg"
+  end
 end

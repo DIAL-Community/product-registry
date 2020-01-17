@@ -25,6 +25,8 @@ gem 'haml'
 gem 'licensee'
 
 gem "recaptcha"
+gem "minitest-reporters"
+
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'

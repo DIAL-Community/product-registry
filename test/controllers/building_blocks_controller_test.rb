@@ -96,15 +96,14 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     # With additional filter, should now load 0
     get building_blocks_url
     assert_equal(0, assigns(:building_blocks).count)
-
   end
 
-  test "Policy tests: should reject new, edit, update, delete actions for regular user. Should allow get" do
+  test "Policy tests: Should only allow get" do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
     get building_block_url(@building_block)
     assert_response :success
-    
+
     get new_building_block_url
     assert_response :redirect
 

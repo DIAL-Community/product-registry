@@ -64,5 +64,5 @@
 <% end %>
 
 <script>
-        setUpViewer("<%= @wfDesc.description %>")
+        setUpViewer(<%= raw JSON.generate(@wfDesc.description) %>)
 </script>

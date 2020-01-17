@@ -21,7 +21,7 @@
 <% end %>
 
 <script>
-  var editor = setUpEditor("<%= glossary.description %>");
+  var editor = setUpEditor(<%= raw JSON.generate(glossary.description) %>);
   var form = document.querySelector('#glossary-form');
   form.onsubmit = function() {
     var description = $('#glossary_description');

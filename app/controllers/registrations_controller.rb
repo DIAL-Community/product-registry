@@ -20,8 +20,6 @@ class RegistrationsController < Devise::RegistrationsController
 
   def check_captcha
     unless verify_recaptcha secret_key: Rails.application.secrets.captcha_secret_key
-      logger.info 'Unable to verify registration.'
-
       configure_registration_parameters
       self.resource = resource_class.new sign_up_params
       resource.validate

@@ -4,10 +4,10 @@ one:
   name: MyString
   slug: MyString
   locale: MyString
-  description: MyString
+  description: {MyString}
 
 two:
   name: MyString
   slug: MyString
   locale: MyString
-  description: MyString
+  description: {MyString}

@@ -6,7 +6,7 @@
             target: "_blank", rel: "noreferrer noopener" %>
 <br clear="both"/>
 
-<div class="card mt-4">
+<div class="card mt-2">
   <h5 class="card-header bg-secondary text-white">
     <%= "#{t('model.product').to_s.humanize}: #{@product.name}" %>
   </h5>
@@ -17,7 +17,7 @@
           <%= image_tag(@product.image_file, class: 'card-img-top align-middle') %>
         </div>
       </div>
-      <div class="col-6 mt-4">
+      <div class="col-6 mt-2">
         <% if !@product.website.nil? and !@product.website.empty? %>
           <h6 class="card-text text-muted mt-2 mb-2">
             <strong><%= t('view.product.form.website') %>:</strong>
@@ -79,11 +79,72 @@
   </div>
 </div>
 
-<div class="card-deck mt-4">
-  <div class="card">
-    <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left mb-0"><%= t('model.organization').to_s.humanize.pluralize %></h5>
+<% statistics_data = @product.statistics %>
+<% unless statistics_data['data'].nil? %>
+  <% repository_data = statistics_data['data']['repository'] %>
+  <div class="card my-3">
+    <h5 class="card-header bg-secondary text-white">
+      <%= t('view.product.show.statistics') %>
+      <%
+        last_updated = DateTime.parse(repository_data['updatedAt'])
+        last_month = Date.today.months_ago(1)
+        last_year = Date.today.years_ago(1)
+
+        if last_updated >= last_month
+          concat("<span class='badge badge-success'>#{t('view.product.show.very-active')}</span>".html_safe)
+        elsif last_updated > last_year && last_updated < last_month
+          concat("<span class='badge badge-warning'>#{t('view.product.show.not-very-active')}</span>".html_safe)
+        else
+          concat("<span class='badge badge-danger'>#{t('view.product.show.inactive')}</span>".html_safe)
+        end
+      %>
+    </h5>
+    <div class="card-body pt-0">
+      <div class="row">
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-star"></i> <%= t('view.product.show.star') %></div>
+          <h4><%= repository_data['stargazers']['totalCount'] %></h4>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-eye"></i> <%= t('view.product.show.watcher') %></div>
+          <h4><%= repository_data['watchers']['totalCount'] %></h4>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-code-branch"></i> <%= t('view.product.show.fork') %></div>
+          <h4><%= repository_data['forkCount'] %></h4>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-file"></i> <%= t('view.product.show.current-version') %></div>
+          <% if repository_data['releases']['totalCount'].to_i > 0 %>
+          <h4><%= repository_data['releases']['edges'][0]['node']['name'] %></h4>
+          <% else %>
+          <h4><%= t('view.product.show.no-version-data') %></h4>
+          <% end %>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-calendar"></i> <%= t('view.product.show.created') %></div>
+          <h4><%= DateTime.parse(repository_data['createdAt']).strftime("%m/%d/%Y") %></h4>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-calendar-alt"></i> <%= t('view.product.show.last-updated') %></div>
+          <h4><%= DateTime.parse(repository_data['updatedAt']).strftime("%m/%d/%Y") %></h4>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-code"></i> <%= t('view.product.show.open-pr') %></div>
+          <h4><%= repository_data['openPullRequestCount']['totalCount'] %></h4>
+        </div>
+        <div class="col-3 col-xs-12 mt-3">
+          <div class="text-muted"><i class="fas fa-check"></i> <%= t('view.product.show.merged-pr') %></div>
+          <h4><%= repository_data['mergedPullRequestCount']['totalCount'] %></h4>
+        </div>
+      </div>
     </div>
+  </div>
+<% end %>
+
+<div class="card-deck mt-2">
+  <div class="card">
+    <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.organization').to_s.humanize.pluralize %></h5>
     <div class="card-body">
       <% if @product.organizations.count > 0 %>
         <% @product.organizations.each_slice(3) do |org_row| %>
@@ -113,9 +174,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left"><%= t('model.sector').to_s.humanize.pluralize %></h5>
-    </div>
+    <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sector').to_s.humanize.pluralize %></h5>
     <div class="card-body">
       <% if @product.sectors.count > 0 %>
         <% @product.sectors.each_slice(3) do |sector_row| %>
@@ -148,7 +207,7 @@
   </div>
 </div>
 
-<div class="card-deck">
+<div class="card-deck mt-2">
   <div class="card">
     <h5 class="card-header bg-secondary text-white"><%= t('model.building-block').to_s.pluralize.titlecase %></h5>
     <div class="card-body">
@@ -180,9 +239,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left"><%= t('model.sdg').to_s.upcase.pluralize %></h5>
-    </div>
+    <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sdg').to_s.upcase.pluralize %></h5>
     <div class="card-body">
       <% if @product.sustainable_development_goals.count > 0 %>
         <% @product.sustainable_development_goals.each_slice(3) do |sdg_row| %>
@@ -213,11 +270,9 @@
   </div>
 </div>
 
-<div class="card-deck mt-4">
+<div class="card-deck mt-2">
   <div class="card">
-    <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left"><%= t('view.product.form.interoperable-products') %></h5>
-    </div>
+    <h5 class="card-header bg-secondary text-white clearfix"><%= t('view.product.form.interoperable-products') %></h5>
     <div class="card-body">
       <% if @product.interoperates_with.count > 0 %>
         <% @product.interoperates_with.each_slice(3) do |product_row| %>
@@ -249,9 +304,7 @@
   </div>
 
   <div class="card">
-    <div class="card-header bg-secondary text-white clearfix">
-      <h5 class="float-left"><%= t('view.product.form.included-products') %></h5>
-    </div>
+    <h5 class="card-header bg-secondary text-white clearfix"><%= t('view.product.form.included-products') %></h5>
     <div class="card-body">
       <% if @product.includes.count > 0 %>
         <% @product.includes.each_slice(3) do |product_row| %>
@@ -283,7 +336,7 @@
   </div>
 </div>
 
-<div class="card-deck">
+<div class="card-deck mt-2">
   <div class="card">
       <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.digisquare-maturity') %></h5>
       <div class="card-body text-center">
@@ -349,5 +402,5 @@
 </div>
 
 <script>
-  setUpViewer("<%= @product_description.description %>")
+  setUpViewer(<%= raw JSON.generate(@product_description.description) %>)
 </script>

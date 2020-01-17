@@ -18,7 +18,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "Policy tests: should reject edit and get actions for regular user." do
+  test "Policy tests: should reject edit and get for regular user." do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
     get user_url(@user)

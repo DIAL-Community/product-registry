@@ -82,7 +82,7 @@ class BuildingBlocksController < ApplicationController
         if (building_block_params[:bb_desc])
           @bbDesc.building_block_id = @building_block.id
           @bbDesc.locale = I18n.locale
-          @bbDesc.description = building_block_params[:bb_desc]
+          @bbDesc.description = JSON.parse(building_block_params[:bb_desc])
           @bbDesc.save
         end
         format.html { redirect_to @building_block,
@@ -134,7 +134,7 @@ class BuildingBlocksController < ApplicationController
     if (building_block_params[:bb_desc])
       @bbDesc.building_block_id = @building_block.id
       @bbDesc.locale = I18n.locale
-      @bbDesc.description = building_block_params[:bb_desc]
+      @bbDesc.description = JSON.parse(building_block_params[:bb_desc])
       @bbDesc.save
     end
 

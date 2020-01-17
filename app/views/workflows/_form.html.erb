@@ -73,7 +73,7 @@
     addBuildingBlock('<%= building_block.id %>', '<%= building_block.name %>');
   <% end %>
 
-  var editor = setUpEditor("<%= @wfDesc.description %>");
+  var editor = setUpEditor(<%= raw JSON.generate(@wfDesc.description) %>);
   var form = document.querySelector('#workflow-form');
   form.onsubmit = function() {
     var workflowDesc = $('#workflow_desc');

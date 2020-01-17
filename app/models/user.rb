@@ -20,7 +20,7 @@ class User < ApplicationRecord
   end
 
   def after_database_authentication
-    if expired && reset_password_token.nil?
+    if expired 
       self.expired = false
       self.expired_at = nil
       save(validate: false)
@@ -33,7 +33,7 @@ class User < ApplicationRecord
     return true if email == Rails.configuration.settings['admin_email'] && updated_at.nil?
 
     today = Date.today
-    !confirmed_at.nil? && !updated_at.nil? && updated_at + 90 < today
+    !confirmed_at.nil? && !updated_at.nil? && updated_at + 365.days < today
   end
 
   def generate_reset_token
@@ -71,13 +71,7 @@ class User < ApplicationRecord
       end
     end
 
-    if organization_id.nil?
-      # Skip organization validation when the user is signing up to be product owner.
-      return unless products.empty?
-
-      logger.info 'User need to select organization to register without DIAL email.'
-      errors.add(:organization_id, I18n.translate('view.devise.organization-required'))
-    else
+    unless organization_id.nil?
       organization = Organization.find(organization_id)
       email_domain = /\A[^@\s]+@([^@\s]+\z)/.match(email)[1]
       logger.info "Matching organization website: '#{organization.website}' with '#{email_domain}'."
