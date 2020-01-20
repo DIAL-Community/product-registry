@@ -213,6 +213,7 @@ GEM
     ruby-ole (1.2.12.2)
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
+    rubysl-open3 (2.0.0)
     rubyzip (1.2.2)
     rugged (0.28.3.1)
     sass (3.7.3)
@@ -319,6 +320,7 @@ DEPENDENCIES
   rails (~> 5.1.4)
   rails-controller-testing
   recaptcha
+  rubysl-open3
   sass-rails (~> 5.0)
   selenium-webdriver
   spreadsheet

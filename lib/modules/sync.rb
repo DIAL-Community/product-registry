@@ -222,7 +222,7 @@ module Modules
       end
 
       process_current_page(response_json, counter, product)
-      process_next_page(response_json, http, request, owner, repo)
+      process_next_page(response_json, http, request, owner, repo, counter, product)
 
       if product.save!
         puts "Product versions saved: #{product.product_versions.size}."
@@ -243,7 +243,7 @@ module Modules
       end
     end
 
-    def process_next_page(response_json, http, request, owner, repo)
+    def process_next_page(response_json, http, request, owner, repo, counter, product)
       return unless response_json['data'].present? && response_json['data']['repository'].present?
       releases_info = response_json['data']['repository']['releases']
       return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage']
@@ -254,8 +254,8 @@ module Modules
 
       response_json = JSON.parse(response.body)
 
-      process_current_page(response_json)
-      process_next_page(response_json, http, request, owner, repo)
+      process_current_page(response_json, counter, product)
+      process_next_page(response_json, http, request, owner, repo, counter, product)
     end
 
     def graph_ql_request_body(owner, repo, offset)
