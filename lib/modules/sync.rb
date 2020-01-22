@@ -230,7 +230,8 @@ module Modules
     end
 
     def process_current_page(response_json, counter, product)
-      return unless response_json['data'].present? && response_json['data']['releases'].present?
+      return unless response_json['data'].present? && response_json['data']['repository'].present?
+
       releases_data = response_json['data']['repository']['releases']['edges']
       return if releases_data.empty?
 
@@ -245,8 +246,9 @@ module Modules
 
     def process_next_page(response_json, http, request, owner, repo, counter, product)
       return unless response_json['data'].present? && response_json['data']['repository'].present?
+
       releases_info = response_json['data']['repository']['releases']
-      return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage']
+      return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage'].present?
 
       offset = releases_info['pageInfo']['endCursor']
       request.body = { 'query' => graph_ql_request_body(owner, repo, offset) }.to_json
