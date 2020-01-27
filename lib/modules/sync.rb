@@ -254,6 +254,8 @@ module Modules
       request.body = { 'query' => graph_ql_request_body(owner, repo, offset) }.to_json
       response = http.request(request)
 
+      puts "Processing: #{owner}/#{repo} releases with offset: #{offset}."
+
       response_json = JSON.parse(response.body)
 
       process_current_page(response_json, counter, product)
