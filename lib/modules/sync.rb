@@ -235,6 +235,8 @@ module Modules
       releases_data = response_json['data']['repository']['releases']['edges']
       return if releases_data.empty?
 
+      puts "Processing releases: #{owner}/#{repo} with #{releases_data.count} releases."
+
       releases_data.each do |release_data|
         version_code = release_data['node']['tagName']
         next if product.product_versions.exists?(version: version_code)
@@ -253,6 +255,8 @@ module Modules
       offset = releases_info['pageInfo']['endCursor']
       request.body = { 'query' => graph_ql_request_body(owner, repo, offset) }.to_json
       response = http.request(request)
+
+      puts "Processing next page: #{owner}/#{repo} releases with offset: #{offset}."
 
       response_json = JSON.parse(response.body)
 
