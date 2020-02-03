@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200128154358) do
+ActiveRecord::Schema.define(version: 20200128204056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,15 @@ ActiveRecord::Schema.define(version: 20200128154358) do
 
 # Could not dump table "operator_services" because of following StandardError
 #   Unknown type 'mobile_services' for column 'service'
+
+  create_table "organization_descriptions", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_descriptions_on_organization_id"
+  end
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
@@ -406,6 +415,7 @@ ActiveRecord::Schema.define(version: 20200128154358) do
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
   add_foreign_key "operator_services", "locations", column: "locations_id"
+  add_foreign_key "organization_descriptions", "organizations"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"

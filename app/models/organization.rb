@@ -1,6 +1,8 @@
 class Organization < ApplicationRecord
   include Auditable
 
+  attr_accessor :organization_description
+
   has_and_belongs_to_many :products, join_table: :organizations_products,
                                      after_add: :association_add,
                                      before_remove: :association_remove
@@ -24,6 +26,7 @@ class Organization < ApplicationRecord
                                      before_remove: :association_remove
   has_many :organizations_contacts
   has_many :contacts, through: :organizations_contacts
+  has_many :organization_descriptions
 
   validates :name, presence: true, length: { maximum: 300 }
 

@@ -363,7 +363,6 @@
   var form = document.querySelector('#product-form');
   form.onsubmit = function() {
     var productDescription = $('#product_description');
-    console.log(editor.getContents());
     productDescription.val(JSON.stringify(editor.getContents()));
   };
 </script>

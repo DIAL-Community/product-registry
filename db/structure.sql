@@ -526,6 +526,39 @@ ALTER SEQUENCE public.operator_services_id_seq OWNED BY public.operator_services
 
 
 --
+-- Name: organization_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organization_descriptions (
+    id bigint NOT NULL,
+    organization_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: organization_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organization_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organization_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organization_descriptions_id_seq OWNED BY public.organization_descriptions.id;
+
+
+--
 -- Name: organizations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1518,6 +1551,13 @@ ALTER TABLE ONLY public.operator_services ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: organization_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_descriptions ALTER COLUMN id SET DEFAULT nextval('public.organization_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1743,6 +1783,14 @@ ALTER TABLE ONLY public.locations
 
 ALTER TABLE ONLY public.operator_services
     ADD CONSTRAINT operator_services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organization_descriptions organization_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_descriptions
+    ADD CONSTRAINT organization_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2051,6 +2099,13 @@ CREATE INDEX index_operator_services_on_locations_id ON public.operator_services
 --
 
 CREATE UNIQUE INDEX index_operator_services_on_name_and_locations_id_and_service ON public.operator_services USING btree (name, locations_id, service);
+
+
+--
+-- Name: index_organization_descriptions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organization_descriptions_on_organization_id ON public.organization_descriptions USING btree (organization_id);
 
 
 --
@@ -2418,6 +2473,14 @@ ALTER TABLE ONLY public.deploys
 
 ALTER TABLE ONLY public.candidate_organizations
     ADD CONSTRAINT fk_rails_246998b230 FOREIGN KEY (rejected_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: organization_descriptions fk_rails_3a6b8edce9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_descriptions
+    ADD CONSTRAINT fk_rails_3a6b8edce9 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
 
 
 --
@@ -2876,6 +2939,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200105125805'),
 ('20200107135217'),
 ('20200110151548'),
-('20200128154358');
+('20200128154358'),
+('20200128204056');
 
 
