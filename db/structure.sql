@@ -1037,6 +1037,39 @@ CREATE TABLE public.products_sustainable_development_goals (
 
 
 --
+-- Name: project_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.project_descriptions (
+    id bigint NOT NULL,
+    project_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: project_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.project_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: project_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.project_descriptions_id_seq OWNED BY public.project_descriptions.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1049,7 +1082,6 @@ CREATE TABLE public.projects (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     name character varying NOT NULL,
-    description character varying NOT NULL,
     slug character varying NOT NULL
 );
 
@@ -1628,6 +1660,13 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: project_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_descriptions ALTER COLUMN id SET DEFAULT nextval('public.project_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1871,6 +1910,14 @@ ALTER TABLE ONLY public.product_versions
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: project_descriptions project_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_descriptions
+    ADD CONSTRAINT project_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2176,6 +2223,13 @@ CREATE INDEX index_products_sectors_on_product_id_and_sector_id ON public.produc
 --
 
 CREATE INDEX index_products_sectors_on_sector_id_and_product_id ON public.products_sectors USING btree (sector_id, product_id);
+
+
+--
+-- Name: index_project_descriptions_on_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_project_descriptions_on_project_id ON public.project_descriptions USING btree (project_id);
 
 
 --
@@ -2513,6 +2567,14 @@ ALTER TABLE ONLY public.workflow_descriptions
 
 ALTER TABLE ONLY public.deploys
     ADD CONSTRAINT fk_rails_7995634207 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: project_descriptions fk_rails_94cabf0709; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_descriptions
+    ADD CONSTRAINT fk_rails_94cabf0709 FOREIGN KEY (project_id) REFERENCES public.projects(id);
 
 
 --
@@ -2940,6 +3002,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200107135217'),
 ('20200110151548'),
 ('20200128154358'),
-('20200128204056');
+('20200128204056'),
+('20200130220904'),
+('20200130221126');
 
 

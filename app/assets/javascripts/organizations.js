@@ -66,6 +66,10 @@ function addContact(value, label) {
   addElement("base-selected-contacts", "selected_contacts", value, label);
 }
 
+function addProject(value, label) {
+  addElement("base-selected-projects", "selected_projects", value, label);
+}
+
 var setupMapView = function() {
   tooltip = new ol.Overlay({
     element: document.getElementById('office-popup')
@@ -132,6 +136,11 @@ var setupAutoComplete = function() {
   var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
+
+  // Init the autocomplete for the country field.
+  var projectAutoComplete = autoComplete("/projects.json?without_paging=true", addProject)
+  $('#base-selected-projects').hide();
+  $("#project-search").autocomplete(projectAutoComplete);
 }
 
 function sectorCustomAutoComplete(source, callback) {
