@@ -196,12 +196,27 @@ module Modules
       puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
+    def add_latest_product_version(product)
+      version_code = 'Latest'
+      return if product.product_versions.exists?(version: version_code)
+
+      product_version = ProductVersion.new(version: version_code, version_order: 1)
+      product.product_versions << product_version
+      if product.save
+        puts "Adding 'Latest' as version code for #{product.name}."
+      end
+    end
+
     def sync_product_versions(product)
-      return if product.repository.blank?
+      if product.repository.blank?
+        return add_latest_product_version(product)
+      end
 
       puts "Processing: #{product.repository}"
       repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product.repository.match(repo_regex))
+      if !(match = product.repository.match(repo_regex))
+        return add_latest_product_version(product)
+      end
 
       _, owner, repo = match.captures
 
@@ -233,9 +248,11 @@ module Modules
       return unless response_json['data'].present? && response_json['data']['repository'].present?
 
       releases_data = response_json['data']['repository']['releases']['edges']
-      return if releases_data.empty?
+      if releases_data.empty? && product.product_versions.count.zero?
+        return add_latest_product_version(product)
+      end
 
-      puts "Processing releases: #{owner}/#{repo} with #{releases_data.count} releases."
+      puts "Processing releases: #{releases_data.count} releases."
 
       releases_data.each do |release_data|
         version_code = release_data['node']['tagName']
