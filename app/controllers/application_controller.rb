@@ -16,14 +16,14 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
 
   def not_found
-    raise ActionController::RoutingError.new('Not Found')
+    raise ActionController::RoutingError, 'Not Found'
   end
 
   def set_locale
     accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
     if accept_language
       accept_language.scan(/[a-z]{2}(?=;)/).first
-      if (I18n.available_locales.index(accept_language[0..1].to_sym))
+      if I18n.available_locales.index(accept_language[0..1].to_sym)
         I18n.locale = accept_language[0..1].to_sym
       end
     end
@@ -44,14 +44,17 @@ class ApplicationController < ActionController::Base
 
   def generate_offset(first_duplicate)
     size = 1
-    if (!first_duplicate.nil?)
-      size = first_duplicate
-                .slug
-                .slice(/_dup\d+$/)
-                .delete('^0-9')
-                .to_i + 1
+    if !first_duplicate.nil?
+      size = first_duplicate.slug
+                            .slice(/_dup\d+$/)
+                            .delete('^0-9')
+                            .to_i + 1
+      logger.info("Slug dupes: #{first_duplicate.slug
+                                                .slice(/_dup\d+$/)
+                                                .delete('^0-9')
+                                                .to_i}")
     end
-    return "_dup#{size.to_s}"
+    "_dup#{size}"
   end
 
   def update_cookies(filter_name)
@@ -68,8 +71,8 @@ class ApplicationController < ActionController::Base
     filter_array.each do | filter_item |
       curr_filter = filter_array[filter_item]
       filter_name = curr_filter['filter_name']
+      filter_obj = {}
       if curr_filter['filter_value']
-        filter_obj = Hash.new
         filter_obj['value'] = curr_filter['filter_value']
         filter_obj['label'] = curr_filter['filter_label']
         existing_value = session[filter_name.to_s]
@@ -77,9 +80,8 @@ class ApplicationController < ActionController::Base
         existing_value.empty? && session.delete(filter_name.to_s)
         !existing_value.empty? && session[filter_name.to_s] = existing_value
       else
-        filter_obj = Hash.new
         existing_value = session[filter_name.to_s]
-        existing_value && existing_value.delete(filter_obj)
+        existing_value&.delete(filter_obj)
         session.delete(filter_name.to_s)
       end
       update_cookies(filter_name)
@@ -93,7 +95,7 @@ class ApplicationController < ActionController::Base
 
     retval = false
     filter_name = params['filter_name']
-    filter_obj = Hash.new
+    filter_obj = {}
     filter_obj['value'] = params['filter_value']
     filter_obj['label'] = params['filter_label']
     if params['filter_label'].nil? || params['filter_label'].empty?
@@ -102,7 +104,7 @@ class ApplicationController < ActionController::Base
     else
       existing_value = session[filter_name.to_s]
       existing_value.nil? && existing_value = []
-      if (!existing_value.include? filter_obj)
+      if !existing_value.include? filter_obj
         existing_value.push(filter_obj)
         retval = true
       end
@@ -113,7 +115,7 @@ class ApplicationController < ActionController::Base
   end
 
   def remove_all_filters
-    puts "REMOVE ALL FILTERS"
+    logger.info 'Removing all filters'
     ORGANIZATION_FILTER_KEYS.each do |key|
       if session[key]
         session.delete(key)
@@ -128,7 +130,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_filters
-    filters = Hash.new
+    filters = {}
     ORGANIZATION_FILTER_KEYS.each do |key|
       if session[key]
         filters[key] = session[key]
@@ -136,7 +138,7 @@ class ApplicationController < ActionController::Base
     end
     FRAMEWORK_FILTER_KEYS.each do |key|
       if session[key]
-        puts "SESSION: "+session[key].to_s
+        logger.info "Session: #{session[key]}"
         filters[key] = session[key]
       end
     end
@@ -157,7 +159,7 @@ class ApplicationController < ActionController::Base
 
   def sanitize_session_values(filter_name)
     filter_values = []
-    if (session.key? filter_name.to_s)
+    if session.key? filter_name.to_s
       session[filter_name.to_s].each do |curr_filter|
         filter_values.push(curr_filter['value'])
       end
@@ -316,7 +318,12 @@ class ApplicationController < ActionController::Base
   private
 
   def user_not_authorized(exception)
-    flash[:error] = t exception.query.to_s, scope: 'pundit', default: :default
-    redirect_to(request.referrer || root_path)
+    respond_to do |format|
+      format.html do
+        redirect_to request.referrer || root_path,
+                    flash: { error: t(exception.query.to_s), scope: 'pundit', default: :default }
+      end
+      format.json { render json: {}, status: 401 }
+    end
   end
 end

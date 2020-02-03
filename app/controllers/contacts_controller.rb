@@ -117,12 +117,12 @@ class ContactsController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
+      if current_slug != original_slug
         @contacts = Contact.where(slug: current_slug).to_a
       end
     end
-    authorize @contacts, :view_allowed?
-    render json: @contacts, :only => [:name, :title]
+    authorize Contact, :view_allowed?
+    render json: @contacts, only: [:name, :title]
   end
 
   private

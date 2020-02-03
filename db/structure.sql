@@ -936,7 +936,8 @@ CREATE TABLE public.products (
     aliases character varying[] DEFAULT '{}'::character varying[],
     repository character varying,
     license character varying,
-    license_analysis character varying
+    license_analysis character varying,
+    statistics jsonb DEFAULT '"{}"'::jsonb NOT NULL
 );
 
 
@@ -2870,6 +2871,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191206150613'),
 ('20191210210550'),
 ('20200105125805'),
-('20200107135217');
+('20200107135217'),
+('20200110151548');
 
 

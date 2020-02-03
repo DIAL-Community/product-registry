@@ -62,7 +62,7 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   test "Policy tests: should reject all actions for regular user." do
     sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
 
-    get operator_services_url(@operator_service)
+    get operator_service_url(@operator_service.name)
     assert_response :redirect
 
     get new_operator_service_url

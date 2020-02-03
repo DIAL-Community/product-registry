@@ -40,7 +40,7 @@ class CandidateOrganizationsController < ApplicationController
       contact.slug = slug_em(params[:contact][:name])
 
       dupe_count = Contact.where(slug: contact.slug).count
-      if dupe_count > 0
+      if dupe_count.positive?
         first_duplicate = Contact.slug_starts_with(contact.slug).order(slug: :desc).first
         contact.slug = contact.slug + generate_offset(first_duplicate).to_s
       end
@@ -49,7 +49,7 @@ class CandidateOrganizationsController < ApplicationController
     end
 
     respond_to do |format|
-      if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && @candidate_organization.save
+      if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && @candidate_organization.save!
         format.html { redirect_to @candidate_organization, notice: t('view.candidate-organization.form.created') }
         format.json { render :show, status: :created, location: @candidate_organization }
       else
@@ -104,7 +104,7 @@ class CandidateOrganizationsController < ApplicationController
         @candidate_organizations = CandidateOrganization.where(slug: current_slug).select(:name, :slug).to_a
       end
     end
-    authorize @candidate_organizations, :view_allowed?
+    authorize CandidateOrganization, :view_allowed?
     render json: @candidate_organizations, only: [:name]
   end
 
@@ -119,7 +119,7 @@ class CandidateOrganizationsController < ApplicationController
     organization.slug = @candidate_organization.slug
 
     duplicates = Organization.where(slug: organization.slug)
-    if duplicates.count > 0
+    if duplicates.count.positive?
       first_duplicate = Organization.slug_starts_with(organization.slug).order(slug: :desc).first
       organization.slug = organization.slug + generate_offset(first_duplicate).to_s
     end

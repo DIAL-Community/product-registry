@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   resources :product_suites
   resources :glossaries
   resources :settings, only: [:index, :edit, :show, :update]
@@ -78,23 +80,23 @@ Rails.application.routes.draw do
   get '/service_capabilities', to: 'organizations#service_capabilities', as: :service_capabilities
   get '/update_capability', to: 'organizations#update_capability', as: :update_capability
 
-  get 'export', :to => 'organizations#export'
-  get 'map_aggregators', :to => 'organizations#map_aggregators'
-  get 'map', :to => 'organizations#map'
-  get 'map_fs', :to => 'organizations#map_fs'
-  get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
-  get 'contact_duplicates', :to => 'contacts#duplicates'
-  get 'location_duplicates', :to => 'locations#duplicates'
-  get 'sector_duplicates', :to => 'sectors#duplicates'
-  get 'product_duplicates', :to => 'products#duplicates'
-  get 'building_block_duplicates', :to => 'building_blocks#duplicates'
-  get 'organization_duplicates', :to => 'organizations#duplicates'
-  get 'use_case_duplicates', :to => 'use_cases#duplicates'
-  get 'workflow_duplicates', :to => 'workflows#duplicates'
-  get 'glossary_duplicates', :to => 'glossaries#duplicates'
-  get 'product_suite_duplicates', :to => 'product_suites#duplicates'
-  get 'deploys_refresh_list', :to => 'deploys#refresh_list'
+  get 'export', to: 'organizations#export'
+  get 'map_aggregators', to: 'organizations#map_aggregators'
+  get 'map', to: 'organizations#map'
+  get 'map_fs', to: 'organizations#map_fs'
+  get 'candidate_organization_duplicates', to: 'candidate_organizations#duplicates'
+  get 'contact_duplicates', to: 'contacts#duplicates'
+  get 'location_duplicates', to: 'locations#duplicates'
+  get 'sector_duplicates', to: 'sectors#duplicates'
+  get 'product_duplicates', to: 'products#duplicates'
+  get 'building_block_duplicates', to: 'building_blocks#duplicates'
+  get 'organization_duplicates', to: 'organizations#duplicates'
+  get 'use_case_duplicates', to: 'use_cases#duplicates'
+  get 'workflow_duplicates', to: 'workflows#duplicates'
+  get 'glossary_duplicates', to: 'glossaries#duplicates'
+  get 'product_suite_duplicates', to: 'product_suites#duplicates'
+  get 'deploys_refresh_list', to: 'deploys#refresh_list'
 
-  get 'productmap', :to => 'products#map'
+  get 'productmap', to: 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

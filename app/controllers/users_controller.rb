@@ -30,7 +30,9 @@ class UsersController < ApplicationController
 
   def update
     user_hash = {}
-    user_hash[:role] = user_params[:role]
+    if user_params[:role].present?
+      user_hash[:role] = user_params[:role]
+    end
 
     user_hash[:receive_backup] = false
     if (user_params[:receive_backup]) && (user_hash[:role] == "admin")
