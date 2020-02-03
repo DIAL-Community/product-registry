@@ -175,9 +175,11 @@ en:
         aggregator: Aggregator
         website: Website
         when-endorsed: When endorsed
+        description-placeholder: Description of the organization goes here.
       index:
         endorsers: Endorsers
         aggregators: Aggregators
+        description: Description
         endorsed-date: Endorsed on
         export: Export
         export-option: Export with contacts info

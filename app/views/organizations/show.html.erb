@@ -32,6 +32,12 @@
           <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
         </p>
       <% end %>
+      <% if !@organization_description.description.nil? && !@organization_description.description.empty? && @organization_description.description != "{}" %>
+        <p class="m-2">
+          <strong><%= t('view.organization.index.description') %>:</strong>
+          <div id="product-viewer" class="wysiwyg-viewer"></div>
+        </p>
+      <% end %>
       <% if !@organization.website.nil? %>
         <p class="m-2">
           <strong><%= "#{t('view.organization.form.website')}:" %></strong>
@@ -202,5 +208,6 @@
 
     $(document).on('organizations#show:loaded', updateMapMarker)
   <% end %>
-    
+
+  setUpViewer(<%= raw JSON.generate(@organization_description.description) %>)    
 </script>

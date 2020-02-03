@@ -72,6 +72,7 @@ class OrganizationsController < ApplicationController
   def new
     authorize Organization, :mod_allowed?
     @organization = Organization.new
+    @organization_description = OrganizationDescription.new
   end
 
   # GET /organizations/1/edit
@@ -154,16 +155,28 @@ class OrganizationsController < ApplicationController
     end
 
     respond_to do |format|
-      if !@organization.errors.any? && @organization.save
-        format.html { redirect_to @organization,
-                      flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize) }}
+      if @organization.errors.none? && @organization.save
+
+        if organization_params[:organization_description].present?
+          @organization_description = OrganizationDescription.new
+          @organization_description.organization_id = @organization.id
+          @organization_description.locale = I18n.locale
+          @organization_description.description = JSON.parse(organization_params[:organization_description])
+          @organization_description.save
+        end
+
+        format.html do
+          redirect_to @organization, flash: {
+            notice: t('messages.model.created', model: t('model.organization').to_s.humanize)
+          }
+        end
         format.json { render :show, status: :created, location: @organization }
       else
-        errMsg = ""
-        @organization.errors.each do |attr, err|
-          errMsg = err
+        error_message = ''
+        @organization.errors.each do |_, err|
+          error_message = err
         end
-        format.html { redirect_to new_organization_url, flash: { error: errMsg } }
+        format.html { redirect_to new_organization_url, flash: { error: error_message } }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
@@ -253,14 +266,23 @@ class OrganizationsController < ApplicationController
       @organization.set_image_changed(params[:logo].original_filename)
     end
 
+    if organization_params[:organization_description].present?
+      @organization_description.organization_id = @organization.id
+      @organization_description.locale = I18n.locale
+      @organization_description.description = JSON.parse(organization_params[:organization_description])
+      @organization_description.save
+    end
+
     respond_to do |format|
-      
-      if !@organization.errors.any? 
-        if (organization_params)
+      if @organization.errors.none?
+        if organization_params
           @organization.update(organization_params)
         end
-        format.html { redirect_to @organization,
-                      flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
+        format.html do
+          redirect_to @organization, flash: {
+            notice: t('messages.model.updated', model: t('model.organization').to_s.humanize)
+          }
+        end
         format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
@@ -391,6 +413,13 @@ class OrganizationsController < ApplicationController
       if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end
+
+      @organization_description = OrganizationDescription.where(organization_id: @organization, locale: I18n.locale)
+                                                         .first
+      if @organization_description.nil?
+        @organization_description = OrganizationDescription.new
+      end
+
       if !@organization.nil? && @organization.is_mni 
         #operator_services_ids = @organization.aggregator_capabilities.all.select(:operator_services_id).map(&:operator_services_id).uniq
         #@operator_services = OperatorService.where('id in (?)', operator_services_ids)
