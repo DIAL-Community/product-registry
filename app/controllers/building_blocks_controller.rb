@@ -1,6 +1,6 @@
 class BuildingBlocksController < ApplicationController
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate]
 
   # GET /building_blocks
   # GET /building_blocks.json
@@ -163,16 +163,16 @@ class BuildingBlocksController < ApplicationController
   end
 
   def duplicates
-    @building_blocks = Array.new
+    @building_blocks = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
+      if current_slug != original_slug
         @building_blocks = BuildingBlock.where(slug: current_slug).to_a
       end
     end
-    authorize @building_blocks, :view_allowed?
-    render json: @building_blocks, :only => [:name]
+    authorize BuildingBlock, :view_allowed?
+    render json: @building_blocks, only: [:name]
   end
 
   private

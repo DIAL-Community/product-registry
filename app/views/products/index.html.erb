@@ -37,7 +37,7 @@
     <% if user_signed_in? && policy(Product).mod_allowed? %>
       <%= link_to t('view.general.create'), new_product_path, class: 'small mr-1' %>
       <span class="small mr-1">&nbsp;|</span>
-      <%= link_to t('view.organization.index.view-audit'), audits_path("Product"), :class => 'small mr-1' %>
+      <%= link_to t('view.organization.index.view-audit'), audits_path(type: "Product"), :class => 'small mr-1' %>
     <% else %>
       <%= link_to t('view.general.create'),
           'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
