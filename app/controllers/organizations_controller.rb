@@ -130,6 +130,13 @@ class OrganizationsController < ApplicationController
       end
     end
 
+    if params[:selected_projects].present?
+      params[:selected_projects].keys.each do |project_id|
+        project = Project.find(project_id)
+        @organization.projects.push(project)
+      end
+    end
+
     if (params[:office_id].present?)
       office = Location.find(params[:office_id])
       if (office)
@@ -238,6 +245,15 @@ class OrganizationsController < ApplicationController
       end
     end
     @organization.products = products.to_a
+
+    projects = Set.new
+    if params[:selected_projects].present?
+      params[:selected_projects].keys.each do |project_id|
+        project = Project.find(project_id)
+        projects.add(project)
+      end
+    end
+    @organization.projects = projects.to_a
 
     if (params[:office_ids].present?)
       params[:office_ids].keys.each do |office_id|
