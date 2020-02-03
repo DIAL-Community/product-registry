@@ -468,7 +468,10 @@ CREATE TABLE public.locations (
     points point[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    location_type public.location_type NOT NULL
+    location_type public.location_type NOT NULL,
+    country character varying,
+    city character varying,
+    state character varying
 );
 
 
@@ -2872,6 +2875,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191210210550'),
 ('20200105125805'),
 ('20200107135217'),
-('20200110151548');
+('20200110151548'),
+('20200128154358');
 
 

@@ -136,4 +136,20 @@ namespace :sync do
       sync_product_statistics(product)
     end
   end
+
+  task :update_locations_data, [] => :environment do
+    puts 'Starting to update location data ...'
+    countries = YAML.load_file('config/country_lookup.yml')
+
+    country_lookup = {}
+    countries['countries'].each do |country|
+      country_lookup[country['country_code']] = country['country_name']
+    end
+
+    access_token = authenticate_user
+
+    Location.where(location_type: 'point').each do |location|
+      clean_location_data(location, country_lookup, access_token)
+    end
+  end
 end

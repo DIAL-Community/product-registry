@@ -416,5 +416,70 @@ module Modules
       '  }'\
       '}'\
     end
+
+    def clean_location_data(location, country_lookup, access_token)
+      return if !location.country.nil? && !location.city.nil?
+
+      sleep 1
+
+      puts "Processing: #{location.name}."
+
+      uri = URI.parse(Rails.configuration.geocode['esri']['auth_uri'])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['reverse_geocode_uri']}{?q*}")
+      reverse_geocode_uri = uri_template.expand(
+        'q': {
+          'location': "#{location.points[0].y}, #{location.points[0].x}",
+          'langCode': 'en',
+          'token': access_token,
+          'f': 'json'
+        }
+      )
+      uri = URI.parse(reverse_geocode_uri)
+      response = Net::HTTP.post_form(uri, {})
+      location_data = JSON.parse(response.body)
+
+      location.city = location_data['address']['City']
+      location.state = location_data['address']['Region']
+      location.country = country_lookup[location_data['address']['CountryCode']]
+
+      location.name = [location.city, location.state, location.country].reject(&:blank?).join(', ')
+
+      current_slug = slug_em(location.name)
+      if Location.where(slug: current_slug).count.positive?
+        duplicate_location = Location.slug_starts_with(current_slug).order(slug: :desc).first
+        duplicate_count = 1
+        if !duplicate_location.nil?
+          duplicate_count = duplicate_location.slug
+                                              .slice(/_dup\d+$/)
+                                              .delete('^0-9')
+                                              .to_i + 1
+        end
+        current_slug = "#{current_slug}_dup#{duplicate_count}"
+      end
+      location.slug = current_slug
+
+      if location.save
+        puts "Updating location with id: #{location.id} to: #{location.name}."
+      end
+    end
+
+    def authenticate_user
+      uri = URI.parse(Rails.configuration.geocode['esri']['auth_uri'])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(uri.path)
+      data = { 'client_id' => Rails.configuration.geocode['esri']['client_id'],
+               'client_secret' => Rails.configuration.geocode['esri']['client_secret'],
+               'grant_type' => Rails.configuration.geocode['esri']['grant_type'] }
+      request.set_form_data(data)
+
+      response = http.request(request)
+      response_json = JSON.parse(response.body)
+      response_json['access_token']
+    end
   end
 end
