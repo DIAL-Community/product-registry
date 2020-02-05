@@ -1,11 +1,24 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<% if user_signed_in? && policy(Project).mod_allowed? %>
+  <%= link_to t('view.general.create'), new_project_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
+<div class="float-right pb-2">
+  <%= form_tag(projects_path, :method => "get", id: "search-form", class: "form-inline") do %>
+  <%= text_field_tag :search, params[:search],
+      placeholder: t('view.general.search-placeholder', model: t('model.project').to_s.pluralize),
+      class: "form-control" %>
+  <div class="input-group-append">
+    <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
+  </div>
+<% end %>
+</div>
+
 <table class="table">
   <thead class="thead-light">
     <tr>
       <th><%= t('view.general.name') %></th>
-      <th><%= t('view.project.index.description') %></th>
       <th><%= t('view.project.index.start-date') %></th>
       <th><%= t('view.project.index.end-date') %></th>
       <th><%= t('view.project.index.budget') %></th>
@@ -17,7 +30,6 @@
       <% @projects.each do |project| %>
         <tr>
           <td><%= project.name %></td>
-          <td><%= project.description %></td>
           <td><%= project.start_date %></td>
           <td><%= project.end_date %></td>
           <td class="nav-item dropdown">
@@ -28,8 +40,9 @@
             <div class="dropdown-menu">
               <%= link_to t('view.general.view'), project, :class =>"dropdown-item"  %>
               <% if user_signed_in? && policy(project).mod_allowed? %>
+                <%= link_to t('view.general.edit'), edit_project_path(project), :class =>"dropdown-item" %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), project, method: :delete, data: { confirm: t('view.gneral.delete-confirmation') }, :class =>"dropdown-item" %>
+                <%= link_to t('view.general.delete'), project, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
               <% end %>
             </div>
           </td>

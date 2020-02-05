@@ -196,12 +196,27 @@ module Modules
       puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
+    def add_latest_product_version(product)
+      version_code = 'Latest'
+      return if product.product_versions.exists?(version: version_code)
+
+      product_version = ProductVersion.new(version: version_code, version_order: 1)
+      product.product_versions << product_version
+      if product.save
+        puts "Adding 'Latest' as version code for #{product.name}."
+      end
+    end
+
     def sync_product_versions(product)
-      return if product.repository.blank?
+      if product.repository.blank?
+        return add_latest_product_version(product)
+      end
 
       puts "Processing: #{product.repository}"
       repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product.repository.match(repo_regex))
+      if !(match = product.repository.match(repo_regex))
+        return add_latest_product_version(product)
+      end
 
       _, owner, repo = match.captures
 
@@ -222,7 +237,7 @@ module Modules
       end
 
       process_current_page(response_json, counter, product)
-      process_next_page(response_json, http, request, owner, repo)
+      process_next_page(response_json, http, request, owner, repo, counter, product)
 
       if product.save!
         puts "Product versions saved: #{product.product_versions.size}."
@@ -230,9 +245,14 @@ module Modules
     end
 
     def process_current_page(response_json, counter, product)
-      return unless response_json['data'].present? && response_json['data']['releases'].present?
+      return unless response_json['data'].present? && response_json['data']['repository'].present?
+
       releases_data = response_json['data']['repository']['releases']['edges']
-      return if releases_data.empty?
+      if releases_data.empty? && product.product_versions.count.zero?
+        return add_latest_product_version(product)
+      end
+
+      puts "Processing releases: #{releases_data.count} releases."
 
       releases_data.each do |release_data|
         version_code = release_data['node']['tagName']
@@ -243,19 +263,22 @@ module Modules
       end
     end
 
-    def process_next_page(response_json, http, request, owner, repo)
+    def process_next_page(response_json, http, request, owner, repo, counter, product)
       return unless response_json['data'].present? && response_json['data']['repository'].present?
+
       releases_info = response_json['data']['repository']['releases']
-      return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage']
+      return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage'].present?
 
       offset = releases_info['pageInfo']['endCursor']
       request.body = { 'query' => graph_ql_request_body(owner, repo, offset) }.to_json
       response = http.request(request)
 
+      puts "Processing next page: #{owner}/#{repo} releases with offset: #{offset}."
+
       response_json = JSON.parse(response.body)
 
-      process_current_page(response_json)
-      process_next_page(response_json, http, request, owner, repo)
+      process_current_page(response_json, counter, product)
+      process_next_page(response_json, http, request, owner, repo, counter, product)
     end
 
     def graph_ql_request_body(owner, repo, offset)
@@ -392,6 +415,71 @@ module Modules
       '    }'\
       '  }'\
       '}'\
+    end
+
+    def clean_location_data(location, country_lookup, access_token)
+      return if !location.country.nil? && !location.city.nil?
+
+      sleep 1
+
+      puts "Processing: #{location.name}."
+
+      uri = URI.parse(Rails.configuration.geocode['esri']['auth_uri'])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['reverse_geocode_uri']}{?q*}")
+      reverse_geocode_uri = uri_template.expand(
+        'q': {
+          'location': "#{location.points[0].y}, #{location.points[0].x}",
+          'langCode': 'en',
+          'token': access_token,
+          'f': 'json'
+        }
+      )
+      uri = URI.parse(reverse_geocode_uri)
+      response = Net::HTTP.post_form(uri, {})
+      location_data = JSON.parse(response.body)
+
+      location.city = location_data['address']['City']
+      location.state = location_data['address']['Region']
+      location.country = country_lookup[location_data['address']['CountryCode']]
+
+      location.name = [location.city, location.state, location.country].reject(&:blank?).join(', ')
+
+      current_slug = slug_em(location.name)
+      if Location.where(slug: current_slug).count.positive?
+        duplicate_location = Location.slug_starts_with(current_slug).order(slug: :desc).first
+        duplicate_count = 1
+        if !duplicate_location.nil?
+          duplicate_count = duplicate_location.slug
+                                              .slice(/_dup\d+$/)
+                                              .delete('^0-9')
+                                              .to_i + 1
+        end
+        current_slug = "#{current_slug}_dup#{duplicate_count}"
+      end
+      location.slug = current_slug
+
+      if location.save
+        puts "Updating location with id: #{location.id} to: #{location.name}."
+      end
+    end
+
+    def authenticate_user
+      uri = URI.parse(Rails.configuration.geocode['esri']['auth_uri'])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(uri.path)
+      data = { 'client_id' => Rails.configuration.geocode['esri']['client_id'],
+               'client_secret' => Rails.configuration.geocode['esri']['client_secret'],
+               'grant_type' => Rails.configuration.geocode['esri']['grant_type'] }
+      request.set_form_data(data)
+
+      response = http.request(request)
+      response_json = JSON.parse(response.body)
+      response_json['access_token']
     end
   end
 end

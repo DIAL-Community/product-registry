@@ -175,9 +175,11 @@ en:
         aggregator: Aggregator
         website: Website
         when-endorsed: When endorsed
+        description-placeholder: Description of the organization goes here.
       index:
         endorsers: Endorsers
         aggregators: Aggregators
+        description: Description
         endorsed-date: Endorsed on
         export: Export
         export-option: Export with contacts info
@@ -249,7 +251,7 @@ en:
         no-include-product: We don't have any includes information for this product.
         no-interrop-product: We don't have any interoperating information for this product.
         no-osc-eval: This product hasn't been evaluated with the OSC's maturity model.
-        active-version: Latest version
+        active-version: Current version
         license: License
         license-unknown: Unknown
         statistics: Statistics

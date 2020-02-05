@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200110151548) do
+ActiveRecord::Schema.define(version: 20200130221126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,15 @@ ActiveRecord::Schema.define(version: 20200110151548) do
 
 # Could not dump table "operator_services" because of following StandardError
 #   Unknown type 'mobile_services' for column 'service'
+
+  create_table "organization_descriptions", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_descriptions_on_organization_id"
+  end
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
@@ -250,16 +259,24 @@ ActiveRecord::Schema.define(version: 20200110151548) do
     t.index ["sustainable_development_goal_id", "product_id"], name: "sdgs_prods", unique: true
   end
 
+  create_table "project_descriptions", force: :cascade do |t|
+    t.bigint "project_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_descriptions_on_project_id"
+  end
+
   create_table "projects", force: :cascade do |t|
-    t.bigint "origin_id"
     t.date "start_date"
     t.date "end_date"
     t.decimal "budget", precision: 12, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", null: false
-    t.string "description", null: false
     t.string "slug", null: false
+    t.bigint "origin_id"
     t.index ["origin_id"], name: "index_projects_on_origin_id"
   end
 
@@ -406,6 +423,7 @@ ActiveRecord::Schema.define(version: 20200110151548) do
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
   add_foreign_key "operator_services", "locations", column: "locations_id"
+  add_foreign_key "organization_descriptions", "organizations"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"
@@ -427,6 +445,7 @@ ActiveRecord::Schema.define(version: 20200110151548) do
   add_foreign_key "products_origins", "products", name: "products_origins_product_fk"
   add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
   add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
+  add_foreign_key "project_descriptions", "projects"
   add_foreign_key "projects", "origins"
   add_foreign_key "projects_locations", "locations", name: "projects_locations_location_fk"
   add_foreign_key "projects_locations", "projects", name: "projects_locations_project_fk"

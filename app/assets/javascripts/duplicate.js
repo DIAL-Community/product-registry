@@ -92,6 +92,10 @@ var productSuiteDuplicateCheck = function() {
   duplicateCheck("product_suite_name", "/product_suite_duplicates.json");
 }
 
+var projectDuplicateCheck = function() {
+  duplicateCheck("project_name", "/project_duplicates.json");
+}
+
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
@@ -114,3 +118,5 @@ $(document).on('glossaries#edit:loaded', glossaryDuplicateCheck);
 $(document).on('glossaries#new:loaded', glossaryDuplicateCheck);
 $(document).on('product_suites#edit:loaded', productSuiteDuplicateCheck);
 $(document).on('product_suites#new:loaded', productSuiteDuplicateCheck);
+$(document).on('projects#edit:loaded', projectDuplicateCheck);
+$(document).on('projects#new:loaded', projectDuplicateCheck);

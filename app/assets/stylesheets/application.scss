@@ -68,6 +68,7 @@ h6 {
   display:flex;
   align-items:center;
   flex-grow: 1;
+  min-height: 195px;
 }
 
 .index-card {
@@ -365,4 +366,8 @@ h6 {
 
 .ql-editor {
   min-height: 6rem;
+}
+
+.ql-container {
+  height: auto !important;
 }

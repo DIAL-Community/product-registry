@@ -7,7 +7,9 @@ class BuildingBlockPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == "admin" || user.role == "ict4sdg"
+    return false if user.nil?
+
+    user.role == 'admin' || user.role == 'ict4sdg'
   end
 
   def view_allowed?

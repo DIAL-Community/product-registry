@@ -468,7 +468,10 @@ CREATE TABLE public.locations (
     points point[],
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    location_type public.location_type NOT NULL
+    location_type public.location_type NOT NULL,
+    country character varying,
+    city character varying,
+    state character varying
 );
 
 
@@ -520,6 +523,39 @@ CREATE SEQUENCE public.operator_services_id_seq
 --
 
 ALTER SEQUENCE public.operator_services_id_seq OWNED BY public.operator_services.id;
+
+
+--
+-- Name: organization_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organization_descriptions (
+    id bigint NOT NULL,
+    organization_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: organization_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organization_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organization_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organization_descriptions_id_seq OWNED BY public.organization_descriptions.id;
 
 
 --
@@ -936,7 +972,8 @@ CREATE TABLE public.products (
     aliases character varying[] DEFAULT '{}'::character varying[],
     repository character varying,
     license character varying,
-    license_analysis character varying
+    license_analysis character varying,
+    statistics jsonb DEFAULT '"{}"'::jsonb NOT NULL
 );
 
 
@@ -1000,6 +1037,39 @@ CREATE TABLE public.products_sustainable_development_goals (
 
 
 --
+-- Name: project_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.project_descriptions (
+    id bigint NOT NULL,
+    project_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: project_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.project_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: project_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.project_descriptions_id_seq OWNED BY public.project_descriptions.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1012,7 +1082,6 @@ CREATE TABLE public.projects (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     name character varying NOT NULL,
-    description character varying NOT NULL,
     slug character varying NOT NULL
 );
 
@@ -1514,6 +1583,13 @@ ALTER TABLE ONLY public.operator_services ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: organization_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_descriptions ALTER COLUMN id SET DEFAULT nextval('public.organization_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1581,6 +1657,13 @@ ALTER TABLE ONLY public.product_versions ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: project_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_descriptions ALTER COLUMN id SET DEFAULT nextval('public.project_descriptions_id_seq'::regclass);
 
 
 --
@@ -1742,6 +1825,14 @@ ALTER TABLE ONLY public.operator_services
 
 
 --
+-- Name: organization_descriptions organization_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_descriptions
+    ADD CONSTRAINT organization_descriptions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: organizations_contacts organizations_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1819,6 +1910,14 @@ ALTER TABLE ONLY public.product_versions
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: project_descriptions project_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_descriptions
+    ADD CONSTRAINT project_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2050,6 +2149,13 @@ CREATE UNIQUE INDEX index_operator_services_on_name_and_locations_id_and_service
 
 
 --
+-- Name: index_organization_descriptions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organization_descriptions_on_organization_id ON public.organization_descriptions USING btree (organization_id);
+
+
+--
 -- Name: index_organizations_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2117,6 +2223,13 @@ CREATE INDEX index_products_sectors_on_product_id_and_sector_id ON public.produc
 --
 
 CREATE INDEX index_products_sectors_on_sector_id_and_product_id ON public.products_sectors USING btree (sector_id, product_id);
+
+
+--
+-- Name: index_project_descriptions_on_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_project_descriptions_on_project_id ON public.project_descriptions USING btree (project_id);
 
 
 --
@@ -2417,6 +2530,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 
 --
+-- Name: organization_descriptions fk_rails_3a6b8edce9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_descriptions
+    ADD CONSTRAINT fk_rails_3a6b8edce9 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
 -- Name: projects fk_rails_45a5b9baa8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2446,6 +2567,14 @@ ALTER TABLE ONLY public.workflow_descriptions
 
 ALTER TABLE ONLY public.deploys
     ADD CONSTRAINT fk_rails_7995634207 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: project_descriptions fk_rails_94cabf0709; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_descriptions
+    ADD CONSTRAINT fk_rails_94cabf0709 FOREIGN KEY (project_id) REFERENCES public.projects(id);
 
 
 --
@@ -2870,6 +2999,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191206150613'),
 ('20191210210550'),
 ('20200105125805'),
-('20200107135217');
+('20200107135217'),
+('20200110151548'),
+('20200128154358'),
+('20200128204056'),
+('20200130220904'),
+('20200130221126');
 
 

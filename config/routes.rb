@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   resources :product_suites
   resources :glossaries
   resources :settings, only: [:index, :edit, :show, :update]
-  resources :projects, only: [:index, :show, :destroy]
+  resources :projects
 
   get 'deploys/index'
   get 'about/cookies'
@@ -94,6 +96,7 @@ Rails.application.routes.draw do
   get 'glossary_duplicates', :to => 'glossaries#duplicates'
   get 'product_suite_duplicates', :to => 'product_suites#duplicates'
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
+  get 'project_duplicates', to: 'projects#duplicates'
 
   get 'productmap', :to => 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

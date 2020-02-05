@@ -78,6 +78,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
+                  <%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'dropdown-item' %>
                   <a target="_blank" rel="noreferrer noopener" href="https://docs.osc.dial.community/projects/product-registry/en/latest/" class="dropdown-item">
                     <%= t('view.header.documentation') %>
                   </a>
