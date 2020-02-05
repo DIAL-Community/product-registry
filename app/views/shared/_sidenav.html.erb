@@ -44,45 +44,49 @@
             'slow');
     });
 
+    // Only do this on the landing page
+      
     $(window).scroll(function(){
-        currPos = $(window).scrollTop() + 500
+       if ($("#overview_section").length > 0) {
+          currPos = $(window).scrollTop() + 500
 
-        if (currPos < $("#overview_section").position().top) {
-            introDot.addClass('nav-highlight');
-            overviewDot.removeClass('nav-highlight');
-            donorDot.removeClass('nav-highlight');
-            policyDot.removeClass('nav-highlight');
-            ministerDot.removeClass('nav-highlight');
-        }
-        if ((currPos > $("#overview_section").position().top) && (currPos < $("#donor_section").position().top)) {
-            introDot.removeClass('nav-highlight');
-            overviewDot.addClass('nav-highlight');
-            donorDot.removeClass('nav-highlight');
-            policyDot.removeClass('nav-highlight');
-            ministerDot.removeClass('nav-highlight');
-        }
-        if ((currPos > $("#donor_section").position().top) && (currPos < $("#policy_section").position().top)) {
-            introDot.removeClass('nav-highlight');
-            overviewDot.removeClass('nav-highlight');
-            donorDot.addClass('nav-highlight');
-            policyDot.removeClass('nav-highlight');
-            ministerDot.removeClass('nav-highlight');
-        }
+          if (currPos < $("#overview_section").position().top) {
+              introDot.addClass('nav-highlight');
+              overviewDot.removeClass('nav-highlight');
+              donorDot.removeClass('nav-highlight');
+              policyDot.removeClass('nav-highlight');
+              ministerDot.removeClass('nav-highlight');
+          }
+          if ((currPos > $("#overview_section").position().top) && (currPos < $("#donor_section").position().top)) {
+              introDot.removeClass('nav-highlight');
+              overviewDot.addClass('nav-highlight');
+              donorDot.removeClass('nav-highlight');
+              policyDot.removeClass('nav-highlight');
+              ministerDot.removeClass('nav-highlight');
+          }
+          if ((currPos > $("#donor_section").position().top) && (currPos < $("#policy_section").position().top)) {
+              introDot.removeClass('nav-highlight');
+              overviewDot.removeClass('nav-highlight');
+              donorDot.addClass('nav-highlight');
+              policyDot.removeClass('nav-highlight');
+              ministerDot.removeClass('nav-highlight');
+          }
 
-        if ((currPos > $("#policy_section").position().top) && (currPos < $("#implement_section").position().top)) {
-            introDot.removeClass('nav-highlight');
-            overviewDot.removeClass('nav-highlight');
-            donorDot.removeClass('nav-highlight');
-            policyDot.addClass('nav-highlight');
-            ministerDot.removeClass('nav-highlight');
-        }
+          if ((currPos > $("#policy_section").position().top) && (currPos < $("#implement_section").position().top)) {
+              introDot.removeClass('nav-highlight');
+              overviewDot.removeClass('nav-highlight');
+              donorDot.removeClass('nav-highlight');
+              policyDot.addClass('nav-highlight');
+              ministerDot.removeClass('nav-highlight');
+          }
 
-        if (currPos > $("#implement_section").position().top) {
-            introDot.removeClass('nav-highlight');
-            overviewDot.removeClass('nav-highlight');
-            donorDot.removeClass('nav-highlight');
-            policyDot.removeClass('nav-highlight');
-            ministerDot.addClass('nav-highlight');
+          if (currPos > $("#implement_section").position().top) {
+              introDot.removeClass('nav-highlight');
+              overviewDot.removeClass('nav-highlight');
+              donorDot.removeClass('nav-highlight');
+              policyDot.removeClass('nav-highlight');
+              ministerDot.addClass('nav-highlight');
+          }
         }
     });
 

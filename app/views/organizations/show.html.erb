@@ -229,6 +229,8 @@
 
     $(document).on('organizations#show:loaded', updateMapMarker)
   <% end %>
-
-  setUpViewer(<%= raw JSON.generate(@organization_description.description) %>)    
+  
+  <% if !@organization_description.description.nil? && !@organization_description.description.empty? && @organization_description.description != "{}" %>
+    setUpViewer(<%= raw JSON.generate(@organization_description.description) %>) 
+  <% end %>   
 </script>
