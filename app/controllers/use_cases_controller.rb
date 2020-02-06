@@ -83,7 +83,7 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.save
-        if (use_case_params[:bb_desc])
+        if (use_case_params[:uc_desc])
           @ucDesc.use_case_id = @use_case.id
           @ucDesc.locale = I18n.locale
           @ucDesc.description = JSON.parse(use_case_params[:uc_desc])

@@ -43,7 +43,7 @@ function setUpEditor(viewJson, placeholderText) {
       toolbar: [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
-        ['image'],
+        ['link', 'image'],
       
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
