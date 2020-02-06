@@ -199,7 +199,7 @@ function aggregatorClickHandler(evt) {
         `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
           <h6 class="card-header py-2 px-2">${organization.name}</h6>
           <p class="small py-2 px-2 mb-0">
-            <a href="/organizations/${organization.id}"><small>View aggregator</small></a> <br />
+            <a href="/organizations/${organization.name.toLowerCase()}"><small>View aggregator</small></a> <br />
           </p>
         </div>`;
       $(element).html(content);
@@ -224,7 +224,7 @@ function aggregatorClickHandler(evt) {
         orgInfo.append(`<strong>${organization.name}</strong>`);
         orgInfo.append(`<p class="org-details mb-0" style="display:none">
                           <small>
-                            <a href="/organizations/${organization.id}">View organization</a> <br />
+                            <a href="/organizations/${organization.name.toLowerCase()}">View organization</a> <br />
                           </small>
                         </p>`)
         organizationElements.append(orgInfo);
