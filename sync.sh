@@ -12,3 +12,4 @@ rake sync:purge_removed_products['/candidates/nominees']
 rake sync:update_version_data
 rake sync:update_license_data
 rake sync:update_statistics_data
+rake sync:sync_digital_health_atlas_data
