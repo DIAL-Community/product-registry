@@ -122,7 +122,9 @@ module Modules
           org = Organization.where('lower(name) = lower(?)', organization)[0]
           if !org.nil? && !sync_product.organizations.include?(org)
             puts "  Adding org to product: #{org.name}"
+            org_product = OrganizationsProduct.new
             sync_product.organizations << org
+            puts sync_product.organizations.inspect
           end
         end
       end

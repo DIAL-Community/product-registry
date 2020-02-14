@@ -39,6 +39,9 @@ class OrganizationsController < ApplicationController
     products = sanitize_session_values 'products'
     sectors = sanitize_session_values 'sectors'
     years = sanitize_session_values 'years'
+    orgs = sanitize_session_values 'organizations'
+
+    !orgs.empty? && organizations = organizations.where('id in (?)', orgs)
 
     if (endorser_only && aggregator_only)
       organizations = organizations.where(is_endorser: true).or(organizations.where(is_mni: true))

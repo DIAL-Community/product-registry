@@ -34,7 +34,7 @@ var decrementFilterCount = function(filterId) {
   if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
-  if (filterId == "endorser_only" || filterId == "aggregator_only") {
+  if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
     filterId = "years"
   }
   currVal = parseInt($("#accordian-"+filterId+"-count").html())
@@ -49,7 +49,7 @@ var clearFilterCount = function(filterId) {
   if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
-  if (filterId == "endorser_only" || filterId == "aggregator_only") {
+  if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
     filterId = "years"
   }
   $("#accordian-"+filterId+"-count").html("")
@@ -59,7 +59,7 @@ var clearFilterCount = function(filterId) {
   if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
     filterId = "origins"
   }
-  if (filterId == "endorser_only" || filterId == "aggregator_only") {
+  if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
     filterId = "years"
   }
   $("#accordian-"+filterId+"-count").html("")
@@ -168,6 +168,11 @@ var addProductFilter = function(value, label) {
   addFilter(id, value, label)
 }
 
+var addOrganizationFilter = function(value, label) {
+  var id = 'organizations';
+  addFilter(id, value, label)
+}
+
 var prepareFilters = function() {
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
@@ -192,6 +197,7 @@ var prepareFilters = function() {
       filter_array = []
       if (filter_name == 'organizations') {
         filter_array.push({filter_name: 'years'})
+        filter_array.push({filter_name: 'organizations'})
         filter_array.push({filter_name: 'endorser_only'})
         $('#endorser_only').prop('checked', false);
         filter_array.push({filter_name: 'aggregator_only'})
@@ -216,6 +222,9 @@ var prepareFilters = function() {
 
     var productAutoComplete = autoComplete("/products.json?without_paging=true", addProductFilter)
     $("#products").autocomplete(productAutoComplete);
+
+    var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganizationFilter)
+    $("#organizations").autocomplete(organizationAutoComplete);
 
     loadFilters();
 }
