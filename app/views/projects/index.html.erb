@@ -30,8 +30,8 @@
       <% @projects.each do |project| %>
         <tr>
           <td><%= project.name %></td>
-          <td><%= project.start_date %></td>
-          <td><%= project.end_date %></td>
+          <td><%= !project.start_date.nil? ? project.start_date.strftime("%d/%m/%Y") : '' %></td>
+          <td><%= !project.end_date.nil? ? project.end_date.strftime("%d/%m/%Y") : '' %></td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">

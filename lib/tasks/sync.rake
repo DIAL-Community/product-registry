@@ -152,4 +152,95 @@ namespace :sync do
       clean_location_data(location, country_lookup, access_token)
     end
   end
+
+  task :sync_digital_health_atlas_data, [] => :environment do
+    dha_origin = Origin.find_by(name: 'Digital Health Atlas')
+    if dha_origin.nil?
+      dha_origin = Origin.new
+      dha_origin.name = 'Digital Health Atlas'
+      dha_origin.slug = slug_em dha_origin.name
+      dha_origin.description = 'Digital Health Atlas Website'
+
+      if dha_origin.save
+        puts 'Digital health atlas as origin is created.'
+      end
+    end
+
+    csv_table = CSV.parse(File.read('utils/DHA-Data.csv'), headers: true)
+
+    csv_table.each do |csv_row|
+      project_name = csv_row[0]
+
+      existing_project = Project.find_by(name: project_name)
+      next unless existing_project.nil?
+
+      existing_project = Project.new
+      existing_project.name = project_name
+      existing_project.slug = slug_em existing_project.name
+      existing_project.origin = dha_origin
+
+      country_name = csv_row['Country']
+      location = Location.find_by(name: country_name, location_type: 'country')
+      if !location.nil?
+        existing_project.locations << location
+      end
+
+      # There's two date. We will always try to use the start date.
+      # If start date is nil, then we will try to use the implementing date.
+      start_date = csv_row['Start Date']
+      if start_date.nil?
+        start_date = csv_row['Implementing Date']
+      end
+
+      if !start_date.nil?
+        begin
+          existing_project.start_date = Date.parse(start_date.to_s)
+        rescue ArgumentError
+          puts "Invalid start date: #{start_date}"
+        end
+      end
+
+      end_date = csv_row['End Date']
+      if !end_date.nil?
+        begin
+          existing_project.end_date = Date.parse(csv_row['End Date'].to_s)
+        rescue ArgumentError
+          puts "Invalid end date: #{csv_row['End Date']}"
+        end
+      end
+
+      description = {
+        ops: [
+          insert: csv_row['Overview of digital health implementation']
+        ]
+      }
+
+      project_description = ProjectDescription.new
+      project_description.locale = I18n.locale
+      project_description.description = description
+
+      existing_project.project_descriptions << project_description
+
+      product = Product.find_by(name: csv_row['Software'])
+      if !product.nil?
+        existing_project.products << product
+      end
+
+      organizations = Set.new
+      organization = Organization.find_by(name: csv_row['Organisation Name'])
+      !organization.nil? && organizations.add(organization)
+
+      organization = Organization.find_by(name: csv_row['Donors'])
+      !organization.nil? && organizations.add(organization)
+
+      organization = Organization.find_by(name: csv_row['Implementing Partners'])
+      !organization.nil? && organizations.add(organization)
+
+      existing_project.organizations = organizations.to_a
+
+      if existing_project.save!
+        puts "Project #{existing_project.name} saved!"
+      end
+    end
+  end
 end
