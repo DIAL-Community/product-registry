@@ -27,7 +27,7 @@ class Organization < ApplicationRecord
   has_many :organizations_contacts
   has_many :contacts, through: :organizations_contacts
   has_many :organizations_products
-  has_many :contacts, through: :organizations_products
+  has_many :products, through: :organizations_products
   has_many :organization_descriptions
 
   validates :name, presence: true, length: { maximum: 300 }
