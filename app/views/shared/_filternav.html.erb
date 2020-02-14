@@ -303,16 +303,16 @@
         <div class="row mb-2">
           <div class="col-12 ml-1">
             <div class="form-check">
-                <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
-                <%= label_tag "endorser_only", t('view.organization.index.endorsers'), class: "form-check-label" %>
+                <%= check_box_tag "aggregator_only", true, params[:aggregator_only], { class: "form-check-input filter-element checkbox-align", name:"aggregator"} %>
+                <%= label_tag "aggregator_only", t('view.organization.index.aggregators'), class: "form-check-label" %>
             </div>
           </div>
         </div>
         <div class="row mb-2">
           <div class="col-12 ml-1">
             <div class="form-check">
-                <%= check_box_tag "aggregator_only", true, params[:aggregator_only], { class: "form-check-input filter-element checkbox-align", name:"aggregator"} %>
-                <%= label_tag "aggregator_only", t('view.organization.index.aggregators'), class: "form-check-label" %>
+                <%= check_box_tag "endorser_only", true, params[:endorser_only], { class: "form-check-input filter-element checkbox-align", name:"endorser"} %>
+                <%= label_tag "endorser_only", t('view.organization.index.endorsers'), class: "form-check-label" %>
             </div>
           </div>
         </div>
@@ -334,6 +334,18 @@
           </div>
         </div>
         <% end %>
+        <div class="row">
+          <div class="col-12 badges"></div>
+        </div>
+        <div class="row p-1 mt-1">
+          <div class="col-12">
+            <div class="form-group mb-1">
+              <%= label_tag "organizations", t('model.organization').titlecase.pluralize %>:
+              <input type="text" id="organizations" class="form-control filter-element"
+                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-12 badges"></div>
         </div>

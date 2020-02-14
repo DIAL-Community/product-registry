@@ -292,15 +292,21 @@ class ProductsController < ApplicationController
       sdgs = sanitize_session_values 'sdgs'
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
+      organizations = sanitize_session_values 'organizations'
 
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
 
-      filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
+      filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty? && organizations.empty?)
 
-      sdg_products = Product.all
+      org_products = Product.all
+      if !organizations.empty?
+        org_products = Product.all.joins(:organizations).where('organization_id in (?)', organizations)
+      end 
+
+      sdg_products = org_products
       if !sdgs.empty?
-        sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+        sdg_products = org_products.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
       end
 
       use_case_bbs = get_bbs_from_use_cases(use_cases)
