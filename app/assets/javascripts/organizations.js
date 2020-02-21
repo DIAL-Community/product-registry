@@ -250,6 +250,16 @@ var setupFormView = function() {
       return false;
     }
   });
+
+  $("button.add-other-name").click(function(event) {
+    event.preventDefault();
+    addOtherName();
+  });
+
+  $("button.remove-other-name").click(function(event) {
+    event.preventDefault();
+    removeOtherName(event.target);
+  });
 };
 
 var editServices = function (e) {

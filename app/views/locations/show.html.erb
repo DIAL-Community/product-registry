@@ -5,6 +5,18 @@
     <%= "#{t('model.location').to_s.humanize}: #{@location.name}" %>
   </h5>
   <div class="card-body py-2">
+    <div>
+      <% if !@location.aliases.empty? %>
+        <h6 class="card-text text-muted mt-2 mb-2">
+          <strong><%= t('view.location.form.other-names') %>:</strong>
+          <ul>
+            <% @location.aliases.each{|other_name| %>
+              <li><%= other_name %></li>
+            <%}%>
+          </ul>
+        </h6>
+      <% end %>
+    </div>
     <div class="float-right">
       <%= link_to t('view.general.back'), locations_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@location).mod_allowed? %>

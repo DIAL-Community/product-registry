@@ -167,12 +167,15 @@ en:
       product-tooltip: "Optionally apply as a product owner. You will need to be verified by our team member to do this."
 
     location:
+      form:
+        other-names: Other Names
       index:
         no-data: We couldn't find any location in the database.
     organization:
       form:
         endorser: Endorser
         aggregator: Aggregator
+        other-names: Other Names
         website: Website
         when-endorsed: When endorsed
         description-placeholder: Description of the organization goes here.

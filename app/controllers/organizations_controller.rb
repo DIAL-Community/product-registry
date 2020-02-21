@@ -517,6 +517,9 @@ class OrganizationsController < ApplicationController
           if attr[:when_endorsed].present?
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
           end
+          if params[:other_names].present? && policy(Organization).permitted_attributes.include?(:aliases)
+            attr[:aliases] = params[:other_names].reject(&:empty?)
+          end
           if params[:reslug].present? && policy(Organization).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
             if params[:duplicate].present?
