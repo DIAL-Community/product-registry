@@ -71,6 +71,20 @@ h6 {
   min-height: 195px;
 }
 
+.project-logo-frame {
+  min-height: 195px;
+  min-width: 195px;
+}
+
+.project-logo {
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  height: 95px;
+  width: 95px;
+  padding: 0.6rem;
+}
+
 .index-card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
