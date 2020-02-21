@@ -7,9 +7,10 @@ class ProjectsController < ApplicationController
       @projects = Project.where('LOWER(name) like LOWER(?)', "%#{params[:search]}%")
                          .order(:name)
     else
-      @projects = Project.all
-                         .paginate(page: params[:page], per_page: 20)
-                         .order(:name)
+      @projects = filter_projects.order(Project.arel_table['name'].lower.asc)
+      @projects = @projects.eager_load(:organizations, :products).order(:name)
+
+      params[:search].present? && @projects = @projects.name_contains(params[:search])
     end
     authorize @projects, :view_allowed?
   end
@@ -32,6 +33,13 @@ class ProjectsController < ApplicationController
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
         @project.organizations.push(organization)
+      end
+    end
+
+    if params[:selected_products].present?
+      params[:selected_products].keys.each do |product_id|
+        product = Organization.find(product_id)
+        @project.products.push(product)
       end
     end
 
@@ -71,6 +79,15 @@ class ProjectsController < ApplicationController
         organizations.add(organization)
       end
       @project.organizations = organizations.to_a
+    end
+
+    if params[:selected_products].present?
+      products = Set.new
+      params[:selected_products].keys.each do |product_id|
+        product = Product.find(product_id)
+        products.add(product)
+      end
+      @project.products = products.to_a
     end
 
     if project_params[:project_description].present?
@@ -120,6 +137,17 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def filter_projects
+    proj_list = sanitize_session_values 'projects'
+
+    filter_projects = Project.all.order(:name)
+    if(!proj_list.empty?) 
+      filter_projects = filter_projects.where('projects.id in (?)', proj_list)
+    end
+
+    filter_projects
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project

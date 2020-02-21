@@ -9,4 +9,28 @@ class Project < ApplicationRecord
   has_many :project_descriptions
 
   belongs_to :origin
+
+  def product_image_file
+    if !products.empty?
+      if File.exist?(File.join('public','assets','products',"#{products.first.slug}.png"))
+        return "/assets/products/#{products.first.slug}.png"
+      else
+        return "/assets/products/prod_placeholder.png"
+      end
+    else
+      return "/assets/products/prod_placeholder.png"
+    end
+  end
+
+  def org_image_file
+    if !organizations.empty?
+      if File.exist?(File.join('public','assets','organizations',"#{organizations.first.slug}.png"))
+        return "/assets/organizations/#{organizations.first.slug}.png"
+      else
+        return "/assets/organizations/org_placeholder.png"
+      end
+    else
+      return "/assets/organizations/org_placeholder.png"
+    end
+  end
 end

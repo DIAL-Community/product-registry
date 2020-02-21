@@ -278,6 +278,8 @@ en:
         end-date: End Date
         no-project: We couldn't find any project in the database.
         start-date: Start Date
+        dates: Dates
+        source: Source
       show:
         origin: Origin
     sector:

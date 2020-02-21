@@ -38,10 +38,12 @@
     <div class="row">
       <% @project.organizations.each.with_index do |organization, index| %>
         <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body py-2">
-              <h5 class="card-title"><%= link_to organization.name, organization %></h5>
-              <h6 class="card-subtitle text-muted"><%= organization.website %></h6>
+          <div class="card flex-row">
+            <%= link_to organization do %>
+              <%= image_tag(organization.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+            <% end %>
+            <div class="card-body align-middle my-auto px-2 py-2">
+              <%= link_to organization.name, organization %>
             </div>
           </div>
         </div>
@@ -50,6 +52,32 @@
   <% else %>
     <p class="card-text text-muted">
       <%= t('view.general.not-available', model: t('model.project'), multi: t('model.organization').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.product').to_s.humanize %></h5>
+  </div>
+  <% if @project.products.count > 0 %>
+    <div class="row">
+      <% @project.products.each.with_index do |product, index| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card flex-row">
+            <%= link_to product do %>
+              <%= image_tag(product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+            <% end %>
+            <div class="card-body align-middle my-auto px-2 py-2">
+              <%= link_to product.name, product %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.project'), multi: t('model.product').to_s.pluralize) %>
     </p>
   <% end %>
 </div>
