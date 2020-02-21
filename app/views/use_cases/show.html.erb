@@ -6,6 +6,10 @@
     <h5 class="float-left mb-0">
       <%= "#{t('model.use-case').to_s.titlecase}: #{@use_case.name}" %>
     </h5>
+    <div class="float-right mr-2 text-white"> 
+      <%= t('view.use-case.index.maturity').to_s %>:
+      <%= @use_case.maturity %>
+    </div>
   </div>
   <%= image_tag(@use_case.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
   <div class="card-body">

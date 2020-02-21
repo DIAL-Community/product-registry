@@ -94,6 +94,13 @@
                 concat(content.html_safe)
               end
             %>
+            <div class="float-right">
+              <% if use_case.maturity == "Beta" %>
+                <span class='badge badge-warning'><%= use_case.maturity %></span>
+              <% else %>
+                <span class='badge badge-success'><%= use_case.maturity %></span>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>

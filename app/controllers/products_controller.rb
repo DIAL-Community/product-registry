@@ -63,6 +63,7 @@ class ProductsController < ApplicationController
     authorize Product, :mod_allowed?
     @product = Product.new(product_params)
     @product.set_current_user(current_user)
+    @product_description = ProductDescription.new
 
     if product_params[:start_assessment] == "true"
       assign_maturity
@@ -105,8 +106,11 @@ class ProductsController < ApplicationController
 
     if (params[:selected_sustainable_development_goals])
       params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
-        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
-        @product.sustainable_development_goals.push(sustainable_development_goal)
+        new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+        new_prod_sdg.sustainable_development_goal_id = sustainable_development_goal_id
+        new_prod_sdg.link_type = 'Validated'
+
+        @product.products_sustainable_development_goals << new_prod_sdg
       end
     end
 
@@ -197,14 +201,21 @@ class ProductsController < ApplicationController
     end
     @product.building_blocks = building_blocks.to_a
 
-    sustainable_development_goals = Set.new
+    product_sdgs = []
+    @product.sustainable_development_goals.delete_all
     if params[:selected_sustainable_development_goals].present?
-      params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
-        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
-        sustainable_development_goals.add(sustainable_development_goal)
+      params[:selected_sustainable_development_goals].each do |selected_sdg|
+        curr_sdg = @product.products_sustainable_development_goals.find_by(sustainable_development_goal_id: selected_sdg)
+        if curr_sdg.nil?
+          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = selected_sdg
+          new_prod_sdg.link_type = 'Validated'
+
+          product_sdgs.push(new_prod_sdg)
+        end
       end
+      @product.products_sustainable_development_goals << product_sdgs
     end
-    @product.sustainable_development_goals = sustainable_development_goals.to_a
 
     if params[:logo].present?
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
