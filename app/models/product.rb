@@ -8,9 +8,11 @@ class Product < ApplicationRecord
   has_many :product_versions
   has_and_belongs_to_many :organizations, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :sectors, join_table: :products_sectors, after_add: :association_add, before_remove: :association_remove
-  has_and_belongs_to_many :sustainable_development_goals, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :origins, join_table: :products_origins, after_add: :association_add, before_remove: :association_remove
+
+  has_many :products_sustainable_development_goals
+  has_many :sustainable_development_goals, through: :products_sustainable_development_goals, after_add: :association_add, before_remove: :association_remove
 
   has_many :include_relationships, -> { where(relationship_type: 'composed')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
   has_many :includes, through: :include_relationships, source: :to_product, after_add: :association_add, before_remove: :association_remove

@@ -394,6 +394,7 @@ en:
       form:
         assigned-sdg-targets: Assigned SDG Targets
         search-sdg-targets: Search and assign SDG Targets
+        is-mature: Is Mature
       index:
         no-data: We couldn't find any use case in the database.
         sdg-target-popover:
@@ -410,6 +411,7 @@ en:
           Typically sector-specific  
           Able to be improved through digital technology 
         description: Each Use Case model describes primary actors, key steps involved in achieving a specified business objective, descriptions of the WorkFlows and ICT Building Blocks involved in each step, and mappings to SDG Targets. The list of Use Case models is not exhaustive and more will be added in future releases. 
+        maturity: Maturity
       show:
         description: Description
         steps: Steps for this use case include

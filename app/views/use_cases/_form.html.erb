@@ -20,6 +20,11 @@
   <div class="wysiwyg-editor">
   </div>
 
+  <div>
+    <%= form.label :sector_id, t('view.use-case.form.is-mature').to_s, class: 'custom-label' %>:
+    <%= form.check_box :maturity, {}, "Mature", "Beta" %>
+  </div>
+
   <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
     <%= t('view.use-case.form.assigned-sdg-targets') %>
   </h6>

@@ -51,10 +51,7 @@ module Modules
         if !sdgs.nil? && !sdgs.empty?
           sdgs.each do |sdg|
             sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
-            if !sdg_obj.nil? && !existing_product.sustainable_development_goals.include?(sdg_obj)
-              puts "Adding sdg #{sdg} to product"
-              existing_product.sustainable_development_goals << sdg_obj
-            end
+            assign_sdg_to_product(sdg_obj, existing_product, 'Self-reported')
           end
         end
 
@@ -133,10 +130,7 @@ module Modules
       if !sdgs.nil? && !sdgs.empty?
         sdgs.each do |sdg|
           sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
-          if !sdg_obj.nil? && !sync_product.sustainable_development_goals.include?(sdg_obj)
-            puts "  Adding sdg #{sdg} to product"
-            sync_product.sustainable_development_goals << sdg_obj
-          end
+          assign_sdg_to_product(sdg_obj, sync_product, 'Validated')
         end
       end
 
@@ -163,6 +157,29 @@ module Modules
 
       if sync_product.save
         update_product_description(sync_product, nil)
+      end
+    end
+
+    def assign_sdg_to_product(sdg_obj, product_obj, link_type)
+      if !sdg_obj.nil? 
+        prod_sdg = ProductsSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id, product_id: product_obj.id)
+        if prod_sdg.empty?
+          puts "Adding sdg #{sdg_obj.number} to product"
+          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = sdg_obj.id
+          new_prod_sdg.product_id = product_obj.id
+          new_prod_sdg.link_type = link_type
+
+          new_prod_sdg.save
+        elsif prod_sdg.first.link_type.nil?
+          product_obj.sustainable_development_goals.delete(sdg_obj)
+          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = sdg_obj.id
+          new_prod_sdg.product_id = product_obj.id
+          new_prod_sdg.link_type = link_type
+
+          new_prod_sdg.save
+        end
       end
     end
 
