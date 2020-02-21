@@ -482,7 +482,8 @@ CREATE TABLE public.locations (
     location_type public.location_type NOT NULL,
     country character varying,
     city character varying,
-    state character varying
+    state character varying,
+    aliases character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -582,7 +583,8 @@ CREATE TABLE public.organizations (
     is_endorser boolean,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_mni boolean DEFAULT false
+    is_mni boolean DEFAULT false,
+    aliases character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -3020,6 +3022,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200130220904'),
 ('20200130221126'),
 ('20200205210606'),
-('20200218150006');
+('20200218150006'),
+('20200220202959'),
+('20200220203026');
 
 

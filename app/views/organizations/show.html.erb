@@ -26,6 +26,16 @@
       </div>
     <% end %>
     <div class="col-lg-8 col-12">
+      <% if !@organization.aliases.empty? %>
+        <p class="m-2">
+          <strong><%= t('view.organization.form.other-names') %>:</strong>
+          <ul>
+            <% @organization.aliases.each{|other_name| %>
+              <li><%= other_name %></li>
+            <%}%>
+          </ul>
+        </p>
+      <% end %>
       <% if !@organization.is_mni %>
         <p class="m-2">
           <strong><%= "#{t('view.organization.index.endorsed-date')}:" %></strong>
