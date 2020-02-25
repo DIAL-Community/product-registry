@@ -1507,6 +1507,23 @@ paths:
       responses:
         '200':
           description: successful
+  "/productlist":
+    get:
+      summary: Export products in standard json format.
+      tags:
+      - Product Controller
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: source
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
   "/projects":
     get:
       summary: List all available projects.
