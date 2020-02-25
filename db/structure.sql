@@ -5,7 +5,6 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -126,6 +125,16 @@ CREATE TYPE public.mobile_services AS ENUM (
 
 
 --
+-- Name: org_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.org_type AS ENUM (
+    'owner',
+    'maintainer'
+);
+
+
+--
 -- Name: relationship_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -151,6 +160,8 @@ CREATE TYPE public.user_role AS ENUM (
 
 
 SET default_tablespace = '';
+
+SET default_with_oids = false;
 
 --
 -- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
@@ -471,7 +482,8 @@ CREATE TABLE public.locations (
     location_type public.location_type NOT NULL,
     country character varying,
     city character varying,
-    state character varying
+    state character varying,
+    aliases character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -571,7 +583,8 @@ CREATE TABLE public.organizations (
     is_endorser boolean,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_mni boolean DEFAULT false
+    is_mni boolean DEFAULT false,
+    aliases character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -662,7 +675,8 @@ ALTER SEQUENCE public.organizations_locations_id_seq OWNED BY public.organizatio
 
 CREATE TABLE public.organizations_products (
     organization_id bigint NOT NULL,
-    product_id bigint NOT NULL
+    product_id bigint NOT NULL,
+    org_type public.org_type DEFAULT 'owner'::public.org_type
 );
 
 
@@ -1032,7 +1046,8 @@ CREATE TABLE public.products_sectors (
 
 CREATE TABLE public.products_sustainable_development_goals (
     product_id bigint NOT NULL,
-    sustainable_development_goal_id bigint NOT NULL
+    sustainable_development_goal_id bigint NOT NULL,
+    link_type character varying
 );
 
 
@@ -1341,7 +1356,8 @@ CREATE TABLE public.use_cases (
     sector_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    description jsonb DEFAULT '"{}"'::jsonb NOT NULL
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    maturity character varying
 );
 
 
@@ -3004,6 +3020,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200128154358'),
 ('20200128204056'),
 ('20200130220904'),
-('20200130221126');
+('20200130221126'),
+('20200205210606'),
+('20200218150006'),
+('20200220202959'),
+('20200220203026');
 
 

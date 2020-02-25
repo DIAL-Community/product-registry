@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
   get 'project_duplicates', to: 'projects#duplicates'
 
+  get 'productlist', :to => 'products#productlist', as: :productlist
   get 'productmap', :to => 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

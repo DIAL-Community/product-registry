@@ -1,59 +1,49 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<% if user_signed_in? && policy(Project).mod_allowed? %>
-  <%= link_to t('view.general.create'), new_project_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
-<% end %>
-<div class="float-right pb-2">
-  <%= form_tag(projects_path, :method => "get", id: "search-form", class: "form-inline") do %>
-  <%= text_field_tag :search, params[:search],
-      placeholder: t('view.general.search-placeholder', model: t('model.project').to_s.pluralize),
-      class: "form-control" %>
-  <div class="input-group-append">
-    <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
+<div class="row">
+  <div class="col-12">
+    <div class="float-right pb-2">
+      <% if user_signed_in? && policy(Project).mod_allowed? %>
+        <%= link_to t('view.general.create'), new_project_path, :class => 'small mr-1' %>
+      <% end %>
+    </div>
   </div>
-<% end %>
 </div>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th><%= t('view.general.name') %></th>
-      <th><%= t('view.project.index.start-date') %></th>
-      <th><%= t('view.project.index.end-date') %></th>
-      <th><%= t('view.project.index.budget') %></th>
-    </tr>
-  </thead>
+<div id="current-list">
+  <div class="row">
+  <% @projects.each do |project| %>
+    <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
+      <div class="card index-card small">
+        <div class="card-header bg-secondary text-white truncate-parent">
+          <%= link_to project.name, project, class: 'truncate-text',
+            'title' => project.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+        </div>
+        <div class="project-logo-frame ml-2 mt-2">
+          <%= link_to(project) do %>
+            <div class="text-muted float-left"><%= t('model.organization').to_s.titlecase.pluralize %></div>
+            <br>
+            <%= image_tag(project.org_image_file, class: 'project-logo align-middle', skip_pipeline: true) %>
+            <div class="text-muted float-left"><%= t('model.product').to_s.titlecase.pluralize %></div>
+            <br>
+            <%= image_tag(project.product_image_file, class: 'project-logo align-middle', skip_pipeline: true) %>
+          <% end %>
+        </div>
 
-  <tbody>
-    <% if @projects.count > 0 %>
-      <% @projects.each do |project| %>
-        <tr>
-          <td><%= project.name %></td>
-          <td><%= project.start_date %></td>
-          <td><%= project.end_date %></td>
-          <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">
-               <%= t('view.general.action') %>
-            </a>
-            <div class="dropdown-menu">
-              <%= link_to t('view.general.view'), project, :class =>"dropdown-item"  %>
-              <% if user_signed_in? && policy(project).mod_allowed? %>
-                <%= link_to t('view.general.edit'), edit_project_path(project), :class =>"dropdown-item" %>
-                <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), project, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
-              <% end %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan="4">
-          <small class="text-muted"><%= t('view.project.index.no-project') %></small>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        <div class="card-footer footer-padding">
+          <div class="footer-row">
+            <%= t('view.project.index.dates') %>: <%= !project.start_date.nil? ? project.start_date.strftime("%d/%m/%Y") : '' %>-<%= !project.end_date.nil? ? project.end_date.strftime("%d/%m/%Y") : '' %>
+          </div>
+          <div class="footer-row">
+            <%= t('view.project.index.source') %>: 
+            <% if !project.origin.nil? %>
+              <%= image_tag("origins/#{project.origin.slug}.png", class: 'project-footer-img') %> 
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

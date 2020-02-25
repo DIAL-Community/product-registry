@@ -251,6 +251,10 @@
                   <%= image_tag(sdg.image_file, width: 50, class: 'card-img-top align-middle p-0') %>
                 <% end %>
               </div>
+              <% product_sdg = @product.products_sustainable_development_goals.where(sustainable_development_goal_id: sdg.id) %>
+              <% if !product_sdg.first.nil? %>
+                <div class="text-muted ml-4"><%= product_sdg.first.link_type %></div>
+              <% end %>
             </div>
           <% end %>
           <% if sdg_row.size < 3  %>

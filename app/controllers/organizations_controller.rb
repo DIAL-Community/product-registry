@@ -39,6 +39,9 @@ class OrganizationsController < ApplicationController
     products = sanitize_session_values 'products'
     sectors = sanitize_session_values 'sectors'
     years = sanitize_session_values 'years'
+    orgs = sanitize_session_values 'organizations'
+
+    !orgs.empty? && organizations = organizations.where('id in (?)', orgs)
 
     if (endorser_only && aggregator_only)
       organizations = organizations.where(is_endorser: true).or(organizations.where(is_mni: true))
@@ -513,6 +516,9 @@ class OrganizationsController < ApplicationController
           end
           if attr[:when_endorsed].present?
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
+          end
+          if params[:other_names].present? && policy(Organization).permitted_attributes.include?(:aliases)
+            attr[:aliases] = params[:other_names].reject(&:empty?)
           end
           if params[:reslug].present? && policy(Organization).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])

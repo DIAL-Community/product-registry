@@ -63,6 +63,7 @@ class ProductsController < ApplicationController
     authorize Product, :mod_allowed?
     @product = Product.new(product_params)
     @product.set_current_user(current_user)
+    @product_description = ProductDescription.new
 
     if product_params[:start_assessment] == "true"
       assign_maturity
@@ -105,8 +106,11 @@ class ProductsController < ApplicationController
 
     if (params[:selected_sustainable_development_goals])
       params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
-        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
-        @product.sustainable_development_goals.push(sustainable_development_goal)
+        new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+        new_prod_sdg.sustainable_development_goal_id = sustainable_development_goal_id
+        new_prod_sdg.link_type = 'Validated'
+
+        @product.products_sustainable_development_goals << new_prod_sdg
       end
     end
 
@@ -197,14 +201,21 @@ class ProductsController < ApplicationController
     end
     @product.building_blocks = building_blocks.to_a
 
-    sustainable_development_goals = Set.new
+    product_sdgs = []
+    @product.sustainable_development_goals.delete_all
     if params[:selected_sustainable_development_goals].present?
-      params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
-        sustainable_development_goal = SustainableDevelopmentGoal.find(sustainable_development_goal_id)
-        sustainable_development_goals.add(sustainable_development_goal)
+      params[:selected_sustainable_development_goals].each do |selected_sdg|
+        curr_sdg = @product.products_sustainable_development_goals.find_by(sustainable_development_goal_id: selected_sdg)
+        if curr_sdg.nil?
+          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = selected_sdg
+          new_prod_sdg.link_type = 'Validated'
+
+          product_sdgs.push(new_prod_sdg)
+        end
       end
+      @product.products_sustainable_development_goals << product_sdgs
     end
-    @product.sustainable_development_goals = sustainable_development_goals.to_a
 
     if params[:logo].present?
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
@@ -265,6 +276,52 @@ class ProductsController < ApplicationController
     render json: @products, :only => [:name]
   end
 
+  def productlist
+    @products = Array.new
+    
+    product_list = Product.all.eager_load(:sustainable_development_goals, :sectors, :organizations, :origins)
+
+    curr_products = product_list.map do |product|
+      origin_list = product.origins.map do |origin|
+        origin.slug
+      end
+      next if params[:source] && !origin_list.include?(params[:source])
+      
+      sdg_list = product.sustainable_development_goals.map do |sdg|
+        [ sdg.number, sdg.name ]
+      end
+
+      sector_list = product.sectors.map do |sector|
+        sector.name
+      end
+
+      org_list = product.organizations.map do |org|
+        org_prod = OrganizationsProduct.where(product_id: product, organization_id: org).first
+        { :name => org.name, :website => org.website, :org_type => org_prod.org_type }
+      end
+
+      description = ProductDescription.where(product_id: product, locale: I18n.locale).first
+
+      product_description = ""
+      if !description.nil?
+        desc_json = description['description']
+        if !desc_json['ops'].nil?
+          product_description = desc_json['ops'][0]['insert']
+        end
+      end
+
+      { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :link => ""}], :SDGs => sdg_list.to_json, :sectors => sector_list.to_json, :type => "software", :repositoryURL => product.repository, :organizations => org_list.to_json }
+    end
+
+    curr_products.each do |prod|
+      if !prod.nil?
+        @products.push(prod)
+      end
+    end
+
+    render json: @products
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.
@@ -292,15 +349,21 @@ class ProductsController < ApplicationController
       sdgs = sanitize_session_values 'sdgs'
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
+      organizations = sanitize_session_values 'organizations'
 
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
 
-      filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
+      filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty? && organizations.empty?)
 
-      sdg_products = Product.all
+      org_products = Product.all
+      if !organizations.empty?
+        org_products = Product.all.joins(:organizations).where('organization_id in (?)', organizations)
+      end 
+
+      sdg_products = org_products
       if !sdgs.empty?
-        sdg_products = Product.all.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+        sdg_products = org_products.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
       end
 
       use_case_bbs = get_bbs_from_use_cases(use_cases)

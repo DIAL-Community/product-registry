@@ -151,11 +151,14 @@ class LocationsController < ApplicationController
     def location_params
       params
         .require(:location)
-        .permit(:name, :confirmation, :slug)
+        .permit(:name, :confirmation, :aliases, :slug)
         .tap do |attr|
-          if (params[:reslug].present?)
+          if params[:other_names].present? && policy(Location).permitted_attributes.include?(:aliases)
+            attr[:aliases] = params[:other_names].reject(&:empty?)
+          end
+          if params[:reslug].present?
             attr[:slug] = slug_em(attr[:name])
-            if (params[:duplicate].present?)
+            if params[:duplicate].present?
               first_duplicate = Location.slug_starts_with(attr[:slug]).order(slug: :desc).first
               attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
             end

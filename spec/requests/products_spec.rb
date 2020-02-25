@@ -117,4 +117,21 @@ RSpec.describe 'products', type: :request do
       end
     end
   end
+
+  path '/productlist' do
+    get('Export products in standard json format.') do
+      tags 'Product Controller'
+
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter name: :source, in: :query, schema: { type: :string }
+      response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+        end
+        run_test!
+      end
+    end
+  end
 end

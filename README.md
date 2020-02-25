@@ -1,5 +1,11 @@
 # T4D Product Registry
 
+## Documentation
+
+Complete documentation is available (including detailed installation and configuration
+instructions) at 
+[https://docs.osc.dial.community/projects/product-registry/en/latest/](https://docs.osc.dial.community/projects/product-registry/en/latest/ "DIAL Online Catalog Documentation")
+
 ## Prerequisites
 
  * Ruby (version 2.3 or greater)

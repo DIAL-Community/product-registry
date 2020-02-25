@@ -6,6 +6,12 @@ class LocationPolicy < ApplicationPolicy
     @record = record
   end
 
+  def permitted_attributes
+    if user.role == 'admin'
+      [:id, :name, :confirmation, :aliases, :slug]
+    end
+  end
+
   def mod_allowed?
     user.role == "admin"
   end

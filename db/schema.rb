@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200130221126) do
+ActiveRecord::Schema.define(version: 20200220203026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20200130221126) do
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
+    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -29,7 +30,7 @@ ActiveRecord::Schema.define(version: 20200130221126) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "id", "version"], name: "auditable_index"
+    t.index ["action", "audit_id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(version: 20200130221126) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_mni", default: false
+    t.string "aliases", default: [], array: true
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
@@ -152,12 +154,8 @@ ActiveRecord::Schema.define(version: 20200130221126) do
     t.index ["organization_id", "location_id"], name: "org_locs", unique: true
   end
 
-  create_table "organizations_products", id: false, force: :cascade do |t|
-    t.bigint "organization_id", null: false
-    t.bigint "product_id", null: false
-    t.index ["organization_id", "product_id"], name: "index_organizations_products_on_organization_id_and_product_id", unique: true
-    t.index ["product_id", "organization_id"], name: "index_organizations_products_on_product_id_and_organization_id", unique: true
-  end
+# Could not dump table "organizations_products" because of following StandardError
+#   Unknown type 'org_type' for column 'org_type'
 
   create_table "organizations_sectors", id: false, force: :cascade do |t|
     t.bigint "sector_id", null: false
@@ -255,6 +253,7 @@ ActiveRecord::Schema.define(version: 20200130221126) do
   create_table "products_sustainable_development_goals", id: false, force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "sustainable_development_goal_id", null: false
+    t.string "link_type"
     t.index ["product_id", "sustainable_development_goal_id"], name: "prod_sdgs", unique: true
     t.index ["sustainable_development_goal_id", "product_id"], name: "sdgs_prods", unique: true
   end
@@ -269,6 +268,7 @@ ActiveRecord::Schema.define(version: 20200130221126) do
   end
 
   create_table "projects", force: :cascade do |t|
+    t.bigint "origin_id"
     t.date "start_date"
     t.date "end_date"
     t.decimal "budget", precision: 12, scale: 2
@@ -276,7 +276,6 @@ ActiveRecord::Schema.define(version: 20200130221126) do
     t.datetime "updated_at", null: false
     t.string "name", null: false
     t.string "slug", null: false
-    t.bigint "origin_id"
     t.index ["origin_id"], name: "index_projects_on_origin_id"
   end
 
@@ -366,6 +365,7 @@ ActiveRecord::Schema.define(version: 20200130221126) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "description", default: "{}", null: false
+    t.string "maturity", default: "Beta"
     t.index ["sector_id"], name: "index_use_cases_on_sector_id"
   end
 

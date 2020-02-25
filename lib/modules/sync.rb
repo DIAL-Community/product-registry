@@ -5,6 +5,7 @@ module Modules
   module Sync
     @@product_list = []
 
+    # Note: This will be deprecated once all data has been published to new publicgoods repository
     def sync_unicef_product(json_data)
       if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
         unicef_origin = Origin.find_by(slug: 'unicef')
@@ -51,10 +52,7 @@ module Modules
         if !sdgs.nil? && !sdgs.empty?
           sdgs.each do |sdg|
             sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
-            if !sdg_obj.nil? && !existing_product.sustainable_development_goals.include?(sdg_obj)
-              puts "Adding sdg #{sdg} to product"
-              existing_product.sustainable_development_goals << sdg_obj
-            end
+            assign_sdg_to_product(sdg_obj, existing_product, 'Self-reported')
           end
         end
 
@@ -64,77 +62,137 @@ module Modules
       end
     end
 
-    def sync_digisquare_product(section)
-      puts section
-      digisquare_origin = Origin.find_by(slug: 'digital_square')
+    def sync_public_product(json_data)
+      if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
+        unicef_origin = Origin.find_by(slug: 'unicef')
+        name_aliases = [json_data['name'], json_data['initialism']].reject { |x| x.nil? || x.empty? }
 
-      candidate_name = section['line']
-      blacklist = YAML.load_file('config/product_blacklist.yml')
-      blacklist.each do |blacklist_item|
-        if candidate_name == blacklist_item['item']
-          puts "skipping #{candidate_name}"
-          return
+        blacklist = YAML.load_file('config/product_blacklist.yml')
+        blacklist.each do |blacklist_item|
+          if json_data['name'] == blacklist_item['item']
+            puts "Skipping #{json_data['name']}"
+            return
+          end
+        end
+        existing_product = nil
+        name_aliases.each do |name_alias|
+          # Find by name, and then by aliases and then by slug.
+          break unless existing_product.nil?
+
+          slug = slug_em name_alias
+          existing_product = Product.first_duplicate(name_alias, slug)
+        end
+
+        if existing_product.nil?
+          existing_product = Product.new
+          existing_product.name = name_aliases.first
+          existing_product.slug = slug_em existing_product.name
+          @@product_list << existing_product.name
+        end
+
+        # Assign what's left in the alias array as aliases.
+        existing_product.aliases.concat(name_aliases.reject { |x| x == existing_product.name }).uniq!
+
+        # Set the origin to be 'unicef'
+        if !existing_product.origins.exists?(id: unicef_origin.id)
+          existing_product.origins.push(unicef_origin)
+        end
+
+        update_attributes(json_data, existing_product)
+
+        if existing_product.save
+          update_product_description(existing_product, json_data['description'])
         end
       end
-      candidate_slug = slug_em(candidate_name)
-      existing_product = Product.first_duplicate(candidate_name, candidate_slug)
+    end
+
+    def sync_digisquare_product(digi_product)
+      digisquare_origin = Origin.find_by(slug: 'digital_square')
+
+      name_aliases = [digi_product['name']]
+      digi_product['aliases'] && digi_product['aliases'].each do |name_alias|
+        name_aliases.push(name_alias)
+      end
+      
+      existing_product = nil
+      name_aliases.each do |name_alias|
+        # Find by name, and then by aliases and then by slug.
+        break unless existing_product.nil?
+
+        slug = slug_em name_alias
+        existing_product = Product.first_duplicate(name_alias, slug)
+      end
+
       if existing_product.nil?
         existing_product = Product.new
-        existing_product.name = candidate_name
-        existing_product.slug = candidate_slug
+        candidate_slug = slug_em(digi_product['name'])
+        existing_product.name = digi_product['name']
+        existing_product.slug = slug_em digi_product['name']
         @@product_list << existing_product.name
       end
 
+      puts existing_product.origins.inspect
       if !existing_product.origins.exists?(id: digisquare_origin.id)
         existing_product.origins.push(digisquare_origin)
       end
 
+      # This will update website, license, repo URL, organizations, and SDGs
+      update_attributes(digi_product, existing_product)
+
+      sdgs = digi_product['SDGs']
+      if !sdgs.nil? && !sdgs.empty?
+        sdgs.each do |sdg|
+          sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
+          assign_sdg_to_product(sdg_obj, existing_product, 'Validated')
+        end
+      end
+
       if existing_product.save
-        update_product_description(existing_product, nil)
+        update_product_description(existing_product, digi_product['description'])
         puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
       end
     end
 
     def sync_osc_product(product)
       puts "Syncing #{product['name']} ..."
-      product_name = product['name']
-      slug = slug_em product_name
-      sync_product = Product.first_duplicate(product_name, slug)
+      name_aliases = [product['name']]
+      product['aliases'] && product['aliases'].each do |name_alias|
+        name_aliases.push(name_alias)
+      end
+      
+      sync_product = nil
+      name_aliases.each do |name_alias|
+        # Find by name, and then by aliases and then by slug.
+        break unless sync_product.nil?
+
+        slug = slug_em name_alias
+        sync_product = Product.first_duplicate(name_alias, slug)
+      end
       if sync_product.nil?
         sync_product = Product.new
-        sync_product.name = product_name
-        sync_product.slug = slug
+        sync_product.name = product['name']
+        sync_product.slug = slug_em product['name']
         if sync_product.save
           puts "  Added new product: #{sync_product.name} -> #{sync_product.slug}"
         end
         @@product_list << sync_product.name
       end
 
-      website = product['website']
-      if !website.nil? && !website.empty?
-        puts "  Updating website: #{sync_product.website} => #{website}"
-        sync_product.website = website
+      if sync_product.nil?
+        sync_product = Product.new
+        sync_product.name = name_aliases.first
+        sync_product.slug = slug_em existing_product.name
+        @@product_list << existing_product.name
       end
 
-      organizations = product['organizations']
-      if !organizations.nil? && !organizations.empty?
-        organizations.each do |organization|
-          org = Organization.where('lower(name) = lower(?)', organization)[0]
-          if !org.nil? && !sync_product.organizations.include?(org)
-            puts "  Adding org to product: #{org.name}"
-            sync_product.organizations << org
-          end
-        end
-      end
+      # This will update website, license, repo URL, organizations, and SDGs
+      update_attributes(product, sync_product)
 
       sdgs = product['SDGs']
       if !sdgs.nil? && !sdgs.empty?
         sdgs.each do |sdg|
           sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
-          if !sdg_obj.nil? && !sync_product.sustainable_development_goals.include?(sdg_obj)
-            puts "  Adding sdg #{sdg} to product"
-            sync_product.sustainable_development_goals << sdg_obj
-          end
+          assign_sdg_to_product(sdg_obj, sync_product, 'Validated')
         end
       end
 
@@ -160,7 +218,82 @@ module Modules
       end
 
       if sync_product.save
-        update_product_description(sync_product, nil)
+        description = product['description']
+        if !description.nil? && !description.empty?
+          update_product_description(sync_product, description)
+        end
+      end
+    end
+
+    def assign_sdg_to_product(sdg_obj, product_obj, link_type)
+      if !sdg_obj.nil? 
+        prod_sdg = ProductsSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id, product_id: product_obj.id)
+        if prod_sdg.empty?
+          puts "Adding sdg #{sdg_obj.number} to product"
+          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = sdg_obj.id
+          new_prod_sdg.product_id = product_obj.id
+          new_prod_sdg.link_type = link_type
+
+          new_prod_sdg.save
+        elsif prod_sdg.first.link_type.nil?
+          product_obj.sustainable_development_goals.delete(sdg_obj)
+          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = sdg_obj.id
+          new_prod_sdg.product_id = product_obj.id
+          new_prod_sdg.link_type = link_type
+
+          new_prod_sdg.save
+        end
+      end
+    end
+
+    def update_attributes(product, sync_product)
+      website = cleanup_url(product['website'])
+      if !website.nil? && !website.empty?
+        puts "  Updating website: #{sync_product.website} => #{website}"
+        sync_product.website = website
+      end
+
+      license = product['license']
+      if !license.nil? && !license.empty?
+        puts "  Updating license: #{sync_product.license} => #{license}"
+        if !license.kind_of?(Array)
+          sync_product.license = license
+        else
+          sync_product.license = license.first['spdx']
+        end
+      end
+
+      repository = product['repositoryURL']
+      if !repository.nil? && !repository.empty?
+        puts "  Updating repository: #{sync_product.repository} => #{repository}"
+        sync_product.repository = repository
+      end
+
+      organizations = product['organizations']
+      if !organizations.nil? && !organizations.empty?
+        organizations.each do |organization|
+          org = Organization.where('lower(name) = lower(?)', organization['name'])[0]
+          if org.nil?
+            # Create a new organization and assign it as an owner
+            org = Organization.new
+            org.name = organization['name']
+            org.slug = slug_em(organization['name'])
+            org.website = organization['website']
+            org.save
+            org_product = OrganizationsProduct.new
+            org_product.org_type = organization['org_type']
+            sync_product.organizations << org
+          end
+          if !sync_product.organizations.include?(org)
+            puts "  Adding org to product: #{org.name}"
+            org_product = OrganizationsProduct.new
+            org_product.org_type = organization['org_type']
+            sync_product.organizations << org
+            puts sync_product.organizations.inspect
+          end
+        end
       end
     end
 
