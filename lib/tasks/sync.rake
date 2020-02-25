@@ -23,6 +23,32 @@ namespace :sync do
         next
       end
 
+      sync_public_product json_data
+    end
+    puts 'Digital public good data synced ...'
+    send_notification
+  end
+
+  # Note: this will be deprecated once all data has been brought into the common publicgoods repository
+  desc 'Sync the database with the public goods lists.'
+  task :unicef_goods, [:path] => :environment do |_, params|
+    puts 'Pulling data from digital public good ...'
+
+    Dir.entries(params[:path]).select { |item| item.include? '.json' }.each do |entry|
+      entry_data = File.read(File.join(params[:path], entry))
+
+      begin
+        json_data = JSON.parse(entry_data)
+      rescue JSON::ParserError
+        puts "Skipping unparseable json file: #{entry}"
+        next
+      end
+
+      if !json_data.key?('type') && !json_data.key?('name')
+        puts "Skipping unrecognized json file: #{entry}"
+        next
+      end
+
       sync_unicef_product json_data
     end
     puts 'Digital public good data synced ...'
@@ -30,23 +56,11 @@ namespace :sync do
   end
 
   task :digi_square_digital_good, [:path] => :environment do
-    puts 'Pulling data from digital square ...'
+    puts 'Pulling Digital Square Global Goods ...'
 
-    digi_square_location = 'https://wiki.digitalsquare.io/api.php?'\
-                           'action=parse&format=json&prop=sections&'\
-                           'page=Digital_Square_Investments_in_Global_Goods:Approved_Global_Goods'
-    digi_square_uri = URI.parse(digi_square_location)
-    digi_square_response = Net::HTTP.get(digi_square_uri)
-    digi_square_data = JSON.parse(digi_square_response)
-
-    digi_square_data['parse']['sections'].each do |section|
-      # only process section 2 & 3 and the toc level 2
-      # also skip the lorem ipsum
-      if !section['number'].start_with?('2', '3') || section['toclevel'] != 2
-        next
-      end
-
-      sync_digisquare_product section
+    digisquare_products = YAML.load_file('config/digisquare_global_goods.yml')
+    digisquare_products['products'].each do |digi_product|
+      sync_digisquare_product digi_product
     end
 
     puts 'Digital square data synced.'
@@ -109,6 +123,28 @@ namespace :sync do
             system cmd
           end
         end
+      end
+    end
+  end
+
+  desc 'Sync the database with the public goods lists.'
+  task :export_public_goods, [:path] => :environment do |_, params|
+    puts 'Exporting OSC and Digital Square global goods ...'
+
+    session = ActionDispatch::Integration::Session.new(Rails.application)
+    session.get "/productlist?source=dial_osc"
+    prod_list = JSON.parse(session.response.body)
+    prod_list.each do |prod|
+      File.open("export/"+slug_em(prod['name'])+".json","w") do |f|
+        f.write(prod)
+      end
+    end
+
+    session.get "/productlist?source=digital_square"
+    prod_list = JSON.parse(session.response.body)
+    prod_list.each do |prod|
+      File.open("export/"+slug_em(prod['name'])+".json","w") do |f|
+        f.write(prod)
       end
     end
   end

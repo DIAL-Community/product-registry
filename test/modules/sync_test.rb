@@ -115,7 +115,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     initial_size = Product.count
     assert_not_nil Product.find_by(slug: 'odk')
 
-    new_product = JSON.parse('{"line": "ODK"}')
+    new_product = JSON.parse('{"name": "ODK"}')
     capture_stdout { sync_digisquare_product(new_product) }
 
     assert_not_nil Product.find_by(slug: 'odk')
@@ -126,7 +126,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     initial_size = Product.count
     assert_nil Product.find_by(slug: 'open_data_kit')
 
-    new_product = JSON.parse('{"line": "Open Data Kit"}')
+    new_product = JSON.parse('{"name": "Open Data Kit"}')
     capture_stdout { sync_digisquare_product(new_product) }
 
     assert_not_nil Product.find_by(slug: 'open_data_kit')
@@ -170,7 +170,7 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     initial_size = Product.all.size
 
-    p2 = JSON.parse('{ "name": "Product", "organizations": [ "Organization" ] }')
+    p2 = JSON.parse('{ "name": "Product", "organizations": [ {"name":"Organization" }] }')
     capture_stdout { sync_osc_product(p2) }
 
     # shouldn't create a duplicate
@@ -188,7 +188,8 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal p1.organizations[0].name, 'Organization'
 
     # sync again adding Org1, should be added and Org2 should still be there
-    p2['organizations'] << 'Organization Again'
+    p2 = JSON.parse('{ "name": "Product", "organizations": [ {"name":"Organization Again" }] }')
+    puts p2
     capture_stdout { sync_osc_product(p2) }
     p1 = Product.where(name: 'Product')[0]
     assert_equal p1.organizations.size, 2

@@ -276,6 +276,52 @@ class ProductsController < ApplicationController
     render json: @products, :only => [:name]
   end
 
+  def productlist
+    @products = Array.new
+    
+    product_list = Product.all.eager_load(:sustainable_development_goals, :sectors, :organizations, :origins)
+
+    curr_products = product_list.map do |product|
+      origin_list = product.origins.map do |origin|
+        origin.slug
+      end
+      next if params[:source] && !origin_list.include?(params[:source])
+      
+      sdg_list = product.sustainable_development_goals.map do |sdg|
+        [ sdg.number, sdg.name ]
+      end
+
+      sector_list = product.sectors.map do |sector|
+        sector.name
+      end
+
+      org_list = product.organizations.map do |org|
+        org_prod = OrganizationsProduct.where(product_id: product, organization_id: org).first
+        { :name => org.name, :website => org.website, :org_type => org_prod.org_type }
+      end
+
+      description = ProductDescription.where(product_id: product, locale: I18n.locale).first
+
+      product_description = ""
+      if !description.nil?
+        desc_json = description['description']
+        if !desc_json['ops'].nil?
+          product_description = desc_json['ops'][0]['insert']
+        end
+      end
+
+      { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :link => ""}], :SDGs => sdg_list.to_json, :sectors => sector_list.to_json, :type => "software", :repositoryURL => product.repository, :organizations => org_list.to_json }
+    end
+
+    curr_products.each do |prod|
+      if !prod.nil?
+        @products.push(prod)
+      end
+    end
+
+    render json: @products
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.

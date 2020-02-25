@@ -1,0 +1,116 @@
+products:
+  - name: OpenCRVS
+    description: OpenCRVS is an open source software product that supports civil registration (CR) and vital statistics (VS) services in low-resource countries and is interoperable with other systems.
+    website: www.opencrvs.org
+    organizations: [{"name":"Plan International","website":"plan-international.org","org_type":"owner"}, {"name":"Jembi","website":"jembi.org","org_type":"owner"}]
+    SDGs: [16]
+    license: MPL-2.0
+    repositoryURL: https://github.com/jembi/opencrvs-fhir-templates
+  - name: Open Concept Lab
+    description: An open-source, cloud-based toolset for open and collaborative terminology, indicator, and core dataset management and development to accelerate convergence on best practices for data and data dictionary harmonization, information exchange, and reuse of analytics tools and approaches.
+    website: openconceptlab.org
+    organizations: [{"name":"Open Concept Lab","website":"openconceptlab.org","org_type":"owner"}]
+    SDGs: [3]
+    license: MPL-2.0
+    repositoryURL: https://github.com/OpenConceptLab/oclapi
+  - name: CommCare
+    description: Mobile data collection platform to improve the quality and efficiency of services in the most remote corners of the world.
+    website: www.dimagi.com
+    organizations: [{"name":"Dimagi","website":"dimagi.com","org_type":"owner"}]
+    SDGs: [3,6,10]
+    license: APL-2.0
+    repositoryURL: https://github.com/dimagi/commcare-hq
+  - name: Community Health Toolkit
+    description: CHT provides a collection of open source technologies and open access design, technical, and implementer resources that help you build and deploy digital tools for community health. 
+    website: communityhealthtoolkit.org
+    organizations: [{"name":"Medic Mobile","website":"medicmobile.org","org_type":"owner"}]
+    SDGs: [3,6,10]
+    license: AGPL-3.0
+    repositoryURL: https://github.com/medic/cht-core
+  - name: OpenHIM
+    description: A middleware component designed to ease interoperability between disparate information systems, connecting health systems simply, securely and safely.
+    website: openhim.org
+    organizations: [{"name":"Jembi","website":"jembi.org","org_type":"owner"}]
+    SDGs: [3]
+    license: MPL-2.0
+    repositoryURL: https://github.com/jembi/openhim-core-js
+  - name: Bahmni
+    description: Open Source Hospital Management System built on top of OpenMRS, OpenELIS and OpenERP.
+    website: bahmni.org
+    organizations: [{"name":"Bahmni","website":"bahmni.org","org_type":"owner"}]
+    SDGs: [3]
+    license: AGPL-3.0
+    repositoryURL: https://github.com/Bahmni/bahmni-core
+  - name: OpenMRS
+    description: Software platform and reference application which enables design of a customized medical records system with no programming knowledge.
+    website: openmrs.org
+    organizations: [{"name":"OpenMRS","website":"openmrs.org","org_type","owner"}]
+    SDGs: [3]
+    license: MPL-2.0 
+    repositoryURL: https://github.com/openmrs/openmrs-core
+  - name: OpenSRP
+    description: Open source mobile health platform that allows frontline health workers to electronically register and track the health of their entire client population
+    website: smartregister.org
+    organizations: [{"name":"OpenSRP","website":"smartregister.org","org_type","owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/OpenSRP/opensrp-client-core
+  - name: OpenIMIS
+    description: OpenIMIS is open source software that manages social (health) protection schemes. It links beneficiary, provider and payer data.
+    website: openimis.org
+    organizations: [{"name":"OpenIMIS","website":"openimis.org","org_type","owner"}]
+    SDGs: [3]
+    license: AGPL-3.0
+    repositoryURL: https://github.com/openimis/web_app_vb
+  - name: DHIS2
+    aliases: ["DHIS"]
+    description: A health management data platform for reporting, analysis and dissemination of data for all health programs, developed on open source Java technologies.
+    website: dhis2.org
+    organizations: [{"name":"DHIS2","website":"dhis2.org","org_type":"owner"}]
+    SDGs: [3]
+    license: BSD-3-Clause
+    repositoryURL: https://github.com/dhis2/dhis2-core
+  - name: iHRIS
+    description: Open Source software that helps countries around the world track and manage their health workforce data to improve access to services.
+    website: ihris.org
+    organizations: [{"name":"Intrahealth International","website":"intrahealth.org","org_type":"owner"}]
+    SDGs: [3]
+    license: GPL-3.0
+    repositoryURL: https://github.com/iHRIS/iHRIS
+  - name: Child Growth Monitor
+    description: CGM uses mobile technology (augmented reality and arti cial intelligence) to capture body scans of children as anthropometric data to deduce levels and variations in malnutrition. This allows e cient measurement, early diagnosis, and rapid emergency response to the early symptoms and e ects of malnutrition.
+    website: childgrowthmonitor.org
+    organizations: [{"name":"welthungerhilfe","website":"welthungerhilfe.org","org_type":"owner"}]
+    SDGs: [3]
+    license: GPL-3.0
+    repositoryURL: https://github.com/Welthungerhilfe/cgm-scanner
+  - name: OpenLMIS
+    description: Cloud-based electronic logistics management information system (LMIS) purpose-built to manage health commodity distribution in low- and middle-income countries.
+    website: openlmis.org
+    organizations: [{"name":"OpenLMIS","website":"openlmis.org","org_type":"owner"}]
+    SDGs: [3,9]
+    license: AGPL-3.0
+    repositoryURL: https://github.com/OpenLMIS/openlmis-ref-distro
+  - name: Reveal
+    aliases: ["mSpray", "Reveal (formerly mSpray)"]
+    description: Tool for enumeration, targeting and monitoring of Indoor Residual Spraying (IRS) for malaria interventions.
+    website: akros.com/mspray
+    organizations: [{"name":"Akros","website":"akros.com","org_type":"owner"}]
+    SDGs: [3]
+    license: Apache-2.0
+    repositoryURL: https://github.com/onaio/mspray
+  - name: SORMAS
+    aliases: ["Surveillance, Outbreak Response Management and Analysis System"]
+    description: An open source eHealth system - consisting of separate web and mobile apps - that is geared towards optimizing the processes used in monitoring the spread of infectious diseases and responding to outbreak situations.
+    website: sormas.org
+    organizations: [{"name":"Helmholtz Centre for Infection Research","website":"www.helmholtz-hzi.de","org_type":"owner"}]
+    SDGs: [3,16,17]
+    license: GPL-3.0
+    repositoryURL: https://github.com/hzi-braunschweig/SORMAS-Project
+  - name: "HEARTH"
+    description: Hearth is a centralized patient record containing clinical information provided by and accessible to the disparate information systems making up the health information space of low- and middle- income countries.
+    website: https://github.com/jembi/hearth
+    organizations: [{"name":"Jembi","website":"jembi.org","org_type":"owner"}]
+    SDGs: [3]
+    license: BSD-3-Clause
+    repositoryURL: https://github.com/jembi/hearth
