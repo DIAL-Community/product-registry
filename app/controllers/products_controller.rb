@@ -311,7 +311,6 @@ class ProductsController < ApplicationController
             else
               license_file = "https://"+product.repository + '/' + license_files.gsub(/\s+/, "")
             end
-            puts license_file
           end
         end
       end
@@ -320,9 +319,9 @@ class ProductsController < ApplicationController
 
       product_description = ""
       if !description.nil?
-        desc_json = description['description']
-        if !desc_json['ops'].nil?
-          product_description = desc_json['ops'][0]['insert']
+        desc_json = description["description"]
+        if !desc_json["ops"].nil?
+          product_description = desc_json["ops"][0]["insert"]
         end
       end
 
