@@ -300,6 +300,22 @@ class ProductsController < ApplicationController
         { :name => org.name, :website => org.website, :org_type => org_prod.org_type }
       end
 
+      license_file = ""
+      if !product.license_analysis.nil?
+        license_data = product.license_analysis.split(/\r?\n/)
+        license_data.each do |license_line|
+          if license_line.include?("Matched files")
+            license_files = license_line.split(':')[1]
+            if license_files.include?(',')
+              license_file = product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
+            else
+              license_file = product.repository + '/' + license_files.gsub(/\s+/, "")
+            end
+            puts license_file
+          end
+        end
+      end
+
       description = ProductDescription.where(product_id: product, locale: I18n.locale).first
 
       product_description = ""
@@ -310,7 +326,7 @@ class ProductsController < ApplicationController
         end
       end
 
-      { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :link => ""}], :SDGs => sdg_list.to_json, :sectors => sector_list.to_json, :type => "software", :repositoryURL => product.repository, :organizations => org_list.to_json }
+      { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :licenseURL => license_file}], :SDGs => sdg_list.to_json, :sectors => sector_list.to_json, :type => "software", :repositoryURL => product.repository, :organizations => org_list.to_json }
     end
 
     curr_products.each do |prod|
