@@ -454,11 +454,13 @@ module Modules
       license_analysis = stdout
       license = stdout.lines.first.split(/\s+/)[1]
 
-      product.license_analysis = license_analysis
-      product.license = license
+      if license != "NOASSERTION"
+        product.license_analysis = license_analysis
+        product.license = license
 
-      if product.save!
-        puts "Product license information saved: #{product.license}."
+        if product.save!
+          puts "Product license information saved: #{product.license}."
+        end
       end
     end
 
