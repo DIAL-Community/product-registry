@@ -136,7 +136,7 @@ namespace :sync do
     prod_list = JSON.parse(session.response.body)
     prod_list.each do |prod|
       File.open("export/"+slug_em(prod['name'])+".json","w") do |f|
-        f.write(prod)
+        f.write(JSON.pretty_generate prod)
       end
     end
 

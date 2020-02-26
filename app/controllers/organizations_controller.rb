@@ -40,8 +40,18 @@ class OrganizationsController < ApplicationController
     sectors = sanitize_session_values 'sectors'
     years = sanitize_session_values 'years'
     orgs = sanitize_session_values 'organizations'
+    origins = sanitize_session_values 'origins'
 
     !orgs.empty? && organizations = organizations.where('id in (?)', orgs)
+
+    product_list = Product.all
+    if !origins.empty?
+      product_list = product_list.where('id in (select product_id from products_origins where origin_id in (?))', origins)
+    end
+    if !products.empty?
+      product_list = product_list.where('id in (?)', products)
+    end
+    puts "COUNT: "+product_list.count.to_s
 
     if (endorser_only && aggregator_only)
       organizations = organizations.where(is_endorser: true).or(organizations.where(is_mni: true))
@@ -50,7 +60,7 @@ class OrganizationsController < ApplicationController
       aggregator_only && organizations = organizations.where(is_mni: true)
     end
     !countries.empty? && organizations = organizations.joins(:locations).where('locations.id in (?)', countries)
-    !products.empty? && organizations = organizations.joins(:products).where('products.id in (?)', products)
+    (!products.empty? || !origins.empty?) && organizations = organizations.joins(:products).where('products.id in (?)', product_list.ids)
     !sectors.empty? && organizations = organizations.joins(:sectors).where('sectors.id in (?)', sectors)
     !years.empty? && organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
     organizations

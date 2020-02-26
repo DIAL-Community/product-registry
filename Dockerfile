@@ -10,6 +10,9 @@ RUN apt-get install -y postgresql-client-11
 RUN mkdir /candidates
 RUN git clone https://github.com/unicef/publicgoods-candidates.git /candidates
 
+RUN mkdir /products
+RUN git clone https://github.com/publicgoods/products.git /products
+
 COPY cron-sync /etc/cron.d/cron-sync
 RUN crontab /etc/cron.d/cron-sync
 
