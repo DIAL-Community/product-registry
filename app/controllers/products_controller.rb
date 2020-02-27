@@ -319,9 +319,13 @@ class ProductsController < ApplicationController
 
       product_description = ""
       if !description.nil?
-        desc_json = description["description"]
-        if !desc_json["ops"].nil?
-          product_description = desc_json["ops"][0]["insert"]
+        desc_json = description["description"].to_s
+        if !desc_json.nil?
+          desc = desc_json.split(':')[2]
+          if !desc.nil?
+            desc = desc.gsub("}]}","").tr('"','')
+            product_description = desc
+          end
         end
       end
 
