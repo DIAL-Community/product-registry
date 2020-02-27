@@ -307,9 +307,9 @@ class ProductsController < ApplicationController
           if license_line.include?("Matched files")
             license_files = license_line.split(':')[1]
             if license_files.include?(',')
-              license_file = "https://"+product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
+              license_file = "product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
             else
-              license_file = "https://"+product.repository + '/' + license_files.gsub(/\s+/, "")
+              license_file = "product.repository + '/' + license_files.gsub(/\s+/, "")
             end
           end
         end
@@ -331,7 +331,7 @@ class ProductsController < ApplicationController
 
       repositoryURL=""
       if !product.repository.nil?
-        repositoryURL = "https://"+product.repository
+        repositoryURL = product.repository
       end
       
       { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :licenseURL => license_file}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => "software", :repositoryURL => repositoryURL, :organizations => org_list.as_json }

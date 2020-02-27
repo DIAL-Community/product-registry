@@ -5,7 +5,7 @@ products:
     organizations: [{"name":"Plan International","website":"plan-international.org","org_type":"owner"}, {"name":"Jembi","website":"jembi.org","org_type":"owner"}]
     SDGs: [16]
     license: MPL-2.0
-    repositoryURL: https://github.com/jembi/opencrvs-fhir-templates
+    repositoryURL: https://github.com/opencrvs/opencrvs-core
   - name: Open Concept Lab
     description: An open-source, cloud-based toolset for open and collaborative terminology, indicator, and core dataset management and development to accelerate convergence on best practices for data and data dictionary harmonization, information exchange, and reuse of analytics tools and approaches.
     website: openconceptlab.org
