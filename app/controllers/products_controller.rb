@@ -307,9 +307,9 @@ class ProductsController < ApplicationController
           if license_line.include?("Matched files")
             license_files = license_line.split(':')[1]
             if license_files.include?(',')
-              license_file = "product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
+              license_file = product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
             else
-              license_file = "product.repository + '/' + license_files.gsub(/\s+/, "")
+              license_file = product.repository + '/' + license_files.gsub(/\s+/, "")
             end
           end
         end
