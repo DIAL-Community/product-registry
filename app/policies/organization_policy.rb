@@ -34,6 +34,13 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def view_capabilities_allowed?
+    # DIAL is promoting the use of the catalog to help find aggregators, so we are adjusting the policy
+    # to allow any user to see the services/capabilities offered.
+    # If we want to go back to the original policy (only logged in users can view the capability), then 
+    # remove the 'return true' line
+
+    return true
+    
     if !user
       return false
     end
@@ -48,7 +55,6 @@ class OrganizationPolicy < ApplicationPolicy
   
     # get the org for the user 
     userOrg = Organization.where(:id => user.organization_id).first
-    puts "ORG: " + userOrg[:is_mni].to_s
     if userOrg[:is_mni]
       return false
     else
