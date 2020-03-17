@@ -37,7 +37,7 @@
               <% if user_signed_in? && policy(sector).mod_allowed? %>
                 <%= link_to t('view.general.edit'), edit_sector_path(sector), :class =>"dropdown-item" %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), sector, method: :delete, data: { confirm: t('view.general.delete-confirm') }, class: "dropdown-item" %>
+                <%= link_to t('view.general.delete'), sector, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, class: "dropdown-item" %>
               <% end %>
             </div>
           </td>

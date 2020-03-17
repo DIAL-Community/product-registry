@@ -9,6 +9,7 @@ gem 'bootstrap'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'will_paginate'
+gem "actionpack-page_caching"
 
 gem 'spreadsheet'
 

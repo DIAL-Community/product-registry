@@ -1,0 +1,156 @@
+<%= form_with(model: portal_view, multipart: true, local: true, html: { id: 'portal-form' }) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :portal_view_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <input id="original_name" type="hidden" value="<%= portal_view.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.portal-view')) %>
+  </div>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :description, id: :portal_view_description, class: "form-control", placeholder: t('view.general.description') %>
+    <%= form.label :description, t('view.general.description') %>
+  </fieldset>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :subdomain, id: :portal_view_subdomain, class: "form-control", placeholder: t('view.portal.form.subdomain') %>
+    <%= form.label :subdomain, t('view.portal.form.subdomain') %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('view.portal-view.top-nav').to_s.pluralize.humanize) %>
+  </h6>
+  <% PortalView.top_navs.keys.each do |top_nav| %>
+    <fieldset class="form-label-group mt-2 ml-3 inline col-3">
+      <div class="custom-control custom-switch">
+        <%= hidden_field_tag :selected_top_navs[top_nav], false %>
+        <input type="checkbox" class="custom-control-input"
+              id="selected_top_navs[<%= top_nav %>]" name="selected_top_navs[<%= top_nav %>]"
+              <%= "checked" if portal_view.top_navs.include?(top_nav) %> />
+        <label class="custom-control-label" for="selected_top_navs[<%= top_nav %>]">
+          <%= t("view.filternav.#{top_nav}") %>
+        </label>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('view.portal-view.filter-nav').to_s.pluralize.humanize) %>
+  </h6>
+  <% PortalView.filter_navs.keys.each do |filter_nav| %>
+    <fieldset class="form-label-group mt-2 ml-3 inline col-3">
+      <div class="custom-control custom-switch">
+        <%= hidden_field_tag :selected_filter_navs[filter_nav], false %>
+        <input type="checkbox" class="custom-control-input"
+              id="selected_filter_navs[<%= filter_nav %>]" name="selected_filter_navs[<%= filter_nav %>]"
+              <%= "checked" if portal_view.filter_navs.include?(filter_nav) %> />
+        <label class="custom-control-label" for="selected_filter_navs[<%= filter_nav %>]">
+          <%= t("view.filternav.#{filter_nav}") %>
+        </label>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('view.portal-view.user-role').to_s.pluralize.humanize) %>
+  </h6>
+  <% User.roles.keys.each do |role| %>
+    <fieldset class="form-label-group mt-2 ml-3 inline col-3">
+      <div class="custom-control custom-switch">
+        <%= hidden_field_tag :selected_user_roles[role], false %>
+        <input type="checkbox" class="custom-control-input"
+              id="selected_user_roles[<%= role %>]" name="selected_user_roles[<%= role %>]"
+              <%= "checked" if portal_view.user_roles.include?(role) %> />
+        <label class="custom-control-label" for="selected_user_roles[<%= role %>]">
+          <%= t("view.user.role.#{role}") %>
+        </label>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('view.portal-view.product-origin').to_s.pluralize.humanize) %>
+  </h6>
+  <% Origin.all.each do |origin| %>
+    <fieldset class="form-label-group mt-2 ml-3 inline col-3">
+      <div class="custom-control custom-switch">
+        <%= hidden_field_tag :selected_products[origin.name], false %>
+        <input type="checkbox" class="custom-control-input"
+              id="selected_products[<%= origin.name %>]" name="selected_products[<%= origin.name %>]"
+              <%= "checked" if portal_view.product_views.include?(origin.name) %> />
+        <label class="custom-control-label" for="selected_products[<%= origin.name %>]">
+          <%= origin.name %>
+        </label>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('view.portal-view.org-type').to_s.pluralize.humanize) %>
+  </h6>
+  <% Organization.org_types.keys.each do |org_type| %>
+    <fieldset class="form-label-group mt-2 ml-3 inline col-3">
+      <div class="custom-control custom-switch">
+        <%= hidden_field_tag :selected_organizations[org_type], false %>
+        <input type="checkbox" class="custom-control-input"
+              id="selected_organizations[<%= org_type %>]" name="selected_organizations[<%= org_type %>]"
+              <%= "checked" if portal_view.organization_views.include?(org_type) %> />
+        <label class="custom-control-label" for="selected_organizations[<%= org_type %>]">
+          <%= org_type %>
+        </label>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.portal.index.landing-page') %>
+  </h6>
+  <%= hidden_field_tag :about_page %>
+    <div id="about-editor" class="wysiwyg-editor">
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.portal.index.background-color') %>
+  </h6>
+  <fieldset class="form-label-group">
+    <input id="stylesheet_color" name="stylesheet_color" type="text" class="form-control" placeholder="<%= t('view.portal.form.background-color') %>" value="<%= @stylesheet_color %>" />
+    <%= form.label :stylesheet_color, t('view.portal.form.background-color') %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.portal.index.page-footer') %>
+  </h6>
+  <%= hidden_field_tag :page_footer %>
+    <div id="footer-editor" class="wysiwyg-editor">
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.portal.index.header-logo') %>
+  </h6>
+  <fieldset class="custom-file mt-2">
+    <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
+    <label class="custom-file-label" for="logo-file">
+      <%= t('view.portal.form.header-logo') %>
+    </label>
+  </fieldset>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+
+  var abouteditor = setUpEditor(<%= raw JSON.generate(@about_page) %>, "<%= t('view.portal.form.about-page') %>", "about-editor");
+  var footereditor = setUpEditor(<%= raw JSON.generate(@footer) %>, "<%= t('view.portal.form.page-footer') %>", "footer-editor");
+  var form = document.querySelector('#portal-form');
+  form.onsubmit = function() {
+    var aboutPage = $('#about_page');
+    aboutPage.val(JSON.stringify(abouteditor.getContents()));
+    var footer = $('#page_footer');
+    footer.val(JSON.stringify(footereditor.getContents()));
+  };
+</script>

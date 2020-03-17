@@ -11,6 +11,11 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :origins, join_table: :products_origins, after_add: :association_add, before_remove: :association_remove
 
+  has_and_belongs_to_many :projects, join_table: :projects_products,
+                                     dependent: :delete_all,
+                                     after_add: :association_add,
+                                     before_remove: :association_remove
+
   has_many :products_sustainable_development_goals
   has_many :sustainable_development_goals, through: :products_sustainable_development_goals, after_add: :association_add, before_remove: :association_remove
 

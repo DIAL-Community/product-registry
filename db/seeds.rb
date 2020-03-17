@@ -17,3 +17,35 @@ if Setting.where(slug: 'default_organization').count.zero?
                   description: 'The default installation organization who own the product (must use the slug value).',
                   value: 'digital_impact_alliance_dial'
 end
+
+if PortalView.where(slug: 'default').count.zero?
+  PortalView.create! name: 'Default',
+                  slug: 'default',
+                  description: 'Default portal view',
+                  top_navs: ['sdgs','use_cases','workflows','building_blocks','products','organizations'],
+                  filter_navs:['sdgs','use_cases','workflows','building_blocks','products','organizations','locations','sectors'],
+                  user_roles: ['admin','ict4sdg','principle','user','org_user','org_product_user','product_user','mni'],
+                  product_views: ["DIAL OSC","Digital Square","Unicef","Digital Health Atlas"],
+                  organization_views: ['endorser','mni','product']
+end
+
+if PortalView.where(slug: 'projects').count.zero?
+  PortalView.create! name: 'Projects',
+                  slug: 'projects',
+                  description: 'Projects view',
+                  top_navs: ['products','organizations', 'projects'],
+                  filter_navs:['products','organizations','locations','projects'],
+                  user_roles: ['admin','ict4sdg','principle','user','org_user','org_product_user','product_user','mni'],
+                  product_views: ["DIAL OSC","Digital Square","Unicef","Digital Health Atlas"],
+                  organization_views: ['endorser','mni','product']
+end
+
+if Stylesheet.where(portal: 'default').count.zero?
+  Stylesheet.create! portal: 'default',
+      background_color: '#000043'
+end
+
+if Stylesheet.where(portal: 'projects').count.zero?
+  Stylesheet.create! portal: 'projects',
+      background_color: '#430000'
+end

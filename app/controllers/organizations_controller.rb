@@ -31,47 +31,118 @@ class OrganizationsController < ApplicationController
   end
 
   def search_organizations
-    organizations = Organization.all.order(:slug)
-
     endorser_only = sanitize_session_value 'endorser_only'
     aggregator_only = sanitize_session_value 'aggregator_only'
+
     countries = sanitize_session_values 'countries'
     products = sanitize_session_values 'products'
     sectors = sanitize_session_values 'sectors'
     years = sanitize_session_values 'years'
-    orgs = sanitize_session_values 'organizations'
+    organizations = sanitize_session_values 'organizations'
     origins = sanitize_session_values 'origins'
+    projects = sanitize_session_values 'projects'
 
-    !orgs.empty? && organizations = organizations.where('id in (?)', orgs)
+    with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+    is_launchable = sanitize_session_value 'is_launchable'
 
-    product_list = Product.all
-    if !origins.empty?
-      product_list = product_list.where('id in (select product_id from products_origins where origin_id in (?))', origins)
+    sdgs = sanitize_session_values 'sdgs'
+    use_cases = sanitize_session_values 'use_cases'
+    workflows = sanitize_session_values 'workflows'
+    bbs = sanitize_session_values 'building_blocks'
+
+    filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
+                   organizations.empty? && origins.empty? && projects.empty? &&
+                   sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                 endorser_only || aggregator_only || with_maturity_assessment || is_launchable
+
+    sdg_products = []
+    if !sdgs.empty?
+      sdg_products = Product.joins(:sustainable_development_goals)
+                            .where('sustainable_development_goal_id in (?)', sdgs)
+                            .ids
     end
-    if !products.empty?
-      product_list = product_list.where('id in (?)', products)
-    end
-    puts "COUNT: "+product_list.count.to_s
 
-    if (endorser_only && aggregator_only)
-      organizations = organizations.where(is_endorser: true).or(organizations.where(is_mni: true))
+    use_case_bbs = get_bbs_from_use_cases(use_cases)
+    workflow_bbs = get_bbs_from_workflows(workflows)
+    bb_ids_parts = [bbs, use_case_bbs, workflow_bbs].reject { |x| x.nil? || x.length <= 0 }
+                                                    .sort { |a, b| a.length <=> b.length }
+
+    bb_ids = bb_ids_parts[0]
+    bb_ids_parts.each do |x|
+      bb_ids &= x
+    end
+
+    bb_products = []
+    if !bb_ids.nil? && !bb_ids.empty?
+      bb_products = Product.joins(:building_blocks)
+                           .where('building_blocks.id in (?)', bb_ids)
+                           .ids
+    end
+
+    product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+    product_ids_parts = [sdg_products, bb_products, product_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                .sort { |a, b| a.length <=> b.length }
+
+    product_ids = product_ids_parts[0]
+    product_ids_parts.each do |x|
+      product_ids &= x
+    end
+
+    org_products = []
+    if !product_ids.nil? && !product_ids.empty?
+      org_products = Organization.joins(:products)
+                                 .where('products.id in (?)', product_ids)
+                                 .ids
+    end
+
+    product_project_ids = []
+    if !product_ids.nil? && !product_ids.empty?
+      product_project_ids += Project.joins(:products)
+                                    .where('products.id in (?)', product_ids)
+                                    .ids
+    end
+    project_ids_parts = [projects, product_project_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                       .sort { |a, b| a.length <=> b.length }
+    project_ids = project_ids_parts[0]
+    project_ids_parts.each do |x|
+      project_ids &= x
+    end
+
+    org_projects = []
+    if !project_ids.nil? && !project_ids.empty?
+      org_projects = Organization.joins(:projects)
+                                 .where('projects.id in (?)', project_ids)
+                                 .ids
+    end
+
+    org_ids = []
+    org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
+                    !sectors.empty? || !countries.empty?)
+    if org_filtered
+      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
+    end
+
+    if filter_set
+      ids_parts = [org_products + org_projects, org_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                        .sort { |a, b| a.length <=> b.length }
+      ids = ids_parts[0]
+      ids_parts.each do |x|
+        ids &= x
+      end
+      organizations = Organization.where(id: ids)
+                                  .order(:slug)
     else
-      endorser_only && organizations = organizations.where(is_endorser: true)
-      aggregator_only && organizations = organizations.where(is_mni: true)
+      organizations = Organization.all.order(:slug)
     end
-    !countries.empty? && organizations = organizations.joins(:locations).where('locations.id in (?)', countries)
-    (!products.empty? || !origins.empty?) && organizations = organizations.joins(:products).where('products.id in (?)', product_list.ids)
-    !sectors.empty? && organizations = organizations.joins(:sectors).where('sectors.id in (?)', sectors)
-    !years.empty? && organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
     organizations
   end
 
   def export
-    export_contacts = params[:export_contacts].downcase == "true" ? true : false
+    export_contacts = params[:export_contacts].downcase == 'true'
     send_data(
       export_with_params(export_contacts),
-      filename: "Endorsing Organizations.xls",
-      type: "application/vnd.ms-excel"
+      filename: 'Endorsing Organizations.xls',
+      type: 'application/vnd.ms-excel'
     )
   end
 

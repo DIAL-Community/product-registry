@@ -36,58 +36,118 @@ class SustainableDevelopmentGoalsController < ApplicationController
   private
 
     def filter_sdgs
-
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
       sdgs = sanitize_session_values 'sdgs'
       bbs = sanitize_session_values 'building_blocks'
       products = sanitize_session_values 'products'
       origins = sanitize_session_values 'origins'
+      organizations = sanitize_session_values 'organizations'
+      projects = sanitize_session_values 'projects'
+
+      endorser_only = sanitize_session_value 'endorser_only'
+      aggregator_only = sanitize_session_value 'aggregator_only'
+      years = sanitize_session_values 'years'
+
+      countries = sanitize_session_values 'countries'
+      sectors = sanitize_session_values 'sectors'
+
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
 
-      filter_set = true;
-      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
-        filter_set = false;
+      filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? &&
+                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                   endorser_only || aggregator_only || with_maturity_assessment || is_launchable
+
+      project_product_ids = []
+      !projects.empty? && project_product_ids = Product.joins(:projects)
+                                                       .where('projects.id in (?)', projects)
+                                                       .ids
+
+      # Filter out organizations based on filter input.
+      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
+      org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
+                      !sectors.empty? || !countries.empty?)
+
+      # Filter out project based on organization filter above.
+      org_projects = []
+      org_filtered && org_projects += Project.joins(:organizations)
+                                             .where('organizations.id in (?)', org_ids)
+                                             .ids
+
+      # Add products based on the project filtered above.
+      !org_projects.empty? && project_product_ids += Product.joins(:projects)
+                                                            .where('projects.id in (?)', org_projects)
+                                                            .ids
+
+      sdg_products = []
+      # if !sdgs.empty?
+      #   sdg_products += Product.joins(:sustainable_development_goals)
+      #                          .where('sustainable_development_goal_id in (?)', sdgs)
+      #                          .ids
+      # end
+
+      org_products = []
+      if !organizations.empty?
+        org_products += Product.joins(:organizations)
+                               .where('organization_id in (?)', organizations)
+                               .ids
       end
 
-      use_case_sdgs = SustainableDevelopmentGoal.all
+      products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products_ids_parts = [products, sdg_products, org_products, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                                      .sort { |a, b| a.length <=> b.length }
 
-      workflow_use_cases = get_use_cases_from_workflows(workflows)
-      bb_use_cases = get_use_cases_from_bbs(bbs)
+      product_ids = products_ids_parts[0]
+      products_ids_parts.each do |x|
+        product_ids &= x
+      end
 
-      if (!use_cases.empty?)
-        filter_use_cases = UseCase.all.where('id in (?)', use_cases)
-        use_case_ids = (filter_use_cases.ids & workflow_use_cases & bb_use_cases).uniq
+      workflow_product_ids = []
+      if !product_ids.nil? && !product_ids.empty?
+        workflow_product_ids = get_workflows_from_products(product_ids)
+      end
+
+      workflow_bb_ids = get_workflows_from_bbs(bbs)
+      workflow_ids_parts = [workflows, workflow_product_ids, workflow_bb_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                             .sort { |a, b| a.length <=> b.length }
+
+      workflow_ids = workflow_ids_parts[0]
+      workflow_ids_parts.each do |x|
+        workflow_ids &= x
+      end
+
+      uc_workflows = []
+      if !workflow_ids.nil? && !workflow_ids.empty?
+        uc_workflows += UseCase.joins(:workflows)
+                               .where('workflows.id in (?)', workflow_ids)
+                               .ids
+      end
+
+      sdg_uc_ids_parts = [use_cases, uc_workflows].reject { |x| x.nil? || x.length <= 0 }
+                                                  .sort { |a, b| a.length <=> b.length }
+
+      sdg_uc_ids = sdg_uc_ids_parts[0]
+      sdg_uc_ids_parts.each do |x|
+        sdg_uc_ids &= x
+      end
+
+      if filter_set
+        ids_parts = [sdgs, sdg_uc_ids].reject { |x| x.nil? || x.length <= 0 }
+                                      .sort { |a, b| a.length <=> b.length }
+
+        ids = ids_parts[0]
+        ids_parts.each do |x|
+          ids &= x
+        end
+
+        sdgs = SustainableDevelopmentGoal.where(id: ids)
+                                         .order(:number)
       else
-        use_case_ids = (workflow_use_cases & bb_use_cases).uniq
+        sdgs = SustainableDevelopmentGoal.order(:number)
       end
-
-      if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
-        sdg_targets = SdgTarget.all.joins(:use_cases).where('use_case_id in (?)', use_case_ids)
-        use_case_sdgs = SustainableDevelopmentGoal.all.where('id in (select distinct(sdg_number) from sdg_targets where id in (?))', sdg_targets.ids)
-      end
-
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-
-      product_sdgs = SustainableDevelopmentGoal.all
-      if product_filter_set == true
-        product_sdgs = SustainableDevelopmentGoal.all.where('sustainable_development_goals.id in (select sustainable_development_goal_id from products_sustainable_development_goals where product_id in (?))', product_ids)
-      end
-
-      filter_sdgs = SustainableDevelopmentGoal.all
-      if(!sdgs.empty?)
-        filter_sdgs = SustainableDevelopmentGoal.all.where('id in (?)', sdgs).order(:number)
-      end
-
-      if (filter_set)
-        ids = (use_case_sdgs.ids & product_sdgs.ids & filter_sdgs.ids).uniq
-        all_sdgs = SustainableDevelopmentGoal.where(id: ids)
-      else
-        all_sdgs = SustainableDevelopmentGoal.all.order(:number)
-      end
-
-      all_sdgs
+      sdgs
     end
 
     # Use callbacks to share common setup or constraints between actions.

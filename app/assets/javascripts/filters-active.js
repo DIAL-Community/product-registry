@@ -67,11 +67,18 @@ const createLink = function() {
     })
     url = url.slice(0, -1); 
     navigator.clipboard.writeText(url).then(function() {
-      $("#share-link").next().text("Link has been copied to your clipboard")
+      $("#share-link").next().text("Link has been copied to your clipboard");
+      hideShareNotification();
     }, function() {
       $("#share-link").next().text("You may share this view using the following url: "+url)
     })
   })
+}
+
+const hideShareNotification = function() {
+  setTimeout(function() {
+    $("#share-link").next().text("");
+  }, 5000);
 }
 
 const removeFilterHandler = function() {
@@ -89,3 +96,4 @@ $(document).on('workflows#index:loaded', removeFilterHandler);
 $(document).on('building_blocks#index:loaded', removeFilterHandler);
 $(document).on('products#index:loaded', removeFilterHandler);
 $(document).on('organizations#index:loaded', removeFilterHandler);
+$(document).on('projects#index:loaded', removeFilterHandler);
