@@ -1,7 +1,11 @@
-function setUpViewer(viewJson) {
-  var viewer = $('.wysiwyg-viewer');
+function setUpViewer(viewJson, editorId) {
+  formSelector = '.wysiwyg-viewer'
+  if (editorId) {
+    formSelector = '#'+editorId
+  }
+  var viewer = $(formSelector);
   if (viewer) {
-    var quill = new Quill('.wysiwyg-viewer', {
+    var quill = new Quill(formSelector, {
       readOnly: true,
       modules: {
         toolbar: false
@@ -37,8 +41,12 @@ function setViewerForElement(elementId, viewJson) {
   }
 }
 
-function setUpEditor(viewJson, placeholderText) {
-  var quill = new Quill('.wysiwyg-editor', {
+function setUpEditor(viewJson, placeholderText, editorId) {
+  formSelector = '.wysiwyg-editor'
+  if (editorId) {
+    formSelector = '#'+editorId
+  }
+  var quill = new Quill(formSelector, {
     modules: {
       toolbar: [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons

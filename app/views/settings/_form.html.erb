@@ -1,18 +1,18 @@
 <%= form_with(model: setting, local: true) do |form| %>
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :setting_name, class: "form-control",
-                                 placeholder: t('view.general.name'), disabled: true %>
+                                 placeholder: t('view.general.name'), disabled: !policy(setting).permitted_attributes.include?(:name) %>
       <%= form.label :name, t('view.general.name') %>
     </fieldset>
 
     <fieldset class="form-label-group">
       <%= form.text_field :description, id: :setting_description, class: "form-control",
-                                        placeholder: t('view.general.description'), disabled: true %>
+                                        placeholder: t('view.general.description'), disabled: !policy(setting).permitted_attributes.include?(:description) %>
       <%= form.label :description, t('view.general.description') %>
     </fieldset>
 
     <fieldset class="form-label-group">
-      <%= form.text_field :value, id: :setting_value, class: "form-control", placeholder: t('view.general.value') %>
+      <%= form.text_field :value, id: :setting_value, class: "form-control", placeholder: t('view.general.value'), disabled: !policy(setting).permitted_attributes.include?(:value) %>
       <%= form.label :value, t('view.general.value') %>
     </fieldset>
 

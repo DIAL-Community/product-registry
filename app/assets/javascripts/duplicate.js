@@ -96,6 +96,10 @@ var projectDuplicateCheck = function() {
   duplicateCheck("project_name", "/project_duplicates.json");
 }
 
+var portalViewDuplicateCheck = function() {
+  duplicateCheck("portal_view_name", "/portal_view_duplicates.json");
+}
+
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
@@ -120,3 +124,5 @@ $(document).on('product_suites#edit:loaded', productSuiteDuplicateCheck);
 $(document).on('product_suites#new:loaded', productSuiteDuplicateCheck);
 $(document).on('projects#edit:loaded', projectDuplicateCheck);
 $(document).on('projects#new:loaded', projectDuplicateCheck);
+$(document).on('portal_views#edit:loaded', portalViewDuplicateCheck);
+$(document).on('portal_views#new:loaded', portalViewDuplicateCheck);

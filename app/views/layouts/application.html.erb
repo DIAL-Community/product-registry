@@ -4,6 +4,7 @@
     <title>Product Registry</title>
     <%= csrf_meta_tags %>
     <meta name="turbolinks-cache-control" content="no-cache">
+    <link href="<%= stylesheet_path(session[:portal]['slug']) %>" rel="stylesheet" type="text/css" />
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_link_tag "https://use.fontawesome.com/releases/v5.7.2/css/all.css",
@@ -17,6 +18,7 @@
       .ol-touch .rotate-north {
         top: 80px;
       }
+      <%= @stylesheet_contents %>
     </style>
     <% if Rails.env.production? || Rails.env.development? %>
       <!-- Global site tag (gtag.js) - Google Analytics -->

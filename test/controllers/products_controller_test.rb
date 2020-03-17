@@ -69,9 +69,9 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should filter products' do
-    # With no filters, should load 3 products
+    # With no filters, should load 4 products
     get products_url
-    assert_equal(3, assigns(:products).count)
+    assert_equal(4, assigns(:products).count)
 
     first_product = products(:one)
     first_origin = origins(:one)
@@ -91,7 +91,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get products_url
-    assert_equal(3, assigns(:products).count)
+    assert_equal(4, assigns(:products).count)
 
     # Remove first product's assessment information.
     # * should return 2 products

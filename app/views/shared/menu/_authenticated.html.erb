@@ -1,0 +1,44 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle-avatar" data-toggle="dropdown" href="#" role="button">
+    <div class="avatar-circle">
+      <span class="initials">
+        <%= current_user.email[0].upcase %>
+      </span>
+    </div>
+  </a>
+  <div class="dropdown-menu dropdown-menu-right">
+    <%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'dropdown-item' %>
+    <div class="dropdown-divider"></div>
+    <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
+    <% if (policy(current_user).index?) %>   
+      <%= link_to t('model.setting').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
+    <% end %>
+    <% if !available_portals.nil? && available_portals.length > 0 %>
+      <div class="dropdown-submenu">
+        <a class="dropdown-item dropdown-toggle mt-2" href="#" id="navPortal" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+          <%= t('view.header.view-selection') %>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navPortal">
+          <% available_portals.each do |available_portal| %>
+            <a class="dropdown-item portal-switcher" style="cursor: pointer;" data-portal="<%= available_portal.id %>">
+              <%= available_portal.name %>
+              <% if session[:portal]['id'] == available_portal.id %>
+                (<%= t('view.header.active-portal') %>)
+              <% end %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <div class="dropdown-divider"></div>
+    <a target="_blank" rel="noreferrer noopener"
+       href="https://docs.osc.dial.community/projects/product-registry/en/latest/"
+       class="dropdown-item">
+      <%= t('view.header.documentation') %>
+    </a>
+    <%= link_to t('view.header.feedback'), 'mailto:catalog-support@dial.community',
+                target: '_blank', class: 'dropdown-item' %>
+    <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+  </div>
+</li>

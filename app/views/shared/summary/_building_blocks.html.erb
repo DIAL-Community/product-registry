@@ -1,0 +1,11 @@
+<li class="list-group-item w-100 text-center bg-transparent">
+  <%= link_to building_blocks_path do %>
+    <% if current_page?(:controller => 'building_blocks', :action => 'index') %>
+      <span class="w-100 btn btn-warning"><%= t('model.building-block').titlecase.pluralize %>
+    <% else %>
+      <span class="w-100 btn btn-secondary"><%= t('model.building-block').titlecase.pluralize %>
+    <% end %>
+    <span id="bb-badge" class="badge badge-light">--</span>
+    </span>
+  <% end %>
+</li>

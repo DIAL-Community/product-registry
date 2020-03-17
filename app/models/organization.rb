@@ -1,4 +1,6 @@
 class Organization < ApplicationRecord
+  enum org_type: { endorser: 'endorser', mni: 'mni', product: 'product' }, _suffix: true
+
   include Auditable
 
   attr_accessor :organization_description

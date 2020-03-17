@@ -13,4 +13,12 @@ class SettingPolicy < ApplicationPolicy
   def view_allowed?
     user.role == 'admin'
   end
+
+  def permitted_attributes
+    if user.role == 'admin'
+      [:name, :description, :value]
+    else
+      []
+    end
+  end
 end

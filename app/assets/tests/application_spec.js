@@ -11,8 +11,7 @@ describe("application.js:", function() {
     // prep the handler
     $(document).on(controller + ':loaded', controllerSpy);
     $(document).on(controller + '#' + action + ':loaded', actionSpy);
-    // trigger the events
-    triggerPageEvents();
+
   })
 
   it("should trigger based on body tag.", function() {
