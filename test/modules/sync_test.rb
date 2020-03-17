@@ -15,11 +15,11 @@ class SyncModuleTest < ActiveSupport::TestCase
     fake.string
   end
 
-  test "sync_unicef_product should update product with aliases" do
+  test "sync_public_product should update product with aliases" do
     initial_size = Product.count
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
+    capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
 
@@ -33,13 +33,13 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_nil not_saved_product
   end
 
-  test "sync_unicef_product should update sdg for existing product" do
+  test "sync_public_product should update sdg for existing product" do
     initial_size = Product.count
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.length, 0
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "SDGs": [7], "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": "ODK", "SDGs": [7], "website": "https://opendatakit.org/"}')
+    capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
 
@@ -47,7 +47,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal saved_product.sustainable_development_goals.size, 1
 
     new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [8], "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
 
@@ -55,7 +55,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal saved_product.sustainable_development_goals.size, 2
   end
 
-  test "sync_unicef_product should save product with initialism" do
+  test "sync_public_product should save product with alias" do
     initial_size = Product.count
 
     existing_assessment = product_assessments(:three)
@@ -66,8 +66,8 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     assert_equal Product.count, initial_size - 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
+    capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
 
@@ -83,7 +83,7 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     # Try syncing dupes with the same name.
     new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'odk')
     assert_not_nil Product.find_by(slug: 'open_data_kit')
@@ -91,15 +91,15 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     # Try syncing dupes with the same name with one of the alias.
     new_product = JSON.parse('{"type": ["software"], "name": "ODK", "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'odk')
     assert_not_nil Product.find_by(slug: 'open_data_kit')
     assert_equal Product.count, initial_size
 
     # Try syncing dupes with the same initialism with one of the alias.
-    new_product = JSON.parse('{"type": ["software"], "name": "OpenDataKit", "initialism": "ODK", "website": "https://opendatakit.org/"}')
-    capture_stdout { sync_unicef_product(new_product) }
+    new_product = JSON.parse('{"type": ["software"], "name": "OpenDataKit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
+    capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'odk')
     saved_product = Product.find_by(slug: 'open_data_kit')
@@ -189,7 +189,6 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     # sync again adding Org1, should be added and Org2 should still be there
     p2 = JSON.parse('{ "name": "Product", "organizations": [ {"name":"Organization Again" }] }')
-    puts p2
     capture_stdout { sync_osc_product(p2) }
     p1 = Product.where(name: 'Product')[0]
     assert_equal p1.organizations.size, 2

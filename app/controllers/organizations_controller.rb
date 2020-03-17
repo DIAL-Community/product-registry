@@ -51,7 +51,6 @@ class OrganizationsController < ApplicationController
     if !products.empty?
       product_list = product_list.where('id in (?)', products)
     end
-    puts "COUNT: "+product_list.count.to_s
 
     if (endorser_only && aggregator_only)
       organizations = organizations.where(is_endorser: true).or(organizations.where(is_mni: true))
