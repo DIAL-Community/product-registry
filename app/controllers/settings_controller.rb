@@ -39,6 +39,29 @@ class SettingsController < ApplicationController
     end
   end
 
+  # GET /portal_views/new
+  def new
+    @setting = Setting.new
+    authorize @setting, :view_allowed?
+  end
+
+  def create
+    authorize Setting, :view_allowed?
+    puts "PARAMS: " + setting_params.to_s
+    @setting = Setting.new(setting_params)
+    @setting.slug = slug_em @setting.name
+
+    respond_to do |format|
+      if @setting.save
+        format.html { redirect_to @setting, notice: 'Portal view was successfully created.' }
+        format.json { render :show, status: :created, location: @portal_view }
+      else
+        format.html { render :new }
+        format.json { render json: @setting.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -49,6 +72,6 @@ class SettingsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def setting_params
     params.require(:setting)
-          .permit(:value)
+          .permit(:name, :description, :value)
   end
 end

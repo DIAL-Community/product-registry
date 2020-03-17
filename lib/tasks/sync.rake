@@ -106,25 +106,66 @@ namespace :sync do
       end
     end
     unicef_products = Product.all.joins(:products_origins).where('origin_id=?', unicef_origin.id)
+
+    removed_products = []
     unicef_products.each do |product|
       if product.origins.count == 1
         # the product's only origin is Unicef
         if !unicef_list.include?(product.name)
-          # Send email to admin to remove this product
-          msg_string = "Product #{product.name} is no longer in the Unicef list. Please remove from catalog."
-          users = User.where(receive_backup: true)
-          users.each do |user|
-            cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
-                  " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
-                  " -F from='Registry <backups@registry.dial.community>'"\
-                  " -F to=#{user.email}"\
-                  " -F subject='Sync task - delete product'"\
-                  " -F text='#{msg_string}'"
-            system cmd
-          end
+          removed_products << product.name
         end
       end
     end
+    # Send email to admin to remove this product
+    msg_string = "Products no longer in the Unicef list. Please remove from catalog. <br />#{removed_products.join('<br />')}"
+    users = User.where(receive_backup: true)
+    users.each do |user|
+      cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
+            " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
+            " -F from='Registry <backups@registry.dial.community>'"\
+            " -F to=#{user.email}"\
+            " -F subject='Sync task - delete product'"\
+            " -F html='#{msg_string}'"
+      system cmd
+    end
+  end
+
+  task :purge_blacklisted_products, [:path] => :environment do |_, params|
+    puts 'Removing products in the blacklist...'
+    blacklist = YAML.load_file('config/product_blacklist.yml')
+        blacklist.each do |blacklist_item|
+          blacklist_product = Product.where(name: blacklist_item['item']).first
+          if !blacklist_product.nil?
+            puts "Deleting "+blacklist_product.name
+            blacklist_product.organizations.each do |org|
+              org_products = OrganizationsProduct.where(organization_id: org.id)
+              if org_products.count == 1 && org.is_endorser != true && org.is_mni != true
+                puts "Deleting ORG: " +org.name
+                org.destroy
+              elsif org_products.count > 1
+                curr_org_product = org_products.where(product_id: blacklist_product.id).first
+                if !curr_org_product.nil?
+                  puts "DELETING ORG PRODUCT RELATIONSHIP: " + curr_org_product.inspect
+                  results = ActiveRecord::Base.connection.execute("delete from organizations_products where product_id="+blacklist_product.id.to_s)
+                  #deleted_org_prod = OrganizationsProduct.where(product_id: blacklist_product.id).destroy_all
+                end
+              end
+              
+            end
+            blacklist_product.product_versions.each do |version|
+              puts "Deleting "+version.version
+              version.destroy
+            end
+            blacklist_product.product_descriptions.each do |description|
+              description.destroy
+            end
+            blacklist_product.sustainable_development_goals.each do |prod_sdg|
+              puts "Deleting "+prod_sdg.number.to_s
+              prod_sdg.destroy
+            end
+            blacklist_product.destroy
+          end
+        end
   end
 
   desc 'Sync the database with the public goods lists.'

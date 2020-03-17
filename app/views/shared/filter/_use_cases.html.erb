@@ -1,0 +1,36 @@
+<div class="accordion-header bg-dark">
+  <span class="m-0 align-middle">
+    <div id="header-use_cases-link" class="header-link-button" >
+    <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px" %>
+    <span class="align-middle"><%= t('view.filternav.use_cases') %></span>
+    </div>
+    <%
+      counter = filter_count('use_cases')
+      if counter > 0
+        concat "<span id='accordian-use_cases-count' class='badge badge-light'>#{counter}</span>".html_safe
+      else
+        concat "<span id='accordian-use_cases-count' class='badge badge-light'></span>".html_safe
+      end
+    %>
+    <i class="fa fa-angle-down float-right text-muted"></i>
+  </span>
+</div>
+<div class="accordion-body p-0 bg-dark">
+  <div class="row">
+    <div id="clear-use_cases" class="col-12 small clear-all">
+      <a class="float-right" href="#"><%= t('view.filternav.clear') %></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ml-1">
+      <div class="form-group mb-1">
+        <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
+            { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
+            { class: 'form-control filter-element' }) %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 badges"></div>
+  </div>
+</div>

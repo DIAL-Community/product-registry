@@ -104,13 +104,16 @@ class WorkflowsController < ApplicationController
     @workflow.use_cases = use_cases.to_a
 
     building_blocks = Set.new
-    if (params[:selected_bulding_blocks])
-      params[:selected_bulding_blocks].keys.each do |building_block_id|
+    if (params[:selected_building_blocks])
+      puts "Building blocks: " + params[:selected_building_blocks].to_s
+      params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
+        puts "Found BB: " + building_block.inspect
         building_blocks.add(building_block)
       end
     end
     @workflow.building_blocks = building_blocks.to_a
+    puts "WF BBs: " + @workflow.building_blocks.inspect
 
     if (workflow_params[:wf_desc])
       @wfDesc.workflow_id = @workflow.id
@@ -167,57 +170,119 @@ class WorkflowsController < ApplicationController
     end
 
     def filter_workflows
-
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
       sdgs = sanitize_session_values 'sdgs'
       bbs = sanitize_session_values 'building_blocks'
       products = sanitize_session_values 'products'
       origins = sanitize_session_values 'origins'
+      organizations = sanitize_session_values 'organizations'
+      projects = sanitize_session_values 'projects'
+
+      endorser_only = sanitize_session_value 'endorser_only'
+      aggregator_only = sanitize_session_value 'aggregator_only'
+      years = sanitize_session_values 'years'
+
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
 
-      filter_set = true;
-      if (sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty?)
-        filter_set = false;
-      end
+      countries = sanitize_session_values 'countries'
+      sectors = sanitize_session_values 'sectors'
+
+      filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? &&
+                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                   endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
       sdg_use_cases = get_use_cases_from_sdgs(sdgs)
-      
-      if !use_cases.empty?
-        filter_use_cases = UseCase.all.where('id in (?)', use_cases)
-        use_case_ids = (filter_use_cases.ids & sdg_use_cases).uniq
+      use_case_ids_parts = [sdg_use_cases, use_cases].reject { |x| x.nil? || x.length <= 0 }
+                                                     .sort { |a, b| a.length <=> b.length }
+      use_case_ids = use_case_ids_parts[0]
+      use_case_ids_parts.each do |x|
+        use_case_ids &= x
+      end
+
+      use_case_workflow_ids = get_workflows_from_use_cases(use_case_ids)
+
+      project_product_ids = []
+      !projects.empty? && project_product_ids = Product.joins(:projects)
+                                                       .where('projects.id in (?)', projects)
+                                                       .ids
+
+      # Filter out organizations based on filter input.
+      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
+      org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
+                      !sectors.empty? || !countries.empty?)
+
+      # Filter out project based on organization filter above.
+      org_projects = []
+      org_filtered && org_projects += Project.joins(:organizations)
+                                             .where('organizations.id in (?)', org_ids)
+                                             .ids
+
+      # Add products based on the project filtered above.
+      !org_projects.empty? && project_product_ids += Product.joins(:projects)
+                                                            .where('projects.id in (?)', org_projects)
+                                                            .ids
+
+      sdg_products = []
+      # if !sdgs.empty?
+      #   sdg_products += Product.joins(:sustainable_development_goals)
+      #                          .where('sustainable_development_goal_id in (?)', sdgs)
+      #                          .ids
+      # end
+
+      org_products = []
+      if !organizations.empty?
+        org_products += Product.joins(:organizations)
+                               .where('organization_id in (?)', organizations)
+                               .ids
+      end
+
+      products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+
+      products_ids_parts = [products, sdg_products, org_products, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                                      .sort { |a, b| a.length <=> b.length }
+
+      product_ids = products_ids_parts[0]
+      products_ids_parts.each do |x|
+        product_ids &= x
+      end
+
+      product_bbs = []
+      if !product_ids.nil? && !product_ids.empty?
+        product_bbs = get_bbs_from_products(product_ids)
+      end
+      bb_ids_parts = [bbs, product_bbs].reject { |x| x.nil? || x.length <= 0 }
+                                       .sort { |a, b| a.length <=> b.length }
+
+      bb_ids = bb_ids_parts[0]
+      bb_ids_parts.each do |x|
+        bb_ids &= x
+      end
+
+      bb_workflow_ids = []
+      if !bb_ids.nil? && !bb_ids.empty?
+        bb_workflow_ids = Workflow.joins(:building_blocks)
+                                  .where('building_blocks.id in (?)', bb_ids)
+                                  .ids
+      end
+
+      if filter_set
+        ids_parts = [workflows, use_case_workflow_ids, bb_workflow_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                       .sort { |a, b| a.length <=> b.length }
+
+        ids = ids_parts[0]
+        ids_parts.each do |x|
+          ids &= x
+        end
+
+        workflows = Workflow.where(id: ids)
+                            .order(:slug)
       else
-        use_case_ids = sdg_use_cases
+        workflows = Workflow.order(:slug)
       end
-
-      use_case_workflows = Workflow.all.joins(:use_cases).where('use_case_id in (?)', use_case_ids).distinct 
-
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-      product_bbs = get_bbs_from_products(product_ids, product_filter_set)
-
-      if !bbs.empty?
-        filter_bbs = BuildingBlock.all.where('id in (?)', bbs)
-        bb_ids = (filter_bbs.ids & product_bbs).uniq
-      else
-        bb_ids = product_bbs
-      end
-
-      bb_workflows = Workflow.all.joins(:building_blocks).where('building_block_id in (?)', bb_ids).distinct
-
-      filter_workflow = Workflow.all
-      if(!workflows.empty?) 
-        filter_workflow = Workflow.all.where('id in (?)', workflows).order(:slug)
-      end
-
-      if (filter_set)
-        ids = (use_case_workflows & bb_workflows & filter_workflow).uniq
-        all_workflows = Workflow.where(id: ids)
-      else 
-        all_workflows = Workflow.all.order(:slug)
-      end
-
-      all_workflows
+      workflows
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

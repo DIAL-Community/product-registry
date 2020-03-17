@@ -1,0 +1,11 @@
+<li class="list-group-item w-100 text-center bg-transparent">
+  <%= link_to workflows_path do %>
+    <% if current_page?(:controller => 'workflows', :action => 'index') %>
+      <span class="w-100 btn btn-warning"><%= t('model.workflow').titlecase.pluralize %>
+    <% else %>
+      <span class="w-100 btn btn-secondary"><%= t('model.workflow').titlecase.pluralize %>
+    <% end %>
+    <span id="workflow-badge" class="badge badge-light">--</span>
+    </span>
+  <% end %>
+</li>

@@ -278,7 +278,7 @@ class ProductsController < ApplicationController
 
   def productlist
     @products = Array.new
-    
+
     product_list = Product.all.eager_load(:sustainable_development_goals, :sectors, :organizations, :origins)
 
     curr_products = product_list.map do |product|
@@ -286,7 +286,7 @@ class ProductsController < ApplicationController
         origin.slug
       end
       next if params[:source] && !origin_list.include?(params[:source])
-      
+
       sdg_list = product.sustainable_development_goals.map do |sdg|
         [ sdg.number, sdg.name ]
       end
@@ -307,9 +307,9 @@ class ProductsController < ApplicationController
           if license_line.include?("Matched files")
             license_files = license_line.split(':')[1]
             if license_files.include?(',')
-              license_file = "https://"+product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
+              license_file = product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
             else
-              license_file = "https://"+product.repository + '/' + license_files.gsub(/\s+/, "")
+              license_file = product.repository + '/' + license_files.gsub(/\s+/, "")
             end
           end
         end
@@ -331,9 +331,9 @@ class ProductsController < ApplicationController
 
       repositoryURL=""
       if !product.repository.nil?
-        repositoryURL = "https://"+product.repository
+        repositoryURL = product.repository
       end
-      
+
       { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :licenseURL => license_file}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => "software", :repositoryURL => repositoryURL, :organizations => org_list.as_json }
     end
 
@@ -374,42 +374,88 @@ class ProductsController < ApplicationController
       use_cases = sanitize_session_values 'use_cases'
       workflows = sanitize_session_values 'workflows'
       organizations = sanitize_session_values 'organizations'
+      projects = sanitize_session_values 'projects'
+
+      endorser_only = sanitize_session_value 'endorser_only'
+      aggregator_only = sanitize_session_value 'aggregator_only'
+      years = sanitize_session_values 'years'
 
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
 
-      filter_set = !(sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && products.empty? && origins.empty? && organizations.empty?)
+      countries = sanitize_session_values 'countries'
+      sectors = sanitize_session_values 'sectors'
 
-      org_products = Product.all
+      filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? &&
+                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                   endorser_only || aggregator_only || with_maturity_assessment || is_launchable
+
+      project_product_ids = []
+      !projects.empty? && project_product_ids = Product.joins(:projects)
+                                                       .where('projects.id in (?)', projects)
+                                                       .ids
+
+      # Filter out organizations based on filter input.
+      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
+      org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
+                      !sectors.empty? || !countries.empty?)
+
+      # Filter out project based on organization filter above.
+      org_projects = []
+      org_filtered && org_projects += Project.joins(:organizations)
+                                             .where('organizations.id in (?)', org_ids)
+                                             .ids
+
+      # Add products based on the project filtered above.
+      !org_projects.empty? && project_product_ids += Product.joins(:projects)
+                                                            .where('projects.id in (?)', org_projects)
+                                                            .ids
+
+      org_products = []
       if !organizations.empty?
-        org_products = Product.all.joins(:organizations).where('organization_id in (?)', organizations)
-      end 
+        org_products += Product.joins(:organizations)
+                               .where('organization_id in (?)', organizations)
+                               .ids
+      end
 
       sdg_products = org_products
       if !sdgs.empty?
-        sdg_products = org_products.joins(:sustainable_development_goals).where('sustainable_development_goal_id in (?)', sdgs)
+        sdg_products += Product.joins(:sustainable_development_goals)
+                               .where('sustainable_development_goal_id in (?)', sdgs)
+                               .ids
       end
 
       use_case_bbs = get_bbs_from_use_cases(use_cases)
       workflow_bbs = get_bbs_from_workflows(workflows)
+      bb_ids_parts = [bbs, use_case_bbs, workflow_bbs].reject { |x| x.nil? || x.length <= 0 }
+                                                      .sort { |a, b| a.length <=> b.length }
 
-      if (!bbs.empty?)
-        filter_bbs = BuildingBlock.all.where('id in (?)', bbs)
-        bb_ids = (filter_bbs.ids & use_case_bbs & workflow_bbs).uniq
-      else 
-        bb_ids = (use_case_bbs & workflow_bbs).uniq
+      bb_ids = bb_ids_parts[0]
+      bb_ids_parts.each do |x|
+        bb_ids &= x
       end
 
-      bb_products = Product.all
-      if !use_cases.empty? || ! workflows.empty? || !bbs.empty?
-        bb_products = Product.all.where('id in (select product_id from products_building_blocks where building_block_id in (?))', bb_ids)
+      bb_products = []
+      if !bb_ids.nil? && !bb_ids.empty?
+        bb_products += Product.joins(:building_blocks)
+                              .where('building_blocks.id in (?)', bb_ids)
+                              .ids
       end
 
       product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       if filter_set || product_filter_set
-        product_ids = (sdg_products.ids & bb_products.ids & product_ids).uniq
-        products = Product.where(id: product_ids)
+        ids_parts = [sdg_products, bb_products, product_ids, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                                 .sort { |a, b| a.length <=> b.length }
+
+        ids = ids_parts[0]
+        ids_parts.each do |x|
+          ids &= x
+        end
+
+        products = Product.where(id: ids)
+                          .order(:slug)
       else
         products = Product.all.order(:slug)
       end

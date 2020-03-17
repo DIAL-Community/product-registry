@@ -7,12 +7,18 @@ class ProjectsController < ApplicationController
       @projects = Project.where('LOWER(name) like LOWER(?)', "%#{params[:search]}%")
                          .order(:name)
     else
-      @projects = filter_projects.order(Project.arel_table['name'].lower.asc)
-      @projects = @projects.eager_load(:organizations, :products).order(:name)
+      @projects = filter_projects
+      @projects = @projects.eager_load(:organizations, :products, :locations, :origin).order(:name)
 
       params[:search].present? && @projects = @projects.name_contains(params[:search])
     end
     authorize @projects, :view_allowed?
+  end
+
+  def count
+    @projects = filter_projects.distinct
+    authorize @projects, :view_allowed?
+    render json: @projects.count
   end
 
   def show
@@ -139,14 +145,97 @@ class ProjectsController < ApplicationController
   private
 
   def filter_projects
-    proj_list = sanitize_session_values 'projects'
+    endorser_only = sanitize_session_value 'endorser_only'
+    aggregator_only = sanitize_session_value 'aggregator_only'
+    years = sanitize_session_values 'years'
 
-    filter_projects = Project.all.order(:name)
-    if(!proj_list.empty?) 
-      filter_projects = filter_projects.where('projects.id in (?)', proj_list)
+    projects = sanitize_session_values 'projects'
+    countries = sanitize_session_values 'countries'
+    products = sanitize_session_values 'products'
+    sectors = sanitize_session_values 'sectors'
+    organizations = sanitize_session_values 'organizations'
+    origins = sanitize_session_values 'origins'
+
+    bbs = sanitize_session_values 'building_blocks'
+    sdgs = sanitize_session_values 'sdgs'
+    use_cases = sanitize_session_values 'use_cases'
+    workflows = sanitize_session_values 'workflows'
+
+    with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
+    is_launchable = sanitize_session_value 'is_launchable'
+
+    filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
+                   organizations.empty? && origins.empty? && projects.empty? &&
+                   sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                 endorser_only || aggregator_only || with_maturity_assessment || is_launchable
+
+    organization_ids = get_organizations_from_filters(organizations, years, sectors, countries,
+                                                      endorser_only, aggregator_only)
+    org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
+                    !sectors.empty? || !countries.empty?)
+
+    org_project_ids = []
+    if !organization_ids.empty? && org_filtered
+      org_project_ids += Project.joins(:organizations)
+                                .where('organizations.id in (?)', organization_ids)
+                                .ids
     end
 
-    filter_projects
+    sdg_products = []
+    if !sdgs.empty?
+      sdg_products += Product.joins(:sustainable_development_goals)
+                             .where('sustainable_development_goal_id in (?)', sdgs)
+                             .ids
+    end
+
+    use_case_bbs = get_bbs_from_use_cases(use_cases)
+    workflow_bbs = get_bbs_from_workflows(workflows)
+    bb_ids_parts = [bbs, use_case_bbs, workflow_bbs].reject { |x| x.nil? || x.length <= 0 }
+                                                    .sort { |a, b| a.length <=> b.length }
+
+    bb_ids = bb_ids_parts[0]
+    bb_ids_parts.each do |x|
+      bb_ids &= x
+    end
+
+    bb_products = []
+    if !bb_ids.nil? && !bb_ids.empty?
+      bb_products += Product.joins(:building_blocks)
+                            .where('building_blocks.id in (?)', bb_ids)
+                            .ids
+    end
+
+    product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+    product_ids_parts = [sdg_products, bb_products, product_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                .sort { |a, b| a.length <=> b.length }
+
+    product_ids = product_ids_parts[0]
+    product_ids_parts.each do |x|
+      product_ids &= x
+    end
+
+    product_project_ids = []
+    if !product_ids.nil? && !product_ids.empty?
+      product_project_ids += Project.joins(:products)
+                                    .where('products.id in (?)', product_ids)
+                                    .ids
+    end
+
+    if filter_set
+      ids_parts = [projects, org_project_ids, product_project_ids].reject { |x| x.nil? || x.length <= 0 }
+                                                                  .sort { |a, b| a.length <=> b.length }
+
+      ids = ids_parts[0]
+      ids_parts.each do |x|
+        ids &= x
+      end
+
+      projects = Project.where(id: ids)
+                        .order(:slug)
+    else
+      projects = Project.all.order(:slug)
+    end
+    projects
   end
 
   # Use callbacks to share common setup or constraints between actions.

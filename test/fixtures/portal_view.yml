@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Default
+  slug: default
+  filter_navs: []
+  top_navs: []
+  organization_views: [endorser,mni,product]
+  product_views: ["DIAL OSC","Digital Square",Unicef,"Digital Health Atlas"]
+  user_roles: ["admin","org_user","product_user"]
+  subdomain: sub_a
+  
+two:
+  name: Portal 2
+  slug: portal_2
+  filter_navs: []
+  top_navs: []
+  organization_views: [endorser,mni,product]
+  product_views: ["DIAL OSC","Digital Square",Unicef,"Digital Health Atlas"]
+  user_roles: ["admin","user", "org_user","product_user"]
+  subdomain: sub_b

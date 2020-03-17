@@ -52,6 +52,7 @@ en:
     location: location
     office: office
     organization: organization
+    portal-view: portal view
     product: product
     product-suite: product suite
     product-version: product version
@@ -202,6 +203,18 @@ en:
         current: Current
         unknown: Unknown
         with-org: With organization
+    portal:
+      index: 
+        landing-page: Landing Page
+        background-color: Background Color
+        page-footer: Page Footer
+        header-logo: Header Logo
+      form:
+        about-page: Provide content for the main landing page
+        background-color: Enter a background color in rrggbb format
+        page-footer: Provide content for the footer of the site
+        header-logo: Upload a file to use as the main header logo
+        subdomain: Sub Domain
     product:
       form:
         complete-assessment: Mark assessment as completed.
@@ -300,7 +313,9 @@ en:
       gitlab: "View this project on Gitlab"
       osc-forum: "Discuss on the Open Source Center Forum"
       ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
+      powered-by-dial: Powered by DIAL
     header:
+      active-portal: Active
       admin-data: Admin Data
       principle-data: Principles Data
       mni-data: MNI Data
@@ -314,6 +329,7 @@ en:
       profile: Profile Settings
       sign-up: Sign Up
       documentation: Help
+      view-selection: Views
     filternav:
       framework: Digital Investment Framework
       registry: Development Project Registry
@@ -323,9 +339,11 @@ en:
       building_blocks: Building Blocks
       products: Products
       geographies: Geographies
+      locations: Locations
       sectors: Sectors
       orgs: Organizations
-      projects: Projects (coming soon)
+      organizations: Organizations
+      projects: Projects
       view-projects: Coming soon.
       map: Map Views
       endorser-map: View endorser map
@@ -333,11 +351,15 @@ en:
       clear: Clear All
       with-maturity: Product with maturity assessment
       is-launchable: Product can be deployed and launched
+      top-nav: Top Navigations
+      filter-nav: Filter Navigations
+      user-role: Associated Roles
       title:
         building-block: Filter by Building Block
         country: Filter by Country
         origin: Filter by Product Origin
         product: Filter by Product
+        project: Filter by Project
         sdg: Filter by SDG
         sector: Filter by Sector
         use-case: Filter by Use Case
@@ -362,6 +384,9 @@ en:
       products:
         one: Product
         other: Products
+      projects:
+        one: Project
+        other: Projects
       sdgs:
         one: SDG
         other: SDGs
@@ -510,6 +535,13 @@ en:
       assigned:
         label: 'Search and assign %{model} ...'
         title: 'Assigned %{model}'
+    portal-view:
+      top-nav: top navigation
+      filter-nav: filter navigation
+      user-role: user role
+      product-origin: product origin
+      org-type: organization type
+      subdomain: Sub Domain
   will_paginate:
     previous_label: "&#8592; Previous"
     next_label: "Next &#8594;"

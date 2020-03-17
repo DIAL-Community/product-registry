@@ -1,0 +1,11 @@
+<li class="list-group-item w-100 text-center bg-transparent">
+  <%= link_to sustainable_development_goals_path do %>
+    <% if current_page?(:controller => 'sustainable_development_goals', :action => 'index') %>
+      <span class="w-100 btn btn-warning"><%= t('model.sdg').upcase.pluralize %>
+    <% else %>
+      <span class="w-100 btn btn-secondary"><%= t('model.sdg').upcase.pluralize %>
+    <% end %>
+      <span id="sdg-badge" class="badge badge-light">--</span>
+    </span>
+  <% end %>
+</li>

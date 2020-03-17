@@ -1,0 +1,181 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+<div class="card">
+  <h5 class="card-header bg-secondary text-white">
+    <%= "#{t('model.portal-view').to_s.titlecase}: #{@portal_view.name}" %>
+  </h5>
+  <div class="card-body py-2">
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <strong><%= t('view.general.description') %>:</strong>
+      <%= @portal_view.description %> 
+    </h6>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <strong><%= t('view.portal.form.subdomain') %>:</strong>
+      <%= @portal_view.subdomain %> 
+    </h6>
+    <div class="float-right" >
+      <%= link_to t('view.general.back'), portal_views_path, :class => "card-link" %>
+      <% if user_signed_in? && policy(@portal_view).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_portal_view_path(@portal_view), :class => "card-link" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal-view.top-nav').to_s.pluralize.titlecase %></h5>
+  </div>
+  <% if @portal_view.top_navs.count > 0 %>
+    <div class="row">
+      <% @portal_view.top_navs.each do |top_nav| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body p-2">
+              <h6 class="m-0"><%= I18n.translate("view.filternav.#{top_nav}") %></h6>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.portal-view'), multi: t('view.portal-view.top-nav').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal-view.filter-nav').to_s.pluralize.titlecase %></h5>
+  </div>
+  <% if @portal_view.filter_navs.count > 0 %>
+    <div class="row">
+      <% @portal_view.filter_navs.each do |filter_nav| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body p-2">
+              <h6 class="m-0"><%= I18n.translate("view.filternav.#{filter_nav}") %></h6>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.portal-view'), multi: t('view.portal-view.filter-nav').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal-view.user-role').to_s.pluralize.titlecase %></h5>
+  </div>
+  <% if @portal_view.user_roles.count > 0 %>
+    <div class="row">
+      <% @portal_view.user_roles.each do |user_role| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body p-2">
+              <h6 class="m-0"><%= I18n.translate("view.user.role.#{user_role}") %></h6>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.portal-view'), multi: t('view.portal-view.filter-nav').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.titlecase %></h5>
+  </div>
+  <% if @portal_view.product_views.count > 0 %>
+    <div class="row">
+      <% @portal_view.product_views.each do |origin| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body p-2">
+              <h6 class="m-0"><%= origin %></h6>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.portal-view'), multi: t('model.product').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.organization').to_s.pluralize.titlecase %></h5>
+  </div>
+  <% if @portal_view.organization_views.count > 0 %>
+    <div class="row">
+      <% @portal_view.organization_views.each do |org_type| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body p-2">
+              <h6 class="m-0"><%= org_type %></h6>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.portal-view'), multi: t('model.organization').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal.index.landing-page') %></h5>
+  </div>
+  <p class="m-2">
+    <div id="about-page" class="wysiwyg-viewer"></div>
+  </p>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal.index.background-color') %></h5>
+  </div>
+  <p class="m-2">
+    <div class="ml-3"><%= @stylesheet_color %></div>
+  </p>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal.index.page-footer') %></h5>
+  </div>
+  <p class="m-2">
+    <div id="page-footer" class="wysiwyg-viewer"></div>
+  </p>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.portal.index.header-logo') %></h5>
+  </div>
+  <%= image_tag "/assets/portal_views/"+@portal_view.slug+".png", :alt => "DIAL Logo", :height => "86px", :style => "background-color: #ccc" %>
+</div>
+
+<script>
+  <% if !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
+    setUpViewer(<%= raw JSON.generate(@about_page) %>, 'about-page') 
+  <% end %>  
+  <% if !@footer.nil? && !@footer.empty? && @footer != "{}" %>
+    setUpViewer(<%= raw JSON.generate(@footer) %>, 'page-footer') 
+  <% end %>  
+</script>

@@ -65,7 +65,7 @@ module Modules
     def sync_public_product(json_data)
       if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
         unicef_origin = Origin.find_by(slug: 'unicef')
-        name_aliases = [json_data['name'], json_data['initialism']].reject { |x| x.nil? || x.empty? }
+        name_aliases = [json_data['name'], json_data['aliases']].reject { |x| x.nil? || x.empty? }
 
         blacklist = YAML.load_file('config/product_blacklist.yml')
         blacklist.each do |blacklist_item|
@@ -96,6 +96,14 @@ module Modules
         # Set the origin to be 'unicef'
         if !existing_product.origins.exists?(id: unicef_origin.id)
           existing_product.origins.push(unicef_origin)
+        end
+
+        sdgs = json_data['SDGs']
+        if !sdgs.nil? && !sdgs.empty?
+          sdgs.each do |sdg|
+            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
+            assign_sdg_to_product(sdg_obj, existing_product, 'Self-reported')
+          end
         end
 
         update_attributes(json_data, existing_product)

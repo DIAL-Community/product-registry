@@ -1,4 +1,5 @@
 <footer id="footer">
+<% if session[:portal]["slug"] == "default" %>
   <ul class="icons sponsors">
     <li class="description">
       <a href="https://digitalimpactalliance.org">The Digital Impact Alliance</a>
@@ -29,10 +30,10 @@
       </a>
     </li>
     <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://gitlab.com/dial/t4d-product-backlog/product-registry"
+      <a target="_blank" rel="noreferrer noopener" href="https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry"
          class="fas fa-share-alt" style="text-decoration:none;">
       </a>
-      <a target="_blank" rel="noreferrer noopener" href="https://gitlab.com/dial/t4d-product-backlog/product-registry"
+      <a target="_blank" rel="noreferrer noopener" href="https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry"
          style="text-decoration:none;">
          <%= t('view.footer.gitlab') %>
       </a>
@@ -64,6 +65,12 @@
       <a target="_blank" rel="noreferrer noopener" href="https://www.globalgoals.org/"><%= t('view.footer.sdg-icons') %></a>
     </li>
   </ul>
+<% else %> 
+  <div id="footer-content" class="wysiwyg-viewer custom-footer"></div>
+  <ul class="copyright">
+    <li><%= t('view.footer.powered-by-dial') %> | <a target="_blank" rel="noreferrer noopener" href="https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry"><%= t('view.footer.gitlab') %></a></li>
+  </ul>
+<% end %>
   <ul class="copyright">
     <li>© 2019 Digital Impact Alliance</li>
     <li>
@@ -71,3 +78,9 @@
     </li>
   </ul>
 </footer>
+
+<script>
+  <% if session[:portal]["slug"] != "default" && !@footer.nil? && !@footer.empty? && @footer != "{}" %>
+    setUpViewer(<%= raw JSON.generate(@footer) %>, 'footer-content') 
+  <% end %> 
+</script>

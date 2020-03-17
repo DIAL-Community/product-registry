@@ -165,12 +165,17 @@ var loadMainDiv = function() {
 
 var addProductFilter = function(value, label) {
   var id = 'products';
-  addFilter(id, value, label)
+  addFilter(id, value, label);
 }
 
 var addOrganizationFilter = function(value, label) {
   var id = 'organizations';
-  addFilter(id, value, label)
+  addFilter(id, value, label);
+}
+
+var addProjectFilter = function(value, label) {
+  var id = 'projects';
+  addFilter(id, value, label);
 }
 
 var prepareFilters = function() {
@@ -226,6 +231,9 @@ var prepareFilters = function() {
     var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganizationFilter)
     $("#organizations").autocomplete(organizationAutoComplete);
 
+    var projectAutoComplete = autoComplete("/projects.json", addProjectFilter)
+    $("#projects").autocomplete(projectAutoComplete);
+
     loadFilters();
 }
 
@@ -235,3 +243,4 @@ $(document).on('workflows#index:loaded', prepareFilters);
 $(document).on('building_blocks#index:loaded', prepareFilters);
 $(document).on('products#index:loaded', prepareFilters);
 $(document).on('organizations#index:loaded', prepareFilters);
+$(document).on('projects#index:loaded', prepareFilters);

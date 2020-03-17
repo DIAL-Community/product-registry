@@ -3,8 +3,11 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => '/api-docs'
   resources :product_suites
   resources :glossaries
-  resources :settings, only: [:index, :edit, :show, :update]
-  resources :projects
+  resources :settings
+
+  resources :projects do
+    get 'count', on: :collection
+  end
 
   get 'deploys/index'
   get 'about/cookies'
@@ -20,6 +23,12 @@ Rails.application.routes.draw do
     member do
       post 'reject'
       post 'approve'
+    end
+  end
+
+  resources :portal_views do
+    member do
+      post 'select'
     end
   end
 
@@ -57,6 +66,8 @@ Rails.application.routes.draw do
   resources :operator_services
 
   resources :audits, only: [:index]
+
+  resources :stylesheets
 
   resources :locations do
     resources :organizations
@@ -97,6 +108,7 @@ Rails.application.routes.draw do
   get 'product_suite_duplicates', :to => 'product_suites#duplicates'
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
   get 'project_duplicates', to: 'projects#duplicates'
+  get 'portal_view_duplicates', to: 'portal_views#duplicates'
 
   get 'productlist', :to => 'products#productlist', as: :productlist
   get 'productmap', :to => 'products#map'

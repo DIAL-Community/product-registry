@@ -4,13 +4,22 @@ one:
   name: Product
   slug: product
   website: website.org
+  origins: three
 
 two:
   name: Product Again
   slug: product_againt
   website: InvalidWebsite
+  origins: three
 
 three:
   name: ODK
   slug: odk
   website: odk.com
+  origins: three
+
+four:
+  name: Product 4
+  slug: prod_4
+  website: me.com
+
