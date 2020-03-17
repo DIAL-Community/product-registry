@@ -58,10 +58,10 @@ class SyncModuleTest < ActiveSupport::TestCase
   test "sync_public_product should save product with alias" do
     initial_size = Product.count
 
-    existing_assessment = product_assessments(:three)
+    existing_assessment = product_assessments(:four)
     ProductAssessment.delete existing_assessment
 
-    existing_product = products(:three)
+    existing_product = products(:four)
     Product.delete existing_product
 
     assert_equal Product.count, initial_size - 1
@@ -71,42 +71,42 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     assert_equal Product.count, initial_size
 
-    saved_product = Product.find_by(slug: 'open_data_kit')
-    assert_equal saved_product.name, "Open Data Kit"
-    assert_equal saved_product.slug, 'open_data_kit'
-    assert_equal saved_product.website, "opendatakit.org"
+    saved_product = Product.find_by(slug: 'product_4')
+    assert_equal saved_product.name, "Product 4"
+    assert_equal saved_product.slug, 'product_4'
+    assert_equal saved_product.website, "me.com"
     assert_equal saved_product.aliases.length, 1
-    assert_equal saved_product.aliases[0], 'ODK'
+    assert_equal saved_product.aliases[0], 'Prod 4'
 
-    not_saved_product = Product.find_by(slug: 'odk')
+    not_saved_product = Product.find_by(slug: 'prod_4')
     assert_nil not_saved_product
 
     # Try syncing dupes with the same name.
     new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
-    assert_nil Product.find_by(slug: 'odk')
-    assert_not_nil Product.find_by(slug: 'open_data_kit')
+    assert_nil Product.find_by(slug: 'prod_4')
+    assert_not_nil Product.find_by(slug: 'product_4')
     assert_equal Product.count, initial_size
 
     # Try syncing dupes with the same name with one of the alias.
     new_product = JSON.parse('{"type": ["software"], "name": "ODK", "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
-    assert_nil Product.find_by(slug: 'odk')
-    assert_not_nil Product.find_by(slug: 'open_data_kit')
+    assert_nil Product.find_by(slug: 'prod_4')
+    assert_not_nil Product.find_by(slug: 'product_4')
     assert_equal Product.count, initial_size
 
     # Try syncing dupes with the same initialism with one of the alias.
     new_product = JSON.parse('{"type": ["software"], "name": "OpenDataKit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
-    assert_nil Product.find_by(slug: 'odk')
-    saved_product = Product.find_by(slug: 'open_data_kit')
+    assert_nil Product.find_by(slug: 'prod_4')
+    saved_product = Product.find_by(slug: 'product_4')
     assert_not_nil saved_product
     assert_equal saved_product.aliases.length, 2
-    assert_equal saved_product.aliases[0], "ODK"
-    assert_equal saved_product.aliases[1], "OpenDataKit"
+    assert_equal saved_product.aliases[0], "Prod 4"
+    assert_equal saved_product.aliases[1], "Product4"
 
     assert_equal Product.count, initial_size
   end
@@ -234,13 +234,13 @@ class SyncModuleTest < ActiveSupport::TestCase
   end
 
   test "ensure origin is set" do
-    p1 = products(:one)
+    p1 = products(:four)
     assert p1.origins.empty?
 
-    p2 = JSON.parse('{ "name": "Product" }')
+    p2 = JSON.parse('{ "name": "Product 4" }')
     capture_stdout { sync_osc_product(p2) }
 
-    p1 = Product.where(name: 'Product')[0]
+    p1 = Product.where(name: 'Product 4')[0]
     assert_equal p1.origins[0].slug, 'dial_osc'
   end
 

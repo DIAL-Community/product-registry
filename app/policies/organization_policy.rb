@@ -22,7 +22,7 @@ class OrganizationPolicy < ApplicationPolicy
       return true
     end
 
-    if user.role == 'principle'
+    if user.role == 'principle' && record.is_endorser
       return true
     end
 

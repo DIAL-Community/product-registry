@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_registration_parameters, if: :devise_controller?
   before_action :check_password_expiry
   before_action :set_locale
+  before_action :set_portal
 
   def not_found
     raise ActionController::RoutingError, 'Not Found'
@@ -25,6 +26,43 @@ class ApplicationController < ActionController::Base
       accept_language.scan(/[a-z]{2}(?=;)/).first
       if I18n.available_locales.index(accept_language[0..1].to_sym)
         I18n.locale = accept_language[0..1].to_sym
+      end
+    end
+  end
+
+  def set_portal
+    if session[:portal_subdomain].nil?
+      default_url = Setting.where(slug: 'root_domain').first
+      if default_url.nil?
+        session[:portal_subdomain] = false
+      else
+        session[:portal_subdomain] = true
+      end
+    end
+
+    if session[:portal].nil?
+      if session[:portal_subdomain]
+        # Get current URL, strip off root domain to get subdomain and check against portal_view table
+        root_domain = Setting.where(slug: 'root_domain').first.value
+        subdomain = request.host.split(root_domain)[0]
+        if !subdomain.nil?
+          subdomain_portal = PortalView.where(subdomain: subdomain.chomp('.')).first
+          if !subdomain_portal.nil?
+            session[:portal] = subdomain_portal
+          end
+        end
+      end
+      if session[:portal].nil?
+        if current_user.nil?
+          session[:portal] = PortalView.where(slug: 'default').first
+        else
+          PortalView.all.order(:id).each do |portal|
+            if portal.user_roles.include?(current_user.role)
+              session[:portal] = portal
+              break
+            end
+          end
+        end
       end
     end
   end
@@ -59,7 +97,7 @@ class ApplicationController < ActionController::Base
 
   def update_cookies(filter_name)
     case filter_name
-    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable'
+    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'organizations', 'projects'
       cookies[:updated_prod_filter] = true
     end
   end
@@ -68,7 +106,7 @@ class ApplicationController < ActionController::Base
     return unless params.key? 'filter_array'
 
     filter_array = params['filter_array']
-    filter_array.each do | filter_item |
+    filter_array.each do |filter_item|
       curr_filter = filter_array[filter_item]
       filter_name = curr_filter['filter_name']
       filter_obj = {}
@@ -147,7 +185,8 @@ class ApplicationController < ActionController::Base
 
   def sanitize_filter_values(filter_name)
     filter_values = []
-    (params.key? filter_name.to_s) && filter_values += params[filter_name.to_s].reject { |value| value.nil? || value.blank? }
+    params.key?(filter_name.to_s) &&
+      filter_values += params[filter_name.to_s].reject { |value| value.nil? || value.blank? }
     filter_values
   end
 
@@ -161,7 +200,7 @@ class ApplicationController < ActionController::Base
     filter_values = []
     if session.key? filter_name.to_s
       session[filter_name.to_s].each do |curr_filter|
-        filter_values.push(curr_filter['value'])
+        filter_values.push(curr_filter['value'].to_i)
       end
     end
     filter_values
@@ -169,8 +208,8 @@ class ApplicationController < ActionController::Base
 
   def sanitize_session_value(filter_name)
     filter_value = nil
-    (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]
-    filter_value
+    (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]['value']
+    filter_value.to_s.downcase == 'true'
   end
 
   def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
@@ -178,11 +217,21 @@ class ApplicationController < ActionController::Base
     if cookies[:updated_prod_filter].nil? || cookies[:updated_prod_filter] == 'true'
       filter_products = Product.all
       if !products.empty?
-        filter_products = Product.all.where('id in (?)', products)
+        filter_products = Product.all.where('products.id in (?)', products)
       end
 
       if !origins.empty?
-        filter_products = filter_products.where('id in (select product_id from products_origins where origin_id in (?))', origins)
+        origin_list = Origin.where('origins.id in (?)', origins)
+
+        # Also filter origins using the portal configuration.
+        if !session[:portal]['product_views'].nil?
+          origin_list = origin_list.where('origins.name in (?)', session[:portal]['product_views'])
+        end
+
+        # Filter products based on the origin information
+        !origin_list.empty? && filter_products = filter_products.joins(:origins)
+                                                                .eager_load('origins')
+                                                                .where('origins.id in (?)', origin_list.ids)
       end
 
       if is_launchable
@@ -190,7 +239,9 @@ class ApplicationController < ActionController::Base
       end
 
       if with_maturity_assessment
-        filter_products = filter_products.where('id in (select product_id from product_assessments where has_osc = true or has_digisquare = true)')
+        filter_products = filter_products.where('' \
+          ' products.id in (select product_id from product_assessments' \
+          '          where has_osc = true or has_digisquare = true)')
       end
 
       product_filter_set = false
@@ -198,112 +249,169 @@ class ApplicationController < ActionController::Base
         product_filter_set = true
       end
 
-      product_list = filter_products.ids
+      product_list = []
+      if product_filter_set
+        product_list = filter_products.ids
+      end
+
       # Set the cookies for caching
       cookies[:updated_prod_filter] = false
       cookies[:filter_products] = product_list.join(',')
       cookies[:prod_filter_set] = product_filter_set
     else
-      product_filter_set = cookies[:prod_filter_set]
-      product_list = cookies[:filter_products].split(",").map(&:to_i)
+      product_filter_set = (cookies[:prod_filter_set].to_s.downcase == 'true')
+      product_list = cookies[:filter_products].split(',').map(&:to_i)
     end
-    return product_list, product_filter_set
+    [product_list, product_filter_set]
+  end
+
+  def get_products_from_projects(projects)
+  end
+
+  def get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
+    # Filter out the organization first based on the arguments.
+    org_list = Organization.order(:slug)
+    !organizations.empty? && org_list = org_list.where('organizations.id in (?)', organizations)
+
+    if endorser_only && aggregator_only
+      org_list = org_list.where(is_endorser: true)
+                         .or(Organization.where(is_mni: true))
+    else
+      endorser_only && org_list = org_list.where(is_endorser: true)
+      aggregator_only && org_list = org_list.where(is_mni: true)
+    end
+
+    !countries.empty? && org_list = org_list.joins(:locations).where('locations.id in (?)', countries)
+    !sectors.empty? && org_list = org_list.joins(:sectors).where('sectors.id in (?)', sectors)
+    !years.empty? && org_list = org_list.where('extract(year from when_endorsed) in (?)', years)
+
+    if !session[:portal]['organization_views'].nil?
+      if !session[:portal]['organization_views'].include?('endorser')
+        org_list = org_list.where.not('is_endorser is true')
+      end
+      if !session[:portal]['organization_views'].include?('mni')
+        org_list = org_list.where.not('is_endorser is false')
+      end
+      if !session[:portal]['organization_views'].include?('product')
+        org_list = org_list.where
+                           .not('organizations.id in (select organization_id from organizations_products)')
+      end
+    end
+    org_list.ids
   end
 
   def get_use_cases_from_workflows(workflows)
+    use_cases_ids = []
     if !workflows.empty?
-      workflow_use_cases = UseCase.all.where('id in (select use_case_id from workflows_use_cases where workflow_id in (?))', workflows)
-    else
-      workflow_use_cases = UseCase.all
+      workflow_use_cases = UseCase.joins(:workflows)
+                                  .where('workflows.id in (?)', workflows)
+      use_cases_ids = workflow_use_cases.ids
     end
-    workflow_use_cases.ids
+    use_cases_ids
   end
 
   def get_use_cases_from_bbs(bbs)
+    use_cases_ids = []
     if !bbs.empty?
-      bb_workflows = Workflow.all.where('id in (select workflow_id from workflows_building_blocks where building_block_id in (?))', bbs)
-      bb_use_cases = UseCase.all.where('id in (select use_case_id from workflows_use_cases where workflow_id in (?))', bb_workflows.ids)
-    else
-      bb_use_cases = UseCase.all
+      bb_workflows = Workflow.joins(:building_blocks)
+                             .where('building_blocks.id in (?)', bbs)
+      bb_use_cases = UseCase.joins(:workflows)
+                            .where('workflows.id in (?)', bb_workflows.ids)
+      use_cases_ids = bb_use_cases.ids
     end
-    bb_use_cases.ids
+    use_cases_ids
   end
 
   def get_use_cases_from_sdgs(sdgs)
+    use_cases_ids = []
     if !sdgs.empty?
-      sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
-      sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
-    else
-      sdg_use_cases = UseCase.all
+      sdgs = SustainableDevelopmentGoal.where(id: sdgs)
+                                       .select(:number)
+      sdg_targets = SdgTarget.where('sdg_number in (?)', sdgs)
+      sdg_use_cases = UseCase.joins(:sdg_targets)
+                             .where('sdg_targets.id in (?)', sdg_targets.ids)
+      use_cases_ids = sdg_use_cases.ids
     end
-    sdg_use_cases.ids
+    use_cases_ids
   end
 
   def get_workflows_from_use_cases(use_cases)
-    if !use_cases.empty?
-      workflow_use_cases = Workflow.all.where('id in (select workflow_id from workflows_use_cases where use_case_id in (?))', use_cases)
-    else
-      workflow_use_cases = Workflow.all
+    workflow_ids = []
+    if !use_cases.nil? && !use_cases.empty?
+      workflow_use_cases = Workflow.joins(:use_cases)
+                                   .where('use_cases.id in (?)', use_cases)
+      workflow_ids = workflow_use_cases.ids
     end
-    workflow_use_cases.ids
+    workflow_ids
   end
 
   def get_workflows_from_sdgs(sdgs)
+    workflow_ids = []
     if !sdgs.empty?
-      sdg_targets = SdgTarget.all.where('sdg_number in (?)', sdgs)
-      sdg_use_cases = UseCase.all.where('id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))', sdg_targets.ids)
-      workflow_sdgs = Workflow.all.where('id in (select workflow_id from workflows_use_cases where use_case_id in (?))', sdg_use_cases.ids)
-    else
-      workflow_sdgs = Workflow.all
+      sdgs = SustainableDevelopmentGoal.where(id: sdgs)
+                                       .select(:number)
+      sdg_targets = SdgTarget.where('sdg_number in (?)', sdgs)
+      sdg_use_cases = UseCase.joins(:sdg_targets)
+                             .where('sdg_targets.id in (?)', sdg_targets.ids)
+      workflow_sdgs = Workflow.joins(:use_cases)
+                              .where('use_cases.id in (?)', sdg_use_cases.ids)
+      workflow_ids = workflow_sdgs.ids
     end
-    workflow_sdgs.ids
+    workflow_ids
   end
 
   def get_workflows_from_bbs(bbs)
+    workflow_ids = []
     if !bbs.empty?
-      workflow_bbs = Workflow.all.where('id in (select workflow_id from workflows_building_blocks where building_block_id in (?))', bbs)
-    else
-      workflow_bbs = Workflow.all
+      workflow_bbs = Workflow.joins(:building_blocks)
+                             .where('building_blocks.id in (?)', bbs)
+      workflow_ids = workflow_bbs.ids
     end
-    workflow_bbs.ids
+    workflow_ids
   end
 
-  def get_workflows_from_products(products, filters_set)
-    if (filters_set)
-      product_bbs = BuildingBlock.all.where('id in (select building_block_id from products_building_blocks where product_id in (?))', products)
-      product_workflows = Workflow.all.where('id in (select workflow_id from workflows_building_blocks where building_block_id in (?))', product_bbs.ids)
-    else
-      product_workflows = Workflow.all
+  def get_workflows_from_products(products)
+    workflow_ids = []
+    if !products.empty?
+      product_bbs = BuildingBlock.joins(:products)
+                                 .where('products.id in (?)', products)
+      bb_workflows = Workflow.joins(:building_blocks)
+                             .where('building_blocks.id in (?)', product_bbs.ids)
+      workflow_ids = bb_workflows.ids
     end
-    product_workflows.ids
+    workflow_ids
   end
 
   def get_bbs_from_use_cases(use_cases)
+    bbs_ids = []
     if !use_cases.empty?
-      use_case_workflows = Workflow.all.where('id in (select workflow_id from workflows_use_cases where use_case_id in (?))', use_cases)
-      use_case_bbs = BuildingBlock.all.where('id in (select building_block_id from workflows_building_blocks where workflow_id in (?))', use_case_workflows.ids)
-    else
-      use_case_bbs = BuildingBlock.all
+      use_case_workflows = Workflow.joins(:use_cases)
+                                   .where('use_cases.id in (?)', use_cases)
+      use_case_bbs = BuildingBlock.joins(:workflows)
+                                  .where('workflows.id in (?)', use_case_workflows.ids)
+      bbs_ids += use_case_bbs.ids
     end
-    use_case_bbs.ids
+    bbs_ids
   end
 
   def get_bbs_from_workflows(workflows)
+    bbs_ids = []
     if !workflows.empty?
-      workflow_bbs = BuildingBlock.all.where('id in (select building_block_id from workflows_building_blocks where workflow_id in (?))', workflows)
-    else
-      workflow_bbs = BuildingBlock.all
+      workflow_bbs = BuildingBlock.joins(:workflows)
+                                  .where('workflows.id in (?)', workflows)
+      bbs_ids += workflow_bbs.ids
     end
-    workflow_bbs.ids
+    bbs_ids
   end
 
-  def get_bbs_from_products(products, filters_set)
-    if filters_set == true
-      product_bbs = BuildingBlock.all.where('id in (select building_block_id from products_building_blocks where product_id in (?))', products)
-    else
-      product_bbs = BuildingBlock.all
+  def get_bbs_from_products(products)
+    bbs_ids = []
+    if !products.empty?
+      product_bbs = BuildingBlock.joins(:products)
+                                 .where('products.id in (?)', products)
+      bbs_ids = product_bbs.ids
     end
-    product_bbs.ids
+    bbs_ids
   end
 
   protected

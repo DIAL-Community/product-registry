@@ -1,0 +1,35 @@
+<div class="accordion-header bg-dark">
+  <span class="m-0 align-middle">
+    <div id="header-projects-link" class="header-link-button" >
+      <%= image_tag "project.png", :width => "20px" %>
+      <span class="align-middle"><%= t('view.filternav.projects') %></span>
+    </div>
+    <%
+      counter = filter_count('projects')
+      if counter > 0
+        concat "<span id='accordian-countries-count' class='badge badge-light'>#{counter}</span>".html_safe
+      else
+        concat "<span id='accordian-countries-count' class='badge badge-light'></span>".html_safe
+      end
+    %>
+    <i class="fa fa-angle-down float-right text-muted"></i>
+  </span>
+</div>
+<div class="accordion-body p-0 bg-dark">
+  <div class="row">
+    <div id="clear-projects" class="col-12 small clear-all">
+      <a class="float-right" href="#"><%= t('view.filternav.clear') %></a>
+    </div>
+  </div>
+  <div class="row p-1 mt-1">
+    <div class="col-12">
+      <div class="form-group mb-1">
+        <input type="text" id="projects" class="form-control filter-element"
+          placeholder="<%= t('view.multi-select.assigned.label', model: t('model.project').to_s.pluralize) %>" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 badges"></div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -95,6 +96,23 @@ CREATE TYPE public.digisquare_maturity_level AS ENUM (
 
 
 --
+-- Name: filter_nav; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.filter_nav AS ENUM (
+    'sdgs',
+    'use_cases',
+    'workflows',
+    'building_blocks',
+    'products',
+    'projects',
+    'locations',
+    'sectors',
+    'organizations'
+);
+
+
+--
 -- Name: location_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -145,6 +163,21 @@ CREATE TYPE public.relationship_type AS ENUM (
 
 
 --
+-- Name: top_nav; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.top_nav AS ENUM (
+    'sdgs',
+    'use_cases',
+    'workflows',
+    'building_blocks',
+    'products',
+    'projects',
+    'organizations'
+);
+
+
+--
 -- Name: user_role; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -160,8 +193,6 @@ CREATE TYPE public.user_role AS ENUM (
 
 
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
@@ -726,6 +757,45 @@ ALTER SEQUENCE public.origins_id_seq OWNED BY public.origins.id;
 
 
 --
+-- Name: portal_views; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.portal_views (
+    id bigint NOT NULL,
+    name character varying,
+    slug character varying NOT NULL,
+    description character varying,
+    top_navs character varying[] DEFAULT '{}'::character varying[],
+    filter_navs character varying[] DEFAULT '{}'::character varying[],
+    user_roles character varying[] DEFAULT '{}'::character varying[],
+    product_views character varying[] DEFAULT '{}'::character varying[],
+    organization_views character varying[] DEFAULT '{}'::character varying[],
+    subdomain character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: portal_views_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.portal_views_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: portal_views_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.portal_views_id_seq OWNED BY public.portal_views.id;
+
+
+--
 -- Name: product_assessments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1281,6 +1351,39 @@ ALTER SEQUENCE public.settings_id_seq OWNED BY public.settings.id;
 
 
 --
+-- Name: stylesheets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.stylesheets (
+    id bigint NOT NULL,
+    portal character varying,
+    background_color character varying,
+    about_page jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    footer_content jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    header_logo character varying
+);
+
+
+--
+-- Name: stylesheets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.stylesheets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: stylesheets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.stylesheets_id_seq OWNED BY public.stylesheets.id;
+
+
+--
 -- Name: sustainable_development_goals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1634,6 +1737,13 @@ ALTER TABLE ONLY public.origins ALTER COLUMN id SET DEFAULT nextval('public.orig
 
 
 --
+-- Name: portal_views id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.portal_views ALTER COLUMN id SET DEFAULT nextval('public.portal_views_id_seq'::regclass);
+
+
+--
 -- Name: product_assessments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1708,6 +1818,13 @@ ALTER TABLE ONLY public.sectors ALTER COLUMN id SET DEFAULT nextval('public.sect
 --
 
 ALTER TABLE ONLY public.settings ALTER COLUMN id SET DEFAULT nextval('public.settings_id_seq'::regclass);
+
+
+--
+-- Name: stylesheets id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stylesheets ALTER COLUMN id SET DEFAULT nextval('public.stylesheets_id_seq'::regclass);
 
 
 --
@@ -1881,6 +1998,14 @@ ALTER TABLE ONLY public.origins
 
 
 --
+-- Name: portal_views portal_views_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.portal_views
+    ADD CONSTRAINT portal_views_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: product_assessments product_assessments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1974,6 +2099,14 @@ ALTER TABLE ONLY public.sectors
 
 ALTER TABLE ONLY public.settings
     ADD CONSTRAINT settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stylesheets stylesheets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stylesheets
+    ADD CONSTRAINT stylesheets_pkey PRIMARY KEY (id);
 
 
 --
@@ -3024,6 +3157,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200205210606'),
 ('20200218150006'),
 ('20200220202959'),
-('20200220203026');
+('20200220203026'),
+('20200224225410'),
+('20200224225415'),
+('20200303191546');
 
 

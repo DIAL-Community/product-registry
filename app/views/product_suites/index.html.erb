@@ -39,7 +39,7 @@
               <% if user_signed_in? && policy(product_suite).mod_allowed? %>
                 <%= link_to t('view.general.edit'), edit_product_suite_path(product_suite), :class =>"dropdown-item" %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), product_suite, method: :delete, data: { confirm: t('view.general.delete-confirm') }, class: "dropdown-item" %>
+                <%= link_to t('view.general.delete'), product_suite, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, class: "dropdown-item" %>
               <% end %>
             </div>
           </td>

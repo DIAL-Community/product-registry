@@ -1,0 +1,75 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<% if user_signed_in? && policy(PortalView).mod_allowed? %>
+  <%= link_to t('view.general.create'), new_portal_view_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+<% end %>
+<div class="form-group float-right">
+  <%= form_tag(portal_views_path, method: "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search], class: "form-control",
+        placeholder: t('view.general.search-placeholder', model: t('model.portal-view').to_s.pluralize) %>
+    <div class="input-group-append">
+      <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th><%= t('view.general.name') %></th>
+      <th><%= t('view.general.description') %></th>
+      <th><%= t('view.filternav.top-nav') %></th>
+      <th><%= t('view.filternav.filter-nav') %></th>
+      <th><%= t('view.filternav.user-role') %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @portal_views.count > 0 %>
+      <% @portal_views.each do |portal_view| %>
+        <tr>
+          <td><%= portal_view.name %></td>
+          <td><%= portal_view.description %></td>
+          <td>
+            <%= portal_view.top_navs
+                           .map { |key| I18n.translate("view.filternav.#{key}") }
+                           .join(', ') %>
+          </td>
+          <td>
+            <%= portal_view.filter_navs
+                           .map{ |key| I18n.translate("view.filternav.#{key}") }
+                           .join(', ') %>
+          </td>
+          <td>
+            <%= portal_view.user_roles
+                           .map{ |key| I18n.translate("view.user.role.#{key}") }
+                           .join(', ') %>
+          </td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false" style="padding-top: 0;">
+               <%= t('view.general.action') %>
+            </a>
+            <div class="dropdown-menu">
+              <%= link_to t('view.general.view'), portal_view, :class =>"dropdown-item" %>
+              <% if user_signed_in? && policy(portal_view).mod_allowed? %>
+                <%= link_to t('view.general.edit'), edit_portal_view_path(portal_view), :class =>"dropdown-item" %>
+                <div class="dropdown-divider"></div>
+                <%= link_to t('view.general.delete'), portal_view, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, class: "dropdown-item" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted"><%= t('view.portal_view.index.no-data') %></small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @portal_views, :class => "float-right digg-pagination" %>

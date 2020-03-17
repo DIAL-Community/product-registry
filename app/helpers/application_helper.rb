@@ -6,8 +6,8 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors projects candidate_organizations
-                             product_suites operator_services settings glossaries].freeze
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations
+                             product_suites operator_services settings glossaries portal_views].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
@@ -24,6 +24,10 @@ module ApplicationHelper
 
   def display_breadcrumb
     ACTION_WITH_BREADCRUMBS.include?(params[:action]) && params[:controller] != 'deploys'
+  end
+
+  def available_portals
+    PortalView.where(':user_role = ANY(user_roles)', user_role: current_user.role)
   end
 
   def build_breadcrumbs(params)

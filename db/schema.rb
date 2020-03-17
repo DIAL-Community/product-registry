@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200220203026) do
+ActiveRecord::Schema.define(version: 20200303191546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20200220203026) do
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
-    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -30,7 +29,7 @@ ActiveRecord::Schema.define(version: 20200220203026) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "audit_id", "version"], name: "auditable_index"
+    t.index ["action", "id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -173,6 +172,20 @@ ActiveRecord::Schema.define(version: 20200220203026) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_origins_on_organization_id"
+  end
+
+  create_table "portal_views", force: :cascade do |t|
+    t.string "name"
+    t.string "slug", null: false
+    t.string "description"
+    t.string "top_navs", default: [], array: true
+    t.string "filter_navs", default: [], array: true
+    t.string "user_roles", default: [], array: true
+    t.string "product_views", default: [], array: true
+    t.string "organization_views", default: [], array: true
+    t.string "subdomain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 # Could not dump table "product_assessments" because of following StandardError
@@ -339,6 +352,14 @@ ActiveRecord::Schema.define(version: 20200220203026) do
     t.text "value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "stylesheets", force: :cascade do |t|
+    t.string "portal"
+    t.string "background_color"
+    t.jsonb "about_page", default: "{}", null: false
+    t.jsonb "footer_content", default: "{}", null: false
+    t.string "header_logo"
   end
 
   create_table "sustainable_development_goals", force: :cascade do |t|

@@ -48,14 +48,19 @@ namespace :mni do
         # now add the aggregator data
         capability = mni_row['Service Type'].strip
         aggregators.each do |aggregator|
-          if mni_row[aggregator] == 'y'
-            agg_capability = AggregatorCapability.new
-            agg_capability.aggregator_id = aggregator_ids[aggregator]
-            agg_capability.operator_services_id = operator_service.id
-            agg_capability.service = core_service
-            agg_capability.capability = capability
-            agg_capability.country_name = country_name
-            agg_capability.save
+          begin
+            if mni_row[aggregator] == 'y'
+              agg_capability = AggregatorCapability.new
+              agg_capability.aggregator_id = aggregator_ids[aggregator]
+              agg_capability.operator_services_id = operator_service.id
+              agg_capability.service = core_service
+              agg_capability.capability = capability
+              agg_capability.country_name = country_name
+              agg_capability.save
+            end
+            next
+          rescue
+            next
           end
         end
       end

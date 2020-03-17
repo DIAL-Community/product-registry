@@ -1,3 +1,5 @@
+<% if session[:portal]["slug"] == "default" %>
+
 <div id="intro_section" class="view jarallax main-img">
     <%= image_tag("ict_cover.png", class:'jarallax-img') %>
     <div class="mask purple-slight" style="height: 100vh;">
@@ -176,6 +178,9 @@
     </div>
   </div>
 </div>
+<% else %>
+  <div id="about-viewer" class="wysiwyg-viewer"></div>
+<% end %>
 
 <script>
   /* init Jarallax */
@@ -187,4 +192,7 @@
     keepImg: true,
   });
   
+  <% if session[:portal]["slug"] != "default" && !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
+    setUpViewer(<%= raw JSON.generate(@about_page) %>) 
+  <% end %>  
 </script>
