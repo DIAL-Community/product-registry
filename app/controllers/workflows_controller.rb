@@ -104,13 +104,16 @@ class WorkflowsController < ApplicationController
     @workflow.use_cases = use_cases.to_a
 
     building_blocks = Set.new
-    if (params[:selected_bulding_blocks])
-      params[:selected_bulding_blocks].keys.each do |building_block_id|
+    if (params[:selected_building_blocks])
+      puts "Building blocks: " + params[:selected_building_blocks].to_s
+      params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
+        puts "Found BB: " + building_block.inspect
         building_blocks.add(building_block)
       end
     end
     @workflow.building_blocks = building_blocks.to_a
+    puts "WF BBs: " + @workflow.building_blocks.inspect
 
     if (workflow_params[:wf_desc])
       @wfDesc.workflow_id = @workflow.id

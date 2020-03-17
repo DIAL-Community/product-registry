@@ -65,7 +65,7 @@ module Modules
     def sync_public_product(json_data)
       if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
         unicef_origin = Origin.find_by(slug: 'unicef')
-        name_aliases = [json_data['name'], json_data['initialism']].reject { |x| x.nil? || x.empty? }
+        name_aliases = [json_data['name'], json_data['aliases']].reject { |x| x.nil? || x.empty? }
 
         blacklist = YAML.load_file('config/product_blacklist.yml')
         blacklist.each do |blacklist_item|
