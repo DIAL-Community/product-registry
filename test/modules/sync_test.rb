@@ -66,7 +66,7 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     assert_equal Product.count, initial_size - 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Product 4", "aliases": "Prod 4", "website": "https://me.com/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -82,7 +82,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_nil not_saved_product
 
     # Try syncing dupes with the same name.
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Product 4", "website": "https://me.com/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'prod_4')
@@ -90,15 +90,15 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
 
     # Try syncing dupes with the same name with one of the alias.
-    new_product = JSON.parse('{"type": ["software"], "name": "ODK", "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Prod 4", "website": "https://me.com/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'prod_4')
     assert_not_nil Product.find_by(slug: 'product_4')
     assert_equal Product.count, initial_size
 
-    # Try syncing dupes with the same initialism with one of the alias.
-    new_product = JSON.parse('{"type": ["software"], "name": "OpenDataKit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
+    # Try syncing dupes with the same alias with one of the alias.
+    new_product = JSON.parse('{"type": ["software"], "name": "Product4", "aliases": "Prod 4", "website": "https://me.com/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'prod_4')
