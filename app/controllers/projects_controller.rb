@@ -190,15 +190,9 @@ class ProjectsController < ApplicationController
 
     use_case_bbs = get_bbs_from_use_cases(use_cases)
     workflow_bbs = get_bbs_from_workflows(workflows)
-    bb_ids_parts = [bbs, use_case_bbs, workflow_bbs].reject { |x| x.nil? || x.length <= 0 }
-                                                    .sort { |a, b| a.length <=> b.length }
-
-    bb_ids = bb_ids_parts[0]
-    bb_ids_parts.each do |x|
-      bb_ids &= x
-    end
 
     bb_products = []
+    bb_ids = filter_and_intersect_arrays([bbs, use_case_bbs, workflow_bbs])
     if !bb_ids.nil? && !bb_ids.empty?
       bb_products += Product.joins(:building_blocks)
                             .where('building_blocks.id in (?)', bb_ids)
@@ -206,15 +200,9 @@ class ProjectsController < ApplicationController
     end
 
     product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-    product_ids_parts = [sdg_products, bb_products, product_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                .sort { |a, b| a.length <=> b.length }
-
-    product_ids = product_ids_parts[0]
-    product_ids_parts.each do |x|
-      product_ids &= x
-    end
 
     product_project_ids = []
+    product_ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids])
     if !product_ids.nil? && !product_ids.empty?
       product_project_ids += Project.joins(:products)
                                     .where('products.id in (?)', product_ids)
@@ -222,20 +210,11 @@ class ProjectsController < ApplicationController
     end
 
     if filter_set
-      ids_parts = [projects, org_project_ids, product_project_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                  .sort { |a, b| a.length <=> b.length }
-
-      ids = ids_parts[0]
-      ids_parts.each do |x|
-        ids &= x
-      end
-
-      projects = Project.where(id: ids)
-                        .order(:slug)
+      ids = filter_and_intersect_arrays([projects, org_project_ids, product_project_ids])
+      Project.where(id: ids).order(:slug)
     else
-      projects = Project.all.order(:slug)
+      Project.all.order(:slug)
     end
-    projects
   end
 
   # Use callbacks to share common setup or constraints between actions.

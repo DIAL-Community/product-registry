@@ -428,15 +428,9 @@ class ProductsController < ApplicationController
 
       use_case_bbs = get_bbs_from_use_cases(use_cases)
       workflow_bbs = get_bbs_from_workflows(workflows)
-      bb_ids_parts = [bbs, use_case_bbs, workflow_bbs].reject { |x| x.nil? || x.length <= 0 }
-                                                      .sort { |a, b| a.length <=> b.length }
-
-      bb_ids = bb_ids_parts[0]
-      bb_ids_parts.each do |x|
-        bb_ids &= x
-      end
 
       bb_products = []
+      bb_ids = filter_and_intersect_arrays([bbs, use_case_bbs, workflow_bbs])
       if !bb_ids.nil? && !bb_ids.empty?
         bb_products += Product.joins(:building_blocks)
                               .where('building_blocks.id in (?)', bb_ids)
@@ -446,20 +440,11 @@ class ProductsController < ApplicationController
       product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       if filter_set || product_filter_set
-        ids_parts = [sdg_products, bb_products, product_ids, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                                 .sort { |a, b| a.length <=> b.length }
-
-        ids = ids_parts[0]
-        ids_parts.each do |x|
-          ids &= x
-        end
-
-        products = Product.where(id: ids)
-                          .order(:slug)
+        ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids])
+        Product.where(id: ids).order(:slug)
       else
-        products = Product.all.order(:slug)
+        Product.all.order(:slug)
       end
-      products
     end
 
     def load_maturity

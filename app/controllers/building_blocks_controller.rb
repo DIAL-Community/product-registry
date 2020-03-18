@@ -232,15 +232,9 @@ class BuildingBlocksController < ApplicationController
 
       sdg_workflows = get_workflows_from_sdgs(sdgs)
       use_case_workflows = get_workflows_from_use_cases(use_cases)
-      workflow_ids_parts = [workflows, sdg_workflows, use_case_workflows].reject { |x| x.nil? || x.length <= 0 }
-                                                                         .sort { |a, b| a.length <=> b.length }
-
-      workflow_ids = workflow_ids_parts[0]
-      workflow_ids_parts.each do |x|
-        workflow_ids &= x
-      end
 
       bb_workflows = []
+      workflow_ids = filter_and_intersect_arrays([workflows, sdg_workflows, use_case_workflows])
       if !workflow_ids.nil? && !workflow_ids.empty?
         bb_workflows = BuildingBlock.joins(:workflows)
                                     .where('workflows.id in (?)', workflow_ids)
@@ -257,21 +251,11 @@ class BuildingBlocksController < ApplicationController
       end
 
       if filter_set
-        ids_parts = [bb_workflows, bb_products, bbs, bb_projects].reject { |x| x.nil? || x.length <= 0 }
-                                                                 .sort { |a, b| a.length <=> b.length }
-
-        ids = ids_parts[0]
-        ids_parts.each do |x|
-          ids &= x
-        end
-
-        building_blocks = BuildingBlock.where(id: ids)
-                                       .order(:slug)
+        ids = filter_and_intersect_arrays([bb_workflows, bb_products, bbs, bb_projects])
+        BuildingBlock.where(id: ids).order(:slug)
       else
-        building_blocks = BuildingBlock.order(:slug)
+        BuildingBlock.order(:slug)
       end
-
-      building_blocks
     end
 
     # Use callbacks to share common setup or constraints between actions.

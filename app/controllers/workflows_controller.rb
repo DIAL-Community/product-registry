@@ -195,13 +195,7 @@ class WorkflowsController < ApplicationController
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
       sdg_use_cases = get_use_cases_from_sdgs(sdgs)
-      use_case_ids_parts = [sdg_use_cases, use_cases].reject { |x| x.nil? || x.length <= 0 }
-                                                     .sort { |a, b| a.length <=> b.length }
-      use_case_ids = use_case_ids_parts[0]
-      use_case_ids_parts.each do |x|
-        use_case_ids &= x
-      end
-
+      use_case_ids = filter_and_intersect_arrays([sdg_use_cases, use_cases])
       use_case_workflow_ids = get_workflows_from_use_cases(use_case_ids)
 
       project_product_ids = []
@@ -241,27 +235,14 @@ class WorkflowsController < ApplicationController
 
       products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
-      products_ids_parts = [products, sdg_products, org_products, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                                      .sort { |a, b| a.length <=> b.length }
-
-      product_ids = products_ids_parts[0]
-      products_ids_parts.each do |x|
-        product_ids &= x
-      end
-
       product_bbs = []
+      product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
       if !product_ids.nil? && !product_ids.empty?
         product_bbs = get_bbs_from_products(product_ids)
       end
-      bb_ids_parts = [bbs, product_bbs].reject { |x| x.nil? || x.length <= 0 }
-                                       .sort { |a, b| a.length <=> b.length }
-
-      bb_ids = bb_ids_parts[0]
-      bb_ids_parts.each do |x|
-        bb_ids &= x
-      end
 
       bb_workflow_ids = []
+      bb_ids = filter_and_intersect_arrays([bbs, product_bbs])
       if !bb_ids.nil? && !bb_ids.empty?
         bb_workflow_ids = Workflow.joins(:building_blocks)
                                   .where('building_blocks.id in (?)', bb_ids)
@@ -269,20 +250,11 @@ class WorkflowsController < ApplicationController
       end
 
       if filter_set
-        ids_parts = [workflows, use_case_workflow_ids, bb_workflow_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                       .sort { |a, b| a.length <=> b.length }
-
-        ids = ids_parts[0]
-        ids_parts.each do |x|
-          ids &= x
-        end
-
-        workflows = Workflow.where(id: ids)
-                            .order(:slug)
+        ids = filter_and_intersect_arrays([workflows, use_case_workflow_ids, bb_workflow_ids])
+        Workflow.where(id: ids).order(:slug)
       else
-        workflows = Workflow.order(:slug)
+        Workflow.order(:slug)
       end
-      workflows
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
