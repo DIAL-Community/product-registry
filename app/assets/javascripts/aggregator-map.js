@@ -198,7 +198,7 @@ function aggregatorClickHandler(evt) {
       const content =
         `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
           <h6 class="card-header py-2 px-2">${organization.name}</h6>
-          <p class="small py-2 px-2 mb-0">
+          <p class="py-2 px-2 mb-0">
             <a href="/organizations/${organization.name.toLowerCase()}"><small>View aggregator</small></a> <br />
           </p>
         </div>`;

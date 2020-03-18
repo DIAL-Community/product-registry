@@ -298,6 +298,9 @@ en:
         source: Source
       show:
         origin: Origin
+      map:
+        projects: Map of Projects
+        all-projects: All projects
     sector:
       index:
         no-data: We couldn't find any sector in the database.
@@ -348,6 +351,7 @@ en:
       map: Map Views
       endorser-map: View endorser map
       aggregator-map: View aggregator map
+      project-map: View project map
       clear: Clear All
       with-maturity: Product with maturity assessment
       is-launchable: Product can be deployed and launched
