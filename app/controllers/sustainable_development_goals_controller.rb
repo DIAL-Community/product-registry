@@ -115,9 +115,16 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
       sdg_uc_ids = filter_and_intersect_arrays([use_cases, uc_workflows])
 
+      sdg_numbers = []
+      if !sdg_uc_ids.nil? && !sdg_uc_ids.empty?
+        sdg_numbers = UseCase.joins(:sdg_targets)
+                             .where('use_cases.id in (?)', sdg_uc_ids)
+                             .pluck('sdg_number')
+      end
+
       if filter_set
-        ids = filter_and_intersect_arrays([sdgs, sdg_uc_ids])
-        SustainableDevelopmentGoal.where(id: ids).order(:number)
+        ids = filter_and_intersect_arrays([sdgs, sdg_numbers])
+        SustainableDevelopmentGoal.where(number: ids).order(:number)
       else
         SustainableDevelopmentGoal.order(:number)
       end
