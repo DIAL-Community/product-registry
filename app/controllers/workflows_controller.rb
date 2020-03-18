@@ -11,10 +11,10 @@ class WorkflowsController < ApplicationController
       return
     end
 
-    @workflows = filter_workflows.order(:name)
+    @workflows = filter_workflows.eager_load(:building_blocks, :use_cases).order(:name)
 
     if params[:search]
-      @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%" + params[:search] + "%")
+      @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%#{params[:search]}%")
     end
 
     if !params[:without_paging]
