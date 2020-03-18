@@ -13,11 +13,13 @@ class SustainableDevelopmentGoalsController < ApplicationController
       return
     end
 
-    @sustainable_development_goals = filter_sdgs.order(:number)
+    @sustainable_development_goals = filter_sdgs.eager_load(:sdg_targets).order(:number)
     @sustainable_development_goals = @sustainable_development_goals.eager_load(:sdg_targets)
 
     if params[:search]
-      @sustainable_development_goals = @sustainable_development_goals.where('LOWER("sustainable_development_goals"."name") like LOWER(?)', "%" + params[:search] + "%")
+      @sustainable_development_goals = @sustainable_development_goals.where(
+        'LOWER("sustainable_development_goals"."name") like LOWER(?)', "%#{params[:search]}%"
+      )
     end
     authorize @sustainable_development_goals, :view_allowed?
   end
@@ -119,6 +121,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
       if !sdg_uc_ids.nil? && !sdg_uc_ids.empty?
         sdg_numbers = UseCase.joins(:sdg_targets)
                              .where('use_cases.id in (?)', sdg_uc_ids)
+                             .select('sdg_number')
                              .pluck('sdg_number')
       end
 
