@@ -1,8 +1,8 @@
-- name: Ask Darcel
+- name: AskDarcel
   parent:
-    - name: Ask Darcel
+    - name: AskDarcel
   children:
-    - name: Ask Darcel API
+    - name: AskDarcel API
 - name: Aster
   parent:
     - name: Aster - Platform
@@ -68,6 +68,7 @@
   parent:
     - name: HOTOSM Tasking Manager
   children:
+    - name: Export Tool
     - name: Learn OSM
     - name: Nominatim
     - name: Open Street Map iD
