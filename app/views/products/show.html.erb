@@ -17,58 +17,17 @@
           <%= image_tag(@product.image_file, class: 'card-img-top align-middle') %>
         </div>
       </div>
-      <div class="col-6 mt-2">
-        <% if !@product.website.nil? and !@product.website.empty? %>
+      <% if @child_products.empty? %>
+        <div class="col-6 mt-2">
+          <%= render 'productdata', product: @product, product_description: @product_description %>
+        </div>
+      <% else %>
+        <div class="col-6 mt-2">
           <h6 class="card-text text-muted mt-2 mb-2">
-            <strong><%= t('view.product.form.website') %>:</strong>
-            <a href="//<%= @product.website %>" target="_blank" rel="noreferrer noopener"><%= @product.website %> &#x29c9;</a>
+              <%= @product.name %> <%= t('view.product.index.multiple') %>
           </h6>
-        <% end %>
-        <h6 class="card-text text-muted mt-2 mb-2">
-          <strong><%= t('view.product.form.repository') %>:</strong>
-          <% if !@product.repository.blank? %>
-            <a href="//<%= @product.repository %>" target="_new"><%= @product.repository %> &#x29c9;</a>
-          <% else %>
-            <%= t('view.product.show.na') %>
-          <% end %>
-        </h6>
-        <% if !@product.product_versions.nil? and !@product.product_versions.empty? %>
-          <h6 class="card-text text-muted mt-2 mb-2">
-            <strong><%= t('view.product.show.active-version') %>:</strong>
-            <%= @product.product_versions.last.version %>
-          </h6>
-        <% end %>
-        <h6 class="card-text text-muted mt-2 mb-2">
-          <strong><%= t('view.product.show.license') %>:</strong>
-          <%= @product.license.blank? ? t('view.product.show.na') :
-              @product.license == 'NOASSERTION' ? t('view.product.show.license-unknown') :
-              @product.license
-          %>
-        </h6>
-        <% if !@product.origins.nil? and !@product.origins.empty? %>
-          <h6 class="card-text text-muted mt-2 mb-2">
-          <strong><%= t('view.product.index.sources') %></strong>
-          <% @product.origins.each do |origin| %>
-            <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
-          <% end %>
-        <% end %>
-        <% if !@product.aliases.empty? %>
-          <h6 class="card-text text-muted mt-2 mb-2">
-            <strong><%= t('view.product.form.other-names') %>:</strong>
-            <ul>
-              <% @product.aliases.each{|other_name| %>
-                <li><%= other_name %></li>
-              <%}%>
-            </ul>
-          </h6>
-        <% end %>
-        <% if !@product_description.description.nil? and !@product_description.description.empty? %>
-          <h6 class="card-text text-muted mt-2 mb-2">
-            <strong><%= t('view.product.index.description') %>:</strong>
-            <div id="product-viewer" class="wysiwyg-viewer"></div>
-          </h6>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), products_path, :class => "card-link" %>
@@ -79,67 +38,67 @@
   </div>
 </div>
 
-<% statistics_data = @product.statistics %>
-<% unless statistics_data['data'].nil? %>
-  <% repository_data = statistics_data['data']['repository'] %>
+<% if !@child_products.empty? %>
+  
   <div class="card my-3">
     <h5 class="card-header bg-secondary text-white">
-      <%= t('view.product.show.statistics') %>
-      <%
-        last_updated = DateTime.parse(repository_data['updatedAt'])
-        last_month = Date.today.months_ago(1)
-        last_year = Date.today.years_ago(1)
-
-        if last_updated >= last_month
-          concat("<span class='badge badge-success'>#{t('view.product.show.very-active')}</span>".html_safe)
-        elsif last_updated > last_year && last_updated < last_month
-          concat("<span class='badge badge-warning'>#{t('view.product.show.not-very-active')}</span>".html_safe)
-        else
-          concat("<span class='badge badge-danger'>#{t('view.product.show.inactive')}</span>".html_safe)
-        end
-      %>
+      <%= @product.name %>
     </h5>
-    <div class="card-body pt-0">
-      <div class="row">
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-star"></i> <%= t('view.product.show.star') %></div>
-          <h4><%= repository_data['stargazers']['totalCount'] %></h4>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-eye"></i> <%= t('view.product.show.watcher') %></div>
-          <h4><%= repository_data['watchers']['totalCount'] %></h4>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-code-branch"></i> <%= t('view.product.show.fork') %></div>
-          <h4><%= repository_data['forkCount'] %></h4>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-file"></i> <%= t('view.product.show.current-version') %></div>
-          <% if repository_data['releases']['totalCount'].to_i > 0 %>
-          <h4><%= repository_data['releases']['edges'][0]['node']['name'] %></h4>
-          <% else %>
-          <h4><%= t('view.product.show.no-version-data') %></h4>
+    <div class="row">
+      <div class="card-body col-6">
+        <%= render 'productdata', product: @product, product_description: @product_description %>
+      </div>
+      <div class="col-6">
+      <% statistics_data = @product.statistics %>
+      <% unless statistics_data['data'].nil? %>
+        <% repository_data = statistics_data['data']['repository'] %>
+        <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
+      <% end %>
+      <div class="col-12">
+        <p class="float-right mb-1" >
+          <% if user_signed_in? && policy(@product).mod_allowed? %>
+            <%= link_to t('view.general.edit'), edit_product_path(@product), :class => "card-link" %>
           <% end %>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-calendar"></i> <%= t('view.product.show.created') %></div>
-          <h4><%= DateTime.parse(repository_data['createdAt']).strftime("%m/%d/%Y") %></h4>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-calendar-alt"></i> <%= t('view.product.show.last-updated') %></div>
-          <h4><%= DateTime.parse(repository_data['updatedAt']).strftime("%m/%d/%Y") %></h4>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-code"></i> <%= t('view.product.show.open-pr') %></div>
-          <h4><%= repository_data['openPullRequestCount']['totalCount'] %></h4>
-        </div>
-        <div class="col-3 col-xs-12 mt-3">
-          <div class="text-muted"><i class="fas fa-check"></i> <%= t('view.product.show.merged-pr') %></div>
-          <h4><%= repository_data['mergedPullRequestCount']['totalCount'] %></h4>
-        </div>
+        </p>
       </div>
     </div>
   </div>
+  
+  </div>
+  <% @child_products.each do |child_product| %>
+    <% curr_description = @child_descriptions.where(product_id: child_product).first %>
+    <% puts "CHILD DESCRIPTION: " + curr_description.inspect %>
+    <div class="card my-3">
+      <h5 class="card-header bg-secondary text-white">
+        <%= child_product.name %>
+      </h5>
+      <div class="row">
+        <div class="card-body col-6">
+          <%= render 'productdata', product: child_product, product_description: curr_description %>
+        </div>
+        <div class="col-6">
+          <% statistics_data = child_product.statistics %>
+          <% unless statistics_data['data'].nil? %>
+            <% repository_data = statistics_data['data']['repository'] %>
+            <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-12">
+        <p class="float-right mb-1" >
+          <% if user_signed_in? && policy(@product).mod_allowed? %>
+            <%= link_to t('view.general.edit'), edit_product_path(child_product), :class => "card-link" %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <% statistics_data = @product.statistics %>
+  <% unless statistics_data['data'].nil? %>
+    <% repository_data = statistics_data['data']['repository'] %>
+    <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
+  <% end %>
 <% end %>
 
 <div class="card-deck mt-2">

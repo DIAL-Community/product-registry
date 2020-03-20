@@ -360,6 +360,10 @@ class ProductsController < ApplicationController
       if @product_description.nil?
         @product_description = ProductDescription.new
       end
+      @child_products = Product.where(parent_product_id: @product)
+      if !@child_products.empty?
+        @child_descriptions = ProductDescription.where(product_id: @child_products)
+      end
     end
 
     def set_current_user
@@ -454,10 +458,10 @@ class ProductsController < ApplicationController
           ids &= x
         end
 
-        products = Product.where(id: ids)
+        products = Product.where(id: ids, is_child: false)
                           .order(:slug)
       else
-        products = Product.all.order(:slug)
+        products = Product.where(is_child: false).order(:slug)
       end
       products
     end

@@ -18,7 +18,7 @@ class SyncModuleTest < ActiveSupport::TestCase
   test "sync_public_product should update product with aliases" do
     initial_size = Product.count
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": "ODK", "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -38,7 +38,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.length, 0
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": "ODK", "SDGs": [7], "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "SDGs": [7], "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -66,7 +66,7 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     assert_equal Product.count, initial_size - 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Product 4", "aliases": "Prod 4", "website": "https://me.com/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Product 4", "aliases": ["Prod 4"], "website": "https://me.com/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -98,7 +98,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
 
     # Try syncing dupes with the same alias with one of the alias.
-    new_product = JSON.parse('{"type": ["software"], "name": "Product4", "aliases": "Prod 4", "website": "https://me.com/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Product4", "aliases": ["Prod 4"], "website": "https://me.com/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'prod_4')

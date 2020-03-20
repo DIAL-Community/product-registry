@@ -5,7 +5,6 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -148,6 +147,17 @@ CREATE TYPE public.mobile_services AS ENUM (
 
 CREATE TYPE public.org_type AS ENUM (
     'owner',
+    'maintainer',
+    'funder'
+);
+
+
+--
+-- Name: org_type_orig; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.org_type_orig AS ENUM (
+    'owner',
     'maintainer'
 );
 
@@ -193,6 +203,8 @@ CREATE TYPE public.user_role AS ENUM (
 
 
 SET default_tablespace = '';
+
+SET default_with_oids = false;
 
 --
 -- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
@@ -707,7 +719,7 @@ ALTER SEQUENCE public.organizations_locations_id_seq OWNED BY public.organizatio
 CREATE TABLE public.organizations_products (
     organization_id bigint NOT NULL,
     product_id bigint NOT NULL,
-    org_type public.org_type DEFAULT 'owner'::public.org_type
+    org_type public.org_type_orig DEFAULT 'owner'::public.org_type_orig
 );
 
 
@@ -1057,7 +1069,9 @@ CREATE TABLE public.products (
     repository character varying,
     license character varying,
     license_analysis character varying,
-    statistics jsonb DEFAULT '"{}"'::jsonb NOT NULL
+    statistics jsonb DEFAULT '"{}"'::jsonb NOT NULL,
+    is_child boolean DEFAULT false,
+    parent_product_id integer
 );
 
 
@@ -3160,6 +3174,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200220203026'),
 ('20200224225410'),
 ('20200224225415'),
-('20200303191546');
+('20200303191546'),
+('20200318153113');
 
 

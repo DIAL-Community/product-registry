@@ -239,6 +239,7 @@ en:
         product-graph: Product Graph
         is_endorsed: "Used/Maintained by an Endorser"
         is_deployable: "This product is one-click deployable"
+        multiple: "has multiple repositories. Information about each is displayed below."
         source: "Source: "
         sources: "Sources: "
         source_dial: "Digital Impact Alliance Open Source Center"
