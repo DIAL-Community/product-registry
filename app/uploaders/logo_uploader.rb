@@ -29,7 +29,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
-  process resize_image: 640
+  process resize_image: 195
   def resize_image(size)
     manipulate! do |image|
       image.strip
