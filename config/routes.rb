@@ -113,4 +113,6 @@ Rails.application.routes.draw do
   get 'productlist', :to => 'products#productlist', as: :productlist
   get 'productmap', :to => 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  get 'map_projects', to: 'projects#map_projects'
 end
