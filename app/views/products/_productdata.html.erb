@@ -1,0 +1,54 @@
+  <% if !product.website.nil? and !product.website.empty? %>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <strong><%= t('view.product.form.website') %>:</strong>
+      <a href="//<%= @product.website %>" target="_blank" rel="noreferrer noopener"><%= @product.website %> &#x29c9;</a>
+    </h6>
+  <% end %>
+  <h6 class="card-text text-muted mt-2 mb-2">
+    <strong><%= t('view.product.form.repository') %>:</strong>
+    <% if !product.repository.blank? %>
+      <a href="<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
+    <% else %>
+      <%= t('view.product.show.na') %>
+    <% end %>
+  </h6>
+  <% if !product.product_versions.nil? and !product.product_versions.empty? %>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <strong><%= t('view.product.show.active-version') %>:</strong>
+      <%= product.product_versions.last.version %>
+    </h6>
+  <% end %>
+  <h6 class="card-text text-muted mt-2 mb-2">
+    <strong><%= t('view.product.show.license') %>:</strong>
+    <%= product.license.blank? ? t('view.product.show.na') :
+        product.license == 'NOASSERTION' ? t('view.product.show.license-unknown') :
+        product.license
+    %>
+  </h6>
+  <% if !product.origins.nil? and !@product.origins.empty? %>
+    <h6 class="card-text text-muted mt-2 mb-2">
+    <strong><%= t('view.product.index.sources') %></strong>
+    <% product.origins.each do |origin| %>
+      <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
+    <% end %>
+  <% end %>
+  <% if !product.aliases.empty? %>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <strong><%= t('view.product.form.other-names') %>:</strong>
+      <ul>
+        <% product.aliases.each{|other_name| %>
+          <li><%= other_name %></li>
+        <%}%>
+      </ul>
+    </h6>
+  <% end %>
+  <% if !product_description.description.nil? and !product_description.description.empty? %>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <strong><%= t('view.product.index.description') %>:</strong>
+      <div id="product-viewer-<%= product.slug %>" class="wysiwyg-viewer"></div>
+    </h6>
+  <% end %>
+
+<script>
+  setUpViewer(<%= raw JSON.generate(product_description.description) %>, "product-viewer-<%= product.slug %>")
+</script>

@@ -239,6 +239,7 @@ en:
         product-graph: Product Graph
         is_endorsed: "Used/Maintained by an Endorser"
         is_deployable: "This product is one-click deployable"
+        multiple: "has multiple repositories. Information about each is displayed below."
         source: "Source: "
         sources: "Sources: "
         source_dial: "Digital Impact Alliance Open Source Center"
@@ -298,6 +299,9 @@ en:
         source: Source
       show:
         origin: Origin
+      map:
+        projects: Map of Projects
+        all-projects: All projects
     sector:
       index:
         no-data: We couldn't find any sector in the database.
@@ -348,6 +352,7 @@ en:
       map: Map Views
       endorser-map: View endorser map
       aggregator-map: View aggregator map
+      project-map: View project map
       clear: Clear All
       with-maturity: Product with maturity assessment
       is-launchable: Product can be deployed and launched
