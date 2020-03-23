@@ -142,6 +142,11 @@ class ProjectsController < ApplicationController
     render json: @projects, only: [:name]
   end
 
+  def map_projects
+    @projects = Project.eager_load(:locations)
+    authorize @projects, :view_allowed?
+  end
+
   private
 
   def filter_projects

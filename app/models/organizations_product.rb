@@ -1,5 +1,5 @@
 class OrganizationsProduct < ApplicationRecord
-  enum org_type: { owner: 'owner', maintainer: 'maintainer' }
+  enum org_type: { owner: 'owner', maintainer: 'maintainer', funder: 'funder' }
   after_initialize :set_default_type, if: :new_record?
 
   def set_default_type

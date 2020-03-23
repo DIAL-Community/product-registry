@@ -360,6 +360,10 @@ class ProductsController < ApplicationController
       if @product_description.nil?
         @product_description = ProductDescription.new
       end
+      @child_products = Product.where(parent_product_id: @product)
+      if !@child_products.empty?
+        @child_descriptions = ProductDescription.where(product_id: @child_products)
+      end
     end
 
     def set_current_user
@@ -441,9 +445,9 @@ class ProductsController < ApplicationController
 
       if filter_set || product_filter_set
         ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids])
-        Product.where(id: ids).order(:slug)
+        Product.where(id: ids, is_child: false).order(:slug)
       else
-        Product.all.order(:slug)
+        Product.where(is_child: false).order(:slug)
       end
     end
 
