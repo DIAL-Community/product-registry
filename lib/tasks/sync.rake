@@ -190,6 +190,26 @@ namespace :sync do
     end
   end
 
+  desc 'Create parent-child links for products that have multiple repos'
+  task :link_products, [:path] => :environment do |_, params|
+    product_list = YAML.load_file("config/product_parent_child.yml")
+    product_list.each do |curr_product|
+      parent_product = curr_product["parent"].first
+      parent_prod = Product.where(name: parent_product["name"]).first
+      if !parent_prod.nil?
+        curr_product["children"].each do |child_product|
+          child_prod = Product.where(name: child_product["name"]).first
+          if !child_prod.nil?
+            puts "Adding "+child_prod.name+" as child to "+parent_prod.name
+            child_prod.is_child=true
+            child_prod.parent_product_id=parent_prod.id
+            child_prod.save
+          end
+        end
+      end
+    end
+  end
+
   task :update_version_data, [] => :environment do
     puts 'Starting to pull version data ...'
 

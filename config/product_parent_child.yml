@@ -1,0 +1,140 @@
+- name: Ask Darcel
+  parent:
+    - name: Ask Darcel
+  children:
+    - name: Ask Darcel API
+- name: Aster
+  parent:
+    - name: Aster - Platform
+  children:
+    - name: Aster - Emergency Scoring
+    - name: Aster - Stream
+- name: Avni
+  parent:
+    - name: Avni Server
+  children:
+    - name: Avni Client
+- name: Child Growth Monitor
+  parent:
+    - name: Child Growth Monitor
+  children:
+    - name: Child Growth Monitor Machine Learning
+- name: CommCare
+  parent:
+    - name: CommCare
+  children:
+    - name: CommCare Android
+    - name: CommCare Cloud
+- name: Enketo
+  parent:
+    - name: Enketo Core
+  children:
+    - name: Enketo Express
+- name: Hospital Run
+  parent:
+    - name: HospitalRun Server
+  children:
+    - name: HospitalRun Frontend
+    - name: HospitalRun Server Routes
+- name: InteleHealth
+  parent:
+    - name: InteleHealth Android
+  children:
+    - name: InteleHealth OpenMRS UI
+- name: KoboToolbox
+  parent:
+    - name: KoboToolbox
+  children:
+    - name: KoboCat
+    - name: Kobo API
+- name: LibreHealth EHR
+  parent:
+    - name: LibreHealth EHR
+  children:
+    - name: LibreHealth Toolkit
+- name: Mapswipe
+  parent:
+    - name: Mapswipe
+  children:
+    - name: Mapswipe Backend
+- name: Mifos
+  parent:
+    - name: Mifos
+  children:
+    - name: Mifos Android
+    - name: Mifos Mobile
+    - name: Mifos Web App
+- name: Open Street Map
+  parent:
+    - name: HOTOSM Tasking Manager
+  children:
+    - name: Learn OSM
+    - name: Nominatim
+    - name: Open Street Map iD
+    - name: Open Street Map Website
+    - name: osm2pgsql
+    - name: OSM Analytics
+- name: Open Data Kit
+  parent:
+    - name: ODK Aggregate
+  children: 
+    - name: ODK Briefcase 
+    - name: ODK Build
+    - name: ODK Collect
+    - name: ODK XLS Form Offline
+- name: Open Food Facts
+  parent:
+    - name: Open Food Facts Android
+  children: 
+    - name: Open Food Facts iOS 
+    - name: Open Food Facts Server
+- name: OpenMRS
+  parent:
+    - name: OpenMRS
+  children: 
+    - name: Open MRS Android Client
+    - name: Open MRS Core
+- name: Oppia
+  parent:
+    - name: Oppia
+  children: 
+    - name: Oppia Machine Learning
+- name: PublicLab
+  parent:
+    - name: PublicLab
+  children: 
+    - name: PublicLab Plots2
+- name: Scratch
+  parent:
+    - name: Scratch
+  children: 
+    - name: Scratch Blocks
+    - name: Scratch GUI
+    - name: Scratch Junior
+    - name: Scratch VM
+    - name: Scratch Web
+- name: Spatio-Temporal Asset Catalog
+  parent: 
+    - name: Spatio-Temporal Asset Catalog Browser
+  children:
+    - name: Spatio-Temporal Asset Catalog Specifications
+- name: Sugar
+  parent: 
+    - name: Sugar
+  children: 
+    - name: Sugarizer
+    - name: Sugar - Turtle Art
+- name: TidePool
+  parent: 
+    - name: TidePool Platform
+  children:
+    - name: TideLine
+    - name: TidePool Blip
+    - name: TidePool Chrome Uploader
+    - name: TidePool Data Analytics
+    - name: TidePool Viz
+- name: Ushahidi
+  parent:
+    - name: Ushahidi Platform
+  children:
+    - name: Ushahidi Platform Client

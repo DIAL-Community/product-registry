@@ -65,7 +65,10 @@ module Modules
     def sync_public_product(json_data)
       if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
         unicef_origin = Origin.find_by(slug: 'unicef')
-        name_aliases = [json_data['name'], json_data['aliases']].reject { |x| x.nil? || x.empty? }
+        name_aliases = [json_data['name']]
+        if !json_data['aliases'].nil?
+          name_aliases += json_data['aliases']
+        end
 
         blacklist = YAML.load_file('config/product_blacklist.yml')
         blacklist.each do |blacklist_item|
@@ -81,6 +84,8 @@ module Modules
 
           slug = slug_em name_alias
           existing_product = Product.first_duplicate(name_alias, slug)
+          # Check to see if both just have the same alias. In this case, it's not a duplicate 
+          
         end
 
         if existing_product.nil?
@@ -299,7 +304,6 @@ module Modules
             org_product = OrganizationsProduct.new
             org_product.org_type = organization['org_type']
             sync_product.organizations << org
-            puts sync_product.organizations.inspect
           end
         end
       end
