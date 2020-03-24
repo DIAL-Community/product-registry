@@ -241,10 +241,10 @@ class BuildingBlocksController < ApplicationController
                                     .ids
       end
 
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       bb_products = []
-      if product_filter_set && !product_ids.empty?
+      if !product_ids.empty?
         bb_products = BuildingBlock.joins(:products)
                                    .where('products.id in (?)', product_ids)
                                    .ids
