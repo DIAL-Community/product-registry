@@ -20,7 +20,10 @@ class ProductsController < ApplicationController
       return
     end
 
+    # :filtered_time will be updated every time we add or remove a filter.
     if session[:filtered_time].to_s.downcase != session[:product_filtered_time].to_s.downcase
+      # :product_filtered_time is not updated after the filter is updated:
+      # - rebuild the product id cache
       product_ids, filter_set = filter_products
       session[:product_filtered_ids] = product_ids
       session[:product_filtered] = filter_set
@@ -28,6 +31,7 @@ class ProductsController < ApplicationController
       session.delete(:product_filtered_page)
     end
 
+    # Current page information will be stored in the main page div.
     current_page = params[:page] || 1
 
     @products = Product.where(is_child: false)
@@ -44,6 +48,8 @@ class ProductsController < ApplicationController
   end
 
   def count
+    # We will use whichever set the product id cache first: this one or the one in index method.
+    # This should reduce the need to execute the same operation multiple time.
     if session[:filtered_time].to_s.downcase != session[:product_filtered_time].to_s.downcase
       product_ids, filter_set = filter_products
       session[:product_filtered_ids] = product_ids
