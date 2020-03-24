@@ -57,13 +57,13 @@ class ProductsController < ApplicationController
       session[:product_filtered_time] = session[:filtered_time]
     end
 
-    product_count = session[:product_filtered_ids].length
-    if session[:product_filtered].to_s.downcase != 'true'
-      product_count = Product.where(is_child: false).count
+    product_count = Product.where(is_child: false)
+    if session[:product_filtered].to_s.downcase == 'true'
+      product_count = product_count.where(id: session[:product_filtered_ids])
     end
 
     authorize Product, :view_allowed?
-    render json: product_count
+    render json: product_count.count
   end
 
   # GET /products/1
