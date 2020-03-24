@@ -25,7 +25,10 @@ class ProductsController < ApplicationController
       session[:product_filtered_ids] = product_ids
       session[:product_filtered] = filter_set
       session[:product_filtered_time] = session[:filtered_time]
+      session.delete(:product_filtered_page)
     end
+
+    current_page = params[:page] || 1
 
     @products = Product.where(is_child: false)
     if session[:product_filtered].to_s.downcase == 'true'
@@ -35,15 +38,12 @@ class ProductsController < ApplicationController
     @products = @products.eager_load(:references, :include_relationships, :includes, :interop_relationships,
                                      :interoperates_with, :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals, :sectors)
-                         .paginate(page: params[:page], per_page: 10)
+                         .paginate(page: current_page, per_page: 10)
                          .order(:name)
     authorize @products, :view_allowed?
   end
 
   def count
-    logger.info "Filtered time: #{session[:filtered_time].to_s.downcase}"
-    logger.info "Product filtered time: #{session[:product_filtered_time].to_s.downcase}"
-
     if session[:filtered_time].to_s.downcase != session[:product_filtered_time].to_s.downcase
       product_ids, filter_set = filter_products
       session[:product_filtered_ids] = product_ids
