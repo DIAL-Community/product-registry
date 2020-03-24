@@ -125,7 +125,7 @@ class ApplicationController < ActionController::Base
       update_cookies(filter_name)
     end
     # Mark when the filter was last updated
-    session[:filtered_time] = Time.now.to_i
+    session[:filtered_time] = DateTime.now.strftime('%Q')
     render json: true
   end
 
@@ -150,7 +150,7 @@ class ApplicationController < ActionController::Base
       session[filter_name.to_s] = existing_value
     end
     update_cookies(filter_name)
-    session[:filtered_time] = Time.now.to_i
+    session[:filtered_time] = DateTime.now.strftime('%Q')
     render json: retval
   end
 
@@ -166,7 +166,7 @@ class ApplicationController < ActionController::Base
         session.delete(key)
       end
     end
-    session[:filtered_time] = Time.now.to_i
+    session[:filtered_time] = DateTime.now.strftime('%Q')
     render json: true
   end
 

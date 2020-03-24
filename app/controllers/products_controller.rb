@@ -24,6 +24,8 @@ class ProductsController < ApplicationController
     if session[:filtered_time].to_s.downcase != session[:product_filtered_time].to_s.downcase
       # :product_filtered_time is not updated after the filter is updated:
       # - rebuild the product id cache
+      logger.info('Filter updated. Rebuilding cached product id list.')
+
       product_ids, filter_set = filter_products
       session[:product_filtered_ids] = product_ids
       session[:product_filtered] = filter_set
@@ -44,6 +46,8 @@ class ProductsController < ApplicationController
                                      :building_blocks, :sustainable_development_goals, :sectors)
                          .paginate(page: current_page, per_page: 10)
                          .order(:name)
+                         
+    params[:search].present? && @products = @products.name_contains(params[:search])
     authorize @products, :view_allowed?
   end
 

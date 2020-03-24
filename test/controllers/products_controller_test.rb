@@ -14,10 +14,10 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get products_url(:search=>"Product Again")
+    get products_url(search: 'Product Again')
     assert_equal(1, assigns(:products).count)
 
-    get products_url(:search=>"InvalidProduct")
+    get products_url(search: 'InvalidProduct')
     assert_equal(0, assigns(:products).count)
   end
 
@@ -172,10 +172,10 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
 
     get edit_product_url(@product)
-    assert_response :redirect    
+    assert_response :redirect
 
     patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug, website: @product.website } }
-    assert_response :redirect  
+    assert_response :redirect
 
     delete product_url(@product)
     assert_response :redirect
