@@ -71,7 +71,7 @@ var mapOfProject = {
     });
 
     mapOfProject.map = new ol.Map({
-      target: 'map',
+      target: 'map-of-project',
       layers: [
         mapOfProject.countryLayer,
         mapOfProject.countryHightlightLayer
@@ -103,6 +103,7 @@ var mapOfProject = {
           const normalized = {
             id: project.id,
             name: project.name,
+            slug: project.slug,
             organizations: project.organizations,
             countries: project.locations
           }
@@ -125,7 +126,7 @@ var mapOfProject = {
   },
 
   init: function() {
-    $("#map").empty();
+    $("#map-of-project").empty();
     mapOfProject.initMap();
     mapOfProject.initLocations();
     mapOfProject.initProjects();
@@ -134,12 +135,12 @@ var mapOfProject = {
 
 function highlightProjectCountries(countries) {
   countries.forEach(function(country) {
-    mapOfProject.countryLayer.getSource().forEachFeature(function(feature) {
-      if (country == feature.get('name')) {
+    mapOfProject.countryLayer.getSource().forEachFeature(function(projectFeature) {
+      if (country == projectFeature.get('name')) {
         mapOfProject.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-          name: feature.get("name"),
-          coordinate: feature.get("coordinate"),
-          geometry: feature.get("geometry"),
+          name: projectFeature.get("name"),
+          coordinate: projectFeature.get("coordinate"),
+          geometry: projectFeature.get("geometry"),
           projects: mapOfProject.projectsByCountry[country]
         }));
       }
@@ -148,7 +149,7 @@ function highlightProjectCountries(countries) {
 }
 
 function mapOfProjectClickHandler(evt) {
-  var feature = mapOfProject.map.forEachFeatureAtPixel(
+  var projectFeature = mapOfProject.map.forEachFeatureAtPixel(
     evt.pixel,
     function(ft, layer) {
       if (layer == mapOfProject.countryHightlightLayer) {
@@ -156,16 +157,16 @@ function mapOfProjectClickHandler(evt) {
       }
     }
   );
-  if (feature) {
+  if (projectFeature) {
     const element = mapOfProject.popup.element;
-    const projectIds = feature.get("projects");
+    const projectIds = projectFeature.get("projects");
     if (projectIds.length == 1) {
       const project = mapOfProject.projects[projectIds[0]];
       const content =
         `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
           <h6 class="card-header py-2 px-2">${project.name}</h6>
           <p class="py-2 px-2 mb-0">
-            <a href="/projects/${project.name.toLowerCase()}"><small>View project</small></a> <br />
+            <a href="/projects/${project.slug}"><small>View project</small></a> <br />
           </p>
         </div>`;
       $(element).html(content);
@@ -190,7 +191,7 @@ function mapOfProjectClickHandler(evt) {
         orgInfo.append(`<strong>${project.name}</strong>`);
         orgInfo.append(`<p class="org-details mb-0" style="display:none">
                           <small>
-                            <a href="/projects/${project.name.toLowerCase()}">View project</a> <br />
+                            <a href="/projects/${project.slug}">View project</a> <br />
                           </small>
                         </p>`)
         projectElements.append(orgInfo);
