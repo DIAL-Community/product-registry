@@ -38,7 +38,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.length, 0
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "SDGs": [7], "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "SDGs": [[7, "No poverty"]], "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -46,7 +46,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.size, 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [8], "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [[8, "No poverty"]], "website": "https://opendatakit.org/"}')
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
