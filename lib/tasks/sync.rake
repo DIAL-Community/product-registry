@@ -159,10 +159,10 @@ namespace :sync do
             blacklist_product.product_descriptions.each do |description|
               description.destroy
             end
-            blacklist_product.sustainable_development_goals.each do |prod_sdg|
-              puts "Deleting "+prod_sdg.number.to_s
-              prod_sdg.destroy
-            end
+            #blacklist_product.sustainable_development_goals.each do |prod_sdg|
+            #  puts "Deleting "+prod_sdg.number.to_s
+            #  prod_sdg.destroy
+            #end
             blacklist_product.destroy
           end
         end
