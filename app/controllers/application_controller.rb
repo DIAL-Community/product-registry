@@ -416,6 +416,22 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def filter_and_intersect_arrays(arrays)
+    return [] unless arrays.is_a?(Array)
+
+    filtered_arrays = arrays.reject { |x| x.nil? || x.length <= 0 }
+                            .sort { |a, b| a.length <=> b.length }
+
+    intersected_array = filtered_arrays[0]
+    filtered_arrays.each do |x|
+      intersected_array &= x
+    end
+
+    return [] if intersected_array.nil?
+
+    intersected_array
+  end
+
   def configure_registration_parameters
     logger.info 'Configuring custom registration parameters.'
     devise_parameter_sanitizer.permit(:sign_up) do |user_params|
