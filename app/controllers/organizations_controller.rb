@@ -64,31 +64,26 @@ class OrganizationsController < ApplicationController
 
     use_case_bbs = get_bbs_from_use_cases(use_cases)
     workflow_bbs = get_bbs_from_workflows(workflows)
-    bb_ids_parts = [bbs, use_case_bbs, workflow_bbs].reject { |x| x.nil? || x.length <= 0 }
-                                                    .sort { |a, b| a.length <=> b.length }
-
-    bb_ids = bb_ids_parts[0]
-    bb_ids_parts.each do |x|
-      bb_ids &= x
-    end
 
     bb_products = []
+    bb_ids = filter_and_intersect_arrays([bbs, use_case_bbs, workflow_bbs])
     if !bb_ids.nil? && !bb_ids.empty?
       bb_products = Product.joins(:building_blocks)
                            .where('building_blocks.id in (?)', bb_ids)
                            .ids
     end
 
-    product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-    product_ids_parts = [sdg_products, bb_products, product_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                .sort { |a, b| a.length <=> b.length }
-
-    product_ids = product_ids_parts[0]
-    product_ids_parts.each do |x|
-      product_ids &= x
+    project_products = []
+    if !projects.empty?
+      project_products += Project.joins(:products)
+                                 .where('projects.id in (?)', projects)
+                                 .select('products.id')
     end
 
+    product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+
     org_products = []
+    product_ids = filter_and_intersect_arrays([sdg_products, bb_products, project_products, product_ids])
     if !product_ids.nil? && !product_ids.empty?
       org_products = Organization.joins(:products)
                                  .where('products.id in (?)', product_ids)
@@ -101,14 +96,9 @@ class OrganizationsController < ApplicationController
                                     .where('products.id in (?)', product_ids)
                                     .ids
     end
-    project_ids_parts = [projects, product_project_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                       .sort { |a, b| a.length <=> b.length }
-    project_ids = project_ids_parts[0]
-    project_ids_parts.each do |x|
-      project_ids &= x
-    end
 
     org_projects = []
+    project_ids = filter_and_intersect_arrays([projects, product_project_ids])
     if !project_ids.nil? && !project_ids.empty?
       org_projects = Organization.joins(:projects)
                                  .where('projects.id in (?)', project_ids)
@@ -123,18 +113,11 @@ class OrganizationsController < ApplicationController
     end
 
     if filter_set
-      ids_parts = [org_products + org_projects, org_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                        .sort { |a, b| a.length <=> b.length }
-      ids = ids_parts[0]
-      ids_parts.each do |x|
-        ids &= x
-      end
-      organizations = Organization.where(id: ids)
-                                  .order(:slug)
+      ids = filter_and_intersect_arrays([org_products + org_projects, org_ids])
+      Organization.where(id: ids).order(:slug)
     else
-      organizations = Organization.all.order(:slug)
+      Organization.all.order(:slug)
     end
-    organizations
   end
 
   def export

@@ -13,11 +13,13 @@ class SustainableDevelopmentGoalsController < ApplicationController
       return
     end
 
-    @sustainable_development_goals = filter_sdgs.order(:number)
+    @sustainable_development_goals = filter_sdgs.eager_load(:sdg_targets).order(:number)
     @sustainable_development_goals = @sustainable_development_goals.eager_load(:sdg_targets)
 
     if params[:search]
-      @sustainable_development_goals = @sustainable_development_goals.where('LOWER("sustainable_development_goals"."name") like LOWER(?)', "%" + params[:search] + "%")
+      @sustainable_development_goals = @sustainable_development_goals.where(
+        'LOWER("sustainable_development_goals"."name") like LOWER(?)', "%#{params[:search]}%"
+      )
     end
     authorize @sustainable_development_goals, :view_allowed?
   end
@@ -96,58 +98,39 @@ class SustainableDevelopmentGoalsController < ApplicationController
       end
 
       products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-      products_ids_parts = [products, sdg_products, org_products, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                                      .sort { |a, b| a.length <=> b.length }
-
-      product_ids = products_ids_parts[0]
-      products_ids_parts.each do |x|
-        product_ids &= x
-      end
 
       workflow_product_ids = []
+      product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
       if !product_ids.nil? && !product_ids.empty?
         workflow_product_ids = get_workflows_from_products(product_ids)
       end
 
       workflow_bb_ids = get_workflows_from_bbs(bbs)
-      workflow_ids_parts = [workflows, workflow_product_ids, workflow_bb_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                             .sort { |a, b| a.length <=> b.length }
-
-      workflow_ids = workflow_ids_parts[0]
-      workflow_ids_parts.each do |x|
-        workflow_ids &= x
-      end
 
       uc_workflows = []
+      workflow_ids = filter_and_intersect_arrays([workflows, workflow_product_ids, workflow_bb_ids])
       if !workflow_ids.nil? && !workflow_ids.empty?
         uc_workflows += UseCase.joins(:workflows)
                                .where('workflows.id in (?)', workflow_ids)
                                .ids
       end
 
-      sdg_uc_ids_parts = [use_cases, uc_workflows].reject { |x| x.nil? || x.length <= 0 }
-                                                  .sort { |a, b| a.length <=> b.length }
+      sdg_uc_ids = filter_and_intersect_arrays([use_cases, uc_workflows])
 
-      sdg_uc_ids = sdg_uc_ids_parts[0]
-      sdg_uc_ids_parts.each do |x|
-        sdg_uc_ids &= x
+      sdg_numbers = []
+      if !sdg_uc_ids.nil? && !sdg_uc_ids.empty?
+        sdg_numbers = UseCase.joins(:sdg_targets)
+                             .where('use_cases.id in (?)', sdg_uc_ids)
+                             .select('sdg_number')
+                             .pluck('sdg_number')
       end
 
       if filter_set
-        ids_parts = [sdgs, sdg_uc_ids].reject { |x| x.nil? || x.length <= 0 }
-                                      .sort { |a, b| a.length <=> b.length }
-
-        ids = ids_parts[0]
-        ids_parts.each do |x|
-          ids &= x
-        end
-
-        sdgs = SustainableDevelopmentGoal.where(id: ids)
-                                         .order(:number)
+        ids = filter_and_intersect_arrays([sdgs, sdg_numbers])
+        SustainableDevelopmentGoal.where(number: ids).order(:number)
       else
-        sdgs = SustainableDevelopmentGoal.order(:number)
+        SustainableDevelopmentGoal.order(:number)
       end
-      sdgs
     end
 
     # Use callbacks to share common setup or constraints between actions.
