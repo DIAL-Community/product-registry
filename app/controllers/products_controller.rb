@@ -46,7 +46,7 @@ class ProductsController < ApplicationController
                                      :building_blocks, :sustainable_development_goals, :sectors)
                          .paginate(page: current_page, per_page: 10)
                          .order(:name)
-                         
+
     params[:search].present? && @products = @products.name_contains(params[:search])
     authorize @products, :view_allowed?
   end
