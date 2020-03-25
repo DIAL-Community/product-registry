@@ -236,29 +236,17 @@ class UseCasesController < ApplicationController
       end
 
       products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-      products_ids_parts = [products, sdg_products, org_products, project_product_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                                      .sort { |a, b| a.length <=> b.length }
-
-      product_ids = products_ids_parts[0]
-      products_ids_parts.each do |x|
-        product_ids &= x
-      end
 
       workflow_product_ids = []
+      product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
       if !product_ids.nil? && !product_ids.empty?
         workflow_product_ids = get_workflows_from_products(product_ids)
       end
 
       workflow_bb_ids = get_workflows_from_bbs(bbs)
-      workflow_ids_parts = [workflows, workflow_product_ids, workflow_bb_ids].reject { |x| x.nil? || x.length <= 0 }
-                                                                             .sort { |a, b| a.length <=> b.length }
-
-      workflow_ids = workflow_ids_parts[0]
-      workflow_ids_parts.each do |x|
-        workflow_ids &= x
-      end
 
       uc_workflows = []
+      workflow_ids = filter_and_intersect_arrays([workflows, workflow_product_ids, workflow_bb_ids])
       if !workflow_ids.nil? && !workflow_ids.empty?
         uc_workflows += UseCase.joins(:workflows)
                                .where('workflows.id in (?)', workflow_ids)
@@ -266,20 +254,11 @@ class UseCasesController < ApplicationController
       end
 
       if filter_set
-        ids_parts = [use_cases, sdg_uc_ids, uc_workflows].reject { |x| x.nil? || x.length <= 0 }
-                                                         .sort { |a, b| a.length <=> b.length }
-
-        ids = ids_parts[0]
-        ids_parts.each do |x|
-          ids &= x
-        end
-
-        use_cases = UseCase.where(id: ids)
-                           .order(:slug)
+        ids = filter_and_intersect_arrays([use_cases, sdg_uc_ids, uc_workflows])
+        UseCase.where(id: ids).order(:slug)
       else
-        use_cases = UseCase.order(:slug)
+        UseCase.order(:slug)
       end
-      use_cases
     end
 
     def set_sectors
