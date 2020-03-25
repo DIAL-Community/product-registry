@@ -106,7 +106,7 @@ module Modules
         sdgs = json_data['SDGs']
         if !sdgs.nil? && !sdgs.empty?
           sdgs.each do |sdg|
-            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
+            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg.first)
             assign_sdg_to_product(sdg_obj, existing_product, 'Self-reported')
           end
         end
@@ -298,6 +298,9 @@ module Modules
             org_product = OrganizationsProduct.new
             org_product.org_type = organization['org_type']
             sync_product.organizations << org
+          else
+            org.website = cleanup_url(organization['website'])
+            org.save
           end
           if !sync_product.organizations.include?(org)
             puts "  Adding org to product: #{org.name}"
@@ -485,7 +488,7 @@ module Modules
                 " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
                 " -F from='Registry <backups@registry.dial.community>'"\
                 " -F to=#{user.email}"\
-                " -F subject='Sync task - delete product'"\
+                " -F subject='Sync task - add product'"\
                 " -F html='#{email_body}'"
           puts cmd
           system cmd
