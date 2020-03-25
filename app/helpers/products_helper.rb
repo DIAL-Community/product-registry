@@ -65,11 +65,15 @@ module ProductsHelper
       header = t("view.product.index.footer_popover_sdg")
     when "Maturity Models"
       header = t("view.product.index.footer_popover_maturity")
+    when "License"
+      header = t("view.product.show.license")
     end
     content = '<div class="card-header bg-secondary text-white">'+header+'</div>'
     content += '<div>'
     images.each do |image|
-      if image["gradient"]
+      if image["license"]
+        content += '<p class="footer-source float-right">image["value"]</p>'
+      elsif image["gradient"]
         content += '<div class="digisquare-gauge-med" title="'+image["tooltip"]+'">'
         content += '<p class="footer-score-large">'+image["filename"].to_s+'</p></div>'
       elsif image["osc"]
@@ -96,24 +100,17 @@ module ProductsHelper
   def get_footer_category(product, rownum)
     category = "none"
     if (rownum == 1)
-      if (product.building_blocks.size > 0)
+      category = "Sustainable Development Goals"
+    end
+    if (rownum == 2)
+      if !product.product_assessment.nil?
+        category = "Maturity Models"
+      elsif product.building_blocks.size > 0
         category = "Building Blocks"
       elsif (product.interoperates_with.size > 0) || (product.includes.size > 0)
         category = "Compatibility"
-      elsif (product.sustainable_development_goals.size > 0)
-        category = "Sustainable Development Goals"
-      elsif (!product.product_assessment.nil?)
-        category = "Maturity Models"
-      end
-    end
-    if (rownum == 2)
-      row1_cat = get_footer_category(product, 1)
-      if ((product.interoperates_with.size > 0) || (product.includes.size > 0)) && (row1_cat == "Building Blocks")
-        category = "Compatibility"
-      elsif (product.sustainable_development_goals.size > 0) && ((row1_cat == "Building Blocks") || (row1_cat == "Compatibility"))
-        category = "Sustainable Development Goals"
-      elsif (!product.product_assessment.nil?) && ((row1_cat == "Building Blocks") || (row1_cat == "Compatibility") || (row1_cat == "Sustainable Development Goals"))
-        category = "Maturity Models"
+      else
+        category = "License"
       end
     end
     if (rownum == 3)
@@ -131,6 +128,10 @@ module ProductsHelper
         image = Hash["filename"=>bb.image_file, "tooltip"=>tooltip, "id"=>bb.id, "controller"=>"building_blocks"]
         images.push(image)
       end
+    when "License"
+      tooltip = product.license
+      image = Hash["license"=>true, "value"=>product.license]
+      images.push(image)
     when "Compatibility"
       product.interoperates_with.each do |interop|
         tooltip = t("view.product.index.footer_interop") + interop.name

@@ -98,7 +98,10 @@
               <div class="footer-row mt-1">
             <% end %>
               <% images.each do |image| %>
-                <% if image["gradient"] %>
+                <% if image["license"] %>
+                  <p class="footer-source mb-1"><%= t('view.product.show.license') %></p>
+                  <p class="footer-source float-right mb-1"><%= product.license %></p>
+                <% elsif image["gradient"] %>
                   <div class="digisquare-gauge-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
                     <p class="footer-score"><%= image["filename"] %></p>
                   </div>
