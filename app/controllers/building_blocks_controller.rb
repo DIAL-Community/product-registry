@@ -243,10 +243,18 @@ class BuildingBlocksController < ApplicationController
 
       product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
+      org_products = []
+      if !organizations.empty?
+        org_products += Product.joins(:organizations)
+                               .where('organization_id in (?)', organizations)
+                               .ids
+      end
+
       bb_products = []
-      if !product_ids.empty?
+      bb_products_ids = filter_and_intersect_arrays([org_products, product_ids])
+      if !bb_products_ids.empty?
         bb_products = BuildingBlock.joins(:products)
-                                   .where('products.id in (?)', product_ids)
+                                   .where('products.id in (?)', bb_products_ids)
                                    .ids
       end
 
