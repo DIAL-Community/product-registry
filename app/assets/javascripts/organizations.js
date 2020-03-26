@@ -415,7 +415,7 @@ const scrollHandlerOrg = function() {
     const currentPage = $('#organization-list').attr('data-current-page');
     const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
     const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 400; 
-    if (!currentlyLoadingOrgs && shouldExecuteXhr) {
+    if (!isNaN(currentPage) && !currentlyLoadingOrgs && shouldExecuteXhr) {
       currentlyLoadingOrgs = true;
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);

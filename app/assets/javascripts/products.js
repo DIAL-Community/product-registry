@@ -75,7 +75,7 @@ const scrollHandler = function() {
     const currentPage = $('#product-list').attr('data-current-page');
     const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
     const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 500; 
-    if (!currentlyLoading && shouldExecuteXhr) {
+    if (!isNaN(currentPage) && !currentlyLoading && shouldExecuteXhr) {
       currentlyLoading = true;
       $.getScript(url, function() {
         $('#product-list').attr('data-current-page', parseInt(currentPage) + 1);

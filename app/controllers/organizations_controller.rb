@@ -501,7 +501,6 @@ class OrganizationsController < ApplicationController
 
   def update_capability
     operator_service = OperatorService.where(id: params[:operator]).first
-    puts params[:checked].to_s
     if (params[:checked] == "true")
       country = Location.where(id: params[:country]).first
       agg_capability = AggregatorCapability.new

@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
 
   def index
     if params[:without_paging]
-      @projects = Project.where('LOWER(name) like LOWER(?)', "%#{params[:search]}%")
+      @projects = Project.name_contains(params[:search])
                          .order(:name)
       return
     end
@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
     end
 
     @projects = filter_projects
-    @projects = @projects.eager_load(:organizations, :products, :locations, :origin).order(:name)
+    @projects = @projects.eager_load(:organizations, :products, :locations, :origin)
                          .paginate(page: current_page, per_page: 20)
 
     params[:search].present? && @projects = @projects.name_contains(params[:search])
