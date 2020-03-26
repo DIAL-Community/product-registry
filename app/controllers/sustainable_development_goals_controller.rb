@@ -97,7 +97,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
                                .ids
       end
 
-      products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       workflow_product_ids = []
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])

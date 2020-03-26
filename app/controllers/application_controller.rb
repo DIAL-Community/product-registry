@@ -252,7 +252,7 @@ class ApplicationController < ActionController::Base
 
       product_list = []
       if product_filter_set
-        product_list = filter_products.ids
+        product_list += filter_products.ids
       end
 
       # Set the cookies for caching

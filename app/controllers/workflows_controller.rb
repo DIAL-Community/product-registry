@@ -233,9 +233,10 @@ class WorkflowsController < ApplicationController
                                .ids
       end
 
-      products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       product_bbs = []
+      puts "Organizations: #{[products, sdg_products, org_products, project_product_ids]}"
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
       if !product_ids.nil? && !product_ids.empty?
         product_bbs = get_bbs_from_products(product_ids)

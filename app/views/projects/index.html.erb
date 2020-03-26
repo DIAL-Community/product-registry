@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-12">
-    <div class="float-right pb-2">
+    <div class="float-right">
       <% if user_signed_in? && policy(Project).mod_allowed? %>
         <%= link_to t('view.general.create'), new_project_path, :class => 'small mr-1' %>
       <% end %>
@@ -12,41 +12,7 @@
 </div>
 
 <div id="current-list">
-  <div class="row">
-  <% @projects.each do |project| %>
-    <div class="col-lg-5ths col-md-4 w-100 mt-2">
-      <div class="card index-card small">
-        <div class="card-header bg-secondary text-white truncate-parent">
-          <%= link_to project.name, project, class: 'truncate-text',
-            'title' => project.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
-        </div>
-        <div class="project-logo-frame ml-2 mt-2">
-          <%= link_to(project) do %>
-            <div class="text-muted float-left"><%= t('model.organization').to_s.titlecase.pluralize %></div>
-            <br>
-            <%= image_tag(project.org_image_file, class: 'project-logo align-middle', skip_pipeline: true) %>
-            <div class="text-muted float-left"><%= t('model.product').to_s.titlecase.pluralize %></div>
-            <br>
-            <%= image_tag(project.product_image_file, class: 'project-logo align-middle', skip_pipeline: true) %>
-          <% end %>
-        </div>
-
-        <div class="card-footer footer-padding">
-          <div class="footer-row">
-            <%= t('view.project.index.dates') %>:
-            <%= !project.start_date.nil? ? project.start_date.strftime("%d/%m/%Y") : '' %>
-             - 
-            <%= !project.end_date.nil? ? project.end_date.strftime("%d/%m/%Y") : '' %>
-          </div>
-          <div class="footer-row">
-            <%= t('view.project.index.source') %>: 
-            <% if !project.origin.nil? %>
-              <%= image_tag("origins/#{project.origin.slug}.png", class: 'project-footer-img') %> 
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  <div id="project-list" data-current-page="1" class="row">
+    <%= render @projects %>
   </div>
 </div>

@@ -115,7 +115,7 @@ class OrganizationsController < ApplicationController
                                  .select('products.id')
     end
 
-    product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
     org_products = []
     product_ids = filter_and_intersect_arrays([sdg_products, bb_products, project_products, product_ids])
