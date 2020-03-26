@@ -409,6 +409,22 @@ var setUpAggregators = function(isEdit) {
   });
 }
 
+let currentlyLoadingOrgs = false;
+const scrollHandlerOrg = function() {
+  $(window).on('scroll', function() {
+    const currentPage = $('#organization-list').attr('data-current-page');
+    const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 400; 
+    if (!currentlyLoadingOrgs && shouldExecuteXhr) {
+      currentlyLoadingOrgs = true;
+      $.getScript(url, function() {
+        $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);
+        currentlyLoadingOrgs = false;
+      });
+    }
+  });
+}
+
 $(document).on('organizations#new:loaded', setupFormView);
 $(document).on('organizations#show:loaded', setupMapView);
 $(document).on('organizations#edit:loaded', setupFormView);
@@ -418,3 +434,5 @@ $(document).on('organizations#edit:loaded', setupAutoComplete);
 
 $(document).on('organizations#show:loaded', setUpAggregatorsView);
 $(document).on('organizations#edit:loaded', setUpAggregatorsEdit);
+
+$(document).on('organizations#index:loaded', scrollHandlerOrg);

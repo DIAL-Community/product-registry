@@ -1,0 +1,54 @@
+
+<div class="col-lg-5ths col-md-4 d-flex mt-2">
+  <div class="card w-100 index-card small">
+    <div class="card-header bg-secondary text-white truncate-parent">
+      <%= link_to building_block.name, building_block, class: 'truncate-text',
+          'title' => building_block.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+    </div>
+    <div class="model-logo">
+      <%= link_to(building_block) do %>
+        <%= image_tag(building_block.image_file, class: 'card-img-top align-middle') %>
+      <% end %>
+    </div>
+
+    <div class="card-footer footer-padding">
+      <%
+        workflows = bb_footer(building_block, 'workflows')
+        if workflows.count > 0
+          content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                          data-html='true' data-content='#{bb_footer_popover(workflows, 'view.building-block.index.bb-workflow-popover')}'>"
+          concat(content.html_safe)
+
+          concat(image_tag(workflows[0][:filename], class: 'footer-img'))
+          content = "<span class='text-muted ml-1'>#{building_block.workflows.size} #{t('model.workflow').titlecase.pluralize(building_block.workflows.size)}</span>"
+          concat(content.html_safe)
+
+          # When we have image for each workflow, we can use the following code.
+          # workflows.each do |workflow|
+          #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
+          #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+          # end
+          concat('</div>'.html_safe)
+        end
+
+        products = bb_footer(building_block, 'products')
+        if products.count > 0
+          content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
+                          data-html='true' data-content='#{bb_footer_popover(products, 'view.building-block.index.bb-product-popover')}'>"
+          concat(content.html_safe)
+
+          products.each do |product|
+            concat(image_tag(product[:filename], title: product[:tooltip],
+                           class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+          end
+          concat('</div>'.html_safe)
+        end
+
+        if workflows.count == 0 || products.count == 0
+          content = '<div class="footer-row"></div>'
+          concat(content.html_safe)
+        end
+      %>
+    </div>
+  </div>
+</div>

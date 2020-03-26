@@ -2,9 +2,6 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <a href="#" class="sdg-show-hide ml-4" id="sdg-show-more">
-    <p class="float-left"><%= t('view.general.show-sdg').to_s %></p>
-  </a>
   <div id="sdg-more" class="hidden">
     <section class="hero bg-secondary mb-2 ml-3 mr-3">
       <div class="col-12 ml-4 mt-2 text-white">
@@ -17,66 +14,19 @@
     </section>
   </div>
 </div>
-<div id="current-list">
 <div class="row">
-  <% if @sustainable_development_goals.count > 0 %>
-    <% @sustainable_development_goals.order(:number).each do |sustainable_development_goal| %>
-      <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
-        <div class="card index-card">
-          <div class="card-header bg-secondary text-white small truncate-parent">
-            <%= link_to sustainable_development_goal.name, sustainable_development_goal, class: 'truncate-text',
-              'title' => sustainable_development_goal.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
-          </div>
-          <div class="model-logo">
-            <%= link_to(sustainable_development_goal) do %>
-              <%= image_tag(sustainable_development_goal.image_file, class: 'card-img-top align-middle px-2 py-2') %>
-            <% end %>
-          </div>
-
-          <div class="card-footer footer-padding">
-            <%
-              sdg_targets = sdg_footer(sustainable_development_goal, 'sdg_targets')
-              if sdg_targets.count > 0
-                content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{sdg_footer_popover(sdg_targets, 'view.sdg.index.sdg-target-popover')}'>"
-                concat(content.html_safe)
-
-                sdg_targets.each do |sdg_target|
-                  concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip],
-                                   class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-                end
-                concat('</div>'.html_safe)
-              end
-
-              use_cases = sdg_footer(sustainable_development_goal, 'use_cases')
-              if use_cases.count > 0
-                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{sdg_footer_popover(use_cases, 'view.workflow.index.use-case-popover')}'>"
-                concat(content.html_safe)
-                concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1'))
-                
-                content = "<span class='small text-muted ml-1'>#{@use_case_count} #{t('model.use-case').titlecase.pluralize(@use_case_count)}</span>"
-                concat(content.html_safe)
-                
-                concat('</div>'.html_safe)
-              end
-
-              if sdg_targets.count == 0
-                content = '<div class="footer-row mb-2"></div>'
-                concat(content.html_safe)
-              end
-
-              if use_cases.count == 0
-                content = '<div class="footer-row"></div>'
-                concat(content.html_safe)
-              end
-            %>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
+  <div class="col-12">
+    <div class="float-left">
+      <a href="#" class="sdg-show-hide small" id="sdg-show-more">
+        <%= t('view.general.show-sdg').to_s %>
+      </a>
+    </div>
+  </div>
 </div>
+<div id="current-list">
+  <div class="row">
+    <%= render @sustainable_development_goals %>
+  </div>
 </div>
 
 <script>
