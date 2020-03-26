@@ -1,0 +1,29 @@
+
+<div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
+  <div class="card index-card small">
+    <div class="card-header bg-secondary text-white truncate-parent">
+      <%= link_to organization.name, organization, class: 'truncate-text',
+          'title' => organization.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+    </div>
+    <div class="model-logo">
+      <%= link_to(organization) do %>
+        <%= image_tag(organization.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
+      <% end %>
+    </div>
+    <div class="card-footer">
+      <% if organization.website.present? %>
+        <small>
+          <a href="<%= "//" + organization.website %>" target="_blank" rel="noreferrer noopener">
+            <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
+          </a>
+        </small>
+        <br/>
+      <% end %>
+      <% if organization.is_endorser %>
+      <small class="text-muted">
+        <%= raw "#{image_tag('digiprins.png', width: 16)} #{t('view.organization.index.endorsed-date')}  #{organization.when_endorsed.year}" %>
+      </small>
+      <% end %>
+    </div>
+  </div>
+</div>

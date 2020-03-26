@@ -30,7 +30,6 @@ class ProductsController < ApplicationController
       session[:product_filtered_ids] = product_ids
       session[:product_filtered] = filter_set
       session[:product_filtered_time] = session[:filtered_time]
-      session.delete(:product_filtered_page)
     end
 
     # Current page information will be stored in the main page div.
@@ -41,9 +40,8 @@ class ProductsController < ApplicationController
       @products = @products.where(id: session[:product_filtered_ids])
     end
 
-    @products = @products.eager_load(:references, :include_relationships, :includes, :interop_relationships,
-                                     :interoperates_with, :product_assessment, :origins, :organizations,
-                                     :building_blocks, :sustainable_development_goals, :sectors)
+    @products = @products.eager_load(:includes, :interoperates_with, :product_assessment, :origins, :organizations,
+                                     :building_blocks, :sustainable_development_goals)
                          .paginate(page: current_page, per_page: 10)
                          .order(:name)
 

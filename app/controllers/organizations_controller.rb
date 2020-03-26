@@ -19,13 +19,46 @@ class OrganizationsController < ApplicationController
       return
     end
 
-    @organizations = search_organizations
+    # :filtered_time will be updated every time we add or remove a filter.
+    if session[:filtered_time].to_s.downcase != session[:org_filtered_time].to_s.downcase
+      # :org_filtered_time is not updated after the filter is updated:
+      # - rebuild the product id cache
+      logger.info('Filter updated. Rebuilding cached product id list.')
+
+      org_ids, filter_set = search_organizations
+      session[:org_filtered_ids] = org_ids
+      session[:org_filtered] = filter_set
+      session[:org_filtered_time] = session[:filtered_time]
+    end
+
+    # Current page information will be stored in the main page div.
+    current_page = params[:page] || 1
+
+    @organizations = Organization.order(:slug)
+    if session[:org_filtered].to_s.downcase == 'true'
+      @organizations = @organizations.where(id: session[:org_filtered_ids])
+    end
+
+    @organizations = @organizations.paginate(page: current_page, per_page: 10)
     params[:search].present? && @organizations = @organizations.name_contains(params[:search])
     authorize @organizations, :view_allowed?
   end
 
   def count
-    organizations = search_organizations
+    # We will use whichever set the product id cache first: this one or the one in index method.
+    # This should reduce the need to execute the same operation multiple time.
+    if session[:filtered_time].to_s.downcase != session[:org_filtered_time].to_s.downcase
+      org_ids, filter_set = search_organizations
+      session[:org_filtered_ids] = org_ids
+      session[:org_filtered] = filter_set
+      session[:org_filtered_time] = session[:filtered_time]
+    end
+
+    organizations = Organization
+    if session[:org_filtered].to_s.downcase == 'true'
+      organizations = organizations.where(id: session[:org_filtered_ids])
+    end
+
     authorize organizations, :view_allowed?
     render json: organizations.count
   end
@@ -54,6 +87,8 @@ class OrganizationsController < ApplicationController
                    organizations.empty? && origins.empty? && projects.empty? &&
                    sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                  endorser_only || aggregator_only || with_maturity_assessment || is_launchable
+
+    return [[], filter_set] unless filter_set
 
     sdg_products = []
     if !sdgs.empty?
@@ -112,12 +147,7 @@ class OrganizationsController < ApplicationController
       org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
     end
 
-    if filter_set
-      ids = filter_and_intersect_arrays([org_products + org_projects, org_ids])
-      Organization.where(id: ids).order(:slug)
-    else
-      Organization.all.order(:slug)
-    end
+    [filter_and_intersect_arrays([org_products + org_projects, org_ids]), filter_set]
   end
 
   def export
