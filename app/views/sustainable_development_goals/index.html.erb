@@ -2,9 +2,6 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <a href="#" class="sdg-show-hide ml-3 small" id="sdg-show-more">
-    <p class="float-left"><%= t('view.general.show-sdg').to_s %></p>
-  </a>
   <div id="sdg-more" class="hidden">
     <section class="hero bg-secondary mb-2 ml-3 mr-3">
       <div class="col-12 ml-4 mt-2 text-white">
@@ -15,6 +12,15 @@
         </a>
       </div>
     </section>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="float-left">
+      <a href="#" class="sdg-show-hide small" id="sdg-show-more">
+        <%= t('view.general.show-sdg').to_s %>
+      </a>
+    </div>
   </div>
 </div>
 <div id="current-list">
