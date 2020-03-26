@@ -14,7 +14,7 @@
 <div id="current-list">
   <div class="row">
   <% @projects.each do |project| %>
-    <div class="col-lg-5ths col-md-4 align-items-stretch mt-2">
+    <div class="col-lg-5ths col-md-4 w-100 mt-2">
       <div class="card index-card small">
         <div class="card-header bg-secondary text-white truncate-parent">
           <%= link_to project.name, project, class: 'truncate-text',

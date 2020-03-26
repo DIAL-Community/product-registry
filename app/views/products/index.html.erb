@@ -2,9 +2,6 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <a href="#" class="prod-show-hide ml-4" id="prod-show-more">
-    <p class="float-left mb-0 small"><%= t('view.general.show-product').to_s %></p>
-  </a>
   <div id="prod-more" class="hidden">
     <section class="hero bg-secondary mb-2 ml-3 mr-3">
       <div class="col-12 ml-2 mt-2 text-white">
@@ -13,10 +10,12 @@
           <p class="mr-4"><%= t('view.product.index.definition').to_s %></p>
           <div class="row">
             <div class="col-lg-6">
-              <%= image_tag("/assets/products/ProductLegend1.png", class: 'card-img-top align-middle p-0') %>
+              <%= image_tag("/assets/products/ProductLegend1.png", style: 'height:auto;width:100%;',
+                  class: 'card-img-top align-middle p-0') %>
             </div>
             <div class="col-lg-6">
-              <%= image_tag("/assets/products/ProductLegend2.png", class: 'card-img-top align-middle p-0') %>
+              <%= image_tag("/assets/products/ProductLegend2.png", style: 'height:auto;width:100%;',
+                  class: 'card-img-top align-middle p-0') %>
             </div>
           </div>
           <p class="mr-4 mt-2"><%= t('view.product.index.footer_help').to_s %></p>
@@ -30,6 +29,11 @@
 </div>
 <div class="row">
   <div class="col-12">
+    <div class="float-left">
+      <a href="#" class="prod-show-hide small" id="prod-show-more">
+        <%= t('view.general.show-product').to_s %>
+      </a>
+    </div>
     <div class="float-right">
     <%= link_to t('view.product.index.product-graph'), productmap_path, class: 'small mr-1',
                 target: "_blank", rel: "noreferrer noopener" %>
