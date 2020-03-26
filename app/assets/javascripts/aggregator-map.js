@@ -224,7 +224,7 @@ function aggregatorClickHandler(evt) {
         orgInfo.append(`<strong>${organization.name}</strong>`);
         orgInfo.append(`<p class="org-details mb-0" style="display:none">
                           <small>
-                            <a href="/organizations/${organization.name.toLowerCase()}">View organization</a> <br />
+                            <a href="/organizations/${organization.name.replace(/ /g,'_').toLowerCase()}">View organization</a> <br />
                           </small>
                         </p>`)
         organizationElements.append(orgInfo);
