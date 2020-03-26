@@ -42,7 +42,7 @@ class ProductsController < ApplicationController
 
     @products = @products.eager_load(:includes, :interoperates_with, :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals)
-                         .paginate(page: current_page, per_page: 10)
+                         .paginate(page: current_page, per_page: 20)
                          .order(:name)
 
     params[:search].present? && @products = @products.name_contains(params[:search])

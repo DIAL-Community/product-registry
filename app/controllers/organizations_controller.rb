@@ -39,7 +39,7 @@ class OrganizationsController < ApplicationController
       @organizations = @organizations.where(id: session[:org_filtered_ids])
     end
 
-    @organizations = @organizations.paginate(page: current_page, per_page: 10)
+    @organizations = @organizations.paginate(page: current_page, per_page: 20)
     params[:search].present? && @organizations = @organizations.name_contains(params[:search])
     authorize @organizations, :view_allowed?
   end
