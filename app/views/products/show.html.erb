@@ -110,9 +110,9 @@
           <div class="card-deck">
             <% org_row.each do |organization| %>
               <div class="card">
-                <div class="card-body snug">
+                <div class="card-body">
                   <%= link_to organization do %>
-                    <%= image_tag(organization.image_file, width: 50, class: 'card-img-top align-middle p-0') %>
+                    <%= image_tag(organization.image_file, class: 'card-image align-middle p-0') %>
                   <% end %>
                 </div>
               </div>
@@ -175,9 +175,9 @@
         <div class="card-deck">
           <% bb_row.each do |bb| %>
             <div class="card">
-              <div class="card-body snug">
+              <div class="card-body">
                 <%= link_to bb do %>
-                  <%= image_tag(bb.image_file, width: 50, class: 'card-img-top align-middle p-0') %>
+                  <%= image_tag(bb.image_file, class: 'card-image align-middle p-0') %>
                 <% end %>
               </div>
             </div>
@@ -205,9 +205,9 @@
         <div class="card-deck">
           <% sdg_row.each do |sdg| %>
             <div class="card">
-              <div class="card-body snug">
+              <div class="card-body">
                 <%= link_to sdg do %>
-                  <%= image_tag(sdg.image_file, width: 50, class: 'card-img-top align-middle p-0') %>
+                  <%= image_tag(sdg.image_file, width: 50, class: 'card-image align-middle p-0') %>
                 <% end %>
               </div>
               <% product_sdg = @product.products_sustainable_development_goals.where(sustainable_development_goal_id: sdg.id) %>
@@ -242,10 +242,10 @@
         <div class="card-deck">
           <% product_row.each do |product| %>
             <div class="card">
-              <div class="card-body snug">
+              <div class="card-body">
                 <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
                 <%= link_to product do %>
-                  <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+                  <%= image_tag(product.image_file, width: 50, class: 'card-image align-middle') %>
                 <% end %>
               </div>
             </div>
@@ -274,10 +274,10 @@
         <div class="card-deck">
           <% product_row.each do |product| %>
             <div class="card">
-              <div class="card-body snug">
+              <div class="card-body">
                 <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
                 <%= link_to product do %>
-                  <%= image_tag(product.image_file, width: 50, class: 'card-img-top align-middle') %>
+                  <%= image_tag(product.image_file, width: 50, class: 'card-image align-middle') %>
                 <% end %>
               </div>
             </div>
