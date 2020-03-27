@@ -413,13 +413,36 @@ let currentlyLoadingOrgs = false;
 const scrollHandlerOrg = function() {
   $(window).on('scroll', function() {
     const currentPage = $('#organization-list').attr('data-current-page');
-    const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+    
+    let url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+
+    const searchTerm = $('#search-organizations').val();
+    if (searchTerm) {
+      url = `${url}&search=${searchTerm}`
+    }
+
     const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 400; 
     if (!isNaN(currentPage) && !currentlyLoadingOrgs && shouldExecuteXhr) {
       currentlyLoadingOrgs = true;
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);
         currentlyLoadingOrgs = false;
+      });
+    }
+  });
+}
+
+let currentlySearchingOrgs = false;
+const searchFilterHandler = function() {
+  $('#search-organizations').keyup(function() {
+    const searchTerm = $(this).val();
+    const url = `${window.location.pathname}?search=${searchTerm}`;
+    if (!currentlySearchingOrgs) {
+      $('#organization-list').empty();
+      currentlySearchingOrgs = true;
+      $.getScript(url, function() {
+        $('#organization-list').attr('data-current-page', 1);
+        currentlySearchingOrgs = false;
       });
     }
   });
@@ -436,3 +459,4 @@ $(document).on('organizations#show:loaded', setUpAggregatorsView);
 $(document).on('organizations#edit:loaded', setUpAggregatorsEdit);
 
 $(document).on('organizations#index:loaded', scrollHandlerOrg);
+$(document).on('organizations#index:loaded', searchFilterHandler);
