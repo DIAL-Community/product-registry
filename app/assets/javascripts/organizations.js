@@ -426,7 +426,7 @@ const scrollHandlerOrg = function() {
       url = `${url}&search=${searchTerm}`
     }
 
-    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 400; 
+    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 600; 
     if (!isNaN(currentPage) && !currentlyLoadingOrgs && shouldExecuteXhr) {
       currentlyLoadingOrgs = true;
       $('#organization-list > div').addClass('existing-org');
