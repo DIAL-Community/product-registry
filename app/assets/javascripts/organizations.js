@@ -459,6 +459,11 @@ const searchFilterHandler = function() {
     $('.to-be-hidden').remove();
   }
 
+  const removeClasses = function() {
+    $('#organization-list > div.to-be-animated').show();
+    $('#organization-list > div').removeClass('to-be-animated');
+  }
+
   $('#search-organizations').keyup(function() {
     const searchTerm = $(this).val();
     const url = `${window.location.pathname}?search=${searchTerm}`;
@@ -467,7 +472,8 @@ const searchFilterHandler = function() {
       currentlySearchingOrgs = true;
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', 1);
-        animateCss('.to-be-hidden', 'fadeOut', hideElements)
+        animateCss('.to-be-hidden', 'fadeOut faster', hideElements);
+        animateCss('.to-be-animated', 'fadeIn', removeClasses);
         currentlySearchingOrgs = false;
       });
     }
