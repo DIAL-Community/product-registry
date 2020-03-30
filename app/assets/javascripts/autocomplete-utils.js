@@ -65,6 +65,10 @@ function autoComplete(source, callback) {
  * contacts#edit
  */
 
+function addContact(value, label) {
+ addElement("base-selected-contacts", "selected_contacts", value, label);
+}
+
 function addOrganization(value, label) {
   addElement("base-selected-organizations", "selected_organizations", value, label);
 }

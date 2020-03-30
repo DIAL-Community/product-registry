@@ -19,10 +19,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get projects_url(:search=>"Project A")
+    get projects_url(search: 'Project A')
     assert_equal(1, assigns(:projects).count)
 
-    get projects_url(:search=>"Invalid Project")
+    get projects_url(search: 'Invalid Project')
     assert_equal(0, assigns(:projects).count)
   end
 

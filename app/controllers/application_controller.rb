@@ -124,7 +124,8 @@ class ApplicationController < ActionController::Base
       end
       update_cookies(filter_name)
     end
-
+    # Mark when the filter was last updated
+    session[:filtered_time] = DateTime.now.strftime('%Q')
     render json: true
   end
 
@@ -149,6 +150,7 @@ class ApplicationController < ActionController::Base
       session[filter_name.to_s] = existing_value
     end
     update_cookies(filter_name)
+    session[:filtered_time] = DateTime.now.strftime('%Q')
     render json: retval
   end
 
@@ -164,6 +166,7 @@ class ApplicationController < ActionController::Base
         session.delete(key)
       end
     end
+    session[:filtered_time] = DateTime.now.strftime('%Q')
     render json: true
   end
 
@@ -171,12 +174,13 @@ class ApplicationController < ActionController::Base
     filters = {}
     ORGANIZATION_FILTER_KEYS.each do |key|
       if session[key]
+        logger.info "Organization filter in session: #{session[key]}"
         filters[key] = session[key]
       end
     end
     FRAMEWORK_FILTER_KEYS.each do |key|
       if session[key]
-        logger.info "Session: #{session[key]}"
+        logger.info "Framework filter in session: #{session[key]}"
         filters[key] = session[key]
       end
     end
@@ -244,14 +248,11 @@ class ApplicationController < ActionController::Base
           '          where has_osc = true or has_digisquare = true)')
       end
 
-      product_filter_set = false
-      if !products.empty? || !origins.empty? || with_maturity_assessment || is_launchable
-        product_filter_set = true
-      end
+      product_filter_set = (!products.empty? || !origins.empty? || with_maturity_assessment || is_launchable)
 
       product_list = []
       if product_filter_set
-        product_list = filter_products.ids
+        product_list += filter_products.ids
       end
 
       # Set the cookies for caching
@@ -259,10 +260,9 @@ class ApplicationController < ActionController::Base
       cookies[:filter_products] = product_list.join(',')
       cookies[:prod_filter_set] = product_filter_set
     else
-      product_filter_set = (cookies[:prod_filter_set].to_s.downcase == 'true')
       product_list = cookies[:filter_products].split(',').map(&:to_i)
     end
-    [product_list, product_filter_set]
+    product_list
   end
 
   def get_products_from_projects(projects)

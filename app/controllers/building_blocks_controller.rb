@@ -241,7 +241,7 @@ class BuildingBlocksController < ApplicationController
                                     .ids
       end
 
-      product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       org_products = []
       if !organizations.empty?
