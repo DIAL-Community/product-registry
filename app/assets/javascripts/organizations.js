@@ -412,9 +412,8 @@ var setUpAggregators = function(isEdit) {
 let currentlyLoadingOrgs = false;
 const scrollHandlerOrg = function() {
   const removeClasses = function() {
-    $('#organization-list > div.to-be-animated').show();
-    $('#organization-list > div').removeClass('existing-org');
-    $('#organization-list > div').removeClass('to-be-animated');
+    $('.existing-org').removeClass('existing-org');
+    $('.to-be-animated').removeClass('to-be-animated');
   }
 
   $(window).on('scroll', function() {
@@ -453,31 +452,44 @@ const animateCss = function(selector, animationName, callback) {
   $(selector).on('animationend', handleAnimationEnd);
 }
 
+const delay = function(fn, ms) {
+  let timer = 0
+  return function(...args) {
+    clearTimeout(timer)
+    timer = setTimeout(fn.bind(this, ...args), ms || 0)
+  }
+}
+
 let currentlySearchingOrgs = false;
 const searchFilterHandler = function() {
   const hideElements = function() {
-    $('.to-be-hidden').remove();
+    $('.existing-org').remove();
   }
 
   const removeClasses = function() {
-    $('#organization-list > div.to-be-animated').show();
-    $('#organization-list > div').removeClass('to-be-animated');
+    $('.to-be-animated').removeClass('to-be-animated');
   }
 
-  $('#search-organizations').keyup(function() {
-    const searchTerm = $(this).val();
+  let previousSearchTerm = '';
+  const searchWithAnimation = function() {
+    const searchTerm = $('#search-organizations').val();
     const url = `${window.location.pathname}?search=${searchTerm}`;
-    if (!currentlySearchingOrgs) {
-      $('#organization-list > div').addClass('to-be-hidden');
+    if (!currentlySearchingOrgs && previousSearchTerm !== searchTerm) {
+      $('#organization-list > div').addClass('existing-org');
+      animateCss('.existing-org', 'fadeOut', hideElements);
+
       currentlySearchingOrgs = true;
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', 1);
-        animateCss('.to-be-hidden', 'fadeOut faster', hideElements);
-        animateCss('.to-be-animated', 'fadeIn', removeClasses);
+        animateCss('.to-be-animated', 'fadeIn delay-1s', removeClasses);
+
+        previousSearchTerm = searchTerm;
         currentlySearchingOrgs = false;
       });
     }
-  });
+  }
+
+  $('#search-organizations').keyup(delay(searchWithAnimation, 400));
 }
 
 $(document).on('organizations#new:loaded', setupFormView);
