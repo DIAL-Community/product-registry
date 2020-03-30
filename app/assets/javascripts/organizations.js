@@ -411,6 +411,12 @@ var setUpAggregators = function(isEdit) {
 
 let currentlyLoadingOrgs = false;
 const scrollHandlerOrg = function() {
+  const removeClasses = function() {
+    $('#organization-list > div.to-be-animated').show();
+    $('#organization-list > div').removeClass('existing-org');
+    $('#organization-list > div').removeClass('to-be-animated');
+  }
+
   $(window).on('scroll', function() {
     const currentPage = $('#organization-list').attr('data-current-page');
     
@@ -424,24 +430,44 @@ const scrollHandlerOrg = function() {
     const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 400; 
     if (!isNaN(currentPage) && !currentlyLoadingOrgs && shouldExecuteXhr) {
       currentlyLoadingOrgs = true;
+      $('#organization-list > div').addClass('existing-org');
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);
+        animateCss('.to-be-animated', 'fadeIn', removeClasses)
         currentlyLoadingOrgs = false;
       });
     }
   });
 }
 
+const animateCss = function(selector, animationName, callback) {
+  $(selector).addClass(`animated ${animationName}`);
+
+  const handleAnimationEnd = function() {
+    $(selector).removeClass(`animated ${animationName}`);
+    $(selector).off('animationend');
+
+    if (typeof callback === 'function') callback();
+  }
+
+  $(selector).on('animationend', handleAnimationEnd);
+}
+
 let currentlySearchingOrgs = false;
 const searchFilterHandler = function() {
+  const hideElements = function() {
+    $('.to-be-hidden').remove();
+  }
+
   $('#search-organizations').keyup(function() {
     const searchTerm = $(this).val();
     const url = `${window.location.pathname}?search=${searchTerm}`;
     if (!currentlySearchingOrgs) {
-      $('#organization-list').empty();
+      $('#organization-list > div').addClass('to-be-hidden');
       currentlySearchingOrgs = true;
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', 1);
+        animateCss('.to-be-hidden', 'fadeOut', hideElements)
         currentlySearchingOrgs = false;
       });
     }
