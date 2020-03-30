@@ -4,7 +4,7 @@ const scrollHandlerProject = function() {
   $(window).on('scroll', function() {
     const currentPage = $('#project-list').attr('data-current-page');
     const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
-    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 400; 
+    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 600; 
     if (!isNaN(currentPage) && !currentlyLoadingProject && shouldExecuteXhr) {
       currentlyLoadingProject = true;
       $.getScript(url, function() {

@@ -10,7 +10,7 @@
         <%= image_tag(organization.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
       <% end %>
     </div>
-    <div class="card-footer py-2">
+    <div class="card-footer h-100 py-2">
       <% if organization.website.present? %>
         <small>
           <a href="<%= "//" + organization.website %>" target="_blank" rel="noreferrer noopener">
