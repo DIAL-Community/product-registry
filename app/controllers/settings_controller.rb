@@ -47,7 +47,6 @@ class SettingsController < ApplicationController
 
   def create
     authorize Setting, :view_allowed?
-    puts "PARAMS: " + setting_params.to_s
     @setting = Setting.new(setting_params)
     @setting.slug = slug_em @setting.name
 

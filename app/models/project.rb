@@ -10,6 +10,8 @@ class Project < ApplicationRecord
 
   belongs_to :origin
 
+  scope :name_contains, ->(name) { where('LOWER(projects.name) like LOWER(?)', "%#{name}%") }
+
   def product_image_file
     if !products.empty?
       if File.exist?(File.join('public','assets','products',"#{products.first.slug}.png"))

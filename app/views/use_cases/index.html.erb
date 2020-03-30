@@ -2,9 +2,6 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
-  <a href="#" class="uc-show-hide ml-4" id="uc-show-more">
-    <p class="float-left"><%= t('view.general.show-use-case').to_s %></p>
-  </a>
   <div id="uc-more" class="hidden">
     <section class="hero bg-secondary mb-2 ml-3 mr-3">
       <div class="col-12 ml-4 mt-2 text-white">
@@ -29,84 +26,23 @@
 </div>
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(UseCase).mod_allowed? %>
-      <%= link_to t('view.general.create'), new_use_case_path, :class => 'float-right small ml-1' %>
-    <% end %>
+    <div class="float-left">
+      <a href="#" class="uc-show-hide small" id="uc-show-more">
+        <%= t('view.general.show-use-case').to_s %>
+      </a>
+    </div>
+    <div class="float-right">
+      <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+        <%= link_to t('view.general.create'), new_use_case_path, :class => 'small ml-1' %>
+      <% end %>
+    </div>
   </div>
 </div>
 
 <div id="current-list">
-<div class="row">
-  <% if @use_cases.count > 0 %>
-    <% @use_cases.each do |use_case| %>
-      <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
-        <div class="card index-card">
-          <div class="card-header bg-secondary text-white small truncate-parent">
-            <%= link_to use_case.name, use_case, class: 'truncate-text',
-                'title' => use_case.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
-          </div>
-          <div class="model-logo">
-            <%= link_to(use_case) do %>
-              <%= image_tag(use_case.image_file, class: 'card-img-top align-middle px-2 py-2') %>
-            <% end %>
-          </div>
-
-          <div class="card-footer footer-padding">
-            <%
-              sdg_targets = uc_footer(use_case, 'sdg_targets')
-              if sdg_targets.count > 0
-                content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{uc_footer_popover(sdg_targets, 'view.use-case.index.sdg-target-popover')}'>"
-                concat(content.html_safe)
-
-                sdg_targets.each do |sdg_target|
-                  concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip],
-                                   class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-                end
-                concat('</div>'.html_safe)
-              end
-
-              workflows = uc_footer(use_case, 'workflows')
-              if workflows.count > 0
-                content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                                data-html='true' data-content='#{uc_footer_popover(workflows, 'view.use-case.index.workflow-popover')}'>"
-                concat(content.html_safe)
-                concat(image_tag(workflows[0][:filename], class: 'footer-img mb-1'))
-
-                content = "<span class='small text-muted ml-1'>#{use_case.workflows.size} #{t('model.workflow').titlecase.pluralize(use_case.workflows.size)}</span>"
-                concat(content.html_safe)
-
-                # When we have image for each workflow, we can use the following code.
-                # workflows.each do |workflow|
-                #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-                #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-                # end
-                concat('</div>'.html_safe)
-              end
-
-              if workflows.count == 0
-                content = '<div class="footer-row"></div>'
-                concat(content.html_safe)
-              end
-
-              if sdg_targets.count == 0
-                content = '<div class="footer-row mb-2"></div>'
-                concat(content.html_safe)
-              end
-            %>
-            <div class="float-right">
-              <% if use_case.maturity == "Beta" %>
-                <span class='badge badge-warning'><%= use_case.maturity %></span>
-              <% else %>
-                <span class='badge badge-success'><%= use_case.maturity %></span>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
-</div>
+  <div class="row">
+    <%= render @use_cases%>
+  </div>
 </div>
 
 <script>

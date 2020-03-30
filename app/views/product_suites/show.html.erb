@@ -7,7 +7,7 @@
   <div class="card-body py-2 pl-2">
     <div class="row">
       <% @product_suite.product_versions.each do |product_version| %>
-        <div class="col-lg-5ths col-md-4 d-flex align-items-stretch mt-2">
+        <div class="col-lg-5ths col-md-4 d-flex mt-2">
           <div class="card index-card small">
             <div class="card-header bg-secondary text-white truncate-parent">
               <%= link_to "#{product_version.product.name} #{product_version.version}", product_version.product,

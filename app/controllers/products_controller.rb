@@ -14,15 +14,35 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     if params[:without_paging]
-      @products = Product.name_contains(params[:search]).order(Product.arel_table['name'].lower.asc)
+      @products = Product.name_contains(params[:search])
+                         .order(Product.arel_table['name'].lower.asc)
       authorize @products, :view_allowed?
       return
     end
 
-    @products = filter_products.order(Product.arel_table['name'].lower.asc)
-    @products = @products.eager_load(:references, :include_relationships, :includes, :interop_relationships,
-                                     :interoperates_with, :product_assessment, :origins, :organizations,
-                                     :building_blocks, :sustainable_development_goals, :sectors)
+    # :filtered_time will be updated every time we add or remove a filter.
+    if session[:filtered_time].to_s.downcase != session[:product_filtered_time].to_s.downcase
+      # :product_filtered_time is not updated after the filter is updated:
+      # - rebuild the product id cache
+      logger.info('Filter updated. Rebuilding cached product id list.')
+
+      product_ids, filter_set = filter_products
+      session[:product_filtered_ids] = product_ids
+      session[:product_filtered] = filter_set
+      session[:product_filtered_time] = session[:filtered_time]
+    end
+
+    # Current page information will be stored in the main page div.
+    current_page = params[:page] || 1
+
+    @products = Product.where(is_child: false)
+    if session[:product_filtered].to_s.downcase == 'true'
+      @products = @products.where(id: session[:product_filtered_ids])
+    end
+
+    @products = @products.eager_load(:includes, :interoperates_with, :product_assessment, :origins, :organizations,
+                                     :building_blocks, :sustainable_development_goals)
+                         .paginate(page: current_page, per_page: 20)
                          .order(:name)
 
     params[:search].present? && @products = @products.name_contains(params[:search])
@@ -30,9 +50,22 @@ class ProductsController < ApplicationController
   end
 
   def count
-    @products = filter_products.distinct
-    authorize @products, :view_allowed?
-    render json: @products.count
+    # We will use whichever set the product id cache first: this one or the one in index method.
+    # This should reduce the need to execute the same operation multiple time.
+    if session[:filtered_time].to_s.downcase != session[:product_filtered_time].to_s.downcase
+      product_ids, filter_set = filter_products
+      session[:product_filtered_ids] = product_ids
+      session[:product_filtered] = filter_set
+      session[:product_filtered_time] = session[:filtered_time]
+    end
+
+    product_count = Product.where(is_child: false)
+    if session[:product_filtered].to_s.downcase == 'true'
+      product_count = product_count.where(id: session[:product_filtered_ids])
+    end
+
+    authorize Product, :view_allowed?
+    render json: product_count.count
   end
 
   # GET /products/1
@@ -395,6 +428,8 @@ class ProductsController < ApplicationController
                      sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
+      return [[], filter_set] unless filter_set
+
       project_product_ids = []
       !projects.empty? && project_product_ids = Product.joins(:projects)
                                                        .where('projects.id in (?)', projects)
@@ -441,14 +476,8 @@ class ProductsController < ApplicationController
                               .ids
       end
 
-      product_ids, product_filter_set = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
-
-      if filter_set || product_filter_set
-        ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids])
-        Product.where(id: ids, is_child: false).order(:slug)
-      else
-        Product.where(is_child: false).order(:slug)
-      end
+      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      [filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids]), filter_set]
     end
 
     def load_maturity
