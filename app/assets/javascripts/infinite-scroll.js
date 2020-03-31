@@ -72,12 +72,12 @@ const searchProductHandler = function() {
     const url = `${window.location.pathname}?search=${searchTerm}`;
     if (!currentlySearchingProducts && previousSearchTerm !== searchTerm) {
       $('#product-list > div').addClass('existing-product');
-      animateCss('.existing-product', 'fadeOut', hideElements);
+      animateCss('.existing-product', 'fadeOut faster', hideElements);
 
       currentlySearchingProducts = true;
       $.getScript(url, function() {
         $('#product-list').attr('data-current-page', 1);
-        animateCss('.to-be-animated', 'fadeIn delay-1s', removeClasses);
+        animateCss('.to-be-animated', 'fadeIn faster', removeClasses);
 
         previousSearchTerm = searchTerm;
         currentlySearchingProducts = false;

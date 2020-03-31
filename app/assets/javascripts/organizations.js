@@ -455,12 +455,12 @@ const searchFilterHandler = function() {
     const url = `${window.location.pathname}?search=${searchTerm}`;
     if (!currentlySearchingOrgs && previousSearchTerm !== searchTerm) {
       $('#organization-list > div').addClass('existing-org');
-      animateCss('.existing-org', 'fadeOut', hideElements);
+      animateCss('.existing-org', 'fadeOut faster', hideElements);
 
       currentlySearchingOrgs = true;
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', 1);
-        animateCss('.to-be-animated', 'fadeIn delay-1s', removeClasses);
+        animateCss('.to-be-animated', 'fadeIn faster', removeClasses);
 
         previousSearchTerm = searchTerm;
         currentlySearchingOrgs = false;
