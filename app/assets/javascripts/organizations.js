@@ -411,18 +411,85 @@ var setUpAggregators = function(isEdit) {
 
 let currentlyLoadingOrgs = false;
 const scrollHandlerOrg = function() {
+  const removeClasses = function() {
+    $('.existing-org').removeClass('existing-org');
+    $('.to-be-animated').removeClass('to-be-animated');
+  }
+
   $(window).on('scroll', function() {
     const currentPage = $('#organization-list').attr('data-current-page');
-    const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+    
+    let url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+
+    const searchTerm = $('#search-organizations').val();
+    if (searchTerm) {
+      url = `${url}&search=${searchTerm}`
+    }
+
     const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 600; 
     if (!isNaN(currentPage) && !currentlyLoadingOrgs && shouldExecuteXhr) {
       currentlyLoadingOrgs = true;
+      $('#organization-list > div').addClass('existing-org');
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);
+        animateCss('.to-be-animated', 'fadeIn', removeClasses)
         currentlyLoadingOrgs = false;
       });
     }
   });
+}
+
+const animateCss = function(selector, animationName, callback) {
+  $(selector).addClass(`animated ${animationName}`);
+
+  const handleAnimationEnd = function() {
+    $(selector).removeClass(`animated ${animationName}`);
+    $(selector).off('animationend');
+
+    if (typeof callback === 'function') callback();
+  }
+
+  $(selector).on('animationend', handleAnimationEnd);
+}
+
+const delay = function(fn, ms) {
+  let timer = 0
+  return function(...args) {
+    clearTimeout(timer)
+    timer = setTimeout(fn.bind(this, ...args), ms || 0)
+  }
+}
+
+let currentlySearchingOrgs = false;
+const searchFilterHandler = function() {
+  const hideElements = function() {
+    $('.existing-org').remove();
+  }
+
+  const removeClasses = function() {
+    $('.to-be-animated').removeClass('to-be-animated');
+  }
+
+  let previousSearchTerm = '';
+  const searchWithAnimation = function() {
+    const searchTerm = $('#search-organizations').val();
+    const url = `${window.location.pathname}?search=${searchTerm}`;
+    if (!currentlySearchingOrgs && previousSearchTerm !== searchTerm) {
+      $('#organization-list > div').addClass('existing-org');
+      animateCss('.existing-org', 'fadeOut', hideElements);
+
+      currentlySearchingOrgs = true;
+      $.getScript(url, function() {
+        $('#organization-list').attr('data-current-page', 1);
+        animateCss('.to-be-animated', 'fadeIn delay-1s', removeClasses);
+
+        previousSearchTerm = searchTerm;
+        currentlySearchingOrgs = false;
+      });
+    }
+  }
+
+  $('#search-organizations').keyup(delay(searchWithAnimation, 400));
 }
 
 $(document).on('organizations#new:loaded', setupFormView);
@@ -436,3 +503,4 @@ $(document).on('organizations#show:loaded', setUpAggregatorsView);
 $(document).on('organizations#edit:loaded', setUpAggregatorsEdit);
 
 $(document).on('organizations#index:loaded', scrollHandlerOrg);
+$(document).on('organizations#index:loaded', searchFilterHandler);
