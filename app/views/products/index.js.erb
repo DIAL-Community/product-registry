@@ -1,1 +1,2 @@
 $('#product-list').append('<%= j render(@products) %>');
+$('#product-list > div:not(.existing-product)').addClass('to-be-animated');

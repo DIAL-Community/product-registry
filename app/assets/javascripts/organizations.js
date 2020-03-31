@@ -432,32 +432,11 @@ const scrollHandlerOrg = function() {
       $('#organization-list > div').addClass('existing-org');
       $.getScript(url, function() {
         $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);
-        animateCss('.to-be-animated', 'fadeIn', removeClasses)
+        animateCss('.to-be-animated', 'fadeIn', removeClasses);
         currentlyLoadingOrgs = false;
       });
     }
   });
-}
-
-const animateCss = function(selector, animationName, callback) {
-  $(selector).addClass(`animated ${animationName}`);
-
-  const handleAnimationEnd = function() {
-    $(selector).removeClass(`animated ${animationName}`);
-    $(selector).off('animationend');
-
-    if (typeof callback === 'function') callback();
-  }
-
-  $(selector).on('animationend', handleAnimationEnd);
-}
-
-const delay = function(fn, ms) {
-  let timer = 0
-  return function(...args) {
-    clearTimeout(timer)
-    timer = setTimeout(fn.bind(this, ...args), ms || 0)
-  }
 }
 
 let currentlySearchingOrgs = false;

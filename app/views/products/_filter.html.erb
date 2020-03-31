@@ -1,34 +1,11 @@
-<div class="collapse" id="filter-options">
-  <hr />
-  <%= form_tag(products_path, :method => "get") do %>
-    <%= hidden_field nil, 'filter' %>
-    <div class="form-row">
-      <div class="col-6 mb-3">
-        <fieldset class="form-label-group">
-          <%= text_field_tag "search", params[:search],
-              placeholder: t('view.general.name'),
-              class: "form-control" %>
-          <%= label_tag "name", t('view.general.name') %>
-        </fieldset>
-      </div>
-    </div>
-    <div class="form-row mb-2">
-      <div class="col-12">
-        <div class="form-check">
-          <%= check_box_tag "has_maturity", true, params[:has_maturity], {class: "form-check-input"} %>
-          <%= label_tag "has_maturity", t('view.product.index.has-maturity'), class: "form-check-label" %>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-6 mb-3">
-        <%= label_tag "organizations", t('model.organization').to_s.pluralize.humanize %>
-        <%= collection_select(nil, "organizations",
-                              Organization.all.order(:name), :id, :name,
-                              { selected: params[:organizations] },
-                              { multiple: true, class: 'custom-select' }) %>
-      </div>
-    </div>
-  <% end %>
-  <hr />
+
+<div class="row mt-2">
+  <div class="col-12">
+    <fieldset class="form-label-group">
+      <%= text_field_tag "search-products", params[:search],
+          placeholder: t('view.general.search'),
+          class: "form-control" %>
+      <%= label_tag "search-products", t('view.general.search') %>
+    </fieldset>
+  </div>
 </div>
