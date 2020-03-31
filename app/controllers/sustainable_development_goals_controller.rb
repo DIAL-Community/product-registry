@@ -126,8 +126,16 @@ class SustainableDevelopmentGoalsController < ApplicationController
       end
 
       if filter_set
-        ids = filter_and_intersect_arrays([sdgs, sdg_numbers])
-        SustainableDevelopmentGoal.where(number: ids).order(:number)
+        goals = SustainableDevelopmentGoal
+        if !sdgs.nil? && !sdgs.empty?
+          goals = goals.where(id: sdgs)
+          if !sdg_numbers.empty?
+            goals = goals.or(SustainableDevelopmentGoal.where(number: sdg_numbers))
+          end
+        elsif !sdg_numbers.empty?
+          goals = goals.where(number: sdg_numbers)
+        end
+        goals
       else
         SustainableDevelopmentGoal.order(:number)
       end

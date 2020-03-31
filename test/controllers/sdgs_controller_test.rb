@@ -33,7 +33,7 @@ class SustainableDevelopmentGoalsControllerTest < ActionDispatch::IntegrationTes
     sdg1 = assigns(:sustainable_development_goals)[0]
     sdg2 = assigns(:sustainable_development_goals)[1]
 
-    param = { 'filter_name' => 'sdgs', 'filter_value' => sdg1.number, 'filter_label' => sdg1.name }
+    param = { 'filter_name' => 'sdgs', 'filter_value' => sdg1.id, 'filter_label' => sdg1.name }
     post '/add_filter', params: param
 
     # Filter is set, should only load 1
