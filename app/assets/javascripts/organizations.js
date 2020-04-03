@@ -6,25 +6,6 @@ var tooltip;
 var feature;
 var markerCoordinate;
 
-feature = new ol.Feature({
-  name: "Organization Marker"
-})
-
-var markerLayer = new ol.layer.Vector({
-  source: new ol.source.Vector({
-    features: [feature]
-  }),
-  style: new ol.style.Style({
-    image: new ol.style.Icon({
-      anchor: [11, 29],
-      anchorXUnits: 'pixels',
-      anchorYUnits: 'pixels',
-      opacity: 1,
-      src: '/assets/marker.png'
-    })
-  }),
-});
-
 /*
  * Prepare the office marker on the map and center the map on the office location.
  */
@@ -71,6 +52,25 @@ function addProject(value, label) {
 }
 
 var setupMapView = function() {
+  feature = new ol.Feature({
+    name: "Organization Marker"
+  })
+  
+  var markerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [feature]
+    }),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: '/assets/marker.png'
+      })
+    }),
+  });
+
   tooltip = new ol.Overlay({
     element: document.getElementById('office-popup')
   });
