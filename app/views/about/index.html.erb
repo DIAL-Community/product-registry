@@ -182,17 +182,22 @@
   <div id="about-viewer" class="wysiwyg-viewer"></div>
 <% end %>
 
+<%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.0/jarallax.min.js" %>
 <script>
-  /* init Jarallax */
-  $('.jarallax').jarallax({
-    speed: 0.2
-  });
+  const pageLoadHandler = function() {
+    /* init Jarallax */
+    $('.jarallax').jarallax({
+      speed: 0.2
+    });
 
-  $('.jarallax-keep-img').jarallax({
-    keepImg: true,
-  });
-  
-  <% if session[:portal]["slug"] != "default" && !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
-    setUpViewer(<%= raw JSON.generate(@about_page) %>) 
-  <% end %>  
+    $('.jarallax-keep-img').jarallax({
+      keepImg: true,
+    });
+
+    <% if session[:portal]["slug"] != "default" && !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
+      setUpViewer(<%= raw JSON.generate(@about_page) %>) 
+    <% end %>
+  }
+
+  $(document).on("turbolinks:load", pageLoadHandler);
 </script>

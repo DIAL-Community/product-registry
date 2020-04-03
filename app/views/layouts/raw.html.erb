@@ -2,13 +2,12 @@
 <html>
   <head>
     <title>Product Registry</title>
-    <%= csrf_meta_tags %>
-    <meta name="turbolinks-cache-control" content="no-cache">
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_link_tag "https://use.fontawesome.com/releases/v5.7.2/css/all.css",
-        :integrity => "sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr",
-        :crossorigin => "anonymous" %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"
+            integrity="sha256-JuQeAGbk9rG/EoRMixuy5X8syzICcvB0dj3KindZkY0="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css"
+          integrity="sha256-iq5ygGJ7021Pi7H5S+QAUXCPUfaBzfqeplbg/KlEssg="
+          crossorigin="anonymous" />
     <style>
       .rotate-north {
         top: 65px;
