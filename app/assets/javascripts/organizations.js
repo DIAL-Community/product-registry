@@ -6,25 +6,6 @@ var tooltip;
 var feature;
 var markerCoordinate;
 
-feature = new ol.Feature({
-  name: "Organization Marker"
-})
-
-var markerLayer = new ol.layer.Vector({
-  source: new ol.source.Vector({
-    features: [feature]
-  }),
-  style: new ol.style.Style({
-    image: new ol.style.Icon({
-      anchor: [11, 29],
-      anchorXUnits: 'pixels',
-      anchorYUnits: 'pixels',
-      opacity: 1,
-      src: '/assets/marker.png'
-    })
-  }),
-});
-
 /*
  * Prepare the office marker on the map and center the map on the office location.
  */
@@ -71,6 +52,25 @@ function addProject(value, label) {
 }
 
 var setupMapView = function() {
+  feature = new ol.Feature({
+    name: "Organization Marker"
+  })
+  
+  var markerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [feature]
+    }),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: '/assets/marker.png'
+      })
+    }),
+  });
+
   tooltip = new ol.Overlay({
     element: document.getElementById('office-popup')
   });
@@ -409,6 +409,68 @@ var setUpAggregators = function(isEdit) {
   });
 }
 
+let currentlyLoadingOrgs = false;
+const scrollHandlerOrg = function() {
+  const removeClasses = function() {
+    $('.existing-org').removeClass('existing-org');
+    $('.to-be-animated').removeClass('to-be-animated');
+  }
+
+  $(window).on('scroll', function() {
+    const currentPage = $('#organization-list').attr('data-current-page');
+    
+    let url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+
+    const searchTerm = $('#search-organizations').val();
+    if (searchTerm) {
+      url = `${url}&search=${searchTerm}`
+    }
+
+    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 600; 
+    if (!isNaN(currentPage) && !currentlyLoadingOrgs && shouldExecuteXhr) {
+      currentlyLoadingOrgs = true;
+      $('#organization-list > div').addClass('existing-org');
+      $.getScript(url, function() {
+        $('#organization-list').attr('data-current-page', parseInt(currentPage) + 1);
+        animateCss('.to-be-animated', 'fadeIn', removeClasses);
+        currentlyLoadingOrgs = false;
+      });
+    }
+  });
+}
+
+let currentlySearchingOrgs = false;
+const searchFilterHandler = function() {
+  const hideElements = function() {
+    $('.existing-org').remove();
+  }
+
+  const removeClasses = function() {
+    $('.to-be-animated').removeClass('to-be-animated');
+  }
+
+  let previousSearchTerm = '';
+  const searchWithAnimation = function() {
+    const searchTerm = $('#search-organizations').val();
+    const url = `${window.location.pathname}?search=${searchTerm}`;
+    if (!currentlySearchingOrgs && previousSearchTerm !== searchTerm) {
+      $('#organization-list > div').addClass('existing-org');
+      animateCss('.existing-org', 'fadeOut faster', hideElements);
+
+      currentlySearchingOrgs = true;
+      $.getScript(url, function() {
+        $('#organization-list').attr('data-current-page', 1);
+        animateCss('.to-be-animated', 'fadeIn faster', removeClasses);
+
+        previousSearchTerm = searchTerm;
+        currentlySearchingOrgs = false;
+      });
+    }
+  }
+
+  $('#search-organizations').keyup(delay(searchWithAnimation, 400));
+}
+
 $(document).on('organizations#new:loaded', setupFormView);
 $(document).on('organizations#show:loaded', setupMapView);
 $(document).on('organizations#edit:loaded', setupFormView);
@@ -418,3 +480,6 @@ $(document).on('organizations#edit:loaded', setupAutoComplete);
 
 $(document).on('organizations#show:loaded', setUpAggregatorsView);
 $(document).on('organizations#edit:loaded', setUpAggregatorsEdit);
+
+$(document).on('organizations#index:loaded', scrollHandlerOrg);
+$(document).on('organizations#index:loaded', searchFilterHandler);

@@ -9,10 +9,13 @@ until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_produc
   sleep 2s
 done
 
+echo "Version: $(git rev-parse --short HEAD)" > public/version.txt
+
 . ./setEnv.sh prod
 
 rails db:run_if_no_db && rails db:create_db_with_public_data
 rails db:migrate
+rails db:seed
 rails assets:precompile RAILS_ENV=production
 
 service cron restart

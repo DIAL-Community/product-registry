@@ -13,19 +13,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree ./v5.3.0-dist
-//= require map
-//= require map-style
-//= require map-year-control
-//= require map-click-control
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/widgets/autocomplete
 //= require jquery-ui/widgets/accordion
 //= require popper
 //= require bootstrap
 //= require cookies_eu
-//= require quill
-//= require_tree .
+//= require_directory .
 
 function triggerPageEvents() {
   var action = $('#main-body').attr("data-action");

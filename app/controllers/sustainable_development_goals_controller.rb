@@ -97,7 +97,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
                                .ids
       end
 
-      products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       workflow_product_ids = []
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
@@ -126,8 +126,16 @@ class SustainableDevelopmentGoalsController < ApplicationController
       end
 
       if filter_set
-        ids = filter_and_intersect_arrays([sdgs, sdg_numbers])
-        SustainableDevelopmentGoal.where(number: ids).order(:number)
+        goals = SustainableDevelopmentGoal
+        if !sdgs.nil? && !sdgs.empty?
+          goals = goals.where(id: sdgs)
+          if !sdg_numbers.empty?
+            goals = goals.or(SustainableDevelopmentGoal.where(number: sdg_numbers))
+          end
+        elsif !sdg_numbers.empty?
+          goals = goals.where(number: sdg_numbers)
+        end
+        goals
       else
         SustainableDevelopmentGoal.order(:number)
       end

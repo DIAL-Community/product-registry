@@ -35,11 +35,7 @@
       edges: { arrows: { to: { enabled: true, scaleFactor: .5 } } },
       physics: { repulsion: { nodeDistance: 10 } },
       nodes: {
-        shape: 'dot',
-        scaling: {
-          min: 1,
-          max: <%= @products.count / 3 %>
-        }
+        shape: 'dot'
       }
     };
 

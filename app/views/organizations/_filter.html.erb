@@ -1,43 +1,10 @@
 
-    <div class="form-row">
-      <div class="col-12 mb-3">
-        <fieldset class="form-label-group">
-          <%= text_field_tag "search", params[:search],
-              placeholder: t('view.general.name'),
-              class: "form-control" %>
-          <%= label_tag "name", t('view.general.name') %>
-        </fieldset>
-      </div>
-    </div>
-    
-      <div class="col-12 mb-3">
-        <%= label_tag "sectors", t('model.sector').to_s.pluralize.humanize %>
-        <%= collection_select(nil, "sectors",
-                              Sector.all.order(:name), :id, :name,
-                              { selected: params[:sectors] },
-                              { multiple: true, class: 'custom-select' }) %>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-12 mb-3">
-        <%= label_tag "products", t('model.product').to_s.pluralize.humanize %>
-        <%= collection_select(nil, "products",
-                              Product.all.order(:name), :id, :name,
-                              { selected: params[:products] },
-                              { multiple: true, class: 'custom-select' }) %>
-      </div>
-      <div class="col-12 mb-3">
-        <%= label_tag "countries" %>
-        <%= collection_select(nil, "countries",
-                              Location.where.not(location_type: 'point').order(:name), :id, :name,
-                              { selected: params[:countries] },
-                              { multiple: true, class: 'custom-select' }) %>
-      </div>
-    </div>
-    <div class="float-right">
-      <button id="filter-toggle" type="button" class="btn btn-secondary"
-              data-toggle="collapse" data-target="#filter-options"
-              aria-expanded="false" aria-controls="filter-options">
-        <%= t('view.organization.index.filter') %>
-      </button>
-    </div>
+<div class="row mt-2">
+  <div class="col-12">
+    <fieldset class="form-label-group-xs">
+      <%= text_field_tag "search-organizations", params[:search],
+          placeholder: t('view.general.search'),
+          class: "form-control" %>
+    </fieldset>
+  </div>
+</div>

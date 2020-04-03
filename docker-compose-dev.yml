@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+ postgres:
+  environment:
+    POSTGRES_USER: registry
+    POSTGRES_PASSWORD: Password!1
+    POSTGRES_DB: registry_production
+  image: postgres
+  restart: always
+  volumes:
+    - ./postgres-data:/var/lib/postgresql/data
+  ports:
+    - 5432:5432
+ web:
+ # image: localhost:5000/t4d-product-backlog:${T4D_VERSION}
+  build:
+    context: .
+    target: build-web
+  environment:
+    - RAILS_SERVE_STATIC_FILES=true
+    - RAILS_ENV=production
+  entrypoint: /t4d/docker-entrypoint.sh
+  command: bundle exec rails s -p 3000 -b '0.0.0.0'
+  restart: always
+  volumes:
+   - .:/t4d
+   - ./prod/logrotate.d/registry:/etc/logrotate.d/registry
+  ports:
+   - 3000:3000
+  depends_on:
+   - postgres
+ nginx:
+  image: nginx:1.15-alpine
+  restart: unless-stopped
+  volumes:
+   - ./prod/ssl/data/nginx/dev:/etc/nginx/conf.d
+   - ./prod/ssl/data/certbot/conf:/etc/letsencrypt
+   - ./prod/ssl/data/certbot/www:/var/www/certbot
+   - ./public:/var/www/registry
+  ports:
+   - 80:80
+   - 443:443
+  command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+ certbot:
+  image: certbot/certbot
+  restart: unless-stopped
+  volumes:
+   - ./prod/ssl/data/certbot/conf:/etc/letsencrypt
+   - ./prod/ssl/data/certbot/www:/var/www/certbot
+  entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+ 

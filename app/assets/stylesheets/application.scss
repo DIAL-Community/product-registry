@@ -11,9 +11,11 @@
  * It is generally better to create a new file per style scope.
  *
 
- *= require jquery-ui
+ *= require jquery-ui/datepicker
+ *= require jquery-ui/autocomplete
+ *= require jquery-ui/accordion
+ *= require jquery-ui/core
  *= require cookies_eu
- *= require quill.snow
  *= require_tree .
  *= require_self
  */
@@ -67,6 +69,7 @@ h6 {
 .model-logo {
   display:flex;
   align-items:center;
+  justify-content: center;
   flex-grow: 1;
   min-height: 195px;
 }

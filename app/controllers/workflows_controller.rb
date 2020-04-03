@@ -105,15 +105,12 @@ class WorkflowsController < ApplicationController
 
     building_blocks = Set.new
     if (params[:selected_building_blocks])
-      puts "Building blocks: " + params[:selected_building_blocks].to_s
       params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
-        puts "Found BB: " + building_block.inspect
         building_blocks.add(building_block)
       end
     end
     @workflow.building_blocks = building_blocks.to_a
-    puts "WF BBs: " + @workflow.building_blocks.inspect
 
     if (workflow_params[:wf_desc])
       @wfDesc.workflow_id = @workflow.id
@@ -233,7 +230,7 @@ class WorkflowsController < ApplicationController
                                .ids
       end
 
-      products, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
       product_bbs = []
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])

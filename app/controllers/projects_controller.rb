@@ -3,20 +3,56 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def index
-    if params[:search]
-      @projects = Project.where('LOWER(name) like LOWER(?)', "%#{params[:search]}%")
+    if params[:without_paging]
+      @projects = Project.name_contains(params[:search])
                          .order(:name)
-    else
-      @projects = filter_projects
-      @projects = @projects.eager_load(:organizations, :products, :locations, :origin).order(:name)
-
-      params[:search].present? && @projects = @projects.name_contains(params[:search])
+      return
     end
+
+    # :filtered_time will be updated every time we add or remove a filter.
+    if session[:filtered_time].to_s.downcase != session[:project_filtered_time].to_s.downcase
+      # :project_filtered_time is not updated after the filter is updated:
+      # - rebuild the project id cache
+      logger.info('Filter updated. Rebuilding cached project id list.')
+
+      project_ids, filter_set = filter_projects
+      session[:project_filtered_ids] = project_ids
+      session[:project_filtered] = filter_set
+      session[:project_filtered_time] = session[:filtered_time]
+    end
+
+    # Current page information will be stored in the main page div.
+    current_page = params[:page] || 1
+
+    @projects = Project.order(:slug)
+    if session[:project_filtered].to_s.downcase == 'true'
+      @projects = @projects.where(id: session[:project_filtered_ids])
+    end
+
+    @projects = @projects.eager_load(:organizations, :products, :locations, :origin)
+                         .paginate(page: current_page, per_page: 20)
+
+    params[:search].present? && @projects = @projects.name_contains(params[:search])
     authorize @projects, :view_allowed?
   end
 
   def count
-    @projects = filter_projects.distinct
+    # :filtered_time will be updated every time we add or remove a filter.
+    if session[:filtered_time].to_s.downcase != session[:project_filtered_time].to_s.downcase
+      # :project_filtered_time is not updated after the filter is updated:
+      # - rebuild the project id cache
+      logger.info('Filter updated. Rebuilding cached project id list.')
+
+      project_ids, filter_set = filter_projects
+      session[:project_filtered_ids] = project_ids
+      session[:project_filtered] = filter_set
+      session[:project_filtered_time] = session[:filtered_time]
+    end
+
+    @projects = Project.order(:slug)
+    if session[:project_filtered].to_s.downcase == 'true'
+      @projects = @projects.where(id: session[:project_filtered_ids])
+    end
     authorize @projects, :view_allowed?
     render json: @projects.count
   end
@@ -174,6 +210,8 @@ class ProjectsController < ApplicationController
                    sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                  endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
+    return [[], filter_set] unless filter_set
+
     organization_ids = get_organizations_from_filters(organizations, years, sectors, countries,
                                                       endorser_only, aggregator_only)
     org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
@@ -204,7 +242,7 @@ class ProjectsController < ApplicationController
                             .ids
     end
 
-    product_ids, = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
 
     product_project_ids = []
     product_ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids])
@@ -214,12 +252,7 @@ class ProjectsController < ApplicationController
                                     .ids
     end
 
-    if filter_set
-      ids = filter_and_intersect_arrays([projects, org_project_ids, product_project_ids])
-      Project.where(id: ids).order(:slug)
-    else
-      Project.all.order(:slug)
-    end
+    [filter_and_intersect_arrays([projects, org_project_ids, product_project_ids]), filter_set]
   end
 
   # Use callbacks to share common setup or constraints between actions.
