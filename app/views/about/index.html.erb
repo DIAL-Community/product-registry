@@ -184,7 +184,7 @@
 
 <%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.0/jarallax.min.js" %>
 <script>
-  const pageLoadHandler = function() {
+  var pageLoadHandler = function() {
     /* init Jarallax */
     $('.jarallax').jarallax({
       speed: 0.2
@@ -199,5 +199,5 @@
     <% end %>
   }
 
-  $(document).on("turbolinks:load", pageLoadHandler);
+  $(document).ready(pageLoadHandler);
 </script>

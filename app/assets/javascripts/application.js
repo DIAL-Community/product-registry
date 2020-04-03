@@ -19,7 +19,7 @@
 //= require popper
 //= require bootstrap
 //= require cookies_eu
-//= require_tree .
+//= require_directory .
 
 function triggerPageEvents() {
   var action = $('#main-body').attr("data-action");

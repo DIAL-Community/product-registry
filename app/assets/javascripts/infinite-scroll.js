@@ -36,7 +36,7 @@ const scrollProductHandler = function () {
 
   $(window).on('scroll', function () {
     const currentPage = $('#product-list').attr('data-current-page');
-    const url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
+    let url = `${window.location.pathname}?page=${parseInt(currentPage) + 1}`;
 
     const searchTerm = $('#search-products').val();
     if (searchTerm) {
