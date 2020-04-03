@@ -289,6 +289,9 @@ module Modules
         organizations.each do |organization|
           org = Organization.where('lower(name) = lower(?)', organization['name'])[0]
           if org.nil?
+            org = Organization.where("aliases @> ARRAY['"+organization['name']+"']::varchar[]").first
+          end
+          if org.nil?
             # Create a new organization and assign it as an owner
             org = Organization.new
             org.name = organization['name']
