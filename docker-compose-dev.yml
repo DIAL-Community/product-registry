@@ -33,7 +33,7 @@ services:
   image: nginx:1.15-alpine
   restart: unless-stopped
   volumes:
-   - ./prod/ssl/data/nginx/prod:/etc/nginx/conf.d
+   - ./prod/ssl/data/nginx/dev:/etc/nginx/conf.d
    - ./prod/ssl/data/certbot/conf:/etc/letsencrypt
    - ./prod/ssl/data/certbot/www:/var/www/certbot
    - ./public:/var/www/registry
