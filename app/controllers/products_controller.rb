@@ -40,12 +40,17 @@ class ProductsController < ApplicationController
       @products = @products.where(id: session[:product_filtered_ids])
     end
 
+    if params[:search].present?
+      name_products = @products.name_contains(params[:search])
+      desc_products = @products.joins(:product_descriptions).where("description#>>'{}' like (?)", "%"+params[:search]+"%")
+      @products = @products.where(id: (name_products+desc_products).uniq)
+    end
+
     @products = @products.eager_load(:includes, :interoperates_with, :product_assessment, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals)
                          .paginate(page: current_page, per_page: 20)
                          .order(:name)
 
-    params[:search].present? && @products = @products.name_contains(params[:search])
     authorize @products, :view_allowed?
   end
 

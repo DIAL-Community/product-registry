@@ -39,8 +39,14 @@ class OrganizationsController < ApplicationController
       @organizations = @organizations.where(id: session[:org_filtered_ids])
     end
 
+    if params[:search].present?
+      name_orgs = @organizations.name_contains(params[:search])
+      desc_orgs = @organizations.joins(:organization_descriptions).where("description#>>'{}' like (?)", "%"+params[:search]+"%")
+      @organizations = @organizations.where(id: (name_orgs+desc_orgs).uniq)
+    end
+
     @organizations = @organizations.paginate(page: current_page, per_page: 20)
-    params[:search].present? && @organizations = @organizations.name_contains(params[:search])
+
     authorize @organizations, :view_allowed?
   end
 
