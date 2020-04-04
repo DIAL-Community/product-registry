@@ -238,3 +238,5 @@ function aggregatorClickHandler(evt) {
     aggregator.popup.setPosition(undefined);
   }
 };
+
+aggregator.init()
