@@ -6,6 +6,10 @@
   <script src="https://cdn.jsdelivr.net/npm/openlayers@4.6.5/dist/ol.js"
             integrity="sha256-77IKwU93jwIX7zmgEBfYGHcmeO0Fx2MoWB/ooh9QkBA="
             crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js" 
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" 
+            crossorigin="anonymous"></script>
   
   <%= javascript_include_tag "/assets/map/aggregator-map.js" %>
   <%= javascript_include_tag "/assets/map/aggregator-map-handler.js" %>
@@ -41,3 +45,6 @@
   </div>
 </div>
 
+<script>
+    aggregator.init();
+</script>
