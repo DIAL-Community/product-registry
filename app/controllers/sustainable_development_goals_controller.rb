@@ -134,6 +134,9 @@ class SustainableDevelopmentGoalsController < ApplicationController
           end
         elsif !sdg_numbers.empty?
           goals = goals.where(number: sdg_numbers)
+        else
+          # Nothing is matching the criteria. Return nothing.
+          goals = SustainableDevelopmentGoal.none
         end
         goals
       else
