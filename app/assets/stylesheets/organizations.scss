@@ -16,6 +16,15 @@
   height: 10em;
 }
 
+.ui-menu-item {
+  list-style-type: none;
+  text-decoration: none;
+}
+
+ul.ui-autocomplete {
+  padding-left: 20px;
+}
+
 #agg-nav .accordion-expand-holder {
   margin:10px 0;
 }
