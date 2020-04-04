@@ -274,6 +274,8 @@ function updateToHd() {
   }
 }
 
+mapObject.initMap()
+
 // TODO: Enable this to allow switching to better looking map.
 // We should also look into this to serve the high-def map:
 // https://github.com/mapbox/geojson-vt

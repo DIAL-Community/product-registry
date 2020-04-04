@@ -205,3 +205,5 @@ function mapOfProjectClickHandler(evt) {
     mapOfProject.popup.setPosition(undefined);
   }
 };
+
+mapOfProject.init();
