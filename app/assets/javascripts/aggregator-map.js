@@ -68,6 +68,8 @@ var aggregator = {
   }),
 
   initMap: function() {
+    aggregator.countryHightlightLayer.getSource().clear()
+
     aggregator.popup = new ol.Overlay({
       element: document.getElementById('popup')
     });
