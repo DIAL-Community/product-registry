@@ -1,6 +1,6 @@
-<div id="summary-nav" class="d-none d-lg-block row mb-2 bg-dark">
+<div id="summary-nav" class="d-none d-block row mb-2 bg-dark">
   <div class="col-12">
-    <div class="list-group w-100 flex-fill list-group-horizontal bg-transparent">
+    <div class="list-group w-100 flex-fill list-group-horizontal-md list-group-vertical-sm bg-transparent">
       <% session[:portal]["top_navs"].each do |top_nav| %>
         <%= render "/shared/summary/#{top_nav}" %>
       <% end %>
