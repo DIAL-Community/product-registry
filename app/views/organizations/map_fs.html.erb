@@ -1,15 +1,5 @@
 <% content_for(:header_scripts) do %>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@4.6.5/ol.css"
-          integrity="sha256-72AsUmsoxyYb+HfGS44LqAscCOz3Ch/B1oUyos9lBM0="
-          crossorigin="anonymous">
 
-  <script src="https://cdn.jsdelivr.net/npm/openlayers@4.6.5/dist/ol.js"
-            integrity="sha256-77IKwU93jwIX7zmgEBfYGHcmeO0Fx2MoWB/ooh9QkBA="
-            crossorigin="anonymous"></script>
-            
-  <%= javascript_include_tag "/assets/map/map.js" %>
-  <%= javascript_include_tag "/assets/map/map-sector-control.js" %>
-  <%= javascript_include_tag "/assets/map/map-year-control.js" %>
 <% end %>
 
 <div id="map" class="map" style="height:640px;">

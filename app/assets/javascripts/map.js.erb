@@ -67,7 +67,7 @@ var mapObject = {
 
   countryLayer : new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: '/assets/map/countries.json',
+      url: "<%= asset_path('countries.json') %>",
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
@@ -84,7 +84,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: '/assets/map/marker.png'
+        src: "<%= asset_path('marker.png') %>"
       })
     }),
   }),
@@ -97,7 +97,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: '/assets/map/marker.png'
+        src: "<%= asset_path('marker.png') %>"
       })
     }),
   }),
@@ -110,7 +110,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: '/assets/map/marker.png'
+        src: "<%= asset_path('marker.png') %>"
       })
     }),
   }),
@@ -266,15 +266,13 @@ function updateToHd() {
   if (mapObject.countryLayer) {
     console.log("Updating map to HD!");
     var hdSource = new ol.source.Vector({
-      url: '/assets/map/countries-hd.json',
+      url: "<%= asset_path('countries-hd.json') %>",
       format: new ol.format.GeoJSON()
     });
     mapObject.countryLayer.setSource(hdSource);
     clearTimeout(updateToHdCheck);
   }
 }
-
-mapObject.initMap()
 
 // TODO: Enable this to allow switching to better looking map.
 // We should also look into this to serve the high-def map:
