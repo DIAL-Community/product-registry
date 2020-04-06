@@ -56,7 +56,7 @@ var mapOfProject = {
 
   countryLayer: new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: '/assets/map/countries.json',
+      url: "<%= asset_path('countries.json') %>",
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
@@ -206,4 +206,4 @@ function mapOfProjectClickHandler(evt) {
   }
 };
 
-mapOfProject.init();
+$(document).on('turbolinks:load', mapOfProject.init);
