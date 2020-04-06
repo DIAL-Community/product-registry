@@ -47,7 +47,6 @@ public/assets/**/*.svg
 public/assets/**/*.json
 public/assets/**/*.webp
 public/assets/**/*.js
-!public/assets/map/*
 
 # Uploaded assets
 public/uploads

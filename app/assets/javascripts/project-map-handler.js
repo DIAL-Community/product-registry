@@ -52,4 +52,4 @@ const projectMapHandler = function() {
   });
 }
 
-$(document).ready(projectMapHandler);
+$(document).on('projects#map_projects:loaded', projectMapHandler);

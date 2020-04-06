@@ -1,60 +1,53 @@
-const sectorSelectionReady = function() {
-  $.getJSON(
-    '/sectors.json?display_only=true&without_paging=true',
-    function(sectors) {
-      sectors.forEach(function(sector) {
-        var option = new Option(sector.name, sector.id);
-        $(option).html(sector.name);
-        $('#sector').append(option);
-      });
-    }
-  );
+const yearSelectionReady = function() {
 
-  $('#sector').change(function() {
-    if (mapObject) {
-      var sectorId = $(this).val();
+    for (var iy = 2015; iy <= new Date().getFullYear(); iy++) {
+      var option = new Option(iy, iy);
+      $(option).html(iy);
+      $('#year').append(option);
+    }
+
+    $('#year').change(function() {
+      var yearId = $(this).val();
 
       mapObject.popup.setPosition(undefined);
-
       mapObject.countryHightlightLayer.getSource().forEachFeature(function(feature) {
         mapObject.countryLayer.getSource().addFeature(feature);
       });
       mapObject.countryHightlightLayer.getSource().clear();
 
       mapObject.markerLayer.getSource().forEachFeature(function(iFeature) {
-        if (iFeature.get("partial_sector") === true) {
+        if (iFeature.get("partial_year") === true) {
           mapObject.markerLayer.getSource().removeFeature(iFeature);
         }
       })
-      mapObject.sectorMarkerHoldingLayer.getSource().forEachFeature(function(iFeature) {
+      mapObject.markerHoldingLayer.getSource().forEachFeature(function(iFeature) {
         mapObject.markerLayer.getSource().addFeature(iFeature);
       });
-      mapObject.sectorMarkerHoldingLayer.getSource().clear();
+      mapObject.markerHoldingLayer.getSource().clear();
       mapObject.markerLayer.getSource().forEachFeature(function(iFeature) {
-        if (parseInt(sectorId) === -1)
+        if (parseInt(yearId) === -1)
           return;
 
-        // remove all non matching sectors.
+        // remove all non matching endersed year
         var filtered = iFeature.get("organizations").filter(function(organization) {
-          return $.inArray(parseInt(sectorId), organization.sectors) > 0;
+          return yearId == organization.when_endorsed;
         });
-      
+
         if (filtered.length !== iFeature.get("organizations").length) {
           mapObject.markerLayer.getSource().removeFeature(iFeature);
-          mapObject.sectorMarkerHoldingLayer.getSource().addFeature(iFeature);
+          mapObject.markerHoldingLayer.getSource().addFeature(iFeature);
           if (filtered.length > 0) {
             mapObject.markerLayer.getSource().addFeature(new ol.Feature({
               coordinate: iFeature.get("coordinate"),
               geometry: iFeature.get("geometry"),
               organizations: filtered,
-              partial_sector: true
+              partial_year: true
             }));
           }
         }
       });
-    }
-  });
+    });
 }
 
-// Attach all of them to the browser, page, and turbolinks event.
-$(document).ready(sectorSelectionReady);
+$(document).on('organizations#map:loaded', yearSelectionReady);
+$(document).on('organizations#map_fs:loaded', yearSelectionReady);
