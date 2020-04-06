@@ -58,7 +58,7 @@ var aggregator = {
 
   countryLayer: new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: '/assets/map/countries.json',
+      url: '/assets/countries.json',
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
@@ -238,5 +238,3 @@ function aggregatorClickHandler(evt) {
     aggregator.popup.setPosition(undefined);
   }
 };
-
-aggregator.init()

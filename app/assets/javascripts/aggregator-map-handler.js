@@ -169,4 +169,4 @@ const aggregatorMapHandler = function() {
   });
 }
 
-$(document).ready(aggregatorMapHandler);
+$(document).on('organizations#map_aggregators:loaded', aggregatorMapHandler);
