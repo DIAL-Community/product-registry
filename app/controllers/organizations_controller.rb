@@ -41,7 +41,7 @@ class OrganizationsController < ApplicationController
 
     if params[:search].present?
       name_orgs = @organizations.name_contains(params[:search])
-      desc_orgs = @organizations.joins(:organization_descriptions).where("description#>>'{}' like (?)", "%"+params[:search]+"%")
+      desc_orgs = @organizations.joins(:organization_descriptions).where("LOWER(description#>>'{}') like LOWER(?)", "%"+params[:search]+"%")
       @organizations = @organizations.where(id: (name_orgs+desc_orgs).uniq)
     end
 

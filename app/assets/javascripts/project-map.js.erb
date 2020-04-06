@@ -66,6 +66,7 @@ var mapOfProject = {
   }),
 
   initMap: function() {
+    mapOfProject.countryHightlightLayer.getSource().clear()
     mapOfProject.popup = new ol.Overlay({
       element: document.getElementById('popup')
     });
