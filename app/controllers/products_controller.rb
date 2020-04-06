@@ -42,7 +42,7 @@ class ProductsController < ApplicationController
 
     if params[:search].present?
       name_products = @products.name_contains(params[:search])
-      desc_products = @products.joins(:product_descriptions).where("description#>>'{}' like (?)", "%"+params[:search]+"%")
+      desc_products = @products.joins(:product_descriptions).where("LOWER(description#>>'{}') like LOWER(?)", "%"+params[:search]+"%")
       @products = @products.where(id: (name_products+desc_products).uniq)
     end
 
