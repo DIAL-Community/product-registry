@@ -78,5 +78,6 @@ public/assets/organizations/organization.png
 /coverage
 
 setEnv.sh
+.env
 
 prod/ssl/data/*
