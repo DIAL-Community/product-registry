@@ -1,12 +1,6 @@
 <% if session[:portal]["slug"] == "default" %>
 <div id="covid-section" class="about-jumbotron">
-  <div class="float-right">
-    <%= link_to products_path, class: 'no-hover' do %>
-      <h5 class="icon-inline text-muted"><%= t("view.about.enter_catalog") %></h5>
-      <i class="fas fa-external-link-alt text-muted icon-inline"></i>
-    <% end %>
-  </div>
-  <h3 class="display-4 text-muted">DIAL Online Catalog Supports COVID-19 Response</h3>
+  <h1 class="display-5 text-muted">DIAL Online Catalog Supports COVID-19 Response</h1>
   <div class="mb-5">
     <%= link_to 'Learn More', covid_index_path, :class => 'btn btn-outline-secondary float-left col-lg-2' %>
   </div>
