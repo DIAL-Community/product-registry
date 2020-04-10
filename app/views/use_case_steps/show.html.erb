@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @use_case_step.name %>
+</p>
+
+<p>
+  <strong>Slug:</strong>
+  <%= @use_case_step.slug %>
+</p>
+
+<p>
+  <strong>Step number:</strong>
+  <%= @use_case_step.step_number %>
+</p>
+
+<p>
+  <strong>Use case:</strong>
+  <%= @use_case_step.use_case_id %>
+</p>
+
+<%= link_to 'Edit', edit_use_case_step_path(@use_case_step) %> |
+<%= link_to 'Back', use_case_steps_path %>

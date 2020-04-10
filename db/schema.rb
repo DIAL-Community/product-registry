@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200318153113) do
+ActiveRecord::Schema.define(version: 20200403183400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20200318153113) do
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
+    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -29,7 +30,7 @@ ActiveRecord::Schema.define(version: 20200318153113) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "id", "version"], name: "auditable_index"
+    t.index ["action", "audit_id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -381,6 +382,16 @@ ActiveRecord::Schema.define(version: 20200318153113) do
     t.index ["use_case_id"], name: "index_use_case_descriptions_on_use_case_id"
   end
 
+  create_table "use_case_steps", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.integer "step_number"
+    t.bigint "use_case_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["use_case_id"], name: "index_use_case_steps_on_use_case_id"
+  end
+
   create_table "use_cases", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -481,6 +492,7 @@ ActiveRecord::Schema.define(version: 20200318153113) do
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
   add_foreign_key "use_case_descriptions", "use_cases"
+  add_foreign_key "use_case_steps", "use_cases"
   add_foreign_key "use_cases", "sectors"
   add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
   add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"

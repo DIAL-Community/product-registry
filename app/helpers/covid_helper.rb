@@ -1,0 +1,2 @@
+module CovidHelper
+end

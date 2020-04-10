@@ -1,0 +1,37 @@
+<%= form_with(model: use_case_step, local: true) do |form| %>
+  <% if use_case_step.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(use_case_step.errors.count, "error") %> prohibited this use_case_step from being saved:</h2>
+
+      <ul>
+      <% use_case_step.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :use_case_step_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :slug %>
+    <%= form.text_field :slug, id: :use_case_step_slug %>
+  </div>
+
+  <div class="field">
+    <%= form.label :step_number %>
+    <%= form.number_field :step_number, id: :use_case_step_step_number %>
+  </div>
+
+  <div class="field">
+    <%= form.label :use_case_id %>
+    <%= form.text_field :use_case_id, id: :use_case_step_use_case_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

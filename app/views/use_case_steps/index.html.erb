@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Use Case Steps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+      <th>Step number</th>
+      <th>Use case</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @use_case_steps.each do |use_case_step| %>
+      <tr>
+        <td><%= use_case_step.name %></td>
+        <td><%= use_case_step.slug %></td>
+        <td><%= use_case_step.step_number %></td>
+        <td><%= use_case_step.use_case_id %></td>
+        <td><%= link_to 'Show', use_case_step %></td>
+        <td><%= link_to 'Edit', edit_use_case_step_path(use_case_step) %></td>
+        <td><%= link_to 'Destroy', use_case_step, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Use Case Step', new_use_case_step_path %>

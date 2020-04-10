@@ -65,9 +65,8 @@
         data-controller="<%= controller.controller_name %>"
         data-action="<%= controller.action_name %>">
     <%= render '/shared/topnav' %>
-    <% if current_page?('/about') || current_page?(root_path) %>
+    <% if current_page?('/about') || current_page?(root_path) || current_page?('/covid')%>
       <div id="content" class="container">
-        <%= render '/shared/sidenav' %>
         <%= yield %>
         <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
       </div>

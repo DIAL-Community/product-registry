@@ -19,6 +19,7 @@ module Modules
           end
         end
         existing_product = nil
+        is_new = false
         name_aliases.each do |name_alias|
           # Find by name, and then by aliases and then by slug.
           break unless existing_product.nil?
@@ -35,6 +36,7 @@ module Modules
           existing_product.name = name_aliases.first
           existing_product.slug = slug_em existing_product.name
           @@product_list << existing_product.name
+          is_new = true
         end
 
         existing_product.website = website
@@ -56,7 +58,9 @@ module Modules
           end
         end
 
-        if existing_product.save
+        existing_product.save
+        
+        if is_new
           update_product_description(existing_product, json_data['description'])
         end
       end
@@ -78,6 +82,7 @@ module Modules
           end
         end
         existing_product = nil
+        is_new = false
         name_aliases.each do |name_alias|
           # Find by name, and then by aliases and then by slug.
           break unless existing_product.nil?
@@ -93,6 +98,7 @@ module Modules
           existing_product.name = name_aliases.first
           existing_product.slug = slug_em existing_product.name
           @@product_list << existing_product.name
+          is_new = true
         end
 
         # Assign what's left in the alias array as aliases.
@@ -113,7 +119,9 @@ module Modules
 
         update_attributes(json_data, existing_product)
 
-        if existing_product.save
+        existing_product.save
+
+        if is_new
           update_product_description(existing_product, json_data['description'])
         end
       end
@@ -128,6 +136,7 @@ module Modules
       end
       
       existing_product = nil
+      is_new = false
       name_aliases.each do |name_alias|
         # Find by name, and then by aliases and then by slug.
         break unless existing_product.nil?
@@ -142,6 +151,7 @@ module Modules
         existing_product.name = digi_product['name']
         existing_product.slug = slug_em digi_product['name']
         @@product_list << existing_product.name
+        is_new = true
       end
 
       puts existing_product.origins.inspect
@@ -160,10 +170,11 @@ module Modules
         end
       end
 
-      if existing_product.save
+      existing_product.save
+      if is_new
         update_product_description(existing_product, digi_product['description'])
-        puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
       end
+      puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
     def sync_osc_product(product)
@@ -174,6 +185,7 @@ module Modules
       end
       
       sync_product = nil
+      is_new = false
       name_aliases.each do |name_alias|
         # Find by name, and then by aliases and then by slug.
         break unless sync_product.nil?
@@ -196,6 +208,7 @@ module Modules
         sync_product.name = name_aliases.first
         sync_product.slug = slug_em existing_product.name
         @@product_list << existing_product.name
+        is_new = true
       end
 
       # This will update website, license, repo URL, organizations, and SDGs
@@ -230,7 +243,8 @@ module Modules
         sync_product.origins.push(osc_origin)
       end
 
-      if sync_product.save
+      sync_product.save
+      if is_new
         description = product['description']
         if !description.nil? && !description.empty?
           update_product_description(sync_product, description)
@@ -522,6 +536,17 @@ module Modules
 
       if product.save!
         puts "Product statistics saved: #{product.name}."
+      end
+    end
+
+    def export_products(source)
+      session = ActionDispatch::Integration::Session.new(Rails.application)
+      session.get "/productlist?source="+source
+      prod_list = JSON.parse(session.response.body)
+      prod_list.each do |prod|
+        File.open("export/"+slug_em(prod['name']).gsub("_","-")+".json","w") do |f|
+          f.write(JSON.pretty_generate prod)
+        end
       end
     end
 
