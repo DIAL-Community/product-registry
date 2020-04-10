@@ -1,0 +1,2 @@
+class UseCaseStep < ApplicationRecord
+end

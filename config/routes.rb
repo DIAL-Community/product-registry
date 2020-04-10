@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :use_case_steps
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   resources :product_suites
@@ -19,6 +20,8 @@ Rails.application.routes.draw do
 
   root to: 'about#index'
 
+  resources :covid, only: [:index]
+  
   resources :candidate_organizations do
     member do
       post 'reject'

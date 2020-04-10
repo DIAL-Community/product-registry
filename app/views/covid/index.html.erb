@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="row">
+    <div id="covid" class="col-md-12 mt-4">
+      <h1 class="text-center">DIAL Support for COVID-19</h1>
+      <div class="m-3 text-left text-muted">
+        <p>
+        COVID-19 has become the greatest public health crisis of our time. The Digital Impact Alliance (DIAL) has developed this online resource to support organizations and governments in their COVID-19 response. Though this tool was originally developed for the evaluation and deployment of open source digital tools, it can also be leveraged specifically to respond to COVID-19 in two areas:
+        </p>
+        <ul>
+          <li><a href="#mobile">Provide tools to quickly set up messaging platforms</a></li>
+          <li><a href="#products">Quickly identify software platforms that can be used to support frontline health workers and organizations who are tracking COVID-19 outbreaks​</a></li>
+        </ul>
+      </div>
+      <hr class="my-4">
+      <a id='mobile'></a>
+      <h2 class="text-muted">Using the Online Catalog for Mobile Messaging Response​</h2>
+      <div class="col-8 pb-2 text-muted">
+        <p class="pt-2">Governments and organizations need to provide regular information to their constituents. Mobile messaging channels are extremely effective, but can be time-consuming and expensive to set up.</p>
+        <p class="pb-2">But DIAL can help. We have developed relationships with several mobile network aggregators around the world. These aggregators have established relationships with mobile network operators and can configure mobile services very quickly and easily. A mobile messaging solution can be established in a matter of hours.</p>
+        <p>The DIAL online catalog lists mobile network service integrators that provide mobile service delivery around the world and services offered.</p>
+        <p class="m-2"><%= link_to "Click on this link to see the aggregator map", '/map_aggregators' %></p>
+        <%= image_tag("covid-agg1.png", width:700) %>
+        <p class="m-2"><%= link_to "You can also navigate to the main product page, expand the 'Map Views' section on the left and click on 'Aggregator Map'", '/products' %></p>
+      </div>
+      <div class="col-8 pt-2 pb-2 text-muted">
+        <p>On the map page, click on a country to show which aggregators work in that country. Click on an aggregator in that list to see detailed information about the services that they offer and which network operators they partner with.</p>
+        <%= image_tag("covid-agg2.png", width:700) %>
+      </div>
+      <div class="col-8 pt-2 pb-2 text-muted">
+        <p>Select an aggregator to view the details for that provider. The Operator Services section shows which services are available by country and which network operators provide those services.</p>
+        <p>For example, if you are looking for Bulk SMS services in Kenya, you can expand the SMS menu and see that these services are offered by this aggregator through Safaricom.​</p>
+        <%= image_tag("covid-agg4.png", width:400) %>
+      </div>
+      <div class="col-8 pt-2 pb-2 text-muted">
+        <p>Alternatively, <a href="https://registry.dial.community/organizations?urlFilter=true&aggregator_only=true">this link</a> will display a page that shows all of the mobile aggregators in the catalog. Select any aggregator to see which countries they work in, which mobile network operators they partner with, and the specific service offerings they provide.​</p>
+        <%= image_tag("covid-agg3.png", width:700) %>
+      </div>
+      <hr class="my-4">
+      <a id="products"></a>
+      <h2 class="text-muted">Using the Online Catalog for Product Discovery​</h2>
+      <div class="col-8 pt-2 pb-2 text-muted">
+        <p class="pt-2">Governments and organizations are looking for digital tools to help with COVID-19 surveillance, diagnosis, prevention and treatment.<p>
+        <p class="pb-2">However, they may not know that there are mature open source solutions that are ready to be deployed to support these needs.</p>
+        <p>The <a href="https://registry.dial.community/products">Online Catalog</a> contains a list of open source products that support the SDGs.</p>
+        <p>Users can filter products by the SDGs that they are designed to address, the use cases that they are connected to, or the building blocks that they support.</p>
+        <%= image_tag("covid-prod1.png", width:700) %>
+      </div>
+      <div class="col-8 pt-2 pb-2 text-muted">
+        <p>Several of the products in the catalog have been tagged as supporting specific functionality needed for COVID-19 response.​</p>
+        <p>To see these products, type ‘covid’ in the search box​</p>
+        <p>Click on a specific product to get detailed information about the product.</p>
+        <%= image_tag("covid-prod2.png", width:700) %>
+      </div>
+      <div class="col-8 pt-2 pb-2 text-muted">
+        <p>The product details page will provide a description of the product, links to the product website and code repository, as well as other relevant data about the product.​</p>
+        <%= image_tag("covid-prod3.png", width:700) %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,10 @@
 <% if session[:portal]["slug"] == "default" %>
-
+<div id="covid-section" class="about-jumbotron">
+  <h1 class="display-5 text-muted">DIAL Online Catalog Supports COVID-19 Response</h1>
+  <div class="mb-5">
+    <%= link_to 'Learn More', covid_index_path, :class => 'btn btn-outline-secondary float-left col-lg-2' %>
+  </div>
+</div>
 <div id="intro_section" class="view jarallax main-img">
     <%= image_tag("ict_cover.png", class:'jarallax-img') %>
     <div class="mask purple-slight" style="height: 100vh;">
@@ -184,7 +189,7 @@
 
 <%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.0/jarallax.min.js" %>
 <script>
-  var pageLoadHandler = function() {
+
     /* init Jarallax */
     $('.jarallax').jarallax({
       speed: 0.2
@@ -197,7 +202,5 @@
     <% if session[:portal]["slug"] != "default" && !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
       setUpViewer(<%= raw JSON.generate(@about_page) %>) 
     <% end %>
-  }
 
-  $(document).ready(pageLoadHandler);
 </script>

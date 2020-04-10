@@ -1,5 +1,4 @@
 const projectMapHandler = function() {
-
   const highlightHolder = {
     projects: []
   }

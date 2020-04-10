@@ -94,11 +94,12 @@ var mapOfProject = {
       locations.forEach(function(location) {
         mapOfProject.locations[location.id] = location;
       });
+      mapOfProject.initProjects();
     });
   },
 
   initProjects: function() {
-    $.getJSON('/projects.json', function(projects) {
+    $.getJSON('/projects.json?without_paging=true', function(projects) {
       projects
         .forEach(function(project) {
           const normalized = {
@@ -121,7 +122,7 @@ var mapOfProject = {
           });
         });
       
-      // Hightlight our initial country list.
+      // Highlight our initial country list.
       highlightProjectCountries(Object.keys(mapOfProject.projectsByCountry));
     });
   },
@@ -130,7 +131,6 @@ var mapOfProject = {
     $("#map-of-project").empty();
     mapOfProject.initMap();
     mapOfProject.initLocations();
-    mapOfProject.initProjects();
   },
 };
 
@@ -207,4 +207,3 @@ function mapOfProjectClickHandler(evt) {
   }
 };
 
-$(document).on('turbolinks:load', mapOfProject.init);

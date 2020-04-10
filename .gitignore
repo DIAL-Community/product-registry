@@ -29,6 +29,7 @@
 
 public/export.xls
 public/export.xlsx
+export/*
 
 public/assets/*.png
 public/assets/jquery-ui/*.png
@@ -78,5 +79,6 @@ public/assets/organizations/organization.png
 /coverage
 
 setEnv.sh
+.env
 
 prod/ssl/data/*
