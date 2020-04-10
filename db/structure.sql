@@ -1463,6 +1463,40 @@ ALTER SEQUENCE public.use_case_descriptions_id_seq OWNED BY public.use_case_desc
 
 
 --
+-- Name: use_case_steps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.use_case_steps (
+    id bigint NOT NULL,
+    name character varying,
+    slug character varying,
+    step_number integer,
+    use_case_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: use_case_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.use_case_steps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: use_case_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.use_case_steps_id_seq OWNED BY public.use_case_steps.id;
+
+
+--
 -- Name: use_cases; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1856,6 +1890,13 @@ ALTER TABLE ONLY public.use_case_descriptions ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- Name: use_case_steps id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps ALTER COLUMN id SET DEFAULT nextval('public.use_case_steps_id_seq'::regclass);
+
+
+--
 -- Name: use_cases id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2137,6 +2178,14 @@ ALTER TABLE ONLY public.sustainable_development_goals
 
 ALTER TABLE ONLY public.use_case_descriptions
     ADD CONSTRAINT use_case_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: use_case_steps use_case_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps
+    ADD CONSTRAINT use_case_steps_pkey PRIMARY KEY (id);
 
 
 --
@@ -2424,6 +2473,13 @@ CREATE INDEX index_use_case_descriptions_on_use_case_id ON public.use_case_descr
 
 
 --
+-- Name: index_use_case_steps_on_use_case_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_use_case_steps_on_use_case_id ON public.use_case_steps USING btree (use_case_id);
+
+
+--
 -- Name: index_use_cases_on_sector_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2666,6 +2722,14 @@ CREATE UNIQUE INDEX workflows_bbs ON public.workflows_building_blocks USING btre
 --
 
 CREATE UNIQUE INDEX workflows_usecases ON public.workflows_use_cases USING btree (workflow_id, use_case_id);
+
+
+--
+-- Name: use_case_steps fk_rails_1ab85a3bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps
+    ADD CONSTRAINT fk_rails_1ab85a3bb6 FOREIGN KEY (use_case_id) REFERENCES public.use_cases(id);
 
 
 --
@@ -3175,6 +3239,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200224225410'),
 ('20200224225415'),
 ('20200303191546'),
-('20200318153113');
+('20200318153113'),
+('20200403183400');
 
 

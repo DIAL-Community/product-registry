@@ -7,7 +7,7 @@ class OperatorServicesController < ApplicationController
   def index
     if params[:without_paging]
       @operators = OperatorService.order(:name)
-      authorize @operators, :view_allowed?
+      authorize @operators, :map_allowed?
       return
     end
 

@@ -17,4 +17,8 @@ class OperatorServicePolicy < ApplicationPolicy
     
     user.role == 'admin' || user.role == 'mni' 
   end
+
+  def map_allowed?
+    return true
+  end
 end
