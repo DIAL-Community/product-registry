@@ -15,6 +15,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown mt-2">
+              <strong><%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'nav-link' %></strong>
+            </li>
             <% if user_signed_in? %>
               <% if (policy(current_user).index?) %>
                 <li class="nav-item dropdown">

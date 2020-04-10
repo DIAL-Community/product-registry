@@ -172,22 +172,9 @@ namespace :sync do
   task :export_public_goods, [:path] => :environment do |_, params|
     puts 'Exporting OSC and Digital Square global goods ...'
 
-    session = ActionDispatch::Integration::Session.new(Rails.application)
-    session.get "/productlist?source=dial_osc"
-    prod_list = JSON.parse(session.response.body)
-    prod_list.each do |prod|
-      File.open("export/"+slug_em(prod['name'])+".json","w") do |f|
-        f.write(JSON.pretty_generate prod)
-      end
-    end
-
-    session.get "/productlist?source=digital_square"
-    prod_list = JSON.parse(session.response.body)
-    prod_list.each do |prod|
-      File.open("export/"+slug_em(prod['name'])+".json","w") do |f|
-        f.write(JSON.pretty_generate prod)
-      end
-    end
+    export_products('dial_osc')
+    export_products('digital_square')
+  
   end
 
   desc 'Create parent-child links for products that have multiple repos'
@@ -207,6 +194,37 @@ namespace :sync do
           end
         end
       end
+    end
+  end
+
+  task :update_public_goods_repo, [:path] => :environment do |_, params|
+    puts 'Updating changes to OSC and Digital Square goods to publicgoods repository'
+
+    export_products('dial_osc')
+    export_products('digital_square')
+
+    Dir.entries('./export').select { |item| item.include? '.json' }.each do |entry|
+      product_file = entry
+      if !File.exist?('./products/'+product_file)
+        puts entry
+        curr_prod = Product.where(slug: entry.chomp('.json').gsub("-","_")).first
+        curr_prod['aliases'].each do |prod_alias|
+          alias_file = slug_em(prod_alias).gsub("_","-")+".json"
+          if File.exist?('../publicgoods/products/'+alias_file)
+            product_file = alias_file
+          end
+        end
+      end
+      if File.exist?("../publicgoods/products/"+product_file)
+        File.open("../publicgoods/products/"+product_file,"r") do |f|
+          #If you don't find the entry, load the product and try the aliases
+          #Only export if it has an SDG attached
+        end
+      else
+        puts "CANT FIND: " + product_file
+      end
+
+      # Push file to products directory. Can do a git push origin manually
     end
   end
 
