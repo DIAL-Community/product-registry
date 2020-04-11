@@ -142,6 +142,7 @@ var aggregator = {
       
       // Hightlight our initial country list.
       highlightCountries(Object.keys(aggregator.aggregatorsByCountry));
+      $("#loading-spinner").hide();
 
       Object.keys(aggregator.aggregators).sort().forEach(function(aggregator_id) {
         const organization = aggregator.aggregators[aggregator_id];
