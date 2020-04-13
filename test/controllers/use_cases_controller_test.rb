@@ -28,7 +28,8 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create use_case" do
     assert_difference('UseCase.count') do
-      post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name, sector_id: @use_case.sector_id, slug: @use_case.slug } }
+      post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
+                                                sector_id: @use_case.sector_id, slug: @use_case.slug } }
     end
 
     assert_redirected_to use_case_url(UseCase.last)
@@ -45,7 +46,8 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update use_case" do
-    patch use_case_url(@use_case), params: { use_case: { uc_desc: @use_case.description, name: @use_case.name, sector_id: @use_case.sector_id, slug: @use_case.slug } }
+    patch use_case_url(@use_case), params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
+                                                         sector_id: @use_case.sector_id, slug: @use_case.slug } }
     assert_redirected_to use_case_url(@use_case)
   end
 
@@ -72,8 +74,9 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_equal(1, assigns(:use_cases).count)
 
     # Now add a workflow filter
-    param = {'filter_name' => 'workflows', 'filter_value' => use_case2.workflows[0].id, 'filter_label' => use_case2.workflows[0].name}
-    post "/add_filter", params: param
+    param = { 'filter_name' => 'workflows', 'filter_value' => use_case2.use_case_steps[0].workflows[0].id,
+              'filter_label' => use_case2.use_case_steps[0].workflows[0].name }
+    post '/add_filter', params: param
 
     # With additional filter, should now load 0
     get use_cases_url

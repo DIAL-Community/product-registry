@@ -6,7 +6,7 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps
                              product_suites operator_services settings glossaries portal_views].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
@@ -36,11 +36,20 @@ module ApplicationHelper
     base_path == 'users' && base_path = 'admin/users'
 
     # Special case for the candidate organizations.
-    # * Non registered user should go to organizations list instead of candidate list in the crumb.
+    # Non registered user should go to organizations list instead of candidate list in the crumb.
     base_label = params[:controller].titlecase
     if base_path == 'candidate_organizations' && !policy(CandidateOrganization).view_allowed?
       base_path = 'organizations'
       base_label = 'Organizations'
+    end
+
+    if params[:controller].downcase == 'use_case_steps'
+      base_path = 'use_cases'
+      base_label = 'Use Cases'
+      if params[:use_case_id].present?
+        parent_path = "use_cases/#{params[:use_case_id]}"
+        parent_label = UseCase.find(params[:use_case_id]).name
+      end
     end
 
     object_class = params[:controller].classify.constantize
@@ -57,8 +66,14 @@ module ApplicationHelper
       end
     end
 
-    { base_path: base_path, base_label: base_label,
-      id_path: "#{base_path}/#{params[:id]}", id_label: id_label }
+    {
+      base_path: base_path,
+      base_label: base_label,
+      parent_path: parent_path,
+      parent_label: parent_label,
+      id_path: "#{base_path}/#{params[:id]}",
+      id_label: id_label
+    }
   end
 
   def filter_count(filter_name)

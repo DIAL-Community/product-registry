@@ -49,8 +49,10 @@ Rails.application.routes.draw do
 
   resources :sdg_targets, only: [:index, :show]
 
+  resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
   resources :use_cases do
     get 'count', on: :collection
+    resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
   end
 
   resources :workflows do
@@ -112,6 +114,7 @@ Rails.application.routes.draw do
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
   get 'project_duplicates', to: 'projects#duplicates'
   get 'portal_view_duplicates', to: 'portal_views#duplicates'
+  get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
 
   get 'productlist', :to => 'products#productlist', as: :productlist
   get 'productmap', :to => 'products#map'

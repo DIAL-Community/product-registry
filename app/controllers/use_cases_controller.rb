@@ -18,7 +18,7 @@ class UseCasesController < ApplicationController
       @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
 
-    @use_cases = @use_cases.eager_load(:workflows, :sdg_targets)
+    @use_cases = @use_cases.eager_load(:sdg_targets)
     authorize @use_cases, :view_allowed?
   end
 
@@ -74,13 +74,6 @@ class UseCasesController < ApplicationController
       end
     end
 
-    if (params[:selected_workflows])
-      params[:selected_workflows].keys.each do |workflow_id|
-        workflow = Workflow.find(workflow_id)
-        @use_case.workflows.push(workflow)
-      end
-    end
-
     respond_to do |format|
       if @use_case.save
         if (use_case_params[:uc_desc])
@@ -112,15 +105,6 @@ class UseCasesController < ApplicationController
       end
     end
     @use_case.sdg_targets = sdg_targets.to_a
-
-    workflows = Set.new
-    if (params[:selected_workflows])
-      params[:selected_workflows].keys.each do |workflow_id|
-        workflow = Workflow.find(workflow_id)
-        workflows.add(workflow)
-      end
-    end
-    @use_case.workflows = workflows.to_a
 
     if (use_case_params[:uc_desc])
       @ucDesc.use_case_id = @use_case.id
@@ -248,9 +232,10 @@ class UseCasesController < ApplicationController
       uc_workflows = []
       workflow_ids = filter_and_intersect_arrays([workflows, workflow_product_ids, workflow_bb_ids])
       if !workflow_ids.nil? && !workflow_ids.empty?
-        uc_workflows += UseCase.joins(:workflows)
-                               .where('workflows.id in (?)', workflow_ids)
-                               .ids
+        uc_workflows += UseCaseStep.joins(:workflows)
+                                   .where('workflows.id in (?)', workflow_ids)
+                                   .select('use_case_id')
+                                   .pluck('use_case_id')
       end
 
       if filter_set
