@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
   def index
     if params[:without_paging]
       @projects = Project.name_contains(params[:search])
+                         .eager_load(:locations)
                          .order(:name)
       return
     end

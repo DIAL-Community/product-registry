@@ -3,7 +3,12 @@ module WorkflowsHelper
     images = []
     case category
     when 'use_cases'
-      workflow.use_cases.each do |use_case|
+      use_cases = []
+      workflow.use_case_steps.each do |use_case_step|
+        use_cases |= [use_case_step.use_case]
+      end
+
+      use_cases.each do |use_case|
         next if use_case.nil?
 
         tooltip = use_case.name

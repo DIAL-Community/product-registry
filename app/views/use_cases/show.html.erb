@@ -18,13 +18,45 @@
     <p class="float-right mb-0" >
       <%= link_to 'Back', use_cases_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@use_case).mod_allowed? %>
-        <%= link_to 'Edit', edit_use_case_path(@use_case), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), edit_use_case_path(@use_case), :class => "card-link" %>
       <% end %>
   </div>
 </div>
 
+<div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.use-case.show.use-case-steps') %></h5>
+    <h5 class="float-right mb-0">
+      <%= link_to t('view.general.add'), new_use_case_use_case_step_path(@use_case), class: "card-link small" %>
+    </h5>
+  </div>
+  <% if @use_case.use_case_steps.count > 0 %>
+    <div class="row">
+      <% @use_case.use_case_steps.order("step_number").each_with_index do |use_case_step, index| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <p class="card-text mb-0">
+                <%= link_to(use_case_use_case_step_path(@use_case, use_case_step)) do %>
+                  <%= "#{index + 1}. #{use_case_step.name}" %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-12">
+          <small class="text-muted"><%= t('view.use-case-step.show.no-data') %></small>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 <% if @use_case.sdg_targets.count > 0 %>
-  <div class="mt-4">
+  <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
     </div>
@@ -44,14 +76,20 @@
   </div>
 <% end %>
 
-<% if @use_case.workflows.count > 0 %>
-  <% building_blocks = [] %>
-  <div class="mt-4">
+<% if @use_case.use_case_steps.count > 0
+     workflows = []
+     @use_case.use_case_steps.each do |use_case_step|
+       workflows = workflows | use_case_step.workflows 
+     end
+
+     building_blocks = []
+%>
+  <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
     </div>
     <div class="row">
-      <% @use_case.workflows.order("name").each do |workflow| %>
+      <% workflows.sort_by{|workflow| workflow.name.downcase }.each do |workflow| %>
         <% building_blocks = building_blocks | workflow.building_blocks %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
@@ -67,7 +105,7 @@
     </div>
   </div>
 
-  <div class="mt-4">
+  <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
     </div>

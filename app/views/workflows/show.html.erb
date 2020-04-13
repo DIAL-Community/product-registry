@@ -19,14 +19,19 @@
   </div>
 </div>
 
-<% if @workflow.use_cases.count > 0 %>
+<% if @workflow.use_case_steps.count > 0
+     use_cases = []
+     @workflow.use_case_steps.each do |use_case_step|
+       use_cases |= [use_case_step.use_case]
+     end
+%>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.use-case').to_s.titlecase.pluralize %></h5>
     </div>
 
       <div class="row">
-        <% @workflow.use_cases.order("name").each do |use_case| %>
+        <% use_cases.sort_by{|use_case| use_case.name.downcase }.each do |use_case| %>
           <div class="col-6 col-lg-4 mt-2">
             <div class="card h-100">
               <%= image_tag(use_case.image_file, class: 'card-img-top mx-auto w-25 px-0 pt-2 pb-0') %>
@@ -64,5 +69,5 @@
 <% end %>
 
 <script>
-        setUpViewer(<%= raw JSON.generate(@wfDesc.description) %>)
+        setUpViewer(<%= raw JSON.generate(@wf_desc.description) %>)
 </script>

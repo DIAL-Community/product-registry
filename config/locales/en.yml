@@ -60,6 +60,7 @@ en:
     sector: sector
     setting: setting
     use-case: use case
+    use-case-step: use case step
     user: user
     workflow: workflow
     sdg: sdg
@@ -454,6 +455,7 @@ en:
         steps: Steps for this use case include
         sdg-targets: SDG Targets
         no-sdg-targets: We don't have any SDG target information for this use case.
+        use-case-steps: Use Case Steps
     user:
       role:
         admin: Administrator
@@ -506,6 +508,7 @@ en:
         short-description: Short Description
     general:
       action: Action
+      add: Add
       back: Back
       create: Create New
       delete: Delete
@@ -549,6 +552,13 @@ en:
       product-origin: product origin
       org-type: organization type
       subdomain: Sub Domain
+    use-case-step:
+      show:
+        other-steps: Steps in Use Case
+        no-data: We couldn't find any step for this use case.
+      form:
+        use-case: Use Case
+        step-number: Step number
   will_paginate:
     previous_label: "&#8592; Previous"
     next_label: "Next &#8594;"
