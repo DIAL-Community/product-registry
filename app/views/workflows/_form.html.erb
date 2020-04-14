@@ -13,29 +13,6 @@
   <%= form.hidden_field :wf_desc, id: :workflow_desc %>
   <div class="wysiwyg-editor">
   </div>
-
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
-    <%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize.titlecase) %>
-  </h6>
-
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="use-case-search" class="form-control"
-           placeholder="<%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize) %>" />
-    <label for="workflow-use-case">
-      <%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize) %>
-    </label>
-  </fieldset>
-  <div class="row">
-    <div class="col-12">
-      <span id="base-selected-use-cases" class="selected-element badge badge-secondary px-1 mb-1">
-        <span class="text-label"></span>
-        <a onclick="remove(this);" style="cursor: pointer;">
-          <i class="fas fa-trash-alt"></i>
-        </a>
-        <input type="hidden"/>
-      </span>
-    </div>
-  </div>
   
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
@@ -66,14 +43,11 @@
 <% end %>
 
 <script>
-  <% workflow.use_cases.order("name").each do |use_case| %>
-    addUseCase('<%= use_case.id %>', '<%= use_case.name %>');
-  <% end %>
   <% workflow.building_blocks.order("name").each do |building_block| %>
     addBuildingBlock('<%= building_block.id %>', '<%= building_block.name %>');
   <% end %>
 
-  var editor = setUpEditor(<%= raw JSON.generate(@wfDesc.description) %>);
+  var editor = setUpEditor(<%= raw JSON.generate(@wf_desc.description) %>);
   var form = document.querySelector('#workflow-form');
   form.onsubmit = function() {
     var workflowDesc = $('#workflow_desc');

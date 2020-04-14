@@ -47,29 +47,6 @@
     </div>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-    <%= t('view.multi-select.assigned.title', model: t('model.workflow').to_s.pluralize.humanize) %>
-  </h6>
-
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="workflow-search" class="form-control"
-           placeholder="<%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>" />
-    <label for="use-case-workflow">
-      <%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>
-    </label>
-  </fieldset>
-  <div class="row">
-    <div class="col-12">
-      <span id="base-selected-workflows" class="selected-element badge badge-secondary px-1 mb-1">
-        <span class="text-label"></span>
-        <a onclick="remove(this);" style="cursor: pointer;">
-          <i class="fas fa-trash-alt"></i>
-        </a>
-        <input type="hidden"/>
-      </span>
-    </div>
-  </div>
-
   <fieldset class="float-right mt-4">
     <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
@@ -79,9 +56,6 @@
 <script>
   <% use_case.sdg_targets.order("target_number").each do |sdg_target| %>
     addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.target_number %> : <%= sdg_target.name %>');
-  <% end %>
-  <% use_case.workflows.order("name").each do |workflow| %>
-    addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 
   var editor = setUpEditor(<%= raw JSON.generate(@ucDesc.description) %>);

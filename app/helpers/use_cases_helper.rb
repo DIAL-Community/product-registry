@@ -11,7 +11,12 @@ module UseCasesHelper
         images.push(image)
       end
     when 'workflows'
-      use_case.workflows.each do |workflow|
+      workflows = []
+      use_case.use_case_steps.each do |use_case_step|
+        workflows |= use_case_step.workflows
+      end
+
+      workflows.each do |workflow|
         next if workflow.nil?
 
         tooltip = workflow.name

@@ -12,11 +12,18 @@
         <%= breadcrumbs[:base_label] %>
       </a>
     </li>
+    <% if breadcrumbs[:parent_path].present? && !breadcrumbs[:parent_path].nil? %>
+      <li class="breadcrumb-item" aria-current="page">
+        <a href='/<%= breadcrumbs[:parent_path] %>'>
+          <%= breadcrumbs[:parent_label] %>
+        </a>
+      </li>
+    <% end %>
     <% if params[:id] && params[:action] == 'show'%>
       <li class="breadcrumb-item active" aria-current="page">
         <%= breadcrumbs[:id_label] %>
       </li>
-    <% else %>
+    <% elsif params[:id] && params[:action] == 'edit'%>
       <li class="breadcrumb-item" aria-current="page">
         <a href='/<%= breadcrumbs[:id_path] %>'>
           <%= breadcrumbs[:id_label] %>
