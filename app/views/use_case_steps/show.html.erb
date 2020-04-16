@@ -1,24 +1,93 @@
-<p id="notice"><%= notice %></p>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @use_case_step.name %>
-</p>
+<% if @use_case_step.use_case.use_case_steps.count > 0 %>
+  <div class="mt-4">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0">
+        <%= "#{t('view.use-case-step.show.other-steps')}: #{@use_case_step.use_case.name}" %>
+      </h5>
+    </div>
+    <div class="row">
+      <% @use_case_step.use_case.use_case_steps.order("step_number").each_with_index do |use_case_step, index| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body pb-2 pt-2">
+              <p class="card-text mb-0">
+                <%= link_to(use_case_use_case_step_path(@use_case_step.use_case, use_case_step)) do %>
+                  <%= "#{index + 1}. #{use_case_step.name}" %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
 
-<p>
-  <strong>Slug:</strong>
-  <%= @use_case_step.slug %>
-</p>
+<div class="card mt-2">
+  <div class="bg-secondary text-white card-header">
+    <h5 class="float-left mb-0">
+      <%= "#{t('model.use-case-step').to_s.titlecase}: #{@use_case_step.name}" %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <div class="wysiwyg-viewer"></div>
+    <p class="float-right mb-0" >
+      <%= link_to 'Back to Parent', use_case_path(@use_case_step.use_case), class: "card-link" %>
+      <% if user_signed_in? && policy(@use_case_step).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_use_case_use_case_step_path(@use_case_step.use_case, @use_case_step), class: "card-link" %>
+        <%= link_to t('view.general.delete'), @use_case_step, method: :delete,
+                    data: { confirm: t('view.general.delete-confirmation') }, class: "card-link" %>
+      <% end %>
+  </div>
+</div>
 
-<p>
-  <strong>Step number:</strong>
-  <%= @use_case_step.step_number %>
-</p>
+<% if @use_case_step.workflows.count > 0 %>
+  <% building_blocks = [] %>
+  <div class="mt-2">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
+    </div>
+    <div class="row">
+      <% @use_case_step.workflows.order("name").each do |workflow| %>
+        <% building_blocks = building_blocks | workflow.building_blocks %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body px-1 py-1">
+              <%= image_tag(workflow.image_file, class: 'footer-img') %>
+              <span class="card-text text-muted mt-2">
+                <%= link_to workflow.name, workflow %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 
-<p>
-  <strong>Use case:</strong>
-  <%= @use_case_step.use_case_id %>
-</p>
+  <div class="mt-2">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
+    </div>
+    <div class="row">
+      <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body px-1 py-1">
+              <%= image_tag(building_block.image_file, class: 'footer-img-small') %>
+              <span class="card-text text-muted mb-0">
+                <%= link_to building_block.name, building_block %>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
 
-<%= link_to 'Edit', edit_use_case_step_path(@use_case_step) %> |
-<%= link_to 'Back', use_case_steps_path %>
+<script>
+  setUpViewer(<%= raw JSON.generate(@ucs_desc.description) %>)
+</script>

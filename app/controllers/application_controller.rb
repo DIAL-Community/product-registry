@@ -303,9 +303,11 @@ class ApplicationController < ActionController::Base
   def get_use_cases_from_workflows(workflows)
     use_cases_ids = []
     if !workflows.empty?
-      workflow_use_cases = UseCase.joins(:workflows)
-                                  .where('workflows.id in (?)', workflows)
-      use_cases_ids = workflow_use_cases.ids
+      workflow_use_cases = UseCaseStep.joins(:workflows)
+                                      .where('workflows.id in (?)', workflows)
+                                      .select('use_case_id')
+                                      .pluck('use_case_id')
+      use_cases_ids = workflow_use_cases
     end
     use_cases_ids
   end
@@ -315,9 +317,11 @@ class ApplicationController < ActionController::Base
     if !bbs.empty?
       bb_workflows = Workflow.joins(:building_blocks)
                              .where('building_blocks.id in (?)', bbs)
-      bb_use_cases = UseCase.joins(:workflows)
-                            .where('workflows.id in (?)', bb_workflows.ids)
-      use_cases_ids = bb_use_cases.ids
+      bb_use_cases = UseCaseStep.joins(:workflows)
+                                .where('workflows.id in (?)', bb_workflows.ids)
+                                .select('use_case_id')
+                                .pluck('use_case_id')
+      use_cases_ids = bb_use_cases
     end
     use_cases_ids
   end
@@ -338,8 +342,8 @@ class ApplicationController < ActionController::Base
   def get_workflows_from_use_cases(use_cases)
     workflow_ids = []
     if !use_cases.nil? && !use_cases.empty?
-      workflow_use_cases = Workflow.joins(:use_cases)
-                                   .where('use_cases.id in (?)', use_cases)
+      workflow_use_cases = Workflow.joins(:use_case_steps)
+                                   .where('use_case_steps.use_case_id in (?)', use_cases)
       workflow_ids = workflow_use_cases.ids
     end
     workflow_ids
@@ -353,8 +357,8 @@ class ApplicationController < ActionController::Base
       sdg_targets = SdgTarget.where('sdg_number in (?)', sdgs)
       sdg_use_cases = UseCase.joins(:sdg_targets)
                              .where('sdg_targets.id in (?)', sdg_targets.ids)
-      workflow_sdgs = Workflow.joins(:use_cases)
-                              .where('use_cases.id in (?)', sdg_use_cases.ids)
+      workflow_sdgs = Workflow.joins(:use_case_steps)
+                              .where('use_case_steps.use_case_id in (?)', sdg_use_cases.ids)
       workflow_ids = workflow_sdgs.ids
     end
     workflow_ids
@@ -385,8 +389,8 @@ class ApplicationController < ActionController::Base
   def get_bbs_from_use_cases(use_cases)
     bbs_ids = []
     if !use_cases.empty?
-      use_case_workflows = Workflow.joins(:use_cases)
-                                   .where('use_cases.id in (?)', use_cases)
+      use_case_workflows = Workflow.joins(:use_case_steps)
+                                   .where('use_case_steps.use_case_id in (?)', use_cases)
       use_case_bbs = BuildingBlock.joins(:workflows)
                                   .where('workflows.id in (?)', use_case_workflows.ids)
       bbs_ids += use_case_bbs.ids

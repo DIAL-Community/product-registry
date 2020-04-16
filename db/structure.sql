@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -203,8 +204,6 @@ CREATE TYPE public.user_role AS ENUM (
 
 
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
@@ -1463,6 +1462,37 @@ ALTER SEQUENCE public.use_case_descriptions_id_seq OWNED BY public.use_case_desc
 
 
 --
+-- Name: use_case_step_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.use_case_step_descriptions (
+    id bigint NOT NULL,
+    use_case_step_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL
+);
+
+
+--
+-- Name: use_case_step_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.use_case_step_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: use_case_step_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.use_case_step_descriptions_id_seq OWNED BY public.use_case_step_descriptions.id;
+
+
+--
 -- Name: use_case_steps; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1494,6 +1524,16 @@ CREATE SEQUENCE public.use_case_steps_id_seq
 --
 
 ALTER SEQUENCE public.use_case_steps_id_seq OWNED BY public.use_case_steps.id;
+
+
+--
+-- Name: use_case_steps_workflows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.use_case_steps_workflows (
+    use_case_step_id bigint NOT NULL,
+    workflow_id bigint NOT NULL
+);
 
 
 --
@@ -1890,6 +1930,13 @@ ALTER TABLE ONLY public.use_case_descriptions ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- Name: use_case_step_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_step_descriptions ALTER COLUMN id SET DEFAULT nextval('public.use_case_step_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: use_case_steps id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2178,6 +2225,14 @@ ALTER TABLE ONLY public.sustainable_development_goals
 
 ALTER TABLE ONLY public.use_case_descriptions
     ADD CONSTRAINT use_case_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: use_case_step_descriptions use_case_step_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_step_descriptions
+    ADD CONSTRAINT use_case_step_descriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2473,6 +2528,13 @@ CREATE INDEX index_use_case_descriptions_on_use_case_id ON public.use_case_descr
 
 
 --
+-- Name: index_use_case_step_descriptions_on_use_case_step_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_use_case_step_descriptions_on_use_case_step_id ON public.use_case_step_descriptions USING btree (use_case_step_id);
+
+
+--
 -- Name: index_use_case_steps_on_use_case_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2683,6 +2745,13 @@ CREATE UNIQUE INDEX sectors_projects_idx ON public.projects_sectors USING btree 
 
 
 --
+-- Name: use_case_steps_workflows_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX use_case_steps_workflows_idx ON public.use_case_steps_workflows USING btree (use_case_step_id, workflow_id);
+
+
+--
 -- Name: usecases_sdgs; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2715,6 +2784,13 @@ CREATE UNIQUE INDEX users_products_idx ON public.users_products USING btree (use
 --
 
 CREATE UNIQUE INDEX workflows_bbs ON public.workflows_building_blocks USING btree (workflow_id, building_block_id);
+
+
+--
+-- Name: workflows_use_case_steps_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX workflows_use_case_steps_idx ON public.use_case_steps_workflows USING btree (workflow_id, use_case_step_id);
 
 
 --
@@ -2794,6 +2870,14 @@ ALTER TABLE ONLY public.workflow_descriptions
 
 ALTER TABLE ONLY public.deploys
     ADD CONSTRAINT fk_rails_7995634207 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: use_case_step_descriptions fk_rails_7c6b0affba; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_step_descriptions
+    ADD CONSTRAINT fk_rails_7c6b0affba FOREIGN KEY (use_case_step_id) REFERENCES public.use_case_steps(id);
 
 
 --
@@ -3093,6 +3177,22 @@ ALTER TABLE ONLY public.product_product_relationships
 
 
 --
+-- Name: use_case_steps_workflows use_case_steps_workflows_step_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps_workflows
+    ADD CONSTRAINT use_case_steps_workflows_step_fk FOREIGN KEY (use_case_step_id) REFERENCES public.use_case_steps(id);
+
+
+--
+-- Name: use_case_steps_workflows use_case_steps_workflows_workflow_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps_workflows
+    ADD CONSTRAINT use_case_steps_workflows_workflow_fk FOREIGN KEY (workflow_id) REFERENCES public.workflows(id);
+
+
+--
 -- Name: use_cases_sdg_targets usecases_sdgs_sdg_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3146,22 +3246,6 @@ ALTER TABLE ONLY public.workflows_building_blocks
 
 ALTER TABLE ONLY public.workflows_building_blocks
     ADD CONSTRAINT workflows_bbs_workflow_fk FOREIGN KEY (workflow_id) REFERENCES public.workflows(id);
-
-
---
--- Name: workflows_use_cases workflows_usecases_usecase_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.workflows_use_cases
-    ADD CONSTRAINT workflows_usecases_usecase_fk FOREIGN KEY (use_case_id) REFERENCES public.use_cases(id);
-
-
---
--- Name: workflows_use_cases workflows_usecases_workflow_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.workflows_use_cases
-    ADD CONSTRAINT workflows_usecases_workflow_fk FOREIGN KEY (workflow_id) REFERENCES public.workflows(id);
 
 
 --
@@ -3240,6 +3324,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200224225415'),
 ('20200303191546'),
 ('20200318153113'),
-('20200403183400');
+('20200403183400'),
+('20200408151430'),
+('20200409175231'),
+('20200410181908');
 
 

@@ -1,6 +1,11 @@
-<h1>Editing Use Case Step</h1>
-
+<% if @use_case_step.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <%= t('view.general.error', count: @use_case_step.errors.count) %>
+    </div>
+  </div>
+<% end %>
+<h5 class="border rounded bg-secondary text-white p-3">
+  <%= t('view.general.title.edit', model: t('model.use-case-step')) %>
+</h5>
 <%= render 'form', use_case_step: @use_case_step %>
-
-<%= link_to 'Show', @use_case_step %> |
-<%= link_to 'Back', use_case_steps_path %>

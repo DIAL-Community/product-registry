@@ -11,7 +11,7 @@ class WorkflowsController < ApplicationController
       return
     end
 
-    @workflows = filter_workflows.eager_load(:building_blocks, :use_cases).order(:name)
+    @workflows = filter_workflows.eager_load(:building_blocks, :use_case_steps).order(:name)
 
     if params[:search]
       @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%#{params[:search]}%")
@@ -41,7 +41,7 @@ class WorkflowsController < ApplicationController
   def new
     authorize Workflow, :mod_allowed?
     @workflow = Workflow.new
-    @wfDesc = WorkflowDescription.new
+    @wf_desc = WorkflowDescription.new
   end
 
   # GET /workflows/1/edit
@@ -54,16 +54,9 @@ class WorkflowsController < ApplicationController
   def create
     authorize Workflow, :mod_allowed?
     @workflow = Workflow.new(workflow_params)
-    @wfDesc = WorkflowDescription.new
+    @wf_desc = WorkflowDescription.new
 
-    if (params[:selected_use_cases])
-      params[:selected_use_cases].keys.each do |use_case_id|
-        use_case = UseCase.find(use_case_id)
-        @workflow.use_cases.push(use_case)
-      end
-    end
-
-    if (params[:selected_building_blocks])
+    if params[:selected_building_blocks].present?
       params[:selected_building_blocks].keys.each do |building_block_id|
         building_block = BuildingBlock.find(building_block_id)
         @workflow.building_blocks.push(building_block)
@@ -72,11 +65,11 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       if @workflow.save
-        if (workflow_params[:wf_desc])
-          @wfDesc.workflow_id = @workflow.id
-          @wfDesc.locale = I18n.locale
-          @wfDesc.description = JSON.parse(workflow_params[:wf_desc])
-          @wfDesc.save
+        if workflow_params[:wf_desc].present?
+          @wf_desc.workflow_id = @workflow.id
+          @wf_desc.locale = I18n.locale
+          @wf_desc.description = JSON.parse(workflow_params[:wf_desc])
+          @wf_desc.save
         end
 
         format.html { redirect_to @workflow,
@@ -94,15 +87,6 @@ class WorkflowsController < ApplicationController
   def update
     authorize @workflow, :mod_allowed?
 
-    use_cases = Set.new
-    if (params[:selected_use_cases])
-      params[:selected_use_cases].keys.each do |use_case_id|
-        use_case = UseCase.find(use_case_id)
-        use_cases.add(use_case)
-      end
-    end
-    @workflow.use_cases = use_cases.to_a
-
     building_blocks = Set.new
     if (params[:selected_building_blocks])
       params[:selected_building_blocks].keys.each do |building_block_id|
@@ -112,11 +96,11 @@ class WorkflowsController < ApplicationController
     end
     @workflow.building_blocks = building_blocks.to_a
 
-    if (workflow_params[:wf_desc])
-      @wfDesc.workflow_id = @workflow.id
-      @wfDesc.locale = I18n.locale
-      @wfDesc.description = JSON.parse(workflow_params[:wf_desc])
-      @wfDesc.save
+    if workflow_params[:wf_desc].present?
+      @wf_desc.workflow_id = @workflow.id
+      @wf_desc.locale = I18n.locale
+      @wf_desc.description = JSON.parse(workflow_params[:wf_desc])
+      @wf_desc.save
     end
 
     respond_to do |format|
@@ -160,9 +144,9 @@ class WorkflowsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_workflow
       @workflow = Workflow.find_by(id: params[:id]) or not_found
-      @wfDesc = WorkflowDescription.where(workflow_id: params[:id], locale: I18n.locale).first
-      if !@wfDesc
-        @wfDesc = WorkflowDescription.new
+      @wf_desc = WorkflowDescription.where(workflow_id: params[:id], locale: I18n.locale).first
+      if !@wf_desc
+        @wf_desc = WorkflowDescription.new
       end
     end
 

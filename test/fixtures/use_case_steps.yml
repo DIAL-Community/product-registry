@@ -1,0 +1,10 @@
+
+one:
+  name: Use Case Step One
+  slug: use_case_step_one
+  use_case: one
+
+two:
+  name: Use Case Step Two
+  slug: use_case_step_two
+  use_case: two
