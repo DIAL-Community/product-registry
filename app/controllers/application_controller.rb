@@ -303,9 +303,11 @@ class ApplicationController < ActionController::Base
   def get_use_cases_from_workflows(workflows)
     use_cases_ids = []
     if !workflows.empty?
-      workflow_use_cases = UseCase.joins(:workflows)
-                                  .where('workflows.id in (?)', workflows)
-      use_cases_ids = workflow_use_cases.ids
+      workflow_use_cases = UseCaseStep.joins(:workflows)
+                                      .where('workflows.id in (?)', workflows)
+                                      .select('use_case_id')
+                                      .pluck('use_case_id')
+      use_cases_ids = workflow_use_cases
     end
     use_cases_ids
   end
@@ -315,9 +317,11 @@ class ApplicationController < ActionController::Base
     if !bbs.empty?
       bb_workflows = Workflow.joins(:building_blocks)
                              .where('building_blocks.id in (?)', bbs)
-      bb_use_cases = UseCase.joins(:workflows)
-                            .where('workflows.id in (?)', bb_workflows.ids)
-      use_cases_ids = bb_use_cases.ids
+      bb_use_cases = UseCaseStep.joins(:workflows)
+                                .where('workflows.id in (?)', bb_workflows.ids)
+                                .select('use_case_id')
+                                .pluck('use_case_id')
+      use_cases_ids = bb_use_cases
     end
     use_cases_ids
   end
