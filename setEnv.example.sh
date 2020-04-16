@@ -13,6 +13,8 @@ if [ "${user_env:0:1}" == "d" ] || [ "${user_env:0:1}" == "D" ]; then
   export DATABASE_NAME=registry_development
   export DATABASE_USER=registry
   export DATABASE_PASSWORD=<DB password>
+  export DATABASE_HOST=localhost
+  export DATABASE_PORT=5432
   export TEST_DATABASE_NAME=registry_test
   export TEST_DATABASE_USER=registry
   export TEST_DATABASE_PASSWORD=<DB password>
@@ -34,6 +36,8 @@ if [ "${user_env:0:1}" == "t" ] || [ "${user_env:0:1}" == "T" ]; then
   export DATABASE_NAME=registry_development
   export DATABASE_USER=registry
   export DATABASE_PASSWORD=<DB password>
+  export DATABASE_HOST=localhost
+  export DATABASE_PORT=5432
   export TEST_DATABASE_NAME=registry_test
   export TEST_DATABASE_USER=registry
   export TEST_DATABASE_PASSWORD=<DB password>
@@ -55,6 +59,8 @@ if [ "${user_env:0:1}" == "p" ] || [ "${user_env:0:1}" == "P" ]; then
   export DATABASE_NAME=registry_development
   export DATABASE_USER=registry
   export DATABASE_PASSWORD=<DB password>
+  export DATABASE_HOST=localhost
+  export DATABASE_PORT=5432
   export TEST_DATABASE_NAME=registry_test
   export TEST_DATABASE_USER=registry
   export TEST_DATABASE_PASSWORD=<DB password>

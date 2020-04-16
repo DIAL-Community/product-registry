@@ -5,7 +5,7 @@ if [ -f tmp/pids/server.pid ]; then
   rm tmp/pids/server.pid
 fi
 
-until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_production" -c '\q'; do
+until PGPASSWORD=${POSTGRES_PASSWORD} psql -h ${POSTGRES_HOST}  -U ${POSTGRES_USER} -d ${POSTGRES_DB} -p ${POSTGRES_PORT}  -c '\q'; do
   sleep 2s
 done
 
