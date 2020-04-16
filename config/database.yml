@@ -46,7 +46,8 @@ test:
 production:
   <<: *default
   timeout: 5000
-  host: postgres
+  host: <%= ENV["DATABASE_HOST"] %>
+  port: <%= ENV["DATABASE_PORT"] %>
   adapter: postgresql
   encoding: unicode
   database: <%= ENV["DATABASE_NAME"] %>
