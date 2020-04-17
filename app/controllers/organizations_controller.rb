@@ -173,7 +173,7 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/new
   def new
-    authorize Organization, :mod_allowed?
+    authorize Organization, :create_allowed?
     @organization = Organization.new
     @organization_description = OrganizationDescription.new
   end
@@ -186,7 +186,7 @@ class OrganizationsController < ApplicationController
   # POST /organizations
   # POST /organizations.json
   def create
-    authorize Organization, :mod_allowed?
+    authorize Organization, :create_allowed?
     @organization = Organization.new(organization_params)
     @organization.set_current_user(current_user)
 
