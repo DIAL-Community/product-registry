@@ -6,13 +6,6 @@ h1 {
   color: #fbab18
 }
 
-#covid a {
+.tab-pane a {
   color: #fbab18 !important;
-}
-
-a#mobile, a#products {
-  display: block;
-  position: relative;
-  top: -120px; 
-  visibility: hidden;
 }

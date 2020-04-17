@@ -304,6 +304,7 @@ en:
       map:
         projects: Map of Projects
         all-projects: All projects
+        covid-response: COVID-19 Response
     sector:
       index:
         no-data: We couldn't find any sector in the database.
