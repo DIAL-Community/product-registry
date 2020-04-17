@@ -7,6 +7,10 @@ class ProjectsController < ApplicationController
       @projects = Project.name_contains(params[:search])
                          .eager_load(:locations)
                          .order(:name)
+      
+      if params[:origin]
+        @projects = @projects.where('origin_id=(select id from origins where slug like ?)', params[:origin])
+      end
       return
     end
 
@@ -180,6 +184,11 @@ class ProjectsController < ApplicationController
   end
 
   def map_projects
+    @projects = Project.eager_load(:locations)
+    authorize @projects, :view_allowed?
+  end
+
+  def map_covid
     @projects = Project.eager_load(:locations)
     authorize @projects, :view_allowed?
   end

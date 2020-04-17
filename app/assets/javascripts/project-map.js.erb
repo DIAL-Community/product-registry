@@ -89,17 +89,22 @@ var mapOfProject = {
     mapOfProject.map.on('click', mapOfProjectClickHandler);
   },
 
-  initLocations: function() {
+  initLocations: function(mapDisplay) {
     $.getJSON('/locations.json?without_paging=true', function(locations) {
       locations.forEach(function(location) {
         mapOfProject.locations[location.id] = location;
       });
-      mapOfProject.initProjects();
+      mapOfProject.initProjects(mapDisplay);
     });
   },
 
-  initProjects: function() {
-    $.getJSON('/projects.json?without_paging=true', function(projects) {
+  initProjects: function(mapDisplay) {
+    var url='/projects.json?without_paging=true';
+    if (mapDisplay == 'covid') {
+      url = 'projects.json?without_paging=true&origin=unicef_covid'
+    }
+
+    $.getJSON(url, function(projects) {
       projects
         .forEach(function(project) {
           const normalized = {
@@ -128,10 +133,10 @@ var mapOfProject = {
     });
   },
 
-  init: function() {
+  init: function(mapDisplay) {
     $("#map-of-project").empty();
     mapOfProject.initMap();
-    mapOfProject.initLocations();
+    mapOfProject.initLocations(mapDisplay);
   },
 };
 

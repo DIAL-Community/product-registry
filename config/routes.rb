@@ -116,9 +116,12 @@ Rails.application.routes.draw do
   get 'portal_view_duplicates', to: 'portal_views#duplicates'
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
 
+  get 'covidresources', :to => 'covid#resources'
+
   get 'productlist', :to => 'products#productlist', as: :productlist
   get 'productmap', :to => 'products#map'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   get 'map_projects', to: 'projects#map_projects'
+  get 'map_covid', to: 'projects#map_covid'
 end
