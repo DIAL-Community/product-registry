@@ -17,6 +17,13 @@ class OrganizationPolicy < ApplicationPolicy
     end
   end
 
+  def create_allowed?
+    if (user.role == 'principle' || user.role == 'admin')
+      return true
+    end
+    return false
+  end
+
   def mod_allowed?
     if record.is_a?(Organization) && user.organization_id == record.id
       return true
