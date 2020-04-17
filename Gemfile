@@ -12,6 +12,7 @@ gem 'will_paginate'
 gem "actionpack-page_caching"
 
 gem 'spreadsheet'
+gem 'google-api-client'
 
 gem 'addressable'
 

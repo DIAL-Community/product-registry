@@ -6,7 +6,7 @@
     <div id="loading-spinner" class="spinner-border spinner-border-sm" role="status">
       <span class="sr-only">Loading...</span>
     </div>
-    <%= t('view.project.map.projects') %>
+    <%= t('view.project.map.covid-response') %>
     <div class="float-right">
       <%= link_to products_path, class: 'no-hover' do %>
         <h5 class="text-white icon-inline"><%= t("view.about.return_catalog") %></h5>
@@ -31,5 +31,5 @@
 </div>
 
 <script>
-  mapOfProject.init('default')
+  mapOfProject.init('covid')
 </script>
