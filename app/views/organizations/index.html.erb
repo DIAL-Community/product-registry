@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col-12">
     <div class="float-right">
-      <% if user_signed_in? && policy(Organization).mod_allowed? %>
+      <% if user_signed_in? && policy(Organization).create_allowed? %>
         <%= link_to t('view.general.create'), new_organization_path, :class => 'small mr-1' %>
         <span class="small mr-1">&nbsp;|</span>
         <%= link_to t('view.organization.index.view-audit'), audits_path(type: "Organization"), :class => 'small mr-1' %>
