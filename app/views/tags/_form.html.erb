@@ -1,0 +1,31 @@
+<%= form_with(model: tag, local: true, html: { id: 'tag-form' }) do |form| %>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :tag_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= tag.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.use-case-step')) %>
+  </div>
+
+  <%= form.hidden_field :tag_desc, id: :tag_desc %>
+  <div class="wysiwyg-editor">
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var editor = setUpEditor(<%= raw JSON.generate(@tag_desc.description) %>);
+  var form = document.querySelector('#tag-form');
+  form.onsubmit = function() {
+    var tagDesc = $('#tag_desc');
+    tagDesc.val(JSON.stringify(editor.getContents()));
+  };
+</script>

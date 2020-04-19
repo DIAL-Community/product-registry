@@ -18,6 +18,31 @@ if Setting.where(slug: 'default_organization').count.zero?
                   value: 'digital_impact_alliance_dial'
 end
 
+if Setting.where(slug: 'default_covid19_tag').count.zero?
+  Setting.create! name: 'Default COVID-19 Tag',
+                  slug: 'default_covid19_tag',
+                  description: 'The default tag name for COVID-19 related objects.',
+                  value: 'COVID-19'
+end
+
+if Tag.where(slug: 'covid19').count.zero?
+  tag = Tag.create! name: 'COVID-19',
+                    slug: 'covid19'
+  TagDescription.create! tag_id: tag.id,
+                         locale: 'en',
+                         description: {
+                           "ops": [
+                             {
+                               'insert': 'Coronavirus disease 2019 (COVID-19) is an infectious disease caused by severe ' \
+                                         'acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The World Health ' \
+                                         'Organization (WHO) declared the 2019–20 coronavirus outbreak a Public Health ' \
+                                         'Emergency of International Concern (PHEIC) on 30 January 2020 and a pandemic ' \
+                                         'on 11 March 2020.'
+                             }
+                           ]
+                         }
+end
+
 if PortalView.where(slug: 'default').count.zero?
   PortalView.create! name: 'Default',
                   slug: 'default',

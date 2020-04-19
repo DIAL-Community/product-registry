@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tags
   resources :use_case_steps
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
@@ -115,6 +116,7 @@ Rails.application.routes.draw do
   get 'project_duplicates', to: 'projects#duplicates'
   get 'portal_view_duplicates', to: 'portal_views#duplicates'
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
+  get 'tag_duplicates', to: 'tags#duplicates'
 
   get 'covidresources', :to => 'covid#resources'
 

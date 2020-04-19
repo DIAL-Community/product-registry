@@ -11,7 +11,7 @@ class OrganizationsController < ApplicationController
   def index
     if params[:without_paging]
       @organizations = Organization
-      !params[:mni_only].nil? && @organizations = @organizations.where('is_mni is true') 
+      !params[:mni_only].nil? && @organizations = @organizations.where('is_mni is true')
       !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
       !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
       @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
@@ -41,8 +41,9 @@ class OrganizationsController < ApplicationController
 
     if params[:search].present?
       name_orgs = @organizations.name_contains(params[:search])
-      desc_orgs = @organizations.joins(:organization_descriptions).where("LOWER(description#>>'{}') like LOWER(?)", "%"+params[:search]+"%")
-      @organizations = @organizations.where(id: (name_orgs+desc_orgs).uniq)
+      desc_orgs = @organizations.joins(:organization_descriptions)
+                                .where("LOWER(description#>>'{}') like LOWER(?)", "%#{params[:search]}%")
+      @organizations = @organizations.where(id: (name_orgs + desc_orgs).uniq)
     end
 
     @organizations = @organizations.paginate(page: current_page, per_page: 20)
@@ -89,8 +90,10 @@ class OrganizationsController < ApplicationController
     workflows = sanitize_session_values 'workflows'
     bbs = sanitize_session_values 'building_blocks'
 
+    tags = sanitize_session_values 'tags'
+
     filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                   organizations.empty? && origins.empty? && projects.empty? &&
+                   organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
                    sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                  endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -121,7 +124,7 @@ class OrganizationsController < ApplicationController
                                  .select('products.id')
     end
 
-    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
 
     org_products = []
     product_ids = filter_and_intersect_arrays([sdg_products, bb_products, project_products, product_ids])
@@ -616,8 +619,12 @@ class OrganizationsController < ApplicationController
           if attr[:when_endorsed].present?
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
           end
-          if params[:other_names].present? && policy(Organization).permitted_attributes.include?(:aliases)
-            attr[:aliases] = params[:other_names].reject(&:empty?)
+          if policy(Organization).permitted_attributes.include?(:aliases)
+            valid_aliases = []
+            if params[:other_names].present?
+              valid_aliases = params[:other_names].reject(&:empty?)
+            end
+            attr[:aliases] = valid_aliases
           end
           if params[:reslug].present? && policy(Organization).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])

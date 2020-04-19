@@ -202,4 +202,10 @@ module ProductsHelper
     images
   end
 
+  def coronavirus_handler(product)
+    if @covid19_tag.nil?
+      @covid19_tag = Setting.find_by(slug: 'default_covid19_tag')
+    end
+    product.tags.map(&:downcase).include? @covid19_tag.value.downcase
+  end
 end

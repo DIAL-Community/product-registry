@@ -79,16 +79,19 @@
       <% end %>
     </div>
   </div>
-  <p class="float-right mb-0 mr-2" >
-    <%= link_to 'Back', organizations_path, :class => "card-link" %>
-    <% if user_signed_in? && policy(@organization).mod_allowed? %>
-      <%= link_to t('view.general.edit'), edit_organization_path(@organization), :class => "card-link" %>
-    <% end %>
-  </p>
+  <div class="row">
+    <div class="offset-8 col-4">
+      <p class="float-right mb-0 mr-2" >
+        <%= link_to 'Back', organizations_path, :class => "card-link" %>
+        <% if user_signed_in? && policy(@organization).mod_allowed? %>
+          <%= link_to t('view.general.edit'), edit_organization_path(@organization), :class => "card-link" %>
+        <% end %>
+      </p>
+  </div>
 </div>
 
 <% if user_signed_in? && (policy(Contact).view_allowed? || policy(@organization).mod_allowed?) %>
-  <div class="mt-4">
+  <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.contact').to_s.pluralize.humanize %></h5>
     </div>
@@ -125,7 +128,7 @@
 <% end %>
 
 <% if !@organization.is_mni ### Start for non-MNI data section. ### %>
-<div class="mt-4">
+<div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.sector').to_s.pluralize.humanize %></h5>
   </div>
@@ -146,7 +149,7 @@
   <% end %>
 </div>
 
-<div class="mt-4">
+<div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
   </div>
@@ -170,7 +173,7 @@
   <% end %>
 </div>
 
-<div class="mt-4">
+<div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.project').to_s.pluralize.humanize %></h5>
   </div>
@@ -192,7 +195,7 @@
 </div>
 <% end ### End for non-MNI data section. ### %>
 
-<div class="mt-4">
+<div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.country').to_s.pluralize.humanize %></h5>
   </div>
@@ -214,12 +217,12 @@
 </div>
 
 <% if @organization.is_mni && @can_view_mni %>
-  <div class="mt-4">
+  <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.operator_services').to_s.pluralize.humanize %></h5>
     </div>
     <div id="orgId" style="display:none"><%= @organization.id %></div>
-    <div id="agg-nav" class="card-body p-2 col-6 col-lg-4 mt-2 ml-4 accordion-section ">
+    <div id="agg-nav" class="card-body accordion-section p-0">
       <div class="mni-accordion">
         <% @organization.locations.each do |country| %>
           <h3 class="country-list" id="<%= country.id %>"><%= country.name %></h3>

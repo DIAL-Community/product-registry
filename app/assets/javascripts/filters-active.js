@@ -21,7 +21,7 @@ const removeActiveFilter = function(event) {
     updateCount();
     loadMainDiv();
     clearFilterCount(filter_name);
-    clearFilterItems(filter_name)
+    clearFilterItems(filter_name);
   });
 };
 

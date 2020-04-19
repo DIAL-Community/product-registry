@@ -60,11 +60,13 @@
   <label class="form-label-group mt-2" for="is_launchable">
     <%= t('view.product.form.is-launchable') %>
   </label>
+
   <fieldset class="form-label-group">
     <%= form.text_field :default_url, id: :default_url, class: "form-control",
         placeholder: t('view.product.form.default-url') %>
     <%= form.label :default_url, t('view.product.form.default-url') %>
   </fieldset>
+
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
@@ -138,6 +140,7 @@
         </div>
       </div>
     </div>
+
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.multi-select.assigned.title', model: t('model.sdg').to_s.upcase.pluralize) %>
@@ -201,6 +204,32 @@
       <div class="row">
         <div class="col-12">
           <span id="base-selected-included-products" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        <%= t('model.tag').titlecase.pluralize %>
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="tag-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>" />
+        <label for="tag-search">
+          <%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>
+        </label>
+      </fieldset>
+      <div class="row">
+        <div class="col-12">
+          <span id="base-selected-tags" class="selected-element badge badge-secondary px-1 mb-1">
             <span class="text-label"></span>
             <a onclick="remove(this);" style="cursor: pointer;">
               <i class="fas fa-trash-alt"></i>
@@ -357,6 +386,9 @@
   <% end %>
   <% product.aliases.each {|other_name| %>
     addOtherName('<%= other_name %>');
+  <% } %>
+  <% product.tags.each {|tag| %>
+    tagProduct('', '<%= tag %>');
   <% } %>
 
   var editor = setUpEditor(<%= raw JSON.generate(@product_description.description) %>, '<%= t('view.product.form.description-placeholder') %>');

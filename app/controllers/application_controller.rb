@@ -97,13 +97,15 @@ class ApplicationController < ActionController::Base
 
   def update_cookies(filter_name)
     case filter_name
-    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'organizations', 'projects'
-      cookies[:updated_prod_filter] = true
+    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'organizations', 'projects', 'tags'
+      session[:updated_prod_filter] = true
     end
   end
 
   def remove_filter
     return unless params.key? 'filter_array'
+
+    logger.debug("Removing filter: #{params['filter_array']}.")
 
     filter_array = params['filter_array']
     filter_array.each do |filter_item|
@@ -131,6 +133,8 @@ class ApplicationController < ActionController::Base
 
   def add_filter
     return unless params.key? 'filter_name'
+
+    logger.debug("Adding filter: #{params['filter_name']} -> {#{params['filter_value']}, #{params['filter_label']}}.")
 
     retval = false
     filter_name = params['filter_name']
@@ -174,13 +178,13 @@ class ApplicationController < ActionController::Base
     filters = {}
     ORGANIZATION_FILTER_KEYS.each do |key|
       if session[key]
-        logger.info "Organization filter in session: #{session[key]}"
+        logger.debug "Organization filter in session: #{session[key]}"
         filters[key] = session[key]
       end
     end
     FRAMEWORK_FILTER_KEYS.each do |key|
       if session[key]
-        logger.info "Framework filter in session: #{session[key]}"
+        logger.debug "Framework filter in session: #{session[key]}"
         filters[key] = session[key]
       end
     end
@@ -204,7 +208,11 @@ class ApplicationController < ActionController::Base
     filter_values = []
     if session.key? filter_name.to_s
       session[filter_name.to_s].each do |curr_filter|
-        filter_values.push(curr_filter['value'].to_i)
+        filter_value = curr_filter['value']
+        if filter_value.scan(/\D/).empty?
+          filter_value = filter_value.to_i
+        end
+        filter_values.push(filter_value)
       end
     end
     filter_values
@@ -216,9 +224,10 @@ class ApplicationController < ActionController::Base
     filter_value.to_s.downcase == 'true'
   end
 
-  def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+  def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
     # Check to see if the filter has already been set
-    if cookies[:updated_prod_filter].nil? || cookies[:updated_prod_filter] == 'true'
+    product_list = []
+    if session[:updated_prod_filter].nil? || session[:updated_prod_filter].to_s.downcase == 'true'
       filter_products = Product.all
       if !products.empty?
         filter_products = Product.all.where('products.id in (?)', products)
@@ -238,6 +247,10 @@ class ApplicationController < ActionController::Base
                                                                 .where('origins.id in (?)', origin_list.ids)
       end
 
+      if !tags.empty?
+        filter_products = filter_products.where("tags @> '{#{tags.map(&:downcase).join(',')}}'::varchar[]")
+      end
+
       if is_launchable
         filter_products = filter_products.where('is_launchable is true')
       end
@@ -248,19 +261,19 @@ class ApplicationController < ActionController::Base
           '          where has_osc = true or has_digisquare = true)')
       end
 
-      product_filter_set = (!products.empty? || !origins.empty? || with_maturity_assessment || is_launchable)
+      product_filter_set = (!products.empty? || !origins.empty? || !tags.empty? ||
+                             with_maturity_assessment || is_launchable)
 
-      product_list = []
       if product_filter_set
         product_list += filter_products.ids
       end
 
       # Set the cookies for caching
-      cookies[:updated_prod_filter] = false
-      cookies[:filter_products] = product_list.join(',')
-      cookies[:prod_filter_set] = product_filter_set
+      session[:updated_prod_filter] = false
+      session[:filter_products] = product_list.join(',')
+      session[:prod_filter_set] = product_filter_set
     else
-      product_list = cookies[:filter_products].split(',').map(&:to_i)
+      product_list = session[:filter_products].split(',').map(&:to_i)
     end
     product_list
   end

@@ -1,11 +1,17 @@
 <li class="list-group-item w-100 text-center bg-transparent">
   <%= link_to projects_path do %>
-    <% if current_page?(:controller => 'projects', :action => 'index') %>
-      <span class="w-100 btn btn-warning"><%= t('model.project').titlecase.pluralize %>
-    <% else %>
-      <span class="w-100 btn btn-secondary"><%= t('model.project').titlecase.pluralize %>
-    <% end %>
-    <span id="project-badge" class="badge badge-light">--</span>
+    <%
+      btn_class = 'btn-secondary'
+      if current_page?(:controller => 'projects', :action => 'index')
+        btn_class = 'btn-warning'
+      end
+    %>
+    <span class="w-100 btn <%= btn_class %>">
+      <%= image_tag "project.png", :width => "20px" %>
+      <span class="d-none d-lg-inline-block">
+        <%= t('model.project').titlecase.pluralize %>
+      </span>
+      <span id="project-badge" class="badge badge-light">--</span>
     </span>
   <% end %>
 </li>

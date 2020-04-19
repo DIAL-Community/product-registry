@@ -168,8 +168,10 @@ class UseCasesController < ApplicationController
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
 
+      tags = sanitize_session_values 'tags'
+
       filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
                      sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -219,7 +221,7 @@ class UseCasesController < ApplicationController
                                .ids
       end
 
-      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
 
       workflow_product_ids = []
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
@@ -250,18 +252,24 @@ class UseCasesController < ApplicationController
       @sectors = Sector.order(:name)
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def use_case_params
-      params.require(:use_case)
-      .permit(:name, :slug, :sector_id, :uc_desc, :maturity)
-      .tap do |attr|
-        if (params[:reslug].present?)
-          attr[:slug] = slug_em(attr[:name])
-          if (params[:duplicate].present?)
-            first_duplicate = UseCase.slug_starts_with(attr[:slug]).order(slug: :desc).first
-            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def use_case_params
+    params.require(:use_case)
+          .permit(:name, :slug, :sector_id, :uc_desc, :maturity)
+          .tap do |attr|
+            valid_tags = []
+            if params[:use_case_tags].present?
+              valid_tags = params[:use_case_tags].reject(&:empty?).map(&:downcase)
+            end
+            attr[:tags] = valid_tags
+
+            if params[:reslug].present?
+              attr[:slug] = slug_em(attr[:name])
+              if params[:duplicate].present?
+                first_duplicate = UseCase.slug_starts_with(attr[:slug]).order(slug: :desc).first
+                attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+              end
+            end
           end
-        end
-      end
-    end
+  end
 end
