@@ -4,19 +4,19 @@
     <div class="card-header bg-secondary text-white truncate-parent">
       <%= link_to product.name, product, class: 'truncate-text',
         'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
-      <div>
-      <% if product.is_launchable %>
-        <i class="fa fa-rocket header-img ml-1 mt-1" data-toggle="tooltip"
-           data-placement="top" data-original-title="<%= t('view.product.index.is_deployable') %>"></i>
-      <% end %>
-      <% if is_endorsed(product) %>
-        <%= image_tag("digiprins.png", class: 'header-img mt-1',
-                      'title': t('view.product.index.is_endorsed'), 'data-toggle': 'tooltip', 'data-placement': 'top') %>
-      <% end %>
-      <% if coronavirus_handler(product) %>
-        <%= image_tag("marker-coronavirus.png", class: 'header-img mt-1 mr-1',
-                      'title': t('view.product.index.covid-19-related'), 'data-toggle': 'tooltip', 'data-placement': 'top') %>
-      <% end %>
+      <div style="display: inline-flex;">
+        <% if product.is_launchable %>
+          <i class="fa fa-rocket header-img ml-1 mt-1" data-toggle="tooltip"
+            data-placement="top" data-original-title="<%= t('view.product.index.is_deployable') %>"></i>
+        <% end %>
+        <% if is_endorsed(product) %>
+          <%= image_tag("digiprins.png", class: 'header-img mt-1',
+                        'title': t('view.product.index.is_endorsed'), 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+        <% end %>
+        <% if coronavirus_handler(product) %>
+          <%= image_tag("marker-coronavirus.png", class: 'header-img mt-1 ml-1',
+                        'title': t('view.product.index.covid-19-related'), 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+        <% end %>
       </div>
     </div>
     <div class="model-logo">
