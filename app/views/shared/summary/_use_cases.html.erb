@@ -1,11 +1,17 @@
 <li class="list-group-item w-100 text-center bg-transparent">
   <%= link_to use_cases_path do %>
-    <% if current_page?(:controller => 'use_cases', :action => 'index') %>
-      <span class="w-100 btn btn-warning"><%= t('model.use-case').titlecase.pluralize %>
-    <% else %>
-      <span class="w-100 btn btn-secondary"><%= t('model.use-case').titlecase.pluralize %>
-    <% end %>
-    <span id="use-case-badge" class="badge badge-light">--</span>
+    <%
+      btn_class = 'btn-secondary'
+      if current_page?(:controller => 'use_cases', :action => 'index')
+        btn_class = 'btn-warning'
+      end
+    %>
+    <span class="w-100 btn <%= btn_class %>">
+      <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px" %>
+      <span class="d-none d-lg-inline-block">
+        <%= t('model.use-case').titlecase.pluralize %>
+      </span>
+      <span id="use-case-badge" class="badge badge-light">--</span>
     </span>
   <% end %>
 </li>

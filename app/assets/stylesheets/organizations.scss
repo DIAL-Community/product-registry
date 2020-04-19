@@ -29,7 +29,7 @@ ul.ui-autocomplete {
   margin:10px 0;
 }
 
-#agg-nav .accordion-expand-holder .open, .accordion-expand-holder .close {
+#agg-nav .accordion-expand-holder .open, #agg-nav .accordion-expand-holder .close {
   margin:0 10px 0 0;
 }
 
@@ -47,12 +47,12 @@ ul.ui-autocomplete {
   margin: 0.3em;
 }
 
-#agg-nav .ui-state-active, .ui-widget-content .ui-state-active {
+#agg-nav .ui-state-active, #agg-nav .ui-widget-content .ui-state-active {
   background: #6c757d !important;
   color: white !important;
 }
 
-#agg-nav .ui-state-default, .ui-widget-content .ui-state-default {
+#agg-nav .ui-state-default, #agg-nav .ui-widget-content .ui-state-default {
   background: #e9ecef;
   color: #6c757d;
 }

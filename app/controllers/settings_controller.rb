@@ -8,8 +8,14 @@ class SettingsController < ApplicationController
   # GET /settings
   # GET /settings.json
   def index
-    @settings = Setting.order(:name)
-                       .paginate(page: params[:page], per_page: 20)
+    if params[:search]
+      @settings = Setting.order(:name)
+                         .name_contains(params[:search])
+                         .paginate(page: params[:page], per_page: 20)
+    else
+      @settings = Setting.order(:name)
+                         .paginate(page: params[:page], per_page: 20)
+    end
     authorize @settings, :view_allowed?
   end
 

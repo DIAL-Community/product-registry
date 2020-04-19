@@ -20,30 +20,57 @@
   <div class="wysiwyg-editor">
   </div>
 
-  <div>
-    <%= form.label :sector_id, t('view.use-case.form.is-mature').to_s, class: 'custom-label' %>:
-    <%= form.check_box :maturity, {}, "Mature", "Beta" %>
-  </div>
-
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
-    <%= t('view.use-case.form.assigned-sdg-targets') %>
-  </h6>
-  <fieldset class="form-label-group mt-2">
-    <input type="text" id="sdg-target-search" class="form-control"
-           placeholder="<%= t('view.use-case.form.search-sdg-targets') %>" />
-    <label for="use-case-sdg-target">
-      <%= t('view.use-case.form.search-sdg-targets') %>
-    </label>
+  <fieldset class="form-check mt-2">
+    <%= form.check_box :maturity, {id: 'use_case_maturity', class: 'form-check-input'}, "Mature", "Beta" %>
+    <%= form.label :maturity, t('view.use-case.form.is-mature').to_s, class: 'form-check-label' %>
   </fieldset>
-  <div class="row">
-    <div class="col-12">
-      <span id="base-selected-sdg-targets" class="selected-element badge badge-secondary px-1 mb-1">
-        <span class="text-label"></span>
-        <a onclick="remove(this);" style="cursor: pointer;">
-          <i class="fas fa-trash-alt"></i>
-        </a>
-        <input type="hidden"/>
-      </span>
+
+  <div class="row mt-2">
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        <%= t('view.use-case.form.assigned-sdg-targets') %>
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="sdg-target-search" class="form-control"
+               placeholder="<%= t('view.use-case.form.search-sdg-targets') %>" />
+        <label for="use-case-sdg-target">
+          <%= t('view.use-case.form.search-sdg-targets') %>
+        </label>
+      </fieldset>
+      <div class="row">
+        <div class="col-12">
+          <span id="base-selected-sdg-targets" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        <%= t('model.tag').titlecase.pluralize %>
+      </h6>
+      <fieldset class="form-label-group mt-2">
+        <input type="text" id="tag-search" class="form-control"
+               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>" />
+        <label for="tag-search">
+          <%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>
+        </label>
+      </fieldset>
+      <div class="row">
+        <div class="col-12">
+          <span id="base-selected-tags" class="selected-element badge badge-secondary px-1 mb-1">
+            <span class="text-label"></span>
+            <a onclick="remove(this);" style="cursor: pointer;">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            <input type="hidden"/>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -57,6 +84,9 @@
   <% use_case.sdg_targets.order("target_number").each do |sdg_target| %>
     addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.target_number %> : <%= sdg_target.name %>');
   <% end %>
+  <% use_case.tags.each {|tag| %>
+    tagUseCase('', '<%= tag %>');
+  <% } %>
 
   var editor = setUpEditor(<%= raw JSON.generate(@ucDesc.description) %>);
   var form = document.querySelector('#use-case-form');

@@ -1,8 +1,17 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
-<% if user_signed_in? && policy(PortalView).mod_allowed? %>
+<% if user_signed_in? && policy(Setting).mod_allowed? %>
   <%= link_to t('view.general.create'), new_setting_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
 <% end %>
+<div class="form-group float-right">
+  <%= form_tag(settings_path, method: "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search], class: "form-control",
+        placeholder: t('view.general.search-placeholder', model: t('model.sector').to_s.pluralize) %>
+    <div class="input-group-append">
+      <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
 <table class="table">
   <thead class="thead-light">
     <tr>

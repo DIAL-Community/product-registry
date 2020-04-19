@@ -6,7 +6,7 @@ require 'modules/constants'
 module ApplicationHelper
   include Modules::Constants
 
-  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps
+  ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps tags
                              product_suites operator_services settings glossaries portal_views].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze

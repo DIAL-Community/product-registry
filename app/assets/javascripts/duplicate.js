@@ -104,6 +104,10 @@ var useCaseStepDuplicateCheck = function() {
   duplicateCheck("use_case_step_name", "/use_case_step_duplicates.json");
 }
 
+var tagDuplicateCheck = function() {
+  duplicateCheck("tag_name", "/tag_duplicates.json");
+}
+
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
@@ -132,3 +136,5 @@ $(document).on('portal_views#edit:loaded', portalViewDuplicateCheck);
 $(document).on('portal_views#new:loaded', portalViewDuplicateCheck);
 $(document).on('use_case_steps#edit:loaded', useCaseStepDuplicateCheck);
 $(document).on('use_case_steps#new:loaded', useCaseStepDuplicateCheck);
+$(document).on('tags#edit:loaded', tagDuplicateCheck);
+$(document).on('tags#new:loaded', tagDuplicateCheck);

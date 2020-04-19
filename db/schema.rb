@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200410181908) do
+ActiveRecord::Schema.define(version: 20200416142235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(version: 20200410181908) do
     t.jsonb "statistics", default: "{}", null: false
     t.boolean "is_child", default: false
     t.integer "parent_product_id"
+    t.string "tags", default: [], array: true
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 
@@ -347,6 +348,15 @@ ActiveRecord::Schema.define(version: 20200410181908) do
     t.index ["slug"], name: "index_sectors_on_slug", unique: true
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -372,6 +382,20 @@ ActiveRecord::Schema.define(version: 20200410181908) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_sdgs_on_slug", unique: true
+  end
+
+  create_table "tag_descriptions", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.string "locale", null: false
+    t.jsonb "description", default: "{}", null: false
+    t.index ["tag_id"], name: "index_tag_descriptions_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "use_case_descriptions", force: :cascade do |t|
@@ -413,6 +437,7 @@ ActiveRecord::Schema.define(version: 20200410181908) do
     t.datetime "updated_at", null: false
     t.jsonb "description", default: "{}", null: false
     t.string "maturity", default: "Beta"
+    t.string "tags", default: [], array: true
     t.index ["sector_id"], name: "index_use_cases_on_sector_id"
   end
 
@@ -504,6 +529,7 @@ ActiveRecord::Schema.define(version: 20200410181908) do
   add_foreign_key "projects_sdgs", "sustainable_development_goals", column: "sdg_id", name: "projects_sdgs_sdg_fk"
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
+  add_foreign_key "tag_descriptions", "tags"
   add_foreign_key "use_case_descriptions", "use_cases"
   add_foreign_key "use_case_step_descriptions", "use_case_steps"
   add_foreign_key "use_case_steps", "use_cases"

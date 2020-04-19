@@ -59,6 +59,7 @@ en:
     project: project
     sector: sector
     setting: setting
+    tag: tag
     use-case: use case
     use-case-step: use case step
     user: user
@@ -402,6 +403,9 @@ en:
       sectors:
         one: Sector
         other: Sectors
+      tags:
+        one: Tag
+        other: Tags
       title: 'Filtering by %{model}'
       use_cases:
         one: Use Case
@@ -477,6 +481,9 @@ en:
         role: Role
       index:
         no-data: We couldn't find users matching to the search phrase.
+        account-status: Account Status
+        approved: Approved
+        not-approved: Need Approval
       show:
         approved: Approved
         'no': 'No'

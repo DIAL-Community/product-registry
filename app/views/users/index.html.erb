@@ -18,7 +18,8 @@
     <tr>
       <th><%= t('view.user.form.email') %></th>
       <th><%= t('view.user.form.role')%></th>
-      <th colspan="3"></th>
+      <th><%= t('view.user.index.account-status')%></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -28,6 +29,7 @@
         <tr>
           <td><%= user.email %></td>
           <td><%= t("view.user.role.#{user.role}") %></td>
+          <td><%= !user.confirmed_at.nil? ? t("view.user.index.approved") : t("view.user.index.not-approved") %></td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">

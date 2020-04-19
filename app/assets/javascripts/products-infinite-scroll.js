@@ -43,6 +43,9 @@ const scrollProductHandler = function () {
       url = `${url}&search=${searchTerm}`
     }
 
+    const covidChecked = $('#covid-only').prop("checked");
+    url = `${url}&covid=${covidChecked}`;
+
     const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 800;
     if (!isNaN(currentPage) && !currentlyLoadingProducts && shouldExecuteXhr) {
       currentlyLoadingProducts = true;
@@ -69,7 +72,11 @@ const searchProductHandler = function() {
   let previousSearchTerm = '';
   const searchWithAnimation = function() {
     const searchTerm = $('#search-products').val();
-    const url = `${window.location.pathname}?search=${searchTerm}`;
+    let url = `${window.location.pathname}?search=${searchTerm}`;
+
+    const covidChecked = $('#covid-only').prop("checked");
+    url = `${url}&covid=${covidChecked}`;
+
     if (!currentlySearchingProducts && previousSearchTerm !== searchTerm) {
       $('#product-list > div').addClass('existing-product');
       animateCss('.existing-product', 'fadeOut faster', hideElements);
@@ -88,5 +95,31 @@ const searchProductHandler = function() {
   $('#search-products').keyup(delay(searchWithAnimation, 400));
 }
 
+const filterCovidHandler = function() {
+  const removeElements = function() {
+    $('.existing-product').remove();
+  }
+
+  const removeClasses = function() {
+    $('.to-be-animated').removeClass('to-be-animated');
+  }
+
+  const filterCovidWithAnimation = function() {
+    const checked = $('#covid-only').prop("checked");
+    const url = `${window.location.pathname}?covid=${checked}`;
+    
+    $('#product-list > div').addClass('existing-product');
+    animateCss('.existing-product', 'fadeOut faster', removeElements);
+    
+    $.getScript(url, function() {
+      $('#product-list').attr('data-current-page', 1);
+      animateCss('.to-be-animated', 'fadeIn faster', removeClasses);
+    });
+  }
+
+  $('#covid-only').change(filterCovidWithAnimation);
+}
+
 $(document).on('products#index:loaded', scrollProductHandler);
 $(document).on('products#index:loaded', searchProductHandler);
+$(document).on('products#index:loaded', filterCovidHandler);

@@ -29,12 +29,24 @@
         </div>
       <% end %>
     </div>
-    <p class="float-right mb-0" >
-      <%= link_to t('view.general.back'), products_path, :class => "card-link" %>
-      <% if user_signed_in? && policy(@product).mod_allowed? %>
-        <%= link_to t('view.general.edit'), edit_product_path(@product), :class => "card-link" %>
-      <% end %>
-    </p>
+    <div class="row">
+      <div class="col-4">
+        <% if !@product.tags.empty? %>
+            <small class="font-italic">
+            <%= t('model.tag').titlecase.pluralize %>:
+            <%= @product.tags.join(", ") %>
+            </small>
+        <% end %>
+      </div>
+      <div class="offset-4 col-4">
+        <p class="float-right mb-0" >
+          <%= link_to t('view.general.back'), products_path, :class => "card-link" %>
+          <% if user_signed_in? && policy(@product).mod_allowed? %>
+            <%= link_to t('view.general.edit'), edit_product_path(@product), :class => "card-link" %>
+          <% end %>
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 
