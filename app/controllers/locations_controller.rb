@@ -153,8 +153,12 @@ class LocationsController < ApplicationController
         .require(:location)
         .permit(:name, :confirmation, :aliases, :slug)
         .tap do |attr|
-          if params[:other_names].present? && policy(Location).permitted_attributes.include?(:aliases)
-            attr[:aliases] = params[:other_names].reject(&:empty?)
+          if policy(Location).permitted_attributes.include?(:aliases)
+            valid_aliases = []
+            if params[:other_names].present?
+              valid_aliases = params[:other_names].reject(&:empty?)
+            end
+            attr[:aliases] = valid_aliases
           end
           if params[:reslug].present?
             attr[:slug] = slug_em(attr[:name])

@@ -257,12 +257,12 @@
           </span>
         </div>
       </div>
-      <div class="mt-4">
+      <div class="mt-2">
         <div class="border rounded bg-secondary text-white clearfix border card-header">
           <h5 class="float-left mb-0"><%= t('model.operator_services').to_s.pluralize.humanize %></h5>
         </div>
         <div id="orgId" style="display:none"><%= @organization.id %></div>
-        <div id="agg-nav" class="card-body p-2 col-6 col-lg-4 mt-2 ml-4 accordion-section ">
+        <div id="agg-nav" class="card-body accordion-section p-0">
           <div class="mni-accordion">
             <% @organization.locations.each do |country| %>
               <h3 class="country-list" id="<%= country.id %>"><%= country.name %></h3>

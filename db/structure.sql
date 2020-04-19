@@ -1070,7 +1070,8 @@ CREATE TABLE public.products (
     license_analysis character varying,
     statistics jsonb DEFAULT '"{}"'::jsonb NOT NULL,
     is_child boolean DEFAULT false,
-    parent_product_id integer
+    parent_product_id integer,
+    tags character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -1330,6 +1331,38 @@ ALTER SEQUENCE public.sectors_id_seq OWNED BY public.sectors.id;
 
 
 --
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sessions (
+    id bigint NOT NULL,
+    session_id character varying NOT NULL,
+    data text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
+
+
+--
 -- Name: settings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1428,6 +1461,69 @@ CREATE SEQUENCE public.sustainable_development_goals_id_seq
 --
 
 ALTER SEQUENCE public.sustainable_development_goals_id_seq OWNED BY public.sustainable_development_goals.id;
+
+
+--
+-- Name: tag_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tag_descriptions (
+    id bigint NOT NULL,
+    tag_id bigint,
+    locale character varying NOT NULL,
+    description jsonb DEFAULT '"{}"'::jsonb NOT NULL
+);
+
+
+--
+-- Name: tag_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tag_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tag_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tag_descriptions_id_seq OWNED BY public.tag_descriptions.id;
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tags (
+    id bigint NOT NULL,
+    name character varying,
+    slug character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
@@ -1548,7 +1644,8 @@ CREATE TABLE public.use_cases (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '"{}"'::jsonb NOT NULL,
-    maturity character varying
+    maturity character varying,
+    tags character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -1902,6 +1999,13 @@ ALTER TABLE ONLY public.sectors ALTER COLUMN id SET DEFAULT nextval('public.sect
 
 
 --
+-- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
+
+
+--
 -- Name: settings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1920,6 +2024,20 @@ ALTER TABLE ONLY public.stylesheets ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.sustainable_development_goals ALTER COLUMN id SET DEFAULT nextval('public.sustainable_development_goals_id_seq'::regclass);
+
+
+--
+-- Name: tag_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tag_descriptions ALTER COLUMN id SET DEFAULT nextval('public.tag_descriptions_id_seq'::regclass);
+
+
+--
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
 
 
 --
@@ -2196,6 +2314,14 @@ ALTER TABLE ONLY public.sectors
 
 
 --
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: settings settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2217,6 +2343,22 @@ ALTER TABLE ONLY public.stylesheets
 
 ALTER TABLE ONLY public.sustainable_development_goals
     ADD CONSTRAINT sustainable_development_goals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tag_descriptions tag_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tag_descriptions
+    ADD CONSTRAINT tag_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -2518,6 +2660,27 @@ CREATE UNIQUE INDEX index_sdgs_on_slug ON public.sustainable_development_goals U
 --
 
 CREATE UNIQUE INDEX index_sectors_on_slug ON public.sectors USING btree (slug);
+
+
+--
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_sessions_on_session_id ON public.sessions USING btree (session_id);
+
+
+--
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_updated_at ON public.sessions USING btree (updated_at);
+
+
+--
+-- Name: index_tag_descriptions_on_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tag_descriptions_on_tag_id ON public.tag_descriptions USING btree (tag_id);
 
 
 --
@@ -2846,6 +3009,14 @@ ALTER TABLE ONLY public.organization_descriptions
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT fk_rails_45a5b9baa8 FOREIGN KEY (origin_id) REFERENCES public.origins(id);
+
+
+--
+-- Name: tag_descriptions fk_rails_46e6dc893e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tag_descriptions
+    ADD CONSTRAINT fk_rails_46e6dc893e FOREIGN KEY (tag_id) REFERENCES public.tags(id);
 
 
 --
@@ -3327,6 +3498,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200403183400'),
 ('20200408151430'),
 ('20200409175231'),
-('20200410181908');
+('20200410181908'),
+('20200413175913'),
+('20200413181640'),
+('20200415182207'),
+('20200415182431'),
+('20200416142235');
 
 

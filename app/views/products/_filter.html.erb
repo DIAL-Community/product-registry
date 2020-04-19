@@ -1,10 +1,16 @@
 
 <div class="row mt-2">
-  <div class="col-12">
+  <div class="col-8 col-lg-10">
     <fieldset class="form-label-group-xs">
       <%= text_field_tag "search-products", params[:search],
           placeholder: t('view.general.search'),
           class: "form-control" %>
+    </fieldset>
+  </div>
+  <div class="col-4 col-lg-2 mt-1">
+    <fieldset class="form-group form-check">
+      <input type="checkbox" class="form-check-input" id="covid-only">
+      <label class="form-check-label" for="covid-only">COVID-19 only.</label>
     </fieldset>
   </div>
 </div>

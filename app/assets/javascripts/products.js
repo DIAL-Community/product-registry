@@ -2,6 +2,21 @@
 // All this logic will automatically be available in application.js.
 // You can use CoffeeScript in this file: http://coffeescript.org/
 
+function tagProduct(value, label) {
+  const copy = $("#base-selected-tags").clone();
+
+  $(copy).removeAttr("id");
+  $(copy).find(".text-label").html(label);
+
+  const input = $(copy).find("input");
+  $(input).attr("name",  "product_tags[]");
+  $(input).val(label);
+
+  $(copy).appendTo($("#base-selected-tags").parent());
+
+  $(copy).show();
+}
+
 function productsReady() {
   // hook drop down item click event
   $("#digisquare-element .dropdown-item").click(function() {
@@ -17,6 +32,10 @@ function productsReady() {
   var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
   $("#base-selected-organizations").hide();
   $("#organization-search").autocomplete(organizationAutoComplete);
+  
+  const tagAutoComplete = autoComplete("/tags.json?without_paging=true", tagProduct)
+  $("#base-selected-tags").hide();
+  $("#tag-search").autocomplete(tagAutoComplete);
 
   $("button.add-other-name").click(function(event) {
     event.preventDefault();

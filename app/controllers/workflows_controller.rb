@@ -170,8 +170,10 @@ class WorkflowsController < ApplicationController
       countries = sanitize_session_values 'countries'
       sectors = sanitize_session_values 'sectors'
 
+      tags = sanitize_session_values 'tags'
+
       filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
                      sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -214,7 +216,7 @@ class WorkflowsController < ApplicationController
                                .ids
       end
 
-      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
 
       product_bbs = []
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])

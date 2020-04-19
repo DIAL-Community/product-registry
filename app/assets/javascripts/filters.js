@@ -17,7 +17,7 @@ var addToList = function(filterId, values) {
 }
 
 var incrementFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
+  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags"]) !== -1) {
     filterId = "origins"
   }
   if (filterId == "endorser_only" || filterId == "aggregator_only") {
@@ -31,7 +31,7 @@ var incrementFilterCount = function(filterId) {
 }
 
 var decrementFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
+  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags"]) !== -1) {
     filterId = "origins"
   }
   if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
@@ -46,17 +46,7 @@ var decrementFilterCount = function(filterId) {
 }
 
 var clearFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
-    filterId = "origins"
-  }
-  if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
-    filterId = "years"
-  }
-  $("#accordian-"+filterId+"-count").html("")
-}
-
-var clearFilterCount = function(filterId) {
-  if ((filterId == "products") || (filterId == "with_maturity_assessment") || (filterId == "is_launchable")) {
+  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags"]) !== -1) {
     filterId = "origins"
   }
   if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
@@ -75,7 +65,7 @@ var clearFilterItems = function(filterId) {
   } else if (filterId == 'is_launchable') {
     $('#is_launchable').prop('checked', false);
   } else {
-    $('#' + filterId).parents(".row").next('.row').find('.badges').remove()
+    $('#' + filterId).parents(".row").next('.row').find('.badge').remove()
   }
 }
 
@@ -86,7 +76,9 @@ var removeFilter = function(event) {
         filter_label: event.data.label
     } ] }, function() {
         const card = $(event.target).closest('.badge');
-        card.fadeOut();
+        card.fadeOut("slow", function() {
+          $(this).remove();
+        });
         updateCount();
         decrementFilterCount(event.data.id)
         loadMainDiv();
@@ -131,7 +123,8 @@ var loadFilters = function() {
     $.post('/remove_all_filters', { }, function() {
       Object.keys(urlParams).map(function(urlParam) {
         clearFilterCount(urlParam)
-        if (urlParam == 'use_cases' || urlParam == 'workflows' || urlParam == 'building_blocks' || urlParam == 'sdgs' || urlParam == 'products' || urlParam == 'years' || urlParam == 'origins') {
+        if (urlParam == 'use_cases' || urlParam == 'workflows' || urlParam == 'building_blocks' || urlParam === 'tags' ||
+            urlParam == 'sdgs' || urlParam == 'products' || urlParam == 'years' || urlParam == 'origins') {
           paramValues = urlParams[urlParam].split('--')
           paramValues.map(function(paramValue) {
             paramValueLabel = paramValue.split('-')
@@ -178,6 +171,11 @@ var addProjectFilter = function(value, label) {
   addFilter(id, value, label);
 }
 
+var addTagFilter = function(value, label) {
+  var id = 'tags';
+  addFilter(id, label, label);
+}
+
 var prepareFilters = function() {
     $('.filter-element').change(function() {
         var id = $(this).attr('id');
@@ -208,6 +206,7 @@ var prepareFilters = function() {
         filter_array.push({filter_name: 'aggregator_only'})
         $('#aggregator_only').prop('checked', false);
       } else if (filter_name == 'products') {
+        filter_array.push({filter_name: 'tags'})
         filter_array.push({filter_name: 'origins'})
         filter_array.push({filter_name: 'products'})
         filter_array.push({filter_name: 'is_launchable'})
@@ -231,8 +230,11 @@ var prepareFilters = function() {
     var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganizationFilter)
     $("#organizations").autocomplete(organizationAutoComplete);
 
-    var projectAutoComplete = autoComplete("/projects.json", addProjectFilter)
+    var projectAutoComplete = autoComplete("/projects.json?without_paging=true", addProjectFilter)
     $("#projects").autocomplete(projectAutoComplete);
+
+    const tagAutoComplete = autoComplete("/tags.json?without_paging=true", addTagFilter)
+    $("#tags").autocomplete(tagAutoComplete);
 
     loadFilters();
 }

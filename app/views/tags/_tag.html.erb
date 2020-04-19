@@ -1,0 +1,23 @@
+
+<div class="card mt-2">
+  <div class="card-body py-3 px-3">
+    <h5>
+      <%= link_to(tag) do %>
+        <%= "#{tag.name}" %>
+      <% end %>
+    </h5>
+    <div id="<%= tag.slug %>" class="wysiwyg-viewer"></div>
+    <p class="float-right mb-0">
+      <% if user_signed_in? && policy(tag).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_tag_path(tag), :class => "card-link" %>
+      <% end %>
+    </p>
+  </div>
+  <script>
+    setViewerForElement('<%= tag.slug %>',
+                         <%= raw JSON.generate(tag.tag_descriptions
+                                                  .select { |desc| desc.locale == I18n.locale.to_s }
+                                                  .first
+                                                  .description ) %>)
+  </script>
+</div>

@@ -1,0 +1,24 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="card">
+  <div class="card-body px-3 py-3">
+    <h5>
+      <%= "#{t('model.tag').to_s.titlecase}: #{@tag.name}" %>
+    </h5>
+    <div id="tag-viewer" class="wysiwyg-viewer"></div>
+    <p class="float-right mb-0" >
+      <%= link_to t('view.general.back'), tags_path, :class => "card-link" %>
+      <% if user_signed_in? && policy(@tag).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_tag_path(@tag), :class => "card-link" %>
+      <% end %>
+    </p>
+  </div>
+</div>
+
+<script>
+    setUpViewer(<%= raw JSON.generate(@tag.tag_descriptions
+                                          .select { |desc| desc.locale == I18n.locale.to_s }
+                                          .first
+                                          .description ) %>)
+</script>

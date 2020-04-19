@@ -40,10 +40,16 @@ class ProductsController < ApplicationController
       @products = @products.where(id: session[:product_filtered_ids])
     end
 
+    if params[:covid].present? && params[:covid].to_s.downcase == 'true'
+      covid19_tag = Setting.find_by(slug: 'default_covid19_tag')
+      @products = @products.where(':tag = ANY(products.tags)', tag: covid19_tag.value.downcase)
+    end
+
     if params[:search].present?
       name_products = @products.name_contains(params[:search])
-      desc_products = @products.joins(:product_descriptions).where("LOWER(description#>>'{}') like LOWER(?)", "%"+params[:search]+"%")
-      @products = @products.where(id: (name_products+desc_products).uniq)
+      desc_products = @products.joins(:product_descriptions)
+                               .where("LOWER(description#>>'{}') like LOWER(?)", "%#{params[:search]}%")
+      @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
     @products = @products.eager_load(:includes, :interoperates_with, :product_assessment, :origins, :organizations,
@@ -305,8 +311,8 @@ class ProductsController < ApplicationController
         @products = Product.where(slug: current_slug).to_a
       end
 
-      if (@products.empty?)
-        @products = Product.where(":other_name = ANY(aliases)", other_name: params[:current])
+      if @products.empty?
+        @products = Product.where(':other_name = ANY(aliases)', other_name: params[:current])
       end
     end
 
@@ -428,8 +434,10 @@ class ProductsController < ApplicationController
       countries = sanitize_session_values 'countries'
       sectors = sanitize_session_values 'sectors'
 
+      tags = sanitize_session_values 'tags'
+
       filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
                      sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -481,7 +489,7 @@ class ProductsController < ApplicationController
                               .ids
       end
 
-      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable)
+      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
       [filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids]), filter_set]
     end
 
@@ -530,8 +538,19 @@ class ProductsController < ApplicationController
                                                  .sub(/^https?\/\/\:/i, '')
                                                  .sub(/\/$/, '')
           end
-          if params[:other_names].present? && policy(Product).permitted_attributes.include?(:aliases)
-            attr[:aliases] = params[:other_names].reject(&:empty?)
+          if policy(Product).permitted_attributes.include?(:aliases)
+            valid_aliases = []
+            if params[:other_names].present?
+              valid_aliases = params[:other_names].reject(&:empty?)
+            end
+            attr[:aliases] = valid_aliases
+          end
+          if policy(Product).permitted_attributes.include?(:tags)
+            valid_tags = []
+            if params[:product_tags].present?
+              valid_tags = params[:product_tags].reject(&:empty?).map(&:downcase)
+            end
+            attr[:tags] = valid_tags
           end
           if params[:reslug].present? && policy(Product).permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
