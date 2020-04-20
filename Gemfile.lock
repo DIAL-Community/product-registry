@@ -209,8 +209,8 @@ GEM
       websocket-driver (>= 0.2.0)
     popper_js (1.14.5)
     public_suffix (3.0.3)
-    puma (3.12.0)
-    puma (3.12.0-java)
+    puma (3.12.4)
+    puma (3.12.4-java)
     pundit (2.0.1)
       activesupport (>= 3.0.0)
     rack (2.0.7)
@@ -431,7 +431,7 @@ DEPENDENCIES
   pg
   phantomjs
   poltergeist
-  puma (~> 3.7)
+  puma (~> 3.12)
   pundit
   rails (~> 5.1.4)
   rails-controller-testing
