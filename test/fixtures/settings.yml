@@ -7,13 +7,13 @@ one:
   value: MyText
 
 two:
-  name: MyString
-  slug: MyString
-  description: MyString
-  value: MyText
-
-two:
   name: Default Organization
   slug: default_organization
   description: This is the default organization.
   value: digital_impact_alliance_dial
+
+three:
+  name: Default COVID-19 Tag
+  slug: default_covid19_tag
+  description: The default tag name for COVID-19 related objects.
+  value: COVID-19
