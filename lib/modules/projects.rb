@@ -3,33 +3,32 @@ include Modules::Slugger
 
 module Modules
   module Projects
-    def create_project_entry(orgs, prod, country, origin)
+    def create_project_entry(orgs, prods, country, origin)
 
       project_origin = get_origin(origin)
-      prod_search = "%"+prod.strip.downcase+"%"
-      curr_product = Product.find_by("LOWER(name) LIKE ? OR ? = ANY(aliases)", prod_search, prod_search)
-      if !curr_product.nil?
-        #puts "FOUND PRODUCT: " + curr_product.name
-      else 
-        #puts "NO PRODUCT: " + prod
+      curr_product = nil
+      prods.gsub(/\(.*?\)/, '').gsub(/[\[\]]/,'').split(/[\/,&\n]/).each do |prod|
+        prod_search = prod.gsub(/\(.*?\)/, '').strip.downcase
+        curr_product = Product.find_by("LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])", "%"+prod_search+"%", prod_search)
+        if curr_product.nil?
+          puts "NO PRODUCT: " + prod_search
+        end
       end
 
-      country_search = "%"+country.strip.downcase+"%"
-      curr_location = Location.find_by("LOWER(name) LIKE ? OR ? = ANY(aliases)", country_search, country_search)
-      if !curr_location.nil?
-        #puts "FOUND LOCATION: " + curr_location.name
+      country_search = "%"+country.gsub('-',' ').strip.downcase+"%"
+      curr_location = Location.find_by("LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])", country_search, country_search)
+      if curr_location.nil?
+        puts "NO LOCATION: " + country
       end
 
       # Split org by '/' and try to find an org to match each
       curr_org = nil
       orgs.gsub(/\(.*?\)/, '').gsub(/[\[\]]/,'').split(/[\/,&\n]/).each do |org|
         if !org.blank?
-          org_search = "%"+org.strip.downcase+"%"
-          curr_org = Organization.find_by("LOWER(name) LIKE ? OR ? = ANY(aliases)", org_search, org_search)
-          if !curr_org.nil? 
-            #puts "FOUND ORG: " + curr_org.name
-          else
-            #puts "COULD NOT FIND: " + org
+          org_search = org.strip.downcase
+          curr_org = Organization.find_by("LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])", "%"+org_search+"%", org_search)
+          if curr_org.nil? 
+            puts "NO ORG: " + org
           end
         end
       end

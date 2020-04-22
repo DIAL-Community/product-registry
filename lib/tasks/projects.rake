@@ -52,6 +52,9 @@ namespace :projects do
     range = "1. Partners support to frontline HWs tools!A1:Z"
     response = service.get_spreadsheet_values spreadsheet_id, range
     headers = response.values.shift
+    # take off the first 2 - region and country
+    headers.shift
+    headers.shift
     puts "No data found." if response.values.empty?
     response.values.each do |row|
       region = row.shift
