@@ -197,6 +197,7 @@ GEM
       mini_portile2 (~> 2.4.0)
     octokit (4.14.0)
       sawyer (~> 0.8.0, >= 0.5.3)
+    okcomputer (1.18.1)
     orm_adapter (0.5.0)
     os (1.1.0)
     pg (1.1.3)
@@ -428,6 +429,7 @@ DEPENDENCIES
   mailgun-ruby
   mini_magick
   minitest-reporters
+  okcomputer
   pg
   phantomjs
   poltergeist
