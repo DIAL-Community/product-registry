@@ -39,13 +39,13 @@ gem 'rubysl-open3'
 gem 'okcomputer'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.4'
+gem 'rails', '~> 5.2.4'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
 gem 'pg'
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 4.3.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -69,6 +69,9 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'rswag-api'
 gem 'rswag-ui'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -16,6 +16,7 @@ echo "Version: $(git rev-parse --short HEAD)" > public/version.txt
 rails db:run_if_no_db && rails db:create_db_with_public_data
 rails db:migrate
 rails db:seed
+rails db:sessions:clear
 rails assets:precompile RAILS_ENV=production
 
 service cron restart
