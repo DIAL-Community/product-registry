@@ -105,11 +105,10 @@ class ApplicationController < ActionController::Base
   def remove_filter
     return unless params.key? 'filter_array'
 
-    logger.debug("Removing filter: #{params['filter_array']}.")
+    logger.debug("Removing filter: #{params['filter_array'].values}.")
 
-    filter_array = params['filter_array']
-    filter_array.each do |filter_item|
-      curr_filter = filter_array[filter_item]
+    filter_array = params['filter_array'].values
+    filter_array.each do |curr_filter|
       filter_name = curr_filter['filter_name']
       filter_obj = {}
       if curr_filter['filter_value']

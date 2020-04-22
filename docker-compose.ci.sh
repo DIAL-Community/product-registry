@@ -14,6 +14,7 @@ done
 set +e
 rails db:create_db_with_public_data
 rails db:migrate
+rails db:sessions:clear
 rails assets:precompile RAILS_ENV=test
 set -e
 

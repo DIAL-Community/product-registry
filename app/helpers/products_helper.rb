@@ -203,9 +203,11 @@ module ProductsHelper
   end
 
   def coronavirus_handler(product)
+    handler = false
     if @covid19_tag.nil?
       @covid19_tag = Setting.find_by(slug: 'default_covid19_tag')
     end
-    product.tags.map(&:downcase).include? @covid19_tag.value.downcase
+    !@covid19_tag.nil? && handler = product.tags.map(&:downcase).include?(@covid19_tag.value.downcase)
+    handler
   end
 end
