@@ -117,6 +117,15 @@ module Modules
           end
         end
 
+        sectors = json_data['sectors']
+        if !sectors.nil? && !sectors.empty?
+          sectors.each do |sector|
+            sector_obj = Sector.find_by(name: sector)
+            puts "Adding sector " + sector_obj.name + " to product"
+            existing_product.sectors << sector_obj
+          end
+        end
+
         update_attributes(json_data, existing_product)
 
         existing_product.save
