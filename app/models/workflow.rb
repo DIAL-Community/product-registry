@@ -8,8 +8,8 @@ class Workflow < ApplicationRecord
   attr_accessor :wf_desc
 
   def image_file
-    if File.exist?(File.join('public', 'assets', 'workflows', "#{slug}.png"))
-      return "/assets/workflows/#{slug}.png"
+    if File.exist?(File.join('public', 'assets', 'workflows', "#{slug}.svg"))
+      return "/assets/workflows/#{slug}.svg"
     else
       return '/assets/workflows/workflow_placeholder.png'
     end
