@@ -207,24 +207,20 @@ namespace :sync do
       product_file = entry
       if !File.exist?('./products/'+product_file)
         puts entry
+        
         curr_prod = Product.where(slug: entry.chomp('.json').gsub("-","_")).first
         curr_prod['aliases'].each do |prod_alias|
-          alias_file = slug_em(prod_alias).gsub("_","-")+".json"
+          alias_file = prod_alias.downcase.gsub(" ","-")+".json"
           if File.exist?('../publicgoods/products/'+alias_file)
             product_file = alias_file
           end
         end
       end
       if File.exist?("../publicgoods/products/"+product_file)
-        File.open("../publicgoods/products/"+product_file,"r") do |f|
-          #If you don't find the entry, load the product and try the aliases
-          #Only export if it has an SDG attached
-        end
+        FileUtils.cp_r("./export/"+entry, "../publicgoods/products/"+product_file)
       else
         puts "CANT FIND: " + product_file
       end
-
-      # Push file to products directory. Can do a git push origin manually
     end
   end
 
