@@ -331,7 +331,7 @@ class ProductsController < ApplicationController
       end
       next if params[:source] && !origin_list.include?(params[:source])
 
-      sdg_list = product.sustainable_development_goals.map do |sdg|
+      sdg_list = product.sustainable_development_goals.order(:number).map do |sdg|
         [ sdg.number, sdg.name ]
       end
 
@@ -341,7 +341,7 @@ class ProductsController < ApplicationController
 
       org_list = product.organizations.map do |org|
         org_prod = OrganizationsProduct.where(product_id: product, organization_id: org).first
-        { :name => org.name, :website => org.website, :org_type => org_prod.org_type }
+        { :name => org.name, :website => 'https://'+org.website.to_s, :org_type => org_prod.org_type }
       end
 
       license_file = ""
@@ -378,7 +378,8 @@ class ProductsController < ApplicationController
         repositoryURL = product.repository
       end
 
-      { :name => product.name, :description => product_description, :license => [{:spdx => product.license, :licenseURL => license_file}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => "software", :repositoryURL => repositoryURL, :organizations => org_list.as_json }
+      #puts "WEBSITE: " + product.website
+      { :name => product.name, :description => product_description, :website => 'https://'+product.website.to_s, :license => [{:spdx => product.license, :licenseURL => license_file}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => [ "software" ], :repositoryURL => repositoryURL, :organizations => org_list.as_json }
     end
 
     curr_products.each do |prod|
