@@ -39,7 +39,9 @@
               <%= link_to t('view.general.view'), user, :class =>"dropdown-item"  %>
               <%= link_to t('view.general.edit'), edit_user_path(user), :class =>"dropdown-item"  %>
               <div class="dropdown-divider"></div>
-              <%= link_to t('view.general.delete'), user, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
+              <%= link_to t('view.general.delete'), user, method: :delete,
+                          data: { confirm: t('view.general.delete-confirmation', model: t('model.user')) },
+                          class: "dropdown-item" %>
             </div>
           </td>
         </tr>

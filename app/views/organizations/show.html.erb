@@ -14,7 +14,10 @@
 <div class="row">
   <div class="col-8 mb-2">
     <% if user_signed_in? && policy(Organization).mod_allowed? %>
-      <%= link_to 'Delete this organization', @organization, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-outline-secondary float-left ml-1' %>
+      <%= link_to t('view.general.delete-with-model', model: t('model.organization').titlecase),
+                  @organization, method: :delete,
+                  data: { confirm: t('view.general.delete-confirmation', model: t('model.organization')) },
+                  class: 'btn btn-outline-secondary float-left ml-1' %>
     <% end %>
   </div>
 </div>
