@@ -522,7 +522,8 @@ en:
       back-with-dest: Back to %{dest}
       create: Create New
       delete: Delete
-      delete-confirmation: Are you sure?
+      delete-with-model: Delete %{model}
+      delete-confirmation: "Are you sure you want to remove this %{model}?"
       description: Description
       duplicates: 'One or more %{model} with similar name already exists.'
       edit: Edit

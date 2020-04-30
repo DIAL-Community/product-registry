@@ -66,7 +66,9 @@
                               method: :post, :class =>"dropdown-item"  %>
                   <div class="dropdown-divider"></div>
                 <% end %>
-                <%= link_to t('view.general.delete'), candidate_organization, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
+                <%= link_to t('view.general.delete'), candidate_organization, method: :delete,
+                            data: { confirm: t('view.general.delete-confirmation', model: t('model.candidate-organization')) },
+                            class: "dropdown-item" %>
               <% end %>
             </div>
           </td>

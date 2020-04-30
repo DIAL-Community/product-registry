@@ -1,6 +1,16 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<div class="row">
+  <div class="col-8 mb-2">
+    <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.use-case').titlecase), @use_case,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.use-case')) },
+                  class: 'btn btn-outline-secondary float-left ml-1' %>
+    <% end %>
+  </div>
+</div>
+
 <div class="card">
   <div class="bg-secondary text-white card-header">
     <h5 class="float-left mb-0">

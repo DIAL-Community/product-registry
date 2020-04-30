@@ -37,7 +37,9 @@
             <% if user_signed_in? && policy(operator).mod_allowed? %>
               <%= link_to t('view.general.edit'), edit_operator_service_path(operator.name), :class =>"dropdown-item"  %>
               <div class="dropdown-divider"></div>
-              <%= link_to t('view.general.delete'), operator_service_path(operator.name), method: :delete, data: { confirm: t('view.general.delete-confirmation') }, :class =>"dropdown-item" %>
+              <%= link_to t('view.general.delete'), operator_service_path(operator.name), method: :delete,
+                          data: { confirm: t('view.general.delete-confirmation', model: t('model.operator-service')) },
+                          class: "dropdown-item" %>
             <% end %>
           </div>
         </td>

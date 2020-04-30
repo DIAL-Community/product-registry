@@ -49,7 +49,8 @@
         <%= link_to t('view.general.edit'), edit_use_case_use_case_step_path(@use_case_step.use_case, @use_case_step),
                     class: "card-link" %>
         <%= link_to t('view.general.delete'), @use_case_step, method: :delete,
-                    data: { confirm: t('view.general.delete-confirmation') }, class: "card-link" %>
+                    data: { confirm: t('view.general.delete-confirmation', model: t('model.use-case-step')) },
+                    class: "card-link" %>
       <% end %>
   </div>
 </div>
