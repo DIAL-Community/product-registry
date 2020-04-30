@@ -9,12 +9,20 @@
       </h5>
     </div>
     <div class="row">
-      <% @use_case_step.use_case.use_case_steps.order("step_number").each_with_index do |use_case_step, index| %>
+      <%
+        @use_case_step.use_case.use_case_steps.order("step_number").each_with_index do |use_case_step, index|
+          container_style = ""
+          text_style = ""
+          if @use_case_step.id == use_case_step.id
+            container_style = "bg-warning"
+            text_style = "color: white"
+          end
+      %>
         <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
+          <div class="card h-100 <%= container_style %>">
             <div class="card-body pb-2 pt-2">
               <p class="card-text mb-0">
-                <%= link_to(use_case_use_case_step_path(@use_case_step.use_case, use_case_step)) do %>
+                <%= link_to(use_case_use_case_step_path(@use_case_step.use_case, use_case_step), class: 'card-link', style: text_style) do %>
                   <%= "#{index + 1}. #{use_case_step.name}" %>
                 <% end %>
               </p>
@@ -35,11 +43,14 @@
   <div class="card-body">
     <div class="wysiwyg-viewer"></div>
     <p class="float-right mb-0" >
-      <%= link_to 'Back to Parent', use_case_path(@use_case_step.use_case), class: "card-link" %>
+      <%= link_to t('view.general.back-with-dest', dest: t('model.use-case').titlecase),
+                  use_case_path(@use_case_step.use_case), class: "card-link" %>
       <% if user_signed_in? && policy(@use_case_step).mod_allowed? %>
-        <%= link_to t('view.general.edit'), edit_use_case_use_case_step_path(@use_case_step.use_case, @use_case_step), class: "card-link" %>
+        <%= link_to t('view.general.edit'), edit_use_case_use_case_step_path(@use_case_step.use_case, @use_case_step),
+                    class: "card-link" %>
         <%= link_to t('view.general.delete'), @use_case_step, method: :delete,
-                    data: { confirm: t('view.general.delete-confirmation') }, class: "card-link" %>
+                    data: { confirm: t('view.general.delete-confirmation', model: t('model.use-case-step')) },
+                    class: "card-link" %>
       <% end %>
   </div>
 </div>
@@ -50,20 +61,15 @@
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
     </div>
-    <div class="row">
-      <% @use_case_step.workflows.order("name").each do |workflow| %>
-        <% building_blocks = building_blocks | workflow.building_blocks %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body px-1 py-1">
-              <%= image_tag(workflow.image_file, class: 'footer-img') %>
-              <span class="card-text text-muted mt-2">
-                <%= link_to workflow.name, workflow %>
-              </span>
-            </div>
-          </div>
-        </div>
-      <% end %>
+    <div class="row mt-2">
+      <div class="col-12">
+        <% @use_case_step.workflows.order("name").each do |workflow| %>
+          <% building_blocks = building_blocks | workflow.building_blocks %>
+          <%= link_to(workflow, style: 'text-decoration: none;') do %>
+            <%= image_tag(workflow.image_file, class: 'footer-img', title: workflow.name) %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 
@@ -71,19 +77,14 @@
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
     </div>
-    <div class="row">
-      <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body px-1 py-1">
-              <%= image_tag(building_block.image_file, class: 'footer-img-small') %>
-              <span class="card-text text-muted mb-0">
-                <%= link_to building_block.name, building_block %>
-              </span>
-            </div>
-          </div>
-        </div>
-      <% end %>
+    <div class="row mt-2">
+      <div class="col-12">
+        <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
+          <%= link_to(building_block, style: 'text-decoration: none;') do %>
+            <%= image_tag(building_block.image_file, class: 'footer-img', title: building_block.name) %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

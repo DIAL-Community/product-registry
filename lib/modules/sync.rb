@@ -117,6 +117,15 @@ module Modules
           end
         end
 
+        sectors = json_data['sectors']
+        if !sectors.nil? && !sectors.empty?
+          sectors.each do |sector|
+            sector_obj = Sector.find_by(name: sector)
+            puts "Adding sector " + sector_obj.name + " to product"
+            existing_product.sectors << sector_obj
+          end
+        end
+
         update_attributes(json_data, existing_product)
 
         existing_product.save
@@ -492,6 +501,38 @@ module Modules
 
         if product.save!
           puts "Product license information saved: #{product.license}."
+        end
+      end
+    end
+
+    def update_tco_data(product)
+      return if product.repository.blank?
+
+      # We can't process Gitlab repos currently, so ignore those
+      return if product.repository.include?("gitlab")
+      
+      puts "Processing: #{product.repository}"
+      command = "./cloc-git.sh "+product.repository
+      stdout, = Open3.capture3(command)
+
+      return if stdout.blank?
+     
+      code_data = CSV.parse(File.read("./repodata.csv"), headers: true)
+      code_data.each do |code_row|
+        if code_row['language'] == "SUM"
+          puts "NUM LINES: " + code_row['code']
+          product.code_lines = code_row['code'].to_i
+          
+          # COCOMO Calculation is Effort = A * (Lines of Code/1000)^B
+          # A and B are based on project complexity. We are using simple, where A=2.4 and B=1.05
+          total_klines = (code_row['code'].to_i)/1000
+          effort = 2.4 * total_klines**1.05
+
+          product.cocomo = effort.round.to_s
+          puts "EFFORT: " + effort.round.to_s
+          if product.save!
+            puts "Product COCOMO data saved."
+          end
         end
       end
     end

@@ -1,6 +1,16 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<div class="row">
+  <div class="col-8 mb-2">
+    <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.use-case').titlecase), @use_case,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.use-case')) },
+                  class: 'btn btn-outline-secondary float-left ml-1' %>
+    <% end %>
+  </div>
+</div>
+
 <div class="card">
   <div class="bg-secondary text-white card-header">
     <h5 class="float-left mb-0">
@@ -36,6 +46,21 @@
   </div>
 </div>
 
+<% if @use_case.sdg_targets.count > 0 %>
+  <div class="mt-2">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <% @use_case.sdg_targets.order("target_number").each do |sdg_target| %>
+          <%= image_tag(sdg_target.image_file, height: '100rem', title: "#{sdg_target.target_number} #{sdg_target.name}") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('view.use-case.show.use-case-steps') %></h5>
@@ -48,12 +73,19 @@
       <% @use_case.use_case_steps.order("step_number").each_with_index do |use_case_step, index| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
-            <div class="card-body pb-2 pt-2">
-              <p class="card-text mb-0">
-                <%= link_to(use_case_use_case_step_path(@use_case, use_case_step)) do %>
-                  <%= "#{index + 1}. #{use_case_step.name}" %>
-                <% end %>
-              </p>
+            <div class="card-body py-2">
+              <%= link_to(use_case_use_case_step_path(@use_case, use_case_step), class: 'card-link') do %>
+                <%= "#{index + 1}. #{use_case_step.name}" %>
+              <% end %>
+              <div class="row mt-2">
+                <div class="col-12">
+                  <% use_case_step.workflows.each do |workflow| %>
+                    <%= link_to(workflow, style: 'text-decoration: none;') do %>
+                      <%= image_tag(workflow.image_file, class: 'footer-img mr-1', title: workflow.name) %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -68,27 +100,6 @@
   <% end %>
 </div>
 
-<% if @use_case.sdg_targets.count > 0 %>
-  <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
-    </div>
-    <div class="row">
-      <% @use_case.sdg_targets.order("target_number").each do |sdg_target| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <%= image_tag(sdg_target.image_file, class: 'card-img-top mx-auto w-25 px-0 pt-2 pb-0') %>
-            <div class="card-body pb-2 pt-2">
-              <p class="card-text mb-0" style="flex: 1"><%= sdg_target.target_number %></p>
-              <p class="card-text text-muted mb-1" style="flex: 1"><%= sdg_target.name %></p>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
 <% if @use_case.use_case_steps.count > 0
      workflows = []
      @use_case.use_case_steps.each do |use_case_step|
@@ -96,49 +107,26 @@
      end
 
      building_blocks = []
+     workflows.sort_by{|workflow| workflow.name.downcase }.each do |workflow|
+       building_blocks = building_blocks | workflow.building_blocks
+     end
+   end
 %>
-  <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
-    </div>
-    <div class="row">
-      <% workflows.sort_by{|workflow| workflow.name.downcase }.each do |workflow| %>
-        <% building_blocks = building_blocks | workflow.building_blocks %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body px-1 py-1">
-              <%= image_tag(workflow.image_file, class: 'footer-img') %>
-              <span class="card-text text-muted mt-2">
-                <%= link_to workflow.name, workflow %>
-              </span>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
   <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
     </div>
-    <div class="row">
-      <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body px-1 py-1">
-              <%= image_tag(building_block.image_file, class: 'footer-img-small') %>
-              <span class="card-text text-muted mb-0">
-                <%= link_to building_block.name, building_block %>
-              </span>
-            </div>
-          </div>
-        </div>
-      <% end %>
+    <div class="row mt-2">
+      <div class="col-12">
+        <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
+          <%= link_to(building_block, style: 'text-decoration: none;') do %>
+            <%= image_tag(building_block.image_file, class: 'footer-img mr-1', title: building_block.name) %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
-<% end %>
 
 <script>
-        setUpViewer(<%= raw JSON.generate(@ucDesc.description) %>)
+  setUpViewer(<%= raw JSON.generate(@ucDesc.description) %>)
 </script>

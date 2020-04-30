@@ -1596,7 +1596,7 @@ CREATE TABLE public.use_case_steps (
     id bigint NOT NULL,
     name character varying,
     slug character varying,
-    step_number integer,
+    step_number integer NOT NULL,
     use_case_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -3503,6 +3503,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200413181640'),
 ('20200415182207'),
 ('20200415182431'),
-('20200416142235');
+('20200416142235'),
+('20200428234311');
 
 

@@ -235,6 +235,8 @@ en:
         repository: Code repository
         start-assessment: Start assessing this product.
         website: Website
+        est-hosting: Estimated hosting cost
+        est-invested: Estimated money invested
       index:
         description: Description
         filter: Filter
@@ -288,6 +290,13 @@ en:
         not-very-active: Not Very Active Repository
         inactive: Inactive Repository
         na: N/A
+        cost-data: Cost data for this product
+        no-cost-data: We do not have any cost information for this product
+        code-lines: Lines of Code
+        est-effort: Estimated effort (person months)
+        est-hosting: Estimated hosting costs (monthly)
+        est-invested: Estimated money invested
+        cocomo: The estimated effort is calculated using the COCOMO method. 
     product-suite:
       index:
         no-data: We couldn't find any product suite in the database.
@@ -315,8 +324,9 @@ en:
     footer:
       privacy-policy: Privacy policy
       tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
-      fa-icons: "Icons provided unmodified by FontAwesome"
-      sdg-icons: "Icons provided unmodified by The Global Goals for Sustainable Development"
+      icons-provided: "Icons provided unmodified by "
+      fa-icons: "FontAwesome"
+      sdg-icons: "The Global Goals for Sustainable Development"
       dial-social-media: "Follow DIAL on social media"
       gitlab: "View this project on Gitlab"
       osc-forum: "Discuss on the Open Source Center Forum"
@@ -518,9 +528,11 @@ en:
       action: Action
       add: Add
       back: Back
+      back-with-dest: Back to %{dest}
       create: Create New
       delete: Delete
-      delete-confirmation: Are you sure?
+      delete-with-model: Delete %{model}
+      delete-confirmation: "Are you sure you want to remove this %{model}?"
       description: Description
       duplicates: 'One or more %{model} with similar name already exists.'
       edit: Edit

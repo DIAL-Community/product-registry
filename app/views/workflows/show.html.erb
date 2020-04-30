@@ -20,9 +20,15 @@
 </div>
 
 <% if @workflow.use_case_steps.count > 0
-     use_cases = []
+     use_cases = {}
+     use_case_steps = {}
      @workflow.use_case_steps.each do |use_case_step|
-       use_cases |= [use_case_step.use_case]
+       use_case = use_case_step.use_case
+       use_cases[use_case.id] = use_case
+
+       steps = use_case_steps[use_case.id] || []
+       steps += [use_case_step]
+       use_case_steps[use_case.id] = steps
      end
 %>
   <div class="mt-4">
@@ -31,12 +37,23 @@
     </div>
 
       <div class="row">
-        <% use_cases.sort_by{|use_case| use_case.name.downcase }.each do |use_case| %>
+        <% use_cases.sort.map do |key, use_case| %>
           <div class="col-6 col-lg-4 mt-2">
             <div class="card h-100">
-              <%= image_tag(use_case.image_file, class: 'card-img-top mx-auto w-25 px-0 pt-2 pb-0') %>
-              <div class="card-body pb-2 pt-2">
-                <div class="card-text"><%= link_to use_case.name, use_case %></div>
+              <div class="card-body py-2">
+                <%= link_to(use_case, style: 'text-decoration: none;') do %>
+                  <%= image_tag(use_case.image_file, class: 'footer-img') %>
+                  <%= use_case.name %> 
+                <% end %>
+                <div class="row">
+                  <% use_case_steps[key].sort_by(&:step_number).each do |use_case_step| %>
+                    <div class="col-12 mt-1">
+                      <%= link_to(use_case_use_case_step_path(use_case, use_case_step), style: 'text-decoration: none;') do %>
+                        <%= " Step #{use_case_step.step_number}. #{use_case_step.name}" %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
               </div>
             </div>
           </div>
@@ -51,19 +68,14 @@
       <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
     </div>
 
-    <div class="row">
-      <% @workflow.building_blocks.order("name").each do |building_block| %>
-        <div class="col-6 col-lg-4 mt-2">
-          <div class="card h-100">
-            <div class="card-body px-1 py-1">
-              <%= image_tag(building_block.image_file, class: 'footer-img-small') %>
-              <span class="card-text text-muted mb-0">
-                <%= link_to building_block.name, building_block %>
-              </span>
-            </div>
-          </div>
-        </div>
-      <% end %>
+    <div class="row mt-2">
+      <div class="col-12">
+        <% @workflow.building_blocks.order("name").each do |building_block| %>
+          <%= link_to(building_block, style: 'text-decoration: none;') do %>
+            <%= image_tag(building_block.image_file, class: 'footer-img', title: building_block.name) %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

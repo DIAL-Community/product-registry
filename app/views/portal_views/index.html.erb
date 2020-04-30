@@ -57,7 +57,9 @@
               <% if user_signed_in? && policy(portal_view).mod_allowed? %>
                 <%= link_to t('view.general.edit'), edit_portal_view_path(portal_view), :class =>"dropdown-item" %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), portal_view, method: :delete, data: { confirm: t('view.general.delete-confirmation') }, class: "dropdown-item" %>
+                <%= link_to t('view.general.delete'), portal_view, method: :delete,
+                    data: { confirm: t('view.general.delete-confirmation', model: t('model.portal-view')) },
+                    class: "dropdown-item" %>
               <% end %>
             </div>
           </td>

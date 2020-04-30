@@ -239,6 +239,25 @@
         </div>
       </div>
     </div>
+    <div class="col-12 col-lg-6">
+      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+        <%= t('view.product.show.cost-data') %>
+      </h6>
+      <div class="row">
+        <fieldset class="form-label-group col-6 mt-2">
+          <%= form.text_field :est_hosting, id: :est_hosting,
+                  disabled: !policy(product).permitted_attributes.include?(:est_hosting),
+                  class: "form-control", placeholder: t('view.product.form.est-hosting') %>
+          <%= form.label :est_hosting, t('view.product.form.est-hosting'), class: "pl-4" %>
+        </fieldset>
+        <fieldset class="form-label-group col-6 mt-2">
+          <%= form.text_field :est_invested, id: :est_invested,
+                  disabled: !policy(product).permitted_attributes.include?(:est_invested),
+                  class: "form-control", placeholder: t('view.product.form.est-invested') %>
+          <%= form.label :est_invested, t('view.product.form.est-invested'), class: "pl-4" %>
+        </fieldset>
+      </div>
+    </div>
   </div>
 
   <div class="custom-control custom-switch">

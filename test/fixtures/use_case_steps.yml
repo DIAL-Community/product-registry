@@ -2,9 +2,11 @@
 one:
   name: Use Case Step One
   slug: use_case_step_one
+  step_number: 1
   use_case: one
 
 two:
   name: Use Case Step Two
   slug: use_case_step_two
+  step_number: 2
   use_case: two

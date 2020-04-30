@@ -40,7 +40,6 @@ public/assets/use_cases/*
 public/assets/origins/*
 public/assets/sdgs/*
 public/assets/sdg_targets/*
-public/assets/workflows/*
 public/assets/**/*.gz
 public/assets/**/*.css
 public/assets/**/*.map
@@ -48,6 +47,7 @@ public/assets/**/*.svg
 public/assets/**/*.json
 public/assets/**/*.webp
 public/assets/**/*.js
+!public/assets/workflows/*.svg
 
 # Uploaded assets
 public/uploads

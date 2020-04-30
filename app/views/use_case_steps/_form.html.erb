@@ -25,7 +25,8 @@
   </div>
   
   <fieldset class="form-label-group mt-2">
-    <%= form.text_field :step_number, id: :step_number,
+    <%= form.text_field :step_number, id: :step_number, required: true,
+                        value: calculate_step_number(use_case_step),
                         type: 'number', step: '1', pattern: '\d+',
                         class: "form-control", placeholder: t('view.use-case-step.form.step-number') %>
     <%= form.label :step_number, t('view.use-case-step.form.step-number') %>
