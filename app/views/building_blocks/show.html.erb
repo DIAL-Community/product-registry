@@ -47,17 +47,14 @@
       <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.humanize %></h5>
     </div>
 
-    <div class="row">
-      <% @building_block.workflows.order("name").each do |workflow| %>
-        <div class="col-6 col-lg-4 mt-1">
-          <div class="card h-100">
-            <div class="card-body px-2 py-2">
-              <%= image_tag(workflow.image_file, class: 'footer-img') %>
-              <span class="card-text text-muted"><%= link_to workflow.name, workflow %></span>
-            </div>
-          </div>
-        </div>
-      <% end %>
+    <div class="row mt-2">
+      <div class="col-12">
+        <% @building_block.workflows.order("name").each do |workflow| %>
+          <%= link_to(workflow, style: 'text-decoration: none;') do %>
+            <%= image_tag(workflow.image_file, class: 'footer-img mr-1', title: workflow.name) %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

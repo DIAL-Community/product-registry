@@ -1,7 +1,7 @@
 function setUpViewer(viewJson, editorId) {
   formSelector = '.wysiwyg-viewer'
   if (editorId) {
-    formSelector = '#'+editorId
+    formSelector = '#' + editorId
   }
   var viewer = $(formSelector);
   if (viewer) {
@@ -44,10 +44,15 @@ function setViewerForElement(elementId, viewJson) {
 function setUpEditor(viewJson, placeholderText, editorId) {
   formSelector = '.wysiwyg-editor'
   if (editorId) {
-    formSelector = '#'+editorId
+    formSelector = '#' + editorId
   }
   var quill = new Quill(formSelector, {
     modules: {
+      imageResize: {
+        toolbarStyles: {
+          display: 'none'
+        }
+      },
       toolbar: [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
