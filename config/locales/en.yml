@@ -519,6 +519,7 @@ en:
       action: Action
       add: Add
       back: Back
+      back-with-dest: Back to %{dest}
       create: Create New
       delete: Delete
       delete-confirmation: Are you sure?

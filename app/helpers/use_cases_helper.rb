@@ -6,7 +6,7 @@ module UseCasesHelper
       use_case.sdg_targets.each do |sdg_target|
         next if sdg_target.nil?
 
-        tooltip = sdg_target.name
+        tooltip = "Target #{sdg_target.target_number }: #{sdg_target.name}"
         image = Hash[filename: sdg_target.image_file, tooltip: tooltip, id: sdg_target.id, controller: 'sdg_targets']
         images.push(image)
       end
