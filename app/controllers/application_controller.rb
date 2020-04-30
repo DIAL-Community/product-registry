@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
   before_action :set_portal
 
+  after_action :store_action
+
   def not_found
     raise ActionController::RoutingError, 'Not Found'
   end
@@ -464,6 +466,19 @@ class ApplicationController < ActionController::Base
                     flash: { error: t(exception.query.to_s), scope: 'pundit', default: :default }
       end
       format.json { render json: {}, status: 401 }
+    end
+  end
+
+  def store_action
+    return unless request.get? 
+    if (request.path != "/users/sign_in" &&
+        request.path != "/users/sign_up" &&
+        request.path != "/users/password/new" &&
+        request.path != "/users/password/edit" &&
+        request.path != "/users/confirmation" &&
+        request.path != "/users/sign_out" &&
+        !request.xhr?) # don't store ajax calls
+      store_location_for(:user, request.fullpath)
     end
   end
 end
