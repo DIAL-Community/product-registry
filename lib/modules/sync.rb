@@ -510,6 +510,7 @@ module Modules
 
       # We can't process Gitlab repos currently, so ignore those
       return if product.repository.include?("gitlab")
+      return if product.repository.include?("AsTeR")
       
       puts "Processing: #{product.repository}"
       command = "./cloc-git.sh "+product.repository
