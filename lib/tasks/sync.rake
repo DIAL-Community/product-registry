@@ -264,6 +264,14 @@ namespace :sync do
     end
   end
 
+  task :update_tco_data, [] => :environment do
+    puts 'Updating TCO data for products.'
+
+    Product.all.each do |product|
+      update_tco_data(product)
+    end
+  end
+
   task :sync_digital_health_atlas_data, [] => :environment do
     dha_origin = Origin.find_by(name: 'Digital Health Atlas')
     if dha_origin.nil?
