@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_234311) do
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
+    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -29,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_234311) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "id", "version"], name: "auditable_index"
+    t.index ["action", "audit_id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -242,6 +243,10 @@ ActiveRecord::Schema.define(version: 2020_04_28_234311) do
     t.boolean "is_child", default: false
     t.integer "parent_product_id"
     t.string "tags", default: [], array: true
+    t.integer "code_lines"
+    t.integer "cocomo"
+    t.integer "est_hosting"
+    t.integer "est_invested"
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 

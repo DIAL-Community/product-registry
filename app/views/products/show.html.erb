@@ -354,7 +354,45 @@
     </div>
 </div>
 
-<div class="card-deck">
+<div class="card-deck mt-2">
+  <div class="card">
+    <h5 class="card-header bg-secondary text-white">
+        <%= t('view.product.show.cost-data') %>
+    </h5>
+    <div class="card-body">
+      <% if @product.code_lines.nil? && @product.cocomo.nil? && @product.est_hosting.nil? && @product.est_invested.nil? %>
+        <p class="card-text text-muted">
+          <%= t('view.product.show.no-cost-data') %>
+        </p>
+      <% else %>
+        <div class="row">
+          <div class="col-5 col-xs-12 mt-3">
+            <div class="text-muted"><%= t('view.product.show.code-lines') %></div>
+            <h4 class="ml-4"><%= @product.code_lines %></h4>
+          </div>
+          <div class="col-6 col-xs-12 mt-3" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.product.show.cocomo') %>">
+            <div class="text-muted"><%= t('view.product.show.est-effort') %>
+              <i class="fas fa-info-circle ml-1"></i>
+            </div>
+            <h4 class="ml-4"><%= @product.cocomo %></h4>
+          </div>
+        </div>
+        <% if !@product.est_hosting.nil? || !@product.est_invested.nil? %>
+          <div class="row">
+            <div class="col-5 col-xs-12 mt-3">
+              <div class="text-muted"><%= t('view.product.show.est-hosting') %></div>
+              <h4 class="ml-4"><%= @product.est_hosting %></h4>
+            </div>
+            <div class="col-6 col-xs-12 mt-3">
+              <div class="text-muted"><%= t('view.product.show.est-invested') %></div>
+              <h4 class="ml-4"><%= @product.est_invested %></h4>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
   <div class="card">
     <h5 class="card-header bg-secondary text-white">
         <%= t('view.product.show.auto-launch') %>
@@ -370,8 +408,6 @@
         </p>
       <% end %>
     </div>
-  </div>
-  <div class="card" style="border:none;">
   </div>
 </div>
 
