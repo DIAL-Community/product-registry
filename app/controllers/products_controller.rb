@@ -539,10 +539,10 @@ class ProductsController < ApplicationController
                                                  .sub(/^https?\/\/\:/i, '')
                                                  .sub(/\/$/, '')
           end
-          if attr[:est_hosting].present?
+          if attr[:est_hosting].present? && !attr[:est_hosting].nil?
             attr[:est_hosting] = attr[:est_hosting].to_i
           end
-          if attr[:est_invested].present?
+          if attr[:est_invested].present? && !attr[:est_invested].nil?
             attr[:est_invested] = attr[:est_invested].to_i
           end
           if policy(Product).permitted_attributes.include?(:aliases)
