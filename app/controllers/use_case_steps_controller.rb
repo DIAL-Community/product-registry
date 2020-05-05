@@ -39,6 +39,13 @@ class UseCaseStepsController < ApplicationController
       end
     end
 
+    if params[:selected_products].present?
+      params[:selected_products].keys.each do |product_id|
+        product = Workflow.find(product_id)
+        @use_case_step.products.push(product)
+      end
+    end
+
     respond_to do |format|
       if @use_case_step.save
         if use_case_step_params[:ucs_desc]
@@ -75,6 +82,15 @@ class UseCaseStepsController < ApplicationController
     end
     @use_case_step.workflows = workflows.to_a
 
+    products = Set.new
+    if params[:selected_products].present?
+      params[:selected_products].keys.each do |product_id|
+        product = Product.find(product_id)
+        products.add(product)
+      end
+    end
+    @use_case_step.products = products.to_a
+
     respond_to do |format|
       if @use_case_step.update(use_case_step_params)
         format.html { redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step), notice: 'Use case step was successfully updated.' }
@@ -94,6 +110,7 @@ class UseCaseStepsController < ApplicationController
     @ucs_descs = UseCaseStepDescription.where(use_case_step_id: params[:id])
     @ucs_descs.destroy_all
 
+    @use_case_steps.products.clear
     @use_case_step.destroy
     respond_to do |format|
       format.html { redirect_to use_case_path(use_case), notice: 'Use case step was successfully destroyed.' }

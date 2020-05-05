@@ -2,6 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#usecasesteps-header {
+  .ql-editor {
+    min-height: 1rem !important;
+  }
+}
+
 .use-case-color {
   color: #19486A;
   fill:  #19486A;
