@@ -9,6 +9,7 @@ class UseCase < ApplicationRecord
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
 
   attr_accessor :uc_desc
+  attr_accessor :ucs_header
 
   def image_file
     if File.exist?(File.join('public', 'assets', 'use_cases', "#{slug}.png"))

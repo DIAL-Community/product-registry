@@ -6,8 +6,10 @@ class Product < ApplicationRecord
   has_one :product_assessment
   has_many :product_descriptions
   has_many :product_versions
+  has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products
   has_many :product_classifications
   has_many :classifications, through: :product_classifications
+
   has_and_belongs_to_many :organizations, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :sectors, join_table: :products_sectors, after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :building_blocks, join_table: :products_building_blocks, after_add: :association_add, before_remove: :association_remove

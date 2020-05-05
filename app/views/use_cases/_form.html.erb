@@ -16,8 +16,16 @@
     <%= form.select :sector_id, options, {}, :class => "custom-select mb-2" %>
   </fieldset>
 
+  <label for="usecasesteps-header">
+    <%= t('view.general.description') %>:
+  </label>
   <%= form.hidden_field :uc_desc, id: :use_case_desc %>
-  <div class="wysiwyg-editor">
+  <div class="wysiwyg-editor mb-2" id='usecase-description'>
+  </div>
+
+  <label for="usecasesteps-header">Header Description:</label>
+  <%= form.hidden_field :ucs_header, id: :use_case_steps_header %>
+  <div class="wysiwyg-editor" id='usecasesteps-header'>
   </div>
 
   <fieldset class="form-check mt-2">
@@ -88,10 +96,11 @@
     tagUseCase('', '<%= tag %>');
   <% } %>
 
-  var editor = setUpEditor(<%= raw JSON.generate(@ucDesc.description) %>);
+  var descEditor = setUpEditor(<%= raw JSON.generate(@uc_desc.description) %>, '', 'usecase-description');
+  var headerEditor = setUpEditor(<%= raw JSON.generate(@ucs_header.header) %>, '', 'usecasesteps-header');
   var form = document.querySelector('#use-case-form');
   form.onsubmit = function() {
-    var useCaseDesc = $('#use_case_desc');
-    useCaseDesc.val(JSON.stringify(editor.getContents()));
+    $('#use_case_desc').val(JSON.stringify(descEditor.getContents()));
+    $('#use_case_steps_header').val(JSON.stringify(headerEditor.getContents()));
   };
 </script>

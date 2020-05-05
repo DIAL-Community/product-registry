@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_143924) do
+ActiveRecord::Schema.define(version: 2020_05_03_141314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -428,6 +428,13 @@ ActiveRecord::Schema.define(version: 2020_05_01_143924) do
     t.index ["use_case_id"], name: "index_use_case_descriptions_on_use_case_id"
   end
 
+  create_table "use_case_headers", force: :cascade do |t|
+    t.bigint "use_case_id"
+    t.string "locale", null: false
+    t.jsonb "header", default: {}, null: false
+    t.index ["use_case_id"], name: "index_use_case_headers_on_use_case_id"
+  end
+
   create_table "use_case_step_descriptions", force: :cascade do |t|
     t.bigint "use_case_step_id"
     t.string "locale", null: false
@@ -443,6 +450,13 @@ ActiveRecord::Schema.define(version: 2020_05_01_143924) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["use_case_id"], name: "index_use_case_steps_on_use_case_id"
+  end
+
+  create_table "use_case_steps_products", force: :cascade do |t|
+    t.bigint "use_case_step_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["product_id", "use_case_step_id"], name: "products_use_case_steps_idx", unique: true
+    t.index ["use_case_step_id", "product_id"], name: "use_case_steps_products_idx", unique: true
   end
 
   create_table "use_case_steps_workflows", id: false, force: :cascade do |t|
@@ -558,8 +572,11 @@ ActiveRecord::Schema.define(version: 2020_05_01_143924) do
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
   add_foreign_key "tag_descriptions", "tags"
   add_foreign_key "use_case_descriptions", "use_cases"
+  add_foreign_key "use_case_headers", "use_cases"
   add_foreign_key "use_case_step_descriptions", "use_case_steps"
   add_foreign_key "use_case_steps", "use_cases"
+  add_foreign_key "use_case_steps_products", "products", name: "use_case_steps_products_product_fk"
+  add_foreign_key "use_case_steps_products", "use_case_steps", name: "use_case_steps_products_step_fk"
   add_foreign_key "use_case_steps_workflows", "use_case_steps", name: "use_case_steps_workflows_step_fk"
   add_foreign_key "use_case_steps_workflows", "workflows", name: "use_case_steps_workflows_workflow_fk"
   add_foreign_key "use_cases", "sectors"
