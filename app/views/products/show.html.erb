@@ -354,6 +354,26 @@
     </div>
 </div>
 
+<% if @product.classifications.count > 0 %>
+<div class="card-deck mt-2">
+  <div class="card">
+    <h5 class="card-header bg-secondary text-white">
+        <%= t('view.product.show.classifications') %>
+    </h5>
+    <div class="card-body">
+
+      <ul>
+        <% @product.classifications.each do |classification| %>
+            <li><%= classification.name %>
+            (<%= t('view.product.show.classification-source') %>: 
+            <%= classification.source %>)</li>
+        <% end %>
+      </ul>
+
+    </div>
+  </div>
+</div>
+<% end %>
 <div class="card-deck mt-2">
   <div class="card">
     <h5 class="card-header bg-secondary text-white">

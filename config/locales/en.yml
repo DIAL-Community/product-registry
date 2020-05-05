@@ -297,6 +297,8 @@ en:
         est-hosting: Estimated hosting costs (monthly)
         est-invested: Estimated money invested
         cocomo: The estimated effort is calculated using the COCOMO method. 
+        classifications: Product classifications
+        classification-source: Source
     product-suite:
       index:
         no-data: We couldn't find any product suite in the database.
