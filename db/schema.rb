@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_28_234311) do
+ActiveRecord::Schema.define(version: 2020_05_01_143924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,15 @@ ActiveRecord::Schema.define(version: 2020_04_28_234311) do
     t.datetime "ended_at"
     t.index ["candidate_organization_id", "contact_id"], name: "index_candidate_contacts_on_candidate_id_and_contact_id"
     t.index ["contact_id", "candidate_organization_id"], name: "index_candidate_contacts_on_contact_id_and_candidate_id"
+  end
+
+  create_table "classifications", force: :cascade do |t|
+    t.string "name"
+    t.string "indicator"
+    t.string "description"
+    t.string "source"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -191,6 +200,15 @@ ActiveRecord::Schema.define(version: 2020_04_28_234311) do
 
 # Could not dump table "product_assessments" because of following StandardError
 #   Unknown type 'digisquare_maturity_level' for column 'digisquare_country_utilization'
+
+  create_table "product_classifications", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "classification_id"
+    t.index ["classification_id", "product_id"], name: "classifications_products_idx", unique: true
+    t.index ["classification_id"], name: "index_product_classifications_on_classification_id"
+    t.index ["product_id", "classification_id"], name: "products_classifications_idx", unique: true
+    t.index ["product_id"], name: "index_product_classifications_on_product_id"
+  end
 
   create_table "product_descriptions", force: :cascade do |t|
     t.bigint "product_id"
@@ -510,6 +528,10 @@ ActiveRecord::Schema.define(version: 2020_04_28_234311) do
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
   add_foreign_key "product_assessments", "products"
+  add_foreign_key "product_classifications", "classifications"
+  add_foreign_key "product_classifications", "classifications", name: "product_classifications_classification_fk"
+  add_foreign_key "product_classifications", "products"
+  add_foreign_key "product_classifications", "products", name: "product_classifications_product_fk"
   add_foreign_key "product_descriptions", "products"
   add_foreign_key "product_product_relationships", "products", column: "from_product_id", name: "from_product_fk"
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"

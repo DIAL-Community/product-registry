@@ -7,7 +7,7 @@
       <%= "#{t('model.workflow').to_s.titlecase}: #{@workflow.name}" %>
     </h5>
   </div>
-  <%= image_tag(@workflow.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
+  <%= image_tag(@workflow.image_file, class: 'card-img-top px-2 py-2 mx-auto workflow-filter', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="workflow-viewer" class="wysiwyg-viewer">
     </div>
@@ -42,7 +42,7 @@
             <div class="card h-100">
               <div class="card-body py-2">
                 <%= link_to(use_case, style: 'text-decoration: none;') do %>
-                  <%= image_tag(use_case.image_file, class: 'footer-img') %>
+                  <%= image_tag(use_case.image_file, class: 'footer-img use-case-filter') %>
                   <%= use_case.name %> 
                 <% end %>
                 <div class="row">
@@ -70,11 +70,15 @@
 
     <div class="row mt-2">
       <div class="col-12">
-        <% @workflow.building_blocks.order("name").each do |building_block| %>
-          <%= link_to(building_block, style: 'text-decoration: none;') do %>
-            <%= image_tag(building_block.image_file, class: 'footer-img', title: building_block.name) %>
-          <% end %>
-        <% end %>
+        <div class="card h-100">
+          <div class="card-body py-2">
+            <% @workflow.building_blocks.order("name").each do |building_block| %>
+              <%= link_to(building_block, style: 'text-decoration: none;') do %>
+                <%= image_tag(building_block.image_file, class: 'footer-img', title: building_block.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -21,7 +21,7 @@
 
           workflows.each do |workflow|
             concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-                            class: 'footer-img-small mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                            class: 'footer-img-small mr-1 workflow-filter', 'data-toggle': 'tooltip', 'data-placement': 'top'))
           end
           concat('</div>'.html_safe)
         end
