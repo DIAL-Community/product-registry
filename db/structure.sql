@@ -1071,7 +1071,11 @@ CREATE TABLE public.products (
     statistics jsonb DEFAULT '"{}"'::jsonb NOT NULL,
     is_child boolean DEFAULT false,
     parent_product_id integer,
-    tags character varying[] DEFAULT '{}'::character varying[]
+    tags character varying[] DEFAULT '{}'::character varying[],
+    code_lines integer,
+    cocomo integer,
+    est_hosting integer,
+    est_invested integer
 );
 
 
@@ -1558,6 +1562,37 @@ ALTER SEQUENCE public.use_case_descriptions_id_seq OWNED BY public.use_case_desc
 
 
 --
+-- Name: use_case_headers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.use_case_headers (
+    id bigint NOT NULL,
+    use_case_id bigint,
+    locale character varying NOT NULL,
+    header jsonb DEFAULT '{}'::jsonb NOT NULL
+);
+
+
+--
+-- Name: use_case_headers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.use_case_headers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: use_case_headers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.use_case_headers_id_seq OWNED BY public.use_case_headers.id;
+
+
+--
 -- Name: use_case_step_descriptions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1620,6 +1655,36 @@ CREATE SEQUENCE public.use_case_steps_id_seq
 --
 
 ALTER SEQUENCE public.use_case_steps_id_seq OWNED BY public.use_case_steps.id;
+
+
+--
+-- Name: use_case_steps_products; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.use_case_steps_products (
+    id bigint NOT NULL,
+    use_case_step_id bigint NOT NULL,
+    product_id bigint NOT NULL
+);
+
+
+--
+-- Name: use_case_steps_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.use_case_steps_products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: use_case_steps_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.use_case_steps_products_id_seq OWNED BY public.use_case_steps_products.id;
 
 
 --
@@ -2048,6 +2113,13 @@ ALTER TABLE ONLY public.use_case_descriptions ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- Name: use_case_headers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_headers ALTER COLUMN id SET DEFAULT nextval('public.use_case_headers_id_seq'::regclass);
+
+
+--
 -- Name: use_case_step_descriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2059,6 +2131,13 @@ ALTER TABLE ONLY public.use_case_step_descriptions ALTER COLUMN id SET DEFAULT n
 --
 
 ALTER TABLE ONLY public.use_case_steps ALTER COLUMN id SET DEFAULT nextval('public.use_case_steps_id_seq'::regclass);
+
+
+--
+-- Name: use_case_steps_products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps_products ALTER COLUMN id SET DEFAULT nextval('public.use_case_steps_products_id_seq'::regclass);
 
 
 --
@@ -2370,6 +2449,14 @@ ALTER TABLE ONLY public.use_case_descriptions
 
 
 --
+-- Name: use_case_headers use_case_headers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_headers
+    ADD CONSTRAINT use_case_headers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: use_case_step_descriptions use_case_step_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2383,6 +2470,14 @@ ALTER TABLE ONLY public.use_case_step_descriptions
 
 ALTER TABLE ONLY public.use_case_steps
     ADD CONSTRAINT use_case_steps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: use_case_steps_products use_case_steps_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps_products
+    ADD CONSTRAINT use_case_steps_products_pkey PRIMARY KEY (id);
 
 
 --
@@ -2691,6 +2786,13 @@ CREATE INDEX index_use_case_descriptions_on_use_case_id ON public.use_case_descr
 
 
 --
+-- Name: index_use_case_headers_on_use_case_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_use_case_headers_on_use_case_id ON public.use_case_headers USING btree (use_case_id);
+
+
+--
 -- Name: index_use_case_step_descriptions_on_use_case_step_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2824,6 +2926,13 @@ CREATE UNIQUE INDEX products_projects_idx ON public.projects_products USING btre
 
 
 --
+-- Name: products_use_case_steps_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX products_use_case_steps_idx ON public.use_case_steps_products USING btree (product_id, use_case_step_id);
+
+
+--
 -- Name: products_users_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2905,6 +3014,13 @@ CREATE UNIQUE INDEX sector_orcs ON public.organizations_sectors USING btree (sec
 --
 
 CREATE UNIQUE INDEX sectors_projects_idx ON public.projects_sectors USING btree (sector_id, project_id);
+
+
+--
+-- Name: use_case_steps_products_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX use_case_steps_products_idx ON public.use_case_steps_products USING btree (use_case_step_id, product_id);
 
 
 --
@@ -3113,6 +3229,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 ALTER TABLE ONLY public.use_cases
     ADD CONSTRAINT fk_rails_d2fed50240 FOREIGN KEY (sector_id) REFERENCES public.sectors(id);
+
+
+--
+-- Name: use_case_headers fk_rails_de4b7a8ac2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_headers
+    ADD CONSTRAINT fk_rails_de4b7a8ac2 FOREIGN KEY (use_case_id) REFERENCES public.use_cases(id);
 
 
 --
@@ -3348,6 +3472,22 @@ ALTER TABLE ONLY public.product_product_relationships
 
 
 --
+-- Name: use_case_steps_products use_case_steps_products_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps_products
+    ADD CONSTRAINT use_case_steps_products_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: use_case_steps_products use_case_steps_products_step_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.use_case_steps_products
+    ADD CONSTRAINT use_case_steps_products_step_fk FOREIGN KEY (use_case_step_id) REFERENCES public.use_case_steps(id);
+
+
+--
 -- Name: use_case_steps_workflows use_case_steps_workflows_step_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3504,6 +3644,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200415182207'),
 ('20200415182431'),
 ('20200416142235'),
-('20200428234311');
+('20200428155300'),
+('20200428234311'),
+('20200429220626'),
+('20200503141314');
 
 

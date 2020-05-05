@@ -39,7 +39,8 @@ class UseCasesController < ApplicationController
   def new
     authorize UseCase, :mod_allowed?
     @use_case = UseCase.new
-    @ucDesc = UseCaseDescription.new
+    @uc_desc = UseCaseDescription.new
+    @ucs_header = UseCaseHeader.new
   end
 
   # GET /use_cases/1/edit
@@ -65,7 +66,8 @@ class UseCasesController < ApplicationController
   def create
     authorize UseCase, :mod_allowed?
     @use_case = UseCase.new(use_case_params)
-    @ucDesc = UseCaseDescription.new
+    @uc_desc = UseCaseDescription.new
+    @ucs_header = UseCaseHeader.new
 
     if (params[:selected_sdg_targets])
       params[:selected_sdg_targets].keys.each do |sdg_target_id|
@@ -76,11 +78,17 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.save
-        if (use_case_params[:uc_desc])
-          @ucDesc.use_case_id = @use_case.id
-          @ucDesc.locale = I18n.locale
-          @ucDesc.description = JSON.parse(use_case_params[:uc_desc])
-          @ucDesc.save
+        if use_case_params[:uc_desc].present?
+          @uc_desc.use_case_id = @use_case.id
+          @uc_desc.locale = I18n.locale
+          @uc_desc.description = JSON.parse(use_case_params[:uc_desc])
+          @uc_desc.save
+        end
+        if use_case_params[:ucs_header].present?
+          @ucs_header.use_case_id = @use_case.id
+          @ucs_header.locale = I18n.locale
+          @ucs_header.header = JSON.parse(use_case_params[:ucs_header])
+          @ucs_header.save
         end
         format.html { redirect_to @use_case,
                       flash: { notice: t('messages.model.created', model: t('model.use-case').to_s.humanize) }}
@@ -106,11 +114,18 @@ class UseCasesController < ApplicationController
     end
     @use_case.sdg_targets = sdg_targets.to_a
 
-    if (use_case_params[:uc_desc])
-      @ucDesc.use_case_id = @use_case.id
-      @ucDesc.locale = I18n.locale
-      @ucDesc.description = JSON.parse(use_case_params[:uc_desc])
-      @ucDesc.save
+    if use_case_params[:uc_desc].present?
+      @uc_desc.use_case_id = @use_case.id
+      @uc_desc.locale = I18n.locale
+      @uc_desc.description = JSON.parse(use_case_params[:uc_desc])
+      @uc_desc.save
+    end
+
+    if use_case_params[:ucs_header].present?
+      @ucs_header.use_case_id = @use_case.id
+      @ucs_header.locale = I18n.locale
+      @ucs_header.header = JSON.parse(use_case_params[:ucs_header])
+      @ucs_header.save
     end
 
     respond_to do |format|
@@ -142,9 +157,13 @@ class UseCasesController < ApplicationController
     def set_use_case
       @use_case = UseCase.find_by(id: params[:id]) or not_found
       @sector_name = Sector.find(@use_case.sector_id).name
-      @ucDesc = UseCaseDescription.where(use_case_id: params[:id], locale: I18n.locale).first
-      if !@ucDesc
-        @ucDesc = UseCaseDescription.new
+      @uc_desc = UseCaseDescription.where(use_case_id: params[:id], locale: I18n.locale).first
+      if @uc_desc.nil?
+        @uc_desc = UseCaseDescription.new
+      end
+      @ucs_header = UseCaseHeader.where(use_case_id: params[:id], locale: I18n.locale).first
+      if @ucs_header.nil?
+        @ucs_header = UseCaseHeader.new
       end
     end
 
@@ -255,7 +274,7 @@ class UseCasesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def use_case_params
     params.require(:use_case)
-          .permit(:name, :slug, :sector_id, :uc_desc, :maturity)
+          .permit(:name, :slug, :sector_id, :uc_desc, :ucs_header, :maturity)
           .tap do |attr|
             valid_tags = []
             if params[:use_case_tags].present?
