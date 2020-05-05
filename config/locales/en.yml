@@ -126,6 +126,7 @@ en:
         other-names: Other Names
         key-functionalities: Key Digital Functionalities
         example-of-use: Examples of use in different sectors
+        no-data: We couldn't find any building blocks for this use case.
       index:
         bb-product: "Example software: "
         bb-product-popover:
@@ -297,6 +298,8 @@ en:
         est-hosting: Estimated hosting costs (monthly)
         est-invested: Estimated money invested
         cocomo: The estimated effort is calculated using the COCOMO method. 
+        classifications: Product classifications
+        classification-source: Source
     product-suite:
       index:
         no-data: We couldn't find any product suite in the database.
@@ -575,7 +578,7 @@ en:
     use-case-step:
       show:
         other-steps: Steps in Use Case
-        no-data: We couldn't find any step for this use case.
+        no-data: We couldn't find any steps for this use case.
       form:
         use-case: Use Case
         step-number: Step number
