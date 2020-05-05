@@ -1,3 +1,12 @@
 // Place all the styles related to the use_cases controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.use-case-color {
+  color: #19486A;
+  fill:  #19486A;
+}
+
+.use-case-filter {
+  filter: invert(24%) sepia(26%) saturate(1302%) hue-rotate(162deg) brightness(94%) contrast(95%);
+}

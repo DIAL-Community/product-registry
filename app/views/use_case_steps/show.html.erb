@@ -63,12 +63,16 @@
     </div>
     <div class="row mt-2">
       <div class="col-12">
-        <% @use_case_step.workflows.order("name").each do |workflow| %>
-          <% building_blocks = building_blocks | workflow.building_blocks %>
-          <%= link_to(workflow, style: 'text-decoration: none;') do %>
-            <%= image_tag(workflow.image_file, class: 'footer-img', title: workflow.name) %>
-          <% end %>
-        <% end %>
+        <div class="card h-100">
+          <div class="card-body py-2">
+            <% @use_case_step.workflows.order("name").each do |workflow| %>
+              <% building_blocks = building_blocks | workflow.building_blocks %>
+              <%= link_to(workflow, style: 'text-decoration: none;') do %>
+                <%= image_tag(workflow.image_file, class: 'footer-img workflow-filter', title: workflow.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -79,11 +83,15 @@
     </div>
     <div class="row mt-2">
       <div class="col-12">
-        <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
-          <%= link_to(building_block, style: 'text-decoration: none;') do %>
-            <%= image_tag(building_block.image_file, class: 'footer-img', title: building_block.name) %>
-          <% end %>
-        <% end %>
+        <div class="card h-100">
+          <div class="card-body py-2">
+            <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
+              <%= link_to(building_block, style: 'text-decoration: none;') do %>
+                <%= image_tag(building_block.image_file, class: 'footer-img', title: building_block.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

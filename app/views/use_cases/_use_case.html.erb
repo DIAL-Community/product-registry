@@ -7,7 +7,7 @@
     </div>
     <div class="model-logo">
       <%= link_to(use_case) do %>
-        <%= image_tag(use_case.image_file, class: 'card-img-top align-middle px-2 py-2') %>
+        <%= image_tag(use_case.image_file, class: 'card-img-top align-middle px-2 py-2 use-case-filter') %>
       <% end %>
     </div>
 
@@ -33,7 +33,7 @@
           concat(content.html_safe)
           workflows.each do |workflow|
             concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-                             class: 'footer-img-small mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                             class: 'footer-img-small mr-1 workflow-filter', 'data-toggle': 'tooltip', 'data-placement': 'top'))
           end
 
           # When we have image for each workflow, we can use the following code.

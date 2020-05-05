@@ -188,7 +188,7 @@
             <div class="card">
               <div class="card-body">
                 <%= link_to bb do %>
-                  <%= image_tag(bb.image_file, class: 'card-image align-middle p-0') %>
+                  <%= image_tag(bb.image_file, class: 'card-image align-middle p-0', title: bb.name, 'data-toggle': 'tooltip', 'data-placement': 'top' ) %>
                 <% end %>
               </div>
             </div>

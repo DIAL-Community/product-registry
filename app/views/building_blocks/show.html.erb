@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<% if @building_block.products %>
+<% if !@building_block.products.nil? && @building_block.products.count > 0 %>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
@@ -49,11 +49,15 @@
 
     <div class="row mt-2">
       <div class="col-12">
-        <% @building_block.workflows.order("name").each do |workflow| %>
-          <%= link_to(workflow, style: 'text-decoration: none;') do %>
-            <%= image_tag(workflow.image_file, class: 'footer-img mr-1', title: workflow.name) %>
-          <% end %>
-        <% end %>
+        <div class="card h-100">
+          <div class="card-body py-2">
+            <% @building_block.workflows.order("name").each do |workflow| %>
+              <%= link_to(workflow, style: 'text-decoration: none;') do %>
+                <%= image_tag(workflow.image_file, class: 'footer-img mr-1 workflow-filter', title: workflow.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

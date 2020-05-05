@@ -21,7 +21,7 @@
       <%= @use_case.maturity %>
     </div>
   </div>
-  <%= image_tag(@use_case.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
+  <%= image_tag(@use_case.image_file, class: 'card-img-top px-2 py-2 mx-auto use-case-filter', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="usecase-viewer" class="wysiwyg-viewer">
     </div>
@@ -79,9 +79,10 @@
               <% end %>
               <div class="row mt-2">
                 <div class="col-12">
+                  <small class="workflow-color"><%= t('model.workflow').to_s.pluralize.titlecase %>:</small>
                   <% use_case_step.workflows.each do |workflow| %>
                     <%= link_to(workflow, style: 'text-decoration: none;') do %>
-                      <%= image_tag(workflow.image_file, class: 'footer-img mr-1', title: workflow.name) %>
+                      <%= image_tag(workflow.image_file, class: 'footer-img mr-1 workflow-filter', title: workflow.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
                     <% end %>
                   <% end %>
                 </div>
@@ -116,15 +117,27 @@
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
     </div>
-    <div class="row mt-2">
-      <div class="col-12">
-        <% building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
-          <%= link_to(building_block, style: 'text-decoration: none;') do %>
-            <%= image_tag(building_block.image_file, class: 'footer-img mr-1', title: building_block.name) %>
-          <% end %>
-        <% end %>
+    <% if !building_blocks.nil? %>
+      <div class="row mt-2">
+        <div class="col-12">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <% !building_blocks.nil? && building_blocks.sort_by{|building_block| building_block.name.downcase }.each do |building_block| %>
+                <%= link_to(building_block, style: 'text-decoration: none;') do %>
+                  <%= image_tag(building_block.image_file, class: 'footer-img mr-1', title: building_block.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    <% else %>
+      <div class="row">
+        <div class="col-12">
+            <small class="text-muted"><%= t('view.building-block.show.no-data') %></small>
+        </div>
+      </div>
+    <% end %>
   </div>
 
 <script>

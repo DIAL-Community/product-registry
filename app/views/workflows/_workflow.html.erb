@@ -7,7 +7,7 @@
     </div>
     <div class="model-logo">
       <%= link_to(workflow) do %>
-        <%= image_tag(workflow.image_file, class: 'card-img-top align-middle py-2') %>
+        <%= image_tag(workflow.image_file, class: 'card-img-top align-middle py-2 workflow-filter') %>
       <% end %>
     </div>
     <div class="card-footer footer-padding">
@@ -17,9 +17,9 @@
           content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
                           data-html='true' data-content='#{workflow_footer_popover(use_cases, 'view.workflow.index.use-case-popover')}'>"
           concat(content.html_safe)
-          concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1'))
+          concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1 use-case-filter'))
                 
-          content = "<span class='small text-muted ml-1'>#{use_cases.size} #{t('model.use-case').titlecase.pluralize(use_cases.size)}</span>"
+          content = "<span class='small text-muted ml-1 use-case-color'>#{use_cases.size} #{t('model.use-case').titlecase.pluralize(use_cases.size)}</span>"
           concat(content.html_safe)
 
           # When we have image for each workflow, we can use the following code.
