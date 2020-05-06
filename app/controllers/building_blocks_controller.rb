@@ -270,8 +270,12 @@ class BuildingBlocksController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block
-      @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
-      @bbDesc = BuildingBlockDescription.where(building_block_id: params[:id], locale: I18n.locale).first
+      if !params[:id].scan(/\D/).empty?
+        @building_block = BuildingBlock.find_by(slug: params[:id]) or not_found
+      else
+        @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
+      end
+      @bbDesc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
       if !@bbDesc
         @bbDesc = BuildingBlockDescription.new
       end
@@ -281,7 +285,7 @@ class BuildingBlocksController < ApplicationController
     def building_block_params
       params
         .require(:building_block)
-        .permit(:name, :confirmation, :bb_desc)
+        .permit(:name, :confirmation, :bb_desc, :slug)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

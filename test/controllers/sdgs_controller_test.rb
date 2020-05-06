@@ -5,7 +5,7 @@ class SustainableDevelopmentGoalsControllerTest < ActionDispatch::IntegrationTes
 
   setup do
     sign_in FactoryBot.create(:user, role: :admin)
-    @goal = use_cases(:one)
+    @goal = sustainable_development_goals(:one)
   end
 
   test "should get index" do

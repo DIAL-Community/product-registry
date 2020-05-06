@@ -155,7 +155,11 @@ class UseCasesController < ApplicationController
   private
 
     def set_use_case
-      @use_case = UseCase.find_by(id: params[:id]) or not_found
+      if !params[:id].scan(/\D/).empty?
+        @use_case = UseCase.find_by(slug: params[:id]) or not_found
+      else
+        @use_case = UseCase.find_by(id: params[:id]) or not_found
+      end
       @sector_name = Sector.find(@use_case.sector_id).name
       @uc_desc = UseCaseDescription.where(use_case_id: params[:id], locale: I18n.locale).first
       if @uc_desc.nil?

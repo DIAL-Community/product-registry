@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :tags
-  resources :use_case_steps
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   resources :product_suites
@@ -70,9 +68,7 @@ Rails.application.routes.draw do
   end
 
   resources :operator_services
-
   resources :audits, only: [:index]
-
   resources :stylesheets
 
   resources :locations do
@@ -87,6 +83,9 @@ Rails.application.routes.draw do
   resources :contacts do
     resources :organizations
   end
+
+  resources :tags
+  resources :use_case_steps
 
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
