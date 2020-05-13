@@ -20,7 +20,7 @@ class Product < ApplicationRecord
                                      after_add: :association_add,
                                      before_remove: :association_remove
 
-  has_many :products_sustainable_development_goals
+  has_many :products_sustainable_development_goals, dependent: :delete_all
   has_many :sustainable_development_goals, through: :products_sustainable_development_goals, after_add: :association_add, before_remove: :association_remove
 
   has_many :include_relationships, -> { where(relationship_type: 'composed')}, foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
