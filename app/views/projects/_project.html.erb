@@ -25,7 +25,7 @@
       <div class="footer-row">
         <%= t('view.project.index.source') %>: 
         <% if !project.origin.nil? %>
-          <%= image_tag("origins/#{project.origin.slug}.png", class: 'project-footer-img') %> 
+          <%= image_tag(project.origin_image_file, class: 'project-footer-img') %> 
         <% end %>
       </div>
     </div>
