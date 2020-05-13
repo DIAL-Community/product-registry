@@ -11,7 +11,7 @@ class OrganizationPolicy < ApplicationPolicy
       [:id, :name, :is_endorser, :is_mni, :when_endorsed, :website, :slug, :logo,
        :organization_description, :aliases]
     elsif user.role == 'org_user'
-      [:name, :logo]
+      [:name, :logo, :organization_description]
     else
       [:logo]
     end
