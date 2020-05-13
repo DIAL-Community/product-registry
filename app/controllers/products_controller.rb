@@ -245,20 +245,28 @@ class ProductsController < ApplicationController
     end
     @product.building_blocks = building_blocks.to_a
 
-    product_sdgs = []
-    @product.sustainable_development_goals.delete_all
     if params[:selected_sustainable_development_goals].present?
-      params[:selected_sustainable_development_goals].each do |selected_sdg|
-        curr_sdg = @product.products_sustainable_development_goals.find_by(sustainable_development_goal_id: selected_sdg)
-        if curr_sdg.nil?
-          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
-          new_prod_sdg.sustainable_development_goal_id = selected_sdg
-          new_prod_sdg.link_type = 'Validated'
-
-          product_sdgs.push(new_prod_sdg)
-        end
+      existing_sdgs = ProductsSustainableDevelopmentGoal.where(product_id: @product.id)
+                                                        .pluck('sustainable_development_goal_id')
+      ui_sdgs = params[:selected_sustainable_development_goals].keys
+                                                               .map(&:to_i)
+      removed_sdgs = existing_sdgs - ui_sdgs
+      logger.debug("Removing: #{removed_sdgs} product - sdgs relationship.")
+      removed_sdgs.each do |sdg_id|
+        ProductsSustainableDevelopmentGoal.where(product_id: @product.id,
+                                                 sustainable_development_goal_id: sdg_id)
+                                          .delete_all
       end
-      @product.products_sustainable_development_goals << product_sdgs
+
+      added_sdgs = ui_sdgs - existing_sdgs
+      logger.debug("Adding: #{added_sdgs} product - sdgs relationship")
+      added_sdgs.each do |sdg_id|
+        new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+        new_prod_sdg.sustainable_development_goal_id = sdg_id
+        new_prod_sdg.link_type = 'Validated'
+
+        @product.products_sustainable_development_goals << new_prod_sdg
+      end
     end
 
     if params[:logo].present?
