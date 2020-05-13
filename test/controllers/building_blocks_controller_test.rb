@@ -27,7 +27,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creating building_block without logo should not fail" do
-    post building_blocks_url, params: { building_block: { name: "Some Name", slug: 'some_name' }}
+    post building_blocks_url, params: { building_block: { name: "Some Name", slug: "some_name" }}
     created_building_block = BuildingBlock.last
 
     assert_equal created_building_block.name, "Some Name"
@@ -45,7 +45,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   test "should create building_block" do
     assert_difference('BuildingBlock.count') do
       uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
-      post building_blocks_url, params: { building_block: { name: @building_block.name, slug: @building_block.slug }, logo: uploaded_file }
+      post building_blocks_url, params: { building_block: { name: "Another BB", slug: "another_bb"}, logo: uploaded_file }
     end
 
     assert_redirected_to building_block_url(BuildingBlock.last)

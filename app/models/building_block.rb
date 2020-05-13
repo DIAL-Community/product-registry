@@ -15,4 +15,8 @@ class BuildingBlock < ApplicationRecord
     end
   end
 
+  def to_param  # overridden
+    slug
+  end
+
 end

@@ -14,4 +14,8 @@ class Workflow < ApplicationRecord
       return '/assets/workflows/workflow_placeholder.png'
     end
   end
+
+  def to_param  # overridden
+    slug
+  end
 end

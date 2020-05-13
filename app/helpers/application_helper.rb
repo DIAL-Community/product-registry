@@ -48,7 +48,7 @@ module ApplicationHelper
       base_label = 'Use Cases'
       if params[:use_case_id].present?
         parent_path = "use_cases/#{params[:use_case_id]}"
-        parent_label = UseCase.find(params[:use_case_id]).name
+        parent_label = UseCase.find_by(slug: params[:use_case_id]).name
       end
     end
 

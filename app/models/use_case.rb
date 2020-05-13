@@ -18,4 +18,8 @@ class UseCase < ApplicationRecord
       return '/assets/use_cases/use_case_placeholder.png'
     end
   end
+
+  def to_param  # overridden
+    slug
+  end
 end
