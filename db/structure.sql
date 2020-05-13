@@ -5,7 +5,6 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -205,6 +204,8 @@ CREATE TYPE public.user_role AS ENUM (
 
 SET default_tablespace = '';
 
+SET default_with_oids = false;
+
 --
 -- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
 --
@@ -400,6 +401,40 @@ CREATE SEQUENCE public.candidate_organizations_id_seq
 --
 
 ALTER SEQUENCE public.candidate_organizations_id_seq OWNED BY public.candidate_organizations.id;
+
+
+--
+-- Name: classifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.classifications (
+    id bigint NOT NULL,
+    name character varying,
+    indicator character varying,
+    description character varying,
+    source character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: classifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.classifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: classifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.classifications_id_seq OWNED BY public.classifications.id;
 
 
 --
@@ -910,6 +945,36 @@ CREATE SEQUENCE public.product_assessments_id_seq
 --
 
 ALTER SEQUENCE public.product_assessments_id_seq OWNED BY public.product_assessments.id;
+
+
+--
+-- Name: product_classifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_classifications (
+    id bigint NOT NULL,
+    product_id bigint,
+    classification_id bigint
+);
+
+
+--
+-- Name: product_classifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_classifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_classifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_classifications_id_seq OWNED BY public.product_classifications.id;
 
 
 --
@@ -1917,6 +1982,13 @@ ALTER TABLE ONLY public.candidate_organizations ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: classifications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.classifications ALTER COLUMN id SET DEFAULT nextval('public.classifications_id_seq'::regclass);
+
+
+--
 -- Name: contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1998,6 +2070,13 @@ ALTER TABLE ONLY public.portal_views ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.product_assessments ALTER COLUMN id SET DEFAULT nextval('public.product_assessments_id_seq'::regclass);
+
+
+--
+-- Name: product_classifications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_classifications ALTER COLUMN id SET DEFAULT nextval('public.product_classifications_id_seq'::regclass);
 
 
 --
@@ -2217,6 +2296,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 
 --
+-- Name: classifications classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.classifications
+    ADD CONSTRAINT classifications_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2310,6 +2397,14 @@ ALTER TABLE ONLY public.portal_views
 
 ALTER TABLE ONLY public.product_assessments
     ADD CONSTRAINT product_assessments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_classifications product_classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_classifications
+    ADD CONSTRAINT product_classifications_pkey PRIMARY KEY (id);
 
 
 --
@@ -2548,6 +2643,13 @@ CREATE UNIQUE INDEX block_prods ON public.products_building_blocks USING btree (
 
 
 --
+-- Name: classifications_products_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX classifications_products_idx ON public.product_classifications USING btree (classification_id, product_id);
+
+
+--
 -- Name: index_aggregator_capabilities_on_aggregator_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2692,6 +2794,20 @@ CREATE INDEX index_origins_on_organization_id ON public.origins USING btree (org
 --
 
 CREATE INDEX index_product_assessments_on_product_id ON public.product_assessments USING btree (product_id);
+
+
+--
+-- Name: index_product_classifications_on_classification_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_classifications_on_classification_id ON public.product_classifications USING btree (classification_id);
+
+
+--
+-- Name: index_product_classifications_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_classifications_on_product_id ON public.product_classifications USING btree (product_id);
 
 
 --
@@ -2912,6 +3028,13 @@ CREATE INDEX product_suites_products_versions ON public.product_suites_product_v
 
 
 --
+-- Name: products_classifications_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX products_classifications_idx ON public.product_classifications USING btree (product_id, classification_id);
+
+
+--
 -- Name: products_origins_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3080,6 +3203,14 @@ CREATE UNIQUE INDEX workflows_usecases ON public.workflows_use_cases USING btree
 
 
 --
+-- Name: product_classifications fk_rails_16035b6309; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_classifications
+    ADD CONSTRAINT fk_rails_16035b6309 FOREIGN KEY (classification_id) REFERENCES public.classifications(id);
+
+
+--
 -- Name: use_case_steps fk_rails_1ab85a3bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3232,6 +3363,14 @@ ALTER TABLE ONLY public.use_cases
 
 
 --
+-- Name: product_classifications fk_rails_d5306b6dc7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_classifications
+    ADD CONSTRAINT fk_rails_d5306b6dc7 FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
 -- Name: use_case_headers fk_rails_de4b7a8ac2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3317,6 +3456,22 @@ ALTER TABLE ONLY public.organizations_sectors
 
 ALTER TABLE ONLY public.organizations_sectors
     ADD CONSTRAINT organizations_sectors_sector_fk FOREIGN KEY (sector_id) REFERENCES public.sectors(id);
+
+
+--
+-- Name: product_classifications product_classifications_classification_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_classifications
+    ADD CONSTRAINT product_classifications_classification_fk FOREIGN KEY (classification_id) REFERENCES public.classifications(id);
+
+
+--
+-- Name: product_classifications product_classifications_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_classifications
+    ADD CONSTRAINT product_classifications_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
 --
@@ -3647,6 +3802,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200428155300'),
 ('20200428234311'),
 ('20200429220626'),
+('20200501143924'),
 ('20200503141314');
 
 
