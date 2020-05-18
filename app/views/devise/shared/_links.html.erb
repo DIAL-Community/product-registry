@@ -1,23 +1,23 @@
 <%- if controller_name != 'sessions' %>
-  <small class="text-muted">Already have account?
-    <%= link_to "Log in", new_session_path(resource_name) %>.</small><br/>
+  <small class="text-muted"><%= t('view.devise.have-account') %>
+    <%= link_to t('view.devise.log-in'), new_session_path(resource_name) %>.</small><br/>
 <% end -%>
 
 <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <small class="text-muted">Doesn't have account yet?
-    <%= link_to "Sign up", new_registration_path(resource_name) %>.</small><br/>
+  <small class="text-muted"><%= t('view.devise.have-account') %>
+    <%= link_to t('view.devise.sign-up'), new_registration_path(resource_name) %>.</small><br/>
 <% end -%>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <small class="text-muted"><%= link_to "Forget your password?", new_password_path(resource_name) %></small><br/>
+  <small class="text-muted"><%= link_to t('view.devise.forget-passsword'), new_password_path(resource_name) %></small><br/>
 <% end -%>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <small class="text-muted"><%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %></small><br/>
+  <small class="text-muted"><%= link_to t('view.devise.no-confirmation'), new_confirmation_path(resource_name) %></small><br/>
 <% end -%>
 
 <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br/>
+  <%= link_to t('view.devise.no-unlock'), new_unlock_path(resource_name) %><br/>
 <% end -%>
 
 <%- if devise_mapping.omniauthable? %>

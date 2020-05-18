@@ -170,7 +170,15 @@ en:
       organization-nomatch: "Organization website doesn't match your email address."
       organization-tooltip: "Apply to be the owner for the organization which will allow you to update the organization information."
       product-tooltip: "Optionally apply as a product owner. You will need to be verified by our team member to do this."
-
+      select-org: Select your organization.
+      select-prod: Select your product.
+      have-account: Already have account?
+      no-account: Doesn't have account yet?
+      sign-up: Sign up
+      log-in: Log in
+      forget-password: Forget your password?
+      no-confirmation: Didn't receive confirmation instructions?
+      no-unlock: Didn't receive unlock instructions?
     location:
       form:
         other-names: Other Names
