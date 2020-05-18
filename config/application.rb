@@ -11,7 +11,7 @@ module Registry
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 
-    config.i18n.available_locales = [:en, :es, :fr]
+    config.i18n.available_locales = [:en, :es, :fr, :de]
     config.i18n.default_locale = :en
     config.i18n.locale = config.i18n.default_locale
 
