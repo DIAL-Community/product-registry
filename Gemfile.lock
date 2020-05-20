@@ -222,6 +222,10 @@ GEM
     pg (1.2.3-x64-mingw32)
     pg (1.2.3-x86-mingw32)
     phantomjs (2.1.1.0)
+    piwik_analytics (1.0.2)
+      actionpack
+      activesupport
+      rails (>= 3.0.0)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
       cliver (~> 0.3.1)
@@ -455,6 +459,7 @@ DEPENDENCIES
   okcomputer
   pg
   phantomjs
+  piwik_analytics (~> 1.0.0)
   poltergeist
   puma (~> 4.3.3)
   pundit
