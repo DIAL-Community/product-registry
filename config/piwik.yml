@@ -11,14 +11,14 @@
 #
 production:
   piwik:
-    id_site: 1
+    id_site: 7
     url: stats.dial.community
     use_async: false
     disabled: false
 
 development:
   piwik:
-    id_site: 1
+    id_site: 7
     url: localhost
     disabled: true
     use_async: false
@@ -26,7 +26,7 @@ development:
 
 test:
   piwik:
-    id_site: 1
+    id_site: 7
     url: localhost
     disabled: true
     use_async: false
