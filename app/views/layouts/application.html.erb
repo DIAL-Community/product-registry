@@ -67,21 +67,20 @@
         g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
       })();
 
-      (function() {
-        var previousPageUrl = null;
-        $(document).on('turbolinks:load', function() {
-          if (previousPageUrl) {
-            _paq.push(['setReferrerUrl', previousPageUrl]);
-            _paq.push(['setCustomUrl', window.location.href]);
-            _paq.push(['setDocumentTitle', document.title]);
-            if (event.data && event.data.timing) {
-              _paq.push(['setGenerationTimeMs', event.data.timing.visitEnd - event.data.timing.visitStart]);
-            }
-            _paq.push(['trackPageView']);
+      var previousPageUrl = null;
+      $(document).on('turbolinks:load', function() {
+        if (previousPageUrl) {
+          _paq.push(['setReferrerUrl', previousPageUrl]);
+          _paq.push(['setCustomUrl', window.location.href]);
+          _paq.push(['setDocumentTitle', document.title]);
+          if (event.data && event.data.timing) {
+            _paq.push(['setGenerationTimeMs', event.data.timing.visitEnd - event.data.timing.visitStart]);
           }
-          previousPageUrl = window.location.href;
-        });
-      })();
+          _paq.push(['trackPageView']);
+        }
+        previousPageUrl = window.location.href;
+      });
+
     </script>
   </head>
 <% if controller.action_name == 'map_fs'%>
