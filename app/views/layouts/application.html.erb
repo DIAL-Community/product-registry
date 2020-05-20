@@ -56,6 +56,25 @@
     <% end %>
     <link rel="icon" type="image/png" href="/favicon.png">
     <%= piwik_tracking_tag %>
+    <script type="text/javascript">
+      // Send Matomo a new event when navigating to a new page using Turbolinks
+      // (see https://developer.matomo.org/guides/spa-tracking)
+      (function() {
+        var previousPageUrl = null;
+        addEventListener('turbolinks:load', function(event) {
+          if (previousPageUrl) {
+            _paq.push(['setReferrerUrl', previousPageUrl]);
+            _paq.push(['setCustomUrl', window.location.href]);
+            _paq.push(['setDocumentTitle', document.title]);
+            if (event.data && event.data.timing) {
+              _paq.push(['setGenerationTimeMs', event.data.timing.visitEnd - event.data.timing.visitStart]);
+            }
+            _paq.push(['trackPageView']);
+          }
+          previousPageUrl = window.location.href;
+        });
+      })();
+    </script>
   </head>
 <% if controller.action_name == 'map_fs'%>
   <body id="main-body"
