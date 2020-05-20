@@ -35,4 +35,16 @@ class Project < ApplicationRecord
       return "/assets/organizations/org_placeholder.png"
     end
   end
+
+  def origin_image_file
+    if !origin.nil?
+      if File.exist?(File.join('public','assets','origins',"#{origin.slug}.png"))
+        return "/assets/origins/#{project.origin.slug}.png"
+      else
+        return "/assets/origins/origin_placeholder.png"
+      end
+    else
+      return "/assets/origins/origin_placeholder.png"
+    end
+  end
 end

@@ -35,7 +35,7 @@
     <i class="fa fa-info-circle" data-toggle="tooltip" data-html="true"
        title="<%= t('view.devise.organization-tooltip') %>"></i>
     <%= f.collection_select(:organization_id, Organization.all.order(:name), :id, :name,
-                            { include_blank: 'Select your organization.' },
+                            { include_blank: t('view.devise.select-org') },
                             { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
   </fieldset>
 
@@ -44,7 +44,7 @@
     <i class="fa fa-info-circle" data-toggle="tooltip" data-html="true"
        title="<%= t('view.devise.product-tooltip') %>"></i>
     <%= collection_select(nil, "product-owner", Product.all.order(:name), :id, :name,
-                          { include_blank: 'Select your product.' },
+                          { include_blank: t('view.devise.select-prod') },
                           { class: 'form-control', style: 'height: 3rem; font-size: 0.85rem; ' }) %>
     <div class="row mt-1">
       <div class="col-12 badges"></div>

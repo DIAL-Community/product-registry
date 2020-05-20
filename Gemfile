@@ -37,6 +37,7 @@ gem 'minitest-reporters'
 gem 'rubysl-open3'
 
 gem 'okcomputer'
+gem 'piwik_analytics', '~> 1.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.4'

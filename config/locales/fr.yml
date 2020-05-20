@@ -1,0 +1,616 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+fr:
+  errors:
+    messages:
+      extension_whitelist_error: 'Ce format d''image n''est pas pris en charge. Veuillez télécharger un jpg, jpeg, png ou gif.'
+  messages:
+    model:
+      created: '%{model} a été créé avec succès'
+      deleted: '%{model} a été supprimé avec succès'
+      delete-failed: 'Impossible de supprimer %{model}'
+      updated: '%{model} a été mis à jour avec succès'
+  pundit:
+    mod_allowed?: L'opération n'est pas autorisée
+    view_allowed?: Vous n'êtes pas autorisé à afficher cette page.
+  model:
+    building-block: composant de base
+    candidate-organization: organisation candidate
+    contact: contact
+    country: pays
+    deploys: déployer
+    glossary: glossaire
+    location: emplacement
+    office: l' office
+    organization: organisation
+    portal-view: vue du portail
+    product: produit
+    product-suite: suite de produits
+    product-version: version de produit
+    project: projet
+    sector: secteur
+    setting: réglage
+    tag: marque
+    use-case: cas d'utilisation
+    use-case-step: étape du cas d'utilisation
+    user: utilisateur
+    workflow: flux de travail
+    sdg: odd
+    sustainable-development-goal: objectif de développement durable
+    sdg_target: ODD cible
+    operator_services: services opérateurs
+  view:
+    about:
+      sdg_title: "Cadre d’investissement numérique au service des ODD"
+      sdg_subtitle: "Une approche pangouvernementale des investissements dans les technologies numériques pour atteindre les ODD"
+      enter_catalog: "Explorez le catalogue"
+      return_catalog: "Retour au catalogue"
+      explanation1: "Malgré des investissements importants, nous n'avons pas vu de véritable échelle dans les plateformes logicielles et nous n'avons pas vu d'investissement coordonné dans des produits conçus pour atteindre les ODD. Les investissements et les mises en œuvre numériques sont le plus souvent cloisonnés par secteur, ce qui entraîne une fragmentation importante et une duplication des efforts."
+      explanation2: "Cette fragmentation fait qu'il est difficile pour les gouvernements de comprendre où les produits communs pourraient être utilisés, permettant une approche pangouvernementale pour investir dans l'infrastructure numérique qui peut fournir des services numériques réutilisables à grande échelle avec un meilleur retour sur investissement."
+      explanation3: "Cet outil en ligne présente quatre couches interdépendantes - fournissant un processus étape par étape permettant aux organisations de commencer à planifier l'architecture d'entreprise et d'accélérer les progrès vers les ODD."
+      sdgs: "Objectifs de développement durable"
+      use_cases: "Cas d'utilisation"
+      bbs: "Composants de base TIC"
+      products: "Des produits"
+      ict_bbs: "Composants de base TIC"
+      workflows: "Des Flux de travail"
+      read_more: "Lire la suite"
+      watch_video: "Voir la vidéo"
+      launch: "Lancez l'appli"
+      close: "Proche"
+      intro: "Intro"
+      overview: "Aperçu"
+      policy_partners: "Décideurs et partenaires de mise en œuvre"
+      ministers_specialists: "Ministres des TIC et spécialistes techniques"
+      donors: "Donateurs"
+      donors_text1: "Les donateurs peuvent utiliser cet outil pour coordonner les investissements avec d'autres donateurs. À l'aide de la lentille de la cible SDG, un donateur peut naviguer vers une cible SDG prioritaire pour voir quels cas d'utilisation, workflows et carte de blocs de construction TIC soutiennent la progression de cette cible. Comprendre ces associations a jeté les bases pour que les donateurs voient le chevauchement qu'ils ont avec d'autres donateurs soutenant d'autres cibles des ODD. L'outil démontre qu'une poignée de flux de travail et de blocs de construction peut fournir un large éventail de cibles ODD et de cas d'utilisation correspondants."
+      donors_link: "Explorez les cibles des ODD"
+      policy_makers: "Créateurs de politiques"
+      policy_text1: "Les décideurs, à tous les niveaux, peuvent utiliser cet outil pour explorer les différents cas d'utilisation qu'ils souhaitent mettre en œuvre pour atteindre divers résultats de développement. Chaque cas d'utilisation mettra en évidence les flux de travail et les blocs de construction TIC nécessaires pour prendre en charge l'aspect numérique du cas d'utilisation. L'identification des composantes génériques des TIC soutient la coordination entre les secteurs et les ministères, pour adopter une approche pangouvernementale, afin de réaliser son investissement numérique."
+      policy_link: "Explorez les cas d'utilisation"
+      ict_ministers: "Ministres de la technologie et des TIC"
+      ict_text1: "Les ministres de la technologie peuvent utiliser cet outil pour mapper les systèmes et applications actuellement déployés dans le pays aux blocs de construction TIC pour comprendre quels autres cas d'utilisation pourraient être pris en charge en utilisant leur technologie actuelle. La mise en correspondance des systèmes avec les éléments constitutifs des TIC peut également permettre de mieux comprendre les lacunes existantes ou les opportunités de consolidation."
+      ict_link: "Explorez les composants de base TIC"
+      specialists: "Spécialistes technologiques"
+      specialists_text1: "Les spécialistes en technologie peuvent utiliser cet outil pour aider à intégrer les offres et les crochets d'interopérabilité afin de répondre aux besoins de bout en bout des programmes gouvernementaux. Découvrez également les produits existants qui peuvent répondre aux cas d'utilisation et aux workflows pour des besoins programmatiques spécifiques, en fournissant des informations sur les questions «construire ou acheter» pour la mise en œuvre du projet."
+      specialists_link: "Découvrez les produits"
+      implementers: "Partenaires d'exécution"
+      implementers_text1: "Les partenaires de mise en œuvre peuvent utiliser cet outil pour identifier les blocs de construction et les produits TIC qui fournissent divers flux de travail ou processus métier nécessaires pour fournir des programmes de développement ou diverses initiatives numériques."
+      implementers_link: "Explorez les flux de travail"
+      sdg_desc: "Les ODD comprennent 17 objectifs et 169 cibles représentant les priorités mondiales d'investissement pour réaliser le développement durable."
+      use_case_desc: "Un cas d'utilisation définit les étapes qu'un individu ou un système entreprendra pour atteindre un objectif commercial."
+      workflow_desc: "Un flux de travail est un processus métier générique qui peut être appliqué aux cas d'utilisation des ODD dans plusieurs secteurs."
+      bb_desc: "Un Composant de base TIC est un composant logiciel réutilisable prêt pour l'entreprise qui fournit des fonctionnalités clés pour faciliter les flux de travail génériques dans plusieurs secteurs."
+      product_desc: "Un produit est une offre technologique spécifique conçue pour implémenter un ou plusieurs composants de base TIC"
+      contact: "Nous contacter"
+      contact_text: "Pour plus d'informations, veuillez contacter l'équipe ICT4SDG de Digital Impact Alliance"
+      itu: "Ce cadre a été développé en partenariat avec l'Union internationale des télécommunications (UIT)"
+    audit:
+      audit-log: "Modifications enregistrées pour"
+      username: "Nom d'utilisateur"
+      action: "Action"
+      changes: "Modifications"
+    building-block:
+      show:
+        short-description: Brève description
+        full-description: Description complète
+        other-names: Autres noms
+        key-functionalities: Fonctionnalités numériques clés
+        example-of-use: Exemples d'utilisation dans différents secteurs
+        no-data: Nous n'avons trouvé aucun bloc de construction pour ce cas d'utilisation.
+      index:
+        bb-product: "Exemple de logiciel:"
+        bb-product-popover:
+          one: Exemple de logiciel existant
+          other: Exemple de logiciel existant
+
+        bb-workflow: "Exemple de flux de travail:"
+        bb-workflow-popover:
+          one: Mappage aux flux de travail associés
+          other: Mappage aux flux de travail associés
+
+        definition: "Les composants de base TIC sont des composants logiciels réutilisables prêts à l'emploi, offrant des fonctionnalités clés facilitant les flux de travail génériques dans plusieurs secteurs."
+        characteristics: |
+          Composants logiciels réutilisables
+          Peut être open source, commercial sur étagère (COTS), ou disponible gratuitement avec un accès ouvert aux données
+          Facilite un ou plusieurs workflows génériques
+          Applicable à plusieurs UseCases dans plusieurs secteurs
+          Interopérable avec d'autres blocs de construction TIC
+          Conçu pour l'évolutivité et l'extensibilité
+          Basé sur des normes
+        description: "Chaque page composant de base TIC comprend une description, des fonctionnalités numériques clés, des exemples sectoriels, des exemples de produits logiciels et des mappages aux workflows définis dans ce cadre. La liste des composants de base TIC, des produits logiciels exemplaires et des mappages n'est pas exhaustive et d'autres seront ajoutés dans les prochaines versions. Veuillez noter que les exemples de produits logiciels sont fournis à titre indicatif uniquement. Une cartographie et un classement plus poussés des produits existants basés sur la maturité, la durabilité et l'applicabilité aux composants de base TIC seront abordés au fil du temps." 
+    candidate-organization:
+      form:
+        created: Merci pour votre soumission. Nous examinerons attentivement votre soumission. La soumission approuvée sera disponible dans la liste des organisations.
+      index:
+        approve: Approuver
+        no-data: "Nous n'avons trouvé aucune organisation candidate dans la base de données."
+        reject: Rejeter
+        status: Statut
+        status-approved: Approuvé
+        status-new: Nouvelle soumission
+        status-rejected: Rejeté
+        website: Site Internet
+    contact:
+      form:
+        email: Email
+        title: Intituler
+    devise:
+      email: Email
+      password: Mot de passe
+      password-confirmation: Confirmation mot de passe
+      organization-required: Les informations sur l'organisation sont requises lors de l'inscription en tant qu'éditeur d'organisation.
+      organization-nomatch: "Le site Web de l'organisation ne correspond pas à votre adresse e-mail."
+      organization-tooltip: "Demandez à être le propriétaire de l'organisation, ce qui vous permettra de mettre à jour les informations de l'organisation."
+      product-tooltip: "Appliquer éventuellement en tant que propriétaire du produit. Pour ce faire, vous devrez être vérifié par un membre de notre équipe."
+      select-org: Sélectionnez votre organisation.
+      select-prod: Sélectionnez votre produit.
+      have-account: Vous avez déjà un compte?
+      no-account: N'a pas encore de compte?
+      sign-up: S'inscrire
+      log-in: S'identifier
+      forget-password: Mot de passe oublié?
+      no-confirmation: Vous n'avez pas reçu d'instructions de confirmation?
+      no-unlock: Vous n'avez pas reçu d'instructions de déverrouillage?
+    location:
+      form:
+        other-names: Autres noms
+      index:
+        no-data: Nous n'avons trouvé aucun emplacement dans la base de données.
+    organization:
+      form:
+        endorser: Endosseur
+        aggregator: Agrégateur
+        other-names: Autres noms
+        website: Site Internet
+        when-endorsed: Une fois approuvé
+        description-placeholder: La description de l'organisation est disponible ici.
+      index:
+        endorsers: Endosseurs
+        aggregators: Agrégateurs
+        description: Description
+        endorsed-date: Approuvé le
+        export: Exporter
+        export-option: Exporter avec les informations de contacts
+        filter: Filtre
+        year: An
+        view-audit: Afficher le journal d'audit
+      map:
+        aggregators: Carte de couverture des agrégateurs et des opérateurs
+        title: Carte des endosseurs des principes numériques
+        all-aggregators: Tous les agrégateurs
+        all-operators: Tous les opérateurs
+        all-services: Tous les services
+        all-sectors: Tous secteurs
+        all-years: Toutes les années
+      show:
+        other-offices: Autres bureaux
+        current: Actuel
+        unknown: Ignoré
+        with-org: Avec organisation
+    portal:
+      index: 
+        landing-page: Page de destination
+        background-color: Couleur de l'arrière plan
+        page-footer: Pied de page
+        header-logo: Logo d'en-tête
+      form:
+        about-page: Fournir du contenu pour la page de destination principale
+        background-color: Entrez une couleur d'arrière-plan au format rrggbb
+        page-footer: Fournir du contenu pour le pied de page du site
+        header-logo: Téléchargez un fichier à utiliser comme logo d'en-tête principal
+        subdomain: Sous-domaine
+    product:
+      form:
+        complete-assessment: Marquez l'évaluation comme terminée.
+        default-url: URL par défaut
+        digisquare-maturity: Maturité Digital Square
+        high: élevé
+        included-products: Produits inclus
+        interoperable-products: Produits interopérables
+        is-launchable: Cochez pour indiquer que le produit peut être lancé automatiquement.
+        low: faible
+        medium: moyen
+        osc-maturity: Maturité OSC
+        other-names: Autres noms
+        description-placeholder: Entrez la description du produit ici
+        repository: Dépôt de code
+        start-assessment: Commencez à évaluer ce produit.
+        website: Site Internet
+        est-hosting: Coût d'hébergement estimé
+        est-invested: Estimation de l'argent investi
+      index:
+        description: Description
+        filter: Filtre
+        has-maturity: "A maturité?"
+        product-graph: Graphique du produit
+        is_endorsed: "Utilisé / maintenu par un endosseur"
+        is_deployable: "Ce produit est déployable en un clic"
+        multiple: "possède plusieurs référentiels. Des informations sur chacun sont affichées ci-dessous."
+        source: "La source:"
+        sources: "Sources:"
+        source_dial: "Digital Impact Alliance Open Source Center"
+        source_unicef: "Unicef"
+        source_digital_square: "Digital Square"
+        footer_bb_candidate: "Candidat pour"
+        footer_bb: "composant de base"
+        footer_interop: "Compatible avec"
+        footer_sdg: "Satisfait ODD"
+        footer_maturity_score: "Pourcentage global des critères satisfaits (1-10)"
+        footer_maturity_ds: "Scores du modèle de bonne maturité globale de Digital Square (1-10)"
+        footer_maturity_osc: "Score global du modèle de maturité du centre DIAL Open Source"
+        footer_osc_score: "Pourcentage global des critères satisfaits (1-10)"
+        footer_popover_bb: "Candidat pour les composants de base suivants"
+        footer_popover_sdg: "Satisfait aux ODD suivants"
+        footer_popover_interop: "Ce produit est compatible avec"
+        footer_popover_maturity: "Évaluations de la maturité des produits"
+        definition: Un produit est une solution logicielle qui peut remplir un ou plusieurs composants de base
+        footer_help: "Le pied de page de la fiche produit contient 3 lignes. Passez la souris sur n'importe quelle icône pour obtenir plus d'informations sur les données affichées. Les deux premières lignes peuvent contenir des informations sur les objectifs de développement durable auxquels ce produit répond, les composants de base pour lesquels les produits sont candidats, des informations sur la maturité des produits telles que mesurées par l'Open Source Center ou Digital Square de DIAL, et les autres produits avec lesquels ce produit interagit. La ligne du bas contiendra toujours des informations sur les sources de données pour ce produit - actuellement, nous récupérons les données sur les produits à partir du DIAL Open Source Center, de Digital Square et de la liste des candidats aux produits mondiaux de l'Unicef."
+      launch:
+        auto-launch: Lancer automatiquement une instance de ce produit
+      show:
+        auto-launch: Lancement automatique
+        not-auto-launch: Ce produit n'est pas configuré pour le lancement automatique
+        no-digisquare-eval: Ce produit n'a pas été évalué avec le modèle de maturité de Digital Square.
+        no-include-product: Nous n'avons aucune information incluse pour ce produit.
+        no-interrop-product: Nous n'avons aucune information d'interopérabilité pour ce produit.
+        no-osc-eval: Ce produit n'a pas été évalué avec le modèle de maturité de l'OSC.
+        active-version: Version actuelle
+        license: Licence
+        license-unknown: Ignoré
+        statistics: Statistiques
+        star: Stars
+        watcher: Nombre d'observateurs
+        fork: Nombre de fourches
+        current-version: Version actuelle
+        created: Créé
+        last-updated: Dernière mise à jour
+        open-pr: Demandes de tirage ouvertes
+        merged-pr: Demandes de tirage fusionnées
+        no-version-data: Données non disponibles
+        very-active: Référentiel très actif
+        not-very-active: Référentiel peu actif
+        inactive: Référentiel inactif
+        na: N/A
+        cost-data: Données de coût pour ce produit
+        no-cost-data: Nous n'avons aucune information sur les coûts de ce produit
+        code-lines: Lignes de code
+        est-effort: Effort estimé (mois-personnes)
+        est-hosting: Coûts d'hébergement estimatifs (mensuels)
+        est-invested: Estimation de l'argent investi
+        cocomo: L'effort estimé est calculé à l'aide de la méthode COCOMO. 
+        classifications: Classifications des produits
+        classification-source: "La source:"
+    product-suite:
+      index:
+        no-data: Nous n'avons trouvé aucune suite de produits dans la base de données.
+    project:
+      index:
+        budget: Budget
+        description: Description
+        end-date: Date de fin
+        no-project: Nous n'avons trouvé aucun projet dans la base de données.
+        start-date: Date de début
+        dates: Dates
+        source: "La source:"
+      show:
+        origin: Origine
+      map:
+        projects: Carte des projets
+        all-projects: Tous les projets
+        covid-response: Réponse de COVID-19
+    sector:
+      index:
+        no-data: Nous n'avons trouvé aucun secteur dans la base de données.
+    setting:
+      index:
+        no-data: Aucun paramètre actuellement défini dans la base de données
+    footer:
+      privacy-policy: Politique de confidentialité
+      tag-line: "est un partenariat entre certains des champions du développement numérique les plus actifs au monde. Nous sommes reconnaissants pour le soutien de nos partenaires fondateurs."
+      icons-provided: "Icônes fournies non modifiées par"
+      fa-icons: "FontAwesome"
+      sdg-icons: "Les objectifs mondiaux du développement durable"
+      dial-social-media: "Suivez DIAL sur les réseaux sociaux"
+      gitlab: "Voir ce projet sur Gitlab"
+      osc-forum: "Discutez sur le Forum Open Source Center"
+      ict4sdg-updates: "Inscrivez-vous pour recevoir des mises à jour sur le cadre d'investissement numérique"
+      powered-by-dial: Propulsé par DIAL
+    header:
+      active-portal: Actif
+      admin-data: Données d'administration
+      principle-data: Données sur les Principes
+      mni-data: Données de MNI
+      ict4sdg-data: Données de ICT4SDG
+      deploys: Déploie
+      digital-principles: Principes numériques
+      feedback: Signaler un problème
+      login: S'identifier
+      logout: Se déconnecter
+      product-registry: Registre des produits
+      profile: Paramètres de profil
+      sign-up: S'inscrire
+      documentation: Aidez-moi
+      view-selection: Vues
+      covid-resources: Ressources COVID-19
+    filternav:
+      framework: Cadre d'investissement numérique
+      registry: Registre des projets de développement
+      sdgs: ODDs
+      use_cases: Cas d'utilisation
+      workflows: Des Flux de travail
+      building_blocks: Composants de base
+      products: Produits
+      geographies: Géographies
+      locations: Emplacements
+      sectors: Secteurs
+      orgs: Organisations
+      organizations: Organisations
+      projects: Projets
+      view-projects: Bientôt disponible.
+      map: Vues de la carte
+      endorser-map: Voir la carte de l'endosseur
+      aggregator-map: Voir la carte de l'agrégateur
+      project-map: Voir la carte du projet
+      clear: Tout effacer
+      with-maturity: Produit avec évaluation de la maturité
+      is-launchable: Le produit peut être déployé et lancé
+      top-nav: Navigations principales
+      filter-nav: Navigation dans les filtres
+      user-role: Rôles associés
+      title:
+        building-block: Filtrer par Composants de base
+        country: Filtrer par pays
+        origin: Filtrer par origine de produit
+        product: Filtrer par produit
+        project: Filtrer par projet
+        sdg: Filtrer par ODD
+        sector: Filtrer par secteur
+        use-case: Filtrer par cas d'utilisation
+        workflow: Filtrer par flux de travail
+        year: Filtrer par année approuvée
+    active-filter:
+      building_blocks:
+        one: Composants de base
+        other: Composants de base
+
+      countries:
+        one: Des pays
+        other: Des pays
+
+      endorsers: Organisations avalisantes
+      aggregators: Agrégateurs de réseaux mobiles
+      multi-filter: 'et %{count} autre %{model}'
+      organizations:
+        one: Organisations
+        other: Organisations
+
+      origins:
+        one: Sources de produits
+        other: Sources de produits
+
+      products:
+        one: Des produits
+        other: Produits
+
+      projects:
+        one: Projets
+        other: Projets
+
+      sdgs:
+        one: ODDs
+        other: ODDs
+
+      sectors:
+        one: Secteurs
+        other: Secteurs
+
+      tags:
+        one: Mot clés
+        other: Mots clés
+
+      title: 'Filtrage par %{model}'
+      use_cases:
+        one: Cas d'utilisation
+        other: Cas d'utilisation
+
+      workflows:
+        one: Flux de travail
+        other: Flux de travail
+
+      with-maturity: Produit avec évaluation de la maturité
+      is-launchable: Le produit peut être déployé et lancé
+      years:
+        one: Années approuvées
+        other: Années approuvées
+
+      share-link: Lien de partage
+      share-link-tooltip: "Cliquez ici pour créer une URL qui peut être partagée pour afficher la page actuelle, y compris les filtres"
+    breadcrumb:
+      home: Accueil
+    sdg:
+      index:
+        no-data: Nous n'avons pas pu trouver d'objectif de développement durable correspondant à l'expression de recherche.
+        sdg-number: Nombre
+        view-targets: Afficher les cibles
+        sdg-target-popover:
+          one: ODD cible
+          other: ODD cibles
+
+        definition: Les ODD comprennent 17 objectifs et 169 cibles représentant les priorités mondiales d'investissement pour réaliser le développement durable. Les ODD ont été fixés en 2015 par l'Assemblée générale des Nations Unies et devraient être atteints d'ici 2030.
+      show:
+        target: Cible
+    use-case:
+      form:
+        assigned-sdg-targets: Objectifs ODD attribués
+        search-sdg-targets: Rechercher et affecter des cibles SDG
+        is-mature: Est mature
+      index:
+        no-data: Nous n'avons trouvé aucun cas d'utilisation dans la base de données.
+        sdg-target-popover:
+          one: ODD cible
+          other: ODD cibles
+
+        workflow-popover:
+          one: Workflow mappés
+          other: Workflows mappés
+
+        definition: Un cas d'utilisation correspond aux étapes qu'un individu ou un système entreprendra pour atteindre un objectif commercial.
+        characteristics: |
+          Description centrée sur l'utilisateur des étapes ou des parcours utilisateur nécessaires pour obtenir un résultat
+          Identifie une ou plusieurs cibles ODD comme objectif commercial
+          Décrit les workflows génériques et les processus métier impliqués dans chaque étape du cas d'utilisation
+          Généralement spécifique au secteur
+          Capable d'être amélioré grâce à la technologie numérique
+        description: "Chaque modèle de cas d'utilisation décrit les principaux acteurs, les étapes clés impliquées dans la réalisation d'un objectif commercial spécifié, les descriptions des workflows et des composants de base TIC impliqués dans chaque étape, et les correspondances avec les cibles des ODD. La liste des modèles de cas d'utilisation n'est pas exhaustive et d'autres seront ajoutés dans les prochaines versions." 
+        maturity: Maturité
+      show:
+        description: Description
+        steps: Les étapes de ce cas d'utilisation incluent
+        sdg-targets: ODD cibles
+        no-sdg-targets: Nous n'avons aucune information cible ODD pour ce cas d'utilisation.
+        use-case-steps: Étapes du cas d'utilisation
+    user:
+      role:
+        admin: Administrateur
+        ict4sdg: Utilisateur ICT4SDG
+        principle: Utilisateur Principes
+        user: Utilisateur de base
+        org_user: Utilisateur de l'organisation
+        org_product_user: Utilisateur de l'organisation et produit
+        product_user: Utilisateur du produit
+        mni: Utilisateur de MNI
+      form:
+        db-backup: Cet utilisateur recevra des sauvegardes DB.
+        email: Email
+        manual-approval: Approuvez manuellement cet utilisateur.
+        minimum-length: '%{number} caractères minimum'
+        password: Mot de passe
+        password-confirmation: Confirmation mot de passe
+        role: Rôle
+      index:
+        no-data: Nous n'avons pas pu trouver d'utilisateurs correspondant à l'expression de recherche.
+        account-status: Statut du compte
+        approved: Approuvé
+        not-approved: Besoin d'approbation
+      show:
+        approved: Approuvé
+        'no': 'Non'
+        receive-backup: Recevoir une sauvegarde DB
+        reset-password: Réinitialiser le mot de passe
+        'yes': 'Oui'
+    workflow:
+      form:
+        category: Catégorie
+        description: Description
+        other-names: Autres noms
+      index:
+        no-data: Nous n'avons pas pu trouver de flux de travail correspondant à l'expression de recherche.
+        use-case-popover:
+          one: Cas d'utilisation mappés
+          other: Cas d'utilisation mappés
+
+        building-block-popover:
+          one: Composants de base mappés
+          other: Composants de base mappés
+
+        definition: Un processus opérationnel générique qui contribue aux cas d'utilisation des ODD dans plusieurs secteurs et peut être développé comme un ensemble de capacités organisationnelles.  
+        characteristics: |
+          Processus opérationnel commun utilisé pour aider une organisation à s'acquitter de sa fonction globale
+          Applicable à plusieurs cas d'utilisation dans divers secteurs
+          Propulsé par un ou plusieurs composants de base TIC
+        description: "Chaque flux de travail comprend une description, des exemples spécifiques au secteur et des mappages aux cas d'utilisation définis dans ce cadre. La liste des WorkFlows n'est pas exhaustive et d'autres seront ajoutées dans les futures versions." 
+      show:
+        full-description: Description complète
+        mapping: Exemples de mappages de flux de travail dans un cas d'utilisation
+        other-names: Autres noms
+        short-description: Brève description
+    general:
+      action: Action
+      add: Ajouter
+      back: Retour
+      back-with-dest: "Retour à %{dest}"
+      create: Créer un nouveau
+      delete: Supprimer
+      delete-with-model: "Supprimer %{model}"
+      delete-confirmation: "Voulez-vous vraiment supprimer ce %{model}"
+      description: Description
+      duplicates: 'Un ou plusieurs %{model} avec un nom similaire existent déjà.'
+      edit: Éditer
+      error:
+        one: Le formulaire contient des erreurs.
+        other: Le formulaire contient des erreurs.
+
+      logo: Logo
+      name: Nom
+      not-available: 'Nous n''avons aucune information %{multi} pour cette %{model}.'
+      search: Chercher
+      search-placeholder: 'Recherche %{model}'
+      show: Afficher
+      submit: Soumettre
+      title:
+        create: 'Créer %{model}'
+        edit: 'Modifier %{model}'
+      value: Valeur
+      view: Voir
+      definitions: Cliquez pour voir plus de termes et définitions
+      map-legend: Cliquez pour savoir comment lire les fiches produits
+      characteristics: Caractéristiques
+      description: Description
+      show-use-case: "Qu'est-ce qu'un cas d'utilisation?"
+      show-sdg: "Qu'est-ce qu'un objectif de développement durable?"
+      show-workflow: "Qu'est-ce qu'un flux de travail?"
+      show-bb: "Qu'est-ce qu'un Composants de base?"
+      show-product: Comment lire les fiches produits
+      show-less: Proche
+    multi-select:
+      assigned:
+        label: 'Rechercher et attribuer %{model}...'
+        title: '%{model} attribué'
+    portal-view:
+      top-nav: navigations principales
+      filter-nav: navigation dans les filtres
+      user-role: rôle d'utilisateur
+      product-origin: origine du produit
+      org-type: Type d'Organisation
+      subdomain: Sous-domaine
+    use-case-step:
+      show:
+        other-steps: Étapes du cas d'utilisation
+        no-data: Nous n'avons trouvé aucune étape pour ce cas d'utilisation.
+      form:
+        use-case: Cas d'utilisation
+        step-number: Numéro d'étape
+  will_paginate:
+    previous_label: "&#8592; Précédent"
+    next_label: "Prochain &#8594;"
+    page_gap: "&hellip;"
