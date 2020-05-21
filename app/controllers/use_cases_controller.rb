@@ -161,11 +161,11 @@ class UseCasesController < ApplicationController
         @use_case = UseCase.find_by(id: params[:id]) or not_found
       end
       @sector_name = Sector.find(@use_case.sector_id).name
-      @uc_desc = UseCaseDescription.where(use_case_id: params[:id], locale: I18n.locale).first
+      @uc_desc = UseCaseDescription.where(use_case_id: @use_case.id, locale: I18n.locale).first
       if @uc_desc.nil?
         @uc_desc = UseCaseDescription.new
       end
-      @ucs_header = UseCaseHeader.where(use_case_id: params[:id], locale: I18n.locale).first
+      @ucs_header = UseCaseHeader.where(use_case_id: @use_case.id, locale: I18n.locale).first
       if @ucs_header.nil?
         @ucs_header = UseCaseHeader.new
       end
