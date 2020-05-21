@@ -151,5 +151,7 @@
 
 <script>
   setUpViewer(<%= raw JSON.generate(@uc_desc.description) %>, 'usecase-viewer')
-  setUpViewer(<%= raw JSON.generate(@ucs_header.header) %>, 'usecasesteps-header')
+  <% if !@ucs_header.header.empty? %>
+    setUpViewer(<%= raw JSON.generate(@ucs_header.header) %>, 'usecasesteps-header')
+  <% end %>
 </script>
