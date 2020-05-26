@@ -12,7 +12,7 @@ class UseCaseStepsController < ApplicationController
     @use_case_step = UseCaseStep.new
     @ucs_desc = UseCaseStepDescription.new
     if params[:use_case_id]
-      @use_case = UseCase.find(params[:use_case_id])
+      @use_case = UseCase.find_by(slug: params[:use_case_id])
       @use_case_step.use_case = @use_case
     end
   end
@@ -41,7 +41,7 @@ class UseCaseStepsController < ApplicationController
 
     if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
-        product = Workflow.find(product_id)
+        product = Product.find(product_id)
         @use_case_step.products.push(product)
       end
     end
@@ -110,7 +110,7 @@ class UseCaseStepsController < ApplicationController
     @ucs_descs = UseCaseStepDescription.where(use_case_step_id: params[:id])
     @ucs_descs.destroy_all
 
-    @use_case_steps.products.clear
+    @use_case_step.products.clear
     @use_case_step.destroy
     respond_to do |format|
       format.html { redirect_to use_case_path(use_case), notice: 'Use case step was successfully destroyed.' }
