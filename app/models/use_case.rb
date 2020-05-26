@@ -2,6 +2,8 @@ class UseCase < ApplicationRecord
   belongs_to :sector
   has_many :sdg_targets
   has_many :use_case_steps, dependent: :destroy
+  has_many :use_case_headers, dependent: :destroy
+  has_many :use_case_descriptions, dependent: :destroy
 
   has_and_belongs_to_many :sdg_targets, join_table: :use_cases_sdg_targets
 
