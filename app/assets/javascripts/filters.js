@@ -17,7 +17,7 @@ var addToList = function(filterId, values) {
 }
 
 var incrementFilterCount = function(filterId) {
-  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags"]) !== -1) {
+  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags", "product_type"]) !== -1) {
     filterId = "origins"
   }
   if (filterId == "endorser_only" || filterId == "aggregator_only") {
@@ -31,7 +31,7 @@ var incrementFilterCount = function(filterId) {
 }
 
 var decrementFilterCount = function(filterId) {
-  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags"]) !== -1) {
+  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags", "product_type"]) !== -1) {
     filterId = "origins"
   }
   if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
@@ -46,7 +46,7 @@ var decrementFilterCount = function(filterId) {
 }
 
 var clearFilterCount = function(filterId) {
-  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags"]) !== -1) {
+  if ($.inArray(filterId, ["products", "with_maturity_assessment", "is_launchable", "tags", "product_type"]) !== -1) {
     filterId = "origins"
   }
   if (filterId == "organizations" || filterId == "endorser_only" || filterId == "aggregator_only") {
@@ -209,6 +209,7 @@ var prepareFilters = function() {
         filter_array.push({filter_name: 'tags'})
         filter_array.push({filter_name: 'origins'})
         filter_array.push({filter_name: 'products'})
+        filter_array.push({filter_name: 'product_type'})
         filter_array.push({filter_name: 'is_launchable'})
         $('#is_launchable').prop('checked', false);
         filter_array.push({filter_name: 'with_maturity_assessment'})

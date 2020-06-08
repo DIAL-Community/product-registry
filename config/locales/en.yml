@@ -277,6 +277,7 @@ en:
         source: "Source: "
         sources: "Sources: "
         source_dial: "Digital Impact Alliance Open Source Center"
+        types: "Types: "
         source_unicef: "Unicef"
         source_digital_square: "Digital Square"
         footer_bb_candidate: "Candidate for "
@@ -411,6 +412,7 @@ en:
         building-block: Filter by Building Block
         country: Filter by Country
         origin: Filter by Product Origin
+        type: Filter by Product Type
         product: Filter by Product
         project: Filter by Project
         sdg: Filter by SDG
@@ -434,6 +436,7 @@ en:
       origins:
         one: Product Source
         other: Product Sources
+      product-type: Product Type
       products:
         one: Product
         other: Products

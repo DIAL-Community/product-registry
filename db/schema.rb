@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_03_140902) do
+ActiveRecord::Schema.define(version: 2020_06_08_194733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -275,30 +275,8 @@ ActiveRecord::Schema.define(version: 2020_06_03_140902) do
     t.index ["product_id"], name: "index_product_versions_on_product_id"
   end
 
-  create_table "products", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.string "website"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "is_launchable", default: false
-    t.boolean "start_assessment", default: false
-    t.string "default_url", default: "http://<host_ip>", null: false
-    t.string "aliases", default: [], array: true
-    t.string "repository"
-    t.string "license"
-    t.string "license_analysis"
-    t.jsonb "statistics", default: {}, null: false
-    t.boolean "is_child", default: false
-    t.integer "parent_product_id"
-    t.string "tags", default: [], array: true
-    t.integer "code_lines"
-    t.integer "cocomo"
-    t.integer "est_hosting"
-    t.integer "est_invested"
-    t.integer "maturity_score"
-    t.index ["slug"], name: "index_products_on_slug", unique: true
-  end
+# Could not dump table "products" because of following StandardError
+#   Unknown type 'product_type' for column 'product_type'
 
   create_table "products_building_blocks", id: false, force: :cascade do |t|
     t.bigint "building_block_id", null: false

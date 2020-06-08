@@ -190,11 +190,12 @@ class UseCasesController < ApplicationController
 
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
+      product_type = sanitize_session_values 'product_type'
 
       tags = sanitize_session_values 'tags'
 
       filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
                      sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -244,7 +245,7 @@ class UseCasesController < ApplicationController
                                .ids
       end
 
-      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
+      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
 
       workflow_product_ids = []
       product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
