@@ -121,8 +121,11 @@ module Modules
         if !sectors.nil? && !sectors.empty?
           sectors.each do |sector|
             sector_obj = Sector.find_by(name: sector)
-            puts "Adding sector " + sector_obj.name + " to product"
-            existing_product.sectors << sector_obj
+            # Check to see if the sector exists already
+            if !existing_product.sectors.include?(sector_obj)
+              puts "Adding sector " + sector_obj.name + " to product"
+              existing_product.sectors << sector_obj
+            end
           end
         end
 
