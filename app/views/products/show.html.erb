@@ -1,9 +1,6 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<%= link_to t('view.product.index.product-graph'), productmap_path,
-            :class => 'btn btn-outline-secondary float-left ml-1 float-right',
-            target: "_blank", rel: "noreferrer noopener" %>
 <br clear="both"/>
 
 <div class="card mt-2">
@@ -312,46 +309,42 @@
 
 <div class="card-deck mt-2">
   <div class="card">
-      <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.digisquare-maturity') %></h5>
-      <div class="card-body text-center">
-        <% if !@product.product_assessment.nil? and @product.product_assessment.has_digisquare %>
-          <% @digisquare_maturity.each do |digisquare_maturity_category| %>
-            <div class="digisquare-gauge">
-             <div class="needle" style="transform: rotate(<%= 90 + 18*(@product.maturity_scores[digisquare_maturity_category['core']])%>deg)"></div>
+    <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.product-maturity') %></h5>
+    <div class="card-body">
+      <% if !@product.maturity_score.nil? && @product.maturity_score > 0 %>
+        <h5 class="card-text text-left mb-2">
+          <%= t('view.product.show.overall-maturity-score') %>: <%= @product.maturity_score %> / 100
+        </h5>
+        <div id="maturity-nav" class="card-body accordion-section p-0">
+          <div class="maturity-accordion">
+            <h3 class="country-list"><%= t('model.rubric-category').titlecase.pluralize %></h3>
+            <div>
+              <div class="maturity-accordion">
+                <% !@maturity_scores.nil? && @maturity_scores.each do |category| %>
+                  <% if category[:overall_score] > 0 %>
+                    <div><%= category[:name] %>, <%= t('view.product.show.overall-score') %>: <%= category[:overall_score] %> / 10.0</div>
+                    <div>
+                    <% category[:indicator_scores].each do |indicator| %>
+                      <% if !indicator[:score].nil? %>
+                          <p>Indicator: <%= indicator[:name] %>,
+                          Score: <%= indicator[:score] %></p>
+                          <p class="ml-4 text-muted">Description: <%= raw indicator[:description] %></p>
+                      <% end %>
+                    <% end %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
             </div>
-            <br clear="both"/>
-            <small><%= digisquare_maturity_category['core'] %>:<%= @product.maturity_scores[digisquare_maturity_category['core']] %></small>
-            <br clear="both"/>
-          <% end %>
-        <% else %>
-          <p class="card-text text-left text-muted">
-            <%= t('view.product.show.no-digisquare-eval') %>
-          </p>
-        <% end %>
-      </div>
+          </div>
+        </div>
+      <% else %>
+        <p class="card-text text-left text-muted">
+          <%= t('view.product.show.no-maturity') %>
+        </p>
+      <% end %>
     </div>
-    <div class="card">
-      <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.osc-maturity') %></h5>
-      <div class="card-body">
-        <% if !@product.product_assessment.nil? and @product.product_assessment.has_osc %>
-          <small>
-          <ul>
-            <% @osc_maturity.each do |osc_maturity| %>
-              <li>
-                  <strong><%= osc_maturity["header"] %></strong>:
-                  <big><%= @product.maturity_scores[osc_maturity['header']]['score'] %></big> /
-                  <%= @product.maturity_scores[osc_maturity['header']]['total'] %>
-              </li>
-            <% end %>
-          </ul>
-          </small>
-        <% else %>
-          <p class="card-text text-muted">
-            <%= t('view.product.show.no-osc-eval') %>
-          </p>
-        <% end %>
-      </div>
-    </div>
+  </div>
 </div>
 
 <% if @product.classifications.count > 0 %>

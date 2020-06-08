@@ -5,6 +5,17 @@ Rails.application.routes.draw do
   resources :glossaries
   resources :settings
 
+  resources :rubric_categories, only: [:index, :update, :create, :destroy]
+  resources :category_indicators, only: [:index, :update, :create, :destroy]
+  resources :maturity_rubrics do
+    resources :rubric_categories do
+      resources :category_indicators
+    end
+  end
+
+  resources :tags
+  resources :use_case_steps
+
   resources :projects do
     get 'count', on: :collection
   end
@@ -20,7 +31,7 @@ Rails.application.routes.draw do
   root to: 'about#index'
 
   resources :covid, only: [:index]
-  
+
   resources :candidate_organizations do
     member do
       post 'reject'
@@ -116,6 +127,9 @@ Rails.application.routes.draw do
   get 'portal_view_duplicates', to: 'portal_views#duplicates'
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
   get 'tag_duplicates', to: 'tags#duplicates'
+  get 'maturity_rubric_duplicates', to: 'maturity_rubrics#duplicates'
+  get 'rubric_category_duplicates', to: 'rubric_categories#duplicates'
+  get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
 
   get 'covidresources', :to => 'covid#resources'
 

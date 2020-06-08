@@ -1,0 +1,11 @@
+<% if @rubric_category.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <%= t('view.general.error', count: @rubric_category.errors.count) %>
+    </div>
+  </div>
+<% end %>
+<h5 class="border rounded bg-secondary text-white p-3">
+  <%= t('view.general.title.create', model: t('model.rubric-category')) %>
+</h5>
+<%= render 'form', rubric_category: @rubric_category %>

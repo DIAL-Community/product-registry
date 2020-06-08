@@ -95,7 +95,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     # Remove first product's assessment information.
     # * should return 2 products
-    first_product.product_assessment.delete
+    first_product.maturity_score = 0
     first_product.save
 
     add_parameter = { 'filter_name': 'with_maturity_assessment', 'filter_value': true }

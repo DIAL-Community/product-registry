@@ -1,0 +1,71 @@
+<% description = category_indicator.category_indicator_descriptions
+                                   .select { |desc| desc.locale == I18n.locale.to_s }
+                                   .first %>
+<%= form_with(model: category_indicator, local: true, html: { id: 'category-indicator-form' }) do |form| %>
+  <%= form.hidden_field :rubric_category_id, id: :rubric_category_id %>
+  
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :category_indicator_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= category_indicator.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.rubric-category')) %>
+  </div>
+
+  <label for="rubric-category-description">
+    <%= t('view.rubric-category.form.description') %>
+  </label>
+  <%= form.hidden_field :ci_desc, id: :category_indicator_description %>
+  <div class="wysiwyg-editor" id='rubric-category-description'>
+    <%
+      if !description.nil? && !description.description_html.nil?
+        concat description.description_html.html_safe
+      end
+    %>
+  </div>
+  
+  <fieldset class="form-label-group mt-2">
+    <%= form.text_field :weight, id: :category_indicator_weight, required: true,
+                        type: 'number', step: 'any', class: "form-control",
+                        placeholder: t('view.category-indicator.form.weight') %>
+    <%= form.label :weight, t('view.category-indicator.form.weight') %>
+  </fieldset>
+
+  <fieldset class="form-group mt-2">
+    <%= label_tag "indicator_type", t('view.category-indicator.form.indicator-type') %>
+    <%= form.select(:indicator_type, options_for_select(CategoryIndicator.category_indicator_types
+                                                                         .map {|k, v| [k.humanize.capitalize, v]},
+                                                        selected: category_indicator.indicator_type),
+                   {},
+                   { class: 'form-control filter-element', style: 'height: calc(1.5em + 0.75rem + 15px) !important' }) %>
+  </fieldset>
+  
+  <fieldset class="form-label-group">
+    <%= form.text_field :source_indicator, id: :category_indicator_source_indicator,
+                        class: "form-control", placeholder: t('view.category-indicator.form.source-indicator') %>
+    <%= form.label :source_indicator, t('view.category-indicator.form.source-indicator') %>
+  </fieldset>
+  
+  <fieldset class="form-label-group">
+    <%= form.text_field :data_source, id: :category_indicator_data_source,
+                        class: "form-control", placeholder: t('view.category-indicator.form.data-source') %>
+    <%= form.label :data_source, t('view.category-indicator.form.data-source') %>
+  </fieldset>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var description = setUpEditor(<%= raw JSON.generate(description.nil? ? {} : description.description ) %>);
+  var form = document.querySelector('#category-indicator-form');
+  form.onsubmit = function() {
+    $('#category_indicator_description').val(JSON.stringify(description.getContents()));
+  };
+</script>
+

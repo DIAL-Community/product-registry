@@ -1,6 +1,7 @@
 development: &development
   admin_email: 'admin@admin-user.org'
   install_org_key: 'default_organization'
+  default_maturity_rubric_slug: 'default_maturity_rubric_slug'
 
 test:
   <<: *development
