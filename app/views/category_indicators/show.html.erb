@@ -1,0 +1,59 @@
+<%  description = @category_indicator.category_indicator_descriptions
+                                   .select { |desc| desc.locale == I18n.locale.to_s }
+                                   .first %>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(CategoryIndicator).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.category-indicator').titlecase), @category_indicator,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.category-indicator')) },
+                  class: 'btn btn-outline-secondary float-left' %>
+    <% end %>
+  </div>
+</div>
+
+<div id="show-category-indicator" class="card mt-2">
+  <h5 class="card-header border-0">
+    <%= "#{@category_indicator.name}" %>
+  </h5>
+  <div class="card-body py-2">
+    <div class="row mb-1">
+      <div class="col-6 text-muted">
+        <%= "#{t('view.category-indicator.form.weight')}: #{@category_indicator.weight}" %>
+      </div>
+      <div class="col-6 col-xs-12 text-muted">
+        <%= "#{t('view.category-indicator.form.indicator-type')}: #{@category_indicator.indicator_type.to_s.humanize}" %>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-6 col-xs-12 text-muted">
+        <%= "#{t('view.category-indicator.form.source-indicator')}: #{@category_indicator.source_indicator}" %>
+      </div>
+      <div class="col-6 col-xs-12 text-muted">
+        <%= "#{t('view.category-indicator.form.data-source')}: #{@category_indicator.data_source}" %>
+      </div>
+    </div>
+    <div id="<%= @category_indicator.slug %>" class="wysiwyg-viewer">
+      <%= !description.description_html.nil? && description.description_html.html_safe %>
+    </div>
+  </div>
+  <div class="card-footer border-0">
+    <div class="float-right mb-0">
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", class: "card-link" %>
+      <% if user_signed_in?  && policy(CategoryIndicator).mod_allowed? %>
+        <%= link_to t('view.general.edit'),
+                    edit_maturity_rubric_rubric_category_category_indicator_path(@category_indicator.rubric_category.maturity_rubric,
+                                                                                 @category_indicator.rubric_category,
+                                                                                 @category_indicator),
+                    class: "card-link" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  setViewerForElement('<%= @category_indicator.slug %>',
+                       <%= raw JSON.generate(description.description) %>)
+</script>

@@ -3,13 +3,13 @@
 one:
   name: UseCase1
   slug: usecase1
-  description: '{ }'
+  description: {}
   sector: one
   sdg_targets: one
 
 two:
   name: UseCase2
   slug: usecase2
-  description: '{ }'
+  description: {}
   sector: two
   sdg_targets: two

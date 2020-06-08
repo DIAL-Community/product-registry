@@ -2,22 +2,24 @@ require 'swagger_helper'
 
 RSpec.describe 'locations', type: :request do
   path '/locations' do
-    get('List all available locations.') do
+    get(summary: 'List all available locations.') do
       tags 'Location Controller'
 
       produces 'application/json'
       consumes 'application/json'
 
-      parameter name: :search, in: :query, schema: { type: :string }, description: 'Search term to narrow locations.'
-      response(200, 'successful') do
+      parameter name: :search, in: :query, schema: { type: :string },
+                description: 'Search term to narrow locations.'
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    post('Create a new location.') do
+    post(summary: 'Create a new location.') do
       tags 'Location Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
@@ -26,9 +28,10 @@ RSpec.describe 'locations', type: :request do
                 type: :string, required: true, description: 'The name of the location.'
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -39,19 +42,20 @@ RSpec.describe 'locations', type: :request do
     # You'll want to customize the parameter types...
     parameter name: 'id', in: :path, type: :string, description: 'The id of the location.'
 
-    get('Find a location by their id.') do
+    get(summary: 'Find a location by their id.') do
       tags 'Location Controller'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    patch('Update a location by their id.') do
+    patch(summary: 'Update a location by their id.') do
       tags 'Location Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
@@ -60,28 +64,30 @@ RSpec.describe 'locations', type: :request do
                 type: :string, required: true, description: 'The name of the location.'
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    delete('Delete a location by their id.') do
+    delete(summary: 'Delete a location by their id.') do
       tags 'Location Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
 
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -89,7 +95,7 @@ RSpec.describe 'locations', type: :request do
   end
 
   path '/location_duplicates' do
-    get('Find duplicates of locations.') do
+    get(summary: 'Find duplicates of locations.') do
       tags 'Location Controller'
 
       consumes 'application/json'
@@ -97,9 +103,10 @@ RSpec.describe 'locations', type: :request do
 
       parameter name: :current, in: :query, schema: { type: :string }
       parameter name: :original, in: :query, required: true, schema: { type: :string }
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end

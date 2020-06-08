@@ -20,7 +20,8 @@ class ProductSuitesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product_suite" do
     assert_difference('ProductSuite.count') do
-      post product_suites_url, params: { product_suite: { name: @product_suite.name }, reslug: true }
+      post product_suites_url, params: { product_suite: { name: @product_suite.name, description: 'Some Description' },
+                                         reslug: true }
     end
 
     assert_redirected_to product_suite_url(ProductSuite.last)

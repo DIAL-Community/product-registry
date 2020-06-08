@@ -1,41 +1,4 @@
 module ProductsHelper
-  def digisquare_maturity_level_text(product_assessment, digisquare_maturity_yml_element)
-    maturity_text = "Maturity indicator is not assigned."
-    if (product_assessment)
-      maturity_level = product_assessment.send(digisquare_maturity_yml_element["code"])
-      case maturity_level
-        when 'low'
-          maturity_text = digisquare_maturity_yml_element["low"]
-        when 'medium'
-          maturity_text = digisquare_maturity_yml_element["medium"]
-        when 'high'
-          maturity_text = digisquare_maturity_yml_element["high"]
-      end
-    end
-    maturity_text
-  end
-
-  def has_osc_assessment(product_assessment)
-    has_assessment = false
-    product_assessment.attributes.keys.select { |name| name.start_with?("osc") }.each do |key|
-      has_assessment = product_assessment.send(key)
-      if (has_assessment)
-        break
-      end
-    end
-    has_assessment
-  end
-
-  def has_digisquare_assessment(product_assessment)
-    has_assessment = false
-    product_assessment.attributes.keys.select { |name| name.start_with?("digisquare") }.each do |key|
-      has_assessment = !product_assessment.send(key).nil?
-      if (has_assessment)
-        break
-      end
-    end
-    has_assessment
-  end
 
   def is_endorsed(product)
     is_endorsed = false
@@ -73,12 +36,8 @@ module ProductsHelper
     images.each do |image|
       if image["license"]
         content += '<p class="footer-source float-right">image["value"]</p>'
-      elsif image["gradient"]
-        content += '<div class="digisquare-gauge-med" title="'+image["tooltip"]+'">'
-        content += '<p class="footer-score-large">'+image["filename"].to_s+'</p></div>'
-      elsif image["osc"]
-        content += '<div class="osc-med" title="'+image["tooltip"]+'">'
-        content += '<p class="footer-score-large">'+image["filename"].to_s+'</p></div>'
+      elsif image["maturity"]
+        content += '<p class="footer-source float-right">image["value"]</p>'
       else
         if image["id"]
           content += link_to image_tag(image["filename"], class: 'popover-image', 'title' => image["tooltip"]), {action:'show', controller: image["controller"], id: image["id"]}
@@ -103,7 +62,7 @@ module ProductsHelper
       category = "Sustainable Development Goals"
     end
     if (rownum == 2)
-      if !product.product_assessment.nil?
+      if !product.maturity_score.nil?
         category = "Maturity Models"
       elsif product.building_blocks.size > 0
         category = "Building Blocks"
@@ -150,34 +109,9 @@ module ProductsHelper
         images.push(image)
       end
     when "Maturity Models"
-      if (product.product_assessment.has_digisquare)
-        digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
-        tooltip = t("view.product.index.footer_maturity_ds")
-        image = Hash["filename"=>"origins/digital_square.png", "tooltip"=>tooltip]
-        images.push(image)
-        digisquare_maturity.each do |digisquare_category|
-          score = product.maturity_scores[digisquare_category['core']].to_i
-          tooltip = digisquare_category['core']
-          image = Hash["filename"=>score, "tooltip"=>tooltip, "gradient"=>1]
-          images.push(image)
-        end
-      end
-      if (product.product_assessment.has_osc)
-        osc_maturity = YAML.load_file("config/maturity_osc.yml")
-        tooltip = t("view.product.index.footer_maturity_osc")
-        image = Hash["filename"=>"origins/dial_osc.png", "tooltip"=>tooltip]
-        images.push(image)
-        score = 0
-        total = 0
-        osc_maturity.each do |osc_mat|
-          score += product.maturity_scores[osc_mat['header']]['score'].to_i
-          total += product.maturity_scores[osc_mat['header']]['total'].to_i
-        end
-        total_score = (score*10/total).round
-        tooltip = t("view.product.index.footer_osc_score")
-        image = Hash["filename"=>total_score, "tooltip"=>tooltip, "osc"=>1]
-        images.push(image)
-      end
+      tooltip = t("view.product.index.footer_osc_score")
+      image = Hash["maturity"=>true, "value"=>product.maturity_score]
+      images.push(image)
     when "sources"
       if (product.origins.size == 0)
         tooltip = t("view.product.index.source_dial")
@@ -210,4 +144,5 @@ module ProductsHelper
     !@covid19_tag.nil? && handler = product.tags.map(&:downcase).include?(@covid19_tag.value.downcase)
     handler
   end
+
 end

@@ -1,50 +1,21 @@
 require 'test_helper'
+require 'modules/maturity_sync'
 
 class ProductTest < ActiveSupport::TestCase
-  test 'should calculate digisquare maturity_scores' do
-    product = products(:one)
-    maturity_scores = product.maturity_scores
+  include Modules::MaturitySync
 
-    # Should only have the digisquare keys.
-    assert_equal maturity_scores.keys.count, 3
-    assert_equal maturity_scores['Global Utility'], 7
-    assert_equal maturity_scores['Community Support'], 5
-    assert_equal maturity_scores['Software Maturity'], 5
+  test 'should calculate maturity_scores' do
+    rubric = maturity_rubrics(:two)
+
+    # product one does not have any maturity data
+    product2 = products(:one)
+    maturity_scores = calculate_maturity_scores(product2.id, rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    assert_nil maturity_scores.first[:score]
+
+    # product three shouold have a value of true for the indicator (score should be 10)
+    product3 = products(:three)
+    maturity_scores = calculate_maturity_scores(product3.id, rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    assert_equal maturity_scores.first[:score], 10
   end
 
-  test 'should calculate osc maturity_score' do
-    product = products(:two)
-    maturity_scores = product.maturity_scores
-
-    # Should have all of the osc keys.
-    assert_equal maturity_scores.keys.count, 8
-    assert_equal maturity_scores['Software Code']['score'], 1
-    assert_equal maturity_scores['Licenses and Copyright']['score'], 0
-    assert_equal maturity_scores['Software Releases']['score'], 0
-    assert_equal maturity_scores['Software Quality']['score'], 2
-    assert_equal maturity_scores['Community']['score'], 1
-    assert_equal maturity_scores['Consensus Building']['score'], 0
-    assert_equal maturity_scores['Independence']['score'], 0
-    assert_equal maturity_scores['Impact']['score'], 0
-  end
-
-  test 'should calculate both maturity_score' do
-    product = products(:three)
-    maturity_scores = product.maturity_scores
-
-    # Should have both have the digisquare keys and the osc keys.
-    assert_equal maturity_scores.keys.count, 11
-    assert_equal maturity_scores['Global Utility'], 5
-    assert_equal maturity_scores['Community Support'], 5
-    assert_equal maturity_scores['Software Maturity'], 5
-
-    assert_equal maturity_scores['Software Code']['score'], 1
-    assert_equal maturity_scores['Licenses and Copyright']['score'], 0
-    assert_equal maturity_scores['Software Releases']['score'], 0
-    assert_equal maturity_scores['Software Quality']['score'], 0
-    assert_equal maturity_scores['Community']['score'], 0
-    assert_equal maturity_scores['Consensus Building']['score'], 0
-    assert_equal maturity_scores['Independence']['score'], 0
-    assert_equal maturity_scores['Impact']['score'], 0
-  end
 end

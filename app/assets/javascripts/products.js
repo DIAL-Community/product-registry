@@ -88,6 +88,18 @@ function toggleAssessmentSection(checkbox) {
   }
 }
 
+function productMaturity() {
+  $('.maturity-accordion').accordion({
+    collapsible: true,
+    active: false,
+    autoHeight:false,
+    heightStyle: "content",
+    animate: false
+  });
+  var icons = $(".maturity-accordion").accordion("option", "icons");
+}
+
 // Attach all of them to the browser, page, and turbolinks event.
 $(document).on('products#new:loaded', productsReady);
 $(document).on('products#edit:loaded', productsReady);
+$(document).on('products#show:loaded', productMaturity);

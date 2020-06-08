@@ -56,14 +56,14 @@ class SectorsController < ApplicationController
     authorize Sector, :mod_allowed?
     @sector = Sector.new(sector_params)
 
-    if (params[:selected_organizations])
+    if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
         @sector.organizations.push(organization)
       end
     end
 
-    if (params[:selected_use_cases])
+    if params[:selected_use_cases].present?
       params[:selected_use_cases].keys.each do |use_case_id|
         use_case = UseCase.find(use_case_id)
         @sector.use_cases.push(use_case)
@@ -72,8 +72,10 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.save
-        format.html { redirect_to @sector,
-                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) }}
+        format.html do
+          redirect_to @sector,
+                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) }
+        end
         format.json { render :show, status: :created, location: @sector }
       else
         format.html { render :new }
@@ -86,7 +88,7 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1.json
   def update
     authorize @sector, :mod_allowed?
-    if (params[:selected_organizations])
+    if params[:selected_organizations].present?
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
@@ -95,19 +97,21 @@ class SectorsController < ApplicationController
       @sector.organizations = organizations.to_a
     end
 
-    use_cases = Set.new
-    if (params[:selected_use_cases])
+    if params[:selected_use_cases].present?
+      use_cases = Set.new
       params[:selected_use_cases].keys.each do |use_case_id|
         use_case = UseCase.find(use_case_id)
         use_cases.add(use_case)
       end
+      @sector.use_cases = use_cases.to_a
     end
-    @sector.use_cases = use_cases.to_a
 
     respond_to do |format|
       if @sector.update(sector_params)
-        format.html { redirect_to @sector,
-                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) }}
+        format.html do
+          redirect_to @sector,
+                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) }
+        end
         format.json { render :show, status: :ok, location: @sector }
       else
         format.html { render :edit }

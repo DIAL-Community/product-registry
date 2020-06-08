@@ -2,10 +2,12 @@
 
 require 'modules/slugger'
 require 'modules/constants'
+require 'modules/maturity_sync'
 
 class ApplicationController < ActionController::Base
   include Modules::Slugger
   include Modules::Constants
+  include Modules::MaturitySync
   include Pundit
   protect_from_forgery with: :exception
 
@@ -257,9 +259,7 @@ class ApplicationController < ActionController::Base
       end
 
       if with_maturity_assessment
-        filter_products = filter_products.where('' \
-          ' products.id in (select product_id from product_assessments' \
-          '          where has_osc = true or has_digisquare = true)')
+        filter_products = filter_products.where('maturity_score > 0')
       end
 
       product_filter_set = (!products.empty? || !origins.empty? || !tags.empty? ||

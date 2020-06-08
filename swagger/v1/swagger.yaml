@@ -1,12 +1,13 @@
 ---
 swagger: '2.0'
 info:
-  title: API V1
+  title: API v1
   version: v1
 paths:
   "/audits":
     get:
-      summary: List of all available audits for an object.
+      summary:
+        summary: List of all available audits for an object.
       tags:
       - Audit Controller
       produces:
@@ -24,18 +25,22 @@ paths:
         description: Select one of the available object type.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/building_blocks/count":
     get:
-      summary: Count number of current building blocks.
+      summary:
+        summary: Count number of current building blocks.
       tags:
       - Building Block Controller
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
   "/building_blocks":
     get:
-      summary: List of all existing building blocks in the database.
+      summary:
+        summary: List of all existing building blocks in the database.
       tags:
       - Building Block Controller
       produces:
@@ -50,9 +55,11 @@ paths:
         description: Search term to narrow building blocks.
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
     post:
-      summary: Create a new building block.
+      summary:
+        summary: Create a new building block.
       tags:
       - Building Block Controller
       consumes:
@@ -72,12 +79,15 @@ paths:
         description: Token from an actual building block form.
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
         '401':
-          description: Unauthorized
+          description:
+            description: Unauthorized
   "/building_blocks/{id}":
     get:
-      summary: Find a single building block by their id.
+      summary:
+        summary: Find a single building block by their id.
       tags:
       - Building Block Controller
       consumes:
@@ -93,9 +103,11 @@ paths:
         description: The id of the building block.
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
     patch:
-      summary: Update a single building block object.
+      summary:
+        summary: Update a single building block object.
       tags:
       - Building Block Controller
       consumes:
@@ -121,9 +133,11 @@ paths:
         description: Token from an actual building block form.
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
     delete:
-      summary: Delete a single building block object.
+      summary:
+        summary: Delete a single building block object.
       tags:
       - Building Block Controller
       consumes:
@@ -144,10 +158,12 @@ paths:
         description: Token from an actual building block form.
       responses:
         '204':
-          description: Success
+          description:
+            description: Success
   "/building_block_duplicates":
     get:
-      summary: Find duplicates of building block object.
+      summary:
+        summary: Find duplicates of building block object.
       tags:
       - Building Block Controller
       consumes:
@@ -166,7 +182,8 @@ paths:
           type: string
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
   "/candidate_organizations/{id}/reject":
     parameters:
     - name: id
@@ -180,7 +197,8 @@ paths:
       required: true
       description: Token from an actual candidate organization form.
     post:
-      summary: Reject a candidate organization.
+      summary:
+        summary: Reject a candidate organization.
       tags:
       - Candidate Organization Controller
       consumes:
@@ -189,7 +207,8 @@ paths:
       - application/json
       responses:
         '201':
-          description: Success
+          description:
+            description: Success
   "/candidate_organizations/{id}/approve":
     parameters:
     - name: id
@@ -203,7 +222,8 @@ paths:
       required: true
       description: Token from an actual candidate organization form.
     post:
-      summary: Approve a candidate organization.
+      summary:
+        summary: Approve a candidate organization.
       tags:
       - Candidate Organization Controller
       consumes:
@@ -212,10 +232,12 @@ paths:
       - application/json
       responses:
         '201':
-          description: Success
+          description:
+            description: Success
   "/candidate_organizations":
     get:
-      summary: Get the list of all available candidate organization.
+      summary:
+        summary: Get the list of all available candidate organization.
       tags:
       - Candidate Organization Controller
       produces:
@@ -230,9 +252,11 @@ paths:
         description: Search term to narrow candidate.
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
     post:
-      summary: Propose a new candidate organization.
+      summary:
+        summary: Propose a new candidate organization.
       tags:
       - Candidate Organization Controller
       consumes:
@@ -274,11 +298,12 @@ paths:
         in: formData
         type: string
         required: true
-        description: Response token from recaptcha. Generate this by clicking the
-          recaptcha and see the network op.
+        description: Response from recaptcha. Generate this by clicking the recaptcha
+          and see the network op.
       responses:
         '201':
-          description: Success
+          description:
+            description: Success
   "/candidate_organizations/{id}":
     parameters:
     - name: id
@@ -287,7 +312,8 @@ paths:
       description: The id of the candidate organization.
       required: true
     get:
-      summary: Find a single candidate organization by their id.
+      summary:
+        summary: Find a single candidate organization by their id.
       tags:
       - Candidate Organization Controller
       produces:
@@ -296,9 +322,11 @@ paths:
       - application/json
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
     patch:
-      summary: Update a candidate organization by their id.
+      summary:
+        summary: Update a candidate organization by their id.
       tags:
       - Candidate Organization Controller
       consumes:
@@ -320,13 +348,15 @@ paths:
         in: formData
         type: string
         required: true
-        description: Response token from recaptcha. Generate this by clicking the
-          recaptcha and see the network op.
+        description: Response token recaptcha. Generate this by clicking the recaptcha
+          and see the network op.
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
     delete:
-      summary: Delete candidate organization by their id.
+      summary:
+        summary: Delete candidate organization by their id.
       tags:
       - Candidate Organization Controller
       consumes:
@@ -341,10 +371,12 @@ paths:
         description: Token from an actual candidate organization form.
       responses:
         '204':
-          description: Success
+          description:
+            description: Success
   "/candidate_organization_duplicates":
     get:
-      summary: Find duplicates of candidate organization.
+      summary:
+        summary: Find duplicates of candidate organization.
       tags:
       - Candidate Organization Controller
       consumes:
@@ -363,10 +395,204 @@ paths:
           type: string
       responses:
         '200':
-          description: Success
+          description:
+            description: Success
+  "/category_indicators":
+    post:
+      summary:
+        summary: Create category indicator
+      tags:
+      - Category Indicator Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: category_indicator[rubric_category_id]
+        in: formData
+        type: integer
+        required: true
+        description: The id of the rubric category.
+      - name: category_indicator[name]
+        in: formData
+        type: string
+        required: true
+        description: The name of the indicator.
+      - name: category_indicator[weight]
+        in: formData
+        type: number
+        required: true
+        description: The weight of the indicator.
+      - name: category_indicator[indicator_type]
+        in: formData
+        required: true
+        enum:
+        - scale
+        - numeric
+        - boolean
+        description: The type of the indicator at source.
+      - name: category_indicator[source_indicator]
+        in: formData
+        type: string
+        required: true
+        description: The name of the indicator at source.
+      - name: category_indicator[data_source]
+        in: formData
+        type: string
+        required: true
+        description: The source of the indicator.
+      - name: reslug
+        in: formData
+        enum:
+        - 'true'
+        type: boolean
+        required: true
+        description: Should we regenerate slug for this object?
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+  "/category_indicators/{id}":
+    parameters:
+    - name: id
+      in: path
+      type: string
+      description: Id for the category indicator
+      required: true
+    patch:
+      summary:
+        summary: Update category indicator
+      tags:
+      - Category Indicator Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: category_indicator[rubric_category_id]
+        in: formData
+        type: integer
+        required: true
+        description: The id of the rubric category.
+      - name: category_indicator[name]
+        in: formData
+        type: string
+        required: true
+        description: The name of the indicator.
+      - name: category_indicator[weight]
+        in: formData
+        type: number
+        description: The weight of the indicator.
+      - name: category_indicator[indicator_type]
+        in: formData
+        required: true
+        enum:
+        - scale
+        - numeric
+        - boolean
+        description: The type of the indicator at source.
+      - name: category_indicator[source_indicator]
+        in: formData
+        type: string
+        description: The name of the indicator at source.
+      - name: category_indicator[data_source]
+        in: formData
+        type: string
+        description: The source of the indicator.
+      - name: reslug
+        in: formData
+        enum:
+        - 'true'
+        type: boolean
+        required: true
+        description: Should we regenerate slug for this object?
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+    delete:
+      summary:
+        summary: Delete a category indicator
+      tags:
+      - Category Indicator Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+  "/maturity_rubrics/{maturity_rubric_id}/rubric_categories/{rubric_category_id}/category_indicators/{id}":
+    parameters:
+    - name: maturity_rubric_id
+      in: path
+      type: string
+      description: Id for the maturity rubric
+      required: true
+    - name: rubric_category_id
+      in: path
+      type: string
+      description: Id for the rubric category
+      required: true
+    - name: id
+      in: path
+      type: string
+      description: Id for the category indicator
+      required: true
+    get:
+      summary:
+        summary: Show category indicator
+      tags:
+      - Category Indicator Controller
+      responses:
+        '200':
+          description:
+            description: successful
+  "/category_indicator_duplicates":
+    get:
+      summary:
+        summary: Find duplicates category indicator
+      tags:
+      - Category Indicator Controller
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: current
+        in: query
+        schema:
+          type: string
+      - name: original
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description:
+            description: successful
   "/contacts":
     get:
-      summary: List all available contacts
+      summary:
+        summary: List all available contacts
       tags:
       - Contact Controller
       produces:
@@ -381,9 +607,11 @@ paths:
         description: Search term to narrow contact.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new contact.
+      summary:
+        summary: Create a new contact.
       tags:
       - Contact Controller
       consumes:
@@ -418,7 +646,8 @@ paths:
         description: Token from an actual contact form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/contacts/{id}":
     parameters:
     - name: id
@@ -427,14 +656,17 @@ paths:
       description: The id of the contact
       required: true
     get:
-      summary: Find a contact by their id.
+      summary:
+        summary: Find a contact by their id.
       tags:
       - Contact Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a contact by their id.
+      summary:
+        summary: Update a contact by their id.
       tags:
       - Contact Controller
       consumes:
@@ -462,9 +694,11 @@ paths:
         description: Token from an actual contact form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a contact by their contact id
+      summary:
+        summary: Delete a contact by their contact id
       tags:
       - Contact Controller
       consumes:
@@ -479,10 +713,12 @@ paths:
         description: Token from an actual contact form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/contact_duplicates":
     get:
-      summary: Find duplicates of contact.
+      summary:
+        summary: Find duplicates of contact.
       tags:
       - Contact Controller
       consumes:
@@ -501,10 +737,12 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/glossaries":
     get:
-      summary: List available terms from the glossary.
+      summary:
+        summary: List available terms from the glossary.
       tags:
       - Glossary Controller
       produces:
@@ -519,9 +757,11 @@ paths:
         description: Search term to narrow terms.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create new term in the glossary.
+      summary:
+        summary: Create new term in the glossary.
       tags:
       - Glossary Controller
       consumes:
@@ -541,7 +781,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/glossaries/{id}":
     parameters:
     - name: id
@@ -550,14 +791,17 @@ paths:
       description: The id of the term.
       required: true
     get:
-      summary: Find a term from glossary with their id.
+      summary:
+        summary: Find a term from glossary with their id.
       tags:
       - Glossary Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update term in the glossary using their id.
+      summary:
+        summary: Update term in the glossary using their id.
       tags:
       - Glossary Controller
       consumes:
@@ -577,9 +821,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a term from glossary using their id.
+      summary:
+        summary: Delete a term from glossary using their id.
       tags:
       - Glossary Controller
       consumes:
@@ -594,10 +840,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/glossary_duplicates":
     get:
-      summary: Find duplicate glossary terms.
+      summary:
+        summary: Find duplicate glossary terms.
       tags:
       - Glossary Controller
       consumes:
@@ -616,10 +864,12 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/locations":
     get:
-      summary: List all available locations.
+      summary:
+        summary: List all available locations.
       tags:
       - Location Controller
       produces:
@@ -634,9 +884,11 @@ paths:
         description: Search term to narrow locations.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new location.
+      summary:
+        summary: Create a new location.
       tags:
       - Location Controller
       consumes:
@@ -656,7 +908,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/locations/{id}":
     parameters:
     - name: id
@@ -665,14 +918,17 @@ paths:
       description: The id of the location.
       required: true
     get:
-      summary: Find a location by their id.
+      summary:
+        summary: Find a location by their id.
       tags:
       - Location Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a location by their id.
+      summary:
+        summary: Update a location by their id.
       tags:
       - Location Controller
       consumes:
@@ -692,9 +948,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a location by their id.
+      summary:
+        summary: Delete a location by their id.
       tags:
       - Location Controller
       consumes:
@@ -709,10 +967,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/location_duplicates":
     get:
-      summary: Find duplicates of locations.
+      summary:
+        summary: Find duplicates of locations.
       tags:
       - Location Controller
       consumes:
@@ -731,10 +991,149 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
+  "/maturity_rubrics":
+    get:
+      summary:
+        summary: List all maturity rubric
+      tags:
+      - Maturity Rubric Controller
+      parameters:
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search term to narrow results.
+      responses:
+        '200':
+          description:
+            description: successful
+    post:
+      summary:
+        summary: Create maturity rubric
+      tags:
+      - Maturity Rubric Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: maturity_rubric[name]
+        in: formData
+        type: string
+        required: true
+        description: The name of the maturity.
+      - name: reslug
+        in: formData
+        enum:
+        - 'true'
+        type: boolean
+        required: true
+        description: Should we regenerate slug for this object?
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+  "/maturity_rubrics/{id}":
+    parameters:
+    - name: id
+      in: path
+      type: string
+      description: The maturity rubric id.
+      required: true
+    get:
+      summary:
+        summary: Show maturity rubric
+      tags:
+      - Maturity Rubric Controller
+      responses:
+        '200':
+          description:
+            description: successful
+    patch:
+      summary:
+        summary: Update maturity rubric
+      tags:
+      - Maturity Rubric Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: maturity_rubric[name]
+        in: formData
+        type: string
+        required: true
+        description: The name of the maturity.
+      - name: reslug
+        in: formData
+        enum:
+        - 'true'
+        type: boolean
+        required: true
+        description: Should we regenerate slug for this object?
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+    delete:
+      summary:
+        summary: Delete maturity rubric
+      tags:
+      - Maturity Rubric Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+  "/maturity_rubric_duplicates":
+    get:
+      summary:
+        summary: Find duplicates maturity rubric
+      tags:
+      - Maturity Rubric Controller
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: current
+        in: query
+        schema:
+          type: string
+      - name: original
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description:
+            description: successful
   "/operator_services":
     get:
-      summary: List available operator services.
+      summary:
+        summary: List available operator services.
       tags:
       - Operator Service Controller
       parameters:
@@ -745,9 +1144,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new operator service.
+      summary:
+        summary: Create a new operator service.
       tags:
       - Operator Service Controller
       consumes:
@@ -767,7 +1168,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/operator_services/{id}":
     parameters:
     - name: id
@@ -776,14 +1178,17 @@ paths:
       description: id
       required: true
     get:
-      summary: Find an operator service by their id.
+      summary:
+        summary: Find an operator service by their id.
       tags:
       - Operator Service Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update an operator service by their id.
+      summary:
+        summary: Update an operator service by their id.
       tags:
       - Operator Service Controller
       consumes:
@@ -802,9 +1207,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete an operator service by their id.
+      summary:
+        summary: Delete an operator service by their id.
       tags:
       - Operator Service Controller
       consumes:
@@ -819,18 +1226,22 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/organizations/count":
     get:
-      summary: Count all available organizations.
+      summary:
+        summary: Count all available organizations.
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/organizations":
     get:
-      summary: List all available organizations.
+      summary:
+        summary: List all available organizations.
       tags:
       - Organization Controller
       parameters:
@@ -841,9 +1252,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new organization.
+      summary:
+        summary: Create a new organization.
       tags:
       - Organization Controller
       consumes:
@@ -863,7 +1276,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/organizations/{id}":
     parameters:
     - name: id
@@ -872,14 +1286,17 @@ paths:
       description: id
       required: true
     get:
-      summary: Find an organization by their id.
+      summary:
+        summary: Find an organization by their id.
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update an organization by their id.
+      summary:
+        summary: Update an organization by their id.
       tags:
       - Organization Controller
       consumes:
@@ -898,9 +1315,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete an organization by their id.
+      summary:
+        summary: Delete an organization by their id.
       tags:
       - Organization Controller
       consumes:
@@ -915,7 +1334,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/locations/{location_id}/organizations":
     parameters:
     - name: location_id
@@ -924,7 +1344,8 @@ paths:
       description: location_id
       required: true
     get:
-      summary: List all organizations in a location.
+      summary:
+        summary: List all organizations in a location.
       tags:
       - Organization Controller
       parameters:
@@ -935,9 +1356,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Add an organization to a location.
+      summary:
+        summary: Add an organization to a location.
       tags:
       - Organization Controller
       consumes:
@@ -957,7 +1380,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/locations/{location_id}/organizations/{id}":
     parameters:
     - name: location_id
@@ -971,14 +1395,17 @@ paths:
       description: id
       required: true
     get:
-      summary: Find an organization for a location by their id.
+      summary:
+        summary: Find an organization for a location by their id.
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update an organization for a location by their id.
+      summary:
+        summary: Update an organization for a location by their id.
       tags:
       - Organization Controller
       consumes:
@@ -997,9 +1424,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Remove an organization for a location by their id.
+      summary:
+        summary: Remove an organization for a location by their id.
       tags:
       - Organization Controller
       consumes:
@@ -1014,7 +1443,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sectors/{sector_id}/organizations":
     parameters:
     - name: sector_id
@@ -1023,7 +1453,8 @@ paths:
       description: sector_id
       required: true
     get:
-      summary: List organizations for a sector.
+      summary:
+        summary: List organizations for a sector.
       tags:
       - Organization Controller
       parameters:
@@ -1034,9 +1465,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Add an organization to a sector.
+      summary:
+        summary: Add an organization to a sector.
       tags:
       - Organization Controller
       consumes:
@@ -1056,7 +1489,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sectors/{sector_id}/organizations/{id}":
     parameters:
     - name: sector_id
@@ -1070,14 +1504,17 @@ paths:
       description: id
       required: true
     get:
-      summary: Find an organization for a sector by their id.
+      summary:
+        summary: Find an organization for a sector by their id.
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update an organization for a sector by their id.
+      summary:
+        summary: Update an organization for a sector by their id.
       tags:
       - Organization Controller
       consumes:
@@ -1096,9 +1533,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete an organization for a sector by their id.
+      summary:
+        summary: Delete an organization for a sector by their id.
       tags:
       - Organization Controller
       consumes:
@@ -1113,7 +1552,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/contacts/{contact_id}/organizations":
     parameters:
     - name: contact_id
@@ -1122,7 +1562,8 @@ paths:
       description: contact_id
       required: true
     get:
-      summary: List all organizations for a contact.
+      summary:
+        summary: List all organizations for a contact.
       tags:
       - Organization Controller
       parameters:
@@ -1133,9 +1574,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Add an organization to a contact.
+      summary:
+        summary: Add an organization to a contact.
       tags:
       - Organization Controller
       consumes:
@@ -1155,7 +1598,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/contacts/{contact_id}/organizations/{id}":
     parameters:
     - name: contact_id
@@ -1169,14 +1613,17 @@ paths:
       description: id
       required: true
     get:
-      summary: Find an organization for a contact by their id.
+      summary:
+        summary: Find an organization for a contact by their id.
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update an organization for a contact by their id.
+      summary:
+        summary: Update an organization for a contact by their id.
       tags:
       - Organization Controller
       consumes:
@@ -1195,9 +1642,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete an organization for a contact by their id.
+      summary:
+        summary: Delete an organization for a contact by their id.
       tags:
       - Organization Controller
       consumes:
@@ -1212,42 +1661,52 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/agg_capabilities":
     get:
-      summary: agg_capabilities organization
+      summary:
+        summary: agg_capabilities organization
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/agg_services":
     get:
-      summary: agg_services organization
+      summary:
+        summary: agg_services organization
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/service_capabilities":
     get:
-      summary: service_capabilities organization
+      summary:
+        summary: service_capabilities organization
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/update_capability":
     get:
-      summary: update_capability organization
+      summary:
+        summary: update_capability organization
       tags:
       - Organization Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/organization_duplicates":
     get:
-      summary: Find duplicate organizations.
+      summary:
+        summary: Find duplicate organizations.
       tags:
       - Organization Controller
       consumes:
@@ -1266,10 +1725,12 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/product_suites":
     get:
-      summary: List all available product suites.
+      summary:
+        summary: List all available product suites.
       tags:
       - Product Suite Controller
       parameters:
@@ -1280,9 +1741,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new product suite.
+      summary:
+        summary: Create a new product suite.
       tags:
       - Product Suite Controller
       consumes:
@@ -1305,7 +1768,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/product_suites/{id}":
     parameters:
     - name: id
@@ -1314,14 +1778,17 @@ paths:
       description: Product suite id.
       required: true
     get:
-      summary: Find a product suite by their id.
+      summary:
+        summary: Find a product suite by their id.
       tags:
       - Product Suite Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a product suite by their id.
+      summary:
+        summary: Update a product suite by their id.
       tags:
       - Product Suite Controller
       consumes:
@@ -1344,9 +1811,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a product suite by their id.
+      summary:
+        summary: Delete a product suite by their id.
       tags:
       - Product Suite Controller
       consumes:
@@ -1361,10 +1830,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/product_suite_duplicates":
     get:
-      summary: Find duplicate product suites
+      summary:
+        summary: Find duplicate product suites
       tags:
       - Product Suite Controller
       consumes:
@@ -1383,18 +1854,22 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/products/count":
     get:
-      summary: Count total number of products.
+      summary:
+        summary: Count total number of products.
       tags:
       - Product Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/products":
     get:
-      summary: List all available products.
+      summary:
+        summary: List all available products.
       tags:
       - Product Controller
       produces:
@@ -1409,9 +1884,11 @@ paths:
         description: Search term to narrow products.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new product.
+      summary:
+        summary: Create a new product.
       tags:
       - Product Controller
       consumes:
@@ -1431,7 +1908,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/products/{id}":
     parameters:
     - name: id
@@ -1440,14 +1918,17 @@ paths:
       description: The id of the product.
       required: true
     get:
-      summary: Find a product by their id.
+      summary:
+        summary: Find a product by their id.
       tags:
       - Product Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a product by their id.
+      summary:
+        summary: Update a product by their id.
       tags:
       - Product Controller
       consumes:
@@ -1467,9 +1948,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a product by their id.
+      summary:
+        summary: Delete a product by their id.
       tags:
       - Product Controller
       consumes:
@@ -1484,10 +1967,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/product_duplicates":
     get:
-      summary: Find duplcate of products.
+      summary:
+        summary: Find duplcate of products.
       tags:
       - Product Controller
       consumes:
@@ -1506,10 +1991,12 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/productlist":
     get:
-      summary: Export products in standard json format.
+      summary:
+        summary: Export products in standard json format.
       tags:
       - Product Controller
       consumes:
@@ -1523,15 +2010,18 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/projects":
     get:
-      summary: List all available projects.
+      summary:
+        summary: List all available projects.
       tags:
       - Project Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/projects/{id}":
     parameters:
     - name: id
@@ -1540,14 +2030,17 @@ paths:
       description: id
       required: true
     get:
-      summary: Find a project by their id.
+      summary:
+        summary: Find a project by their id.
       tags:
       - Project Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a project by their id.
+      summary:
+        summary: Delete a project by their id.
       tags:
       - Project Controller
       consumes:
@@ -1562,15 +2055,171 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
+  "/rubric_categories":
+    post:
+      summary:
+        summary: Create rubric category
+      tags:
+      - Rubric Category Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: rubric_category[maturity_rubric_id]
+        in: formData
+        type: integer
+        required: true
+        description: The id of the rubric.
+      - name: rubric_category[name]
+        in: formData
+        type: string
+        required: true
+        description: The name of the category.
+      - name: rubric_category[weight]
+        in: formData
+        type: number
+        required: true
+        description: The weight of the category.
+      - name: reslug
+        in: formData
+        enum:
+        - 'true'
+        type: boolean
+        required: true
+        description: Should we regenerate slug for this object?
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+  "/rubric_categories/{id}":
+    parameters:
+    - name: id
+      in: path
+      type: string
+      description: The rubric category id.
+      required: true
+    patch:
+      summary:
+        summary: Update rubric category
+      tags:
+      - Rubric Category Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: rubric_category[maturity_rubric_id]
+        in: formData
+        type: integer
+        required: true
+        description: The id of the rubric.
+      - name: rubric_category[name]
+        in: formData
+        type: string
+        required: true
+        description: The name of the category.
+      - name: rubric_category[weight]
+        in: formData
+        type: number
+        description: The weight of the category.
+      - name: reslug
+        in: formData
+        enum:
+        - 'true'
+        type: boolean
+        required: true
+        description: Should we regenerate slug for this object?
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+    delete:
+      summary:
+        summary: Delete rubric category
+      tags:
+      - Rubric Category Controller
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: authenticity_token
+        in: formData
+        type: string
+        required: true
+        description: Token from an actual form.
+      responses:
+        '200':
+          description:
+            description: successful
+  "/maturity_rubrics/{maturity_rubric_id}/rubric_categories/{id}":
+    parameters:
+    - name: maturity_rubric_id
+      in: path
+      type: string
+      description: The maturity rubric id.
+      required: true
+    - name: id
+      in: path
+      type: string
+      description: The rubric category id.
+      required: true
+    get:
+      summary:
+        summary: Show rubric category
+      tags:
+      - Rubric Category Controller
+      responses:
+        '200':
+          description:
+            description: successful
+  "/rubric_category_duplicates":
+    get:
+      summary:
+        summary: Find duplicates rubric category
+      tags:
+      - Rubric Category Controller
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: current
+        in: query
+        schema:
+          type: string
+      - name: original
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description:
+            description: successful
   "/sdg_targets":
     get:
-      summary: List all available SDG targets.
+      summary:
+        summary: List all available SDG targets.
       tags:
       - SDG Target Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sdg_targets/{id}":
     parameters:
     - name: id
@@ -1579,15 +2228,18 @@ paths:
       description: SDG Target id.
       required: true
     get:
-      summary: Find an SDG target by their id.
+      summary:
+        summary: Find an SDG target by their id.
       tags:
       - SDG Target Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sectors":
     get:
-      summary: List all available sectors.
+      summary:
+        summary: List all available sectors.
       tags:
       - Sector Controller
       parameters:
@@ -1598,9 +2250,11 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new sector.
+      summary:
+        summary: Create a new sector.
       tags:
       - Sector Controller
       consumes:
@@ -1620,7 +2274,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sectors/{id}":
     parameters:
     - name: id
@@ -1629,14 +2284,17 @@ paths:
       description: Sector id.
       required: true
     get:
-      summary: Find a sector by their id.
+      summary:
+        summary: Find a sector by their id.
       tags:
       - Sector Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a sector by their id.
+      summary:
+        summary: Update a sector by their id.
       tags:
       - Sector Controller
       consumes:
@@ -1656,9 +2314,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a sector by their id.
+      summary:
+        summary: Delete a sector by their id.
       tags:
       - Sector Controller
       consumes:
@@ -1673,10 +2333,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sector_duplicates":
     get:
-      summary: Find duplicate sectors.
+      summary:
+        summary: Find duplicate sectors.
       tags:
       - Sector Controller
       consumes:
@@ -1695,15 +2357,18 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/settings":
     get:
-      summary: List all available settings.
+      summary:
+        summary: List all available settings.
       tags:
       - Settings Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/settings/{id}":
     parameters:
     - name: id
@@ -1712,14 +2377,17 @@ paths:
       description: Setting id.
       required: true
     get:
-      summary: Find a setting by their id.
+      summary:
+        summary: Find a setting by their id.
       tags:
       - Settings Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a setting by their id.
+      summary:
+        summary: Update a setting by their id.
       tags:
       - Settings Controller
       consumes:
@@ -1746,18 +2414,22 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sustainable_development_goals/count":
     get:
-      summary: Count available sustainable development goal.
+      summary:
+        summary: Count available sustainable development goal.
       tags:
       - SDG Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sustainable_development_goals":
     get:
-      summary: List all available sustainable development goals
+      summary:
+        summary: List all available sustainable development goals
       tags:
       - SDG Controller
       parameters:
@@ -1768,7 +2440,8 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sustainable_development_goals/{id}":
     parameters:
     - name: id
@@ -1777,23 +2450,28 @@ paths:
       description: SDG id.
       required: true
     get:
-      summary: Find a sustainable development goal by their id.
+      summary:
+        summary: Find a sustainable development goal by their id.
       tags:
       - SDG Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/use_cases/count":
     get:
-      summary: Count available use cases.
+      summary:
+        summary: Count available use cases.
       tags:
       - Use Case Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/use_cases":
     get:
-      summary: List all available use cases.
+      summary:
+        summary: List all available use cases.
       tags:
       - Use Case Controller
       produces:
@@ -1808,9 +2486,11 @@ paths:
         description: Search term to narrow use case.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new use case.
+      summary:
+        summary: Create a new use case.
       tags:
       - Use Case Controller
       consumes:
@@ -1830,7 +2510,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/use_cases/{id}":
     parameters:
     - name: id
@@ -1839,14 +2520,17 @@ paths:
       description: Use case id.
       required: true
     get:
-      summary: Find a use case by their id.
+      summary:
+        summary: Find a use case by their id.
       tags:
       - Use Case Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a use case by their id.
+      summary:
+        summary: Update a use case by their id.
       tags:
       - Use Case Controller
       consumes:
@@ -1866,9 +2550,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a use case by their id.
+      summary:
+        summary: Delete a use case by their id.
       tags:
       - Use Case Controller
       consumes:
@@ -1883,7 +2569,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sectors/{sector_id}/use_cases":
     parameters:
     - name: sector_id
@@ -1892,7 +2579,8 @@ paths:
       description: sector_id
       required: true
     get:
-      summary: List all use cases associated with a sector.
+      summary:
+        summary: List all use cases associated with a sector.
       tags:
       - Use Case Controller
       produces:
@@ -1907,9 +2595,11 @@ paths:
         description: Search term to narrow use cases.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new use case for a sector.
+      summary:
+        summary: Create a new use case for a sector.
       tags:
       - Use Case Controller
       consumes:
@@ -1929,7 +2619,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/sectors/{sector_id}/use_cases/{id}":
     parameters:
     - name: sector_id
@@ -1943,14 +2634,17 @@ paths:
       description: Use case id.
       required: true
     get:
-      summary: Find a use case for a sector.
+      summary:
+        summary: Find a use case for a sector.
       tags:
       - Use Case Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a use case associated with a sector.
+      summary:
+        summary: Update a use case associated with a sector.
       tags:
       - Use Case Controller
       consumes:
@@ -1970,9 +2664,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Remove a use case from a sector.
+      summary:
+        summary: Remove a use case from a sector.
       tags:
       - Use Case Controller
       consumes:
@@ -1987,10 +2683,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/use_case_duplicates":
     get:
-      summary: Find duplicate use cases.
+      summary:
+        summary: Find duplicate use cases.
       tags:
       - Use Case Controller
       consumes:
@@ -2009,17 +2707,21 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/admin/users":
     get:
-      summary: List all available users.
+      summary:
+        summary: List all available users.
       tags:
       - User Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new user.
+      summary:
+        summary: Create a new user.
       tags:
       - User Controller
       consumes:
@@ -2049,7 +2751,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/admin/users/{id}":
     parameters:
     - name: id
@@ -2058,14 +2761,17 @@ paths:
       description: The id of the user.
       required: true
     get:
-      summary: Find a user by their id.
+      summary:
+        summary: Find a user by their id.
       tags:
       - User Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a user by their id.
+      summary:
+        summary: Update a user by their id.
       tags:
       - User Controller
       consumes:
@@ -2092,9 +2798,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a user by their id.
+      summary:
+        summary: Delete a user by their id.
       tags:
       - User Controller
       consumes:
@@ -2109,10 +2817,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/workflows/count":
     get:
-      summary: Count available workflows.
+      summary:
+        summary: Count available workflows.
       tags:
       - Workflow Controller
       parameters:
@@ -2123,10 +2833,12 @@ paths:
         description: Search term to narrow results.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/workflows":
     get:
-      summary: List all available workflows.
+      summary:
+        summary: List all available workflows.
       tags:
       - Workflow Controller
       produces:
@@ -2141,9 +2853,11 @@ paths:
         description: Search term to narrow workflows.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     post:
-      summary: Create a new workflow.
+      summary:
+        summary: Create a new workflow.
       tags:
       - Workflow Controller
       consumes:
@@ -2163,7 +2877,8 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/workflows/{id}":
     parameters:
     - name: id
@@ -2172,14 +2887,17 @@ paths:
       description: The id of the workflow.
       required: true
     get:
-      summary: Find a workflow by their id.
+      summary:
+        summary: Find a workflow by their id.
       tags:
       - Workflow Controller
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     patch:
-      summary: Update a workflow by their id.
+      summary:
+        summary: Update a workflow by their id.
       tags:
       - Workflow Controller
       consumes:
@@ -2199,9 +2917,11 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
     delete:
-      summary: Delete a workflow by their id.
+      summary:
+        summary: Delete a workflow by their id.
       tags:
       - Workflow Controller
       consumes:
@@ -2216,10 +2936,12 @@ paths:
         description: Token from an actual form.
       responses:
         '200':
-          description: successful
+          description:
+            description: successful
   "/workflow_duplicates":
     get:
-      summary: Find duplicate workflows.
+      summary:
+        summary: Find duplicate workflows.
       tags:
       - Workflow Controller
       consumes:
@@ -2238,4 +2960,5 @@ paths:
           type: string
       responses:
         '200':
-          description: successful
+          description:
+            description: successful

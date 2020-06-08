@@ -13,6 +13,9 @@ RUN git clone https://github.com/unicef/publicgoods-candidates.git /candidates
 RUN mkdir /products
 RUN git clone https://github.com/publicgoods/products.git /products
 
+RUN mkdir /maturity-rubric
+RUN git clone https://github.com/publicgoods/maturity-rubric.git /maturity-rubric
+
 COPY cron-sync /etc/cron.d/cron-sync
 RUN crontab /etc/cron.d/cron-sync
 

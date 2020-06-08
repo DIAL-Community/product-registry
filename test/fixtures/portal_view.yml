@@ -3,6 +3,7 @@
 one:
   name: Default
   slug: default
+  description: 'Default portal definition'
   filter_navs: []
   top_navs: []
   organization_views: [endorser,mni,product]
@@ -13,6 +14,7 @@ one:
 two:
   name: Portal 2
   slug: portal_2
+  description: 'Another portal definition'
   filter_navs: []
   top_navs: []
   organization_views: [endorser,mni,product]

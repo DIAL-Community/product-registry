@@ -1,0 +1,50 @@
+<% description = @rubric_category.rubric_category_descriptions
+                                 .select { |desc| desc.locale == I18n.locale.to_s }
+                                 .first %>
+<%= form_with(model: rubric_category, local: true, html: { id: 'rubric-category-form' }) do |form| %>
+  <%= form.hidden_field :maturity_rubric_id, id: :maturity_rubric_id %>
+  
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :rubric_category_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= rubric_category.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.rubric-category')) %>
+  </div>
+
+  <label for="rubric-category-description">
+    <%= t('view.rubric-category.form.description') %>
+  </label>
+  <%= form.hidden_field :rc_desc, id: :rubric_category_description %>
+  <div class="wysiwyg-editor" id='rubric-category-description'>
+    <%
+      if !description.nil? && !description.description_html.nil?
+        concat description.description_html.html_safe
+      end
+    %>
+  </div>
+  
+  <fieldset class="form-label-group mt-2">
+    <%= form.text_field :weight, id: :weight, required: true,
+                        type: 'number', step: 'any', class: "form-control",
+                        placeholder: t('view.rubric-category.form.weight') %>
+    <%= form.label :weight, t('view.rubric-category.form.weight') %>
+  </fieldset>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var description = setUpEditor(<%= raw JSON.generate(description.nil? ? {} : description.description ) %>);
+  var form = document.querySelector('#rubric-category-form');
+  form.onsubmit = function() {
+    $('#rubric_category_description').val(JSON.stringify(description.getContents()));
+  };
+</script>
+

@@ -12,12 +12,14 @@ function setUpViewer(viewJson, editorId) {
       },
       theme: 'snow'
     });
-
-    var editorJson = viewJson;
-    if (typeof viewJson === 'string' || viewJson instanceof String) {
-      editorJson = JSON.parse(viewJson);
+    
+    if (!jQuery.isEmptyObject(viewJson)) {
+      var editorJson = viewJson;
+      if (typeof viewJson === 'string' || viewJson instanceof String) {
+        editorJson = JSON.parse(viewJson);
+      }
+      quill.setContents(editorJson, 'api');
     }
-    quill.setContents(editorJson, 'api');
   }
 }
 
@@ -33,11 +35,13 @@ function setViewerForElement(elementId, viewJson) {
       theme: 'snow'
     });
 
-    var editorJson = viewJson;
-    if (typeof viewJson === 'string' || viewJson instanceof String) {
-      editorJson = JSON.parse(viewJson);
+    if (!jQuery.isEmptyObject(viewJson)) {
+      var editorJson = viewJson;
+      if (typeof viewJson === 'string' || viewJson instanceof String) {
+        editorJson = JSON.parse(viewJson);
+      }
+      quill.setContents(editorJson, 'api');
     }
-    quill.setContents(editorJson, 'api');
   }
 }
 
@@ -73,11 +77,13 @@ function setUpEditor(viewJson, placeholderText, editorId) {
     theme: 'snow'
   });
 
-  var editorJson = viewJson;
-  if (typeof viewJson === 'string' || viewJson instanceof String) {
-    editorJson = JSON.parse(viewJson);
+  if (!jQuery.isEmptyObject(viewJson)) {
+    var editorJson = viewJson;
+    if (typeof viewJson === 'string' || viewJson instanceof String) {
+      editorJson = JSON.parse(viewJson);
+    }
+    quill.setContents(editorJson, 'api');
   }
-  quill.setContents(editorJson, 'api');
   
   return quill;
 }

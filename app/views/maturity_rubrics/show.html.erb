@@ -1,0 +1,16 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(MaturityRubric).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.maturity-rubric').titlecase), @maturity_rubric,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.maturity-rubric')) },
+                  class: 'btn btn-outline-secondary float-left' %>
+    <% end %>
+  </div>
+</div>
+
+<div id="show-maturity-rubric">
+  <%= render @maturity_rubric %>
+</div>

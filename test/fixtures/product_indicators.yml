@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: three
+  category_indicator: two
+  indicator_value: true
+
+two:
+  product: two
+  category_indicator: two
+  indicator_value: low

@@ -2,18 +2,20 @@ require 'swagger_helper'
 
 RSpec.describe 'operator_services', type: :request do
   path '/operator_services' do
-    get('List available operator services.') do
+    get(summary: 'List available operator services.') do
       tags 'Operator Service Controller'
-      parameter name: :search, in: :query, schema: { type: :string }, description: 'Search term to narrow results.'
-      response(200, 'successful') do
+      parameter name: :search, in: :query, schema: { type: :string },
+                description: 'Search term to narrow results.'
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    post('Create a new operator service.') do
+    post(summary: 'Create a new operator service.') do
       tags 'Operator Service Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
@@ -22,9 +24,10 @@ RSpec.describe 'operator_services', type: :request do
                 type: :string, required: true, description: 'The name of the operator service.'
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -35,19 +38,20 @@ RSpec.describe 'operator_services', type: :request do
     # You'll want to customize the parameter types...
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
-    get('Find an operator service by their id.') do
+    get(summary: 'Find an operator service by their id.') do
       tags 'Operator Service Controller'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    patch('Update an operator service by their id.') do
+    patch(summary: 'Update an operator service by their id.') do
       tags 'Operator Service Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
@@ -56,28 +60,30 @@ RSpec.describe 'operator_services', type: :request do
                 type: :string, description: 'The name of the operator service.'
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    delete('Delete an operator service by their id.') do
+    delete(summary: 'Delete an operator service by their id.') do
       tags 'Operator Service Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
 
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end

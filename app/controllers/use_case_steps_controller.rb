@@ -12,7 +12,11 @@ class UseCaseStepsController < ApplicationController
     @use_case_step = UseCaseStep.new
     @ucs_desc = UseCaseStepDescription.new
     if params[:use_case_id]
-      @use_case = UseCase.find_by(slug: params[:use_case_id])
+      if !params[:use_case_id].scan(/\D/).empty?
+        @use_case = UseCase.find_by(slug: params[:id])
+      else
+        @use_case = UseCase.find_by(id: params[:id])
+      end
       @use_case_step.use_case = @use_case
     end
   end
@@ -135,9 +139,13 @@ class UseCaseStepsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_use_case_step
-    @use_case_step = UseCaseStep.find(params[:id])
-    @ucs_desc = UseCaseStepDescription.where(use_case_step_id: params[:id], locale: I18n.locale).first
-    if !@ucs_desc
+    if !params[:id].scan(/\D/).empty?
+      @use_case_step = UseCaseStep.find_by(slug: params[:id]) || not_found
+    else
+      @use_case_step = UseCaseStep.find(params[:id]) || not_found
+    end
+    @ucs_desc = UseCaseStepDescription.where(use_case_step_id: @use_case_step, locale: I18n.locale).first
+    unless @ucs_desc.nil?
       @ucs_desc = UseCaseStepDescription.new
     end
   end
