@@ -50,7 +50,7 @@ class ProductSuitesController < ApplicationController
     @product_suite.product_versions = product_versions.to_a
 
     respond_to do |format|
-      if @product_suite.save
+      if @product_suite.save!
         format.html { redirect_to @product_suite, notice: 'Product suite was successfully created.' }
         format.json { render :show, status: :created, location: @product_suite }
       else

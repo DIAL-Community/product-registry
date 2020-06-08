@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  include ProductsHelper
+
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
@@ -52,7 +54,7 @@ class ProductsController < ApplicationController
       @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
-    @products = @products.eager_load(:includes, :interoperates_with, :product_assessment, :origins, :organizations,
+    @products = @products.eager_load(:includes, :interoperates_with, :origins, :organizations,
                                      :building_blocks, :sustainable_development_goals)
                          .paginate(page: current_page, per_page: 20)
                          .order(:name)
@@ -87,6 +89,19 @@ class ProductsController < ApplicationController
     @jenkins_url = Rails.application.secrets.jenkins_url
     @jenkins_user = Rails.application.secrets.jenkins_user
     @jenkins_password = Rails.application.secrets.jenkins_password
+
+    # Right now, we are using the legacy rubric. Eventually we will change this to use
+    # the default rubric - just use the 'else' part
+    maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+    if !maturity_rubric.nil?
+      @maturity_scores = calculate_maturity_scores(@product.id, maturity_rubric.id)[:rubric_scores].first
+    else
+      @maturity_scores = calculate_maturity_scores(@product.id, nil)[:rubric_scores].first
+    end
+    if !@maturity_scores.nil?
+      @maturity_scores = @maturity_scores[:category_scores]
+    end
+    
   end
 
   # GET /products/new
@@ -108,10 +123,6 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
     @product.set_current_user(current_user)
     @product_description = ProductDescription.new
-
-    if product_params[:start_assessment] == "true"
-      assign_maturity
-    end
 
     if (params[:selected_organizations])
       params[:selected_organizations].keys.each do |organization_id|
@@ -196,10 +207,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     authorize @product, :mod_allowed?
-    if (!product_params[:start_assessment].nil? && product_params[:start_assessment] == 'true') || @product.start_assessment
-      assign_maturity
-    end
-
+  
     organizations = Set.new
     if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
@@ -505,25 +513,6 @@ class ProductsController < ApplicationController
     def load_maturity
       @osc_maturity = YAML.load_file("config/maturity_osc.yml")
       @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
-    end
-
-    def assign_maturity
-      @product.product_assessment ||= ProductAssessment.new
-      product_assessment = @product.product_assessment
-      if (params[:osc_maturity])
-        params[:osc_maturity].keys.each do |osc_maturity|
-          product_assessment[osc_maturity] = (params[:osc_maturity][osc_maturity] == "true")
-        end
-      end
-      if (params[:digisquare_maturity])
-        params[:digisquare_maturity].keys.each do |digisquare_maturity|
-          product_assessment[digisquare_maturity] = ProductAssessment.digisquare_maturity_levels.key(params[:digisquare_maturity][digisquare_maturity])
-        end
-      end
-      product_assessment.has_osc = (params[:has_osc] == "true")
-      product_assessment.has_digisquare = (params[:has_digisquare] == "true")
-
-      @product.product_assessment = product_assessment
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

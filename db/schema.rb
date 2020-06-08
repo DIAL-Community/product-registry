@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_03_141314) do
+ActiveRecord::Schema.define(version: 2020_06_03_140902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,18 +37,18 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "building_block_descriptions", force: :cascade do |t|
-    t.bigint "building_block_id"
+    t.bigint "building_block_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["building_block_id"], name: "index_building_block_descriptions_on_building_block_id"
   end
 
   create_table "building_blocks", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
+    t.string "name", null: false
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["slug"], name: "index_building_blocks_on_slug", unique: true
   end
 
@@ -76,6 +76,17 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
     t.index ["contact_id", "candidate_organization_id"], name: "index_candidate_contacts_on_contact_id_and_candidate_id"
   end
 
+  create_table "category_indicator_descriptions", force: :cascade do |t|
+    t.bigint "category_indicator_id", null: false
+    t.string "locale", null: false
+    t.jsonb "description", default: {}, null: false
+    t.string "description_html"
+    t.index ["category_indicator_id"], name: "index_category_indicator_descriptions_on_category_indicator_id"
+  end
+
+# Could not dump table "category_indicators" because of following StandardError
+#   Unknown type 'category_indicator_type' for column 'indicator_type'
+
   create_table "classifications", force: :cascade do |t|
     t.string "name"
     t.string "indicator"
@@ -86,7 +97,7 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "slug", null: false
     t.string "email"
     t.string "title"
@@ -116,7 +127,7 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
     t.string "name", null: false
     t.string "slug", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -124,24 +135,39 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
 # Could not dump table "locations" because of following StandardError
 #   Unknown type 'location_type' for column 'location_type'
 
+  create_table "maturity_rubric_descriptions", force: :cascade do |t|
+    t.bigint "maturity_rubric_id", null: false
+    t.string "locale", null: false
+    t.jsonb "description", default: {}, null: false
+    t.string "description_html"
+    t.index ["maturity_rubric_id"], name: "index_maturity_rubric_descriptions_on_maturity_rubric_id"
+  end
+
+  create_table "maturity_rubrics", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 # Could not dump table "operator_services" because of following StandardError
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "organization_descriptions", force: :cascade do |t|
-    t.bigint "organization_id"
+    t.bigint "organization_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_organization_descriptions_on_organization_id"
   end
 
   create_table "organizations", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "slug", null: false
     t.datetime "when_endorsed"
     t.string "website"
-    t.boolean "is_endorser"
+    t.boolean "is_endorser", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_mni", default: false
@@ -185,9 +211,9 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "portal_views", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "slug", null: false
-    t.string "description"
+    t.string "description", null: false
     t.string "top_navs", default: [], array: true
     t.string "filter_navs", default: [], array: true
     t.string "user_roles", default: [], array: true
@@ -197,9 +223,6 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-# Could not dump table "product_assessments" because of following StandardError
-#   Unknown type 'digisquare_maturity_level' for column 'digisquare_country_utilization'
 
   create_table "product_classifications", force: :cascade do |t|
     t.bigint "product_id"
@@ -211,19 +234,27 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "product_descriptions", force: :cascade do |t|
-    t.bigint "product_id"
+    t.bigint "product_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_product_descriptions_on_product_id"
+  end
+
+  create_table "product_indicators", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "category_indicator_id", null: false
+    t.string "indicator_value", null: false
+    t.index ["category_indicator_id"], name: "index_product_indicators_on_category_indicator_id"
+    t.index ["product_id"], name: "index_product_indicators_on_product_id"
   end
 
 # Could not dump table "product_product_relationships" because of following StandardError
 #   Unknown type 'relationship_type' for column 'relationship_type'
 
   create_table "product_suites", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "slug", null: false
     t.string "description"
     t.datetime "created_at", null: false
@@ -238,26 +269,26 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "product_versions", force: :cascade do |t|
-    t.bigint "product_id"
+    t.bigint "product_id", null: false
     t.string "version", null: false
     t.integer "version_order", null: false
     t.index ["product_id"], name: "index_product_versions_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "slug", null: false
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_launchable", default: false
-    t.boolean "start_assessment"
+    t.boolean "start_assessment", default: false
     t.string "default_url", default: "http://<host_ip>", null: false
     t.string "aliases", default: [], array: true
     t.string "repository"
     t.string "license"
     t.string "license_analysis"
-    t.jsonb "statistics", default: "{}", null: false
+    t.jsonb "statistics", default: {}, null: false
     t.boolean "is_child", default: false
     t.integer "parent_product_id"
     t.string "tags", default: [], array: true
@@ -265,6 +296,7 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
     t.integer "cocomo"
     t.integer "est_hosting"
     t.integer "est_invested"
+    t.integer "maturity_score"
     t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 
@@ -298,9 +330,9 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "project_descriptions", force: :cascade do |t|
-    t.bigint "project_id"
+    t.bigint "project_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_project_descriptions_on_project_id"
@@ -353,18 +385,36 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
     t.index ["sector_id", "project_id"], name: "sectors_projects_idx", unique: true
   end
 
+  create_table "rubric_categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.decimal "weight", default: "0.0", null: false
+    t.bigint "maturity_rubric_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["maturity_rubric_id"], name: "index_rubric_categories_on_maturity_rubric_id"
+  end
+
+  create_table "rubric_category_descriptions", force: :cascade do |t|
+    t.bigint "rubric_category_id", null: false
+    t.string "locale", null: false
+    t.jsonb "description", default: {}, null: false
+    t.string "description_html"
+    t.index ["rubric_category_id"], name: "index_rubric_category_descriptions_on_rubric_category_id"
+  end
+
   create_table "sdg_targets", force: :cascade do |t|
-    t.string "name"
-    t.string "target_number"
+    t.string "name", null: false
+    t.string "target_number", null: false
     t.string "slug"
-    t.integer "sdg_number"
+    t.integer "sdg_number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "sectors", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
+    t.string "name", null: false
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_displayable"
@@ -392,61 +442,61 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   create_table "stylesheets", force: :cascade do |t|
     t.string "portal"
     t.string "background_color"
-    t.jsonb "about_page", default: "{}", null: false
-    t.jsonb "footer_content", default: "{}", null: false
+    t.jsonb "about_page", default: {}, null: false
+    t.jsonb "footer_content", default: {}, null: false
     t.string "header_logo"
   end
 
   create_table "sustainable_development_goals", force: :cascade do |t|
-    t.string "slug"
-    t.string "name"
-    t.string "long_title"
-    t.integer "number"
+    t.string "slug", null: false
+    t.string "name", null: false
+    t.string "long_title", null: false
+    t.integer "number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_sdgs_on_slug", unique: true
   end
 
   create_table "tag_descriptions", force: :cascade do |t|
-    t.bigint "tag_id"
+    t.bigint "tag_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["tag_id"], name: "index_tag_descriptions_on_tag_id"
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
+    t.string "name", null: false
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "use_case_descriptions", force: :cascade do |t|
-    t.bigint "use_case_id"
+    t.bigint "use_case_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["use_case_id"], name: "index_use_case_descriptions_on_use_case_id"
   end
 
   create_table "use_case_headers", force: :cascade do |t|
-    t.bigint "use_case_id"
+    t.bigint "use_case_id", null: false
     t.string "locale", null: false
     t.jsonb "header", default: {}, null: false
     t.index ["use_case_id"], name: "index_use_case_headers_on_use_case_id"
   end
 
   create_table "use_case_step_descriptions", force: :cascade do |t|
-    t.bigint "use_case_step_id"
+    t.bigint "use_case_step_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["use_case_step_id"], name: "index_use_case_step_descriptions_on_use_case_step_id"
   end
 
   create_table "use_case_steps", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
+    t.string "name", null: false
+    t.string "slug", null: false
     t.integer "step_number", null: false
-    t.bigint "use_case_id"
+    t.bigint "use_case_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["use_case_id"], name: "index_use_case_steps_on_use_case_id"
@@ -467,12 +517,12 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "use_cases", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
-    t.bigint "sector_id"
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.bigint "sector_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.string "maturity", default: "Beta"
     t.string "tags", default: [], array: true
     t.index ["sector_id"], name: "index_use_cases_on_sector_id"
@@ -496,18 +546,18 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   end
 
   create_table "workflow_descriptions", force: :cascade do |t|
-    t.bigint "workflow_id"
+    t.bigint "workflow_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
     t.index ["workflow_id"], name: "index_workflow_descriptions_on_workflow_id"
   end
 
   create_table "workflows", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
+    t.string "name", null: false
+    t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "description", default: "{}", null: false
+    t.jsonb "description", default: {}, null: false
   end
 
   create_table "workflows_building_blocks", id: false, force: :cascade do |t|
@@ -529,8 +579,11 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   add_foreign_key "building_block_descriptions", "building_blocks"
   add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
+  add_foreign_key "category_indicator_descriptions", "category_indicators"
+  add_foreign_key "category_indicators", "rubric_categories"
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
+  add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
   add_foreign_key "operator_services", "locations", column: "locations_id"
   add_foreign_key "organization_descriptions", "organizations"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
@@ -541,12 +594,13 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   add_foreign_key "organizations_products", "products", name: "organizations_products_product_fk"
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
-  add_foreign_key "product_assessments", "products"
   add_foreign_key "product_classifications", "classifications"
   add_foreign_key "product_classifications", "classifications", name: "product_classifications_classification_fk"
   add_foreign_key "product_classifications", "products"
   add_foreign_key "product_classifications", "products", name: "product_classifications_product_fk"
   add_foreign_key "product_descriptions", "products"
+  add_foreign_key "product_indicators", "category_indicators"
+  add_foreign_key "product_indicators", "products"
   add_foreign_key "product_product_relationships", "products", column: "from_product_id", name: "from_product_fk"
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
   add_foreign_key "product_suites_product_versions", "product_suites", name: "pspv_product_suites_fk"
@@ -570,6 +624,8 @@ ActiveRecord::Schema.define(version: 2020_05_03_141314) do
   add_foreign_key "projects_sdgs", "sustainable_development_goals", column: "sdg_id", name: "projects_sdgs_sdg_fk"
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
+  add_foreign_key "rubric_categories", "maturity_rubrics"
+  add_foreign_key "rubric_category_descriptions", "rubric_categories"
   add_foreign_key "tag_descriptions", "tags"
   add_foreign_key "use_case_descriptions", "use_cases"
   add_foreign_key "use_case_headers", "use_cases"

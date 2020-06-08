@@ -2,7 +2,7 @@ require 'swagger_helper'
 
 RSpec.describe 'audits', type: :request do
   path '/audits' do
-    get('List of all available audits for an object.') do
+    get(summary: 'List of all available audits for an object.') do
       tags 'Audit Controller'
 
       produces 'application/json'
@@ -12,9 +12,10 @@ RSpec.describe 'audits', type: :request do
                 enum: %w[Organization Product],
                 description: 'Select one of the available object type.'
 
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end

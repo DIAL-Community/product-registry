@@ -15,4 +15,5 @@ RAILS_ENV=production
 0 4 * * *   source /t4d/setEnv.sh prod && cd /t4d && bundle install && rake db:backup >> /var/log/cron.log 2>&1
 0 5 * * *   source /t4d/setEnv.sh prod && cd /t4d && rake db:send_backup_emails >> /var/log/cron.log 2>&1
 0 6 * * *   source /t4d/setEnv.sh prod && cd /t4d && rake data:associate_with_organization >> /var/log/cron.log 2>&1
+0 6 * * *   source /t4d/setEnv.sh prod && cd /t4d && rake maturity_sync:update_maturity_scores >> /var/log/cron.log 2>&1
 0 7 1 * *   source /t4d/setEnv.sh prod && cd /t4d && rake sync:update_tco_data >> /var/log/cron.log 2>&1

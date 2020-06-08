@@ -1,0 +1,2 @@
+module RubricCategoriesHelper
+end

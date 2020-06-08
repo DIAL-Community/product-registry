@@ -1,0 +1,123 @@
+[
+  {
+    "name":"CommCare",
+    "maturity":{
+      "Country Utilization":"high",
+      "Country Strategy":"medium",
+      "Digital Health Interventions":"medium",
+      "Source Code Accessibility":"medium",
+      "Funding and Revenue": "medium",
+      "Developer, Contributor and Implementor Community Engagement":"medium",
+      "Community Governance":"low",
+      "Software Roadmap":"medium",
+      "User Documentation":"high",
+      "Multi-Lingual Support": "high",
+      "Technical Documentation":"medium",
+      "Software Productization":"medium",
+      "Interoperability and Data Accessibility":"medium",
+      "Security":"high",
+      "Scalability": "high"
+    }
+  },
+  {
+    "name":"DHIS2",
+    "maturity":{
+      "Country Utilization":"high",
+      "Country Strategy":"medium",
+      "Digital Health Interventions":"high",
+      "Source Code Accessibility":"high",
+      "Funding and Revenue": "high",
+      "Developer, Contributor and Implementor Community Engagement":"high",
+      "Community Governance":"medium",
+      "Software Roadmap":"high",
+      "User Documentation":"high",
+      "Multi-Lingual Support": "high",
+      "Technical Documentation":"high",
+      "Software Productization":"medium",
+      "Interoperability and Data Accessibility":"high",
+      "Security":"high",
+      "Scalability": "high"
+    }
+  },
+  {
+    "name":"ODK",
+    "maturity":{
+      "Country Utilization":"high",
+      "Country Strategy":"medium",
+      "Digital Health Interventions":"medium",
+      "Source Code Accessibility":"high",
+      "Funding and Revenue": "high",
+      "Developer, Contributor and Implementor Community Engagement":"high",
+      "Community Governance":"high",
+      "Software Roadmap":"high",
+      "User Documentation":"high",
+      "Multi-Lingual Support": "medium",
+      "Technical Documentation":"medium",
+      "Software Productization":"high",
+      "Interoperability and Data Accessibility":"high",
+      "Security":"high",
+      "Scalability": "medium"
+    }
+  },
+  {
+    "name":"OpenLMIS",
+    "maturity":{
+      "Country Utilization":"medium",
+      "Country Strategy":"medium",
+      "Digital Health Interventions":"high",
+      "Source Code Accessibility":"high",
+      "Funding and Revenue": "medium",
+      "Developer, Contributor and Implementor Community Engagement":"medium",
+      "Community Governance":"medium",
+      "Software Roadmap":"high",
+      "User Documentation":"medium",
+      "Multi-Lingual Support": "high",
+      "Technical Documentation":"medium",
+      "Software Productization":"medium",
+      "Interoperability and Data Accessibility":"medium",
+      "Security":"high",
+      "Scalability": "high"
+    }
+  },
+  {
+    "name":"OpenMRS",
+    "maturity":{
+      "Country Utilization":"high",
+      "Country Strategy":"medium",
+      "Digital Health Interventions":"medium",
+      "Source Code Accessibility":"high",
+      "Funding and Revenue": "medium",
+      "Developer, Contributor and Implementor Community Engagement":"high",
+      "Community Governance":"high",
+      "Software Roadmap":"medium",
+      "User Documentation":"medium",
+      "Multi-Lingual Support": "medium",
+      "Technical Documentation":"medium",
+      "Software Productization":"medium",
+      "Interoperability and Data Accessibility":"medium",
+      "Security":"medium",
+      "Scalability": "medium"
+    }
+  },
+  {
+    "name":"mHero",
+    "maturity":{
+      "Country Utilization":"medium",
+      "Country Strategy":"low",
+      "Digital Health Interventions":"low",
+      "Source Code Accessibility":"medium",
+      "Funding and Revenue": "low",
+      "Developer, Contributor and Implementor Community Engagement":"high",
+      "Community Governance":"medium",
+      "Software Roadmap":"low",
+      "User Documentation":"medium",
+      "Multi-Lingual Support": "medium",
+      "Technical Documentation":"medium",
+      "Software Productization":"low",
+      "Interoperability and Data Accessibility":"high",
+      "Security":"medium",
+      "Scalability": "high"
+    }
+  }
+]
+      

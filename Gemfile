@@ -30,6 +30,8 @@ gem 'haml'
 
 gem 'licensee'
 
+gem 'kramdown'
+
 gem 'recaptcha'
 
 gem 'minitest-reporters'
