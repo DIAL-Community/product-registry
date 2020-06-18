@@ -58,9 +58,10 @@ namespace :sync do
   task :digi_square_digital_good, [:path] => :environment do
     puts 'Pulling Digital Square Global Goods ...'
 
+    digisquare_maturity = JSON.load(File.open("config/digisquare_maturity_data.json"))
     digisquare_products = YAML.load_file('config/digisquare_global_goods.yml')
     digisquare_products['products'].each do |digi_product|
-      sync_digisquare_product digi_product
+      sync_digisquare_product(digi_product, digisquare_maturity)
     end
 
     puts 'Digital square data synced.'

@@ -1,0 +1,11 @@
+<% if @maturity_rubric.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <%= t('view.general.error', count: @maturity_rubric.errors.count) %>
+    </div>
+  </div>
+<% end %>
+<h5 class="border rounded bg-secondary text-white p-3">
+  <%= t('view.general.title.edit', model: t('model.maturity-rubric')) %>
+</h5>
+<%= render 'form', maturity_rubric: @maturity_rubric %>

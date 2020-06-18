@@ -4,18 +4,21 @@ one:
   name: Product
   slug: product
   website: website.org
+  maturity_score: 65
   origins: three
 
 two:
   name: Product Again
   slug: product_againt
   website: InvalidWebsite
+  maturity_score: 65
   origins: three
 
 three:
   name: ODK
   slug: odk
   website: odk.com
+  maturity_score: 65
   origins: three
 
 four:

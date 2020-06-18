@@ -89,11 +89,11 @@ class BuildingBlocksController < ApplicationController
                       flash: { notice: t('messages.model.created', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :created, location: @building_block }
       else
-        errMsg = ""
-        @organization.errors.each do |attr, err|
-          errMsg = err
+        error_message = ""
+        @building_block.errors.each do |_attr, err|
+          error_message = err
         end
-        format.html { redirect_to new_building_block_url, flash: { error: errMsg } }
+        format.html { redirect_to new_building_block_url, flash: { error: error_message } }
         format.json { render json: @building_block.errors, status: :unprocessable_entity }
       end
     end

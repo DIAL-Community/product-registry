@@ -2,7 +2,7 @@ require 'swagger_helper'
 
 RSpec.describe 'glossaries', type: :request do
   path '/glossaries' do
-    get('List available terms from the glossary.') do
+    get(summary: 'List available terms from the glossary.') do
       tags 'Glossary Controller'
 
       produces 'application/json'
@@ -10,15 +10,16 @@ RSpec.describe 'glossaries', type: :request do
 
       parameter name: :search, in: :query, schema: { type: :string }, description: 'Search term to narrow terms.'
 
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    post('Create new term in the glossary.') do
+    post(summary: 'Create new term in the glossary.') do
       tags 'Glossary Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
@@ -28,9 +29,10 @@ RSpec.describe 'glossaries', type: :request do
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
 
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -40,19 +42,20 @@ RSpec.describe 'glossaries', type: :request do
   path '/glossaries/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'The id of the term.'
 
-    get('Find a term from glossary with their id.') do
+    get(summary: 'Find a term from glossary with their id.') do
       tags 'Glossary Controller'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    patch('Update term in the glossary using their id.') do
+    patch(summary: 'Update term in the glossary using their id.') do
       tags 'Glossary Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
@@ -61,28 +64,30 @@ RSpec.describe 'glossaries', type: :request do
                 type: :string, required: true, description: 'The term of the glossary.'
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    delete('Delete a term from glossary using their id.') do
+    delete(summary: 'Delete a term from glossary using their id.') do
       tags 'Glossary Controller'
       consumes 'multipart/form-data'
       produces 'application/json'
 
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -90,7 +95,7 @@ RSpec.describe 'glossaries', type: :request do
   end
 
   path '/glossary_duplicates' do
-    get('Find duplicate glossary terms.') do
+    get(summary: 'Find duplicate glossary terms.') do
       tags 'Glossary Controller'
 
       consumes 'application/json'
@@ -98,9 +103,10 @@ RSpec.describe 'glossaries', type: :request do
 
       parameter name: :current, in: :query, schema: { type: :string }
       parameter name: :original, in: :query, required: true, schema: { type: :string }
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end

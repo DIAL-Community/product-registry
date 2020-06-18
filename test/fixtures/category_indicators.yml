@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Indicator1
+  slug: indicator1
+  indicator_type: boolean
+  weight: 1
+  rubric_category: one
+
+two:
+  name: Indicator2
+  slug: indicator2
+  indicator_type: boolean
+  weight: 1
+  rubric_category: two

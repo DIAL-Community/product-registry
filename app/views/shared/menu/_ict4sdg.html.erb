@@ -7,5 +7,7 @@
   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
     <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
     <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
+    <div class="dropdown-divider"></div>
+    <%= link_to t('model.maturity-rubric').to_s.pluralize.titlecase, maturity_rubrics_path, :class => 'dropdown-item' %>
   </div>
 </li>

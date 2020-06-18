@@ -1,0 +1,40 @@
+<% description = @maturity_rubric.maturity_rubric_descriptions
+                                 .select { |desc| desc.locale == I18n.locale.to_s }
+                                 .first %>
+<%= form_with(model: maturity_rubric, local: true, html: { id: 'maturity-rubric-form' }) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :maturity_rubric_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= maturity_rubric.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.maturity-rubric')) %>
+  </div>
+
+  <label for="maturity-rubric-description">
+    <%= t('view.maturity-rubric.form.description') %>
+  </label>
+  <%= form.hidden_field :mr_desc, id: :maturity_rubric_description %>
+  <div class="wysiwyg-editor" id='maturity-rubric-description'>
+    <%
+      if !description.nil? && !description.description_html.nil?
+        concat description.description_html.html_safe
+      end
+    %>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var description = setUpEditor(<%= raw JSON.generate(description.nil? ? {} : description.description ) %>);
+  var form = document.querySelector('#maturity-rubric-form');
+  form.onsubmit = function() {
+    $('#maturity_rubric_description').val(JSON.stringify(description.getContents()));
+  };
+</script>

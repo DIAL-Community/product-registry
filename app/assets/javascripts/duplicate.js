@@ -108,6 +108,18 @@ var tagDuplicateCheck = function() {
   duplicateCheck("tag_name", "/tag_duplicates.json");
 }
 
+var maturityRubricDuplicateCheck = function() {
+  duplicateCheck("maturity_rubric_name", "/maturity_rubric_duplicates.json");
+}
+
+var rubricCategoryDuplicateCheck = function() {
+  duplicateCheck("rubric_category_name", "/rubric_category_duplicates.json");
+}
+
+var categoryIndicatorDuplicateCheck = function() {
+  duplicateCheck("category_indicator_name", "/category_indicator_duplicates.json");
+}
+
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
@@ -138,3 +150,9 @@ $(document).on('use_case_steps#edit:loaded', useCaseStepDuplicateCheck);
 $(document).on('use_case_steps#new:loaded', useCaseStepDuplicateCheck);
 $(document).on('tags#edit:loaded', tagDuplicateCheck);
 $(document).on('tags#new:loaded', tagDuplicateCheck);
+$(document).on('maturity_rubrics#edit:loaded', maturityRubricDuplicateCheck);
+$(document).on('maturity_rubrics#new:loaded', maturityRubricDuplicateCheck);
+$(document).on('rubric_categories#edit:loaded', rubricCategoryDuplicateCheck);
+$(document).on('rubric_categories#new:loaded', rubricCategoryDuplicateCheck);
+$(document).on('category_indicators#edit:loaded', categoryIndicatorDuplicateCheck);
+$(document).on('category_indicators#new:loaded', categoryIndicatorDuplicateCheck);

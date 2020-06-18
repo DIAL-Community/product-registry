@@ -1,9 +1,11 @@
 require 'test_helper'
 require 'modules/sync'
+require 'modules/maturity_sync'
 include Modules::Sync
 
 class SyncModuleTest < ActiveSupport::TestCase
-  
+  include Modules::MaturitySync
+
   def capture_stdout(&block)
     original_stdout = $stdout
     $stdout = fake = StringIO.new
@@ -57,9 +59,6 @@ class SyncModuleTest < ActiveSupport::TestCase
 
   test "sync_public_product should save product with alias" do
     initial_size = Product.count
-
-    existing_assessment = product_assessments(:four)
-    ProductAssessment.delete existing_assessment
 
     existing_product = products(:four)
     Product.delete existing_product
@@ -116,7 +115,13 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_not_nil Product.find_by(slug: 'odk')
 
     new_product = JSON.parse('{"name": "ODK"}')
-    capture_stdout { sync_digisquare_product(new_product) }
+    digisquare_maturity = [{"name":"ODK","maturity":{"Indicator1":"high"}}]
+    capture_stdout { sync_digisquare_product(new_product, digisquare_maturity) }
+
+    rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+    odk_product = Product.find_by(slug: 'odk')
+    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    assert_equal maturity_scores.first[:score], 10
 
     assert_not_nil Product.find_by(slug: 'odk')
     assert_equal Product.count, initial_size
@@ -127,7 +132,8 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_nil Product.find_by(slug: 'open_data_kit')
 
     new_product = JSON.parse('{"name": "Open Data Kit"}')
-    capture_stdout { sync_digisquare_product(new_product) }
+    digisquare_maturity = JSON.load(File.open("config/digisquare_maturity_data.json"))
+    capture_stdout { sync_digisquare_product(new_product, digisquare_maturity) }
 
     assert_not_nil Product.find_by(slug: 'open_data_kit')
     assert_equal Product.count, initial_size + 1
@@ -244,16 +250,19 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal p1.origins[0].slug, 'dial_osc'
   end
 
-  test "create assessment" do
-    capture_stdout { sync_osc_product(JSON.parse('{ "name": "Product", "maturity": { "cd10":true}}')) }
-    p1 = Product.where(name: 'Product')[0]
-    assert_not_nil p1.product_assessment
-    assert p1.product_assessment.has_osc
-    assert p1.product_assessment.osc_cd10
-  end
-
   test "overwrites things" do
     capture_stdout { sync_osc_product(JSON.parse('{ "name":"Product", "website": "foo.org"}')) }
     assert_equal Product.where(name: 'Product')[0].website, 'foo.org'
+  end
+
+  test "updates maturity data" do
+
+    new_product = JSON.parse('{"name": "ODK", "maturity":{"indicator2":true}}')
+    capture_stdout { sync_osc_product(new_product) }
+
+    rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+    odk_product = Product.find_by(slug: 'odk')
+    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    assert_equal maturity_scores.first[:score], 10
   end
 end

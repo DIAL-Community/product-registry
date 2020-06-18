@@ -2,22 +2,23 @@ require 'swagger_helper'
 
 RSpec.describe 'contacts', type: :request do
   path '/contacts' do
-    get('List all available contacts') do
+    get(summary: 'List all available contacts') do
       tags 'Contact Controller'
 
       produces 'application/json'
       consumes 'application/json'
 
       parameter name: :search, in: :query, schema: { type: :string }, description: 'Search term to narrow contact.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    post('Create a new contact.') do
+    post(summary: 'Create a new contact.') do
       tags 'Contact Controller'
 
       consumes 'multipart/form-data'
@@ -34,9 +35,10 @@ RSpec.describe 'contacts', type: :request do
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual contact form.'
 
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -47,19 +49,20 @@ RSpec.describe 'contacts', type: :request do
     # You'll want to customize the parameter types...
     parameter name: 'id', in: :path, type: :string, description: 'The id of the contact'
 
-    get('Find a contact by their id.') do
+    get(summary: 'Find a contact by their id.') do
       tags 'Contact Controller'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    patch('Update a contact by their id.') do
+    patch(summary: 'Update a contact by their id.') do
       tags 'Contact Controller'
 
       consumes 'multipart/form-data'
@@ -74,17 +77,18 @@ RSpec.describe 'contacts', type: :request do
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual contact form.'
 
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
     end
 
-    delete('Delete a contact by their contact id') do
+    delete(summary: 'Delete a contact by their contact id') do
       tags 'Contact Controller'
 
       consumes 'multipart/form-data'
@@ -92,11 +96,12 @@ RSpec.describe 'contacts', type: :request do
 
       parameter name: :authenticity_token, in: :formData,
                 type: :string, required: true, description: 'Token from an actual contact form.'
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         let(:id) { '123' }
 
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end
@@ -104,7 +109,7 @@ RSpec.describe 'contacts', type: :request do
   end
 
   path '/contact_duplicates' do
-    get('Find duplicates of contact.') do
+    get(summary: 'Find duplicates of contact.') do
       tags 'Contact Controller'
 
       consumes 'application/json'
@@ -112,9 +117,10 @@ RSpec.describe 'contacts', type: :request do
 
       parameter name: :current, in: :query, schema: { type: :string }
       parameter name: :original, in: :query, required: true, schema: { type: :string }
-      response(200, 'successful') do
+      response(200, description: 'successful') do
         after do |example|
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
+          example.metadata[:response][:examples] =
+            { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
         run_test!
       end

@@ -121,8 +121,11 @@ module Modules
         if !sectors.nil? && !sectors.empty?
           sectors.each do |sector|
             sector_obj = Sector.find_by(name: sector)
-            puts "Adding sector " + sector_obj.name + " to product"
-            existing_product.sectors << sector_obj
+            # Check to see if the sector exists already
+            if !existing_product.sectors.include?(sector_obj)
+              puts "Adding sector " + sector_obj.name + " to product"
+              existing_product.sectors << sector_obj
+            end
           end
         end
 
@@ -136,7 +139,7 @@ module Modules
       end
     end
 
-    def sync_digisquare_product(digi_product)
+    def sync_digisquare_product(digi_product, digisquare_maturity)
       digisquare_origin = Origin.find_by(slug: 'digital_square')
 
       name_aliases = [digi_product['name']]
@@ -176,6 +179,28 @@ module Modules
         sdgs.each do |sdg|
           sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
           assign_sdg_to_product(sdg_obj, existing_product, 'Validated')
+        end
+      end
+
+      # Find maturity data if it exists and update
+      digisquare_maturity.each do |ds_maturity|
+        if existing_product.name == ds_maturity["name"]
+          # Get the legacy rubric
+          maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+          if !maturity_rubric.nil?
+            ds_maturity["maturity"].each do |key, value|
+              # Find the correct category and indicator
+              categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
+              category_indicator = CategoryIndicator.find_by(rubric_category: categories, name: key)
+              # Save the value in ProductIndicators
+              product_indicator = ProductIndicator.where(product_id: existing_product.id, category_indicator_id: category_indicator.id)
+                                                      .first || ProductIndicator.new
+              product_indicator.product_id = existing_product.id
+              product_indicator.category_indicator_id = category_indicator.id
+              product_indicator.indicator_value = value
+              product_indicator.save!
+            end
+          end
         end
       end
 
@@ -233,18 +258,22 @@ module Modules
 
       maturity = product['maturity']
       if !maturity.nil?
-        product_assessment = sync_product.product_assessment
-        if product_assessment.nil?
-          puts '  Creating new maturity assessment'
-          product_assessment = ProductAssessment.new
-          product_assessment.product = sync_product
-          product_assessment.save
+        # Get the legacy rubric
+        maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+        if !maturity_rubric.nil?
+          maturity.each do |key, value|
+            # Find the correct category and indicator
+            categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
+            category_indicator = CategoryIndicator.find_by(rubric_category: categories, slug: key)
+            # Save the value in ProductIndicators
+            product_indicator = ProductIndicator.where(product_id: sync_product.id, category_indicator_id: category_indicator.id)
+                                                    .first || ProductIndicator.new
+            product_indicator.product_id = sync_product.id
+            product_indicator.category_indicator_id = category_indicator.id
+            product_indicator.indicator_value = value
+            product_indicator.save!
+          end
         end
-        product_assessment.has_osc = true
-        maturity.each do |key, value|
-          product_assessment["osc_#{key}"] = value
-        end
-        product_assessment.save
       end
 
       osc_origin = Origin.find_by(slug: 'dial_osc')

@@ -7,7 +7,8 @@ module ApplicationHelper
   include Modules::Constants
 
   ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps tags
-                             product_suites operator_services settings glossaries portal_views].freeze
+                             product_suites operator_services settings glossaries portal_views maturity_rubrics
+                             rubric_categories].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
@@ -31,27 +32,39 @@ module ApplicationHelper
   end
 
   def build_breadcrumbs(params)
-    base_path = params[:controller]
-    # Special case for the users base path because we have way to view/edit users
-    base_path == 'users' && base_path = 'admin/users'
+    breadcrumbs = []
 
-    # Special case for the candidate organizations.
-    # Non registered user should go to organizations list instead of candidate list in the crumb.
-    base_label = params[:controller].titlecase
-    if base_path == 'candidate_organizations' && !policy(CandidateOrganization).view_allowed?
-      base_path = 'organizations'
-      base_label = 'Organizations'
-    end
-
-    if params[:controller].downcase == 'use_case_steps'
-      base_path = 'use_cases'
-      base_label = 'Use Cases'
+    if params[:controller].downcase == 'candidate_organizations' &&
+       !policy(CandidateOrganization).view_allowed?
+      breadcrumbs << { path: 'organizations', label: t('model.organization').titlecase.pluralize }
+    elsif params[:controller].downcase == 'use_case_steps'
+      breadcrumbs << { path: 'use_cases', label: t('model.use-case').titlecase.pluralize }
       if params[:use_case_id].present?
-        parent_path = "use_cases/#{params[:use_case_id]}"
-        parent_label = UseCase.find_by(slug: params[:use_case_id]).name
+        uc_step_path = "use_cases/#{params[:use_case_id]}"
+        uc_step_name = UseCase.find_by(slug: params[:use_case_id]).name
+        breadcrumbs << { path: uc_step_path, label: uc_step_name }
       end
+    elsif params[:controller].downcase == 'users'
+      breadcrumbs << { path: 'admin/users', label: t('model.user').titlecase.pluralize }
+    elsif params[:controller].downcase == 'rubric_categories' || params[:controller].downcase == 'category_indicators'
+      breadcrumbs << { path: 'maturity_rubrics', label: t('model.maturity-rubric').titlecase.pluralize }
+      if params[:maturity_rubric_id].present?
+        mr_path = "maturity_rubrics/#{params[:maturity_rubric_id]}"
+        mr_name = MaturityRubric.find_by(slug: params[:maturity_rubric_id]).name
+        breadcrumbs << { path: mr_path, label: mr_name }
+      end
+      if params[:rubric_category_id].present?
+        rc_path = "#{breadcrumbs[-1][:path]}/rubric_categories/#{params[:rubric_category_id]}"
+        rc_name = RubricCategory.find_by(slug: params[:rubric_category_id]).name
+        breadcrumbs << { path: rc_path, label: rc_name }
+      else
+        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/rubric_categories", label: '' }
+      end
+    else
+      breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }
     end
 
+    # Find the last element of the object tree
     object_class = params[:controller].classify.constantize
     object_class.column_names.include?('slug') && object_record = object_class.find_by(slug: params[:id])
     if object_record.nil? && params[:id].present? && params[:id].scan(/\D/).empty?
@@ -59,21 +72,15 @@ module ApplicationHelper
     end
 
     unless object_record.nil?
-      if base_path == 'admin/users'
+      if breadcrumbs[-1][:path] == 'admin/users'
         id_label = object_record.email
       else
         id_label = object_record.name
       end
     end
 
-    {
-      base_path: base_path,
-      base_label: base_label,
-      parent_path: parent_path,
-      parent_label: parent_label,
-      id_path: "#{base_path}/#{params[:id]}",
-      id_label: id_label
-    }
+    breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/#{params[:id]}", label: id_label }
+    breadcrumbs
   end
 
   def filter_count(filter_name)

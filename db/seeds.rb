@@ -25,6 +25,13 @@ if Setting.where(slug: 'default_covid19_tag').count.zero?
                   value: 'COVID-19'
 end
 
+if Setting.where(slug: Rails.configuration.settings['default_maturity_rubric_slug']).count.zero?
+  Setting.create!(name: 'Default Maturity Rubric Slug',
+                  slug: Rails.configuration.settings['default_maturity_rubric_slug'],
+                  description: 'The key to the default definition of the maturity rubric.',
+                  value: 'default_maturity_rubric')
+end
+
 if Tag.where(slug: 'covid19').count.zero?
   tag = Tag.create! name: 'COVID-19',
                     slug: 'covid19'

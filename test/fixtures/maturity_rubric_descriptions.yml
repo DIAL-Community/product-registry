@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  maturity_rubric: Default Rubric
+  locale: en
+  description: This is a Rubric
+  description_html: This is a Rubric
+
+two:
+  maturity_rubric: Legacy Rubric
+  locale: en
+  description: This is another rubric
+  description_html: This is another rubric

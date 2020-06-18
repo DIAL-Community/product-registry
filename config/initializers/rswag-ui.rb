@@ -7,4 +7,7 @@ Rswag::Ui.configure do |c|
   # then the list below should correspond to the relative paths for those endpoints
 
   c.swagger_endpoint '/api-docs/v1/swagger.yaml', 'API V1 Docs'
+
+  # Default to collapse all of the API definition
+  c.config_object['docExpansion'] = 'none'
 end

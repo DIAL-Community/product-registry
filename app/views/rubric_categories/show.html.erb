@@ -1,0 +1,97 @@
+<% description = @rubric_category.rubric_category_descriptions
+                                 .select { |desc| desc.locale == I18n.locale.to_s }
+                                 .first %>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(RubricCategory).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.rubric-category').titlecase), @rubric_category,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.rubric-category')) },
+                  class: 'btn btn-outline-secondary float-left' %>
+    <% end %>
+  </div>
+</div>
+
+<div id="show-rubric-category" class="card mt-2">
+  <h5 class="card-header border-0 font-weight-bold">
+    <%= "#{@rubric_category.name}" %>
+  </h5>
+  <div class="card-body py-2">
+    <div class="row mb-2">
+      <div class="col-12 text-muted">
+        <%= "#{t('view.rubric-category.form.weight')}: #{@rubric_category.weight}" %>
+      </div>
+    </div>
+    <div id="<%= @rubric_category.slug %>" class="wysiwyg-viewer">
+      <%= !description.description_html.nil? && description.description_html.html_safe %>
+    </div>
+  </div>
+  <div class="card-footer border-0">
+    <div class="float-right mb-0">
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", class: "card-link" %>
+      <% if user_signed_in? && policy(RubricCategory).mod_allowed? %>
+        <%= link_to t('view.general.edit'),
+                    edit_maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric,
+                                                              @rubric_category),
+                    class: "card-link" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div id="rubric-category-indicators" class="card mt-2">
+  <div class="card-header border-0 font-weight-bold">
+    <h5 class="float-left mb-0"><%= t('model.category-indicator').pluralize.titlecase %></h5>
+    <% if user_signed_in? && policy(RubricCategory).mod_allowed? %>
+      <%= link_to t('view.general.add'),
+                  new_maturity_rubric_rubric_category_category_indicator_path(@rubric_category.maturity_rubric,
+                                                                              @rubric_category),
+                  class: "card-link float-right", style: "color: #fbab18 !important" %>
+    <% end %>
+  </div>
+  <div class="card-body p-0">
+    <% if !@rubric_category.category_indicators.empty? %>
+      <% @rubric_category.category_indicators.order('category_indicators.name ASC').each do |category_indicator| %>
+        <% indicator_description = category_indicator.category_indicator_descriptions
+                                                     .select { |desc| desc.locale == I18n.locale.to_s }
+                                                     .first %>
+        <div class="card border-right-0 border-left-0 border-bottom-0">
+          <h6 class="card-header border-0 font-weight-bold">
+            <%= "#{category_indicator.name}" %>
+          </h6>
+          <div class="card-body py-2">
+            <div class="row mb-2">
+              <div class="col-12 text-muted">
+                <%= "#{t('view.category-indicator.form.weight')}: #{category_indicator.weight}" %>
+              </div>
+            </div>
+            <div id="<%= category_indicator.slug %>" class="wysiwyg-viewer">
+              <%= !indicator_description.description_html.nil? && indicator_description.description_html.html_safe %>
+            </div>
+          </div>
+          <div class="card-footer border-0">
+            <div class="float-right mb-0">
+              <%= link_to t('view.general.view'),
+                      maturity_rubric_rubric_category_category_indicator_path(@rubric_category.maturity_rubric,
+                                                                              @rubric_category, category_indicator),
+                      class: "card-link" %>
+            </div>
+          </div>
+        </div>
+        <script>
+          setViewerForElement('<%= category_indicator.slug %>',
+                               <%= raw JSON.generate(indicator_description.description ) %>)
+        </script>
+      <% end %>
+    <% else %>
+      <div class="alert alert-light mb-0" role="alert">
+        <%= t('view.rubric-category.index.no-data') %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  setViewerForElement('<%= @rubric_category.slug %>',
+                       <%= raw JSON.generate(description.description) %>)
+</script>

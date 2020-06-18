@@ -3,7 +3,6 @@ class Product < ApplicationRecord
 
   attr_accessor :product_description
 
-  has_one :product_assessment
   has_many :product_descriptions
   has_many :product_versions
   has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products
@@ -50,50 +49,6 @@ class Product < ApplicationRecord
 
   def to_param  # overridden
     slug
-  end
-
-  def maturity_scores
-    @osc_maturity = YAML.load_file("config/maturity_osc.yml")
-    @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
-
-    toret = {}
-    if !self.product_assessment.nil?
-      if self.product_assessment.has_osc
-        @osc_maturity.each do |osc_maturity_category|
-          total_possible_score = 0
-          total_score = 0
-          osc_maturity_category['items'].each do |item|
-            if self.product_assessment.send('osc_' + item["code"].downcase)
-              total_score += 1
-            end
-          end
-          toret[osc_maturity_category['header']] = {}
-          toret[osc_maturity_category['header']]['total'] = osc_maturity_category['items'].length
-          toret[osc_maturity_category['header']]['score'] = total_score
-        end
-      end
-      if self.product_assessment.has_digisquare
-        @digisquare_maturity.each do |digisquare_maturity_category|
-          cat_total = 0
-          digisquare_maturity_category['sub-indicators'].each do |sub_indicator|
-            next unless product_assessment.send(sub_indicator['code'])
-
-            indicator = product_assessment.send(sub_indicator['code'])
-            case indicator
-            when ProductAssessment.digisquare_maturity_levels[:low]
-              cat_total += -1
-            when ProductAssessment.digisquare_maturity_levels[:medium]
-              cat_total += 0
-            when ProductAssessment.digisquare_maturity_levels[:high]
-              cat_total += 1
-            end
-          end
-          cat_score = 5 * (cat_total.to_f / digisquare_maturity_category['sub-indicators'].length) + 5
-          toret[digisquare_maturity_category['core']] = cat_score
-        end
-      end
-    end
-    toret
   end
 
 end
