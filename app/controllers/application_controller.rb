@@ -477,6 +477,7 @@ class ApplicationController < ActionController::Base
         request.path != "/users/password/edit" &&
         request.path != "/users/confirmation" &&
         request.path != "/users/sign_out" &&
+        request.path != "/export" &&
         !request.path.include?('stylesheets') &&
         !request.xhr?) # don't store ajax calls
       store_location_for(:user, request.fullpath)
