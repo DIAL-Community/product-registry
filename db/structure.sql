@@ -175,6 +175,16 @@ CREATE TYPE public.org_type_orig AS ENUM (
 
 
 --
+-- Name: product_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.product_type AS ENUM (
+    'product',
+    'dataset'
+);
+
+
+--
 -- Name: relationship_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -1212,7 +1222,8 @@ CREATE TABLE public.products (
     cocomo integer,
     est_hosting integer,
     est_invested integer,
-    maturity_score integer
+    maturity_score integer,
+    product_type public.product_type DEFAULT 'product'::public.product_type
 );
 
 
@@ -4247,6 +4258,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200522194438'),
 ('20200526195946'),
 ('20200526203504'),
-('20200603140902');
+('20200603140902'),
+('20200608194733');
 
 

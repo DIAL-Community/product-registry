@@ -447,6 +447,7 @@ class ProductsController < ApplicationController
 
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
+      product_type = sanitize_session_values 'product_type'
 
       countries = sanitize_session_values 'countries'
       sectors = sanitize_session_values 'sectors'
@@ -454,7 +455,7 @@ class ProductsController < ApplicationController
       tags = sanitize_session_values 'tags'
 
       filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
+                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
                      sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -506,7 +507,7 @@ class ProductsController < ApplicationController
                               .ids
       end
 
-      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
+      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
       [filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids]), filter_set]
     end
 

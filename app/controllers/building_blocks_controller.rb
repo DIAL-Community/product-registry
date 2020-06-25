@@ -186,6 +186,7 @@ class BuildingBlocksController < ApplicationController
       origins = sanitize_session_values 'origins'
       with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
       is_launchable = sanitize_session_value 'is_launchable'
+      product_type = sanitize_session_values 'product_type'
 
       endorser_only = sanitize_session_value 'endorser_only'
       aggregator_only = sanitize_session_value 'aggregator_only'
@@ -201,7 +202,7 @@ class BuildingBlocksController < ApplicationController
 
       filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
                      organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
-                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && product_type.empty?) ||
                    endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
       project_product_ids = []
@@ -243,7 +244,7 @@ class BuildingBlocksController < ApplicationController
                                     .ids
       end
 
-      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
+      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
 
       org_products = []
       if !organizations.empty?
