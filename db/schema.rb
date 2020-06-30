@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_08_194733) do
+ActiveRecord::Schema.define(version: 2020_06_24_212630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
-    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -30,7 +29,7 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "audit_id", "version"], name: "auditable_index"
+    t.index ["action", "id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -87,6 +86,18 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
 # Could not dump table "category_indicators" because of following StandardError
 #   Unknown type 'category_indicator_type' for column 'indicator_type'
 
+  create_table "cities", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.bigint "region_id"
+    t.decimal "latitude", null: false
+    t.decimal "longitude", null: false
+    t.string "aliases", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["region_id"], name: "index_cities_on_region_id"
+  end
+
   create_table "classifications", force: :cascade do |t|
     t.string "name"
     t.string "indicator"
@@ -106,6 +117,18 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.index ["slug"], name: "index_contacts_on_slug", unique: true
   end
 
+  create_table "countries", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "code", null: false
+    t.string "code_longer", null: false
+    t.decimal "latitude", null: false
+    t.decimal "longitude", null: false
+    t.string "aliases", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "deploys", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "product_id"
@@ -121,6 +144,18 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_deploys_on_product_id"
     t.index ["user_id"], name: "index_deploys_on_user_id"
+  end
+
+  create_table "districts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.bigint "region_id", null: false
+    t.decimal "latitude", null: false
+    t.decimal "longitude", null: false
+    t.string "aliases", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["region_id"], name: "index_districts_on_region_id"
   end
 
   create_table "glossaries", force: :cascade do |t|
@@ -148,6 +183,22 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.string "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "offices", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.decimal "latitude", null: false
+    t.decimal "longitude", null: false
+    t.string "city", null: false
+    t.bigint "organization_id", null: false
+    t.bigint "region_id"
+    t.bigint "country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_offices_on_country_id"
+    t.index ["organization_id"], name: "index_offices_on_organization_id"
+    t.index ["region_id"], name: "index_offices_on_region_id"
   end
 
 # Could not dump table "operator_services" because of following StandardError
@@ -182,9 +233,18 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.datetime "ended_at"
   end
 
+  create_table "organizations_countries", force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.bigint "country_id", null: false
+    t.index ["country_id"], name: "index_organizations_countries_on_country_id"
+    t.index ["organization_id"], name: "index_organizations_countries_on_organization_id"
+  end
+
   create_table "organizations_locations", force: :cascade do |t|
     t.bigint "location_id", null: false
     t.bigint "organization_id", null: false
+    t.boolean "migrated"
+    t.datetime "migrated_date"
     t.index ["location_id", "organization_id"], name: "loc_orcs", unique: true
     t.index ["organization_id", "location_id"], name: "org_locs", unique: true
   end
@@ -197,6 +257,13 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.bigint "organization_id", null: false
     t.index ["organization_id", "sector_id"], name: "org_sectors", unique: true
     t.index ["sector_id", "organization_id"], name: "sector_orcs", unique: true
+  end
+
+  create_table "organizations_states", force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.bigint "region_id", null: false
+    t.index ["organization_id"], name: "index_organizations_states_on_organization_id"
+    t.index ["region_id"], name: "index_organizations_states_on_region_id"
   end
 
   create_table "origins", force: :cascade do |t|
@@ -328,9 +395,18 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.index ["origin_id"], name: "index_projects_on_origin_id"
   end
 
-  create_table "projects_locations", id: false, force: :cascade do |t|
+  create_table "projects_countries", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "country_id", null: false
+    t.index ["country_id"], name: "index_projects_countries_on_country_id"
+    t.index ["project_id"], name: "index_projects_countries_on_project_id"
+  end
+
+  create_table "projects_locations", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.bigint "location_id", null: false
+    t.boolean "migrated"
+    t.datetime "migrated_date"
     t.index ["location_id", "project_id"], name: "locations_projects_idx", unique: true
     t.index ["project_id", "location_id"], name: "projects_locations_idx", unique: true
   end
@@ -361,6 +437,18 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
     t.bigint "sector_id", null: false
     t.index ["project_id", "sector_id"], name: "projects_sectors_idx", unique: true
     t.index ["sector_id", "project_id"], name: "sectors_projects_idx", unique: true
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.bigint "country_id", null: false
+    t.decimal "latitude", null: false
+    t.decimal "longitude", null: false
+    t.string "aliases", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_regions_on_country_id"
   end
 
   create_table "rubric_categories", force: :cascade do |t|
@@ -559,19 +647,28 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "category_indicator_descriptions", "category_indicators"
   add_foreign_key "category_indicators", "rubric_categories"
+  add_foreign_key "cities", "regions"
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
+  add_foreign_key "districts", "regions"
   add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
+  add_foreign_key "offices", "countries"
+  add_foreign_key "offices", "organizations"
+  add_foreign_key "offices", "regions"
   add_foreign_key "operator_services", "locations", column: "locations_id"
   add_foreign_key "organization_descriptions", "organizations"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
+  add_foreign_key "organizations_countries", "countries"
+  add_foreign_key "organizations_countries", "organizations"
   add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"
   add_foreign_key "organizations_locations", "organizations", name: "organizations_locations_organization_fk"
   add_foreign_key "organizations_products", "organizations", name: "organizations_products_organization_fk"
   add_foreign_key "organizations_products", "products", name: "organizations_products_product_fk"
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
+  add_foreign_key "organizations_states", "organizations"
+  add_foreign_key "organizations_states", "regions"
   add_foreign_key "product_classifications", "classifications"
   add_foreign_key "product_classifications", "classifications", name: "product_classifications_classification_fk"
   add_foreign_key "product_classifications", "products"
@@ -592,6 +689,8 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
   add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
   add_foreign_key "project_descriptions", "projects"
   add_foreign_key "projects", "origins"
+  add_foreign_key "projects_countries", "countries"
+  add_foreign_key "projects_countries", "projects"
   add_foreign_key "projects_locations", "locations", name: "projects_locations_location_fk"
   add_foreign_key "projects_locations", "projects", name: "projects_locations_project_fk"
   add_foreign_key "projects_organizations", "organizations", name: "projects_organizations_organization_fk"
@@ -602,6 +701,7 @@ ActiveRecord::Schema.define(version: 2020_06_08_194733) do
   add_foreign_key "projects_sdgs", "sustainable_development_goals", column: "sdg_id", name: "projects_sdgs_sdg_fk"
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
+  add_foreign_key "regions", "countries"
   add_foreign_key "rubric_categories", "maturity_rubrics"
   add_foreign_key "rubric_category_descriptions", "rubric_categories"
   add_foreign_key "tag_descriptions", "tags"

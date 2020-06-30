@@ -1,0 +1,320 @@
+// TODO: When you select a feature, but then you change the switch selection.
+// There's still issue with this.
+
+const loadProjectTiles = function () {
+  const dimmedOpacity = 0.3;
+
+  const countries = {};
+  const projects = {};
+  const projectsByCountry = {};
+
+  const countryPopup = new ol.Overlay({
+    element: document.getElementById('country-osm-popup')
+  });
+
+  const selectedMarkerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('map_marker.png') %>"
+      })
+    }),
+  });
+
+  const projectMarkerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('map_marker.png') %>"
+      })
+    }),
+  });
+
+  const baseLayer = new ol.layer.Tile({
+    source: new ol.source.OSM()
+  });
+
+  const map = new ol.Map({
+    target: 'project-osm',
+    layers: [
+      baseLayer,
+      projectMarkerLayer,
+      selectedMarkerLayer
+    ],
+    overlays: [countryPopup],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([10, 20.3]),
+      zoom: 2,
+      maxZoom: 10,
+      minZoom: 2
+    })
+  });
+
+  $('#project-osm').data('map', map);
+  $(document).trigger('#project-osm:loaded');
+
+  $.getJSON('/countries.json?without_paging=true', function (countryObjects) {
+    countryObjects.forEach(function(country) {
+      countries[country.name] = {
+        country_code: country.code,
+        latitude: country.latitude,
+        longitude: country.longitude,
+        country_name: country.name
+      }
+    });
+    $(document).trigger({ type: 'data#loaded', sourceType: 'country' });
+  });
+
+  let url = '/projects.json?without_paging=true';
+  $.getJSON(url, function(projectData) {
+    projectData
+      .forEach(function(project) {
+        const normalized = {
+          id: project.id,
+          name: project.name,
+          slug: project.slug,
+          countries: project.countries
+        }
+
+        const option = new Option(project.name, project.id);
+        $(option).html(project.name);
+        $('#project-selector').append(option);
+
+        projects[normalized.id] = normalized;
+        project.countries.forEach(function(country) {
+          const projectsCountry = projectsByCountry[country] || []
+          projectsCountry.push(normalized.id);
+          projectsByCountry[country] = projectsCountry;
+        });
+      });
+    $(document).trigger({ type: 'data#loaded', sourceType: 'project' });
+  });
+
+  const loadingIndicator = {};
+  $(document).on('data#loaded', function(data) {
+    loadingIndicator[data.sourceType] = true;
+    if (loadingIndicator['country'] && loadingIndicator['project']) {
+      $("#loading-spinner").hide();
+      // Highlight our initial country list.
+      prepareCountryLayer(projectsByCountry, countries, projectMarkerLayer);
+    }
+  });
+
+  // Build list of country features for an project
+  const prepareCountryLayer = function(projectsByCountry, countries, projectMarkerLayer) {
+    projectMarkerLayer.getSource().clear();
+    Object.keys(projectsByCountry).forEach(function(projectCountry) {
+      const country = countries[projectCountry];
+      const coordinate = [parseFloat(country.longitude), parseFloat(country.latitude)];
+      const markerCoordinate = ol.proj.transform(coordinate, 'EPSG:4326', 'EPSG:3857');
+      
+      projectMarkerLayer.getSource().addFeature(new ol.Feature({
+        name: projectCountry,
+        geometry: new ol.geom.Point(markerCoordinate),
+        projects: projectsByCountry[projectCountry]
+      }));
+    });
+  }
+
+  const isMarkerLayer = function (feature, layer) {
+    if (layer === projectMarkerLayer) {
+      return feature;
+    } else if (layer === selectedMarkerLayer) {
+      selectedMarkerLayer.getSource().removeFeature(feature)
+      projectMarkerLayer.getSource().addFeature(feature);
+      return feature;
+    } 
+  }
+
+  // Build popup content for a single project marker feature
+  const buildPopupContent = function(project) {
+    return `<div class="card p-0">
+              <h6 class="card-header py-2 px-2">${project.name}</h6>
+              <p class="small py-2 px-2 mb-0">
+                <a href="/projects/${project.slug}" target="_blank" rel="noreferrer noopener">
+                  <small>View project</small>
+                </a>
+                <br />
+              </p>
+            </div>`
+  }
+
+  // Build popup content for an project where the feature contains
+  // multiple project. The default is to collapse all (display: none).
+  const buildMultiPopupContent = function(project) {
+    return `<p class="org-details mb-0" style="display:none">
+              <small>
+                <a href="/projects/${project.slug}" target="_blank" rel="noreferrer noopener">
+                  View project
+                </a>
+                <br />
+              </small>
+            </p>`
+  }
+
+  const resetSelectedLayer = function() {
+    // Set the opacity back to original value
+    projectMarkerLayer.setOpacity(1);
+    // Move back selected feature to the project layer
+    selectedMarkerLayer.getSource().forEachFeature(function(feature) {
+      projectMarkerLayer.getSource().addFeature(feature);
+    });
+    // Clear the selected project layer
+    selectedMarkerLayer.getSource().clear();
+  }
+
+  const clickHandler = function (event) {
+    const element = $('#project-osm-info');
+    const projectFeature = map.forEachFeatureAtPixel(event.pixel, isMarkerLayer);
+    if (projectFeature) {
+      // Move the selected feature from the project layer to selected project layer.
+      // We will dim the org layer by lowering down the opacity later on.
+      projectMarkerLayer.getSource().removeFeature(projectFeature)
+      selectedMarkerLayer.getSource().addFeature(projectFeature);
+      projectMarkerLayer.setOpacity(dimmedOpacity);
+
+      const projectIds = projectFeature.get("projects");
+      if (projectIds.length == 1) {
+        const project = projects[projectIds[0]];
+        const content = buildPopupContent(project);
+        $(element).html(content);
+        $(element).show();
+      } else {
+        const contentDiv = $('<div class="card p-0" style="overflow: hidden; max-height: 10rem"/>');
+
+        const contentHeader = $('<h6 class="card-header py-2 px-2">' + projectIds.length + ' Projects</h6>');
+        contentDiv.append(contentHeader);
+
+        const projectElements = $('<div class="list-group" style="overflow-y: auto;" />');
+        contentDiv.append(projectElements);
+
+        projectIds.forEach(function (aggregatorId) {
+          const project = projects[aggregatorId];
+          const projectInfo = $('<div class="list-group-item list-group-item-action py-2 px-2" />');
+
+          projectInfo.click(function() {
+            $(this).parents(".list-group").find('.org-details').hide();
+            $(this).find('.org-details').show();
+          });
+
+          projectInfo.append(`<strong>${project.name}</strong>`);
+          projectInfo.append(buildMultiPopupContent(project))
+          projectElements.append(projectInfo);
+        });
+        $(element).html(contentDiv);
+        $(element).show();
+      }
+    } else {
+      resetSelectedLayer();
+      $(element).hide();
+    }
+  }
+
+  const isCountryLayer = function(feature, layer) {
+    if (layer === projectMarkerLayer || layer === selectedMarkerLayer) {
+      return feature;
+    }
+  }
+
+  const pointerMoveHandler = function(event) {
+    const feature = map.forEachFeatureAtPixel(event.pixel, isCountryLayer);
+    if (feature) {
+      const element = countryPopup.element;
+      const name = feature.get('name');
+      const projectIds = feature.get("projects");
+      $(element).html(
+        `<div class="card map-hover p-0" style="z-index: 10;">
+          <h6 class="card-header py-2 px-2">${name}</h6>
+          <p class="text-muted py-2 px-2 mb-0">
+            ${projectIds.length} project(s).
+            <br />
+            <small>Click to view project(s).</small>
+          </p>
+        </div>`);
+      countryPopup.setPosition(event.coordinate);
+    } else {
+      countryPopup.setPosition(undefined);
+    }
+  }
+
+  const highlightHolder = {
+    projects: []
+  }
+
+  $('#project-selector').change(function() {
+    const projectId = $(this).val();
+    
+    $('#project-osm-info').hide();
+    resetSelectedLayer();
+
+    // Remove partial features.
+    projectMarkerLayer.getSource().forEachFeature(function(feature) {
+      if (feature.get("partialProjects") === true) {
+        projectMarkerLayer.getSource().removeFeature(feature);
+      }
+    })
+
+    // Add back all features from temporary holder. 
+    highlightHolder.projects.forEach(function(feature) {
+      projectMarkerLayer.getSource().addFeature(feature);
+    });
+
+    // Reset the holder.
+    highlightHolder.projects.length = 0;
+
+    projectMarkerLayer.getSource().forEachFeature(function(feature) {
+      if (parseInt(projectId) === -1) {
+        return;
+      }
+
+      const filteredProjects = feature.get("projects")
+                                      .filter(function(id) {
+                                        return projectId == id;
+                                      });
+
+      projectMarkerLayer.getSource().removeFeature(feature);
+      highlightHolder.projects.push(feature);
+
+      if (filteredProjects.length > 0) {
+        projectMarkerLayer.getSource().addFeature(new ol.Feature({
+          name: feature.get("name"),
+          geometry: feature.get("geometry"),
+          projects: filteredProjects,
+          partialProjects: true
+        }));
+      }
+    });
+  });
+
+  map.on('click', clickHandler);
+  map.on('pointermove', pointerMoveHandler);
+}
+
+const projectOsmMapLoadedHandler = function() {
+    const positionGranted = function(position) {
+      if (position.coords) {
+        console.log('Readjusting map center and zoom ...');
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const geoCoordinate = ol.proj.transform([parseFloat(longitude), parseFloat(latitude)], 'EPSG:4326', 'EPSG:3857');
+        // Center the map to the coordinate
+
+        projectMap = $('#project-osm').data('map');
+        projectMap.getView().setCenter(geoCoordinate);
+        projectMap.getView().setZoom(6);
+      }
+    }
+    <% if !Setting.find_by(slug: 'default_map_center_position', value: 'country').nil? %>
+      requestGeoPosition(positionGranted);
+    <% end %>
+  }
+
+$(document).on('projects#map_projects_osm:loaded', loadProjectTiles);

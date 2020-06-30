@@ -51,7 +51,7 @@ var aggregator = {
     source: new ol.source.Vector(),
     map: this.map,
     style: function(feature) {
-      aggregator.countryHighlightStyle.getText().setText(feature.get('name'));
+      aggregator.countryHighlightStyle.getText().setText(feature.get('NAME_0'));
       return aggregator.countryHighlightStyle;
     }
   }),
@@ -62,7 +62,7 @@ var aggregator = {
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
-      aggregator.countryStyle.getText().setText(feature.get('name'));
+      aggregator.countryStyle.getText().setText(feature.get('NAME_0'));
       return aggregator.countryStyle;
     }
   }),
@@ -172,9 +172,9 @@ var aggregator = {
 function highlightCountries(countries) {
   countries.forEach(function(country) {
     aggregator.countryLayer.getSource().forEachFeature(function(feature) {
-      if (country == feature.get('name')) {
+      if (country == feature.get('NAME_0')) {
         aggregator.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-          name: feature.get("name"),
+          name: feature.get("NAME_0"),
           coordinate: feature.get("coordinate"),
           geometry: feature.get("geometry"),
           aggregators: aggregator.aggregatorsByCountry[country]

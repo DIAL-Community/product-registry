@@ -53,51 +53,57 @@
     <h5 class="card-header bg-secondary text-white">
       <%= @product.name %>
     </h5>
-    <div class="row">
-      <div class="card-body col-6">
-        <%= render 'productdata', product: @product, product_description: @product_description %>
-      </div>
-      <div class="col-6">
-      <% statistics_data = @product.statistics %>
-      <% unless statistics_data['data'].nil? %>
-        <% repository_data = statistics_data['data']['repository'] %>
-        <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
-      <% end %>
-      <div class="col-12">
-        <p class="float-right mb-1" >
-          <% if user_signed_in? && policy(@product).mod_allowed? %>
-            <%= link_to t('view.general.edit'), edit_product_path(@product), :class => "card-link" %>
+    <div class="card-body p-3">
+      <div class="row">
+        <div class="col-6">
+          <%= render 'productdata', product: @product, product_description: @product_description %>
+        </div>
+        <div class="col-6">
+          <% statistics_data = @product.statistics %>
+          <% unless statistics_data['data'].nil? %>
+            <% repository_data = statistics_data['data']['repository'] %>
+            <% if !repository_data.nil? %>
+              <%= render 'repositorydata', repository_data: repository_data %>
+            <% end %>
           <% end %>
-        </p>
+        </div>
+        <div class="col-12">
+          <p class="float-right mb-1" >
+            <% if user_signed_in? && policy(@product).mod_allowed? %>
+              <%= link_to t('view.general.edit'), edit_product_path(@product), :class => "card-link" %>
+            <% end %>
+          </p>
+        </div>
       </div>
     </div>
   </div>
-  
-  </div>
+
   <% @child_products.each do |child_product| %>
     <% curr_description = @child_descriptions.where(product_id: child_product).first %>
     <div class="card my-3">
       <h5 class="card-header bg-secondary text-white">
         <%= child_product.name %>
       </h5>
-      <div class="row">
-        <div class="card-body col-6">
-          <%= render 'productdata', product: child_product, product_description: curr_description %>
+      <div class="card-body p-3">
+        <div class="row">
+          <div class="col-6">
+            <%= render 'productdata', product: child_product, product_description: curr_description %>
+          </div>
+          <div class="col-6">
+            <% statistics_data = child_product.statistics %>
+            <% unless statistics_data['data'].nil? %>
+              <% repository_data = statistics_data['data']['repository'] %>
+              <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
+            <% end %>
+          </div>
+          <div class="col-12">
+            <p class="float-right mb-1" >
+              <% if user_signed_in? && policy(@product).mod_allowed? %>
+                <%= link_to t('view.general.edit'), edit_product_path(child_product), :class => "card-link" %>
+              <% end %>
+            </p>
+          </div>
         </div>
-        <div class="col-6">
-          <% statistics_data = child_product.statistics %>
-          <% unless statistics_data['data'].nil? %>
-            <% repository_data = statistics_data['data']['repository'] %>
-            <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
-          <% end %>
-        </div>
-      </div>
-      <div class="col-12">
-        <p class="float-right mb-1" >
-          <% if user_signed_in? && policy(@product).mod_allowed? %>
-            <%= link_to t('view.general.edit'), edit_product_path(child_product), :class => "card-link" %>
-          <% end %>
-        </p>
       </div>
     </div>
   <% end %>

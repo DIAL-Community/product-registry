@@ -1,6 +1,11 @@
 class Project < ApplicationRecord
   attr_accessor :project_description
 
+  has_many :projects_locations
+  has_many :locations, through: :projects_locations
+
+  has_and_belongs_to_many :countries, join_table: :projects_countries
+
   has_and_belongs_to_many :organizations, join_table: :projects_organizations
   has_and_belongs_to_many :products, join_table: :projects_products
   has_and_belongs_to_many :locations, join_table: :projects_locations

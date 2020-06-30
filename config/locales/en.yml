@@ -46,6 +46,7 @@ en:
     building-block: building block
     candidate-organization: candidate organization
     category-indicator: category indicator
+    city: city
     contact: contact
     country: country
     deploys: deploy
@@ -59,6 +60,7 @@ en:
     product-suite: product suite
     product-version: product version
     project: project
+    region: region
     rubric-category: maturity category
     sector: sector
     setting: setting
@@ -167,6 +169,9 @@ en:
         indicator-type: Type of the indicator
         source-indicator: Name of the indicator at source
         data-source: Where we get this indicator
+    country:
+      show:
+        other-names: Other names
     rubric-category:
       form:
         description: Description of the category
@@ -399,9 +404,12 @@ en:
       projects: Projects
       view-projects: Coming soon.
       map: Map Views
-      endorser-map: View endorser map
-      aggregator-map: View aggregator map
-      project-map: View project map
+      endorser-map: Endorser map
+      endorser-map-with-osm: Endorser map
+      aggregator-map: Aggregator map
+      aggregator-map-with-osm: Aggregator map
+      project-map: Project map
+      project-map-with-osm: Project map
       clear: Clear All
       with-maturity: Product with maturity assessment
       is-launchable: Product can be deployed and launched

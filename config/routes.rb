@@ -82,6 +82,9 @@ Rails.application.routes.draw do
   resources :audits, only: [:index]
   resources :stylesheets
 
+  resources :cities, only: [:index, :show]
+  resources :countries, only: [:index, :show]
+
   resources :locations do
     resources :organizations
   end
@@ -139,4 +142,8 @@ Rails.application.routes.draw do
 
   get 'map_projects', to: 'projects#map_projects'
   get 'map_covid', to: 'projects#map_covid'
+
+  get 'map_osm', to: 'organizations#map_osm'
+  get 'map_aggregators_osm', to: 'organizations#map_aggregators_osm'
+  get 'map_projects_osm', to: 'projects#map_projects_osm'
 end

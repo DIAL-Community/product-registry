@@ -30,14 +30,14 @@
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.organization').to_s.pluralize.humanize %></h5>
   </div>
-  <% if @location.organizations.count > 0 %>
+  <% if @location.organizations_locations.count > 0 %>
     <div class="row">
-      <% @location.organizations.each do |organization| %>
+      <% @location.organizations_locations.each do |organization_location| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
             <div class="card-body py-1">
-              <h5 class="card-title"><%= link_to organization.name, organization %></h5>
-              <h6 class="card-subtitle text-muted"><%= organization.website %></h6>
+              <h5 class="card-title"><%= link_to organization_location.organization.name, organization_location.organization %></h5>
+              <h6 class="card-subtitle text-muted"><%= organization_location.organization.website %></h6>
             </div>
           </div>
         </div>

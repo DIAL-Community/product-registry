@@ -37,7 +37,7 @@ const covidMapHandler = function() {
 
         if (filteredProjects.length > 0) {
           mapOfProject.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-            name: feature.get("name"),
+            name: feature.get("NAME_0"),
             coordinate: feature.get("coordinate"),
             geometry: feature.get("geometry"),
             projects: filteredProjects,

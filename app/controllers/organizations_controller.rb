@@ -1,3 +1,5 @@
+require 'csv'
+
 class OrganizationsController < ApplicationController
   include OrganizationsHelper
 
@@ -5,6 +7,12 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_current_user, only: [:edit, :update, :destroy]
   before_action :set_core_services, only: [:show, :edit, :update, :new]
+
+  def map_aggregators_osm
+  end
+
+  def map_osm
+  end
 
   # GET /organizations
   # GET /organizations.json
@@ -14,7 +22,7 @@ class OrganizationsController < ApplicationController
       !params[:mni_only].nil? && @organizations = @organizations.where('is_mni is true')
       !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
       !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
-      @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
+      @organizations = @organizations.eager_load(:sectors, :countries, :offices).order(:name)
       authorize @organizations, :view_allowed?
       return
     end
