@@ -58,7 +58,10 @@
   <% location.aliases.each {|other_name| %>
     addOtherName('<%= other_name %>');
   <% } %>
-  <% location.organizations.sort_by{|organization| organization.name }.each do |organization| %>
+  <% location.organizations_locations
+             .joins(:organization)
+             .sort_by { |organization| organization.name }
+             .each do |organization| %>
     addOrganization('<%= organization.id %>', '<%= organization.name %>');
   <% end %>
 </script>

@@ -1,9 +1,12 @@
+# https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm
+
 development:
   esri:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
     suggest_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest
     geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates
-    reverse_geocode_uri: http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode
+    convert_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses
+    reverse_geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode
     client_id: <%= ENV["ESRI_CLIENT_ID"] %>
     client_secret: <%= ENV["ESRI_CLIENT_SECRET"] %>
     grant_type: client_credentials
@@ -13,7 +16,8 @@ test:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
     suggest_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest
     geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates
-    reverse_geocode_uri: http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode
+    convert_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses
+    reverse_geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode
     client_id: <%= ENV["ESRI_CLIENT_ID"] %>
     client_secret: <%= ENV["ESRI_CLIENT_SECRET"] %>
     grant_type: client_credentials
@@ -23,7 +27,8 @@ production:
     auth_uri: https://www.arcgis.com/sharing/rest/oauth2/token
     suggest_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest
     geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates
-    reverse_geocode_uri: http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode
+    convert_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses
+    reverse_geocode_uri: https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode
     client_id: <%= ENV["ESRI_CLIENT_ID"] %>
     client_secret: <%= ENV["ESRI_CLIENT_SECRET"] %>
     grant_type: client_credentials

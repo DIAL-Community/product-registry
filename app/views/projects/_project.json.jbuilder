@@ -1,1 +1,5 @@
-json.extract! project, :id, :name, :slug, :created_at, :updated_at, :locations
+json.extract! project, :id, :name, :slug
+
+json.countries project.countries do |country|
+  json.merge! country.name
+end

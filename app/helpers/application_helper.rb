@@ -8,7 +8,7 @@ module ApplicationHelper
 
   ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps tags
                              product_suites operator_services settings glossaries portal_views maturity_rubrics
-                             rubric_categories].freeze
+                             rubric_categories cities countries].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze

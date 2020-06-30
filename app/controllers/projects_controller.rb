@@ -2,12 +2,15 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
+  def map_projects_osm
+  end
+
   def index
     if params[:without_paging]
       @projects = Project.name_contains(params[:search])
-                         .eager_load(:locations)
+                         .eager_load(:countries)
                          .order(:name)
-      
+
       if params[:origin]
         @projects = @projects.where('origin_id=(select id from origins where slug like ?)', params[:origin])
       end

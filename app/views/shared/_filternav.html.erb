@@ -22,20 +22,21 @@
       <% end %>
       <div class="accordion-header bg-dark">
         <span class="m-0 align-middle">
+          <%= image_tag "map_icon.png", :width => "20px", :height => "20px" %>
           <span class="align-middle"><%= t('view.filternav.map') %></span>
           <i class="fa fa-angle-down float-right text-muted"></i>
         </span>
       </div>
       <div class="accordion-body p-0 bg-dark">
         <div class="row p-1">
-          <div class="col-12 ml-3">
-            <%= link_to t('view.filternav.endorser-map'), '/map' %>
+          <div class="col-12 ml-3 mt-2">
+            <%= link_to t('view.filternav.endorser-map-with-osm'), '/map_osm' %>
           </div>
           <div class="col-12 ml-3 mt-2">
-            <%= link_to t('view.filternav.aggregator-map'), '/map_aggregators' %>
+            <%= link_to t('view.filternav.aggregator-map-with-osm'), '/map_aggregators_osm' %>
           </div>
           <div class="col-12 ml-3 mt-2">
-            <%= link_to t('view.filternav.project-map'), '/map_projects' %>
+            <%= link_to t('view.filternav.project-map-with-osm'), '/map_projects_osm' %>
           </div>
         </div>
       </div>

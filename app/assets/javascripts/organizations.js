@@ -1,40 +1,3 @@
-/*
- * Global variables
- */
-var map;
-var tooltip;
-var feature;
-var markerCoordinate;
-
-/*
- * Prepare the office marker on the map and center the map on the office location.
- */
-function setOfficeMarker(organization, location, lon, lat) {
-  if (typeof map === "undefined" || typeof map.getView() === "undefined" || typeof tooltip === "undefined") {
-    setTimeout(function() {
-      setOfficeMarker(organization, location, lon, lat);
-    }, 500);
-    return;
-  }
-
-  // Project the lon lat to the map.
-  markerCoordinate = ol.proj.transform([parseFloat(lon), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857');
-
-  // Center the map to the coordinate
-  map.getView().setCenter(markerCoordinate);
-
-  // Set the feature geometry.
-  feature.setGeometry(new ol.geom.Point(markerCoordinate));
-
-  // Set the tooltip structure and location.
-  tooltip.setPosition(undefined);
-  var element = tooltip.getElement();
-  var content =
-    "<h5 class='text-muted m-2' style='font-size: 0.75em;'>" + organization + "</h5>" +
-    "<h6 class='text-muted m-2' style='font-size: 0.75em;'>" + location + "</h6>"
-  $(element).html(content);
-}
-
 function addSector(value, label) {
   addElement("base-selected-sectors", "selected_sectors", value, label);
 }
@@ -49,74 +12,6 @@ function addContact(value, label) {
 
 function addProject(value, label) {
   addElement("base-selected-projects", "selected_projects", value, label);
-}
-
-var setupMapView = function() {
-  feature = new ol.Feature({
-    name: "Organization Marker"
-  })
-  
-  var markerLayer = new ol.layer.Vector({
-    source: new ol.source.Vector({
-      features: [feature]
-    }),
-    style: new ol.style.Style({
-      image: new ol.style.Icon({
-        anchor: [11, 29],
-        anchorXUnits: 'pixels',
-        anchorYUnits: 'pixels',
-        opacity: 1,
-        src: '/assets/marker.png'
-      })
-    }),
-  });
-
-  tooltip = new ol.Overlay({
-    element: document.getElementById('office-popup')
-  });
-  map = new ol.Map({
-    target: "office",
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
-      }),
-      markerLayer
-    ],
-    overlays: [tooltip],
-    view: new ol.View({
-      center: markerCoordinate ? markerCoordinate : [0, 0],
-      zoom: 10
-    })
-  });
-
-  // Display tooltip when the user click on the office marker.
-  map.on("click", function(e) {
-    var feature = map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-      if (layer === markerLayer && tooltip) {
-        return feature;
-      }
-    });
-
-    coordinate = feature ? markerCoordinate : undefined;
-    tooltip.setPosition(coordinate);
-
-    var element = tooltip.getElement();
-
-    var fontSize = parseInt($("body").css("font-size")) * 0.75;
-
-    var baseBottom = -4 * fontSize;
-    var headerHeight = parseInt($(element).find("h5").height());
-    var lineOfHeader = Math.floor(headerHeight / fontSize)
-    if (lineOfHeader >= 2) {
-      $(element).css("bottom", baseBottom - lineOfHeader * fontSize);
-    }
-
-    var bodyHeight = parseInt($(element).find("h6").height());
-    var lineOfBody = Math.floor(bodyHeight / fontSize);
-    if (lineOfBody >= 2) {
-      $(element).css("bottom", baseBottom - lineOfBody * fontSize);
-    }
-  });
 }
 
 var setupAutoComplete = function() {
@@ -472,7 +367,6 @@ const searchFilterHandler = function() {
 }
 
 $(document).on('organizations#new:loaded', setupFormView);
-$(document).on('organizations#show:loaded', setupMapView);
 $(document).on('organizations#edit:loaded', setupFormView);
 
 $(document).on('organizations#new:loaded', setupAutoComplete);

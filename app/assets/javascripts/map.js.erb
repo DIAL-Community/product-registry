@@ -61,7 +61,7 @@ var mapObject = {
         })
       }),
     });
-    toRet.getText().setText(feature.get('name'));
+    toRet.getText().setText(feature.get('NAME_0'));
     return toRet;}
   }),
 
@@ -71,7 +71,7 @@ var mapObject = {
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
-      mapObject.countryStyle.getText().setText(feature.get('name'));
+      mapObject.countryStyle.getText().setText(feature.get('NAME_0'));
       return mapObject.countryStyle;
     }
   }),
@@ -84,7 +84,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: "<%= asset_path('marker.png') %>"
+        src: "<%= asset_path('marker_shadow.png') %>"
       })
     }),
   }),
@@ -97,7 +97,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: "<%= asset_path('marker.png') %>"
+        src: "<%= asset_path('marker_shadow.png') %>"
       })
     }),
   }),
@@ -110,7 +110,7 @@ var mapObject = {
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
         opacity: 1,
-        src: "<%= asset_path('marker.png') %>"
+        src: "<%= asset_path('marker_shadow.png') %>"
       })
     }),
   }),
@@ -154,7 +154,7 @@ var mapObject = {
         }
         o.offices.forEach(function(of) {
           var coordKey = "" + [of.lat] + "," + of.lon;
-          var coord = ol.proj.transform([of.lon, of.lat],'EPSG:4326','EPSG:3857');
+          var coord = ol.proj.transform([parseFloat(of.lon), parseFloat(of.lat)],'EPSG:4326','EPSG:3857');
           if (!(coordKey in coordinatesToOrgs)) {
             coordinatesToOrgs[coordKey] = { coordinate: coord, orgs: [] };
           }
@@ -178,7 +178,7 @@ var mapObject = {
   showCountries: function(countries) {
     countries.forEach(function(cLabel) {
       mapObject.countryLayer.getSource().forEachFeature(function(cFeature) {
-        if (cLabel == cFeature.get('name')) {
+        if (cLabel == cFeature.get('NAME_0')) {
           mapObject.countryHightlightLayer.getSource().addFeature(cFeature);
         }
       });

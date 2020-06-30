@@ -5,8 +5,9 @@
     <strong><%= t('view.header.admin-data') %></strong>
   </a>
   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+    <%= link_to t('model.city').to_s.pluralize.titlecase, cities_path, :class => 'dropdown-item' %>
     <%= link_to t('model.contact').to_s.pluralize.titlecase, contacts_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.location').to_s.pluralize.titlecase, locations_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.country').to_s.pluralize.titlecase, countries_path, :class => 'dropdown-item' %>
     <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
     <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
     <%= link_to t('model.tag').to_s.pluralize.titlecase, tags_path, :class => 'dropdown-item' %>
