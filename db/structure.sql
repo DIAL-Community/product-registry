@@ -175,6 +175,16 @@ CREATE TYPE public.org_type_orig AS ENUM (
 
 
 --
+-- Name: product_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.product_type AS ENUM (
+    'product',
+    'dataset'
+);
+
+
+--
 -- Name: relationship_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -486,6 +496,42 @@ ALTER SEQUENCE public.category_indicators_id_seq OWNED BY public.category_indica
 
 
 --
+-- Name: cities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cities (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    region_id bigint,
+    latitude numeric NOT NULL,
+    longitude numeric NOT NULL,
+    aliases character varying[] DEFAULT '{}'::character varying[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: cities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cities_id_seq OWNED BY public.cities.id;
+
+
+--
 -- Name: classifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -554,6 +600,43 @@ ALTER SEQUENCE public.contacts_id_seq OWNED BY public.contacts.id;
 
 
 --
+-- Name: countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    code character varying NOT NULL,
+    code_longer character varying NOT NULL,
+    latitude numeric NOT NULL,
+    longitude numeric NOT NULL,
+    aliases character varying[] DEFAULT '{}'::character varying[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.countries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
+
+
+--
 -- Name: deploys; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -591,6 +674,42 @@ CREATE SEQUENCE public.deploys_id_seq
 --
 
 ALTER SEQUENCE public.deploys_id_seq OWNED BY public.deploys.id;
+
+
+--
+-- Name: districts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.districts (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    region_id bigint NOT NULL,
+    latitude numeric NOT NULL,
+    longitude numeric NOT NULL,
+    aliases character varying[] DEFAULT '{}'::character varying[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: districts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.districts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: districts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.districts_id_seq OWNED BY public.districts.id;
 
 
 --
@@ -730,6 +849,44 @@ ALTER SEQUENCE public.maturity_rubrics_id_seq OWNED BY public.maturity_rubrics.i
 
 
 --
+-- Name: offices; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.offices (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    latitude numeric NOT NULL,
+    longitude numeric NOT NULL,
+    city character varying NOT NULL,
+    organization_id bigint NOT NULL,
+    region_id bigint,
+    country_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: offices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.offices_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: offices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.offices_id_seq OWNED BY public.offices.id;
+
+
+--
 -- Name: operator_services; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -844,6 +1001,36 @@ ALTER SEQUENCE public.organizations_contacts_id_seq OWNED BY public.organization
 
 
 --
+-- Name: organizations_countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organizations_countries (
+    id bigint NOT NULL,
+    organization_id bigint NOT NULL,
+    country_id bigint NOT NULL
+);
+
+
+--
+-- Name: organizations_countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_countries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_countries_id_seq OWNED BY public.organizations_countries.id;
+
+
+--
 -- Name: organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -869,7 +1056,9 @@ ALTER SEQUENCE public.organizations_id_seq OWNED BY public.organizations.id;
 CREATE TABLE public.organizations_locations (
     location_id bigint NOT NULL,
     organization_id bigint NOT NULL,
-    id bigint NOT NULL
+    id bigint NOT NULL,
+    migrated boolean,
+    migrated_date timestamp without time zone
 );
 
 
@@ -911,6 +1100,36 @@ CREATE TABLE public.organizations_sectors (
     sector_id bigint NOT NULL,
     organization_id bigint NOT NULL
 );
+
+
+--
+-- Name: organizations_states; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organizations_states (
+    id bigint NOT NULL,
+    organization_id bigint NOT NULL,
+    region_id bigint NOT NULL
+);
+
+
+--
+-- Name: organizations_states_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_states_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_states_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_states_id_seq OWNED BY public.organizations_states.id;
 
 
 --
@@ -1212,7 +1431,8 @@ CREATE TABLE public.products (
     cocomo integer,
     est_hosting integer,
     est_invested integer,
-    maturity_score integer
+    maturity_score integer,
+    product_type public.product_type DEFAULT 'product'::public.product_type
 );
 
 
@@ -1327,6 +1547,36 @@ CREATE TABLE public.projects (
 
 
 --
+-- Name: projects_countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.projects_countries (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    country_id bigint NOT NULL
+);
+
+
+--
+-- Name: projects_countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.projects_countries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_countries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.projects_countries_id_seq OWNED BY public.projects_countries.id;
+
+
+--
 -- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1351,8 +1601,30 @@ ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 CREATE TABLE public.projects_locations (
     project_id bigint NOT NULL,
-    location_id bigint NOT NULL
+    location_id bigint NOT NULL,
+    id bigint NOT NULL,
+    migrated boolean,
+    migrated_date timestamp without time zone
 );
+
+
+--
+-- Name: projects_locations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.projects_locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.projects_locations_id_seq OWNED BY public.projects_locations.id;
 
 
 --
@@ -1393,6 +1665,42 @@ CREATE TABLE public.projects_sectors (
     project_id bigint NOT NULL,
     sector_id bigint NOT NULL
 );
+
+
+--
+-- Name: regions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.regions (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    country_id bigint NOT NULL,
+    latitude numeric NOT NULL,
+    longitude numeric NOT NULL,
+    aliases character varying[] DEFAULT '{}'::character varying[],
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.regions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.regions_id_seq OWNED BY public.regions.id;
 
 
 --
@@ -2198,6 +2506,13 @@ ALTER TABLE ONLY public.category_indicators ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: cities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cities ALTER COLUMN id SET DEFAULT nextval('public.cities_id_seq'::regclass);
+
+
+--
 -- Name: classifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2212,10 +2527,24 @@ ALTER TABLE ONLY public.contacts ALTER COLUMN id SET DEFAULT nextval('public.con
 
 
 --
+-- Name: countries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.countries_id_seq'::regclass);
+
+
+--
 -- Name: deploys id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.deploys ALTER COLUMN id SET DEFAULT nextval('public.deploys_id_seq'::regclass);
+
+
+--
+-- Name: districts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.districts ALTER COLUMN id SET DEFAULT nextval('public.districts_id_seq'::regclass);
 
 
 --
@@ -2247,6 +2576,13 @@ ALTER TABLE ONLY public.maturity_rubrics ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: offices id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offices ALTER COLUMN id SET DEFAULT nextval('public.offices_id_seq'::regclass);
+
+
+--
 -- Name: operator_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2275,10 +2611,24 @@ ALTER TABLE ONLY public.organizations_contacts ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: organizations_countries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_countries ALTER COLUMN id SET DEFAULT nextval('public.organizations_countries_id_seq'::regclass);
+
+
+--
 -- Name: organizations_locations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.organizations_locations ALTER COLUMN id SET DEFAULT nextval('public.organizations_locations_id_seq'::regclass);
+
+
+--
+-- Name: organizations_states id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_states ALTER COLUMN id SET DEFAULT nextval('public.organizations_states_id_seq'::regclass);
 
 
 --
@@ -2356,6 +2706,27 @@ ALTER TABLE ONLY public.project_descriptions ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.projects_id_seq'::regclass);
+
+
+--
+-- Name: projects_countries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_countries ALTER COLUMN id SET DEFAULT nextval('public.projects_countries_id_seq'::regclass);
+
+
+--
+-- Name: projects_locations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_locations ALTER COLUMN id SET DEFAULT nextval('public.projects_locations_id_seq'::regclass);
+
+
+--
+-- Name: regions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.regions ALTER COLUMN id SET DEFAULT nextval('public.regions_id_seq'::regclass);
 
 
 --
@@ -2570,6 +2941,14 @@ ALTER TABLE ONLY public.category_indicators
 
 
 --
+-- Name: cities cities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cities
+    ADD CONSTRAINT cities_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: classifications classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2586,11 +2965,27 @@ ALTER TABLE ONLY public.contacts
 
 
 --
+-- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: deploys deploys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.deploys
     ADD CONSTRAINT deploys_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: districts districts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.districts
+    ADD CONSTRAINT districts_pkey PRIMARY KEY (id);
 
 
 --
@@ -2626,6 +3021,14 @@ ALTER TABLE ONLY public.maturity_rubrics
 
 
 --
+-- Name: offices offices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offices
+    ADD CONSTRAINT offices_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: operator_services operator_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2650,6 +3053,14 @@ ALTER TABLE ONLY public.organizations_contacts
 
 
 --
+-- Name: organizations_countries organizations_countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_countries
+    ADD CONSTRAINT organizations_countries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: organizations_locations organizations_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2663,6 +3074,14 @@ ALTER TABLE ONLY public.organizations_locations
 
 ALTER TABLE ONLY public.organizations
     ADD CONSTRAINT organizations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organizations_states organizations_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_states
+    ADD CONSTRAINT organizations_states_pkey PRIMARY KEY (id);
 
 
 --
@@ -2746,11 +3165,35 @@ ALTER TABLE ONLY public.project_descriptions
 
 
 --
+-- Name: projects_countries projects_countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_countries
+    ADD CONSTRAINT projects_countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: projects_locations projects_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_locations
+    ADD CONSTRAINT projects_locations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: regions regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.regions
+    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
 
 
 --
@@ -3049,6 +3492,13 @@ CREATE INDEX index_category_indicators_on_rubric_category_id ON public.category_
 
 
 --
+-- Name: index_cities_on_region_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cities_on_region_id ON public.cities USING btree (region_id);
+
+
+--
 -- Name: index_contacts_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3070,6 +3520,13 @@ CREATE INDEX index_deploys_on_user_id ON public.deploys USING btree (user_id);
 
 
 --
+-- Name: index_districts_on_region_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_districts_on_region_id ON public.districts USING btree (region_id);
+
+
+--
 -- Name: index_locations_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3081,6 +3538,27 @@ CREATE UNIQUE INDEX index_locations_on_slug ON public.locations USING btree (slu
 --
 
 CREATE INDEX index_maturity_rubric_descriptions_on_maturity_rubric_id ON public.maturity_rubric_descriptions USING btree (maturity_rubric_id);
+
+
+--
+-- Name: index_offices_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_offices_on_country_id ON public.offices USING btree (country_id);
+
+
+--
+-- Name: index_offices_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_offices_on_organization_id ON public.offices USING btree (organization_id);
+
+
+--
+-- Name: index_offices_on_region_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_offices_on_region_id ON public.offices USING btree (region_id);
 
 
 --
@@ -3105,6 +3583,20 @@ CREATE INDEX index_organization_descriptions_on_organization_id ON public.organi
 
 
 --
+-- Name: index_organizations_countries_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organizations_countries_on_country_id ON public.organizations_countries USING btree (country_id);
+
+
+--
+-- Name: index_organizations_countries_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organizations_countries_on_organization_id ON public.organizations_countries USING btree (organization_id);
+
+
+--
 -- Name: index_organizations_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3123,6 +3615,20 @@ CREATE UNIQUE INDEX index_organizations_products_on_organization_id_and_product_
 --
 
 CREATE UNIQUE INDEX index_organizations_products_on_product_id_and_organization_id ON public.organizations_products USING btree (product_id, organization_id);
+
+
+--
+-- Name: index_organizations_states_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organizations_states_on_organization_id ON public.organizations_states USING btree (organization_id);
+
+
+--
+-- Name: index_organizations_states_on_region_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organizations_states_on_region_id ON public.organizations_states USING btree (region_id);
 
 
 --
@@ -3203,10 +3709,31 @@ CREATE INDEX index_project_descriptions_on_project_id ON public.project_descript
 
 
 --
+-- Name: index_projects_countries_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_countries_on_country_id ON public.projects_countries USING btree (country_id);
+
+
+--
+-- Name: index_projects_countries_on_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_countries_on_project_id ON public.projects_countries USING btree (project_id);
+
+
+--
 -- Name: index_projects_on_origin_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_projects_on_origin_id ON public.projects USING btree (origin_id);
+
+
+--
+-- Name: index_regions_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_regions_on_country_id ON public.regions USING btree (country_id);
 
 
 --
@@ -3574,6 +4101,38 @@ CREATE UNIQUE INDEX workflows_usecases ON public.workflows_use_cases USING btree
 
 
 --
+-- Name: districts fk_rails_002fc30497; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.districts
+    ADD CONSTRAINT fk_rails_002fc30497 FOREIGN KEY (region_id) REFERENCES public.regions(id);
+
+
+--
+-- Name: organizations_states fk_rails_059564ad33; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_states
+    ADD CONSTRAINT fk_rails_059564ad33 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: offices fk_rails_0722c0e4f7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offices
+    ADD CONSTRAINT fk_rails_0722c0e4f7 FOREIGN KEY (region_id) REFERENCES public.regions(id);
+
+
+--
+-- Name: offices fk_rails_08e10b87a1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offices
+    ADD CONSTRAINT fk_rails_08e10b87a1 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
 -- Name: product_classifications fk_rails_16035b6309; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3670,6 +4229,22 @@ ALTER TABLE ONLY public.rubric_categories
 
 
 --
+-- Name: organizations_countries fk_rails_61354fe2dd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_countries
+    ADD CONSTRAINT fk_rails_61354fe2dd FOREIGN KEY (country_id) REFERENCES public.countries(id);
+
+
+--
+-- Name: offices fk_rails_63e101f453; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.offices
+    ADD CONSTRAINT fk_rails_63e101f453 FOREIGN KEY (country_id) REFERENCES public.countries(id);
+
+
+--
 -- Name: task_tracker_descriptions fk_rails_64d4c2c34c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3710,6 +4285,14 @@ ALTER TABLE ONLY public.category_indicators
 
 
 --
+-- Name: projects_countries fk_rails_7940afe1fe; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_countries
+    ADD CONSTRAINT fk_rails_7940afe1fe FOREIGN KEY (project_id) REFERENCES public.projects(id);
+
+
+--
 -- Name: deploys fk_rails_7995634207; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3731,6 +4314,14 @@ ALTER TABLE ONLY public.use_case_step_descriptions
 
 ALTER TABLE ONLY public.rubric_category_descriptions
     ADD CONSTRAINT fk_rails_7f79ec6842 FOREIGN KEY (rubric_category_id) REFERENCES public.rubric_categories(id);
+
+
+--
+-- Name: projects_countries fk_rails_8fcd9cd60b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_countries
+    ADD CONSTRAINT fk_rails_8fcd9cd60b FOREIGN KEY (country_id) REFERENCES public.countries(id);
 
 
 --
@@ -3758,11 +4349,27 @@ ALTER TABLE ONLY public.aggregator_capabilities
 
 
 --
+-- Name: organizations_countries fk_rails_a044fbacef; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_countries
+    ADD CONSTRAINT fk_rails_a044fbacef FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
 -- Name: aggregator_capabilities fk_rails_aa5b2f5e59; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aggregator_capabilities
     ADD CONSTRAINT fk_rails_aa5b2f5e59 FOREIGN KEY (operator_services_id) REFERENCES public.operator_services(id);
+
+
+--
+-- Name: organizations_states fk_rails_bea3577035; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_states
+    ADD CONSTRAINT fk_rails_bea3577035 FOREIGN KEY (region_id) REFERENCES public.regions(id);
 
 
 --
@@ -3806,11 +4413,27 @@ ALTER TABLE ONLY public.use_case_headers
 
 
 --
+-- Name: cities fk_rails_e0ef2914ca; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cities
+    ADD CONSTRAINT fk_rails_e0ef2914ca FOREIGN KEY (region_id) REFERENCES public.regions(id);
+
+
+--
 -- Name: operator_services fk_rails_e7154c9b46; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.operator_services
     ADD CONSTRAINT fk_rails_e7154c9b46 FOREIGN KEY (locations_id) REFERENCES public.locations(id);
+
+
+--
+-- Name: regions fk_rails_f2ba72ccee; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.regions
+    ADD CONSTRAINT fk_rails_f2ba72ccee FOREIGN KEY (country_id) REFERENCES public.countries(id);
 
 
 --
@@ -4247,6 +4870,17 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200522194438'),
 ('20200526195946'),
 ('20200526203504'),
-('20200603140902');
+('20200603140902'),
+('20200608194733'),
+('20200617174313'),
+('20200617174358'),
+('20200617174412'),
+('20200619171341'),
+('20200619172658'),
+('20200619172716'),
+('20200623203503'),
+('20200624170721'),
+('20200624212546'),
+('20200624212630');
 
 

@@ -37,7 +37,7 @@ const aggregatorMapHandler = function() {
 
         if (filteredAggregators.length > 0) {
           aggregator.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-            name: feature.get("name"),
+            name: feature.get("NAME_0"),
             coordinate: feature.get("coordinate"),
             geometry: feature.get("geometry"),
             aggregators: filteredAggregators,
@@ -84,7 +84,7 @@ const aggregatorMapHandler = function() {
         aggregator.countryHightlightLayer.getSource().removeFeature(feature);
         highlightHolder.operators.push(feature);
 
-        if (operatorLocations.indexOf(feature.get('name')) !== -1) {
+        if (operatorLocations.indexOf(feature.get('NAME_0')) !== -1) {
           const filteredAggregators = feature.get("aggregators").filter(function(aggregatorId) {
             const normalized = aggregator.aggregators[aggregatorId];
             const intersect = Object.keys(operators).filter(function(operator) {
@@ -96,7 +96,7 @@ const aggregatorMapHandler = function() {
 
           if (filteredAggregators.length > 0) {
             aggregator.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-              name: feature.get("name"),
+              name: feature.get("NAME_0"),
               coordinate: feature.get("coordinate"),
               geometry: feature.get("geometry"),
               aggregators: filteredAggregators,
@@ -144,7 +144,7 @@ const aggregatorMapHandler = function() {
             // Skip:
             // * not matching feature's name and country's name.
             // * not matching service and filtered service name.
-            if (capabilitiy.country !== feature.get("name") || capabilitiy.service !== serviceName) {
+            if (capabilitiy.country !== feature.get("NAME_0") || capabilitiy.service !== serviceName) {
               return false;
             }
 
@@ -156,7 +156,7 @@ const aggregatorMapHandler = function() {
 
         if (filteredAggregators.length > 0) {
           aggregator.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-            name: feature.get("name"),
+            name: feature.get("NAME_0"),
             coordinate: feature.get("coordinate"),
             geometry: feature.get("geometry"),
             aggregators: filteredAggregators,

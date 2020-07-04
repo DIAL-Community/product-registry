@@ -8,7 +8,7 @@ module ApplicationHelper
 
   ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps tags
                              product_suites operator_services settings glossaries portal_views maturity_rubrics
-                             rubric_categories].freeze
+                             rubric_categories cities countries].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
@@ -115,6 +115,14 @@ module ApplicationHelper
 
     if filter_name == 'is_launchable'
       filter_label = "#{t('view.active-filter.is-launchable')}
+                      <span class='close-icon' data-effect='fadeOut'>
+                        <i class='fa fa-times text-danger'></i>
+                      </span>"
+      return filter_label.html_safe
+    end
+
+    if filter_name == 'product_type'
+      filter_label = "#{t('view.active-filter.product-type')}
                       <span class='close-icon' data-effect='fadeOut'>
                         <i class='fa fa-times text-danger'></i>
                       </span>"

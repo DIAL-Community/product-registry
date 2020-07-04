@@ -234,12 +234,12 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(second_organization.name, assigns(:organizations)[0].name)
 
     # Combination assessment with origins:
-    # * should return 3 products
+    # * should return 2 organizations
     add_parameter = { 'filter_name': 'sectors', 'filter_value': first_sector.id, 'filter_label': first_sector.name }
     post '/add_filter', params: add_parameter
 
     get organizations_url
-    assert_equal(0, assigns(:organizations).count)
+    assert_equal(2, assigns(:organizations).count)
 
     remove_parameter = { filter_array: { '0' => { filter_name: 'sectors' } } }
     post '/remove_filter', params: remove_parameter

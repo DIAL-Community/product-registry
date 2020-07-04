@@ -5,6 +5,11 @@
     <%= "#{t('model.setting').to_s.titlecase}: #{@setting.name}" %>
   </h5>
   <div class="card-body py-2">
+    <div class="row mb-2">
+      <div class="col-12 text-muted">
+        <%= "#{t('view.general.value')}: #{@setting.value}" %>
+      </div>
+    </div>
     <%= @setting.description %>
     <div class="float-right" >
       <%= link_to t('view.general.back'), settings_path, :class => "card-link" %>

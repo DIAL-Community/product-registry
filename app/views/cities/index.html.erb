@@ -1,0 +1,49 @@
+<div class="form-group float-right my-2">
+  <%= form_tag(cities_path, method: "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search], class: "form-control",
+        placeholder: t('view.general.search-placeholder', model: t('model.city').to_s.pluralize) %>
+    <div class="input-group-append">
+      <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th><%= t('view.general.name') %></th>
+      <th><%= t('model.region').titlecase %></th>
+      <th><%= t('model.country').titlecase %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @cities.count > 0 %>
+      <% @cities.each do |city| %>
+        <tr>
+          <td><%= city.name %></td>
+          <td><%= city.region.name unless city.region.nil? %></td>
+          <td><%= city.region.country.name unless city.region.nil? || city.region.country.nil? %></td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+               <%= t('view.general.action') %>
+            </a>
+            <div class="dropdown-menu">
+              <%= link_to t('view.general.view'), city, :class =>"dropdown-item" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">
+          <small class="text-muted"><%= t('view.city.index.no-data') %></small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @cities, :class => "float-right digg-pagination" %>

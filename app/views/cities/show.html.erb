@@ -1,0 +1,121 @@
+<%
+  offices = Office.where(city: @city.name)
+%>
+
+<div class="card">
+  <h5 class="card-header bg-secondary text-white">
+    <%= "#{t('model.city').to_s.humanize}: #{@city.name}" %>
+  </h5>
+  <div class="card-body py-2">
+    <div id="city-organizations" style="max-height: 30rem;"></div>
+    <div id="city-popup" class="country-popup"></div>
+    <div>
+      <% if @city.aliases.count > 1 %>
+        <h6 class="card-text text-muted mt-2 mb-2">
+          <strong><%= t('view.city.show.other-names') %>:</strong>
+          <ul>
+            <% @city.aliases.each{|other_name| %>
+              <li><%= other_name %></li>
+            <%}%>
+          </ul>
+        </h6>
+      <% end %>
+    </div>
+    <div class="float-right">
+      <%= link_to t('view.general.back'), 'javascript:window.history.back()', :class => "card-link" %>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.organization').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if offices.count > 0 %>
+    <div class="row">
+      <% offices.each do |office| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-1">
+              <h5 class="card-title"><%= link_to office.organization.name, office.organization %></h5>
+              <h6 class="card-subtitle text-muted"><%= office.organization.website %></h6>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.city'), multi: t('model.organization').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+
+<script>
+var setupCountryMapView = function () {
+
+  const coordinate = [parseFloat(<%= @city.longitude %>), parseFloat(<%= @city.latitude %>)];
+  const markerCoordinate = ol.proj.transform(coordinate, 'EPSG:4326', 'EPSG:3857');
+
+  const feature = new ol.Feature({
+    name: "Organization Marker",
+    geometry: new ol.geom.Point(markerCoordinate)
+  })
+
+  const markerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [feature]
+    }),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: '/assets/marker_shadow.png'
+      })
+    }),
+  });
+
+  const tooltip = new ol.Overlay({
+    element: document.getElementById('city-popup')
+  });
+
+  const map = new ol.Map({
+    target: "city-organizations",
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      }),
+      markerLayer
+    ],
+    overlays: [tooltip],
+    view: new ol.View({
+      center: markerCoordinate,
+      zoom: 4
+    })
+  });
+
+  tooltip.setPosition(undefined);
+  const element = tooltip.getElement();
+  const content =
+    `<h5 class='text-muted m-2'><%= @city.name %></h5>
+     <h6 class='text-muted m-2'>
+      <%= offices.count %> <%= t('model.organization')%>(s).
+     </h6>`
+  $(element).html(content);
+
+  map.on("click", function(e) {
+    const feature = map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+      if (layer === markerLayer && tooltip) {
+        return feature;
+      }
+    });
+
+    position = feature ? markerCoordinate : undefined;
+    tooltip.setPosition(position);
+  });
+}
+
+setupCountryMapView();
+</script>

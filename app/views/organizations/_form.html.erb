@@ -315,6 +315,10 @@
   var form = document.querySelector('#organization-form');
   form.onsubmit = function() {
     var organizationDescription = $('#organization_description');
-    organizationDescription.val(JSON.stringify(editor.getContents()));
+    editorContent = {};
+    if (editor.getText() !== "\n") {
+      editorContent = editor.getContents();
+    }
+    organizationDescription.val(JSON.stringify(editorContent));
   };
 </script>

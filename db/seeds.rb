@@ -32,6 +32,15 @@ if Setting.where(slug: Rails.configuration.settings['default_maturity_rubric_slu
                   value: 'default_maturity_rubric')
 end
 
+if Setting.where(slug: 'default_map_center_position').count.zero?
+  Setting.create!(name: 'Default Map Center Position',
+                  slug: 'default_map_center_position',
+                  description: "The center position for the map view. It will ask for permission " \
+                               "if you pick 'country'. When empty or filled with non 'country', " \
+                               "will default to world.",
+                  value: 'country')
+end
+
 if Tag.where(slug: 'covid19').count.zero?
   tag = Tag.create! name: 'COVID-19',
                     slug: 'covid19'

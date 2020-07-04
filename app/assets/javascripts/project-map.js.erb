@@ -49,7 +49,7 @@ var mapOfProject = {
     source: new ol.source.Vector(),
     map: this.map,
     style: function(feature) {
-      mapOfProject.countryHighlightStyle.getText().setText(feature.get('name'));
+      mapOfProject.countryHighlightStyle.getText().setText(feature.get('NAME_0'));
       return mapOfProject.countryHighlightStyle;
     }
   }),
@@ -60,7 +60,7 @@ var mapOfProject = {
       format: new ol.format.GeoJSON()
     }),
     style: function(feature) {
-      mapOfProject.countryStyle.getText().setText(feature.get('name'));
+      mapOfProject.countryStyle.getText().setText(feature.get('NAME_0'));
       return mapOfProject.countryStyle;
     }
   }),
@@ -120,7 +120,7 @@ var mapOfProject = {
           $('#project-selector').append(option);
 
           mapOfProject.projects[normalized.id] = normalized;
-          project.locations.forEach(function(location) {
+          project.locations && project.locations.forEach(function(location) {
             const countries = mapOfProject.projectsByCountry[location.name] || []
             countries.push(normalized.id);
             mapOfProject.projectsByCountry[location.name] = countries;
@@ -143,9 +143,9 @@ var mapOfProject = {
 function highlightProjectCountries(countries) {
   countries.forEach(function(country) {
     mapOfProject.countryLayer.getSource().forEachFeature(function(projectFeature) {
-      if (country == projectFeature.get('name')) {
+      if (country == projectFeature.get('NAME_0')) {
         mapOfProject.countryHightlightLayer.getSource().addFeature(new ol.Feature({
-          name: projectFeature.get("name"),
+          name: projectFeature.get("NAME_0"),
           coordinate: projectFeature.get("coordinate"),
           geometry: projectFeature.get("geometry"),
           projects: mapOfProject.projectsByCountry[country]

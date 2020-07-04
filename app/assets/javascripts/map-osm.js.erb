@@ -1,0 +1,427 @@
+const requestGeoPosition = function(positionGranted, positionDenied) {
+  const geoSettings = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+
+  navigator.permissions.query({name:'geolocation'})
+    .then(function(result) {
+      if (result.state == 'granted') {
+        console.log('Geolocation: ', result.state);
+        navigator.geolocation.getCurrentPosition(positionGranted, positionDenied, geoSettings);
+      } else if (result.state == 'prompt') {
+        console.log('Geolocation: ', result.state);
+        navigator.geolocation.getCurrentPosition(positionGranted, positionDenied, geoSettings);
+      } else if (result.state == 'denied') {
+        console.log('Geolocation: ', result.state);
+      }
+      result.onchange = function() {
+        console.log('Geolocation permission changed: ', result.state);
+      }
+    });
+}
+
+const loadOrganizationTiles = function () {
+  const dimmedOpacity = 0.3;
+  let selectedOrganization = '';
+
+  // Build list of country features for an organization
+  const prepareCountryLayer = function(countries, countryLatLongMap, countryMarkerLayer) {
+    countryMarkerLayer.getSource().clear();
+    countries.forEach(function(country) {
+      const countryWithLatLong = countryLatLongMap[country];
+      if (countryWithLatLong) {
+        const transform = ol.proj.transform(
+          [parseFloat(countryWithLatLong.longitude), parseFloat(countryWithLatLong.latitude)],
+          'EPSG:4326', 'EPSG:3857');
+        countryMarkerLayer
+          .getSource()
+          .addFeature(
+            new ol.Feature({
+              geometry: new ol.geom.Point(transform),
+              name: country
+            })
+          );
+      }
+    });
+  }
+  
+  // Build popup content for a single organization marker feature
+  const buildPopupContent = function(organization) {
+    return `<div class="card p-0">
+              <h6 class="card-header py-2 px-2">${organization.name}</h6>
+              <p class="small py-2 px-2 mb-0">
+                <a href="//${organization.website}" target="_blank" rel="noreferrer noopener">
+                  ${organization.website}
+                </a>
+                <br />
+                Endorser since ${organization.when_endorsed}
+                <br />
+                <a href="/organizations/${organization.slug}" target="_blank" rel="noreferrer noopener">
+                  <small>View organization</small>
+                </a>
+                <br />
+              </p>
+            </div>`
+  }
+  
+  // Build popup content for an organization where the feature contains
+  // multiple organization. The default is to collapse all (display: none).
+  const buildMultiPopupContent = function(organization) {
+    return `<p class="org-details mb-0" style="display:none">
+              <small>
+                <a href="//${organization.website}" target="_blank" rel="noreferrer noopener">
+                  ${organization.website}
+                </a>
+                <br />
+                Endorser since ${organization.when_endorsed}.
+                <br />
+                <a href="/organizations/${organization.slug}" target="_blank" rel="noreferrer noopener">
+                  View organization
+                </a>
+                <br />
+              </small>
+            </p>`
+  }
+
+  const countryPopup = new ol.Overlay({
+    element: document.getElementById('country-osm')
+  });
+
+  const organizationMarkerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('marker_shadow.png') %>"
+      })
+    }),
+  });
+
+  const selectedMarkerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('marker_shadow.png') %>"
+      })
+    }),
+  });
+
+  const countryMarkerLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('map_marker_shadow.png') %>"
+      })
+    }),
+  });
+
+  const sectorMarkerHoldingLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('marker_shadow.png') %>"
+      })
+    }),
+  });
+
+  const markerHoldingLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('marker_shadow.png') %>"
+      })
+    }),
+  });
+
+  const baseLayer = new ol.layer.Tile({
+    source: new ol.source.OSM()
+  });
+
+  const map = new ol.Map({
+    target: 'map-osm',
+    layers: [
+      baseLayer,
+      countryMarkerLayer,
+      selectedMarkerLayer,
+      organizationMarkerLayer
+    ],
+    overlays: [countryPopup],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([10, 20.3]),
+      zoom: 2,
+      maxZoom: 10,
+      minZoom: 2
+    })
+  });
+
+  $('#map-osm').data('map', map);
+  $(document).trigger('#map-osm:loaded');
+
+  const countries = {};
+  $.getJSON('/countries.json?without_paging=true', function (countryObjects) {
+    countryObjects.forEach(function(country) {
+      countries[country.name] = {
+        country_code: country.code,
+        latitude: country.latitude,
+        longitude: country.longitude,
+        country_name: country.name
+      }
+    });
+  });
+
+  $.getJSON('/organizations.json?without_paging=true', function (organizationObjects) {
+    const organizationsCoordinates = {};
+    organizationObjects.forEach(function (organizationObject) {
+      const organizationFeature = {
+        name: organizationObject.name,
+        slug: organizationObject.slug,
+        website: organizationObject.website,
+        when_endorsed: organizationObject.when_endorsed ? organizationObject.when_endorsed.substr(0, 4) : "0000",
+        countries: organizationObject.countries,
+        sectors: organizationObject.sectors
+      }
+      organizationObject.offices.forEach(function (office) {
+        const coordinateKey = `${office.lat}, ${office.lon}`;
+        const coordinate = ol.proj.transform([parseFloat(office.lon), parseFloat(office.lat)], 'EPSG:4326', 'EPSG:3857');
+        if (!(coordinateKey in organizationsCoordinates)) {
+          organizationsCoordinates[coordinateKey] = { coordinate: coordinate, organizations: [] };
+        }
+        organizationsCoordinates[coordinateKey].organizations.push(organizationFeature)
+      });
+    });
+    $.each(organizationsCoordinates, function (key, value) {
+      const coordinate = organizationsCoordinates[key].coordinate;
+      const organizations = organizationsCoordinates[key].organizations;
+      organizationMarkerLayer
+        .getSource()
+        .addFeature(
+          new ol.Feature({
+            geometry: new ol.geom.Point(coordinate),
+            organizations: organizations
+          })
+        );
+    });
+
+    $("#loading-spinner").hide();
+  });
+
+  const isMarkerLayer = function (feature, layer) {
+    if (layer === organizationMarkerLayer) {
+      return feature;
+    } else if (layer === selectedMarkerLayer) {
+      selectedMarkerLayer.getSource().removeFeature(feature)
+      organizationMarkerLayer.getSource().addFeature(feature);
+      return feature;
+    } 
+  }
+
+  const resetSelectedLayer = function() {
+    // Clear all organization marker
+    countryMarkerLayer.getSource().clear();
+    // Set the opacity back to original value
+    organizationMarkerLayer.setOpacity(1);
+    // Move back selected feature to the organization layer
+    selectedMarkerLayer.getSource().forEachFeature(function(feature) {
+      organizationMarkerLayer.getSource().addFeature(feature);
+    });
+    // Clear the selected organization layer
+    selectedMarkerLayer.getSource().clear();
+  }
+
+  const clickHandler = function (event) {
+    const feature = map.forEachFeatureAtPixel(event.pixel, isMarkerLayer);
+    const element = $('#popup-osm');
+    if (feature) {
+      // Move the selected feature from the organization layer to selected organization layer.
+      // We will dim the org layer by lowering down the opacity later on.
+      organizationMarkerLayer.getSource().removeFeature(feature)
+      selectedMarkerLayer.getSource().addFeature(feature);
+
+      const organizations = feature.get('organizations');
+      if (organizations.length === 1) {
+        organization = organizations[0];
+
+        selectedOrganization = organization.name;
+        
+        prepareCountryLayer(organization.countries, countries, countryMarkerLayer);
+        organizationMarkerLayer.setOpacity(dimmedOpacity);
+
+        $(element).html(buildPopupContent(organization));
+        $(element).show();
+      } else {
+        const contentDiv = $('<div class="card p-0" style="overflow: hidden; max-height: 20rem;"/>');
+        const contentHeader = $(`<h6 class="card-header py-2 px-2">${organizations.length} Organizations</h6>`);
+        contentDiv.append(contentHeader);
+        
+        const organizationElements = $('<div class="list-group" style="overflow-y: auto;" />');
+        contentDiv.append(organizationElements);
+        
+        organizations.forEach(function (organization) {
+          const organizationInfo = $('<div class="list-group-item list-group-item-action py-2 px-2" />');
+          organizationInfo.click(function() {
+            $(this).parents(".list-group").find('.org-details').hide();
+            $(this).find('.org-details').show();
+
+            selectedOrganization = organization.name;
+
+            prepareCountryLayer(organization.countries, countries, countryMarkerLayer);
+            organizationMarkerLayer.setOpacity(dimmedOpacity);
+          });
+          organizationInfo.append(`<strong>${organization.name}</strong>`);
+          organizationInfo.append(buildMultiPopupContent(organization))
+          organizationElements.append(organizationInfo);
+        });
+        $(element).html(contentDiv);
+        $(element).show();
+      }
+    } else {
+      resetSelectedLayer();
+      // Dismiss the popup
+      $(element).hide();
+    }
+  }
+
+  const isCountryLayer = function(feature, layer) {
+    if (layer === countryMarkerLayer) {
+      return feature;
+    }
+  }
+
+  const pointerMoveHandler = function(event) {
+    const feature = map.forEachFeatureAtPixel(event.pixel, isCountryLayer);
+    if (feature) {
+      const element = countryPopup.element;
+      const name = feature.get('name');
+      $(element).html(
+        `
+        <div class="card map-hover" style="padding: 0; z-index: 1000;">
+          <h6 class="card-header py-2 px-2">${selectedOrganization}</h6>
+          <p class="py-2 px-2 mb-0">${name}</p>
+        </div>
+        `);
+      countryPopup.setPosition(event.coordinate);
+    } else {
+      countryPopup.setPosition(undefined);
+    }
+  }
+
+  $.getJSON(
+    '/sectors.json?display_only=true&without_paging=true',
+    function(sectors) {
+      sectors.forEach(function(sector) {
+        const option = new Option(sector.name, sector.id);
+        $(option).html(sector.name);
+        $('#sector').append(option);
+      });
+    }
+  );
+
+  $('#sector').change(function() {
+    if (map) {
+      const sectorId = $(this).val();
+      $('#popup-osm').hide();
+      resetSelectedLayer();
+
+      organizationMarkerLayer.getSource().forEachFeature(function(iFeature) {
+        if (iFeature.get("partial_sector") === true) {
+          organizationMarkerLayer.getSource().removeFeature(iFeature);
+        }
+      })
+      sectorMarkerHoldingLayer.getSource().forEachFeature(function(iFeature) {
+        organizationMarkerLayer.getSource().addFeature(iFeature);
+      });
+      sectorMarkerHoldingLayer.getSource().clear();
+      organizationMarkerLayer.getSource().forEachFeature(function(iFeature) {
+        if (parseInt(sectorId) === -1)
+          return;
+
+        // remove all non matching sectors.
+        const filtered = iFeature.get("organizations").filter(function(organization) {
+          return $.inArray(parseInt(sectorId), organization.sectors) > 0;
+        });
+      
+        if (filtered.length !== iFeature.get("organizations").length) {
+          organizationMarkerLayer.getSource().removeFeature(iFeature);
+          sectorMarkerHoldingLayer.getSource().addFeature(iFeature);
+          if (filtered.length > 0) {
+            organizationMarkerLayer.getSource().addFeature(new ol.Feature({
+              geometry: iFeature.get("geometry"),
+              organizations: filtered,
+              partial_sector: true
+            }));
+          }
+        }
+      });
+    }
+  });
+
+  for (let iy = 2015; iy <= new Date().getFullYear(); iy++) {
+    const option = new Option(iy, iy);
+    $(option).html(iy);
+    $('#year').append(option);
+  }
+
+  $('#year').change(function() {
+    const yearId = $(this).val();
+    $('#popup-osm').hide();
+    resetSelectedLayer();
+    
+    organizationMarkerLayer.getSource().forEachFeature(function(iFeature) {
+      if (iFeature.get("partial_year") === true) {
+        organizationMarkerLayer.getSource().removeFeature(iFeature);
+      }
+    })
+    markerHoldingLayer.getSource().forEachFeature(function(iFeature) {
+      organizationMarkerLayer.getSource().addFeature(iFeature);
+    });
+    markerHoldingLayer.getSource().clear();
+    organizationMarkerLayer.getSource().forEachFeature(function(iFeature) {
+      if (parseInt(yearId) === -1)
+        return;
+
+      // remove all non matching endersed year
+      const filtered = iFeature.get("organizations").filter(function(organization) {
+        return yearId == organization.when_endorsed;
+      });
+
+      if (filtered.length !== iFeature.get("organizations").length) {
+        organizationMarkerLayer.getSource().removeFeature(iFeature);
+        markerHoldingLayer.getSource().addFeature(iFeature);
+        if (filtered.length > 0) {
+          organizationMarkerLayer.getSource().addFeature(new ol.Feature({
+            coordinate: iFeature.get("coordinate"),
+            geometry: iFeature.get("geometry"),
+            organizations: filtered,
+            partial_year: true
+          }));
+        }
+      }
+    });
+  });
+
+  map.on('click', clickHandler);
+  map.on('pointermove', pointerMoveHandler);
+}
+
+$(document).on('organizations#map_osm:loaded', loadOrganizationTiles);

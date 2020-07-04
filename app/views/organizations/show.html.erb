@@ -32,13 +32,13 @@
 
 <div class="mt-2">
   <div class="row">
-    <% if @organization.locations.find_all{|location| location.location_type == 'point'}.first %>
-      <div class="col-lg-4 col-12">
+    <% if @organization.offices.count > 0 %>
+      <div class="col-12">
         <div id="office" style="max-height: 28rem;"></div>
         <div id="office-popup" class="office-popup"></div>
       </div>
     <% end %>
-    <div class="col-lg-8 col-12">
+    <div class="col-12">
       <% if !@organization.aliases.empty? %>
         <p class="m-2">
           <strong><%= t('view.organization.form.other-names') %>:</strong>
@@ -55,7 +55,9 @@
           <%= @organization.when_endorsed.nil? ? '' : @organization.when_endorsed.strftime("%m/%d/%Y") %>
         </p>
       <% end %>
-      <% if !@organization_description.description.nil? && !@organization_description.description.empty? && @organization_description.description != "{}" %>
+      <% if !@organization_description.description.nil? &&
+            !@organization_description.description.empty? &&
+            @organization_description.description != {} %>
         <p class="m-2">
           <strong><%= t('view.organization.index.description') %>:</strong>
           <div id="product-viewer" class="wysiwyg-viewer"></div>
@@ -67,15 +69,18 @@
           <%= link_to @organization.website.downcase.strip, "//#{@organization.website.downcase.strip}", target: :_blank %>
         </p>
       <% end %>
-      <% if @organization.locations.find_all{|location| location.location_type == 'point'}.count > 1 %>
+      <% if @organization.offices.count > 1 %>
         <p class="m-2">
           <strong><%= "#{t('view.organization.show.other-offices')}:" %></strong>
           <ul>
-          <% @organization.locations
-                .find_all{ |location| location.location_type == 'point' }
-                .drop(1)
-                .each do |office| %>
-            <li><%= office.name %></li>
+          <% 
+            @organization.offices
+                         .order(:name)
+                         .drop(1)
+                         .each do |office|
+              city = City.find_by(name: office.city, region: office.region_id)
+          %>
+            <li><%= link_to office.name, city %></li>
           <% end %>
           </ul>
         </p>
@@ -85,11 +90,12 @@
   <div class="row">
     <div class="offset-8 col-4">
       <p class="float-right mb-0 mr-2" >
-        <%= link_to 'Back', organizations_path, :class => "card-link" %>
+        <%= link_to t('view.general.back'), 'javascript:window.history.back()', :class => "card-link" %>
         <% if user_signed_in? && policy(@organization).mod_allowed? %>
           <%= link_to t('view.general.edit'), edit_organization_path(@organization), :class => "card-link" %>
         <% end %>
       </p>
+    </div>
   </div>
 </div>
 
@@ -202,9 +208,9 @@
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.country').to_s.pluralize.humanize %></h5>
   </div>
-  <% if @organization.locations.select{|location| location.location_type != 'point'}.count > 0 %>
+  <% if @organization.countries.count > 0 %>
     <div class="row">
-      <% @organization.locations.where.not(location_type: 'point').order("name").each do |country| %>
+      <% @organization.countries.order("name").each do |country| %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card h-100">
             <div class="card-body py-2">
@@ -246,17 +252,81 @@
 
 <script>
   <%
-    office = @organization.locations.find{|location| location.location_type == 'point'}
+    office = @organization.offices
+                          .order(:name)
+                          .first
     if (office)
   %>
-    function updateMapMarker() {
-      setOfficeMarker('<%= @organization.name %>', '<%= office.name %>', '<%= office.points[0][1] %>', '<%= office.points[0][0] %>');
-    }
+      var setupMapView = function () {
+      
+        const coordinate = [parseFloat(<%= office.longitude %>), parseFloat(<%= office.latitude %>)];
+        const markerCoordinate = ol.proj.transform(coordinate, 'EPSG:4326', 'EPSG:3857');
 
-    $(document).on('organizations#show:loaded', updateMapMarker)
+        const feature = new ol.Feature({
+          name: "Organization Marker",
+          geometry: new ol.geom.Point(markerCoordinate)
+        })
+
+        const markerLayer = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features: [feature]
+          }),
+          style: new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [11, 29],
+              anchorXUnits: 'pixels',
+              anchorYUnits: 'pixels',
+              opacity: 1,
+              src: '/assets/marker_shadow.png'
+            })
+          }),
+        });
+
+        const tooltip = new ol.Overlay({
+          element: document.getElementById('office-popup')
+        });
+
+        const map = new ol.Map({
+          target: "office",
+          layers: [
+            new ol.layer.Tile({
+              source: new ol.source.OSM()
+            }),
+            markerLayer
+          ],
+          overlays: [tooltip],
+          view: new ol.View({
+            center: markerCoordinate,
+            zoom: 4
+          })
+        });
+
+        tooltip.setPosition(undefined);
+        const element = tooltip.getElement();
+        const content =
+          `<h5 class='text-muted m-2'><%= @organization.name %></h5>
+           <h6 class='text-muted m-2'><%= office.name %></h6>`
+        $(element).html(content);
+
+        map.on("click", function(e) {
+          const feature = map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+            if (layer === markerLayer && tooltip) {
+              return feature;
+            }
+          });
+
+          position = feature ? markerCoordinate : undefined;
+          tooltip.setPosition(position);
+        });
+      }
+
+      setupMapView();
   <% end %>
   
-  <% if !@organization_description.description.nil? && !@organization_description.description.empty? && @organization_description.description != "{}" %>
+  <% if !@organization_description.description.nil? &&
+        !@organization_description.description.empty? &&
+        @organization_description.description != {} &&
+        @organization_description.description != {} %>
     setUpViewer(<%= raw JSON.generate(@organization_description.description) %>) 
   <% end %>   
 </script>

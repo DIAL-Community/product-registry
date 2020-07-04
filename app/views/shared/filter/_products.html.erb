@@ -5,7 +5,7 @@
     <span class="align-middle"><%= t('view.filternav.products') %></span>
     </div>
     <%
-      counter = filter_count('origins') + filter_count('products') + filter_count('with_maturity_assessment')
+      counter = filter_count('origins') + filter_count('products') + filter_count('with_maturity_assessment') + filter_count('product_type')
       if counter > 0
         concat "<span id='accordian-origins-count' class='badge badge-light'>#{counter}</span>".html_safe
       else
@@ -46,6 +46,18 @@
         <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
             { selected: params[:name], include_blank: t('view.filternav.title.origin')},
             { class: 'form-control filter-element' }) %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ml-1">
+      <div class="form-group mb-1">
+        <%= label_tag "product_type", t('view.product.index.types') %>
+        <select class="form-control filter-element" id="product_type" name="product_type">
+          <option value>All</option>
+          <option value="product">Product</option>
+          <option value="dataset">Dataset</option>
+        </select>
       </div>
     </div>
   </div>

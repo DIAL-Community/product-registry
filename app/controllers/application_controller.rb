@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
 
   def update_cookies(filter_name)
     case filter_name
-    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'organizations', 'projects', 'tags'
+    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'product_type','organizations', 'projects', 'tags'
       session[:updated_prod_filter] = true
     end
   end
@@ -227,7 +227,7 @@ class ApplicationController < ActionController::Base
     filter_value.to_s.downcase == 'true'
   end
 
-  def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
+  def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
     # Check to see if the filter has already been set
     product_list = []
     if session[:updated_prod_filter].nil? || session[:updated_prod_filter].to_s.downcase == 'true'
@@ -250,6 +250,10 @@ class ApplicationController < ActionController::Base
                                                                 .where('origins.id in (?)', origin_list.ids)
       end
 
+      if !product_type.empty?
+        filter_products = filter_products.where("product_type in (?) ", product_type.map(&:downcase).join(','))
+      end
+
       if !tags.empty?
         filter_products = filter_products.where("tags @> '{#{tags.map(&:downcase).join(',')}}'::varchar[]")
       end
@@ -263,7 +267,7 @@ class ApplicationController < ActionController::Base
       end
 
       product_filter_set = (!products.empty? || !origins.empty? || !tags.empty? ||
-                             with_maturity_assessment || is_launchable)
+                             with_maturity_assessment || is_launchable || product_type)
 
       if product_filter_set
         product_list += filter_products.ids
@@ -477,6 +481,7 @@ class ApplicationController < ActionController::Base
         request.path != "/users/password/edit" &&
         request.path != "/users/confirmation" &&
         request.path != "/users/sign_out" &&
+        request.path != "/export" &&
         !request.path.include?('stylesheets') &&
         !request.xhr?) # don't store ajax calls
       store_location_for(:user, request.fullpath)

@@ -2,12 +2,15 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
+  def map_projects_osm
+  end
+
   def index
     if params[:without_paging]
       @projects = Project.name_contains(params[:search])
-                         .eager_load(:locations)
+                         .eager_load(:countries)
                          .order(:name)
-      
+
       if params[:origin]
         @projects = @projects.where('origin_id=(select id from origins where slug like ?)', params[:origin])
       end
@@ -214,11 +217,12 @@ class ProjectsController < ApplicationController
 
     with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
     is_launchable = sanitize_session_value 'is_launchable'
+    product_type = sanitize_session_values 'product_type'
 
     tags = sanitize_session_values 'tags'
 
     filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                   organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
+                   organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
                    sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                  endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -254,7 +258,7 @@ class ProjectsController < ApplicationController
                             .ids
     end
 
-    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
+    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
 
     product_project_ids = []
     product_ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids])

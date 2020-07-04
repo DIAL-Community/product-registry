@@ -1,3 +1,5 @@
+require 'csv'
+
 class OrganizationsController < ApplicationController
   include OrganizationsHelper
 
@@ -5,6 +7,12 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_current_user, only: [:edit, :update, :destroy]
   before_action :set_core_services, only: [:show, :edit, :update, :new]
+
+  def map_aggregators_osm
+  end
+
+  def map_osm
+  end
 
   # GET /organizations
   # GET /organizations.json
@@ -14,7 +22,7 @@ class OrganizationsController < ApplicationController
       !params[:mni_only].nil? && @organizations = @organizations.where('is_mni is true')
       !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
       !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
-      @organizations = @organizations.eager_load(:sectors, :locations).order(:name)
+      @organizations = @organizations.eager_load(:sectors, :countries, :offices).order(:name)
       authorize @organizations, :view_allowed?
       return
     end
@@ -84,6 +92,7 @@ class OrganizationsController < ApplicationController
 
     with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
     is_launchable = sanitize_session_value 'is_launchable'
+    product_type = sanitize_session_values 'product_type'
 
     sdgs = sanitize_session_values 'sdgs'
     use_cases = sanitize_session_values 'use_cases'
@@ -93,7 +102,7 @@ class OrganizationsController < ApplicationController
     tags = sanitize_session_values 'tags'
 
     filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                   organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
+                   organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
                    sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
                  endorser_only || aggregator_only || with_maturity_assessment || is_launchable
 
@@ -124,7 +133,7 @@ class OrganizationsController < ApplicationController
                                  .select('products.id')
     end
 
-    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, tags)
+    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
 
     org_products = []
     product_ids = filter_and_intersect_arrays([sdg_products, bb_products, project_products, product_ids])
