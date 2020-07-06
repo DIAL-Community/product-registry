@@ -79,7 +79,7 @@ module Modules
             id: rubric_category.id,
             name: rubric_category.name,
             weight: rubric_category.weight,
-            description: !category_description.nil? && category_description.description_html.gsub(/<\/?[^>]*>/, ''),
+            description: !category_description.nil? && !category_description.description_html.nil? && category_description.description_html.gsub(/<\/?[^>]*>/, ''),
             indicator_scores: [],
             # Number of indicator without score at the category level.
             missing_score: 0,
