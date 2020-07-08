@@ -111,7 +111,7 @@ class OrganizationsController < ApplicationController
     return [[], filter_set] unless filter_set
 
     sdg_products = []
-    if !sdgs.empty?
+    unless sdgs.empty?
       sdg_products = Product.joins(:sustainable_development_goals)
                             .where('sustainable_development_goal_id in (?)', sdgs)
                             .ids
@@ -129,7 +129,7 @@ class OrganizationsController < ApplicationController
     end
 
     project_products = []
-    if !projects.empty?
+    unless projects.empty?
       project_products += Project.joins(:products)
                                  .where('projects.id in (?)', projects)
                                  .select('products.id')
@@ -161,10 +161,17 @@ class OrganizationsController < ApplicationController
     end
 
     org_ids = []
+    other_filtered = !(products.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
+                       sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
+                     with_maturity_assessment || is_launchable
     org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
                     !sectors.empty? || !countries.empty?)
     if org_filtered
       org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
+
+      unless other_filtered
+        return [org_ids, filter_set]
+      end
     end
 
     [filter_and_intersect_arrays([org_products + org_projects, org_ids]), filter_set]
