@@ -1,5 +1,6 @@
 class OperatorService < ActiveRecord::Base
-  belongs_to :location, foreign_key: 'locations_id'
+  belongs_to :country
+
   attr_accessor :country_list
 
   scope :name_contains, ->(name) { where('LOWER(name) like LOWER(?)', "%#{name}%") }

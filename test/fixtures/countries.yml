@@ -1,0 +1,15 @@
+one:
+  name: Country
+  slug: country
+  code: c
+  code_longer: country
+  latitude: 1.0
+  longitude: 2.0
+
+two:
+  name: Country Two
+  slug: country_two
+  code: ct
+  code_longer: country two
+  latitude: 1.0
+  longitude: 2.0

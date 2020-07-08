@@ -233,7 +233,7 @@
     <div id="orgId" style="display:none"><%= @organization.id %></div>
     <div id="agg-nav" class="card-body accordion-section p-0">
       <div class="mni-accordion">
-        <% @organization.locations.each do |country| %>
+        <% @organization.countries.each do |country| %>
           <h3 class="country-list" id="<%= country.id %>"><%= country.name %></h3>
           <div>
             <div class="mni-accordion">

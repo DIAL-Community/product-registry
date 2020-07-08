@@ -255,7 +255,8 @@ const loadOrganizationTiles = function () {
     if (feature) {
       // Move the selected feature from the organization layer to selected organization layer.
       // We will dim the org layer by lowering down the opacity later on.
-      organizationMarkerLayer.getSource().removeFeature(feature)
+      organizationMarkerLayer.getSource().removeFeature(feature);
+      organizationMarkerLayer.setOpacity(dimmedOpacity);
       selectedMarkerLayer.getSource().addFeature(feature);
 
       const organizations = feature.get('organizations');
@@ -265,7 +266,6 @@ const loadOrganizationTiles = function () {
         selectedOrganization = organization.name;
         
         prepareCountryLayer(organization.countries, countries, countryMarkerLayer);
-        organizationMarkerLayer.setOpacity(dimmedOpacity);
 
         $(element).html(buildPopupContent(organization));
         $(element).show();
@@ -425,3 +425,4 @@ const loadOrganizationTiles = function () {
 }
 
 $(document).on('organizations#map_osm:loaded', loadOrganizationTiles);
+$(document).on('organizations#map_fs:loaded', loadOrganizationTiles);

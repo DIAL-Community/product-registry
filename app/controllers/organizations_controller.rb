@@ -1,7 +1,9 @@
 require 'csv'
+require 'modules/geocode'
 
 class OrganizationsController < ApplicationController
   include OrganizationsHelper
+  include Modules::Geocode
 
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
@@ -231,10 +233,10 @@ class OrganizationsController < ApplicationController
       @organization.organizations_contacts << organization_contact
     end
 
-    if (params[:selected_countries].present?)
-      params[:selected_countries].keys.each do |location_id|
-        location = Location.find(location_id)
-        @organization.locations.push(location)
+    if params[:selected_countries].present?
+      params[:selected_countries].keys.each do |country_id|
+        country = Country.find(country_id)
+        @organization.countries.push(country)
       end
     end
 
@@ -252,18 +254,23 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    if (params[:office_id].present?)
-      office = Location.find(params[:office_id])
-      if (office)
-        @organization.locations.push(office)
+    if params[:office_magickeys].present?
+      params[:office_magickeys].keys.each do |office_magickey|
+        auth_token = authenticate_user
+        geocoded_office = geocode(office_magickey, auth_token)
+        geocoded_office.slug = slug_em("#{@organization.name} #{geocoded_office.name}")
+        @organization.offices.push(geocoded_office)
       end
     end
 
-    if (params[:office_magickey].present?)
-      auth_token = authenticate_user
-      geocoded_location = geocode(params[:office_magickey], auth_token)
-      geocoded_location.save
-      @organization.locations.push(geocoded_location)
+    if params[:city_ids].present?
+      params[:city_ids].keys.each do |city_id|
+        office = create_office_using_city(city_id)
+        next if office.nil?
+
+        office.slug = slug_em("#{@organization.name} #{office.name}")
+        @organization.offices.push(city)
+      end
     end
 
     if (params[:logo].present?)
@@ -344,13 +351,14 @@ class OrganizationsController < ApplicationController
                           .update(ended_at: Time.now.utc)
     end
 
-    locations = Set.new
-    if (params[:selected_countries].present?)
-      params[:selected_countries].keys.each do |location_id|
-        location = Location.find(location_id)
-        locations.add(location)
+    countries = Set.new
+    if params[:selected_countries].present?
+      params[:selected_countries].keys.each do |country_id|
+        country = Country.find(country_id)
+        countries.add(country)
       end
     end
+    @organization.countries = countries.to_a
 
     products = Set.new
     if (params[:selected_products].present?)
@@ -370,22 +378,33 @@ class OrganizationsController < ApplicationController
     end
     @organization.projects = projects.to_a
 
-    if (params[:office_ids].present?)
+    offices = Set.new
+    if params[:office_ids].present?
       params[:office_ids].keys.each do |office_id|
-        office = Location.find(office_id)
-        locations.add(office)
+        office = Office.find(office_id)
+        offices.add(office)
       end
     end
 
-    if (params[:office_magickeys].present?)
+    if params[:office_magickeys].present?
       auth_token = authenticate_user
       params[:office_magickeys].keys.each do |office_magickey|
-        geocoded_location = geocode(office_magickey, auth_token)
-        locations.add(geocoded_location)
+        geocoded_office = geocode(office_magickey, auth_token)
+        geocoded_office.slug = slug_em("#{@organization.name} #{geocoded_office.name}")
+        offices.add(geocoded_office)
       end
     end
 
-    @organization.locations = locations.to_a
+    if params[:city_ids].present?
+      params[:city_ids].keys.each do |city_id|
+        office = create_office_using_city(city_id)
+        next if office.nil?
+
+        office.slug = slug_em("#{@organization.name} #{office.name}")
+        offices.add(office)
+      end
+    end
+    @organization.offices = offices.to_a
 
     if (params[:logo].present?)
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
@@ -468,74 +487,125 @@ class OrganizationsController < ApplicationController
   end
 
   def duplicates
-    @organizations = Array.new
+    @organizations = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
+      if current_slug != original_slug
         @organizations = Organization.where(slug: current_slug).to_a
       end
     end
-    authorize @organizations, :view_allowed?
-    render json: @organizations, :only => [:name]
+    authorize Organization, :view_allowed?
+    render json: @organizations, only: [:name]
   end
 
   def agg_services
     all_services = []
-    country_name = Location.select(:name).where(id: params[:country]).map(&:name).uniq
-    services_list = AggregatorCapability.select(:service).where(aggregator_id: params[:org]).map(&:service).uniq
+    services_list = AggregatorCapability.select(:service)
+                                        .where(aggregator_id: params[:org])
+                                        .map(&:service)
+                                        .uniq
     services_list.each do |service|
-      capability_list = AggregatorCapability.select(:capability).where(service: service, aggregator_id: params[:org], country_name: country_name).sort_by(&:capability).map(&:capability).uniq
-      all_services.push({ "name" => service, "count" => capability_list.count})
+      capability_list = AggregatorCapability.select(:capability)
+                                            .where(service: service, aggregator_id: params[:org],
+                                                   country_id: params[:country])
+                                            .sort_by(&:capability)
+                                            .map(&:capability)
+                                            .uniq
+      all_services.push({ "name" => service, "count" => capability_list.count })
     end
-    if (services_list.empty?)
+    if services_list.empty?
       set_core_services
       @core_services.each do |service|
-        all_services.push({ "name" => service, "count" => 0})
+        all_services.push({ "name" => service, "count" => 0 })
       end
     end
-    render json: all_services
+    render(json: all_services)
   end
 
   def service_capabilities
-    capability_list = AggregatorCapability.select(:capability).where(service: params[:service]).sort_by(&:capability).map(&:capability).uniq
-    operator_list = OperatorService.select(:name, :id).where(locations_id: params[:country], service: params[:service]).uniq
-    render json: { "capability_list" => capability_list, "operator_list" => operator_list }
+    capability_list = AggregatorCapability.select(:capability)
+                                          .where(service: params[:service])
+                                          .sort_by(&:capability)
+                                          .map(&:capability)
+                                          .uniq
+    operator_list = OperatorService.select(:name, :id)
+                                   .where(country_id: params[:country], service: params[:service])
+                                   .uniq
+    render(json: { "capability_list" => capability_list, "operator_list" => operator_list })
   end
 
   def agg_capabilities
-    operator_services = OperatorService.select(:id, :name).where(service: params[:service], locations_id: params[:country]).uniq
-    @capabilities = AggregatorCapability.where(aggregator_id: params[:org], service: params[:service], operator_services_id: operator_services)
+    operator_services = OperatorService.select(:id, :name)
+                                       .where(service: params[:service], country_id: params[:country])
+                                       .uniq
+    @capabilities = AggregatorCapability.where(aggregator_id: params[:org], service: params[:service])
     capability_list = []
     operator_services.each do |operator|
       curr_capabilities = @capabilities.where(operator_services_id: operator.id)
-      if (!curr_capabilities.empty?) then
-        agg_cap = curr_capabilities.select(:capability).sort_by(&:capability).map(&:capability).uniq
+      if !curr_capabilities.empty?
+        agg_cap = curr_capabilities.select(:capability)
+                                   .sort_by(&:capability)
+                                   .map(&:capability)
+                                   .uniq
         capability_list.push({ "name" => operator.name, "id" => operator.id, "capabilities" => agg_cap })
       end
     end
-    render json: capability_list
+    render(json: capability_list)
   end
 
   def update_capability
-    operator_service = OperatorService.where(id: params[:operator]).first
-    if (params[:checked] == "true")
-      country = Location.where(id: params[:country]).first
+    if params[:checked] == "true"
+      country = Country.where(id: params[:country]).first
       agg_capability = AggregatorCapability.new
       agg_capability.aggregator_id = params[:orgId]
       agg_capability.operator_services_id = params[:operator]
       agg_capability.service = params[:service]
-      agg_capability.capability = params[:capability].gsub("-"," ")
+      agg_capability.capability = params[:capability].gsub("-", " ")
       agg_capability.country_name = country.name
+      agg_capability.country_id = country.id
       agg_capability.save
     else
-      agg_capability = AggregatorCapability.where(operator_services_id: params[:operator], capability: params[:capability].gsub("-"," "), aggregator_id: params[:orgId]).first
+      agg_capability = AggregatorCapability.where(operator_services_id: params[:operator],
+                                                  capability: params[:capability].gsub("-", " "),
+                                                  aggregator_id: params[:orgId])
+                                           .first
       agg_capability.destroy
     end
-    render json: agg_capability
+    render(json: agg_capability)
   end
 
   private
+
+  def create_office_using_city(city_id)
+    city = City.find(city_id)
+
+    return if city.nil?
+
+    office = Office.new
+    office.city = city.name
+
+    city_name = city.name
+    region_name = nil
+    country_code = nil
+
+    country = nil
+    unless city.region.nil?
+      region_name = city.region.name
+      country = city.region.country
+    end
+
+    unless country.nil?
+      country_code = country.code
+    end
+
+    address = "#{city_name}, #{region_name}, #{country_code}"
+    office.name = address
+
+    office.latitude = city.latitude
+    office.longitude = city.longitude
+    office
+  end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
@@ -565,46 +635,117 @@ class OrganizationsController < ApplicationController
       @organization.set_current_user(current_user)
     end
 
-    def authenticate_user
-      uri = URI.parse(Rails.configuration.geocode["esri"]["auth_uri"])
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+  def authenticate_user
+    uri = URI.parse(Rails.configuration.geocode["esri"]["auth_uri"])
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-      request = Net::HTTP::Post.new(uri.path)
-      data = {"client_id" => Rails.configuration.geocode["esri"]["client_id"],
-          "client_secret" => Rails.configuration.geocode["esri"]["client_secret"],
-          "grant_type" => Rails.configuration.geocode["esri"]["grant_type"]}
-      request.set_form_data(data);
+    request = Net::HTTP::Post.new(uri.path)
+    data = { "client_id" => Rails.configuration.geocode["esri"]["client_id"],
+             "client_secret" => Rails.configuration.geocode["esri"]["client_secret"],
+             "grant_type" => Rails.configuration.geocode["esri"]["grant_type"] }
+    request.set_form_data(data)
 
-      response = http.request(request)
-      response_json = JSON.parse(response.body)
-      response_json["access_token"]
+    response = http.request(request)
+    response_json = JSON.parse(response.body)
+    response_json["access_token"]
+  end
+
+  def geocode(magic_key, auth_token)
+    uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['geocode_uri']}{?q*}")
+    geocode_uri = uri_template.expand({
+      "q" => {
+        "SingleLine" => magic_key,
+        "magicKey" => magic_key,
+        "token" => auth_token,
+        "f" => "json",
+        "forStorage" => "true"
+      }
+    })
+
+    uri = URI.parse(geocode_uri)
+    response = Net::HTTP.post_form(uri, {})
+
+    location_data = JSON.parse(response.body)
+    location_name = location_data["candidates"][0]["address"]
+    location_slug = slug_em(location_name)
+    location_x = location_data["candidates"][0]["location"]["x"]
+    location_y = location_data["candidates"][0]["location"]["y"]
+
+    location = Location.new(name: location_name, slug: location_slug, location_type: :point,
+                            points: [ActiveRecord::Point.new(location_y, location_x)])
+
+    google_auth_key = Rails.application.secrets.google_api_key
+    convert_location_using_google(location, google_auth_key)
+  end
+
+  def convert_location_using_google(location, google_auth_key)
+    # Location is a point:
+    # * Reverse geocode to normalize the point
+    # * Update using reverse geocode values
+    # * Update reference to the state & countries
+
+    office_data = {}
+
+    geocode_data = JSON.parse(reverse_geocode_with_google(location, google_auth_key))
+    geocode_results = geocode_data['results']
+    geocode_results.each do |geocode_result|
+      geocode_result['address_components'].each do |address_component|
+        if address_component['types'].include?('locality') ||
+          address_component['types'].include?('postal_town')
+          office_data['city'] = address_component['long_name']
+        elsif address_component['types'].include?('administrative_area_level_3')
+          office_data['admin_city'] = address_component['long_name']
+        elsif address_component['types'].include?('administrative_area_level_2')
+          office_data['subregion'] = address_component['long_name']
+        elsif address_component['types'].include?('administrative_area_level_1')
+          office_data['region'] = address_component['long_name']
+        elsif address_component['types'].include?('country')
+          office_data['country_code'] = address_component['short_name']
+        end
+      end
     end
 
-    def geocode(magic_key, auth_token)
-      uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['geocode_uri']}{?q*}")
-      geocode_uri = uri_template.expand({
-        "q" => {
-          "SingleLine" => magic_key,
-          "magicKey" => magic_key,
-          "token" => auth_token,
-          "f" => "json",
-          "forStorage" => "true"
-        }
-      })
-
-      uri = URI.parse(geocode_uri)
-      response = Net::HTTP.post_form(uri, {})
-
-      location_data = JSON.parse(response.body)
-      location_name = location_data["candidates"][0]["address"]
-      location_slug = slug_em(location_name)
-      location_x = location_data["candidates"][0]["location"]["x"]
-      location_y = location_data["candidates"][0]["location"]["y"]
-
-      Location.new(name: location_name, slug: location_slug, :location_type => :point,
-          points: [ActiveRecord::Point.new(location_y, location_x)])
+    if office_data['city'].blank?
+      office_data['city'] = office_data['admin_city']
     end
+
+    office = Office.new
+    country_code = office_data['country_code']
+    unless office_data['country_code'].blank?
+      country = find_country(country_code, google_auth_key)
+      office.country_id = country.id
+    end
+
+    region_name = office_data['region']
+    unless office_data['region'].blank? || office_data['country_code'].blank?
+      region = find_region(region_name, country_code, google_auth_key)
+      office.region_id = region.id
+    end
+
+    city_name = office_data['city']
+    unless office_data['city'].blank? || office_data['region'].blank? || office_data['country_code'].blank?
+      city = find_city(city_name, region_name, country_code, google_auth_key)
+
+      office.city = city.name
+
+      office.latitude = city.latitude
+      office.longitude = city.longitude
+    end
+
+    if office_data['city'].blank? || office_data['region'].blank? || office_data['country_code'].blank?
+      office.latitude = location[:points][0].x
+      office.longitude = location[:points][0].y
+      office.city = "Unknown"
+      unless office_data['city'].blank?
+        office.city = office_data['city']
+      end
+    end
+
+    address = "#{city_name}, #{region_name}, #{country_code}"
+    office.name = address
+    office
+  end
 
     def set_core_services
       @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT', 'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice'];

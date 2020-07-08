@@ -28,7 +28,7 @@ var setupAutoComplete = function() {
                       });
 
   // Init the autocomplete for the country field.
-  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
+  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addLocation)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
 
@@ -67,7 +67,7 @@ function sectorCustomAutoComplete(source, callback) {
   }
 }
 
-function addOffice(label, officeId, magicKey) {
+function addOffice(label, officeId, magicKey, citiId) {
   var copy = $("#base-selected-offices").clone();
 
   $(copy).removeAttr("id");
@@ -84,6 +84,12 @@ function addOffice(label, officeId, magicKey) {
     $(input).attr("name",  "office_magickeys[" + magicKey + "]");
     $(input).val(magicKey);
   }
+
+  if (citiId) {
+    var input = $(copy).find("input").last();
+    $(input).attr("name",  "city_ids[" + citiId + "]");
+    $(input).val(citiId);
+  }
   
   $(copy).appendTo($("#base-selected-offices").parent());
 
@@ -92,11 +98,11 @@ function addOffice(label, officeId, magicKey) {
 
 function sourceHandle(request, response) {
   $.getJSON(
-    "/locations.json?office_only=true", {
+    "/cities.json?without_paging=true", {
       search: request.term
     },
-    function(sectors) {
-      if (sectors.length <= 0) {
+    function(cities) {
+      if (cities.length <= 0) {
         $.getJSON(
           esri_api, {
             f: 'json',
@@ -115,11 +121,11 @@ function sourceHandle(request, response) {
             }));
           });
       }
-      response($.map(sectors, function(sector) {
+      response($.map(cities, function(city) {
         return {
-          id: sector.id,
-          label: sector.name,
-          value: sector.name,
+          id: city.id,
+          label: city.name,
+          value: city.name,
           magicKey: null
         }
       }));
@@ -140,8 +146,8 @@ var setupFormView = function() {
   $("#office-label").autocomplete({
     source: sourceHandle,
     select: function(event, ui) {
-      addOffice(ui.item.label, ui.item.id, ui.item.magicKey)
-      $(this).val("")
+      addOffice(ui.item.label, null, ui.item.magicKey, ui.item.id);
+      $(this).val("");
       return false;
     }
   });
