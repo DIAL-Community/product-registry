@@ -260,7 +260,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     get organization_url(organization)
     assert_response :success
-    assert_equal(0, assigns(:organization).locations.length)
+    assert_equal(0, assigns(:organization).countries.length)
 
     # Should be able to go to edit page for the organization
     get edit_organization_url(organization)
@@ -272,7 +272,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal(organization.is_endorser, true)
 
-    location = locations(:one)
+    country = countries(:one)
 
     patch_params = { organization: {
       is_endorser: false,
@@ -280,7 +280,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
       website: 'some-fancy-website.com',
       when_endorsed: '11/16/2018'
     }, selected_countries: {
-      "#{location.id}": location.id
+      "#{country.id}": country.id
     } }
 
     patch(organization_url(organization), params: patch_params)
@@ -297,7 +297,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(2019, assigns(:organization).when_endorsed.year)
 
     # Should be able to edit the rest of the fields.
-    assert_equal(1, assigns(:organization).locations.length)
+    assert_equal(1, assigns(:organization).countries.length)
 
     sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', role: :admin)
 

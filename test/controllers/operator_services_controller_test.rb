@@ -6,7 +6,7 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in FactoryBot.create(:user, role: :admin)
     @operator_service = operator_services(:one)
-    @locations = locations(:one)
+    @country = countries(:one)
   end
 
   test "should get index" do
@@ -30,7 +30,8 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   test "should create operator service" do
     # It should create 12 core services for this operator 
     assert_difference('OperatorService.count', 12) do
-      post operator_services_url, params: { operator_service: { name: "NewOperator" }, selected_countries: { @locations.id => @locations.id } }
+      post operator_services_url, params: { operator_service: { name: "NewOperator" },
+                                            selected_countries: { @country.id => @country.id } }
     end
 
     assert_redirected_to operator_services_url

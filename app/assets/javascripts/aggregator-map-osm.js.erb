@@ -1,5 +1,10 @@
-// TODO: When you select a feature, but then you change the switch selection.
-// There's still issue with this.
+
+const compareAggregators = function(a, b) {
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+
+  return 0;
+}
 
 const loadAggregatorTiles = function () {
   let loadingIndicator = { 'country': false, 'aggregator': false, 'operator': false};
@@ -115,10 +120,9 @@ const loadAggregatorTiles = function () {
         });
       });
 
-    Object.keys(aggregators).sort().forEach(function(aggregator_id) {
-      const organization = aggregators[aggregator_id];
-      const option = new Option(organization.name, organization.id);
-      $(option).html(organization.name);
+    Object.values(aggregators).sort(compareAggregators).forEach(function(aggregator) {
+      const option = new Option(aggregator.name, aggregator.id);
+      $(option).html(aggregator.name);
       $('#aggregators').append(option);
     });
 
@@ -342,23 +346,20 @@ const loadAggregatorTiles = function () {
     });
     // Reset the holder.
     highlightHolder.operators.length = 0;
-    const operatorsByName = operators[operatorName];
-    const operatorLocations = Object.values(operatorsByName)
-        .map(function(operatorLocation) {
-          return aggregator.locations[operatorLocation].name;
-        })
-        .filter(function(item, position, self) {
-          return self.indexOf(item) == position;
-        });
+    const operatorByName = operators[operatorName];
+    let operatorLocations = [];
+    if (operatorByName) {
+      operatorLocations = Object.values(operatorByName);
+    }
     aggregatorMarkerLayer.getSource().forEachFeature(function(feature) {
       if (parseInt(operatorName) === -1) {
         return;
       }
       aggregatorMarkerLayer.getSource().removeFeature(feature);
       highlightHolder.operators.push(feature);
-      if (operatorLocations.indexOf(feature.get('NAME_0')) !== -1) {
+      if (operatorLocations.indexOf(feature.get('name')) !== -1) {
         const filteredAggregators = feature.get("aggregators").filter(function(aggregatorId) {
-          const normalized = aggregator.aggregators[aggregatorId];
+          const normalized = aggregators[aggregatorId];
           const intersect = Object.keys(operators).filter(function(operator) {
             return normalized.operators.indexOf(parseInt(operator)) !== -1;
           });
@@ -400,17 +401,17 @@ const loadAggregatorTiles = function () {
       aggregatorMarkerLayer.getSource().removeFeature(feature);
       highlightHolder.services.push(feature);
       const operatorName = $('#operators').val();
-      const operatorsByName = operators[operatorName];
+      const operatorByName = operators[operatorName];
       const filteredAggregators = feature.get("aggregators").filter(function(aggregatorId) {
         const normalized = aggregators[aggregatorId];
-        const matchingCapabilities = normalized.capabilities.filter(function(capabilitiy) {
+        const matchingCapabilities = normalized.capabilities.filter(function(capability) {
           // Skip:
           // * not matching feature's name and country's name.
           // * not matching service and filtered service name.
-          if (capabilitiy.country !== feature.get("name") || capabilitiy.service !== serviceName) {
+          if (capability.country !== feature.get("name") || capability.service !== serviceName) {
             return false;
           }
-          return parseInt(operatorName) === -1 || Object.keys(operatorsByName).indexOf(`${capabilitiy.operator}`) !== -1
+          return parseInt(operatorName) === -1 || Object.keys(operatorByName).indexOf(`${capabilitiy.operator}`) !== -1
         });
         return matchingCapabilities.length > 0;
       });

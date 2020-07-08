@@ -40,7 +40,7 @@ class OperatorServicesController < ApplicationController
     operator_name = params[:operator_service][:name]
 
     selected_countries = []
-    if (params[:selected_countries].present?)
+    if params[:selected_countries].present?
       selected_countries = params[:selected_countries].keys.map(&:to_i)
     end
 
@@ -49,7 +49,7 @@ class OperatorServicesController < ApplicationController
       @core_services.each do |service|
         new_service = OperatorService.new
         new_service.name = operator_name
-        new_service.locations_id = country
+        new_service.country_id = country
         new_service.service = service
         new_service.save
       end
@@ -81,10 +81,10 @@ class OperatorServicesController < ApplicationController
     end
 
     # Remove any countries from operator services that were removed in the edit
-    country_ids = @operator_services.pluck(:locations_id).uniq
+    country_ids = @operator_services.pluck(:country_id).uniq
     country_ids.each do |country|
       if !selected_countries.include?(country)
-        destroy_services = OperatorService.where(name: @operator_services.first.name, locations_id: country).destroy_all
+        destroy_services = OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
       end
     end
 
@@ -94,13 +94,13 @@ class OperatorServicesController < ApplicationController
         @core_services.each do |service|
           new_service = OperatorService.new
           new_service.name = @operator_services.first.name
-          new_service.locations_id = country
+          new_service.country_id = country
           new_service.service = service
           new_service.save
         end
       end
     end
-  
+
     respond_to do |format|
         format.html { redirect_to operator_services_path,
                       flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
@@ -113,10 +113,10 @@ class OperatorServicesController < ApplicationController
   def destroy
     authorize @operator_services, :mod_allowed?
 
-    # Remove all countries from operator services 
-    country_ids = @operator_services.pluck(:locations_id).uniq
+    # Remove all countries from operator services
+    country_ids = @operator_services.pluck(:country_id).uniq
     country_ids.each do |country|
-      destroy_services = OperatorService.where(name: @operator_services.first.name, locations_id: country).destroy_all
+      destroy_services = OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
     end
 
     respond_to do |format|
@@ -127,37 +127,38 @@ class OperatorServicesController < ApplicationController
   end
 
   def map
-    #@organizations = Organization.eager_load(:locations)
-    #authorize @organizations, :view_allowed?
   end
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_operator_services
-      @operator_services = OperatorService.where(name: params[:id])
-      @operator_service = @operator_services.first
-      @operator_name = @operator_service.name
-      @operator_countries = Location.where(id: @operator_services.select('locations_id'))
-      @curr_operator = OperatorService.new
-      @curr_operator.name = @operator_name
-      @curr_operator.country_list = @operator_countries
+  # Use callbacks to share common setup or constraints between actions.
+  def set_operator_services
+    @operator_services = OperatorService.where(name: params[:id])
+    @operator_service = @operator_services.first
+    @operator_name = @operator_service.name
+    @operator_countries = Country.where(id: @operator_services.select('country_id'))
+    @curr_operator = OperatorService.new
+    @curr_operator.name = @operator_name
+    @curr_operator.country_list = @operator_countries
 
+    # The countries_services list is not currently needed. Keeping the code here in case we 
       # The countries_services list is not currently needed. Keeping the code here in case we 
-      #  want to add it later
-      # @countries_services = { }
-      # @operator_countries.each do |country|
-      #   curr_services = @operator_services.where(locations_id: country.id)
-      #   service_list = []
-      #   curr_services.each do |service|
-      #     service_list.push(service.service)
-      #   end
-      #   @countries_services[country.name] = service_list
-      # end
-    end
+    # The countries_services list is not currently needed. Keeping the code here in case we 
+    #  want to add it later
+    # @countries_services = { }
+    # @operator_countries.each do |country|
+    #   curr_services = @operator_services.where(country_id: country.id)
+    #   service_list = []
+    #   curr_services.each do |service|
+    #     service_list.push(service.service)
+    #   end
+    #   @countries_services[country.name] = service_list
+    # end
+  end
 
-    def set_core_services
-      @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT', 'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice'];
-    end
+  def set_core_services
+    @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT',
+                      'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice'];
+  end
 
 end

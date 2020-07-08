@@ -50,4 +50,3 @@ const yearSelectionReady = function() {
 }
 
 $(document).on('organizations#map:loaded', yearSelectionReady);
-$(document).on('organizations#map_fs:loaded', yearSelectionReady);

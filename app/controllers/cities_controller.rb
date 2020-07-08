@@ -4,6 +4,13 @@ class CitiesController < ApplicationController
   # GET /cities
   # GET /cities.json
   def index
+    if params[:without_paging]
+      @cities = City.order(:name)
+      !params[:search].blank? && @cities = @cities.name_contains(params[:search])
+      authorize(@cities, :view_allowed?)
+      return
+    end
+
     if params[:search]
       @cities = City.where(nil)
                     .name_contains(params[:search])

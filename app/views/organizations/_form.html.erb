@@ -264,7 +264,7 @@
         <div id="orgId" style="display:none"><%= @organization.id %></div>
         <div id="agg-nav" class="card-body accordion-section p-0">
           <div class="mni-accordion">
-            <% @organization.locations.each do |country| %>
+            <% @organization.countries.each do |country| %>
               <h3 class="country-list" id="<%= country.id %>"><%= country.name %></h3>
               <div>
                 <div class="mni-accordion">
@@ -297,11 +297,11 @@
   <% organization.projects.order("name").each do |project| %>
     addProject('<%= project.id %>', '<%= project.name %>');
   <% end %>
-  <% organization.locations.where.not(location_type: 'point').order("name").each do |location| %>
-    addLocation('<%= location.id %>', '<%= location.name %>');
+  <% organization.countries.order("name").each do |country| %>
+    addLocation('<%= country.id %>', '<%= country.name %>');
   <% end %>
-  <% organization.locations.where(location_type: 'point').order("name").each do |location| %>
-    addOffice('<%= location.name %>', '<%= location.id %>', null);
+  <% organization.offices.order("name").each do |office| %>
+    addOffice('<%= office.name %>', '<%= office.id %>');
   <% end %>
   <% organization.organizations_contacts.joins(:contact).where('ended_at is null').order('contacts.name').each do |organizations_contact| %>
     addContact('<%= organizations_contact.contact.id %>', '<%= organizations_contact.contact.name %>');

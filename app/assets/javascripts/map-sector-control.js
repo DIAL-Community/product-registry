@@ -58,4 +58,3 @@ const sectorSelectionReady = function() {
 
 // Attach all of them to the browser, page, and turbolinks event.
 $(document).on('organizations#map:loaded', sectorSelectionReady);
-$(document).on('organizations#map_fs:loaded', sectorSelectionReady);

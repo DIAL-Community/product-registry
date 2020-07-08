@@ -2,6 +2,6 @@
 
 one:
   name: Operator
-  locations_id: 1
+  country_id: 1
   service: SMS
   
