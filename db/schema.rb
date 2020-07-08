@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_212630) do
+ActiveRecord::Schema.define(version: 2020_07_07_130945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -537,6 +537,21 @@ ActiveRecord::Schema.define(version: 2020_06_24_212630) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "task_tracker_descriptions", force: :cascade do |t|
+    t.bigint "task_tracker_id", null: false
+    t.string "locale", null: false
+    t.jsonb "description", default: {}, null: false
+    t.index ["task_tracker_id"], name: "index_task_tracker_descriptions_on_task_tracker_id"
+  end
+
+  create_table "task_trackers", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.date "last_run"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "use_case_descriptions", force: :cascade do |t|
     t.bigint "use_case_id", null: false
     t.string "locale", null: false
@@ -640,6 +655,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_212630) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "aggregator_capabilities", "countries"
   add_foreign_key "aggregator_capabilities", "operator_services", column: "operator_services_id"
   add_foreign_key "aggregator_capabilities", "organizations", column: "aggregator_id"
   add_foreign_key "building_block_descriptions", "building_blocks"
@@ -655,6 +671,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_212630) do
   add_foreign_key "offices", "countries"
   add_foreign_key "offices", "organizations"
   add_foreign_key "offices", "regions"
+  add_foreign_key "operator_services", "countries"
   add_foreign_key "operator_services", "locations", column: "locations_id"
   add_foreign_key "organization_descriptions", "organizations"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
@@ -705,6 +722,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_212630) do
   add_foreign_key "rubric_categories", "maturity_rubrics"
   add_foreign_key "rubric_category_descriptions", "rubric_categories"
   add_foreign_key "tag_descriptions", "tags"
+  add_foreign_key "task_tracker_descriptions", "task_trackers"
   add_foreign_key "use_case_descriptions", "use_cases"
   add_foreign_key "use_case_headers", "use_cases"
   add_foreign_key "use_case_step_descriptions", "use_case_steps"

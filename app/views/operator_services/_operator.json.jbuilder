@@ -4,7 +4,7 @@ normalized_operators = {}
 
   operator_ids = normalized_operators[operator_name]
   operator_ids ||= {}
-  operator_ids[operator.id] = operator.locations_id
+  operator_ids[operator.id] = operator.country_name
 
   normalized_operators[operator_name] = operator_ids
 end

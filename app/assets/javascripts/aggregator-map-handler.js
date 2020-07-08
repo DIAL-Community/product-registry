@@ -73,7 +73,7 @@ const aggregatorMapHandler = function() {
             return aggregator.locations[operatorLocation].name;
           })
           .filter(function(item, position, self) {
-            return self.indexOf(item) == position;
+            return self.indexOf(item) === position;
           });
 
       aggregator.countryHightlightLayer.getSource().forEachFeature(function(feature) {

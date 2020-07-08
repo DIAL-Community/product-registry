@@ -239,7 +239,8 @@ CREATE TABLE public.aggregator_capabilities (
     operator_services_id bigint,
     service public.mobile_services,
     capability public.agg_capabilities,
-    country_name character varying
+    country_name character varying,
+    country_id bigint
 );
 
 
@@ -894,7 +895,8 @@ CREATE TABLE public.operator_services (
     id bigint NOT NULL,
     name character varying,
     locations_id bigint,
-    service public.mobile_services
+    service public.mobile_services,
+    country_id bigint
 );
 
 
@@ -3422,6 +3424,13 @@ CREATE INDEX index_aggregator_capabilities_on_aggregator_id ON public.aggregator
 
 
 --
+-- Name: index_aggregator_capabilities_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_aggregator_capabilities_on_country_id ON public.aggregator_capabilities USING btree (country_id);
+
+
+--
 -- Name: index_aggregator_capabilities_on_operator_services_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3559,6 +3568,13 @@ CREATE INDEX index_offices_on_organization_id ON public.offices USING btree (org
 --
 
 CREATE INDEX index_offices_on_region_id ON public.offices USING btree (region_id);
+
+
+--
+-- Name: index_operator_services_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_operator_services_on_country_id ON public.operator_services USING btree (country_id);
 
 
 --
@@ -4229,6 +4245,14 @@ ALTER TABLE ONLY public.rubric_categories
 
 
 --
+-- Name: operator_services fk_rails_5c31270ff7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.operator_services
+    ADD CONSTRAINT fk_rails_5c31270ff7 FOREIGN KEY (country_id) REFERENCES public.countries(id);
+
+
+--
 -- Name: organizations_countries fk_rails_61354fe2dd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4426,6 +4450,14 @@ ALTER TABLE ONLY public.cities
 
 ALTER TABLE ONLY public.operator_services
     ADD CONSTRAINT fk_rails_e7154c9b46 FOREIGN KEY (locations_id) REFERENCES public.locations(id);
+
+
+--
+-- Name: aggregator_capabilities fk_rails_ee0ee7b8e7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aggregator_capabilities
+    ADD CONSTRAINT fk_rails_ee0ee7b8e7 FOREIGN KEY (country_id) REFERENCES public.countries(id);
 
 
 --
@@ -4881,6 +4913,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200623203503'),
 ('20200624170721'),
 ('20200624212546'),
-('20200624212630');
+('20200624212630'),
+('20200707130426'),
+('20200707130945');
 
 

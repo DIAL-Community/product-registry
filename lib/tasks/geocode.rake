@@ -97,6 +97,61 @@ namespace :geocode do
     end
   end
 
+  task :migrate_aggregator_capabilities_to_country, [] => :environment do
+    google_auth_key = Rails.application.secrets.google_api_key
+    AggregatorCapability.all.each do |aggregator|
+      unless aggregator.country_id.nil?
+        next
+      end
+
+      country_name = aggregator.country_name
+      country = Country.find_by(name: country_name)
+      if country.nil?
+        country = find_country(country_name, google_auth_key)
+        if country.nil?
+          puts "Unable to find country for #{aggregator.aggregator_id} -> #{country_name}."
+          next
+        end
+      end
+
+      aggregator.country_id = country.id
+      if aggregator.save!
+        puts "Adding country for aggregator: #{aggregator.aggregator_id}  to -> #{country.name}."
+      end
+    end
+  end
+
+  task :migrate_operator_services_to_country, [] => :environment do
+    google_auth_key = Rails.application.secrets.google_api_key
+    OperatorService.all.each do |operator|
+      unless operator.country_id.nil?
+        next
+      end
+
+      location_id = operator.locations_id
+      location = Location.find_by(id: location_id)
+      if location.nil?
+        puts "Unable to find location for #{operator.name} -> #{location_id}."
+        next
+      end
+
+      country = Country.find_by(name: location.name)
+      if country.nil?
+        country = find_country(location.name, google_auth_key)
+        if country.nil?
+          puts "Unable to find country for #{operator.name} -> #{location.name}."
+          next
+        end
+      end
+
+      operator.country_id = country.id
+      operator.country_name = country.name
+      if operator.save!
+        puts "Adding country for operator: #{operator.name} to -> #{country.name}."
+      end
+    end
+  end
+
   task :migrate_projects_locations_with_google, [] => :environment do
     google_auth_key = Rails.application.secrets.google_api_key
     Project.all.each do |project|
