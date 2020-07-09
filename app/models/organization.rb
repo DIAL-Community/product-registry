@@ -30,6 +30,7 @@ class Organization < ApplicationRecord
                                      dependent: :delete_all,
                                      after_add: :association_add,
                                      before_remove: :association_remove
+  has_and_belongs_to_many :tasks, join_table: :tasks_organizations
   has_many :aggregator_capabilities, join_table: :aggregator_capabilities,
                                      foreign_key: 'aggregator_id',
                                      dependent: :delete_all,

@@ -247,3 +247,5 @@ $(document).on('building_blocks#index:loaded', prepareFilters);
 $(document).on('products#index:loaded', prepareFilters);
 $(document).on('organizations#index:loaded', prepareFilters);
 $(document).on('projects#index:loaded', prepareFilters);
+$(document).on('playbooks#index:loaded', prepareFilters);
+$(document).on('plays#index:loaded', prepareFilters);

@@ -1,0 +1,17 @@
+<li class="list-group-item w-100 text-center bg-transparent">
+  <%= link_to plays_path do %>
+    <%
+      btn_class = 'btn-secondary'
+      if current_page?(:controller => 'plays', :action => 'index')
+        btn_class = 'btn-warning'
+      end
+    %>
+    <span class="w-100 btn <%= btn_class %>">
+      <%= image_tag "play.png", :width => "20px" %>
+      <span class="d-none d-lg-inline-block">
+        <%= t('model.play').titlecase.pluralize %>
+      </span>
+      <span id="play-badge" class="badge badge-light">--</span>
+    </span>
+  <% end %>
+</li>

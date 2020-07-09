@@ -1,0 +1,20 @@
+<div class="col-lg-5ths col-md-4 w-100 mt-2">
+  <div class="card index-card small">
+    <div class="card-header bg-secondary text-white truncate-parent">
+      <%= link_to activity.name, play, class: 'truncate-text',
+        'title' => activity.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+    </div>
+    <div class="play-logo-frame ml-2 mt-2">
+      <%= link_to(activity) do %>
+        <%= t('view.activity.index.description') %>
+        <br>
+        <div class="text-muted float-left"><%= activity.description %></div>
+      <% end %>
+    </div>
+    <div class="card-footer footer-padding">
+      <div class="footer-row">
+        <%= t('view.activity.index.author') %>: <%= activity.phase %>
+      </div>
+    </div>
+  </div>
+</div>

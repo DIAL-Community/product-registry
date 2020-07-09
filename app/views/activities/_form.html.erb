@@ -1,0 +1,78 @@
+<%= form_with(model: activity, local: true, html: { id: 'activity-form' }) do |form| %>
+  <%= form.hidden_field :playbook_id, id: :playbook_id %>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :activity_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :description, id: :description, class: "form-control", placeholder: t('view.activity.form.description') %>
+    <%= form.label :description, t('view.activity.form.description') %>
+  </fieldset>
+
+  <fieldset class="form-group mb-1">
+    <strong class="text-muted inline"><%= form.label :phase, t('view.activity.form.phase') %></strong>
+    <%= form.collection_select :phase, @phases, :to_s, :to_s, { include_blank: false }, { class: "form-control inline" } %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.play.form.resources') %>
+    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+      <a href="#" class="card-link float-right" id="add-resource" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
+    <% end %>
+  </h6>
+  <div id="activity-resources">
+    <% @activity.resources.each do |resource| %>
+      <%= render :partial => 'resource', :object => resource %>
+    <% end %>
+  </div>
+  <div id="activity-tasks">
+    <div class="accordion" id='<%= "#{@activity.slug}_accordion" %>'>
+      <% @activity.tasks.each do |task| %>
+        <div class="card border-right-0 border-left-0 border-bottom-0">
+          <div id='<%= "#{task.slug}_header" %>' class="card-header" 
+              data-toggle="collapse" data-target='#<%= "#{task.slug}_collapse" %>'
+              aria-expanded="true" aria-controls='<%= "#{task.slug}_collapse" %>'>
+            <h6 class="mb-0 float-left font-weight-bold">
+              <%= task.name %>
+            </h6>
+            <i class="fa fa-angle-down float-right"></i>
+          </div>
+          <div id='<%= "#{task.slug}_collapse" %>' class="collapse"
+              aria-labelledby='<%= "#{task.slug}_header" %>'
+              data-parent='#<%= "#{@activity.slug}_accordion" %>'>
+            <div class="card-body p-3">
+              <div id='<%= "#{task.slug}_viewer" %>'>
+                <%= task.description %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+$('#add-resource').click(function(e) {
+  e.preventDefault();
+  $("#activity-resources").append("<%= escape_javascript render(partial: 'resource', object: {}) %>")
+});
+
+$('.remove-resource').click(function(e) {
+  e.preventDefault();
+  removeId = e.currentTarget.id.split('-')[1].replace(" ", "-")
+  $("#"+removeId).remove();
+});
+
+$("#activity-form").on('submit', function(e) {
+  $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+  return true;
+})
+</script>

@@ -147,7 +147,7 @@ class SectorsController < ApplicationController
         @sectors = Sector.where(slug: current_slug).to_a
       end
     end
-    authorize @sectors, :view_allowed?
+    authorize Sector, :view_allowed?
     render json: @sectors, :only => [:name]
   end
 

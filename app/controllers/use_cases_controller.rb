@@ -1,4 +1,6 @@
 class UseCasesController < ApplicationController
+  include FilterConcern
+  
   before_action :set_use_case, only: [:show, :edit, :update, :destroy]
   before_action :set_sectors, only: [:new, :edit, :update, :show]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
@@ -57,7 +59,7 @@ class UseCasesController < ApplicationController
         @use_cases = UseCase.where(slug: current_slug).to_a
       end
     end
-    authorize @use_cases, :view_allowed?
+    authorize UseCase, :view_allowed?
     render json: @use_cases, :only => [:name]
   end
 
@@ -168,107 +170,6 @@ class UseCasesController < ApplicationController
       @ucs_header = UseCaseHeader.where(use_case_id: @use_case, locale: I18n.locale).first
       if @ucs_header.nil?
         @ucs_header = UseCaseHeader.new
-      end
-    end
-
-    def filter_use_cases
-      use_cases = sanitize_session_values 'use_cases'
-      workflows = sanitize_session_values 'workflows'
-      sdgs = sanitize_session_values 'sdgs'
-      bbs = sanitize_session_values 'building_blocks'
-      products = sanitize_session_values 'products'
-      origins = sanitize_session_values 'origins'
-      organizations = sanitize_session_values 'organizations'
-      projects = sanitize_session_values 'projects'
-
-      endorser_only = sanitize_session_value 'endorser_only'
-      aggregator_only = sanitize_session_value 'aggregator_only'
-      years = sanitize_session_values 'years'
-
-      countries = sanitize_session_values 'countries'
-      sectors = sanitize_session_values 'sectors'
-
-      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
-      is_launchable = sanitize_session_value 'is_launchable'
-      product_type = sanitize_session_values 'product_type'
-
-      tags = sanitize_session_values 'tags'
-
-      filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
-                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
-                   endorser_only || aggregator_only || with_maturity_assessment || is_launchable
-
-      sdg_uc_ids = []
-      if !sdgs.empty?
-        # Get use_cases connected to this sdg
-        sdgs = SustainableDevelopmentGoal.where(id: sdgs)
-                                         .select(:number)
-        sdg_targets = SdgTarget.where('sdg_number in (?)', sdgs)
-        sdg_use_cases = UseCase.joins(:sdg_targets)
-                               .where('sdg_targets.id in (?)', sdg_targets.ids)
-        sdg_uc_ids = sdg_use_cases.ids
-      end
-
-      project_product_ids = []
-      !projects.empty? && project_product_ids = Product.joins(:projects)
-                                                       .where('projects.id in (?)', projects)
-                                                       .ids
-
-      # Filter out organizations based on filter input.
-      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
-      org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
-                      !sectors.empty? || !countries.empty?)
-
-      # Filter out project based on organization filter above.
-      org_projects = []
-      org_filtered && org_projects += Project.joins(:organizations)
-                                             .where('organizations.id in (?)', org_ids)
-                                             .ids
-
-      # Add products based on the project filtered above.
-      !org_projects.empty? && project_product_ids += Product.joins(:projects)
-                                                            .where('projects.id in (?)', org_projects)
-                                                            .ids
-
-      sdg_products = []
-      # if !sdgs.empty?
-      #   sdg_products += Product.joins(:sustainable_development_goals)
-      #                          .where('sustainable_development_goal_id in (?)', sdgs)
-      #                          .ids
-      # end
-
-      org_products = []
-      if !organizations.empty?
-        org_products += Product.joins(:organizations)
-                               .where('organization_id in (?)', organizations)
-                               .ids
-      end
-
-      products = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
-
-      workflow_product_ids = []
-      product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
-      if !product_ids.nil? && !product_ids.empty?
-        workflow_product_ids = get_workflows_from_products(product_ids)
-      end
-
-      workflow_bb_ids = get_workflows_from_bbs(bbs)
-
-      uc_workflows = []
-      workflow_ids = filter_and_intersect_arrays([workflows, workflow_product_ids, workflow_bb_ids])
-      if !workflow_ids.nil? && !workflow_ids.empty?
-        uc_workflows += UseCaseStep.joins(:workflows)
-                                   .where('workflows.id in (?)', workflow_ids)
-                                   .select('use_case_id')
-                                   .pluck('use_case_id')
-      end
-
-      if filter_set
-        ids = filter_and_intersect_arrays([use_cases, sdg_uc_ids, uc_workflows])
-        UseCase.where(id: ids).order(:slug)
-      else
-        UseCase.order(:slug)
       end
     end
 
