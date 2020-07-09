@@ -2513,9 +2513,10 @@ CREATE TABLE public.task_trackers (
     id bigint NOT NULL,
     name character varying NOT NULL,
     slug character varying NOT NULL,
-    last_run date,
+    last_run timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    message character varying NOT NULL
 );
 
 
@@ -5870,7 +5871,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200624212546'),
 ('20200624212630'),
 ('20200707130426'),
-('20200707130945');
+('20200707130945'),
+('20200708180807'),
+('20200708181616');
 
 
 

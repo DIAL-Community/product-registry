@@ -1,0 +1,32 @@
+<% description = task_tracker.task_tracker_descriptions
+                             .select { |desc| desc.locale == I18n.locale.to_s }
+                             .first %>
+<%= form_with(model: task_tracker, local: true, html: { id: 'task-tracker-form' }) do |form| %>
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :task_tracker_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= task_tracker.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.task-tracker')) %>
+  </div>
+
+  <%= form.hidden_field :tt_desc, id: :task_tracker_desc %>
+  <div class="wysiwyg-editor">
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var description = setUpEditor(<%= raw JSON.generate(description.nil? ? {} : description.description ) %>);
+  var form = document.querySelector('#task-tracker-form');
+  form.onsubmit = function() {
+    $('#task_tracker_desc').val(JSON.stringify(description.getContents()));
+  };
+</script>

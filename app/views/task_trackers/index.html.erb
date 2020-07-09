@@ -1,0 +1,25 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(TaskTracker).mod_allowed? %>
+      <%= link_to(new_task_tracker_path, class: 'btn btn-outline-primary float-left') do %>
+        <%= "#{t('view.general.create')} #{t('model.task-tracker').to_s.titlecase}" %>
+      <% end %>
+    <% end %>
+    <div class="form-group float-right mb-0">
+      <%= form_tag(task_trackers_path, method: "get", id: "search-form", class: "form-inline") do %>
+        <%= text_field_tag :search, params[:search], class: "form-control",
+            placeholder: t('view.general.search-placeholder', model: t('model.task-tracker').to_s.pluralize) %>
+        <div class="input-group-append">
+          <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div id="task-tracker-list" data-current-page="1">
+  <%= render @task_trackers %>
+</div>
