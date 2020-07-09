@@ -1,0 +1,116 @@
+<%= form_with(model: task, local: true, html: { id: 'task-form' }) do |form| %>
+  <%= form.hidden_field :parent_play, id: :parent_play %>
+  <%= form.hidden_field :parent_activity, id: :parent_activity %>
+  <%= form.hidden_field :parent_playbook, id: :parent_playbook %>
+  
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :task_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= task.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.task')) %>
+  </div>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :description, id: :description, class: "form-control", placeholder: t('view.task.form.short-description') %>
+    <%= form.label :name, t('view.task.form.short-description') %>
+  </fieldset>
+
+  <label for="task-description">
+    <%= t('view.task.form.full-description') %>
+  </label>
+  <%= form.hidden_field :task_desc, id: :task_description %>
+  <div class="wysiwyg-editor" id='task-description'>
+    <%
+      if !@description.nil? 
+        concat @description.description
+      end
+    %>
+  </div>
+  
+  <fieldset class="form-group form-check">
+    <%= form.check_box :complete, id: :task_complete,
+        type: 'boolean', step: 'any', class: "form-check-input" %>
+    <%= form.label :complete, t('view.task.form.is-complete'), class: "form-check-label" %>
+  </fieldset>
+  
+  <fieldset class="form-label-group mt-2">
+    <%= form.text_field :due_date,
+        value: task.due_date.blank? ? '' : task.due_date.strftime("%m/%d/%Y"),
+        id: :task_due_date, class: "form-control data-date",
+        placeholder: t('view.task.form.due-date') %>
+    <%= form.label :due_date, t('view.task.form.due-date') %>
+  </fieldset>
+  
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.play.form.resources') %>
+    <% if user_signed_in? && policy(Play).mod_allowed? %>
+      <a href="#" class="card-link float-right" id="add-resource" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
+    <% end %>
+  </h6>
+  <div id="task-resources">
+    <% @task.resources.each do |resource| %>
+      <%= render :partial => 'resource', :object => resource %>
+    <% end %>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
+  </h6>
+  <fieldset class="form-label-group mt-2">
+    <input type="text" id="organization-search" class="form-control"
+            placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
+    <label for="country-organization">
+      <%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>
+    </label>
+  </fieldset>
+  <div class="row">
+    <div class="col-12">
+      <span id="base-selected-organizations" class="selected-element badge badge-secondary px-1 mb-1">
+        <span class="text-label"></span>
+        <a onclick="remove(this);" style="cursor: pointer;">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        <input type="hidden"/>
+      </span>
+    </div>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  <% task.organizations.sort_by{|organization| organization.name }.each do |organization| %>
+    addOrganization('<%= organization.id %>', '<%= organization.name %>');
+  <% end %>
+
+  var organizationAutoComplete = autoComplete("/organizations.json?without_paging=true", addOrganization)
+  $("#base-selected-organizations").hide();
+  $("#organization-search").autocomplete(organizationAutoComplete);
+
+  $('#task_due_date').datepicker();
+  var description = setUpEditor(<%= raw JSON.generate(@description.nil? ? {} : @description.description ) %>);
+  var form = document.querySelector('#task-form');
+  form.onsubmit = function() {
+    $('#task_description').val(JSON.stringify(description.getContents()));
+    $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+  };
+
+  $('#add-resource').click(function(e) {
+    e.preventDefault();
+    $("#task-resources").append("<%= escape_javascript render(partial: 'resource', object: {}) %>")
+  });
+
+  $('.remove-resource').click(function(e) {
+    e.preventDefault();
+    removeId = e.currentTarget.id.split('-')[1].replace(" ", "-")
+    $("#"+removeId).remove();
+  });
+</script>
+

@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  include FilterConcern
+  
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
@@ -23,9 +25,9 @@ class ProjectsController < ApplicationController
       # - rebuild the project id cache
       logger.info('Filter updated. Rebuilding cached project id list.')
 
-      project_ids, filter_set = filter_projects
+      project_ids = filter_projects
       session[:project_filtered_ids] = project_ids
-      session[:project_filtered] = filter_set
+      session[:project_filtered] = true
       session[:project_filtered_time] = session[:filtered_time]
     end
 
@@ -57,10 +59,6 @@ class ProjectsController < ApplicationController
       session[:project_filtered_time] = session[:filtered_time]
     end
 
-    @projects = Project.order(:slug)
-    if session[:project_filtered].to_s.downcase == 'true'
-      @projects = @projects.where(id: session[:project_filtered_ids])
-    end
     authorize @projects, :view_allowed?
     render json: @projects.count
   end
@@ -179,7 +177,7 @@ class ProjectsController < ApplicationController
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
       if current_slug != original_slug
-        @projects = project.where(slug: current_slug).to_a
+        @projects = Project.where(slug: current_slug).to_a
       end
     end
     authorize Project, :view_allowed?
@@ -197,79 +195,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-
-  def filter_projects
-    endorser_only = sanitize_session_value 'endorser_only'
-    aggregator_only = sanitize_session_value 'aggregator_only'
-    years = sanitize_session_values 'years'
-
-    projects = sanitize_session_values 'projects'
-    countries = sanitize_session_values 'countries'
-    products = sanitize_session_values 'products'
-    sectors = sanitize_session_values 'sectors'
-    organizations = sanitize_session_values 'organizations'
-    origins = sanitize_session_values 'origins'
-
-    bbs = sanitize_session_values 'building_blocks'
-    sdgs = sanitize_session_values 'sdgs'
-    use_cases = sanitize_session_values 'use_cases'
-    workflows = sanitize_session_values 'workflows'
-
-    with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
-    is_launchable = sanitize_session_value 'is_launchable'
-    product_type = sanitize_session_values 'product_type'
-
-    tags = sanitize_session_values 'tags'
-
-    filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                   organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
-                   sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
-                 endorser_only || aggregator_only || with_maturity_assessment || is_launchable
-
-    return [[], filter_set] unless filter_set
-
-    organization_ids = get_organizations_from_filters(organizations, years, sectors, countries,
-                                                      endorser_only, aggregator_only)
-    org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
-                    !sectors.empty? || !countries.empty?)
-
-    org_project_ids = []
-    if !organization_ids.empty? && org_filtered
-      org_project_ids += Project.joins(:organizations)
-                                .where('organizations.id in (?)', organization_ids)
-                                .ids
-    end
-
-    sdg_products = []
-    if !sdgs.empty?
-      sdg_products += Product.joins(:sustainable_development_goals)
-                             .where('sustainable_development_goal_id in (?)', sdgs)
-                             .ids
-    end
-
-    use_case_bbs = get_bbs_from_use_cases(use_cases)
-    workflow_bbs = get_bbs_from_workflows(workflows)
-
-    bb_products = []
-    bb_ids = filter_and_intersect_arrays([bbs, use_case_bbs, workflow_bbs])
-    if !bb_ids.nil? && !bb_ids.empty?
-      bb_products += Product.joins(:building_blocks)
-                            .where('building_blocks.id in (?)', bb_ids)
-                            .ids
-    end
-
-    product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
-
-    product_project_ids = []
-    product_ids = filter_and_intersect_arrays([sdg_products, bb_products, product_ids])
-    if !product_ids.nil? && !product_ids.empty?
-      product_project_ids += Project.joins(:products)
-                                    .where('products.id in (?)', product_ids)
-                                    .ids
-    end
-
-    [filter_and_intersect_arrays([projects, org_project_ids, product_project_ids]), filter_set]
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project

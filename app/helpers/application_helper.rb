@@ -60,6 +60,33 @@ module ApplicationHelper
       else
         breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/rubric_categories", label: '' }
       end
+    elsif params[:controller].downcase == 'activities'|| params[:controller].downcase == 'plays' || params[:controller].downcase == 'tasks'
+      if params[:playbook_id].present?
+        breadcrumbs << { path: 'playbooks', label: t('model.playbook').titlecase.pluralize }
+        playbook_path = "playbooks/#{params[:playbook_id]}"
+        playbook_name = Playbook.find_by(slug: params[:playbook_id]).name
+        breadcrumbs << { path: playbook_path, label: playbook_name }
+        if params[:activity_id].present?
+          activity_path = "#{breadcrumbs[-1][:path]}/activities/#{params[:activity_id]}"
+          activity_name = Activity.find_by(slug: params[:activity_id]).name
+          breadcrumbs << { path: activity_path, label: activity_name }
+        end
+        if params[:task_id].present?
+          task_path = "#{breadcrumbs[-1][:path]}/task/#{params[:task_id]}"
+          task_name = Play.find_by(slug: params[:play_id]).name
+          breadcrumbs << { path: task_path, label: task_name }
+        else
+          breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/tasks", label: '' }
+        end
+      else
+        if params[:play_id].present?
+          play_path = "plays/#{params[:play_id]}"
+          play_name = Play.find_by(slug: params[:play_id]).name
+          breadcrumbs << { path: play_path, label: play_name }
+        else
+          breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }
+        end
+      end
     else
       breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }
     end

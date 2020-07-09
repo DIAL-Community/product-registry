@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   include ProductsHelper
+  include FilterConcern
 
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
@@ -28,9 +29,9 @@ class ProductsController < ApplicationController
       # - rebuild the product id cache
       logger.info('Filter updated. Rebuilding cached product id list.')
 
-      product_ids, filter_set = filter_products
+      product_ids = filter_products
       session[:product_filtered_ids] = product_ids
-      session[:product_filtered] = filter_set
+      session[:product_filtered] = true
       session[:product_filtered_time] = session[:filtered_time]
     end
 
@@ -324,15 +325,14 @@ class ProductsController < ApplicationController
       current_slug = slug_em(params[:current]);
       original_slug = slug_em(params[:original]);
       if (current_slug != original_slug)
-        @products = Product.where(slug: current_slug).to_a
+        @products = Product.where(slug: current_slug)
       end
 
       if @products.empty?
         @products = Product.where(':other_name = ANY(aliases)', other_name: params[:current])
       end
     end
-
-    authorize @products, :view_allowed?
+    authorize Product, :view_allowed?
     render json: @products, :only => [:name]
   end
 
@@ -429,86 +429,6 @@ class ProductsController < ApplicationController
 
     def set_current_user
       @product.set_current_user(current_user)
-    end
-
-    def filter_products
-      bbs = sanitize_session_values 'building_blocks'
-      origins = sanitize_session_values 'origins'
-      products = sanitize_session_values 'products'
-      sdgs = sanitize_session_values 'sdgs'
-      use_cases = sanitize_session_values 'use_cases'
-      workflows = sanitize_session_values 'workflows'
-      organizations = sanitize_session_values 'organizations'
-      projects = sanitize_session_values 'projects'
-
-      endorser_only = sanitize_session_value 'endorser_only'
-      aggregator_only = sanitize_session_value 'aggregator_only'
-      years = sanitize_session_values 'years'
-
-      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
-      is_launchable = sanitize_session_value 'is_launchable'
-      product_type = sanitize_session_values 'product_type'
-
-      countries = sanitize_session_values 'countries'
-      sectors = sanitize_session_values 'sectors'
-
-      tags = sanitize_session_values 'tags'
-
-      filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? && product_type.empty? &&
-                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty?) ||
-                   endorser_only || aggregator_only || with_maturity_assessment || is_launchable
-
-      return [[], filter_set] unless filter_set
-
-      project_product_ids = []
-      !projects.empty? && project_product_ids = Product.joins(:projects)
-                                                       .where('projects.id in (?)', projects)
-                                                       .ids
-
-      # Filter out organizations based on filter input.
-      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
-      org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
-                      !sectors.empty? || !countries.empty?)
-
-      # Filter out project based on organization filter above.
-      org_projects = []
-      org_filtered && org_projects += Project.joins(:organizations)
-                                             .where('organizations.id in (?)', org_ids)
-                                             .ids
-
-      # Add products based on the project filtered above.
-      !org_projects.empty? && project_product_ids += Product.joins(:projects)
-                                                            .where('projects.id in (?)', org_projects)
-                                                            .ids
-
-      org_products = []
-      if !organizations.empty?
-        org_products += Product.joins(:organizations)
-                               .where('organization_id in (?)', organizations)
-                               .ids
-      end
-
-      sdg_products = org_products
-      if !sdgs.empty?
-        sdg_products += Product.joins(:sustainable_development_goals)
-                               .where('sustainable_development_goal_id in (?)', sdgs)
-                               .ids
-      end
-
-      use_case_bbs = get_bbs_from_use_cases(use_cases)
-      workflow_bbs = get_bbs_from_workflows(workflows)
-
-      bb_products = []
-      bb_ids = filter_and_intersect_arrays([bbs, use_case_bbs, workflow_bbs])
-      if !bb_ids.nil? && !bb_ids.empty?
-        bb_products += Product.joins(:building_blocks)
-                              .where('building_blocks.id in (?)', bb_ids)
-                              .ids
-      end
-
-      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
-      [filter_and_intersect_arrays([sdg_products, bb_products, product_ids, project_product_ids]), filter_set]
     end
 
     def load_maturity

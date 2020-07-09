@@ -118,7 +118,7 @@ class RubricCategoriesController < ApplicationController
                                            .to_a
       end
     end
-    authorize @rubric_categories, :mod_allowed?
+    authorize RubricCategory, :view_allowed?
     render json: @rubric_categories, only: [:name]
   end
 

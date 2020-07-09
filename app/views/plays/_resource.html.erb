@@ -1,0 +1,17 @@
+<div id='<%= !resource["name"].nil? && resource["name"].gsub(" ", "-") %>'>
+  <fieldset class="form-label-group inline" style="width:30%;">
+    <input type="text" class="form-control" name='play[resources[][name]]' value='<%= resource["name"] %>' />
+    <label><%= t('view.playbook.form.name') %></label>
+  </fieldset>
+  <fieldset class="form-label-group inline" style="width:60%;">
+    <input type="text" class="form-control" name='play[resources[][description]]' value='<%= resource["description"] %>' />
+    <label><%= t('view.playbook.form.description') %></label>
+  </fieldset>
+  <fieldset class="form-label-group inline" style="width:80%;">
+    <input type="text" class="form-control" name='play[resources[][url]]' value='<%= resource["url"] %>' />
+    <label><%= t('view.play.form.url') %></label>
+  </fieldset>
+  <div class="remove-resource inline" id='remove-<%= resource["name"] %>'>
+    <button class="btn btn-secondary text-white mb-3"><%= t('view.general.delete') %></button>
+  </div>
+</div>

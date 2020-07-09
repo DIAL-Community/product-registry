@@ -43,6 +43,7 @@ en:
     mod_allowed?: The operation is not allowed.
     view_allowed?: You're not allowed to view this page.
   model:
+    activity: activity
     building-block: building block
     candidate-organization: candidate organization
     category-indicator: category indicator
@@ -55,6 +56,8 @@ en:
     maturity-rubric: maturity rubric
     office: office
     organization: organization
+    playbook: playbook
+    play: play
     portal-view: portal view
     product: product
     product-suite: product suite
@@ -65,6 +68,7 @@ en:
     sector: sector
     setting: setting
     tag: tag
+    task: task
     use-case: use case
     use-case-step: use case step
     user: user
@@ -487,6 +491,63 @@ en:
         definition: The SDGs comprise 17 goals and 169 targets representing global priorities for investment in order to achieve sustainable development. The SDGs were set in 2015 by the United Nations General Assembly and intended to be achieved by the year 2030.
       show:
         target: Target
+    playbook:
+      index:
+        overview: Overview
+        audience: Audience
+        outcomes: Outcomes
+        phases: Phases
+        name: Name
+        description: Description
+        no-activity: We couldn't find any activities for this playbook.
+      form:
+        overview: Overview
+        audience: Audience
+        outcomes: Outcomes
+        phases: Phases
+        name: Name
+        description: Description
+    activity:
+      index:
+        description: Description
+        phase: Phase
+        resources: Resources
+        assign: Assign
+        no-data: We couldn't find any tasks for this activity.
+      form:
+        description: Description
+        phase: Phase
+        resources: Resources
+        plays: Plays
+        assign-play: Assign Play
+    play:
+      index:
+        no-data: We couldn't find any plays for this activity.
+        description: Description
+        prerequisites: Prerequisites
+        outcomes: Outcomes
+        author: Author
+        version: Version
+        resources: Resources
+      form:
+        short-description: Short Description
+        description: Full Description
+        prerequisites: Prerequisites
+        outcomes: Outcomes
+        resources: Resources
+        url: URL
+    task:
+      index:
+        no-data: We couldn't find any tasks for this play.
+      form:
+        short-description: Short Description
+        full-description: Full Description
+        is-complete: Is Complete?
+        complete: This task is complete
+        not-complete: This task has not been completed
+        percent-complete: Percent Complete
+        due-date: Due Date
+        responsible: Responsible Party
     use-case:
       form:
         assigned-sdg-targets: Assigned SDG Targets

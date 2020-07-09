@@ -13,6 +13,19 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tasks, only: [:index, :update, :create, :destroy]
+  resources :activities, only: [:index, :update, :create, :destroy]
+  resources :plays do
+    get 'count', on: :collection
+    resources :tasks
+  end
+  resources :playbooks do
+    get 'count', on: :collection
+    resources :activities do
+      resources :tasks
+    end
+  end
+
   resources :tags
   resources :use_case_steps
 
@@ -101,6 +114,7 @@ Rails.application.routes.draw do
   resources :tags
   resources :use_case_steps
 
+  get '/object_counts', to: 'application#object_counts', as: :object_counts
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
   post '/remove_all_filters', to: 'application#remove_all_filters', as: :remove_all_filters
@@ -133,6 +147,9 @@ Rails.application.routes.draw do
   get 'maturity_rubric_duplicates', to: 'maturity_rubrics#duplicates'
   get 'rubric_category_duplicates', to: 'rubric_categories#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
+  get 'playbook_duplicates', to: 'palybooks#duplicates'
+  get 'play_duplicates', to: 'plays#duplicates'
+  get 'task_duplicates', to: 'tasks#duplicates'
 
   get 'covidresources', :to => 'covid#resources'
 

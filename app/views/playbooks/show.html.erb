@@ -1,0 +1,106 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<%= render 'shared/playbooknav', playbook: @playbook %>
+
+<div id="show-playbook">
+<div class="card mt-2">
+  
+    <div class="card-body py-2 px-3">
+      <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer"></div>
+    </div>
+    <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</h5>
+    </div>
+    <div class="card-body py-2 px-3">
+      <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer"></div>
+    </div>
+    <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</h5>
+    </div>
+    <div class="card-body py-2 px-3">
+      <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer"></div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.phases') %>:</h5>
+      </div>
+      <div class="card-body p-0">
+        <% @playbook.phases.each do |phase| %>
+          <div class="ml-5 mt-2 mb-3">
+          <strong><%= phase["name"] %>: </strong><%= phase["description"] %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.activity').pluralize.titlecase %></h5>
+        <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+          <%= link_to t('view.general.add'),
+                      new_playbook_activity_path(@playbook),
+                      class: "card-link float-right", style: "color: #fbab18 !important" %>
+        <% end %>
+      </div>
+      <div class="card-body p-0">
+        <% if @playbook.activities.count > 0 %>
+          <div class="accordion" id='<%= "#{@playbook.slug}_accordion" %>'>
+            <% @playbook.activities.each do |activity| %>
+              <div class="card border-right-0 border-left-0 border-bottom-0">
+                <div id='<%= "#{activity.slug}_header" %>' class="card-header" 
+                   data-toggle="collapse" data-target='#<%= "#{activity.slug}_collapse" %>'
+                   aria-expanded="true" aria-controls='<%= "#{activity.slug}_collapse" %>'>
+                  <h6 class="mb-0 float-left font-weight-bold">
+                    <%= activity.name %>&nbsp;
+                  </h6>
+                  (<%= activity.phase %>)
+                  <i class="fa fa-angle-down float-right"></i>
+                </div>
+                <div id='<%= "#{activity.slug}_collapse" %>' class="collapse"
+                   aria-labelledby='<%= "#{activity.slug}_header" %>'
+                   data-parent='#<%= "#{@playbook.slug}_accordion" %>'>
+                  <div class="card-body p-3">
+                    <div id='<%= "#{activity.slug}_viewer" %>'>
+                      <%= activity.description %>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="float-right mb-0">
+                          <%= link_to t('view.general.view'), playbook_activity_path(@playbook, activity),
+                                      class: "card-link" %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% else %>
+            <div class="alert alert-light mb-0" role="alert">
+              <%= t('view.playbook.index.no-activity') %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="card-footer border-0">
+        <div class="float-right mb-0">
+          <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+            <%= link_to t('view.general.edit'), edit_playbook_path(@playbook), class: "card-link" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    <% if !@description.nil? %>
+      setViewerForElement('<%= @playbook.slug %>-overview',
+                         <%= raw JSON.generate(@description.overview ) %>)
+      setViewerForElement('<%= @playbook.slug %>-audience',
+                         <%= raw JSON.generate(@description.audience ) %>)
+      setViewerForElement('<%= @playbook.slug %>-outcomes',
+                         <%= raw JSON.generate(@description.outcomes ) %>)
+    <% end %>
+</script>

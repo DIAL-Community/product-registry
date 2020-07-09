@@ -1,0 +1,91 @@
+<%= form_with(model: play, multipart: true, local: true, html: { id: 'play-form' }) do |form| %>
+  <%= form.hidden_field :playbook_id, id: :playbook_id %>
+  <%= form.hidden_field :activity_id, id: :activity_id %>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :play_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <div class="mt-2"></div>
+  <input id="original_name" type="hidden" value="<%= play.name %>" />
+  <div id="duplicate-warning" class="alert alert-warning">
+    <%= t('view.general.duplicates', model: t('model.play')) %>
+  </div>
+
+  <fieldset class="custom-file mt-2">
+    <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file"/>
+    <label class="custom-file-label" for="logo-file">
+      <%= t('view.general.logo') %>
+    </label>
+  </fieldset>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :description_html, id: :description_html, class: "form-control", placeholder: t('view.play.form.short-description') %>
+    <%= form.label :description_html, t('view.play.form.short-description') %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.play.form.description') %>
+  </h6>
+  <%= hidden_field_tag :play_description %>
+  <div class="wysiwyg-editor" id='play-description'>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.play.form.prerequisites') %>
+  </h6>
+  <%= hidden_field_tag :play_prerequisites %>
+  <div class="wysiwyg-editor" id='play-prerequisites'>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.play.form.outcomes') %>
+  </h6>
+  <%= hidden_field_tag :play_outcomes %>
+  <div class="wysiwyg-editor" id='play-outcomes'>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.play.form.resources') %>
+    <% if user_signed_in? && policy(Play).mod_allowed? %>
+      <a href="#" class="card-link float-right" id="add-resource" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
+    <% end %>
+  </h6>
+  <div id="play-resources">
+    <% @play.resources.each do |resource| %>
+      <%= render :partial => 'resource', :object => resource %>
+    <% end %>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  var description = setUpEditor(<%= raw JSON.generate(@description.description ) %>, "<%= t('view.play.form.description') %>", "play-description");
+  var prerequisites = setUpEditor(<%= raw JSON.generate(@description.prerequisites ) %>, "<%= t('view.play.form.prerequisites') %>", "play-prerequisites");
+  var outcomes = setUpEditor(<%= raw JSON.generate(@description.outcomes ) %>, "<%= t('view.play.form.outcomes') %>", "play-outcomes");
+  var form = document.querySelector('#play-form');
+  form.onsubmit = function() {
+    $('#play_description').val(JSON.stringify(description.getContents()));
+    $('#play_prerequisites').val(JSON.stringify(prerequisites.getContents()));
+    $('#play_outcomes').val(JSON.stringify(outcomes.getContents()));
+
+    $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+  };
+
+  $('#add-resource').click(function(e) {
+    e.preventDefault();
+    $("#play-resources").append("<%= escape_javascript render(partial: 'resource', object: {}) %>")
+  });
+
+  $('.remove-resource').click(function(e) {
+    e.preventDefault();
+    removeId = e.currentTarget.id.split('-')[1].replace(" ", "-")
+    $("#"+removeId).remove();
+  });
+
+</script>

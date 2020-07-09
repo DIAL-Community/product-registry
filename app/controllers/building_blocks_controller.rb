@@ -1,4 +1,6 @@
 class BuildingBlocksController < ApplicationController
+  include FilterConcern
+  
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate]
 
@@ -176,98 +178,6 @@ class BuildingBlocksController < ApplicationController
   end
 
   private
-
-    def filter_building_blocks
-      use_cases = sanitize_session_values 'use_cases'
-      workflows = sanitize_session_values 'workflows'
-      sdgs = sanitize_session_values 'sdgs'
-      bbs = sanitize_session_values 'building_blocks'
-      products = sanitize_session_values 'products'
-      origins = sanitize_session_values 'origins'
-      with_maturity_assessment = sanitize_session_value 'with_maturity_assessment'
-      is_launchable = sanitize_session_value 'is_launchable'
-      product_type = sanitize_session_values 'product_type'
-
-      endorser_only = sanitize_session_value 'endorser_only'
-      aggregator_only = sanitize_session_value 'aggregator_only'
-      years = sanitize_session_values 'years'
-
-      organizations = sanitize_session_values 'organizations'
-      projects = sanitize_session_values 'projects'
-
-      countries = sanitize_session_values 'countries'
-      sectors = sanitize_session_values 'sectors'
-
-      tags = sanitize_session_values 'tags'
-
-      filter_set = !(countries.empty? && products.empty? && sectors.empty? && years.empty? &&
-                     organizations.empty? && origins.empty? && projects.empty? && tags.empty? &&
-                     sdgs.empty? && use_cases.empty? && workflows.empty? && bbs.empty? && product_type.empty?) ||
-                   endorser_only || aggregator_only || with_maturity_assessment || is_launchable
-
-      project_product_ids = []
-      !projects.empty? && project_product_ids = Product.joins(:projects)
-                                                       .where('projects.id in (?)', projects)
-                                                       .ids
-
-      # Filter out organizations based on filter input.
-      org_ids = get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
-      org_filtered = (!years.empty? || !organizations.empty? || endorser_only || aggregator_only ||
-                      !sectors.empty? || !countries.empty?)
-
-      org_projects = []
-      # Filter out project based on organization filter above.
-      org_filtered && org_projects += Project.joins(:organizations)
-                                             .where('organizations.id in (?)', org_ids)
-                                             .ids
-
-      # Add products based on the project filtered above.
-      !org_projects.empty? && project_product_ids += Product.joins(:projects)
-                                                            .where('projects.id in (?)', org_projects)
-                                                            .ids
-
-      bb_projects = []
-      if !project_product_ids.empty?
-        bb_projects = BuildingBlock.joins(:products)
-                                   .where('products.id in (?)', project_product_ids)
-                                   .ids
-      end
-
-      sdg_workflows = get_workflows_from_sdgs(sdgs)
-      use_case_workflows = get_workflows_from_use_cases(use_cases)
-
-      bb_workflows = []
-      workflow_ids = filter_and_intersect_arrays([workflows, sdg_workflows, use_case_workflows])
-      if !workflow_ids.nil? && !workflow_ids.empty?
-        bb_workflows = BuildingBlock.joins(:workflows)
-                                    .where('workflows.id in (?)', workflow_ids)
-                                    .ids
-      end
-
-      product_ids = get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
-
-      org_products = []
-      if !organizations.empty?
-        org_products += Product.joins(:organizations)
-                               .where('organization_id in (?)', organizations)
-                               .ids
-      end
-
-      bb_products = []
-      bb_products_ids = filter_and_intersect_arrays([org_products, product_ids])
-      if !bb_products_ids.empty?
-        bb_products = BuildingBlock.joins(:products)
-                                   .where('products.id in (?)', bb_products_ids)
-                                   .ids
-      end
-
-      if filter_set
-        ids = filter_and_intersect_arrays([bb_workflows, bb_products, bbs, bb_projects])
-        BuildingBlock.where(id: ids).order(:slug)
-      else
-        BuildingBlock.order(:slug)
-      end
-    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_building_block

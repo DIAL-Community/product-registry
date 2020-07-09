@@ -1,0 +1,58 @@
+<% if @activity.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <%= t('view.general.error', count: @activity.errors.count) %>
+    </div>
+  </div>
+<% end %>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="#create-activity" data-toggle="tab">Create Activity</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#assign-play" data-toggle="tab">Assign Play</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="create-activity">
+    <h5 class="border rounded bg-secondary text-white p-3">
+      <%= t('view.general.title.create', model: t('model.activity')) %>
+    </h5>
+    <%= render 'form', activity: @activity %>
+  </div>
+  <div class="tab-pane fade" id="assign-play">
+    <h5 class="border rounded bg-secondary text-white p-3">
+      <%= t('view.activity.form.assign-play') %>
+    </h5>
+    <%= form_with(model: @activity, local: true, html: { id: 'activity-form' }) do |form| %>
+      <%= form.hidden_field :playbook_id, id: :playbook_id %>
+      <%= form.hidden_field :name, value: "Assign-From-Play" %>
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th><%= t('view.activity.index.assign') %></th>
+            <th><%= t('view.general.name') %></th>
+            <th colspan="3"><%= t('view.general.description') %></th>
+            <th><%= t('view.activity.form.phase') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @plays.each do |play| %>
+          <tr>
+            <td>
+              <%= check_box_tag 'play_ids[]', play.id %>
+            </td>
+            <td><%= play.name %></td>
+            <td><%= play.description %></td>
+            <td><%= form.collection_select :phase, @phases, :to_s, :to_s, { include_blank: false }, { class: "form-control inline" } %></td>
+          <% end %>
+        </tbody>
+      </table>
+      <fieldset class="float-right mt-4">
+        <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+        <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>
+  

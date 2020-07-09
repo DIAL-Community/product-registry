@@ -123,8 +123,8 @@ class MaturityRubricsController < ApplicationController
                                           .to_a
       end
     end
+    authorize MaturityRubric, :view_allowed?
     render json: @maturity_rubrics, only: [:name]
-    authorize @maturity_rubrics, :view_allowed?
   end
 
   private
