@@ -108,6 +108,10 @@ var tagDuplicateCheck = function() {
   duplicateCheck("tag_name", "/tag_duplicates.json");
 }
 
+var taskTrackerDuplicateCheck = function() {
+  duplicateCheck("task_tracker_name", "/task_tracker_duplicates.json");
+}
+
 var maturityRubricDuplicateCheck = function() {
   duplicateCheck("maturity_rubric_name", "/maturity_rubric_duplicates.json");
 }
@@ -162,6 +166,8 @@ $(document).on('use_case_steps#edit:loaded', useCaseStepDuplicateCheck);
 $(document).on('use_case_steps#new:loaded', useCaseStepDuplicateCheck);
 $(document).on('tags#edit:loaded', tagDuplicateCheck);
 $(document).on('tags#new:loaded', tagDuplicateCheck);
+$(document).on('task_trackers#new:loaded', taskTrackerDuplicateCheck);
+$(document).on('task_trackers#edit:loaded', taskTrackerDuplicateCheck);
 $(document).on('maturity_rubrics#edit:loaded', maturityRubricDuplicateCheck);
 $(document).on('maturity_rubrics#new:loaded', maturityRubricDuplicateCheck);
 $(document).on('rubric_categories#edit:loaded', rubricCategoryDuplicateCheck);

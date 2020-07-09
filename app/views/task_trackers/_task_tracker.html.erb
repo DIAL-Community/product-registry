@@ -1,0 +1,31 @@
+<% description = task_tracker.task_tracker_descriptions
+                             .select { |desc| desc.locale == I18n.locale.to_s }
+                             .first %>
+<div class="card mt-2">
+  <h5 class="card-header bg-light border-0 font-weight-bold">
+    <%= "#{task_tracker.name}" %>
+  </h5>
+  <div class="card-body py-2 px-3">
+    <div id="<%= task_tracker.slug %>" class="wysiwyg-viewer"></div>
+    <div class="text-muted">
+      Last run: <%= task_tracker.last_run.strftime('%m/%d/%Y - %H:%M') if !task_tracker.last_run.nil? %>
+    </div>
+    <div class="text-muted">
+      Last run status: <%= task_tracker.message %>
+    </div>
+  </div>
+  <div class="card-footer border-0">
+    <div class="float-right mb-0">
+      <%= link_to t('view.general.view'), task_tracker_path(task_tracker), class: "card-link" %>
+      <% if user_signed_in? && policy(TaskTracker).mod_allowed? %>
+        <%= link_to t('view.general.edit'), edit_task_tracker_path(task_tracker), class: "card-link" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  <% unless description.nil? %>
+    setViewerForElement('<%= task_tracker.slug %>',
+                         <%= raw JSON.generate(description.description ) %>)
+  <% end %>
+</script>

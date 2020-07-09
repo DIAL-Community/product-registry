@@ -1,3 +1,7 @@
+
+require 'modules/track'
+include(Modules::Track)
+
 namespace :db do
 
     desc "returns appropriate exit code whether db exists or not"
@@ -14,6 +18,7 @@ namespace :db do
 
     desc "Dumps the database to db/backup/APP_NAME.dump"
     task :backup => :environment do
+      start_tracking_task('Database Backup')
       cmd = nil
       with_config do |app, host, db, user, pass, port|
         cmd = "export PGPASSWORD=#{pass} && pg_dump --host #{host} --username #{user} -p #{port} --verbose --clean --no-owner --no-acl --format=c #{db} > #{Rails.root}/db/backups/#{app}.dump"
