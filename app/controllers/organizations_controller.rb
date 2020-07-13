@@ -180,7 +180,7 @@ class OrganizationsController < ApplicationController
         next if office.nil?
 
         office.slug = slug_em("#{@organization.name} #{office.name}")
-        @organization.offices.push(city)
+        @organization.offices.push(office)
       end
     end
 
