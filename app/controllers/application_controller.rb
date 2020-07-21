@@ -110,9 +110,6 @@ class ApplicationController < ActionController::Base
   def object_counts
     all_filters, filter_set = sanitize_all_filters
 
-    puts "FILTERS: " + all_filters.to_s
-    puts "FILTER SET: " + filter_set.to_s
-
     # Filter out organizations based on filter input.
     org_ids = get_organizations_from_filters(all_filters)
     org_products = get_org_products(all_filters)
