@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   resources :task_trackers
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
+  mount Commontator::Engine => '/commontator'
+
   resources :product_suites
   resources :glossaries
   resources :settings
