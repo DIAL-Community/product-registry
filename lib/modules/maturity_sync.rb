@@ -29,7 +29,7 @@ module Modules
       category_indicator.slug = indicator_slug
       category_indicator.rubric_category_id = category_id
       category_indicator.data_source = indicator_source
-      category_indicator.weight = (100.0 / indicator_count.to_f).round / 100.0
+      category_indicator.weight = (1000.0 / indicator_count.to_f).round / 1000.0
       category_indicator.source_indicator = indicator_name
       category_indicator.indicator_type = CategoryIndicator.category_indicator_types.key(indicator_type.downcase)
       category_indicator.save!
@@ -136,7 +136,7 @@ module Modules
     end
 
     def convert_to_numeric(score, type, weight)
-      numeric_value = nil
+      numeric_value = 0
       return numeric_value if score.nil?
   
       if type == 'boolean'
