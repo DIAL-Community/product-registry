@@ -37,6 +37,7 @@ en:
       status: 
         created_at: "on %{created_at}."
         updated_at: "Modified on %{updated_at}."
+      require_login: "You must login before you can view / post comment."
   time: 
     formats: 
       commontator: "%m/%d/%Y %H:%M %p"
