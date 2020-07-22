@@ -30,6 +30,16 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  commontator: 
+    comment:
+      actions:
+        reply: Reply
+      status: 
+        created_at: "on %{created_at}."
+        updated_at: "Modified on %{updated_at}."
+  time: 
+    formats: 
+      commontator: "%m/%d/%Y %H:%M %p"
   errors:
     messages:
       extension_whitelist_error: 'This image format is not supported. Please upload a jpg, jpeg, png or gif.'
@@ -635,6 +645,7 @@ en:
       add: Add
       back: Back
       back-with-dest: Back to %{dest}
+      comment: Comment
       create: Create New
       delete: Delete
       delete-with-model: Delete %{model}
@@ -657,6 +668,7 @@ en:
         edit: 'Edit %{model}'
       value: Value
       view: View
+      votes: Votes
       definitions: Click to see more terms and definitions
       map-legend: Click for information on how to read the product cards
       characteristics: Characteristics

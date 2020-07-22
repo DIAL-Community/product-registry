@@ -16,6 +16,7 @@
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/widgets/autocomplete
 //= require jquery-ui/widgets/accordion
+//= require commontator/application
 //= require popper
 //= require bootstrap
 //= require cookies_eu

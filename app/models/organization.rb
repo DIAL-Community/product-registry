@@ -43,6 +43,8 @@ class Organization < ApplicationRecord
   has_many :organization_descriptions, dependent: :destroy
   has_many :offices, dependent: :destroy
 
+  acts_as_commontable
+
   validates :name, presence: true, length: { maximum: 300 }
 
   scope :name_contains, ->(name) { where('LOWER(organizations.name) like LOWER(?)', "%#{name}%") }

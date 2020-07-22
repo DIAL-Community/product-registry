@@ -1,0 +1,19 @@
+$("#commontator-comment-<%= @comment.id %>-body").html("<%= escape_javascript(
+  render partial: 'form', locals: { comment: @comment }
+) %>");
+
+$('#commontator-comment-<%= @comment.id %>-edit-body').focus();
+
+$(".wysiwyg-viewer").each(function(index, element) {
+  const id = $(element).attr("id")
+  const dataId = $(element).attr("body-id");
+
+  let dataBody = $(`#${dataId}`).html();
+  if (dataBody) {
+    dataBody = dataBody.replace(/&nbsp;/g, ' ');
+  }
+  
+  setViewerForElement(id, dataBody);
+});
+
+<%= javascript_proc %>

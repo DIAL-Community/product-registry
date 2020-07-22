@@ -149,6 +149,13 @@
     <% end %>
   </div>
 
+  <div class="mt-2">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('view.general.comment').to_s.titlecase.pluralize %></h5>
+    </div>
+    <%= commontator_thread(@use_case) %>
+  </div>
+
 <script>
   setUpViewer(<%= raw JSON.generate(@uc_desc.description) %>, 'usecase-viewer')
   <% if !@ucs_header.header.empty? %>

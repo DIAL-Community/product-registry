@@ -13,6 +13,10 @@ gem 'jquery-ui-rails'
 gem 'will_paginate'
 gem "actionpack-page_caching"
 
+gem 'commontator'
+gem 'acts_as_votable'
+gem 'sassc-rails'
+
 gem 'spreadsheet'
 gem 'google-api-client'
 

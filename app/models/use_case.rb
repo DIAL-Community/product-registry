@@ -7,8 +7,10 @@ class UseCase < ApplicationRecord
 
   has_and_belongs_to_many :sdg_targets, join_table: :use_cases_sdg_targets
 
-  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
-  scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
+  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%") }
+  scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%") }
+
+  acts_as_commontable
 
   attr_accessor :uc_desc
   attr_accessor :ucs_header

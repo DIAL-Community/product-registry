@@ -1,0 +1,34 @@
+var commontatorOldCommentIds = $("#commontator-comment-<%=
+  @comment.id
+%>-children").children().map(function() {
+  return '#' + $(this).attr('id');
+}).toArray().join(',');
+
+<%=
+  render partial: 'show', locals: {
+    user: @commontator_user,
+    thread: @commontator_thread,
+    comment: @comment,
+    page: @commontator_page,
+    show_all: @commontator_show_all
+  }
+%>
+
+$("#commontator-comment-<%= @comment.id %>-children").children()
+                                                     .not(commontatorOldCommentIds)
+                                                     .hide()
+                                                     .fadeIn();
+
+$(".wysiwyg-viewer").each(function(index, element) {
+  const id = $(element).attr("id")
+  const dataId = $(element).attr("body-id");
+
+  let dataBody = $(`#${dataId}`).html();
+  if (dataBody) {
+    dataBody = dataBody.replace(/&nbsp;/g, ' ');
+  }
+  
+  setViewerForElement(id, dataBody);
+});
+
+<%= javascript_proc %>

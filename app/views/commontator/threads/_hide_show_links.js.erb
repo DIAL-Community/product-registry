@@ -1,0 +1,18 @@
+<%#
+  Views that use this partial must supply the following variables:
+  thread
+%>
+
+$("#commontator-thread-<%= thread.id %>-hide-link").click(function(e) {
+  e.preventDefault();
+  $("#commontator-thread-<%= thread.id %>-hide").hide();
+  $("#commontator-thread-<%= thread.id %>-content").hide();
+  $("#commontator-thread-<%= thread.id %>-show").show();
+});
+
+$("#commontator-thread-<%= thread.id %>-show-link").click(function(e) {
+  e.preventDefault();
+  $("#commontator-thread-<%= thread.id %>-show").hide();
+  $("#commontator-thread-<%= thread.id %>-content").show();
+  $("#commontator-thread-<%= thread.id %>-hide").show();
+});

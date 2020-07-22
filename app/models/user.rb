@@ -14,6 +14,7 @@ class User < ApplicationRecord
   validate :validate_organization, :validate_product
 
   attr_accessor :is_approved
+  acts_as_commontator
 
   def set_default_role
     self.role ||= :user
