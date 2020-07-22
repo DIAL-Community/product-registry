@@ -16,6 +16,16 @@
           thread: thread, user: user, page: page, show_all: show_all
         }
       %>
+    <% elsif !user_signed_in? %>
+      <%=
+        "#{thread.filtered_comments(show_all).count.to_s}
+           #{ thread.filtered_comments(show_all).count > 1 ?
+              t('view.general.comment').to_s.titlecase.pluralize :
+              t('view.general.comment').to_s.titlecase
+            }
+        "
+      %>
+      <p><%= t 'commontator.comment.require_login' %></p>
     <% else %>
       <% subscription = thread.subscription_for(user) %>
       <%= link_to "#{t 'commontator.thread.actions.show'} (#{
