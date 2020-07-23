@@ -91,4 +91,23 @@ namespace :data do
       update_sdg_desc(sdg['code'], sdg['description'])
     end
   end
+
+  task :create_principles => :environment do
+    principle_data = File.read('utils/digital_principles.json')
+    json_principles = JSON.parse(principle_data)
+    json_principles.each do |curr_principle|
+      principle = DigitalPrinciple.new
+      principle.name = curr_principle["name"]
+      principle.slug = curr_principle["slug"]
+      principle.url = curr_principle["url"]
+      principle.save
+
+      desc = PrincipleDescription.new
+      desc.digital_principle_id = principle.id
+      desc.description = curr_principle["description"]
+      desc.locale = I18n.locale
+      desc.save
+    end
+  end
+  
 end

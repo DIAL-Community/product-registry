@@ -1,0 +1,9 @@
+<%#
+  Views that use this partial must provide the following variable:
+  comment
+%>
+
+<div id="quill-body-<%= comment.id %>" class="hidden">
+  <%= comment.body.html_safe %>
+</div>
+<div id="quill-<%= comment.id %>" body-id="quill-body-<%= comment.id %>" class="wysiwyg-viewer" />

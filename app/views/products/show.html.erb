@@ -328,12 +328,17 @@
               <div class="maturity-accordion">
                 <% !@maturity_scores.nil? && @maturity_scores.each do |category| %>
                   <% if category[:overall_score] > 0 %>
-                    <div><%= category[:name] %>, <%= t('view.product.show.overall-score') %>: <%= category[:overall_score] %> / 10.0</div>
+                    <div><%= category[:name] %>, <%= t('view.product.show.overall-score') %>: <%= (category[:overall_score] * 10).round %> / 100</div>
                     <div>
+                    <% num_indicators = category[:indicator_scores].count %>
                     <% category[:indicator_scores].each do |indicator| %>
+                      <% indicator_score = (indicator[:score] * num_indicators * 10).round %>
+                      <% if indicator_score > 100 %>
+                        <% indicator_score = 100 %>
+                      <% end %>
                       <% if !indicator[:score].nil? %>
                           <p>Indicator: <%= indicator[:name] %>,
-                          Score: <%= indicator[:score] %></p>
+                          Score: <%= indicator_score %> / 100 </p>
                           <p class="ml-4 text-muted">Description: <%= raw indicator[:description] %></p>
                       <% end %>
                     <% end %>
@@ -428,6 +433,13 @@
       <% end %>
     </div>
   </div>
+</div>
+
+<div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('view.general.comment').to_s.titlecase.pluralize %></h5>
+  </div>
+  <%= commontator_thread(@product) %>
 </div>
 
 <script>

@@ -145,7 +145,7 @@ class UseCaseStepsController < ApplicationController
       @use_case_step = UseCaseStep.find(params[:id]) || not_found
     end
     @ucs_desc = UseCaseStepDescription.where(use_case_step_id: @use_case_step, locale: I18n.locale).first
-    unless @ucs_desc.nil?
+    if @ucs_desc.nil?
       @ucs_desc = UseCaseStepDescription.new
     end
   end

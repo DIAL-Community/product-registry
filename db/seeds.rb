@@ -81,6 +81,17 @@ if PortalView.where(slug: 'projects').count.zero?
                   organization_views: ['endorser','mni','product']
 end
 
+if PortalView.where(slug: 'playbooks').count.zero?
+  PortalView.create! name: 'Playbooks',
+                  slug: 'playbooks',
+                  description: 'Playbooks view',
+                  top_navs: ['playbooks', 'plays', 'use_cases', 'products','organizations'],
+                  filter_navs:['playbooks', 'plays', 'use_cases', 'products','organizations'],
+                  user_roles: ['admin','ict4sdg','principle','user','org_user','org_product_user','product_user','mni'],
+                  product_views: ["DIAL OSC","Digital Square","Unicef","Digital Health Atlas"],
+                  organization_views: ['endorser','mni','product']
+end
+
 if Stylesheet.where(portal: 'default').count.zero?
   Stylesheet.create! portal: 'default',
       background_color: '#000043'
@@ -89,4 +100,9 @@ end
 if Stylesheet.where(portal: 'projects').count.zero?
   Stylesheet.create! portal: 'projects',
       background_color: '#430000'
+end
+
+if Stylesheet.where(portal: 'playbooks').count.zero?
+  Stylesheet.create! portal: 'playbooks',
+      background_color: '#004300'
 end

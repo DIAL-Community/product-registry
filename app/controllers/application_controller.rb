@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   include Modules::Constants
   include Modules::MaturitySync
   include Pundit
+  include FilterConcern
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -106,6 +107,32 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def object_counts
+    all_filters, filter_set = sanitize_all_filters
+
+    # Filter out organizations based on filter input.
+    org_ids = get_organizations_from_filters(all_filters)
+    org_products = get_org_products(all_filters)
+    products = get_products_from_filters(all_filters)
+
+    project_product_ids = get_products_from_projects(all_filters, org_ids)
+
+    sdgs = filter_sdgs(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    use_cases = filter_use_cases(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    workflows = filter_workflows(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    bbs = filter_building_blocks(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    projects = filter_projects(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    products = filter_products(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    orgs = filter_organizations(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    playbooks = filter_playbooks(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+    plays = filter_plays(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
+
+    render json: { "sdgCount": sdgs.count, "useCaseCount": use_cases.count, "workflowCount": workflows.count, "bbCount": bbs.count,
+           "projectCount": projects.count, "productCount": products.count, "orgCount": orgs.count,
+           "playbookCount": playbooks.count, "playCount": plays.count}
+    
+  end
+
   def remove_filter
     return unless params.key? 'filter_array'
 
@@ -194,6 +221,41 @@ class ApplicationController < ActionController::Base
     render json: filters
   end
 
+  def sanitize_all_filters
+    all_filters = {}
+    all_filters["use_cases"] = sanitize_session_values 'use_cases'
+    all_filters["workflows"] = sanitize_session_values 'workflows'
+    all_filters["sdgs"] = sanitize_session_values 'sdgs'
+    all_filters["bbs"] = sanitize_session_values 'building_blocks'
+    all_filters["products"] = sanitize_session_values 'products'
+    all_filters["origins"] = sanitize_session_values 'origins'
+    all_filters["organizations"] = sanitize_session_values 'organizations'
+    all_filters["projects"] = sanitize_session_values 'projects'
+
+    all_filters["endorser_only"] = sanitize_session_value 'endorser_only'
+    all_filters["aggregator_only"] = sanitize_session_value 'aggregator_only'
+    all_filters["years"] = sanitize_session_values 'years'
+
+    all_filters["countries"] = sanitize_session_values 'countries'
+    all_filters["sectors"] = sanitize_session_values 'sectors'
+
+    all_filters["with_maturity_assessment"] = sanitize_session_value 'with_maturity_assessment'
+    all_filters["is_launchable"] = sanitize_session_value 'is_launchable'
+
+    all_filters["tags"] = sanitize_session_values 'tags'
+    all_filters["product_type"] = sanitize_session_values 'product_type'
+
+    filter_set = !(all_filters["countries"].empty? && all_filters["products"].empty? && all_filters["sectors"].empty? && 
+                     all_filters["years"].empty? && all_filters["organizations"].empty? && all_filters["origins"].empty? && 
+                     all_filters["projects"].empty? && all_filters["tags"].empty? && all_filters["sdgs"].empty? && 
+                     all_filters["use_cases"].empty? && all_filters["workflows"].empty? && all_filters["bbs"].empty? &&
+                     all_filters["product_type"].empty?) ||
+                     all_filters["endorser_only"] || all_filters["aggregator_only"] || 
+                     all_filters["with_maturity_assessment"] || all_filters["is_launchable"]
+
+    return all_filters, filter_set
+  end
+
   def sanitize_filter_values(filter_name)
     filter_values = []
     params.key?(filter_name.to_s) &&
@@ -225,97 +287,6 @@ class ApplicationController < ActionController::Base
     filter_value = nil
     (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]['value']
     filter_value.to_s.downcase == 'true'
-  end
-
-  def get_products_from_filters(products, origins, with_maturity_assessment, is_launchable, product_type, tags)
-    # Check to see if the filter has already been set
-    product_list = []
-    if session[:updated_prod_filter].nil? || session[:updated_prod_filter].to_s.downcase == 'true'
-      filter_products = Product.all
-      if !products.empty?
-        filter_products = Product.all.where('products.id in (?)', products)
-      end
-
-      if !origins.empty?
-        origin_list = Origin.where('origins.id in (?)', origins)
-
-        # Also filter origins using the portal configuration.
-        if !session[:portal]['product_views'].nil?
-          origin_list = origin_list.where('origins.name in (?)', session[:portal]['product_views'])
-        end
-
-        # Filter products based on the origin information
-        !origin_list.empty? && filter_products = filter_products.joins(:origins)
-                                                                .eager_load('origins')
-                                                                .where('origins.id in (?)', origin_list.ids)
-      end
-
-      if !product_type.empty?
-        filter_products = filter_products.where("product_type in (?) ", product_type.map(&:downcase).join(','))
-      end
-
-      if !tags.empty?
-        filter_products = filter_products.where("tags @> '{#{tags.map(&:downcase).join(',')}}'::varchar[]")
-      end
-
-      if is_launchable
-        filter_products = filter_products.where('is_launchable is true')
-      end
-
-      if with_maturity_assessment
-        filter_products = filter_products.where('maturity_score > 0')
-      end
-
-      product_filter_set = (!products.empty? || !origins.empty? || !tags.empty? ||
-                             with_maturity_assessment || is_launchable || product_type)
-
-      if product_filter_set
-        product_list += filter_products.ids
-      end
-
-      # Set the cookies for caching
-      session[:updated_prod_filter] = false
-      session[:filter_products] = product_list.join(',')
-      session[:prod_filter_set] = product_filter_set
-    else
-      product_list = session[:filter_products].split(',').map(&:to_i)
-    end
-    product_list
-  end
-
-  def get_products_from_projects(projects)
-  end
-
-  def get_organizations_from_filters(organizations, years, sectors, countries, endorser_only, aggregator_only)
-    # Filter out the organization first based on the arguments.
-    org_list = Organization.order(:slug)
-    !organizations.empty? && org_list = org_list.where('organizations.id in (?)', organizations)
-
-    if endorser_only && aggregator_only
-      org_list = org_list.where(is_endorser: true)
-                         .or(Organization.where(is_mni: true))
-    else
-      endorser_only && org_list = org_list.where(is_endorser: true)
-      aggregator_only && org_list = org_list.where(is_mni: true)
-    end
-
-    !countries.empty? && org_list = org_list.joins(:locations).where('locations.id in (?)', countries)
-    !sectors.empty? && org_list = org_list.joins(:sectors).where('sectors.id in (?)', sectors)
-    !years.empty? && org_list = org_list.where('extract(year from when_endorsed) in (?)', years)
-
-    if !session[:portal]['organization_views'].nil?
-      if !session[:portal]['organization_views'].include?('endorser')
-        org_list = org_list.where.not('is_endorser is true')
-      end
-      if !session[:portal]['organization_views'].include?('mni')
-        org_list = org_list.where.not('is_endorser is false')
-      end
-      if !session[:portal]['organization_views'].include?('product')
-        org_list = org_list.where
-                           .not('organizations.id in (select organization_id from organizations_products)')
-      end
-    end
-    org_list.ids
   end
 
   def get_use_cases_from_workflows(workflows)

@@ -133,7 +133,7 @@ class LocationsController < ApplicationController
         @locations = Location.where(slug: current_slug).to_a
       end
     end
-    authorize @locations, :view_allowed?
+    authorize Location, :view_allowed?
     render json: @locations, :only => [:name]
   end
 

@@ -41,7 +41,7 @@
     </h5>
   </div>
   <div class="card-body">
-    <div class="wysiwyg-viewer"></div>
+    <div id="step-desc" class="wysiwyg-viewer"></div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back-with-dest', dest: t('model.use-case').titlecase),
                   use_case_path(@use_case_step.use_case), class: "card-link" %>
@@ -98,5 +98,5 @@
 <% end %>
 
 <script>
-  setUpViewer(<%= raw JSON.generate(@ucs_desc.description) %>)
+  setUpViewer(<%= raw JSON.generate(@ucs_desc.description) %>, 'step-desc')
 </script>

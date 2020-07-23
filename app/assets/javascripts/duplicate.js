@@ -108,6 +108,10 @@ var tagDuplicateCheck = function() {
   duplicateCheck("tag_name", "/tag_duplicates.json");
 }
 
+var taskTrackerDuplicateCheck = function() {
+  duplicateCheck("task_tracker_name", "/task_tracker_duplicates.json");
+}
+
 var maturityRubricDuplicateCheck = function() {
   duplicateCheck("maturity_rubric_name", "/maturity_rubric_duplicates.json");
 }
@@ -118,6 +122,18 @@ var rubricCategoryDuplicateCheck = function() {
 
 var categoryIndicatorDuplicateCheck = function() {
   duplicateCheck("category_indicator_name", "/category_indicator_duplicates.json");
+}
+
+var playbooksDuplicateCheck = function() {
+  duplicateCheck("playbook_name", "/playbook_duplicates.json");
+}
+
+var playsDuplicateCheck = function() {
+  duplicateCheck("play_name", "/play_duplicates.json");
+}
+
+var tasksDuplicateCheck = function() {
+  duplicateCheck("task_name", "/task_duplicates.json");
 }
 
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
@@ -150,9 +166,17 @@ $(document).on('use_case_steps#edit:loaded', useCaseStepDuplicateCheck);
 $(document).on('use_case_steps#new:loaded', useCaseStepDuplicateCheck);
 $(document).on('tags#edit:loaded', tagDuplicateCheck);
 $(document).on('tags#new:loaded', tagDuplicateCheck);
+$(document).on('task_trackers#new:loaded', taskTrackerDuplicateCheck);
+$(document).on('task_trackers#edit:loaded', taskTrackerDuplicateCheck);
 $(document).on('maturity_rubrics#edit:loaded', maturityRubricDuplicateCheck);
 $(document).on('maturity_rubrics#new:loaded', maturityRubricDuplicateCheck);
 $(document).on('rubric_categories#edit:loaded', rubricCategoryDuplicateCheck);
 $(document).on('rubric_categories#new:loaded', rubricCategoryDuplicateCheck);
 $(document).on('category_indicators#edit:loaded', categoryIndicatorDuplicateCheck);
 $(document).on('category_indicators#new:loaded', categoryIndicatorDuplicateCheck);
+$(document).on('playbooks#edit:loaded', playbooksDuplicateCheck);
+$(document).on('playbooks#new:loaded', playbooksDuplicateCheck);
+$(document).on('plays#edit:loaded', playsDuplicateCheck);
+$(document).on('plays#new:loaded', playsDuplicateCheck);
+$(document).on('tasks#edit:loaded', tasksDuplicateCheck);
+$(document).on('tasks#new:loaded', tasksDuplicateCheck);

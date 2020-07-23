@@ -103,7 +103,13 @@
         data-action="<%= controller.action_name %>">
     <%= render '/shared/marker' %>
     <%= render '/shared/topnav' %>
-    <% if current_page?('/about') || current_page?(root_path) || current_page?('/covid') || current_page?('/covidresources')%>
+    <% if current_page?(root_path) && session[:portal]["name"] == "Default" %>
+      <div id="content" class="container">
+        <%= render '/shared/sidenav' %>
+        <%= yield %>
+        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+      </div>
+    <% elsif current_page?('/about') || current_page?(root_path) || current_page?('/covid') || current_page?('/covidresources')%>
       <div id="content" class="container">
         <%= yield %>
         <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>

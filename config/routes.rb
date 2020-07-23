@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  resources :task_trackers
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
+  mount Commontator::Engine => '/commontator'
+
   resources :product_suites
   resources :glossaries
   resources :settings
@@ -10,6 +13,19 @@ Rails.application.routes.draw do
   resources :maturity_rubrics do
     resources :rubric_categories do
       resources :category_indicators
+    end
+  end
+
+  resources :tasks, only: [:index, :update, :create, :destroy]
+  resources :activities, only: [:index, :update, :create, :destroy]
+  resources :plays do
+    get 'count', on: :collection
+    resources :tasks
+  end
+  resources :playbooks do
+    get 'count', on: :collection
+    resources :activities do
+      resources :tasks
     end
   end
 
@@ -101,6 +117,7 @@ Rails.application.routes.draw do
   resources :tags
   resources :use_case_steps
 
+  get '/object_counts', to: 'application#object_counts', as: :object_counts
   post '/add_filter', to: 'application#add_filter', as: :add_filter
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
   post '/remove_all_filters', to: 'application#remove_all_filters', as: :remove_all_filters
@@ -130,15 +147,14 @@ Rails.application.routes.draw do
   get 'portal_view_duplicates', to: 'portal_views#duplicates'
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
   get 'tag_duplicates', to: 'tags#duplicates'
-  get 'maturity_rubric_duplicates', to: 'maturity_rubrics#duplicates'
-  get 'rubric_category_duplicates', to: 'rubric_categories#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
+  get 'playbook_duplicates', to: 'palybooks#duplicates'
+  get 'play_duplicates', to: 'plays#duplicates'
+  get 'task_duplicates', to: 'tasks#duplicates'
 
   get 'covidresources', :to => 'covid#resources'
-
   get 'productlist', :to => 'products#productlist', as: :productlist
   get 'productmap', :to => 'products#map'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   get 'map_projects', to: 'projects#map_projects'
   get 'map_covid', to: 'projects#map_covid'

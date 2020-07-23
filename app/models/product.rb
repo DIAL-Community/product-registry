@@ -32,6 +32,8 @@ class Product < ApplicationRecord
 
   validates :name,  presence: true, length: { maximum: 300 }
 
+  acts_as_commontable
+
   scope :name_contains, -> (name) { where("LOWER(products.name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(products.slug) like LOWER(?)", "#{slug}%\\_")}
 

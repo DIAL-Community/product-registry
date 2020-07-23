@@ -1,0 +1,110 @@
+<%  description = @task.task_descriptions
+                                   .select { |desc| desc.locale == I18n.locale.to_s }
+                                   .first %>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(Task).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.task').titlecase), @task,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.task')) },
+                  class: 'btn btn-outline-secondary float-left' %>
+    <% end %>
+  </div>
+</div>
+
+<div id="show-task" class="card mt-2">
+  <h5 class="card-header border-0">
+    <%= "#{@task.name}" %>
+  </h5>
+  <div class="card-body py-2">
+    <div class="card mt-2">
+      <div class="card-body">
+        <%= "#{@task.description}" %>
+        <div class="col-5 text-muted mt-3">
+          <%= @task.complete ? "#{t('view.task.form.complete')}" : "#{t('view.task.form.not-complete')}" %>
+        </div>
+        <div class="col-5 col-xs-12 text-muted">
+          <%= "#{t('view.task.form.due-date')}: #{@task.due_date.to_s}" %>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.task.form.full-description') %>:</h5>
+      </div>
+      <div class="card-body p-0">
+        <div id="<%= @task.slug %>" class="wysiwyg-viewer">
+          <%= !description.description.nil? && description.description %>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.activity.index.resources') %>:</h5>
+      </div>
+      <div class="card-body p-0">
+        <% @task.resources.each do |resource| %>
+          <div class="ml-4 mt-2">
+          <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
+          </div>
+          <div class="ml-5 mb-3">
+          <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <h5 class="card-header border-0 font-weight-bold"><%= t('model.organization').to_s.humanize.pluralize %></h5>
+      <div class="card-body">
+        <% if @task.organizations.count > 0 %>
+          <% @task.organizations.each_slice(5) do |org_row| %>
+            <div class="card-deck">
+              <% org_row.each do |organization| %>
+                <div class="card">
+                  <div class="card-body">
+                    <%= link_to organization do %>
+                      <%= image_tag(organization.image_file, class: 'card-image align-middle p-0') %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+              <% if org_row.size < 5  %>
+                <% (5 - org_row.size).times do |x| %>
+                  <div class="card card-placeholder">
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.general.not-available', model: t('model.task'), multi: t('model.organization').to_s.pluralize) %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer border-0">
+    <div class="float-right mb-0">
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", class: "card-link" %>
+      <% if user_signed_in?  && policy(Task).mod_allowed? %>
+        <% if !@parent_activity.nil? %>
+          <%= link_to t('view.general.edit'),
+                    edit_playbook_activity_task_path(@parent_playbook, @parent_activity, @task),
+                    class: "card-link" %>
+        <% else %>
+          <%= link_to t('view.general.edit'),
+                    edit_play_task_path(@parent_play, @task),
+                    class: "card-link" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  setViewerForElement('<%= @task.slug %>',
+                       <%= raw JSON.generate(description.description) %>)
+</script>
