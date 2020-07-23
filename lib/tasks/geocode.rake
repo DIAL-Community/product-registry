@@ -318,6 +318,10 @@ namespace :geocode do
     return if country_code_or_name.blank?
 
     puts "Processing country: #{country_code_or_name}."
+    if country_code_or_name == "Curacao"
+      country_code_or_name="Curaço"
+    end
+      
     country = Country.find_by('name = ? OR code = ? OR ? = ANY(aliases)',
                               country_code_or_name, country_code_or_name, country_code_or_name)
     if country.nil?
@@ -352,6 +356,9 @@ namespace :geocode do
     return if region_name.blank?
 
     puts "Processing region: #{region_name}."
+    if region_name == 'Quebec'
+      region_name = "Québe"
+    end
     country = find_country(country_code, google_auth_key)
     region = Region.find_by('(name = ? OR ? = ANY(aliases)) AND country_id = ?',
                                   region_name, region_name, country.id)
