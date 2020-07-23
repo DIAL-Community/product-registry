@@ -569,7 +569,7 @@ module Modules
 
     def send_notification
       if !@@product_list.empty?
-        admin_users = User.where(role: 'admin')
+        admin_users = User.where(receive_backup: true)
         email_body = "New product(s) added by the nightly sync process: <br />#{@@product_list.join('<br />')}."
         admin_users.each do |user|
           cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
