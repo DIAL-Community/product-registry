@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_10_210144) do
+ActiveRecord::Schema.define(version: 2020_07_27_155410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,11 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
     t.string "description"
     t.string "phase"
     t.jsonb "resources", default: [], null: false
+    t.bigint "playbook_questions_id"
+    t.integer "order"
+    t.string "media_url"
     t.index ["playbook_id"], name: "index_activities_on_playbook_id"
+    t.index ["playbook_questions_id"], name: "index_activities_on_playbook_questions_id"
   end
 
   create_table "activities_principles", force: :cascade do |t|
@@ -351,6 +355,14 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
     t.index ["organization_id"], name: "index_origins_on_organization_id"
   end
 
+  create_table "playbook_answers", force: :cascade do |t|
+    t.bigint "playbook_questions_id"
+    t.string "answer_text", null: false
+    t.string "action", null: false
+    t.integer "object_id"
+    t.index ["playbook_questions_id"], name: "index_playbook_answers_on_playbook_questions_id"
+  end
+
   create_table "playbook_descriptions", force: :cascade do |t|
     t.bigint "playbook_id"
     t.string "locale", null: false
@@ -358,6 +370,10 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
     t.jsonb "audience", default: {}, null: false
     t.jsonb "outcomes", default: {}, null: false
     t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
+  end
+
+  create_table "playbook_questions", force: :cascade do |t|
+    t.string "question_text", null: false
   end
 
   create_table "playbooks", force: :cascade do |t|
@@ -693,6 +709,10 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
     t.jsonb "resources", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "playbook_questions_id"
+    t.integer "order"
+    t.string "media_url"
+    t.index ["playbook_questions_id"], name: "index_tasks_on_playbook_questions_id"
   end
 
   create_table "tasks_organizations", force: :cascade do |t|
@@ -828,6 +848,7 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
     t.index ["workflow_id", "use_case_id"], name: "workflows_usecases", unique: true
   end
 
+  add_foreign_key "activities", "playbook_questions", column: "playbook_questions_id"
   add_foreign_key "activities", "playbooks"
   add_foreign_key "activities_principles", "activities", name: "principles_activities_phase_fk"
   add_foreign_key "activities_principles", "digital_principles", name: "principles_activities_principle_fk"
@@ -867,6 +888,7 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
   add_foreign_key "organizations_states", "organizations"
   add_foreign_key "organizations_states", "regions"
+  add_foreign_key "playbook_answers", "playbook_questions", column: "playbook_questions_id"
   add_foreign_key "playbook_descriptions", "playbooks"
   add_foreign_key "plays_subplays", "plays", column: "child_play_id", name: "child_play_fk"
   add_foreign_key "plays_subplays", "plays", column: "parent_play_id", name: "parent_play_fk"
@@ -911,6 +933,7 @@ ActiveRecord::Schema.define(version: 2020_07_10_210144) do
   add_foreign_key "tag_descriptions", "tags"
   add_foreign_key "task_descriptions", "tasks"
   add_foreign_key "task_tracker_descriptions", "task_trackers"
+  add_foreign_key "tasks", "playbook_questions", column: "playbook_questions_id"
   add_foreign_key "tasks_organizations", "organizations", name: "organizations_tasks_org_fk"
   add_foreign_key "tasks_organizations", "tasks", name: "organizations_tasks_play_fk"
   add_foreign_key "tasks_products", "products", name: "products_tasks_product_fk"

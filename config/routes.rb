@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   end
   resources :playbooks do
     get 'count', on: :collection
+    member do 
+      get 'create_pdf'
+      get 'show_pdf'
+    end
     resources :activities do
       resources :tasks
     end
@@ -148,7 +152,7 @@ Rails.application.routes.draw do
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
-  get 'playbook_duplicates', to: 'palybooks#duplicates'
+  get 'playbook_duplicates', to: 'playbooks#duplicates'
   get 'play_duplicates', to: 'plays#duplicates'
   get 'task_duplicates', to: 'tasks#duplicates'
 

@@ -1,21 +1,10 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<div class="row">
-  <div class="col-12">
-    <div id='create-pdf', class='btn btn-outline-primary float-right mb-2')>
-      <%= "#{t('view.playbook.index.create-pdf')}" %>
-    </div>
-  </div>
-  <div id="loading-spinner" class="col-12 text-muted">
-    <div class="spinner-border spinner-border-sm float-right mb-2" role="status">
-      <span class="sr-only"><%= "#{t('view.playbook.index.creating-pdf')}" %>...</span>
-    </div>
-    <div class="float-right mb-2"><%= "#{t('view.playbook.index.creating-pdf')}" %>...</div>
-  </div>
+<div class="container-fluid">
+  <%= image_tag(@playbook.image_file, class: 'card-img-top align-middle inline', skip_pipeline: true) %>
+  <h5 class="inline"><%= @playbook.name %></h5>
 </div>
-
-<%= render 'shared/playbooknav', playbook: @playbook %>
 
 <div id="show-playbook">
 <div class="card mt-2">
@@ -50,16 +39,11 @@
     <div class="card mt-2">
       <div class="card-header border-0">
         <h5 class="float-left mb-0 font-weight-bold"><%= t('model.activity').pluralize.titlecase %></h5>
-        <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-          <%= link_to t('view.general.add'),
-                      new_playbook_activity_path(@playbook),
-                      class: "card-link float-right", style: "color: #fbab18 !important" %>
-        <% end %>
       </div>
       <div class="card-body p-0">
         <% if @playbook.activities.count > 0 %>
           <div class="accordion" id='<%= "#{@playbook.slug}_accordion" %>'>
-            <% @playbook.activities.order(:order).each do |activity| %>
+            <% @playbook.activities.each do |activity| %>
               <div class="card border-right-0 border-left-0 border-bottom-0">
                 <div id='<%= "#{activity.slug}_header" %>' class="card-header" 
                    data-toggle="collapse" data-target='#<%= "#{activity.slug}_collapse" %>'
@@ -68,26 +52,53 @@
                     <%= activity.name %>&nbsp;
                   </h6>
                   (<%= activity.phase %>)
-                  <i class="fa fa-angle-down float-right"></i>
                 </div>
-                <div id='<%= "#{activity.slug}_collapse" %>' class="collapse"
-                   aria-labelledby='<%= "#{activity.slug}_header" %>'
-                   data-parent='#<%= "#{@playbook.slug}_accordion" %>'>
-                  <div class="card-body p-3">
-                    <div id='<%= "#{activity.slug}_viewer" %>'>
-                      <%= activity.description %>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="float-right mb-0">
-                          <%= link_to t('view.general.view'), playbook_activity_path(@playbook, activity),
-                                      class: "card-link" %>
-                        </div>
-                      </div>
-                    </div>
+                <div class="card-body p-3">
+                  <div id='<%= "#{activity.slug}_viewer" %>'>
+                    <%= activity.description %>
                   </div>
                 </div>
+                <div class="card-body p-0">
+                  <% activity.resources.each do |resource| %>
+                    <div class="ml-4 mt-2">
+                    <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
+                    </div>
+                    <div class="ml-5 mb-3">
+                    <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
+                    </div>
+                  <% end %>
+                </div>
               </div>
+              <div class="card mt-2">
+                <div class="card-header border-0">
+                  <h5 class="float-left mb-0 font-weight-bold"><%= t('model.task').pluralize.titlecase %></h5>
+                </div>
+                <div class="card-body p-0">
+                  <% if activity.tasks.count > 0 %>
+                    <div class="accordion" id='<%= "#{activity.slug}_accordion" %>'>
+                      <% activity.tasks.each do |task| %>
+                        <div class="card border-right-0 border-left-0 border-bottom-0">
+                          <h6 class="mb-0 float-left font-weight-bold">
+                            <%= task.name %>
+                          </h6>
+                          <div id='<%= "#{task.slug}_collapse" %>' >
+                            <div class="card-body p-3">
+                              <div id='<%= "#{task.slug}_viewer" %>'>
+                                <%= task.description %>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <div class="alert alert-light mb-0" role="alert">
+                      <%= t('view.activity.index.no-data') %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
             <% end %>
           </div>
           <% else %>
@@ -117,30 +128,4 @@
       setViewerForElement('<%= @playbook.slug %>-outcomes',
                          <%= raw JSON.generate(@description.outcomes ) %>)
     <% end %>
-
-    $("#loading-spinner").hide()
-
-    $("#create-pdf").click(function () {
-      url = "/playbooks/<%= @playbook.slug %>/create_pdf"
-      fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-        },
-      })
-      .then(response => response.blob())
-      .then(response => {
-          $("#loading-spinner").hide()
-          filename = "<%= @playbook.slug %>.pdf"
-          const blob = new Blob([response], {type: 'application/pdf'});
-          const downloadUrl = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = downloadUrl;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-      });
-      
-      $("#loading-spinner").show()
-    })
 </script>

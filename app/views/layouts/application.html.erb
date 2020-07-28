@@ -101,47 +101,46 @@
   <body id="main-body"
         data-controller="<%= controller.controller_name %>"
         data-action="<%= controller.action_name %>">
-    <%= render '/shared/marker' %>
-    <%= render '/shared/topnav' %>
-    <% if current_page?(root_path) && session[:portal]["name"] == "Default" %>
-      <div id="content" class="container">
-        <%= render '/shared/sidenav' %>
-        <%= yield %>
-        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
-      </div>
-    <% elsif current_page?('/about') || current_page?(root_path) || current_page?('/covid') || current_page?('/covidresources')%>
-      <div id="content" class="container">
-        <%= yield %>
-        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
-      </div>
-    <% elsif hide_sidenav %>
-      <div id="content" class="container">
-        <%= yield %>
-        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
-      </div>
-    <% elsif display_breadcrumb %>
-      <div id="content" class="container">
-        <%= render '/shared/breadcrumb' %>
-        <%= yield %>
-        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
-      </div>
+    <% if request.url.include?('/show_pdf') %>
+      <%= yield %>
     <% else %>
-      <div id="content" class="container-fluid">
-        <div class="row">
-          <div class="col-3 nav-container bg-dark">
-            <%= render '/shared/filternav' %>
-          </div>
-          <div class="col-9">
-            <%= render '/shared/summarynav' %>
-            <%= render '/shared/activefilter' %>
-            <%= yield %>
-          </div>
+      <%= render '/shared/marker' %>
+      <%= render '/shared/topnav' %>
+      <% if current_page?('/about') || current_page?(root_path) || current_page?('/covid') || current_page?('/covidresources')%>
+        <div id="content" class="container">
+          <%= yield %>
+          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
         </div>
-        <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
-      </div>
+      <% elsif hide_sidenav %>
+        <div id="content" class="container">
+          <%= yield %>
+          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+        </div>
+      <% elsif display_breadcrumb %>
+        <div id="content" class="container">
+          <%= render '/shared/breadcrumb' %>
+          <%= yield %>
+          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+        </div>
+      <% else %>
+        <div id="content" class="container-fluid">
+          <div class="row">
+            <div class="col-3 nav-container bg-dark">
+              <%= render '/shared/filternav' %>
+            </div>
+            <div class="col-9">
+              <%= render '/shared/summarynav' %>
+              <%= render '/shared/activefilter' %>
+              <%= yield %>
+            </div>
+          </div>
+          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+        </div>
+      <% end %>
     <% end %>
-
-    <%= render '/shared/footer' %>
+    <% if !request.url.include?('/show_pdf') %>
+      <%= render '/shared/footer' %>
+    <% end %>
   </body>
 <% end %>
 </html>

@@ -28,6 +28,9 @@
         <div class="col-5 col-xs-12 text-muted">
           <%= "#{t('view.task.form.due-date')}: #{@task.due_date.to_s}" %>
         </div>
+        <div class="col-5 col-xs-12 text-muted">
+          <%= "#{t('view.task.form.order')}: #{@task.order.to_s}" %>
+        </div>
       </div>
     </div>
     <div class="card mt-2">
@@ -38,6 +41,18 @@
         <div id="<%= @task.slug %>" class="wysiwyg-viewer">
           <%= !description.description.nil? && description.description %>
         </div>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.activity.index.media') %>:</h5>
+      </div>
+      <div class="card-body p-0">
+        <% if !@task.media_url.nil? %>
+          <div class="ml-4 mt-2">
+          <iframe src="<%= @task.media_url %>" width=800 height=450 allowfullscreen></iframe>
+          </div>
+        <% end %>
       </div>
     </div>
     <div class="card mt-2">
