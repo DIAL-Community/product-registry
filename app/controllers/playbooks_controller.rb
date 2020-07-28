@@ -1,6 +1,6 @@
 class PlaybooksController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_playbook, only: [:show, :edit, :update, :destroy]
+  before_action :set_playbook, only: [:show, :edit, :update, :destroy, :create_pdf, :show_pdf]
 
   # GET /playbooks
   # GET /playbooks.json
@@ -29,6 +29,9 @@ class PlaybooksController < ApplicationController
   # GET /playbook/1.json
   def show
     authorize @playbook, :view_allowed?
+  end
+
+  def show_pdf
   end
 
   # GET /playbooks/new
@@ -134,6 +137,12 @@ class PlaybooksController < ApplicationController
     end
   end
 
+  def create_pdf
+    url = request.base_url + "/playbooks/" + @playbook.slug + "/show_pdf"
+    pdf_data = Dhalang::PDF.get_from_url(url)
+    send_data(pdf_data, filename: @playbook.slug+'.pdf', type: 'application/pdf')
+  end
+
   def duplicates
     @playbook = []
     if params[:current].present?
@@ -180,4 +189,5 @@ class PlaybooksController < ApplicationController
             end
           end
   end
+  helper_method :create_pdf
 end

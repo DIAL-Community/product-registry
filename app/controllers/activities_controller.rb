@@ -87,6 +87,12 @@ class ActivitiesController < ApplicationController
       end
     else
       @activity = Activity.new(activity_params)
+      if !activity_params[:question_text].nil?
+        question = PlaybookQuestion.new
+        question.question_text = activity_params[:question_text]
+        question.save!
+        @activity.playbook_questions_id = question.id
+      end
       authorize @activity, :mod_allowed?
       @activity.slug = slug_em(@activity.name)
     end
@@ -119,6 +125,13 @@ class ActivitiesController < ApplicationController
 
     if @activity.playbook_id
       @playbook = Playbook.find(@activity.playbook_id)
+    end
+
+    if !activity_params[:question_text].nil?
+      question = @activity.playbook_questions_id.nil? ? PlaybookQuestion.new : PlaybookQuestion.find(@activity.playbook_questions_id)
+      question.question_text = activity_params[:question_text]
+      question.save!
+      @activity.playbook_questions_id = question.id
     end
     
     respond_to do |format|
@@ -178,12 +191,16 @@ class ActivitiesController < ApplicationController
     else
       @activity = Activity.find(params[:id]) || not_found
     end
+    if !@activity.playbook_questions_id.nil?
+      @question = PlaybookQuestion.find(@activity.playbook_questions_id)
+      @answers = PlaybookAnswer.find_by(playbook_questions_id: @activity.playbook_questions_id)
+    end
   end
 
   # Only allow a list of trusted parameters through.
   def activity_params
     params.require(:activity)
-      .permit(:name, :slug, :description, :phase, :playbook_id, :resources => [:name, :description, :url])
+      .permit(:name, :slug, :description, :phase, :order, :media_url, :question_text, :playbook_id, :resources => [:name, :description, :url])
       .tap do |attr|
         if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])

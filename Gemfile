@@ -31,6 +31,7 @@ gem 'http_accept_language'
 
 gem 'cookies_eu'
 gem 'haml'
+gem 'Dhalang', github: "conradsp/Dhalang", branch: "master"
 
 gem 'licensee'
 

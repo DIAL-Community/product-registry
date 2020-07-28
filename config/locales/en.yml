@@ -418,6 +418,8 @@ en:
       orgs: Organizations
       organizations: Organizations
       projects: Projects
+      playbooks: Playbooks
+      plays: Plays
       view-projects: Coming soon.
       map: Map Views
       endorser-map: Endorser map
@@ -512,6 +514,8 @@ en:
         name: Name
         description: Description
         no-activity: We couldn't find any activities for this playbook.
+        create-pdf: Create PDF
+        creating-pdf: Creating PDF
       form:
         overview: Overview
         audience: Audience
@@ -525,13 +529,19 @@ en:
         phase: Phase
         resources: Resources
         assign: Assign
+        order: Order
+        question: Question
+        media: Media
         no-data: We couldn't find any tasks for this activity.
       form:
         description: Description
         phase: Phase
         resources: Resources
         plays: Plays
+        order: Order
         assign-play: Assign Play
+        question-text: Question text
+        media-prompt: If you would like to add a video to this activity, enter the URL
     play:
       index:
         no-data: We couldn't find any plays for this activity.
@@ -551,6 +561,7 @@ en:
     task:
       index:
         no-data: We couldn't find any tasks for this play.
+        media: Media
       form:
         short-description: Short Description
         full-description: Full Description
@@ -559,7 +570,9 @@ en:
         not-complete: This task has not been completed
         percent-complete: Percent Complete
         due-date: Due Date
+        order: Order
         responsible: Responsible Party
+        media-prompt: If you would like to add a video to this activity, enter the URL
     use-case:
       form:
         assigned-sdg-targets: Assigned SDG Targets
