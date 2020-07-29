@@ -53,6 +53,12 @@
 
   <%= recaptcha_tags callback: 'enableRegistration', site_key: Rails.application.secrets.captcha_site_key %>
 
+  <div class="hidden" id="terms-error"><%= t('view.devise.terms-popup') %></div>
+  <fieldset class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="terms">
+    <%= link_to( t('view.devise.accept-terms'), '/terms', 'data-popup' => true ) %>
+  </fieldset>
+
   <%= f.submit t('view.header.sign-up'), id: 'submit-registration',
       class: "btn btn-block btn-secondary", disabled: true %>
 <% end %>
@@ -60,3 +66,10 @@
 <%= render "devise/shared/links" %>
 
 </div>
+
+<script>
+  $('a[data-popup]').on('click', function(e) {
+    window.open( $(this).attr('href'), "Popup", "height=600, width=800" ); 
+    e.preventDefault(); 
+  })
+</script>

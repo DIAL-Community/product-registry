@@ -130,6 +130,8 @@ Rails.application.routes.draw do
   get '/agg_services', to: 'organizations#agg_services', as: :agg_services
   get '/service_capabilities', to: 'organizations#service_capabilities', as: :service_capabilities
   get '/update_capability', to: 'organizations#update_capability', as: :update_capability
+  get '/privacy', to: 'about#privacy', as: :privacy
+  get '/terms', to: 'about#terms', as: :terms
 
   get 'export', :to => 'organizations#export'
   get 'map_aggregators', :to => 'organizations#map_aggregators'

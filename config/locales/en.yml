@@ -216,6 +216,8 @@ en:
       forget-password: Forget your password?
       no-confirmation: Didn't receive confirmation instructions?
       no-unlock: Didn't receive unlock instructions?
+      accept-terms: By clicking here, I accept the Terms of Service for using this website
+      terms-popup: Please accept the terms and conditions
     location:
       form:
         other-names: Other Names
@@ -315,6 +317,7 @@ en:
         footer_popover_maturity: "Product maturity evaluations"
         definition: A product is a software solution that may fulfill one ore more building blocks
         footer_help: The footer of the product card contains 3 rows. Hover over any icon to get more information about the data that is displayed. The first two rows may contain information about what Sustainable Development Goals this product addresses, which building blocks the products are a candidate for, product maturity information as measured by DIAL's Open Source Center or Digital Square, and what other products this product interoperates with. The bottom row will always contain information about data sources for this product - currently we retreive product data from the DIAL Open Source Center, Digital Square, and Unicef's Global Goods Candidate list.
+        covid_only: COVID-19 only.
       launch:
         auto-launch: Automatically launch an instance this product
       show:
