@@ -1,7 +1,13 @@
+let captchaSuccess = false
+
 var enableRegistration = function() {
-  $('#submit-registration').prop('disabled', false);
-  $('#submit-registration').removeClass('btn-secondary');
-  $('#submit-registration').addClass('btn-primary');
+  if ($("#terms").is(":checked")) {
+    $('#submit-registration').prop('disabled', false);
+    $('#submit-registration').removeClass('btn-secondary');
+    $('#submit-registration').addClass('btn-primary');
+  } else {
+    captchaSuccess = true
+  }
 }
 
 const changeProductHandler = function() {
@@ -25,11 +31,27 @@ const changeProductHandler = function() {
 
 const beforeSubmitHandler = function() {
   $('#new_user').submit(function(e) {
-    // Preventing the submission of the product selection field.
-    $('#product-owner').attr('disabled', 'disabled');
-    $(this).submit();
+    if ($("#terms").is(":checked")) {
+      // Preventing the submission of the product selection field.
+      $('#product-owner').attr('disabled', 'disabled');
+      $(this).submit();
+    } else {
+      $("#terms-error").show();
+      e.preventDefault();
+    }
   });
+}
+
+var termsHandler = function() {
+  $("#terms").on('change', function() {
+    if ($("#terms").is(":checked") && captchaSuccess) {
+      $('#submit-registration').prop('disabled', false);
+      $('#submit-registration').removeClass('btn-secondary');
+      $('#submit-registration').addClass('btn-primary');
+    }
+  })
 }
 
 $(document).on('registrations#new:loaded', changeProductHandler);
 $(document).on('registrations#new:loaded', beforeSubmitHandler);
+$(document).on('registrations#new:loaded', termsHandler);

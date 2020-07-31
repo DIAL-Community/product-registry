@@ -7,4 +7,10 @@ class AboutController < ApplicationController
     @about_page = stylesheet.about_page
     @footer = stylesheet.footer_content
   end
+
+  def privacy
+  end
+
+  def terms
+  end
 end
