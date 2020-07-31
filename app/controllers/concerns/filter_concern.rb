@@ -286,7 +286,7 @@ module FilterConcern
 
     products.nil? && products = get_products_from_filters(all_filters)
 
-    filter_and_intersect_arrays([sdg_products, bb_products, products, project_product_ids])
+    products + filter_and_intersect_arrays([sdg_products, bb_products, project_product_ids])
   end
 
   def filter_organizations(all_filters=nil, filter_set=nil, project_product_ids = nil, org_ids = nil, org_products = nil, products = nil)
@@ -485,8 +485,15 @@ module FilterConcern
         filter_products = filter_products.where('maturity_score > 0')
       end
 
-      product_filter_set = (!all_filters["products"].empty? || !all_filters["origins"].empty? || !all_filters["tags"].empty? ||
-                all_filters["with_maturity_assessment"] || all_filters["is_launchable"] || all_filters["product_type"])
+      unless all_filters['sectors'].empty?
+        filter_products = filter_products.joins(:sectors)
+                                         .where('sectors.id in (?)', all_filters["sectors"])
+      end
+
+      product_filter_set = (!all_filters["products"].empty? || !all_filters["origins"].empty? ||
+                            !all_filters["tags"].empty? || !all_filters["sectors"].empty? ||
+                            all_filters["with_maturity_assessment"] || all_filters["is_launchable"] ||
+                            all_filters["product_type"])
 
       if product_filter_set
         product_list += filter_products.ids

@@ -102,7 +102,8 @@ class ApplicationController < ActionController::Base
 
   def update_cookies(filter_name)
     case filter_name
-    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'product_type','organizations', 'projects', 'tags'
+    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'product_type',
+         'organizations', 'projects', 'tags', 'sectors'
       session[:updated_prod_filter] = true
     end
   end
