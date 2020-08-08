@@ -166,7 +166,7 @@ GEM
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.2.1)
-    kramdown (2.2.1)
+    kramdown (2.3.0)
       rexml
     licensee (9.14.0)
       dotenv (~> 2.0)
