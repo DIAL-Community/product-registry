@@ -12,7 +12,7 @@ module ApplicationHelper
                              rubric_categories cities countries task_trackers].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
-  DEVISE_CONTROLLERS = ['devise/sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
+  DEVISE_CONTROLLERS = ['sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
 
   def all_filters
     FRAMEWORK_FILTER_KEYS + ORGANIZATION_FILTER_KEYS

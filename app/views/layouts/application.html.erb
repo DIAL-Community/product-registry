@@ -106,7 +106,8 @@
     <% else %>
       <%= render '/shared/marker' %>
       <%= render '/shared/topnav' %>
-      <% if current_page?('/about') || current_page?(root_path) || current_page?('/covid') || current_page?('/covidresources') || current_page?('/privacy') || current_page?('/terms')%>
+      <% if current_page?('/about') || current_page?(root_path) || current_page?('/covid') ||
+            current_page?('/covidresources') || current_page?('/privacy') || current_page?('/terms')%>
         <div id="content" class="container">
           <%= yield %>
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
