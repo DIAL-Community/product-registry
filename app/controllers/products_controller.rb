@@ -123,6 +123,8 @@ class ProductsController < ApplicationController
     @jenkins_user = Rails.application.secrets.jenkins_user
     @jenkins_password = Rails.application.secrets.jenkins_password
 
+    record_user_event(UserEvent.event_types[:product_view])
+
     # Right now, we are using the legacy rubric. Eventually we will change this to use
     # the default rubric - just use the 'else' part
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
@@ -465,6 +467,25 @@ class ProductsController < ApplicationController
   end
 
   private
+
+  def record_user_event(event_type)
+    user_event = UserEvent.new
+    user_event.identifier = session[:default_identifier]
+    user_event.event_type = event_type
+    user_event.event_datetime = Time.now
+
+    unless current_user.nil?
+      user_event.email = current_user.email
+    end
+
+    unless @product.nil?
+      user_event.extended_data = { slug: @product.slug, name: @product.name }
+    end
+
+    if user_event.save!
+      logger.info("User event '#{event_type}' for #{user_event.identifier} saved.")
+    end
+  end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_product

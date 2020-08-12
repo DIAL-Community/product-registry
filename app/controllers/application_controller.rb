@@ -17,12 +17,19 @@ class ApplicationController < ActionController::Base
   before_action :configure_registration_parameters, if: :devise_controller?
   before_action :check_password_expiry
   before_action :set_locale
+  before_action :set_default_identifier
   before_action :set_portal
 
   after_action :store_action
 
   def not_found
     raise ActionController::RoutingError, 'Not Found'
+  end
+
+  def set_default_identifier
+    if session[:default_identifier].nil?
+      session[:default_identifier] = SecureRandom.uuid
+    end
   end
 
   def set_locale

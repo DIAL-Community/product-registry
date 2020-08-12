@@ -240,7 +240,10 @@ CREATE TABLE public.activities (
     slug character varying NOT NULL,
     description character varying,
     phase character varying,
-    resources jsonb DEFAULT '[]'::jsonb NOT NULL
+    resources jsonb DEFAULT '[]'::jsonb NOT NULL,
+    playbook_questions_id bigint,
+    "order" integer,
+    media_url character varying
 );
 
 
@@ -1404,6 +1407,38 @@ ALTER SEQUENCE public.origins_id_seq OWNED BY public.origins.id;
 
 
 --
+-- Name: playbook_answers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.playbook_answers (
+    id bigint NOT NULL,
+    playbook_questions_id bigint,
+    answer_text character varying NOT NULL,
+    action character varying NOT NULL,
+    object_id integer
+);
+
+
+--
+-- Name: playbook_answers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.playbook_answers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: playbook_answers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.playbook_answers_id_seq OWNED BY public.playbook_answers.id;
+
+
+--
 -- Name: playbook_descriptions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1434,6 +1469,35 @@ CREATE SEQUENCE public.playbook_descriptions_id_seq
 --
 
 ALTER SEQUENCE public.playbook_descriptions_id_seq OWNED BY public.playbook_descriptions.id;
+
+
+--
+-- Name: playbook_questions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.playbook_questions (
+    id bigint NOT NULL,
+    question_text character varying NOT NULL
+);
+
+
+--
+-- Name: playbook_questions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.playbook_questions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: playbook_questions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.playbook_questions_id_seq OWNED BY public.playbook_questions.id;
 
 
 --
@@ -2581,7 +2645,10 @@ CREATE TABLE public.tasks (
     due_date date,
     resources jsonb DEFAULT '[]'::jsonb NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    playbook_questions_id bigint,
+    "order" integer,
+    media_url character varying
 );
 
 
@@ -2875,6 +2942,41 @@ CREATE TABLE public.use_cases_sdg_targets (
     use_case_id bigint NOT NULL,
     sdg_target_id bigint NOT NULL
 );
+
+
+--
+-- Name: user_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_events (
+    id bigint NOT NULL,
+    identifier character varying NOT NULL,
+    email character varying,
+    event_datetime timestamp without time zone NOT NULL,
+    event_type character varying NOT NULL,
+    extended_data character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: user_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_events_id_seq OWNED BY public.user_events.id;
 
 
 --
@@ -3288,10 +3390,24 @@ ALTER TABLE ONLY public.origins ALTER COLUMN id SET DEFAULT nextval('public.orig
 
 
 --
+-- Name: playbook_answers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_answers ALTER COLUMN id SET DEFAULT nextval('public.playbook_answers_id_seq'::regclass);
+
+
+--
 -- Name: playbook_descriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.playbook_descriptions ALTER COLUMN id SET DEFAULT nextval('public.playbook_descriptions_id_seq'::regclass);
+
+
+--
+-- Name: playbook_questions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_questions ALTER COLUMN id SET DEFAULT nextval('public.playbook_questions_id_seq'::regclass);
 
 
 --
@@ -3572,6 +3688,13 @@ ALTER TABLE ONLY public.use_case_steps_products ALTER COLUMN id SET DEFAULT next
 --
 
 ALTER TABLE ONLY public.use_cases ALTER COLUMN id SET DEFAULT nextval('public.use_cases_id_seq'::regclass);
+
+
+--
+-- Name: user_events id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_events ALTER COLUMN id SET DEFAULT nextval('public.user_events_id_seq'::regclass);
 
 
 --
@@ -3875,11 +3998,27 @@ ALTER TABLE ONLY public.origins
 
 
 --
+-- Name: playbook_answers playbook_answers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_answers
+    ADD CONSTRAINT playbook_answers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: playbook_descriptions playbook_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.playbook_descriptions
     ADD CONSTRAINT playbook_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: playbook_questions playbook_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_questions
+    ADD CONSTRAINT playbook_questions_pkey PRIMARY KEY (id);
 
 
 --
@@ -4211,6 +4350,14 @@ ALTER TABLE ONLY public.use_cases
 
 
 --
+-- Name: user_events user_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_events
+    ADD CONSTRAINT user_events_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4303,6 +4450,13 @@ CREATE UNIQUE INDEX classifications_products_idx ON public.product_classificatio
 --
 
 CREATE INDEX index_activities_on_playbook_id ON public.activities USING btree (playbook_id);
+
+
+--
+-- Name: index_activities_on_playbook_questions_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activities_on_playbook_questions_id ON public.activities USING btree (playbook_questions_id);
 
 
 --
@@ -4614,6 +4768,13 @@ CREATE INDEX index_origins_on_organization_id ON public.origins USING btree (org
 
 
 --
+-- Name: index_playbook_answers_on_playbook_questions_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_playbook_answers_on_playbook_questions_id ON public.playbook_answers USING btree (playbook_questions_id);
+
+
+--
 -- Name: index_playbook_descriptions_on_playbook_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4786,6 +4947,13 @@ CREATE INDEX index_task_descriptions_on_task_id ON public.task_descriptions USIN
 --
 
 CREATE INDEX index_task_tracker_descriptions_on_task_tracker_id ON public.task_tracker_descriptions USING btree (task_tracker_id);
+
+
+--
+-- Name: index_tasks_on_playbook_questions_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tasks_on_playbook_questions_id ON public.tasks USING btree (playbook_questions_id);
 
 
 --
@@ -5380,6 +5548,14 @@ ALTER TABLE ONLY public.offices
 
 
 --
+-- Name: activities fk_rails_640012801c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activities
+    ADD CONSTRAINT fk_rails_640012801c FOREIGN KEY (playbook_questions_id) REFERENCES public.playbook_questions(id);
+
+
+--
 -- Name: task_tracker_descriptions fk_rails_64d4c2c34c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5393,6 +5569,14 @@ ALTER TABLE ONLY public.task_tracker_descriptions
 
 ALTER TABLE ONLY public.category_indicator_descriptions
     ADD CONSTRAINT fk_rails_664858eff1 FOREIGN KEY (category_indicator_id) REFERENCES public.category_indicators(id);
+
+
+--
+-- Name: playbook_answers fk_rails_67580b7df5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_answers
+    ADD CONSTRAINT fk_rails_67580b7df5 FOREIGN KEY (playbook_questions_id) REFERENCES public.playbook_questions(id);
 
 
 --
@@ -5617,6 +5801,14 @@ ALTER TABLE ONLY public.principle_descriptions
 
 ALTER TABLE ONLY public.regions
     ADD CONSTRAINT fk_rails_f2ba72ccee FOREIGN KEY (country_id) REFERENCES public.countries(id);
+
+
+--
+-- Name: tasks fk_rails_f4d905c069; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT fk_rails_f4d905c069 FOREIGN KEY (playbook_questions_id) REFERENCES public.playbook_questions(id);
 
 
 --
@@ -6145,8 +6337,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200710205315'),
 ('20200710205316'),
 ('20200710210144'),
+('20200727155410'),
 ('20200729150759'),
-('20200730195836');
+('20200730195836'),
+('20200804184953');
 
 
 

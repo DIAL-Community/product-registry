@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_30_195836) do
+ActiveRecord::Schema.define(version: 2020_08_04_184953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -793,6 +793,16 @@ ActiveRecord::Schema.define(version: 2020_07_30_195836) do
     t.bigint "sdg_target_id", null: false
     t.index ["sdg_target_id", "use_case_id"], name: "sdgs_usecases", unique: true
     t.index ["use_case_id", "sdg_target_id"], name: "usecases_sdgs", unique: true
+  end
+
+  create_table "user_events", force: :cascade do |t|
+    t.string "identifier", null: false
+    t.string "email"
+    t.datetime "event_datetime", null: false
+    t.string "event_type", null: false
+    t.jsonb "extended_data", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 # Could not dump table "users" because of following StandardError
