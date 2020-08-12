@@ -178,7 +178,7 @@ class PlaybooksController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_params
     params.require(:playbook)
-          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :phases => [:name, :description])
+          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :maturity, :phases => [:name, :description])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

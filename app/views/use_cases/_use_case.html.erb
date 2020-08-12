@@ -60,11 +60,17 @@
         end
       %>
       <div class="float-right mb-1">
-        <% if use_case.maturity == "Beta" %>
-          <span class='badge badge-warning'><%= use_case.maturity %></span>
-        <% else %>
-          <span class='badge badge-success'><%= use_case.maturity %></span>
-        <% end %>
+      <% if use_case.maturity == "Beta" %>
+        <span class='badge badge-warning' data-toggle="tooltip"
+          data-placement="top" data-original-title="<%= t('view.use-case.index.is_beta') %>">
+          <%= use_case.maturity %>
+        </span>
+      <% else %>
+        <span class='badge badge-success' data-toggle="tooltip"
+          data-placement="top" data-original-title="<%= t('view.use-case.index.is_mature') %>">
+          <%= use_case.maturity %>
+        </span>
+      <% end %>
       </div>
     </div>
   </div>

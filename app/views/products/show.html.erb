@@ -6,6 +6,11 @@
 <div class="card mt-2">
   <h5 class="card-header bg-secondary text-white">
     <%= "#{t('model.product').to_s.humanize}: #{@product.name}" %>
+    <% if !@product.status.nil? %>
+      <div class="float-right mr-2 text-white"> 
+        <%= @product.status %>
+      </div>
+    <% end %>
   </h5>
   <div class="card-body">
     <div class="row">
@@ -194,6 +199,10 @@
                   <%= image_tag(bb.image_file, class: 'card-image align-middle p-0', title: bb.name, 'data-toggle': 'tooltip', 'data-placement': 'top' ) %>
                 <% end %>
               </div>
+              <% product_bb = @product.products_building_blocks.where(building_block_id: bb.id) %>
+              <% if !product_bb.first.nil? %>
+                <div class="text-muted text-center"><%= product_bb.first.link_type %></div>
+              <% end %>
             </div>
           <% end %>
           <% if bb_row.size < 3  %>
@@ -226,7 +235,7 @@
               </div>
               <% product_sdg = @product.products_sustainable_development_goals.where(sustainable_development_goal_id: sdg.id) %>
               <% if !product_sdg.first.nil? %>
-                <div class="text-muted ml-4"><%= product_sdg.first.link_type %></div>
+                <div class="text-muted text-center"><%= product_sdg.first.link_type %></div>
               <% end %>
             </div>
           <% end %>

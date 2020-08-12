@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 2020_07_30_195836) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "description", default: {}, null: false
+    t.string "maturity", default: "Beta"
     t.index ["slug"], name: "index_building_blocks_on_slug", unique: true
   end
 
@@ -381,6 +382,7 @@ ActiveRecord::Schema.define(version: 2020_07_30_195836) do
     t.jsonb "phases", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "maturity", default: "Beta"
   end
 
   create_table "plays", force: :cascade do |t|
@@ -485,6 +487,7 @@ ActiveRecord::Schema.define(version: 2020_07_30_195836) do
   create_table "products_building_blocks", id: false, force: :cascade do |t|
     t.bigint "building_block_id", null: false
     t.bigint "product_id", null: false
+    t.string "link_type", default: "Beta"
     t.index ["building_block_id", "product_id"], name: "block_prods", unique: true
     t.index ["product_id", "building_block_id"], name: "prod_blocks", unique: true
   end

@@ -18,6 +18,13 @@
       <div class="footer-row">
         <%= t('view.project.index.source') %>: 
       </div>
+      <div class="float-right mb-1">
+        <% if playbook.maturity == "Beta" %>
+          <span class='badge badge-warning'><%= playbook.maturity %></span>
+        <% else %>
+          <span class='badge badge-success'><%= playbook.maturity %></span>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
