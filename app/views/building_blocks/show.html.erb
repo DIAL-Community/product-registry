@@ -3,6 +3,10 @@
 <div class="card">
   <h5 class="card-header bg-secondary text-white">
     <%= "#{t('model.building-block').to_s.titlecase}: #{@building_block.name}" %>
+    <div class="float-right mr-2 text-white"> 
+      <%= t('view.building-block.index.maturity').to_s %>:
+      <%= @building_block.maturity %>
+    </div>
   </h5>
   <%= image_tag(@building_block.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
   <div class="card-body">

@@ -16,6 +16,10 @@ class BuildingBlocksController < ApplicationController
 
     @building_blocks = filter_building_blocks.order(:name)
 
+    if params[:mature].present? && params[:mature].to_s.downcase == 'true'
+      @building_blocks = @building_blocks.where(':tag = building_blocks.maturity', tag: 'Mature')
+    end
+
     if params[:search]
       @building_blocks = @building_blocks.where('LOWER("building_blocks"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
@@ -196,7 +200,7 @@ class BuildingBlocksController < ApplicationController
     def building_block_params
       params
         .require(:building_block)
-        .permit(:name, :confirmation, :bb_desc, :slug)
+        .permit(:name, :confirmation, :bb_desc, :slug, :maturity)
         .tap do |attr|
           if (params[:reslug].present?)
             attr[:slug] = slug_em(attr[:name])

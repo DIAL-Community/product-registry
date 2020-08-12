@@ -1,4 +1,4 @@
-<div id="feedback">
+<div id="feedback" class="hidden">
   <div class="alert alert-info px-3">
     <i id="minimize-feedback" class="fas fa-angle-right"></i>
     <%= t('view.feedback.info-text') %>
@@ -6,7 +6,7 @@
   </div>
 </div>
 
-<div id="feedback-side" class="hidden">
+<div id="feedback-side">
   <div class="alert alert-info px-3">
     <i id="maximize-feedback" class="fas fa-angle-left"></i>
     <i class="far fa-comment-dots feedback-button"></i>
@@ -19,6 +19,7 @@
 </div>
 
 <script>
+
   $(".feedback-button").on("click", function() {
     $("#feedback-overlay").fadeIn();
     $("#feedback-survey").append("<iframe src='<%= embedded_survey_form %>&embedded=true' width='640' height='820' frameborder='0' marginheight='0' marginwidth='0'>Loading…</iframe>");

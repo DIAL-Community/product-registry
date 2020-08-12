@@ -67,6 +67,12 @@
     <%= form.label :default_url, t('view.product.form.default-url') %>
   </fieldset>
 
+  <%= form.hidden_field :status, :value => 'Not Vetted' %>
+  <%= form.check_box :status, { disabled: !policy(product).permitted_attributes.include?(:status) }, 'Vetted', 'Not Vetted' %>
+  <label class="form-label-group mt-2" for="is_launchable">
+    <%= t('view.product.form.is-vetted') %>
+  </label>
+
   <div class="row">
     <div class="col-12 col-lg-6">
       <h6 class="bg-secondary text-white border rounded p-3 mb-0">
@@ -138,6 +144,15 @@
             <input type="hidden"/>
           </span>
         </div>
+        <div class="col-5">
+          <% options = options_for_select([t('view.product.form.beta'),t('view.product.form.validated')]) %>
+          <%= select_tag :bb_mapping, options, :class => "form-control filter-element ml-1 mb-1", :style => 'height: calc(1.5em + 0.75rem + 15px) !important' %>
+        </div>
+        <div class="col-6">
+          <label for="product-building-blocks">
+            <%= t('view.product.form.bb-mapping') %>
+          </label>
+        </div>
       </div>
     </div>
 
@@ -161,6 +176,15 @@
             </a>
             <input type="hidden"/>
           </span>
+        </div>
+        <div class="col-5">
+          <% options = options_for_select([t('view.product.form.self-reported'),t('view.product.form.validated')]) %>
+          <%= select_tag :sdg_mapping, options, :class => "form-control filter-element ml-1 mb-1", :style => 'height: calc(1.5em + 0.75rem + 15px) !important' %>
+        </div>
+        <div class="col-6">
+          <label for="product-building-blocks">
+            <%= t('view.product.form.sdg-mapping') %>
+          </label>
         </div>
       </div>
     </div>

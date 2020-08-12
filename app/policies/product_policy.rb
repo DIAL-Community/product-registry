@@ -9,7 +9,7 @@ class ProductPolicy < ApplicationPolicy
   def permitted_attributes
     if user.role == 'admin'
       [:id, :name, :is_launchable, :website, :slug, :aliases, :tags, :default_url, :logo, :start_assessment,
-       :repository, :product_description, :is_child, :parent_product_id, :est_hosting, :est_invested]
+       :repository, :product_description, :is_child, :parent_product_id, :est_hosting, :est_invested, :status]
     else
       [:logo, :start_assessment]
     end

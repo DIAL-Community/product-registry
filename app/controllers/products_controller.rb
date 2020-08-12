@@ -187,16 +187,27 @@ class ProductsController < ApplicationController
 
     if (params[:selected_building_blocks])
       params[:selected_building_blocks].keys.each do |building_block_id|
-        building_block = BuildingBlock.find(building_block_id)
-        @product.building_blocks.push(building_block)
+        link_type = t('view.product.form.beta')
+        if !params[:bb_mapping].nil?
+          link_type = params[:bb_mapping]
+        end
+        new_prod_bb = ProductsBuildingBlock.new
+        new_prod_bb.building_block_id = building_block_id
+        new_prod_bb.link_type = link_type
+
+        @product.products_building_blocks << new_prod_bb
       end
     end
 
     if (params[:selected_sustainable_development_goals])
       params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
+        link_type = t('view.product.form.self-reported')
+        if !params[:bb_mapping].nil?
+          link_type = params[:bb_mapping]
+        end
         new_prod_sdg = ProductsSustainableDevelopmentGoal.new
         new_prod_sdg.sustainable_development_goal_id = sustainable_development_goal_id
-        new_prod_sdg.link_type = 'Validated'
+        new_prod_sdg.link_type = link_type
 
         @product.products_sustainable_development_goals << new_prod_sdg
       end
@@ -277,34 +288,48 @@ class ProductsController < ApplicationController
     end
     @product.includes = products.to_a
 
-    building_blocks = Set.new
     if params[:selected_building_blocks].present?
-      params[:selected_building_blocks].keys.each do |building_block_id|
-        building_block = BuildingBlock.find(building_block_id)
-        building_blocks.add(building_block)
+      link_type = 'Beta'
+      if !params[:bb_mapping].nil?
+        link_type = params[:bb_mapping]
+      end
+      existing_bbs = ProductsBuildingBlock.where(product_id: @product.id)
+                                                        .pluck('building_block_id')
+      existing_bbs.each do |bb_id|
+        ProductsBuildingBlock.where(product_id: @product.id,
+                                                 building_block_id: bb_id)
+                                          .delete_all
+      end
+
+      ui_bbs = params[:selected_building_blocks].keys.map(&:to_i)
+      ui_bbs.each do |bb_id|
+        new_prod_bb = ProductsBuildingBlock.new
+        new_prod_bb.building_block_id = bb_id
+        new_prod_bb.link_type = link_type
+
+        @product.products_building_blocks << new_prod_bb
       end
     end
-    @product.building_blocks = building_blocks.to_a
 
     if params[:selected_sustainable_development_goals].present?
       existing_sdgs = ProductsSustainableDevelopmentGoal.where(product_id: @product.id)
                                                         .pluck('sustainable_development_goal_id')
       ui_sdgs = params[:selected_sustainable_development_goals].keys
                                                                .map(&:to_i)
-      removed_sdgs = existing_sdgs - ui_sdgs
-      logger.debug("Removing: #{removed_sdgs} product - sdgs relationship.")
-      removed_sdgs.each do |sdg_id|
+      existing_sdgs.each do |sdg_id|
         ProductsSustainableDevelopmentGoal.where(product_id: @product.id,
                                                  sustainable_development_goal_id: sdg_id)
                                           .delete_all
       end
 
-      added_sdgs = ui_sdgs - existing_sdgs
-      logger.debug("Adding: #{added_sdgs} product - sdgs relationship")
-      added_sdgs.each do |sdg_id|
+      ui_sdgs.each do |sdg_id|
+        link_type = t('view.product.form.self-reported')
+        if !params[:sdg_mapping].nil?
+          link_type = params[:sdg_mapping]
+        end
         new_prod_sdg = ProductsSustainableDevelopmentGoal.new
         new_prod_sdg.sustainable_development_goal_id = sdg_id
-        new_prod_sdg.link_type = 'Validated'
+        new_prod_sdg.link_type = link_type
 
         @product.products_sustainable_development_goals << new_prod_sdg
       end

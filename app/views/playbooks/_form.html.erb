@@ -17,6 +17,11 @@
     </label>
   </fieldset>
 
+  <fieldset class="form-check mt-2 mb-2">
+    <%= form.check_box :maturity, {id: 'use_case_maturity', class: 'form-check-input'}, "Mature", "Beta" %>
+    <%= form.label :maturity, t('view.general.is-mature').to_s, class: 'form-check-label' %>
+  </fieldset>
+
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.overview') %>
   </h6>
