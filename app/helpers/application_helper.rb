@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'uri'
 require 'modules/constants'
 
 # Helper to format filter ui for active filter.
@@ -29,6 +30,11 @@ module ApplicationHelper
 
   def available_portals
     PortalView.where(':user_role = ANY(user_roles)', user_role: current_user.role)
+  end
+
+  def embedded_survey_form
+    'https://docs.google.com/forms/d/e/1FAIpQLSfzZ8IHGqDvftad-PMWuVKpf4cHdA7Cw4g-PKla6WDzm9Y4LQ/'\
+    "viewform?entry.1077775768=#{request.original_url}"
   end
 
   def build_breadcrumbs(params)
@@ -123,7 +129,11 @@ module ApplicationHelper
     counter
   end
 
-  def format_filter(filter_name) 
+  def extract_url_query(url)
+    Rack::Utils.parse_nested_query(URI.parse(URI.encode(url)).query.to_s)
+  end
+
+  def format_filter(filter_name, active_filters)
     if filter_name == 'endorser_only'
       filter_label = "#{t('view.active-filter.endorsers')}
                       <span class='close-icon' data-effect='fadeOut'>
@@ -164,7 +174,6 @@ module ApplicationHelper
       return filter_label.html_safe
     end
 
-    active_filters = session[filter_name]
     count = active_filters.count
     if count <= 3
       filter_label = active_filters.sort! { |x, y| x['value'].to_i <=> y['value'].to_i }

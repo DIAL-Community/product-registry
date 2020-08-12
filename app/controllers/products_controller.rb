@@ -13,6 +13,38 @@ class ProductsController < ApplicationController
     render layout: 'layouts/raw'
   end
 
+  def favorite_product
+    set_product
+
+    favoriting_user = current_user
+    favoriting_user.saved_products.push(@product.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
+  def unfavorite_product
+    set_product
+
+    favoriting_user = current_user
+    favoriting_user.saved_products.delete(@product.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
   # GET /products
   # GET /products.json
   def index

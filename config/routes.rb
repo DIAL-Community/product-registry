@@ -38,6 +38,10 @@ Rails.application.routes.draw do
 
   resources :projects do
     get 'count', on: :collection
+    member do
+      post 'favorite_project'
+      post 'unfavorite_project'
+    end
   end
 
   get 'deploys/index'
@@ -67,6 +71,10 @@ Rails.application.routes.draw do
 
   resources :products do
     get 'count', on: :collection
+    member do
+      post 'favorite_product'
+      post 'unfavorite_product'
+    end
   end
 
   resources :building_blocks do
@@ -83,6 +91,10 @@ Rails.application.routes.draw do
   resources :use_cases do
     get 'count', on: :collection
     resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
+    member do
+      post 'favorite_use_case'
+      post 'unfavorite_use_case'
+    end
   end
 
   resources :workflows do
@@ -132,6 +144,8 @@ Rails.application.routes.draw do
   get '/update_capability', to: 'organizations#update_capability', as: :update_capability
   get '/privacy', to: 'about#privacy', as: :privacy
   get '/terms', to: 'about#terms', as: :terms
+
+  post '/save_url', to: 'application#save_url', as: :save_url
 
   get 'export', :to => 'organizations#export'
   get 'map_aggregators', :to => 'organizations#map_aggregators'

@@ -408,6 +408,20 @@ class ApplicationController < ActionController::Base
     bbs_ids
   end
 
+  def save_url
+    favoriting_user = current_user
+    favoriting_user.saved_urls.push(params[:url])
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render json: { saving: 'OK' }, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
   protected
 
   def filter_and_intersect_arrays(arrays)

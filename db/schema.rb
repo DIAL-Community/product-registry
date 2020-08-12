@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_27_155410) do
+ActiveRecord::Schema.define(version: 2020_07_30_195836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 2020_07_27_155410) do
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
-    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -58,7 +57,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_155410) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "audit_id", "version"], name: "auditable_index"
+    t.index ["action", "id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -680,7 +679,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_155410) do
     t.string "locale", null: false
     t.jsonb "description", default: {}, null: false
     t.jsonb "prerequisites", default: {}, null: false
-    t.jsonb "outcomes", default: {}
+    t.jsonb "outcomes", default: {}, null: false
     t.index ["task_id"], name: "index_task_descriptions_on_task_id"
   end
 

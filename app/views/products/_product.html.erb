@@ -20,6 +20,11 @@
       </div>
     </div>
     <div class="model-logo">
+      <i class="favorite-indicator"
+         data-slug="<%= product.slug %>"
+         data-favorited="<%= current_user.saved_products.include?(product.id) %>"
+         data-toggle="tooltip"
+         data-placement="top" data-original-title="<%= t('view.product.index.add_favorite') %>"></i>
       <%= link_to(product) do %>
         <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
       <% end %>

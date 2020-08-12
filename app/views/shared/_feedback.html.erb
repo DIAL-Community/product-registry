@@ -1,0 +1,43 @@
+<div id="feedback">
+  <div class="alert alert-info px-3">
+    <i id="minimize-feedback" class="fas fa-angle-right"></i>
+    <%= t('view.feedback.info-text') %>
+    <i class="far fa-comment-dots feedback-button"></i>
+  </div>
+</div>
+
+<div id="feedback-side" class="hidden">
+  <div class="alert alert-info px-3">
+    <i id="maximize-feedback" class="fas fa-angle-left"></i>
+    <i class="far fa-comment-dots feedback-button"></i>
+  </div>
+</div>
+
+<div id="feedback-overlay" class="hidden"></div>
+<div id="feedback-survey" class="hidden">
+  
+</div>
+
+<script>
+  $(".feedback-button").on("click", function() {
+    $("#feedback-overlay").fadeIn();
+    $("#feedback-survey").append("<iframe src='<%= embedded_survey_form %>&embedded=true' width='640' height='820' frameborder='0' marginheight='0' marginwidth='0'>Loading…</iframe>");
+    $("#feedback-survey").fadeIn();
+  });
+
+  $("#minimize-feedback").on("click", function() {
+    $("#feedback").fadeOut();
+    $("#feedback-side").fadeIn();
+  });
+
+  $("#maximize-feedback").on("click", function() {
+    $("#feedback").fadeIn();
+    $("#feedback-side").fadeOut();
+  });
+
+  $("#feedback-overlay").on("click", function() {
+    $("#feedback-overlay").fadeOut();
+    $("#feedback-survey").empty();
+    $("#feedback-survey").fadeOut();
+  });
+</script>

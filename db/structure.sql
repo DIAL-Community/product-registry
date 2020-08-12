@@ -2898,7 +2898,11 @@ CREATE TABLE public.users (
     receive_backup boolean DEFAULT false,
     organization_id bigint,
     expired boolean,
-    expired_at timestamp without time zone
+    expired_at timestamp without time zone,
+    saved_products bigint[] DEFAULT '{}'::bigint[],
+    saved_use_cases bigint[] DEFAULT '{}'::bigint[],
+    saved_projects bigint[] DEFAULT '{}'::bigint[],
+    saved_urls character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -6140,7 +6144,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200708181616'),
 ('20200710205315'),
 ('20200710205316'),
-('20200710210144');
+('20200710210144'),
+('20200729150759'),
+('20200730195836');
 
 
 

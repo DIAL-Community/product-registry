@@ -6,6 +6,11 @@
           'title' => use_case.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
     </div>
     <div class="model-logo">
+      <i class="favorite-indicator" style="z-index:9;"
+         data-slug="<%= use_case.slug %>"
+         data-favorited="<%= current_user.saved_use_cases.include?(use_case.id) %>"
+         data-toggle="tooltip"
+         data-placement="top" data-original-title="<%= t('view.use-case.index.add_favorite') %>"></i>
       <%= link_to(use_case) do %>
         <%= image_tag(use_case.image_file, class: 'card-img-top align-middle px-2 py-2 use-case-filter') %>
       <% end %>

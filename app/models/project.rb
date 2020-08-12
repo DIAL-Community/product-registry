@@ -17,6 +17,14 @@ class Project < ApplicationRecord
 
   scope :name_contains, ->(name) { where('LOWER(projects.name) like LOWER(?)', "%#{name}%") }
 
+  def image_file
+    if File.exist?(File.join('public','assets','products',"#{slug}.png"))
+      return "/assets/projects/#{slug}.png"
+    else
+      return "project_placeholder.png"
+    end
+  end
+
   def product_image_file
     if !products.empty?
       if File.exist?(File.join('public','assets','products',"#{products.first.slug}.png"))

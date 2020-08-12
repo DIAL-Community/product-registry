@@ -218,6 +218,8 @@ en:
       no-unlock: Didn't receive unlock instructions?
       accept-terms: By clicking here, I accept the Terms of Service for using this website
       terms-popup: Please accept the terms and conditions
+    feedback:
+      info-text: We would like to hear your feedback
     location:
       form:
         other-names: Other Names
@@ -226,6 +228,9 @@ en:
     maturity-rubric:
       index:
         add-category: Add Category
+    notification:
+      favorite-save-notification: We have added this to your favorites!
+      favorite-remove-notification: We have removed this from your favorites
     organization:
       form:
         endorser: Endorser
@@ -290,6 +295,7 @@ en:
         est-hosting: Estimated hosting cost
         est-invested: Estimated money invested
       index:
+        add_favorite: Add to list of favorite Products
         description: Description
         filter: Filter
         has-maturity: Has maturity?
@@ -360,6 +366,7 @@ en:
         no-data: We couldn't find any product suite in the database.
     project:
       index:
+        add_favorite: Add to list of favorite Projects
         budget: Budget
         description: Description
         end-date: End Date
@@ -494,7 +501,9 @@ en:
         one: Year Endorsed
         other: Years Endorsed
       share-link: Share link
-      share-link-tooltip: Click here to create a URL that can be shared to show the current page, including filters
+      share-link-tooltip: Click here to create a URL that can be shared to show the current page, including filters.
+      save-link: Save search
+      save-link-tooltip: Click here to save the URL, including filters.
     breadcrumb:
       home: Home
     sdg:
@@ -582,6 +591,7 @@ en:
         search-sdg-targets: Search and assign SDG Targets
         is-mature: Is Mature
       index:
+        add_favorite: Add to list of favorite Use Cases
         no-data: We couldn't find any use case in the database.
         sdg-target-popover:
           one: SDG Target

@@ -1,2 +1,3 @@
 $('#playbook-list').append('<%= j render(@playbooks) %>');
 $('playbook-list > div:not(.existing-playbook)').addClass('to-be-animated');
+$(document).trigger("infinite-scroll");

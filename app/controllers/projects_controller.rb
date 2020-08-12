@@ -4,6 +4,38 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
+  def favorite_project
+    set_project
+
+    favoriting_user = current_user
+    favoriting_user.saved_projects.push(@project.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
+  def unfavorite_project
+    set_project
+
+    favoriting_user = current_user
+    favoriting_user.saved_projects.delete(@project.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
   def map_projects_osm
   end
 
