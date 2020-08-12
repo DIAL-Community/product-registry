@@ -1,0 +1,31 @@
+#feedback, #feedback-side {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+
+  .feedback-button, #minimize-feedback, #maximize-feedback {
+    cursor: pointer;
+  }
+}
+
+#feedback-overlay {
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  // Overlay will be the top most after survey
+  background-color:#fff;
+  opacity:0.9;
+  z-index:1001;
+}
+
+#feedback-survey {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  // Survey will be the top most
+  background-color:#fff;
+  opacity:1;
+  z-index:1002;
+}

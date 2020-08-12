@@ -1,2 +1,3 @@
 $('#organization-list').append('<%= j render(@organizations) %>');
 $('#organization-list > div:not(.existing-org)').addClass('to-be-animated');
+$(document).trigger("infinite-scroll");

@@ -5,6 +5,38 @@ class UseCasesController < ApplicationController
   before_action :set_sectors, only: [:new, :edit, :update, :show]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
+  def favorite_use_case
+    set_use_case
+
+    favoriting_user = current_user
+    favoriting_user.saved_use_cases.push(@use_case.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
+  def unfavorite_use_case
+    set_use_case
+
+    favoriting_user = current_user
+    favoriting_user.saved_use_cases.delete(@use_case.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
   # GET /use_cases
   # GET /use_cases.json
   def index

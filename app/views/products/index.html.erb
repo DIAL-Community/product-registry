@@ -39,7 +39,7 @@
     <% if user_signed_in? && policy(Product).mod_allowed? %>
       <%= link_to t('view.general.create'), new_product_path, class: 'small mr-1' %>
       <span class="small mr-1">&nbsp;|</span>
-      <%= link_to t('view.organization.index.view-audit'), audits_path(type: "Product"), :class => 'small mr-1' %>
+      <%= link_to t('view.organization.index.view-audit').titlecase, audits_path(type: "Product"), :class => 'small mr-1' %>
     <% else %>
       <%= link_to t('view.general.create'),
           'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
@@ -57,11 +57,55 @@
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
   $(".prod-show-hide").on('click', function(e) {
     e.preventDefault()
     $("#prod-more").toggleClass('hidden')
     $("#prod-show-more").toggleClass('hidden')
     $("#prod-show-less").toggleClass('hidden')
-  })
+  });
+
+  $(".model-logo").on({
+    mouseenter: function() {
+      const indicator = $(this).find(".favorite-indicator");
+      const favorited = $(indicator).attr("data-favorited");
+      if (favorited === "true") {
+        indicator.addClass("fas fa-check-circle text-success");
+      } else {
+        indicator.addClass("fas fa-plus");
+      }
+      indicator.fadeIn();
+    },
+    mouseleave: function() {
+      $(this).find(".favorite-indicator").fadeOut();
+    }
+  });
+  
+  $(".favorite-indicator").each(function(index, element) {
+    $(element).on("click", function(event) {
+      const slug = $(element).attr("data-slug");
+      const favorited = $(element).attr("data-favorited");
+  
+      let path = "favorite_product";
+      if (favorited === "true") {
+        path = "unfavorite_product";
+      }
+  
+      $.post(`/products/${slug}/${path}`, function(data) {
+        $("#notifier").trigger({
+          type: "notify",
+          message: "<%= t('view.notification.favorite-save-notification') %>"
+        });
+        const parent = $(element).parent();
+        $(element).attr("data-favorited", favorited === "true" ? "false" : "true");
+        if (favorited !== "true") {
+          $(element).removeClass("fa-plus");
+          $(element).addClass("fa-check-circle text-success");
+        } else {
+          $(element).removeClass("fa-check-circle text-success");
+          $(element).addClass("fa-plus");
+        }
+      });
+    });
+  });
 </script>

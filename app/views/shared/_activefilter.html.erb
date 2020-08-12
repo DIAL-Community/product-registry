@@ -6,7 +6,7 @@
         <% if session.key? filter %>
           <% @filters_exist = true %>
           <li id="<%= filter %>" class="list-group-item">
-            <%= format_filter(filter) %>
+            <%= format_filter(filter, session[filter]) %>
           </li>
         <% end %>
       <% end %>
@@ -14,10 +14,52 @@
   </div>
   <div class="col-3">
     <% if @filters_exist %>
-    <a id="share-link" href="#" class="float-right" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= t('view.active-filter.share-link-tooltip') %>"><%= t('view.active-filter.share-link') %></a>
-    <div class="float-right mr-2"></div>
-    <textarea class="copytextarea hidden"></textarea>
-    <button id="doclick" class="hidden"></button>
+      <div class="float-right">
+        <a id="share-link" href="#"
+           data-toggle="tooltip" data-placement="bottom"
+           data-original-title="<%= t('view.active-filter.share-link-tooltip') %>">
+           <%= t('view.active-filter.share-link') %>
+        </a>
+        <span class="small mr-1">&nbsp;|</span>
+        <a id="save-link" href="#"
+           data-toggle="tooltip" data-placement="bottom"
+           data-original-title="<%= t('view.active-filter.save-link-tooltip') %>">
+           <%= t('view.active-filter.save-link') %>
+        </a>
+        <textarea class="copytextarea hidden"></textarea>
+        <button id="doclick" class="hidden"></button>
+        <div class="float-right mr-2"></div>
+      </div>
     <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+$("#save-link").on("click", function(event) {
+    event.preventDefault();
+
+    let url = window.location.href + "?urlFilter=true&"
+    $.get('/get_filters', function(filters) {
+      Object.keys(filters).map(function(filterKey) {
+        if (Array.isArray(filters[filterKey])) {
+          url += filterKey + "="
+          filters[filterKey].map(function(arrayFilter) {
+            url += arrayFilter.value + "-" + arrayFilter.label + "--"
+          })
+          url = url.slice(0, -2);
+          url += "&"
+        } else {
+          url += filterKey + "=" + filters[filterKey].value + "&"
+        }
+      });
+      url = url.slice(0, -1);
+
+      $.post(`/save_url`, { url: url },  function(data) {
+        $("#notifier").trigger({
+          type: "notify",
+          message: "<%= t('view.notification.favorite-save-notification') %>"
+        });
+      });
+    });
+});
+</script>

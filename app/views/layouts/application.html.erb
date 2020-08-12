@@ -141,6 +141,10 @@
     <% if !request.url.include?('/show_pdf') %>
       <%= render '/shared/footer' %>
     <% end %>
+
+    <%= render '/shared/notifier' %>
+    <%= render '/shared/feedback' %>
+    <%= render '/shared/footer' %>
   </body>
 <% end %>
 </html>
