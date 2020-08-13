@@ -8,7 +8,7 @@
     <div class="model-logo">
       <i class="favorite-indicator" style="z-index:9;"
          data-slug="<%= use_case.slug %>"
-         data-favorited="<%= current_user.saved_use_cases.include?(use_case.id) %>"
+         data-favorited="<%= current_user.saved_use_cases.include?(use_case.id) unless current_user.nil? %>"
          data-toggle="tooltip"
          data-placement="top" data-original-title="<%= t('view.use-case.index.add_favorite') %>"></i>
       <%= link_to(use_case) do %>

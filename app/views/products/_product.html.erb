@@ -26,7 +26,7 @@
     <div class="model-logo">
       <i class="favorite-indicator"
          data-slug="<%= product.slug %>"
-         data-favorited="<%= current_user.saved_products.include?(product.id) %>"
+         data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
          data-toggle="tooltip"
          data-placement="top" data-original-title="<%= t('view.product.index.add_favorite') %>"></i>
       <%= link_to(product) do %>
