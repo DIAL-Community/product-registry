@@ -5,6 +5,7 @@
 
 <script text="text/javascript">
   $("#notifier").ready(function() {
+    $(this).unbind('notify');
     $(this).bind({
       notify: function(event) {
         event.stopPropagation();
