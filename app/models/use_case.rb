@@ -1,4 +1,6 @@
 class UseCase < ApplicationRecord
+  include EntityStatusType
+
   belongs_to :sector
   has_many :sdg_targets
   has_many :use_case_steps, dependent: :destroy

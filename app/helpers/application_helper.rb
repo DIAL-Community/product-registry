@@ -9,7 +9,7 @@ module ApplicationHelper
 
   ADMIN_NAV_CONTROLLERS = %w[locations contacts users sectors candidate_organizations use_cases_steps tags
                              product_suites operator_services settings glossaries portal_views maturity_rubrics
-                             rubric_categories cities countries task_trackers].freeze
+                             rubric_categories cities countries task_trackers candidate_roles audits].freeze
 
   ACTION_WITH_BREADCRUMBS = %w[show edit create update new].freeze
   DEVISE_CONTROLLERS = ['sessions', 'devise/passwords', 'devise/confirmations', 'registrations', 'deploys'].freeze
@@ -29,7 +29,11 @@ module ApplicationHelper
   end
 
   def available_portals
-    PortalView.where(':user_role = ANY(user_roles)', user_role: current_user.role)
+    available_portals = PortalView.all
+    current_user.roles.each do |role|
+      available_portals = available_portals.where(':user_role = ANY(user_roles)', user_role: role)
+    end
+    available_portals
   end
 
   def embedded_survey_form
@@ -105,7 +109,7 @@ module ApplicationHelper
     end
 
     unless object_record.nil?
-      if breadcrumbs[-1][:path] == 'admin/users'
+      if breadcrumbs[-1][:path] == 'admin/users' || breadcrumbs[-1][:path] == 'candidate_roles'
         id_label = object_record.email
       else
         id_label = object_record.name

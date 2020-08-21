@@ -107,6 +107,18 @@ CREATE TYPE public.digisquare_maturity_level AS ENUM (
 
 
 --
+-- Name: entity_status_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.entity_status_type AS ENUM (
+    'BETA',
+    'MATURE',
+    'SELF-REPORTED',
+    'VALIDATED'
+);
+
+
+--
 -- Name: filter_nav; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -130,6 +142,18 @@ CREATE TYPE public.filter_nav AS ENUM (
 CREATE TYPE public.location_type AS ENUM (
     'country',
     'point'
+);
+
+
+--
+-- Name: mapping_status_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.mapping_status_type AS ENUM (
+    'BETA',
+    'MATURE',
+    'SELF-REPORTED',
+    'VALIDATED'
 );
 
 
@@ -221,7 +245,9 @@ CREATE TYPE public.user_role AS ENUM (
     'org_user',
     'org_product_user',
     'product_user',
-    'mni'
+    'mni',
+    'content_writer',
+    'content_editor'
 );
 
 
@@ -451,7 +477,8 @@ CREATE TABLE public.building_blocks (
     slug character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description jsonb DEFAULT '{}'::jsonb NOT NULL,
+    maturity public.entity_status_type NOT NULL
 );
 
 
@@ -522,6 +549,44 @@ CREATE SEQUENCE public.candidate_organizations_id_seq
 --
 
 ALTER SEQUENCE public.candidate_organizations_id_seq OWNED BY public.candidate_organizations.id;
+
+
+--
+-- Name: candidate_roles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.candidate_roles (
+    id bigint NOT NULL,
+    email character varying NOT NULL,
+    roles public.user_role[] DEFAULT '{}'::public.user_role[],
+    description character varying NOT NULL,
+    rejected boolean,
+    rejected_date timestamp without time zone,
+    rejected_by_id bigint,
+    approved_date timestamp without time zone,
+    approved_by_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: candidate_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.candidate_roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: candidate_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.candidate_roles_id_seq OWNED BY public.candidate_roles.id;
 
 
 --
@@ -1510,7 +1575,8 @@ CREATE TABLE public.playbooks (
     slug character varying NOT NULL,
     phases jsonb DEFAULT '[]'::jsonb NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    maturity character varying DEFAULT 'Beta'::character varying
 );
 
 
@@ -1700,6 +1766,18 @@ ALTER SEQUENCE public.principle_descriptions_id_seq OWNED BY public.principle_de
 
 
 --
+-- Name: product_building_blocks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_building_blocks (
+    building_block_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    link_type character varying DEFAULT 'Beta'::character varying,
+    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL
+);
+
+
+--
 -- Name: product_classifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1825,6 +1903,17 @@ ALTER SEQUENCE public.product_product_relationships_id_seq OWNED BY public.produ
 
 
 --
+-- Name: product_sectors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_sectors (
+    product_id bigint NOT NULL,
+    sector_id bigint NOT NULL,
+    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL
+);
+
+
+--
 -- Name: product_suites; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1864,6 +1953,17 @@ ALTER SEQUENCE public.product_suites_id_seq OWNED BY public.product_suites.id;
 CREATE TABLE public.product_suites_product_versions (
     product_suite_id bigint NOT NULL,
     product_version_id bigint NOT NULL
+);
+
+
+--
+-- Name: product_sustainable_development_goals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_sustainable_development_goals (
+    product_id bigint NOT NULL,
+    sustainable_development_goal_id bigint NOT NULL,
+    mapping_status public.mapping_status_type NOT NULL
 );
 
 
@@ -1925,17 +2025,8 @@ CREATE TABLE public.products (
     est_hosting integer,
     est_invested integer,
     maturity_score integer,
-    product_type public.product_type DEFAULT 'product'::public.product_type
-);
-
-
---
--- Name: products_building_blocks; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.products_building_blocks (
-    building_block_id bigint NOT NULL,
-    product_id bigint NOT NULL
+    product_type public.product_type DEFAULT 'product'::public.product_type,
+    status character varying
 );
 
 
@@ -1965,27 +2056,6 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 CREATE TABLE public.products_origins (
     product_id bigint NOT NULL,
     origin_id bigint NOT NULL
-);
-
-
---
--- Name: products_sectors; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.products_sectors (
-    product_id bigint NOT NULL,
-    sector_id bigint NOT NULL
-);
-
-
---
--- Name: products_sustainable_development_goals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.products_sustainable_development_goals (
-    product_id bigint NOT NULL,
-    sustainable_development_goal_id bigint NOT NULL,
-    link_type character varying
 );
 
 
@@ -2910,7 +2980,7 @@ CREATE TABLE public.use_cases (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    maturity character varying DEFAULT 'Beta'::character varying,
+    maturity public.entity_status_type NOT NULL,
     tags character varying[] DEFAULT '{}'::character varying[]
 );
 
@@ -2954,7 +3024,7 @@ CREATE TABLE public.user_events (
     email character varying,
     event_datetime timestamp without time zone NOT NULL,
     event_type character varying NOT NULL,
-    extended_data character varying,
+    extended_data jsonb DEFAULT '{}'::jsonb NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2996,7 +3066,7 @@ CREATE TABLE public.users (
     unconfirmed_email character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    role public.user_role DEFAULT 'user'::public.user_role NOT NULL,
+    role public.user_role DEFAULT 'user'::public.user_role,
     receive_backup boolean DEFAULT false,
     organization_id bigint,
     expired boolean,
@@ -3004,7 +3074,8 @@ CREATE TABLE public.users (
     saved_products bigint[] DEFAULT '{}'::bigint[],
     saved_use_cases bigint[] DEFAULT '{}'::bigint[],
     saved_projects bigint[] DEFAULT '{}'::bigint[],
-    saved_urls character varying[] DEFAULT '{}'::character varying[]
+    saved_urls character varying[] DEFAULT '{}'::character varying[],
+    roles public.user_role[] DEFAULT '{}'::public.user_role[]
 );
 
 
@@ -3212,6 +3283,13 @@ ALTER TABLE ONLY public.building_blocks ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.candidate_organizations ALTER COLUMN id SET DEFAULT nextval('public.candidate_organizations_id_seq'::regclass);
+
+
+--
+-- Name: candidate_roles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_roles ALTER COLUMN id SET DEFAULT nextval('public.candidate_roles_id_seq'::regclass);
 
 
 --
@@ -3795,6 +3873,14 @@ ALTER TABLE ONLY public.building_blocks
 
 ALTER TABLE ONLY public.candidate_organizations
     ADD CONSTRAINT candidate_organizations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: candidate_roles candidate_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_roles
+    ADD CONSTRAINT candidate_roles_pkey PRIMARY KEY (id);
 
 
 --
@@ -4435,7 +4521,7 @@ CREATE UNIQUE INDEX bbs_workflows ON public.workflows_building_blocks USING btre
 -- Name: block_prods; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX block_prods ON public.products_building_blocks USING btree (building_block_id, product_id);
+CREATE UNIQUE INDEX block_prods ON public.product_building_blocks USING btree (building_block_id, product_id);
 
 
 --
@@ -4527,6 +4613,20 @@ CREATE INDEX index_candidate_organizations_on_approved_by_id ON public.candidate
 --
 
 CREATE INDEX index_candidate_organizations_on_rejected_by_id ON public.candidate_organizations USING btree (rejected_by_id);
+
+
+--
+-- Name: index_candidate_roles_on_approved_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_roles_on_approved_by_id ON public.candidate_roles USING btree (approved_by_id);
+
+
+--
+-- Name: index_candidate_roles_on_rejected_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_roles_on_rejected_by_id ON public.candidate_roles USING btree (rejected_by_id);
 
 
 --
@@ -4824,6 +4924,20 @@ CREATE INDEX index_product_indicators_on_product_id ON public.product_indicators
 
 
 --
+-- Name: index_product_sectors_on_product_id_and_sector_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_sectors_on_product_id_and_sector_id ON public.product_sectors USING btree (product_id, sector_id);
+
+
+--
+-- Name: index_product_sectors_on_sector_id_and_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_sectors_on_sector_id_and_product_id ON public.product_sectors USING btree (sector_id, product_id);
+
+
+--
 -- Name: index_product_versions_on_product_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4835,20 +4949,6 @@ CREATE INDEX index_product_versions_on_product_id ON public.product_versions USI
 --
 
 CREATE UNIQUE INDEX index_products_on_slug ON public.products USING btree (slug);
-
-
---
--- Name: index_products_sectors_on_product_id_and_sector_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_products_sectors_on_product_id_and_sector_id ON public.products_sectors USING btree (product_id, sector_id);
-
-
---
--- Name: index_products_sectors_on_sector_id_and_product_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_products_sectors_on_sector_id_and_product_id ON public.products_sectors USING btree (sector_id, product_id);
 
 
 --
@@ -5128,14 +5228,14 @@ CREATE UNIQUE INDEX principles_activities_idx ON public.activities_principles US
 -- Name: prod_blocks; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX prod_blocks ON public.products_building_blocks USING btree (product_id, building_block_id);
+CREATE UNIQUE INDEX prod_blocks ON public.product_building_blocks USING btree (product_id, building_block_id);
 
 
 --
 -- Name: prod_sdgs; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX prod_sdgs ON public.products_sustainable_development_goals USING btree (product_id, sustainable_development_goal_id);
+CREATE UNIQUE INDEX prod_sdgs ON public.product_sustainable_development_goals USING btree (product_id, sustainable_development_goal_id);
 
 
 --
@@ -5240,7 +5340,7 @@ CREATE UNIQUE INDEX projects_sectors_idx ON public.projects_sectors USING btree 
 -- Name: sdgs_prods; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX sdgs_prods ON public.products_sustainable_development_goals USING btree (sustainable_development_goal_id, product_id);
+CREATE UNIQUE INDEX sdgs_prods ON public.product_sustainable_development_goals USING btree (sustainable_development_goal_id, product_id);
 
 
 --
@@ -5441,6 +5541,14 @@ ALTER TABLE ONLY public.use_case_steps
 
 ALTER TABLE ONLY public.maturity_rubric_descriptions
     ADD CONSTRAINT fk_rails_1c75e9f6a4 FOREIGN KEY (maturity_rubric_id) REFERENCES public.maturity_rubrics(id);
+
+
+--
+-- Name: candidate_roles fk_rails_1c91ae1dbd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_roles
+    ADD CONSTRAINT fk_rails_1c91ae1dbd FOREIGN KEY (approved_by_id) REFERENCES public.users(id);
 
 
 --
@@ -5649,6 +5757,14 @@ ALTER TABLE ONLY public.use_case_step_descriptions
 
 ALTER TABLE ONLY public.rubric_category_descriptions
     ADD CONSTRAINT fk_rails_7f79ec6842 FOREIGN KEY (rubric_category_id) REFERENCES public.rubric_categories(id);
+
+
+--
+-- Name: candidate_roles fk_rails_80a7b4e918; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_roles
+    ADD CONSTRAINT fk_rails_80a7b4e918 FOREIGN KEY (rejected_by_id) REFERENCES public.users(id);
 
 
 --
@@ -5940,18 +6056,18 @@ ALTER TABLE ONLY public.product_classifications
 
 
 --
--- Name: products_building_blocks products_building_blocks_building_block_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: product_building_blocks products_building_blocks_building_block_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.products_building_blocks
+ALTER TABLE ONLY public.product_building_blocks
     ADD CONSTRAINT products_building_blocks_building_block_fk FOREIGN KEY (building_block_id) REFERENCES public.building_blocks(id);
 
 
 --
--- Name: products_building_blocks products_building_blocks_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: product_building_blocks products_building_blocks_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.products_building_blocks
+ALTER TABLE ONLY public.product_building_blocks
     ADD CONSTRAINT products_building_blocks_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
@@ -5972,18 +6088,18 @@ ALTER TABLE ONLY public.products_origins
 
 
 --
--- Name: products_sustainable_development_goals products_sdgs_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: product_sustainable_development_goals products_sdgs_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.products_sustainable_development_goals
+ALTER TABLE ONLY public.product_sustainable_development_goals
     ADD CONSTRAINT products_sdgs_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
 --
--- Name: products_sustainable_development_goals products_sdgs_sdg_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: product_sustainable_development_goals products_sdgs_sdg_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.products_sustainable_development_goals
+ALTER TABLE ONLY public.product_sustainable_development_goals
     ADD CONSTRAINT products_sdgs_sdg_fk FOREIGN KEY (sustainable_development_goal_id) REFERENCES public.sustainable_development_goals(id);
 
 
@@ -6339,8 +6455,22 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200710210144'),
 ('20200727155410'),
 ('20200729150759'),
+('20200729202732'),
 ('20200730195836'),
-('20200804184953');
-
+('20200804184953'),
+('20200811135839'),
+('20200811142114'),
+('20200811143421'),
+('20200811150942'),
+('20200811181245'),
+('20200812012621'),
+('20200812012757'),
+('20200812014644'),
+('20200812014739'),
+('20200812015747'),
+('20200812155025'),
+('20200814184009'),
+('20200818202930'),
+('20200818203509');
 
 

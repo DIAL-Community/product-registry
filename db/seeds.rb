@@ -106,3 +106,8 @@ if Stylesheet.where(portal: 'playbooks').count.zero?
   Stylesheet.create! portal: 'playbooks',
       background_color: '#004300'
 end
+
+if Origin.where(slug: 'manually_entered').count.zero?
+  Origin.create(name: 'Manually Entered', description: 'Project information are manually entered by user.',
+                slug: 'manually_entered')
+end

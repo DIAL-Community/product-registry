@@ -4,7 +4,7 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @operator_service = operator_services(:one)
     @country = countries(:one)
   end

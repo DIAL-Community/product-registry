@@ -1,8 +1,15 @@
 Rails.application.routes.draw do
-  resources :task_trackers
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   mount Commontator::Engine => '/commontator'
+  resources :task_trackers
+
+  resources :candidate_roles do
+    member do
+      post 'reject'
+      post 'approve'
+    end
+  end
 
   resources :product_suites
   resources :glossaries
@@ -50,6 +57,11 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
   scope '/admin' do
     resources :users
+  end
+
+  devise_scope :user do
+    get '/users', to: 'registrations#new'
+    get '/users/password', to: 'devise/passwords#new'
   end
 
   root to: 'about#index'

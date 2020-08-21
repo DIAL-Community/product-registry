@@ -1,32 +1,36 @@
 class CandidateOrganizationsController < ApplicationController
   before_action :set_candidate_organization, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
 
   # GET /candidate_organizations
   # GET /candidate_organizations.json
   def index
     @candidate_organizations = CandidateOrganization.all.paginate(page: params[:page], per_page: 20)
     params[:search].present? && @candidate_organizations = @candidate_organizations.name_contains(params[:search])
-    authorize @candidate_organizations, :view_allowed?
+    authorize(@candidate_organizations, :view_allowed?)
   end
 
   # GET /candidate_organizations/1
   # GET /candidate_organizations/1.json
   def show
+    authorize(@candidate_organization, :view_allowed?)
   end
 
   # GET /candidate_organizations/new
   def new
     @candidate_organization = CandidateOrganization.new
+    authorize(@candidate_organization, :mod_allowed?)
   end
 
   # GET /candidate_organizations/1/edit
   def edit
-    authorize @candidate_organization, :mod_allowed?
+    authorize(@candidate_organization, :mod_allowed?)
   end
 
   # POST /candidate_organizations
   # POST /candidate_organizations.json
   def create
+    authorize(CandidateOrganization, :mod_allowed?)
     # Everyone including unregistered user can post and create candidate organization.
     @candidate_organization = CandidateOrganization.new(candidate_organization_params)
     @candidate_organization.set_current_user(current_user)
@@ -62,7 +66,7 @@ class CandidateOrganizationsController < ApplicationController
   # PATCH/PUT /candidate_organizations/1
   # PATCH/PUT /candidate_organizations/1.json
   def update
-    authorize @candidate_organization, :mod_allowed?
+    authorize(@candidate_organization, :mod_allowed?)
 
     if params[:selected_contacts].present?
       contacts = Set.new
@@ -87,7 +91,7 @@ class CandidateOrganizationsController < ApplicationController
   # DELETE /candidate_organizations/1
   # DELETE /candidate_organizations/1.json
   def destroy
-    authorize @candidate_organization, :mod_allowed?
+    authorize(@candidate_organization, :mod_allowed?)
     @candidate_organization.destroy
     respond_to do |format|
       format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was.' }
@@ -110,7 +114,7 @@ class CandidateOrganizationsController < ApplicationController
 
   def approve
     set_candidate_organization
-    authorize @candidate_organization, :mod_allowed?
+    authorize(@candidate_organization, :mod_allowed?)
 
     organization = Organization.new
     organization.name = @candidate_organization.name
@@ -142,7 +146,7 @@ class CandidateOrganizationsController < ApplicationController
 
   def reject
     set_candidate_organization
-    authorize @candidate_organization, :mod_allowed?
+    authorize(@candidate_organization, :mod_allowed?)
     respond_to do |format|
       # Can only approve new submission.
       if @candidate_organization.rejected.nil? &&

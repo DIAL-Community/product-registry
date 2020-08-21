@@ -5,13 +5,23 @@
   </fieldset>
 
   <fieldset class="form-group">
-    <label for="user-role">
+    <label for="user-role-selector">
       <%= t('view.user.form.role')%>
     </label>
-    <%= form.select(:role, User.roles.keys.map {|role| [role, role]}, {}, :class => "form-control mb-2") %>
+    <select id="user-role-selector" class="form-control mb-2">
+      <option value="-1"><%= t('view.user.role.all-roles') %></option>
+      <%= options_for_select(User.user_roles
+                                 .keys
+                                 .reject { |role| role == User.user_roles[:org_product_user] }
+                                 .map { |role| [t("view.user.role.#{role}"), role] }
+                                 .sort_by { |label, value| label }) %>
+    </select>
+    <div class="row mt-1">
+      <div class="col-12 badges"></div>
+    </div>
   </fieldset>
 
-  <% if @user.role == "admin" %>
+  <% if user.roles.include?(User.user_roles[:admin]) %>
   <fieldset>
     <%= form.check_box :receive_backup, {}, true, false %>
     <label class="form-label-group mt-2" for="receive_backup">
@@ -20,7 +30,31 @@
   </fieldset>
   <% end %>
 
-  <% if !@user.is_approved %>
+  <div id="user-product-selector" class="hidden">
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <%= t('model.product').to_s.pluralize.humanize %> 
+    </h6>
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="product-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
+      <label for="product-search">
+        <%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>
+      </label>
+    </fieldset>
+    <div class="row">
+      <div class="col-12">
+        <span id="base-selected-products" class="selected-element badge badge-secondary px-1 mb-1">
+          <span class="text-label"></span>
+          <a onclick="remove(this);" style="cursor: pointer;">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+          <input type="hidden"/>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <% if !user.is_approved %>
     <fieldset class="form-group form-check">
       <%= form.check_box :is_approved, class: "form-check-input" %>
       <%= form.label :is_approved, t('view.user.form.manual-approval'), class: "form-check-label" %>
@@ -32,3 +66,27 @@
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
+
+<script type="text/javascript">
+  <% user.roles.sort.each do |role| %>
+    $('#user-role-selector').next('.row').find('.badges').append(
+      '<span class="badge badge-secondary mr-1"><%= t("view.user.role.#{role}") %>' +
+      ' <input type="hidden" name="selected_roles[]" value="<%= role %>"/>' +
+      ' <i class="fas fa-window-close remove-product"></i>' +
+      '</span>'
+    );
+
+    <% if role == User.user_roles[:product_user] %>
+      $('#user-product-selector').show();
+      <% user.products.order("name").each do |product| %>
+        addProduct('<%= product.id %>', '<%= product.name %>');
+      <% end %>
+    <% end %>
+  <% end %>
+
+  $('.remove-product').on('click', function() {
+    $(this).closest('.badge').fadeOut(function() {
+      $(this).remove();
+    });
+  });
+</script>

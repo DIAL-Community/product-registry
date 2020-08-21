@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
   include FilterConcern
-  
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
@@ -102,6 +101,21 @@ class ProjectsController < ApplicationController
   def new
     authorize Project, :mod_allowed?
     @project = Project.new
+
+    # Defaulting to manually entered, but allow user to change it.
+    @project.origin = Origin.find_by(slug: 'manually_entered')
+
+    unless current_user.nil?
+      current_user.products.each do |product|
+        @project.products.push(product)
+      end
+
+      organization = Organization.find_by(id: current_user.organization_id)
+      unless organization.nil?
+        @project.organizations.push(organization)
+      end
+    end
+
     @project_description = ProjectDescription.new
   end
 
@@ -112,13 +126,42 @@ class ProjectsController < ApplicationController
     if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
+
+        next if organization.nil?
+
+        unless policy(organization).adding_mapping_allowed?
+          # Skip if we already assign value to the session
+          next if session[:project_elevated_role].to_s.downcase == 'true'
+
+          session[:project_elevated_role] = true
+          next
+        end
+
         @project.organizations.push(organization)
+      end
+    end
+
+    if params[:selected_countries].present?
+      params[:selected_countries].keys.each do |country_id|
+        country = Country.find(country_id)
+        @project.countries.push(country) unless country.nil?
       end
     end
 
     if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
-        product = Organization.find(product_id)
+        product = Product.find(product_id)
+
+        next if product.nil?
+
+        unless policy(product).adding_mapping_allowed?
+          # Skip if we already assign value to the session
+          next if session[:project_elevated_role].to_s.downcase == 'true'
+
+          session[:project_elevated_role] = true
+          next
+        end
+
         @project.products.push(product)
       end
     end
@@ -151,23 +194,102 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    authorize @project, :mod_allowed?
+    authorize(@project, :mod_allowed?)
     if params[:selected_organizations].present?
-      organizations = Set.new
-      params[:selected_organizations].keys.each do |organization_id|
-        organization = Organization.find(organization_id)
-        organizations.add(organization)
+      existing_org_ids = @project.organizations.map(&:id)
+      ui_org_ids = params[:selected_organizations].keys
+                                                  .map(&:to_i)
+
+      removed_org_ids = existing_org_ids - ui_org_ids
+      logger.debug("Removing: [#{removed_org_ids}] organization ids from project.")
+
+      removed_org_ids.each do |removed_org_id|
+        organization = Organization.find(removed_org_id)
+
+        next if organization.nil?
+
+        unless policy(organization).removing_mapping_allowed?
+          # Skip if we already assign value to the session
+          next if session[:project_elevated_role].to_s.downcase == 'true'
+
+          session[:project_elevated_role] = true
+          next
+        end
+
+        @project.organizations.delete(removed_org_id)
       end
-      @project.organizations = organizations.to_a
+
+      added_org_ids = ui_org_ids - existing_org_ids
+      logger.debug("Adding: [#{added_org_ids}] organization ids to project.")
+
+      added_org_ids.each do |added_org_id|
+        organization = Organization.find(added_org_id)
+
+        next if organization.nil?
+
+        unless policy(organization).adding_mapping_allowed?
+          # Skip if we already assign value to the session
+          next if session[:project_elevated_role].to_s.downcase == 'true'
+
+          session[:project_elevated_role] = true
+          next
+        end
+
+        @project.organizations.push(organization)
+      end
+    end
+
+    if params[:selected_countries].present?
+      countries = Set.new
+      params[:selected_countries].keys.each do |country_id|
+        country = Country.find(country_id)
+        countries.add(country) unless country.nil?
+      end
+      @project.countries = countries.to_a
     end
 
     if params[:selected_products].present?
-      products = Set.new
-      params[:selected_products].keys.each do |product_id|
-        product = Product.find(product_id)
-        products.add(product)
+      existing_product_ids = @project.products.map(&:id)
+      ui_product_ids = params[:selected_products].keys
+                                                 .map(&:to_i)
+
+      removed_product_ids = existing_product_ids - ui_product_ids
+      logger.debug("Removing: [#{removed_product_ids}] product ids from project.")
+
+      removed_product_ids.each do |removed_product_id|
+        product = Product.find(removed_product_id)
+
+        next if product.nil?
+
+        unless policy(product).removing_mapping_allowed?
+          # Skip if we already assign value to the session
+          next if session[:project_elevated_role].to_s.downcase == 'true'
+
+          session[:project_elevated_role] = true
+          next
+        end
+
+        @project.products.delete(removed_product_id)
       end
-      @project.products = products.to_a
+
+      added_product_ids = ui_product_ids - existing_product_ids
+      logger.debug("Adding: [#{added_product_ids}] product ids to project.")
+
+      added_product_ids.each do |added_product_id|
+        product = Product.find(added_product_id)
+
+        next if product.nil?
+
+        unless policy(product).adding_mapping_allowed?
+          # Skip if we already assign value to the session
+          next if session[:project_elevated_role].to_s.downcase == 'true'
+
+          session[:project_elevated_role] = true
+          next
+        end
+
+        @project.products.push(product)
+      end
     end
 
     if project_params[:project_description].present?

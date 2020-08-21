@@ -368,7 +368,7 @@ class OrganizationsController < ApplicationController
         user.destroy
       else
         user.organization_id = nil
-        user.role == User.roles[:org_product_user] && user.role = User.roles[:product_user]
+        user.roles = [User.user_roles[:product_user]] if user.roles.include?(User.user_roles[:org_user])
         user.save
       end
     end

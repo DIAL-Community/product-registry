@@ -15,4 +15,13 @@ const scrollHandlerProject = function() {
   });
 }
 
+const projectsReady = function() {
+  // Init the autocomplete for the country field.
+  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addLocation)
+  $('#base-selected-countries').hide();
+  $("#country-search").autocomplete(countryAutoComplete);
+}
+
 $(document).on('projects#index:loaded', scrollHandlerProject);
+$(document).on('projects#new:loaded', projectsReady);
+$(document).on('projects#edit:loaded', projectsReady);

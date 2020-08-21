@@ -4,7 +4,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @use_case = use_cases(:one)
   end
 
@@ -29,6 +29,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   test "should create use_case" do
     assert_difference('UseCase.count') do
       post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
+                                                maturity: 'BETA',
                                                 sector_id: @use_case.sector_id, slug: @use_case.slug } }
     end
 

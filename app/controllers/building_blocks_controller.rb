@@ -1,6 +1,6 @@
 class BuildingBlocksController < ApplicationController
   include FilterConcern
-  
+
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate]
 
@@ -43,9 +43,9 @@ class BuildingBlocksController < ApplicationController
 
   # GET /building_blocks/new
   def new
-    authorize BuildingBlock, :mod_allowed?
+    authorize(BuildingBlock, :create_allowed?)
     @building_block = BuildingBlock.new
-    @bbDesc = BuildingBlockDescription.new
+    @bb_desc = BuildingBlockDescription.new
   end
 
   # GET /building_blocks/1/edit
@@ -56,18 +56,18 @@ class BuildingBlocksController < ApplicationController
   # POST /building_blocks
   # POST /building_blocks.json
   def create
-    authorize BuildingBlock, :mod_allowed?
+    authorize(BuildingBlock, :create_allowed?)
     @building_block = BuildingBlock.new(building_block_params)
-    @bbDesc = BuildingBlockDescription.new
+    @bb_desc = BuildingBlockDescription.new
 
-    if (params[:selected_products])
+    if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
         product = Product.find(product_id)
         @building_block.products.push(product)
       end
     end
 
-    if (params[:selected_workflows])
+    if params[:selected_workflows].present?
       params[:selected_workflows].keys.each do |workflow_id|
         workflow = Workflow.find(workflow_id)
         @building_block.workflows.push(workflow)
@@ -83,13 +83,23 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
+    if policy(@building_block).beta_only?
+      if building_block_params[:maturity] != BuildingBlock.entity_status_types[:BETA] &&
+          session[:building_block_elevated_role].to_s.downcase != 'true'
+        session[:building_block_elevated_role] = true
+      end
+
+      # Always override to beta if the user don't have the right role
+      @building_block.maturity = BuildingBlock.entity_status_types[:BETA]
+    end
+
     respond_to do |format|
       if !@building_block.errors.any? && @building_block.save
-        if (building_block_params[:bb_desc])
-          @bbDesc.building_block_id = @building_block.id
-          @bbDesc.locale = I18n.locale
-          @bbDesc.description = JSON.parse(building_block_params[:bb_desc])
-          @bbDesc.save
+        if building_block_params[:bb_desc].present?
+          @bb_desc.building_block_id = @building_block.id
+          @bb_desc.locale = I18n.locale
+          @bb_desc.description = JSON.parse(building_block_params[:bb_desc])
+          @bb_desc.save
         end
         format.html { redirect_to @building_block,
                       flash: { notice: t('messages.model.created', model: t('model.building-block').to_s.humanize) }}
@@ -111,7 +121,7 @@ class BuildingBlocksController < ApplicationController
     authorize @building_block, :mod_allowed?
 
     products = Set.new
-    if (params[:selected_products])
+    if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
@@ -120,7 +130,7 @@ class BuildingBlocksController < ApplicationController
     @building_block.products = products.to_a
 
     workflows = Set.new
-    if (params[:selected_workflows])
+    if params[:selected_workflows].present?
       params[:selected_workflows].keys.each do |workflow_id|
         workflow = Workflow.find(workflow_id)
         workflows.add(workflow)
@@ -137,11 +147,21 @@ class BuildingBlocksController < ApplicationController
       end
     end
 
-    if (building_block_params[:bb_desc])
-      @bbDesc.building_block_id = @building_block.id
-      @bbDesc.locale = I18n.locale
-      @bbDesc.description = JSON.parse(building_block_params[:bb_desc])
-      @bbDesc.save
+    if building_block_params[:bb_desc].present?
+      @bb_desc.building_block_id = @building_block.id
+      @bb_desc.locale = I18n.locale
+      @bb_desc.description = JSON.parse(building_block_params[:bb_desc])
+      @bb_desc.save
+    end
+
+    if policy(@building_block).beta_only?
+      if building_block_params[:maturity] != BuildingBlock.entity_status_types[:BETA] &&
+          session[:building_block_elevated_role].to_s.downcase != 'true'
+        session[:building_block_elevated_role] = true
+      end
+
+      # Always override to beta if the user don't have the right role
+      @building_block.maturity = BuildingBlock.entity_status_types[:BETA]
     end
 
     respond_to do |format|
@@ -159,7 +179,7 @@ class BuildingBlocksController < ApplicationController
   # DELETE /building_blocks/1
   # DELETE /building_blocks/1.json
   def destroy
-    authorize @building_block, :mod_allowed?
+    authorize(@building_block, :delete_allowed?)
     @building_block.destroy
     respond_to do |format|
       format.html { redirect_to building_blocks_url,
@@ -190,9 +210,9 @@ class BuildingBlocksController < ApplicationController
       else
         @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
       end
-      @bbDesc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
-      if !@bbDesc
-        @bbDesc = BuildingBlockDescription.new
+      @bb_desc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
+      if !@bb_desc
+        @bb_desc = BuildingBlockDescription.new
       end
     end
 

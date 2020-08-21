@@ -4,7 +4,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @organization = organizations(:one)
   end
 
@@ -127,7 +127,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(User.where(organization_id: organization.id).count, 0)
 
     fourth_user = users(:four)
-    fourth_user.role = User.roles[:org_user]
+    fourth_user.roles = [User.user_roles[:org_user]]
     fourth_user.organization_id = organization.id
     fourth_user.save!
 
@@ -146,7 +146,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(User.where(organization_id: organization.id).count, 0)
 
     fourth_user = users(:four)
-    fourth_user.role = User.roles[:org_product_user]
+    fourth_user.roles = [User.user_roles[:org_product_user]]
     fourth_user.products = [products(:one)]
     fourth_user.organization_id = organization.id
     fourth_user.save!
@@ -299,7 +299,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     # Should be able to edit the rest of the fields.
     assert_equal(1, assigns(:organization).countries.length)
 
-    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', role: :admin)
+    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
 
     patch(organization_url(organization), params: patch_params)
     get organization_url(organization)

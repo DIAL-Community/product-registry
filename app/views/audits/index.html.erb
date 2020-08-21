@@ -16,9 +16,10 @@
             <td><%= audit.associated_id %></td>
             <td><%= audit.username %></td>
             <td><%= audit.action %></td>
-            <td><%= audit.audit_changes %></td>
+            <td><pre><%= JSON.pretty_generate(audit.audit_changes) %></pre></td>
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
+<%= will_paginate @audit_list, :class => "float-right digg-pagination" %>

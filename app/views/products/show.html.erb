@@ -199,7 +199,7 @@
                   <%= image_tag(bb.image_file, class: 'card-image align-middle p-0', title: bb.name, 'data-toggle': 'tooltip', 'data-placement': 'top' ) %>
                 <% end %>
               </div>
-              <% product_bb = @product.products_building_blocks.where(building_block_id: bb.id) %>
+              <% product_bb = @product.product_building_blocks.where(building_block_id: bb.id) %>
               <% if !product_bb.first.nil? %>
                 <div class="text-muted text-center"><%= product_bb.first.link_type %></div>
               <% end %>
@@ -223,24 +223,23 @@
   <div class="card">
     <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sdg').to_s.upcase.pluralize %></h5>
     <div class="card-body">
-      <% if @product.sustainable_development_goals.count > 0 %>
-        <% @product.sustainable_development_goals.each_slice(3) do |sdg_row| %>
+      <% if @product.product_sustainable_development_goals.count > 0 %>
+        <% @product.product_sustainable_development_goals.each_slice(3) do |product_sdg_row| %>
         <div class="card-deck">
-          <% sdg_row.each do |sdg| %>
+          <% product_sdg_row.each do |product_sdg| %>
             <div class="card">
               <div class="card-body">
-                <%= link_to sdg do %>
-                  <%= image_tag(sdg.image_file, width: 50, class: 'card-image align-middle p-0') %>
+                <%= link_to product_sdg.sustainable_development_goal do %>
+                  <%= image_tag(product_sdg.sustainable_development_goal.image_file, width: 50, class: 'card-image align-middle p-0') %>
                 <% end %>
               </div>
-              <% product_sdg = @product.products_sustainable_development_goals.where(sustainable_development_goal_id: sdg.id) %>
-              <% if !product_sdg.first.nil? %>
-                <div class="text-muted text-center"><%= product_sdg.first.link_type %></div>
+              <% if !product_sdg.nil? %>
+                <div class="text-muted ml-4"><%= product_sdg.mapping_status %></div>
               <% end %>
             </div>
           <% end %>
-          <% if sdg_row.size < 3  %>
-            <% (3 - sdg_row.size).times do |x| %>
+          <% if product_sdg_row.size < 3  %>
+            <% (3 - product_sdg_row.size).times do |x| %>
               <div class="card card-placeholder">
               </div>
             <% end %>

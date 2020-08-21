@@ -17,7 +17,7 @@ module Auditable
     current_user = get_current_user
     if (current_user)
       audit_log.user_id = current_user.id
-      audit_log.user_role = current_user.role
+      audit_log.user_role = current_user.roles
       audit_log.username = current_user.email
     end
     audit_changes = []
@@ -28,7 +28,7 @@ module Auditable
       audit_changes.push(self.association_changes)
     end
     if (!get_image_changed.nil?)
-      audit_changes.push({"image":get_image_changed.to_s})
+      audit_changes.push({ "image": get_image_changed.to_s })
     end
     if !audit_changes.empty? || audit_log.action == "DELETED"
       audit_log.audit_changes = audit_changes
@@ -54,49 +54,66 @@ module Auditable
 
   def association_add(new_obj)
     initialize_association_changes
-    curr_change = {id: new_obj.slug, action: "ADD"}
+    if new_obj.class.name == ProductSector.name
+      curr_change = { id: new_obj.sector.slug, action: "ADD" }
+    elsif new_obj.class.name == ProductBuildingBlock.name
+      curr_change = { id: new_obj.building_block.slug, action: "ADD" }
+    elsif new_obj.class.name == ProductSustainableDevelopmentGoal.name
+      curr_change = { id: new_obj.sustainable_development_goal.slug, action: "ADD" }
+    else
+      curr_change = { id: new_obj.slug, action: "ADD" }
+    end
     log_association(curr_change, new_obj.class.name)
   end
 
   def association_remove(old_obj)
     initialize_association_changes
-    curr_change = {id: old_obj.slug, action: "REMOVE"}
+    if old_obj.class.name == ProductSector.name
+      curr_change = { id: old_obj.sector.slug, action: "REMOVE" }
+    elsif old_obj.class.name == ProductBuildingBlock.name
+      curr_change = { id: old_obj.building_block.slug, action: "REMOVE" }
+    elsif old_obj.class.name == ProductSustainableDevelopmentGoal.name
+      curr_change = { id: old_obj.sustainable_development_goal.slug, action: "REMOVE" }
+    else
+      curr_change = { id: old_obj.slug, action: "REMOVE" }
+    end
     log_association(curr_change, old_obj.class.name)
   end
 
   def log_association(curr_change, obj_name)
     case obj_name
     when "Organization"
-      @association_changes[:organizations] << curr_change
+      (@association_changes[:organizations] ||= []) << curr_change
     when "Sector"
-      @association_changes[:sectors] << curr_change
+      (@association_changes[:sectors] ||= []) << curr_change
+    when "ProductSector"
+      (@association_changes[:sectors] ||= []) << curr_change
     when "Product"
-      @association_changes[:products] << curr_change
+      (@association_changes[:products] ||= []) << curr_change
     when "SustainableDevelopmentGoal"
-      @association_changes[:sdgs] << curr_change
+      (@association_changes[:sdgs] ||= []) << curr_change
+    when "ProductSustainableDevelopmentGoal"
+      (@association_changes[:sdgs] ||= []) << curr_change
     when "BuildingBlock"
-      @association_changes[:building_blocks] << curr_change
+      (@association_changes[:building_blocks] ||= []) << curr_change
+    when "ProductBuildingBlock"
+      (@association_changes[:building_blocks] ||= []) << curr_change
     when "Origin"
-      @association_changes[:origins] << curr_change
+      (@association_changes[:origins] ||= []) << curr_change
     when "Location"
-      @association_changes[:locations] << curr_change
+      (@association_changes[:locations] ||= []) << curr_change
     when "Contact"
-      @association_changes[:contacts] << curr_change
+      (@association_changes[:contacts] ||= []) << curr_change
     when "Project"
-      @association_changes[:projects] << curr_change
+      (@association_changes[:projects] ||= []) << curr_change
     when "ProductProductRelationship"
-      @association_changes[:products] << curr_change
+      (@association_changes[:products] ||= []) << curr_change
     end
   end
 
   def initialize_association_changes
-    case self.class.name
-    when "Organization"
-      @association_changes = {sectors: [], products: [], locations: [], contacts: [], projects: []} if @association_changes.nil?
-    when 'CandidateOrganization'
-      @association_changes = { sectors: [], products: [], locations: [], contacts: [], projects: [] } if @association_changes.nil?
-    when "Product"
-      @association_changes = {sectors: [], organizations: [], sdgs: [], building_blocks: [], origins: [], products: []} if @association_changes.nil?
+    if @association_changes.nil?
+      @association_changes = {}
     end
   end
 

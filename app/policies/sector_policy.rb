@@ -7,7 +7,7 @@ class SectorPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == "admin"
+    user.roles.include?(User.user_roles[:admin])
   end
 
   def view_allowed?

@@ -30,8 +30,10 @@ class UsersController < ApplicationController
 
   def update
     user_hash = {}
-    if user_params[:role].present?
-      user_hash[:role] = user_params[:role]
+    if params[:selected_roles].present?
+      params[:selected_roles].each do |selected_role|
+        (user_hash[:roles] ||= []) << selected_role
+      end
     end
 
     user_hash[:receive_backup] = false
@@ -44,6 +46,19 @@ class UsersController < ApplicationController
       # If this user registered to be a product owner and was just approved, send an email to them
       send_notification(@user.email)
     end
+
+    user_hash[:products] = []
+    if user_hash[:roles].include?(User.user_roles[:product_user])
+      products = Set.new
+      if params[:selected_products].present?
+        params[:selected_products].keys.each do |product_id|
+          product = Product.find(product_id)
+          products.add(product) unless product.nil?
+        end
+      end
+      user_hash[:products] = products.to_a
+    end
+
     respond_to do |format|
       if @user.update(user_hash)
         format.html { redirect_to @user,
@@ -93,7 +108,7 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user)
-            .permit(:email, :role, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
+            .permit(:email, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
     end
 
     def send_notification(user_email)
