@@ -28,7 +28,12 @@
       <% @users.each do |user| %>
         <tr>
           <td><%= user.email %></td>
-          <td><%= t("view.user.role.#{user.role}") %></td>
+          <td>
+            <% user.roles.each_with_index do |role, index| %>
+              <%= ', ' if index > 0 %>
+              <%= t("view.user.role.#{role}") %>
+            <% end %>
+          </td>
           <td><%= !user.confirmed_at.nil? ? t("view.user.index.approved") : t("view.user.index.not-approved") %></td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"

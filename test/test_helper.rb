@@ -16,7 +16,7 @@ class ActiveSupport::TestCase
       password { "password"} 
       password_confirmation { "password" }
       confirmed_at { Date.today }
-      role { :user }
+      roles { [:user] }
     end
   end
 end

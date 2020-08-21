@@ -139,13 +139,12 @@
         </div>
       <% end %>
     <% end %>
-    <% if !request.url.include?('/show_pdf') %>
-      <%= render '/shared/footer' %>
-    <% end %>
 
     <%= render '/shared/notifier' %>
     <%= render '/shared/feedback' %>
-    <%= render '/shared/footer' %>
+    <% if !request.url.include?('/show_pdf') %>
+      <%= render '/shared/footer' %>
+    <% end %>
   </body>
 <% end %>
 </html>

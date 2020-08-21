@@ -87,8 +87,7 @@ class ProductsController < ApplicationController
       @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
-    @products = @products.eager_load(:includes, :interoperates_with, :origins, :organizations,
-                                     :building_blocks, :sustainable_development_goals)
+    @products = @products.eager_load(:includes, :interoperates_with, :origins, :organizations)
                          .paginate(page: current_page, per_page: 20)
                          .order(:name)
 
@@ -141,7 +140,7 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
-    authorize Product, :mod_allowed?
+    authorize Product, :create_allowed?
     @product = Product.new
     @product_description = ProductDescription.new
   end
@@ -154,64 +153,77 @@ class ProductsController < ApplicationController
   # POST /products
   # POST /products.json
   def create
-    authorize Product, :mod_allowed?
+    authorize Product, :create_allowed?
     @product = Product.new(product_params)
     @product.set_current_user(current_user)
     @product_description = ProductDescription.new
 
-    if (params[:selected_organizations])
+    if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
         @products.organizations.push(organization)
       end
     end
 
-    if (params[:selected_sectors].present?)
+    if params[:selected_sectors].present?
       params[:selected_sectors].keys.each do |sector_id|
-        sector = Sector.find(sector_id)
-        @products.sectors.push(sector)
+        new_prod_sector = ProductSector.new
+        new_prod_sector.sector_id = sector_id
+
+        mapping_status = ProductSector.mapping_status_types[:BETA]
+        if current_user.roles.include?(User.user_roles[:admin]) ||
+           current_user.roles.include?(User.user_roles[:content_editor])
+          mapping_status = ProductSector.mapping_status_types[:VALIDATED]
+        end
+        new_prod_sector.mapping_status = mapping_status
+
+        @product.product_sectors << new_prod_sector
       end
     end
 
-    if (params[:selected_interoperable_products])
+    if params[:selected_interoperable_products].present?
       params[:selected_interoperable_products].keys.each do |product_id|
         to_product = Product.find(product_id)
         @product.interoperates_with.push(to_product)
       end
     end
 
-    if (params[:selected_included_products])
+    if params[:selected_included_products].present?
       params[:selected_included_products].keys.each do |product_id|
         to_product = Product.find(product_id)
         @product.includes.push(to_product)
       end
     end
 
-    if (params[:selected_building_blocks])
+    if params[:selected_building_blocks].present?
       params[:selected_building_blocks].keys.each do |building_block_id|
-        link_type = t('view.product.form.beta')
-        if !params[:bb_mapping].nil?
-          link_type = params[:bb_mapping]
-        end
         new_prod_bb = ProductsBuildingBlock.new
         new_prod_bb.building_block_id = building_block_id
-        new_prod_bb.link_type = link_type
 
-        @product.products_building_blocks << new_prod_bb
+        mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
+        if current_user.roles.include?(User.user_roles[:admin]) ||
+           current_user.roles.include?(User.user_roles[:content_editor])
+          mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
+        end
+        new_prod_bb.mapping_status = mapping_status
+
+        @product.product_building_blocks << new_prod_bb
       end
     end
 
-    if (params[:selected_sustainable_development_goals])
+    if params[:selected_sustainable_development_goals].present?
       params[:selected_sustainable_development_goals].keys.each do |sustainable_development_goal_id|
-        link_type = t('view.product.form.self-reported')
-        if !params[:bb_mapping].nil?
-          link_type = params[:bb_mapping]
-        end
-        new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+        new_prod_sdg = ProductSustainableDevelopmentGoal.new
         new_prod_sdg.sustainable_development_goal_id = sustainable_development_goal_id
-        new_prod_sdg.link_type = link_type
 
-        @product.products_sustainable_development_goals << new_prod_sdg
+        mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+        if current_user.roles.include?(User.user_roles[:admin]) ||
+           current_user.roles.include?(User.user_roles[:content_editor])
+          mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
+        end
+        new_prod_sdg.mapping_status = mapping_status
+
+        @product.product_sustainable_development_goals << new_prod_sdg
       end
     end
 
@@ -263,14 +275,41 @@ class ProductsController < ApplicationController
     end
     @product.organizations = organizations.to_a
 
-    sectors = Set.new
-    if params[:selected_sectors].present?
-      params[:selected_sectors].keys.each do |sector_id|
-        sector = Sector.find(sector_id)
-        sectors.add(sector)
+    if params[:selected_sectors].present? &&
+       (policy(@product).removing_mapping_allowed? || policy(@product).adding_mapping_allowed?)
+
+      existing_sectors = ProductSector.where(product_id: @product.id)
+                                      .pluck('sector_id')
+      ui_sectors = params[:selected_sectors].keys.map(&:to_i)
+
+      if policy(@product).removing_mapping_allowed?
+        removed_sectors = existing_sectors - ui_sectors
+        logger.debug("Removing: #{removed_sectors} product - sectors relationship.")
+
+        removed_sectors.each do |sector_id|
+          @product.sectors.delete(sector_id)
+        end
+      end
+
+      if policy(@product).adding_mapping_allowed?
+        added_sectors = ui_sectors - existing_sectors
+        logger.debug("Adding: #{added_sectors} product - sectors relationship.")
+
+        added_sectors.each do |sector_id|
+          new_prod_sector = ProductSector.new
+          new_prod_sector.sector_id = sector_id
+
+          mapping_status = ProductSector.mapping_status_types[:BETA]
+          if current_user.roles.include?(User.user_roles[:admin]) ||
+             current_user.roles.include?(User.user_roles[:content_editor])
+            mapping_status = ProductSector.mapping_status_types[:VALIDATED]
+          end
+          new_prod_sector.mapping_status = mapping_status
+
+          @product.product_sectors << new_prod_sector
+        end
       end
     end
-    @product.sectors = sectors.to_a
 
     products = Set.new
     if params[:selected_interoperable_products].present?
@@ -290,50 +329,76 @@ class ProductsController < ApplicationController
     end
     @product.includes = products.to_a
 
-    if params[:selected_building_blocks].present?
-      link_type = 'Beta'
-      if !params[:bb_mapping].nil?
-        link_type = params[:bb_mapping]
-      end
-      existing_bbs = ProductsBuildingBlock.where(product_id: @product.id)
-                                                        .pluck('building_block_id')
-      existing_bbs.each do |bb_id|
-        ProductsBuildingBlock.where(product_id: @product.id,
-                                                 building_block_id: bb_id)
-                                          .delete_all
-      end
+    if params[:selected_building_blocks].present? &&
+       (policy(@product).removing_mapping_allowed? || policy(@product).adding_mapping_allowed?)
 
+      existing_bbs = ProductBuildingBlock.where(product_id: @product.id)
+                                         .pluck('building_block_id')
       ui_bbs = params[:selected_building_blocks].keys.map(&:to_i)
-      ui_bbs.each do |bb_id|
-        new_prod_bb = ProductsBuildingBlock.new
-        new_prod_bb.building_block_id = bb_id
-        new_prod_bb.link_type = link_type
 
-        @product.products_building_blocks << new_prod_bb
+      if policy(@product).removing_mapping_allowed?
+        removed_bbs = existing_bbs - ui_bbs
+        logger.debug("Removing: #{removed_bbs} product - bbs relationship.")
+
+        removed_bbs.each do |bb_id|
+          @product.building_blocks.delete(bb_id)
+        end
+      end
+
+      if policy(@product).adding_mapping_allowed?
+        added_bbs = ui_bbs - existing_bbs
+        logger.debug("Adding: #{added_bbs} product - bbs relationship.")
+
+        added_bbs.each do |bb_id|
+          new_prod_bb = ProductBuildingBlock.new
+          new_prod_bb.building_block_id = bb_id
+
+          mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
+          if current_user.roles.include?(User.user_roles[:admin]) ||
+             current_user.roles.include?(User.user_roles[:content_editor])
+            mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
+          end
+          new_prod_bb.mapping_status = mapping_status
+
+          @product.product_building_blocks << new_prod_bb
+        end
       end
     end
 
-    if params[:selected_sustainable_development_goals].present?
-      existing_sdgs = ProductsSustainableDevelopmentGoal.where(product_id: @product.id)
-                                                        .pluck('sustainable_development_goal_id')
+    if params[:selected_sustainable_development_goals].present? &&
+       (policy(@product).removing_mapping_allowed? || policy(@product).adding_mapping_allowed?)
+
+      existing_sdgs = ProductSustainableDevelopmentGoal.where(product_id: @product.id)
+                                                       .pluck('sustainable_development_goal_id')
       ui_sdgs = params[:selected_sustainable_development_goals].keys
                                                                .map(&:to_i)
-      existing_sdgs.each do |sdg_id|
-        ProductsSustainableDevelopmentGoal.where(product_id: @product.id,
-                                                 sustainable_development_goal_id: sdg_id)
-                                          .delete_all
+
+      if policy(@product).removing_mapping_allowed?
+        removed_sdgs = existing_sdgs - ui_sdgs
+        logger.debug("Removing: #{removed_sdgs} product - sdgs relationship.")
+
+        removed_sdgs.each do |sdg_id|
+          @product.sustainable_development_goals.delete(sdg_id)
+        end
       end
 
-      ui_sdgs.each do |sdg_id|
-        link_type = t('view.product.form.self-reported')
-        if !params[:sdg_mapping].nil?
-          link_type = params[:sdg_mapping]
-        end
-        new_prod_sdg = ProductsSustainableDevelopmentGoal.new
-        new_prod_sdg.sustainable_development_goal_id = sdg_id
-        new_prod_sdg.link_type = link_type
+      if policy(@product).adding_mapping_allowed?
+        added_sdgs = ui_sdgs - existing_sdgs
+        logger.debug("Adding: #{added_sdgs} product - sdgs relationship.")
 
-        @product.products_sustainable_development_goals << new_prod_sdg
+        added_sdgs.each do |sdg_id|
+          new_prod_sdg = ProductSustainableDevelopmentGoal.new
+          new_prod_sdg.sustainable_development_goal_id = sdg_id
+
+          mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+          if current_user.roles.include?(User.user_roles[:admin]) ||
+             current_user.roles.include?(User.user_roles[:content_editor])
+            mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
+          end
+          new_prod_sdg.mapping_status = mapping_status
+
+          @product.product_sustainable_development_goals << new_prod_sdg
+        end
       end
     end
 

@@ -7,7 +7,7 @@ class MaturityRubricPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    !user.nil? && (user.role == 'admin' || user.role == 'ict4sdg')
+    !user.nil? && (user.roles.include?(User.user_roles[:admin]) || user.roles.include?(User.user_roles[:ict4sdg]))
   end
 
   def view_allowed?

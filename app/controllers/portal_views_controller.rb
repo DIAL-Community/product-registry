@@ -25,7 +25,7 @@ class PortalViewsController < ApplicationController
     # Default to the first portal object.
     if session[:portal].nil?
       PortalView.all.each do |portal|
-        if portal.user_roles.include?(current_user.role)
+        unless (portal.user_roles & current_user.roles).empty?
           @portal_view = portal
           break
         end
@@ -34,7 +34,7 @@ class PortalViewsController < ApplicationController
 
     if !params[:id].nil?
       @portal_view = PortalView.find(params[:id])
-      if !@portal_view.nil? && !@portal_view.user_roles.include?(current_user.role)
+      if !@portal_view.nil? && (@portal_view.user_roles & current_user.roles).empty?
         @portal_view = nil
       end
     end

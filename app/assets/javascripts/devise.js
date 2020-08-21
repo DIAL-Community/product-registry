@@ -55,3 +55,7 @@ var termsHandler = function() {
 $(document).on('registrations#new:loaded', changeProductHandler);
 $(document).on('registrations#new:loaded', beforeSubmitHandler);
 $(document).on('registrations#new:loaded', termsHandler);
+
+$(document).on('registrations#create:loaded', changeProductHandler);
+$(document).on('registrations#create:loaded', beforeSubmitHandler);
+$(document).on('registrations#create:loaded', termsHandler);

@@ -5,7 +5,7 @@
   </h5>
   <div class="card-body">
     <p class="float-right mb-0 mr-2" >
-      <%= link_to 'Back', operator_services_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), operator_services_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@curr_operator).mod_allowed? %>
         <%= link_to 'Edit', edit_operator_service_path(@curr_operator.name), :class => "card-link" %>
       <% end %>

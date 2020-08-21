@@ -12,7 +12,6 @@ class TaskTrackersController < ApplicationController
     end
 
     current_page = params[:page] || 1
-    puts "Current page : #{current_page}."
 
     @task_tracker = TaskTracker.eager_load(:task_tracker_descriptions)
     if params[:search].present?
@@ -23,7 +22,6 @@ class TaskTrackersController < ApplicationController
       @task_trackers = @task_tracker.order(:name)
                                     .paginate(page: current_page, per_page: 5)
     end
-    puts "Task : #{@task_trackers.inspect}."
     authorize(@task_trackers, :view_allowed?)
   end
 

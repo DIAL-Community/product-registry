@@ -7,10 +7,10 @@ class DeployPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == 'admin' || user.role == 'principle' || user.role == 'ict4sdg'
+    user.roles.include?(User.user_roles[:admin]) || user.roles.include?(User.user_roles[:principle]) || user.roles.include?(User.user_roles[:ict4sdg])
   end
 
   def view_allowed?
-    !user.nil? && user.role != 'user'
+    !user.nil? && user.roles.include?(User.user_roles[:user])
   end
 end

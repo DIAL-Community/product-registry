@@ -135,6 +135,37 @@
         </label>
       </fieldset>
       <div class="row">
+        <div class="col-4">
+          <% if policy(Product).beta_only? %>
+            <%
+              options = options_for_select(
+                             ProductBuildingBlock
+                                 .mapping_status_types
+                                 .keys
+                                 .reject do |x|
+                                    x != ProductBuildingBlock.mapping_status_types[:BETA]
+                                  end
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1" %>
+          <% else %>
+            <%
+              options = options_for_select(
+                             ProductBuildingBlock
+                                 .mapping_status_types
+                                 .keys
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1" %>
+          <% end %>
+        </div>
+        <div class="col-8 ml-0">
+          <label for="product-building-blocks">
+            <%= t('view.product.form.bb-mapping') %>
+          </label>
+        </div>
         <div class="col-12">
           <span id="base-selected-building-blocks" class="selected-element badge badge-secondary px-1 mb-1">
             <span class="text-label"></span>
@@ -143,15 +174,6 @@
             </a>
             <input type="hidden"/>
           </span>
-        </div>
-        <div class="col-5">
-          <% options = options_for_select([t('view.product.form.beta'),t('view.product.form.validated')]) %>
-          <%= select_tag :bb_mapping, options, :class => "form-control filter-element ml-1 mb-1", :style => 'height: calc(1.5em + 0.75rem + 15px) !important' %>
-        </div>
-        <div class="col-6">
-          <label for="product-building-blocks">
-            <%= t('view.product.form.bb-mapping') %>
-          </label>
         </div>
       </div>
     </div>
@@ -168,6 +190,37 @@
         </label>
       </fieldset>
       <div class="row">
+        <div class="col-4">
+          <% if policy(Product).beta_only? %>
+            <%
+              options = options_for_select(
+                             ProductSustainableDevelopmentGoal
+                                 .mapping_status_types
+                                 .keys
+                                 .reject do |x|
+                                    x != ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+                                  end
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1" %>
+          <% else %>
+            <%
+              options = options_for_select(
+                             ProductSustainableDevelopmentGoal
+                                 .mapping_status_types
+                                 .keys
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1" %>
+          <% end %>
+        </div>
+        <div class="col-8 ml-0">
+          <label for="product-building-blocks">
+            <%= t('view.product.form.sdg-mapping') %>
+          </label>
+        </div>
         <div class="col-12">
           <span id="base-selected-sustainable-development-goals" class="selected-element badge badge-secondary px-1 mb-1">
             <span class="text-label"></span>
@@ -176,15 +229,6 @@
             </a>
             <input type="hidden"/>
           </span>
-        </div>
-        <div class="col-5">
-          <% options = options_for_select([t('view.product.form.self-reported'),t('view.product.form.validated')]) %>
-          <%= select_tag :sdg_mapping, options, :class => "form-control filter-element ml-1 mb-1", :style => 'height: calc(1.5em + 0.75rem + 15px) !important' %>
-        </div>
-        <div class="col-6">
-          <label for="product-building-blocks">
-            <%= t('view.product.form.sdg-mapping') %>
-          </label>
         </div>
       </div>
     </div>

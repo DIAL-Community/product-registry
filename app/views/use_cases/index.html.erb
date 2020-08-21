@@ -36,7 +36,7 @@
       </fieldset>
     </div>
     <div class="float-right">
-      <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+      <% if user_signed_in? && policy(UseCase).create_allowed? %>
         <%= link_to t('view.general.create'), new_use_case_path, :class => 'small ml-1' %>
       <% end %>
     </div>

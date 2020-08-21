@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-8 mb-2">
-    <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+    <% if user_signed_in? && policy(UseCase).delete_allowed? %>
       <%= link_to  t('view.general.delete-with-model', model: t('model.use-case').titlecase), @use_case,
                   method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.use-case')) },
                   class: 'btn btn-outline-secondary float-left ml-1' %>
@@ -46,6 +46,13 @@
   </div>
 </div>
 
+<% if session[:use_case_elevated_role].to_s.downcase == 'true' %>
+  <div class="alert alert-info mt-2 mb-0">
+    <%= t('view.use-case.show.request-elevation',
+        href: link_to(t('view.general.this-link'), new_candidate_role_path, class: 'card-link')).html_safe %>
+  </div>
+<% end %>
+
 <% if @use_case.sdg_targets.count > 0 %>
   <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
@@ -71,7 +78,7 @@
         </h5>
       </div>
     </div>
-    <% if !@ucs_header.header.empty? %>
+    <% if !@ucs_header.header.empty? && @ucs_header.header.to_s != '{}' %>
       <div class="row">
         <div id="usecasesteps-header" class="wysiwyg-viewer"></div>
       </div>

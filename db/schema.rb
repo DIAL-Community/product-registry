@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_04_184953) do
+ActiveRecord::Schema.define(version: 2020_08_18_203509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,15 +70,8 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
     t.index ["building_block_id"], name: "index_building_block_descriptions_on_building_block_id"
   end
 
-  create_table "building_blocks", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.jsonb "description", default: {}, null: false
-    t.string "maturity", default: "Beta"
-    t.index ["slug"], name: "index_building_blocks_on_slug", unique: true
-  end
+# Could not dump table "building_blocks" because of following StandardError
+#   Unknown type 'entity_status_type' for column 'maturity'
 
   create_table "candidate_organizations", force: :cascade do |t|
     t.string "name", null: false
@@ -103,6 +96,9 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
     t.index ["candidate_organization_id", "contact_id"], name: "index_candidate_contacts_on_candidate_id_and_contact_id"
     t.index ["contact_id", "candidate_organization_id"], name: "index_candidate_contacts_on_contact_id_and_candidate_id"
   end
+
+# Could not dump table "candidate_roles" because of following StandardError
+#   Unknown type 'user_role' for column 'roles'
 
   create_table "category_indicator_descriptions", force: :cascade do |t|
     t.bigint "category_indicator_id", null: false
@@ -430,6 +426,9 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
     t.index ["digital_principle_id"], name: "index_principle_descriptions_on_digital_principle_id"
   end
 
+# Could not dump table "product_building_blocks" because of following StandardError
+#   Unknown type 'mapping_status_type' for column 'mapping_status'
+
   create_table "product_classifications", force: :cascade do |t|
     t.bigint "product_id"
     t.bigint "classification_id"
@@ -459,6 +458,9 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
 # Could not dump table "product_product_relationships" because of following StandardError
 #   Unknown type 'relationship_type' for column 'relationship_type'
 
+# Could not dump table "product_sectors" because of following StandardError
+#   Unknown type 'mapping_status_type' for column 'mapping_status'
+
   create_table "product_suites", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -474,6 +476,9 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
     t.index ["product_version_id", "product_suite_id"], name: "products_versions_product_suites"
   end
 
+# Could not dump table "product_sustainable_development_goals" because of following StandardError
+#   Unknown type 'mapping_status_type' for column 'mapping_status'
+
   create_table "product_versions", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.string "version", null: false
@@ -484,34 +489,11 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
 # Could not dump table "products" because of following StandardError
 #   Unknown type 'product_type' for column 'product_type'
 
-  create_table "products_building_blocks", id: false, force: :cascade do |t|
-    t.bigint "building_block_id", null: false
-    t.bigint "product_id", null: false
-    t.string "link_type", default: "Beta"
-    t.index ["building_block_id", "product_id"], name: "block_prods", unique: true
-    t.index ["product_id", "building_block_id"], name: "prod_blocks", unique: true
-  end
-
   create_table "products_origins", id: false, force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "origin_id", null: false
     t.index ["origin_id", "product_id"], name: "origins_products_idx", unique: true
     t.index ["product_id", "origin_id"], name: "products_origins_idx", unique: true
-  end
-
-  create_table "products_sectors", id: false, force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "sector_id", null: false
-    t.index ["product_id", "sector_id"], name: "index_products_sectors_on_product_id_and_sector_id"
-    t.index ["sector_id", "product_id"], name: "index_products_sectors_on_sector_id_and_product_id"
-  end
-
-  create_table "products_sustainable_development_goals", id: false, force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "sustainable_development_goal_id", null: false
-    t.string "link_type"
-    t.index ["product_id", "sustainable_development_goal_id"], name: "prod_sdgs", unique: true
-    t.index ["sustainable_development_goal_id", "product_id"], name: "sdgs_prods", unique: true
   end
 
   create_table "project_descriptions", force: :cascade do |t|
@@ -776,17 +758,8 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
     t.index ["workflow_id", "use_case_step_id"], name: "workflows_use_case_steps_idx", unique: true
   end
 
-  create_table "use_cases", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.bigint "sector_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.jsonb "description", default: {}, null: false
-    t.string "maturity", default: "Beta"
-    t.string "tags", default: [], array: true
-    t.index ["sector_id"], name: "index_use_cases_on_sector_id"
-  end
+# Could not dump table "use_cases" because of following StandardError
+#   Unknown type 'entity_status_type' for column 'maturity'
 
   create_table "use_cases_sdg_targets", id: false, force: :cascade do |t|
     t.bigint "use_case_id", null: false
@@ -872,6 +845,8 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
   add_foreign_key "building_block_descriptions", "building_blocks"
   add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
+  add_foreign_key "candidate_roles", "users", column: "approved_by_id"
+  add_foreign_key "candidate_roles", "users", column: "rejected_by_id"
   add_foreign_key "category_indicator_descriptions", "category_indicators"
   add_foreign_key "category_indicators", "rubric_categories"
   add_foreign_key "cities", "regions"
@@ -907,6 +882,8 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
   add_foreign_key "plays_tasks", "plays", name: "tasks_plays_play_fk"
   add_foreign_key "plays_tasks", "tasks", name: "tasks_plays_task_fk"
   add_foreign_key "principle_descriptions", "digital_principles"
+  add_foreign_key "product_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
+  add_foreign_key "product_building_blocks", "products", name: "products_building_blocks_product_fk"
   add_foreign_key "product_classifications", "classifications"
   add_foreign_key "product_classifications", "classifications", name: "product_classifications_classification_fk"
   add_foreign_key "product_classifications", "products"
@@ -918,13 +895,11 @@ ActiveRecord::Schema.define(version: 2020_08_04_184953) do
   add_foreign_key "product_product_relationships", "products", column: "to_product_id", name: "to_product_fk"
   add_foreign_key "product_suites_product_versions", "product_suites", name: "pspv_product_suites_fk"
   add_foreign_key "product_suites_product_versions", "product_versions", name: "pspv_product_versions_fk"
+  add_foreign_key "product_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
+  add_foreign_key "product_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
   add_foreign_key "product_versions", "products"
-  add_foreign_key "products_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
-  add_foreign_key "products_building_blocks", "products", name: "products_building_blocks_product_fk"
   add_foreign_key "products_origins", "origins", name: "products_origins_origin_fk"
   add_foreign_key "products_origins", "products", name: "products_origins_product_fk"
-  add_foreign_key "products_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
-  add_foreign_key "products_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
   add_foreign_key "project_descriptions", "projects"
   add_foreign_key "projects", "origins"
   add_foreign_key "projects_countries", "countries"

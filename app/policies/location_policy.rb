@@ -7,13 +7,13 @@ class LocationPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    if user.role == 'admin'
+    if user.roles.include?(User.user_roles[:admin])
       [:id, :name, :confirmation, :aliases, :slug]
     end
   end
 
   def mod_allowed?
-    user.role == "admin"
+    user.roles.include?(User.user_roles[:admin])
   end
 
   def view_allowed?

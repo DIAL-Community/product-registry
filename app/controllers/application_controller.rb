@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
           session[:portal] = PortalView.where(slug: 'default').first
         else
           PortalView.all.order(:id).each do |portal|
-            if portal.user_roles.include?(current_user.role)
+            if !(portal.user_roles && current_user.roles).empty?
               session[:portal] = portal
               break
             end

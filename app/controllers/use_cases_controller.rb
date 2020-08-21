@@ -75,7 +75,7 @@ class UseCasesController < ApplicationController
 
   # GET /use_cases/new
   def new
-    authorize UseCase, :mod_allowed?
+    authorize(UseCase, :create_allowed?)
     @use_case = UseCase.new
     @uc_desc = UseCaseDescription.new
     @ucs_header = UseCaseHeader.new
@@ -102,7 +102,7 @@ class UseCasesController < ApplicationController
   # POST /use_cases
   # POST /use_cases.json
   def create
-    authorize UseCase, :mod_allowed?
+    authorize(UseCase, :create_allowed?)
     @use_case = UseCase.new(use_case_params)
     @uc_desc = UseCaseDescription.new
     @ucs_header = UseCaseHeader.new
@@ -112,6 +112,16 @@ class UseCasesController < ApplicationController
         sdg_target = SdgTarget.find(sdg_target_id)
         @use_case.sdg_targets.push(sdg_target)
       end
+    end
+
+    if policy(@use_case).beta_only?
+      if use_case_params[:maturity] != UseCase.entity_status_types[:BETA] &&
+          session[:use_case_elevated_role].to_s.downcase != 'true'
+        session[:use_case_elevated_role] = true
+      end
+
+      # Always override to beta if the user don't have the right role
+      @use_case.maturity = UseCase.entity_status_types[:BETA]
     end
 
     respond_to do |format|
@@ -159,6 +169,16 @@ class UseCasesController < ApplicationController
       @uc_desc.save
     end
 
+    if policy(@use_case).beta_only?
+      if use_case_params[:maturity] != UseCase.entity_status_types[:BETA] &&
+          session[:use_case_elevated_role].to_s.downcase != 'true'
+        session[:use_case_elevated_role] = true
+      end
+
+      # Always override to beta if the user don't have the right role
+      @use_case.maturity = UseCase.entity_status_types[:BETA]
+    end
+
     if use_case_params[:ucs_header].present?
       @ucs_header.use_case_id = @use_case.id
       @ucs_header.locale = I18n.locale
@@ -181,7 +201,7 @@ class UseCasesController < ApplicationController
   # DELETE /use_cases/1
   # DELETE /use_cases/1.json
   def destroy
-    authorize @use_case, :mod_allowed?
+    authorize(@use_case, :delete_allowed?)
     @use_case.destroy
     respond_to do |format|
       format.html { redirect_to use_cases_url,

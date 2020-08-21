@@ -3,9 +3,11 @@
 one:
   name: BuildingBlock1
   slug: bb_one
+  maturity: BETA
   workflows: one
 
 two:
   name: Building Block2
   slug: building_block2
+  maturity: BETA
   workflows: two

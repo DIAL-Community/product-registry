@@ -57,6 +57,7 @@ en:
     activity: activity
     building-block: building block
     candidate-organization: candidate organization
+    candidate-role: Candidate Role
     category-indicator: category indicator
     city: city
     contact: contact
@@ -141,6 +142,9 @@ en:
       action: "Action"
       changes: "Changes"
     building-block:
+      form:
+        all-maturity: All Maturity Level
+        maturity-level: Maturity Level
       show:
         short-description: Short Description
         full-description: Full Description
@@ -148,6 +152,8 @@ en:
         key-functionalities: Key Digital Functionalities
         example-of-use: Examples of use in different sectors
         no-data: We couldn't find any building blocks for this use case.
+        request-elevation: We noticed that you made changes to a building block but you were not able to set the maturity level of it.
+                           You might be able to do that by requesting role elevation by clicking %{href}.
       index:
         bb-product: "Example software: "
         bb-product-popover:
@@ -183,6 +189,21 @@ en:
         status-new: New Submission
         status-rejected: Rejected
         website: Website
+    candidate-role:
+      form:
+        description: Why you would like to have your role elevated? Please explain here.
+      index:
+        approve: Approve
+        approved: Approved
+        new: New request
+        reject: Reject
+        rejected: Rejected
+        request-reason: Request reason
+        request-roles: Requested roles
+        request-status: Request status
+      show:
+        request-elevation: We noticed that you tried to add organization(s) or product(s) beyond the purview of your role.
+                           You might be able to request role elevation by clicking %{href}.
     category-indicator:
       form:
         weight: Weight of the indicator
@@ -377,6 +398,9 @@ en:
       index:
         no-data: We couldn't find any product suite in the database.
     project:
+      form:
+        org-owner-tooltip: As organization owner, you are only allowed to add / remove your organization from a project.
+        product-owner-tooltip: As product owner, you are only allowed to add / remove your own products from a project.
       index:
         add_favorite: Add to list of favorite Projects
         budget: Budget
@@ -412,6 +436,7 @@ en:
     header:
       active-portal: Active
       admin-data: Admin Data
+      elevate-role: Request Elevated Role
       principle-data: Principles Data
       mni-data: MNI Data
       ict4sdg-data: ICT4SDG Data
@@ -599,8 +624,11 @@ en:
         media-prompt: If you would like to add a video to this activity, enter the URL
     use-case:
       form:
+        all-maturity: All Maturity Level
         assigned-sdg-targets: Assigned SDG Targets
+        maturity-level: Maturity Level
         search-sdg-targets: Search and assign SDG Targets
+        steps-header-description: Steps Header Description
         is-mature: Is Mature
       index:
         add_favorite: Add to list of favorite Use Cases
@@ -629,9 +657,14 @@ en:
         sdg-targets: SDG Targets
         no-sdg-targets: We don't have any SDG target information for this use case.
         use-case-steps: Use Case Steps
+        request-elevation: We noticed that you made changes to a use case but you were not able to set the maturity level of it.
+                           You might be able to do that by requesting role elevation by clicking %{href}.
     user:
       role:
         admin: Administrator
+        all-roles: All Roles
+        content_editor: Content Editor
+        content_writer: Content Writer
         ict4sdg: ICT 4 SDG User
         principle: Principle User
         user: Basic User
@@ -698,6 +731,7 @@ en:
       error:
         one: The form contains error.
         other: The form contains errors.
+      this-link: this link
       logo: Logo
       is-mature: Is Mature
       name: Name

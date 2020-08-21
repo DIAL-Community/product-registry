@@ -9,12 +9,12 @@ class ContactPolicy < ApplicationPolicy
   def mod_allowed?
     return false if user.nil?
 
-    user.role == 'admin' || user.role == 'principle' || user.role == 'mni'
+    user.roles.include?(User.user_roles[:admin]) || user.roles.include?(User.user_roles[:principle]) || user.roles.include?(User.user_roles[:mni])
   end
 
   def view_allowed?
     return false if user.nil?
 
-    user.role == 'admin' || user.role == 'principle' || user.role == 'mni'
+    user.roles.include?(User.user_roles[:admin]) || user.roles.include?(User.user_roles[:principle]) || user.roles.include?(User.user_roles[:mni])
   end
 end

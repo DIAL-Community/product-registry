@@ -35,7 +35,7 @@
       </fieldset>
     </div>
     <div class="float-right">
-      <% if user_signed_in? && policy(BuildingBlock).mod_allowed? %>
+      <% if user_signed_in? && policy(BuildingBlock).create_allowed? %>
         <%= link_to t('view.general.create'), new_building_block_path, :class => 'small ml-1' %>
       <% end %>
     </div>

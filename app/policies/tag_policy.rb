@@ -7,7 +7,7 @@ class TagPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    !user.nil? && user.role == 'admin'
+    !user.nil? && user.roles.include?(User.user_roles[:admin])
   end
 
   def view_allowed?

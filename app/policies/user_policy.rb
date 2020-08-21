@@ -7,42 +7,42 @@ class UserPolicy < ApplicationPolicy
   end
 
   def index?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def show?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def edit?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def update?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def create?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def new?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def destroy?
-    @current_user.role == "admin"
+    @current_user.roles.include?(User.user_roles[:admin])
   end
 
   def mni?
-    @current_user.role == "admin" || @current_user.role == "mni"
+    @current_user.roles.include?(User.user_roles[:admin]) || @current_user.roles.include?(User.user_roles[:mni])
   end
 
   def principle?
-    @current_user.role == "admin" || @current_user.role == "principle"
+    @current_user.roles.include?(User.user_roles[:admin]) || @current_user.roles.include?(User.user_roles[:principle])
   end
 
   def ict4sdg?
-    @current_user.role == "admin" || @current_user.role == "ict4sdg"
+    @current_user.roles.include?(User.user_roles[:admin]) || @current_user.roles.include?(User.user_roles[:ict4sdg])
   end
 end

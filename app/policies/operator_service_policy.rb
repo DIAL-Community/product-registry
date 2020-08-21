@@ -7,7 +7,7 @@ class OperatorServicePolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.role == 'admin' || user.role == 'mni' 
+    user.roles.include?(User.user_roles[:admin]) || user.roles.include?(User.user_roles[:mni]) 
   end
 
   def view_allowed?
@@ -15,7 +15,7 @@ class OperatorServicePolicy < ApplicationPolicy
       return false
     end
     
-    user.role == 'admin' || user.role == 'mni' 
+    user.roles.include?(User.user_roles[:admin]) || user.roles.include?(User.user_roles[:mni]) 
   end
 
   def map_allowed?

@@ -23,6 +23,10 @@
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
+      <% if current_user.roles.include?(User.user_roles[:org_user])%>
+        <i class="fa fa-info-circle" data-toggle="tooltip" data-html="true"
+           title="<%= t('view.project.form.org-owner-tooltip') %>"></i>
+      <% end %>
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="organization-search" class="form-control"
@@ -44,7 +48,11 @@
     </div>
 
     <h6 class="bg-secondary text-white border rounded p-3 mb-0">
-      <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
+      <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %> 
+      <% if current_user.roles.include?(User.user_roles[:product_user]) %>
+        <i class="fa fa-info-circle" data-toggle="tooltip" data-html="true"
+           title="<%= t('view.project.form.product-owner-tooltip') %>"></i>
+      <% end %>
     </h6>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="product-search" class="form-control"
@@ -56,6 +64,28 @@
     <div class="row">
       <div class="col-12">
         <span id="base-selected-products" class="selected-element badge badge-secondary px-1 mb-1">
+          <span class="text-label"></span>
+          <a onclick="remove(this);" style="cursor: pointer;">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+          <input type="hidden"/>
+        </span>
+      </div>
+    </div>
+
+    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <%= t('model.country').to_s.pluralize.humanize %> 
+    </h6>
+    <fieldset class="form-label-group mt-2">
+      <input type="text" id="country-search" class="form-control"
+             placeholder="<%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>" />
+      <label for="country-search">
+        <%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>
+      </label>
+    </fieldset>
+    <div class="row">
+      <div class="col-12">
+        <span id="base-selected-countries" class="selected-element badge badge-secondary px-1 mb-1">
           <span class="text-label"></span>
           <a onclick="remove(this);" style="cursor: pointer;">
             <i class="fas fa-trash-alt"></i>
@@ -78,6 +108,10 @@
 
   <% project.products.sort_by{|product| product.name }.each do |product| %>
     addProduct('<%= product.id %>', '<%= product.name %>');
+  <% end %>
+
+  <% project.countries.order("name").each do |country| %>
+    addLocation('<%= country.id %>', '<%= country.name %>');
   <% end %>
 
   var editor = setUpEditor(<%= raw JSON.generate(@project_description.description) %>);

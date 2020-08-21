@@ -18,7 +18,7 @@ class NewUserMailerTest < ActionMailer::TestCase
   end
 
   def mail
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @mail ||= begin
       @user = User.create!({
         'email': 'mailuser1@digitalimpactalliance.org',
@@ -34,7 +34,7 @@ class NewUserMailerTest < ActionMailer::TestCase
   end
 
   test 'should not allow non DIAL email with invalid organization.' do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @user = User.new({
       'email': 'user1@example.org',
       'password': '12345678',
@@ -45,7 +45,7 @@ class NewUserMailerTest < ActionMailer::TestCase
   end
 
   test 'should allow non DIAL email with valid organization.' do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @user = User.new({
       'email': 'mailuser@fourth-organization.com',
       'password': '12345678',

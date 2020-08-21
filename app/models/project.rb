@@ -27,7 +27,7 @@ class Project < ApplicationRecord
 
   def product_image_file
     if !products.empty?
-      if File.exist?(File.join('public','assets','products',"#{products.first.slug}.png"))
+      if File.exist?(File.join('public', 'assets', 'products', "#{products.first.slug}.png"))
         return "/assets/products/#{products.first.slug}.png"
       else
         return "/assets/products/prod_placeholder.png"
@@ -39,7 +39,7 @@ class Project < ApplicationRecord
 
   def org_image_file
     if !organizations.empty?
-      if File.exist?(File.join('public','assets','organizations',"#{organizations.first.slug}.png"))
+      if File.exist?(File.join('public', 'assets', 'organizations', "#{organizations.first.slug}.png"))
         return "/assets/organizations/#{organizations.first.slug}.png"
       else
         return "/assets/organizations/org_placeholder.png"
@@ -51,8 +51,8 @@ class Project < ApplicationRecord
 
   def origin_image_file
     if !origin.nil?
-      if File.exist?(File.join('public','assets','origins',"#{origin.slug}.png"))
-        return "/assets/origins/#{project.origin.slug}.png"
+      if File.exist?(File.join('public', 'assets', 'origins', "#{origin.slug}.png"))
+        return "/assets/origins/#{origin.slug}.png"
       else
         return "/assets/origins/origin_placeholder.png"
       end

@@ -1,5 +1,7 @@
 class SustainableDevelopmentGoal < ApplicationRecord
-  has_and_belongs_to_many :products
+  has_many :product_sustainable_development_goals
+  has_many :products, through: :product_sustainable_development_goals
+
   has_many :sdg_targets, :foreign_key => 'sdg_number', :primary_key => 'number'
 
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}

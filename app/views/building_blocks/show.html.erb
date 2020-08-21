@@ -21,6 +21,13 @@
   </div>
 </div>
 
+<% if session[:building_block_elevated_role].to_s.downcase == 'true' %>
+  <div class="alert alert-info mt-2 mb-n3">
+    <%= t('view.building-block.show.request-elevation',
+        href: link_to(t('view.general.this-link'), new_candidate_role_path, class: 'card-link')).html_safe %>
+  </div>
+<% end %>
+
 <% if !@building_block.products.nil? && @building_block.products.count > 0 %>
   <div class="mt-4">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
@@ -75,5 +82,5 @@
 </div>
 
 <script>
-    setUpViewer(<%= raw JSON.generate(@bbDesc.description) %>)
+    setUpViewer(<%= raw JSON.generate(@bb_desc.description) %>)
 </script>
