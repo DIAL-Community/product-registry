@@ -6,7 +6,9 @@
     <h5>
       <%= "#{t('model.glossary').to_s.titlecase}: #{@glossary.name}" %>
     </h5>
-    <div id="glossary-viewer" class="wysiwyg-viewer"></div>
+    <div id="glossary-viewer" class="wysiwyg-viewer">
+      <%= @glossary.description.html_safe %>
+    </div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), glossaries_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@glossary).mod_allowed? %>
@@ -15,7 +17,3 @@
     </p>
   </div>
 </div>
-
-<script>
-  setUpViewer(<%= raw JSON.generate(@glossary.description) %>)
-</script>

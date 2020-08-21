@@ -20,9 +20,7 @@
     <%= t('view.general.duplicates', model: t('model.use-case-step')) %>
   </div>
 
-  <%= form.hidden_field :ucs_desc, id: :ucs_desc %>
-  <div class="wysiwyg-editor">
-  </div>
+  <%= form.cktext_area :ucs_desc, value: @ucs_desc.description.html_safe, id: 'ucs_desc' %>
   
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :step_number, id: :step_number, required: true,
@@ -90,11 +88,4 @@
   <% use_case_step.products.order("name").each do |product| %>
     addProduct('<%= product.id %>', '<%= product.name %>');
   <% end %>
-
-  var editor = setUpEditor(<%= raw JSON.generate(@ucs_desc.description) %>);
-  var form = document.querySelector('#use-case-step-form');
-  form.onsubmit = function() {
-    var useCaseStepDesc = $('#ucs_desc');
-    useCaseStepDesc.val(JSON.stringify(editor.getContents()));
-  };
 </script>

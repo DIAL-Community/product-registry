@@ -388,7 +388,7 @@ module Modules
       product_description.product_id = existing_product.id
       product_description.locale = I18n.locale
       if !sync_description.nil?
-        product_description.description = JSON.generate('ops': [{ 'insert': sync_description }])
+        product_description.description = sync_description
       elsif product_description.description.nil?
         product_descriptions = YAML.load_file('config/product_description.yml')
         product_descriptions['products'].each do |pd|

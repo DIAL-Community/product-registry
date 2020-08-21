@@ -22,14 +22,8 @@
   <label for="task-description">
     <%= t('view.task.form.full-description') %>
   </label>
-  <%= form.hidden_field :task_desc, id: :task_description %>
-  <div class="wysiwyg-editor" id='task-description'>
-    <%
-      if !@description.nil? 
-        concat @description.description
-      end
-    %>
-  </div>
+  
+  <%= form.cktext_area :task_desc, value: @description.description.html_safe, id: 'task_description' %>
   
   <fieldset class="form-group form-check">
     <%= form.check_box :complete, id: :task_complete,
@@ -110,12 +104,6 @@
   $("#organization-search").autocomplete(organizationAutoComplete);
 
   $('#task_due_date').datepicker();
-  var description = setUpEditor(<%= raw JSON.generate(@description.nil? ? {} : @description.description ) %>);
-  var form = document.querySelector('#task-form');
-  form.onsubmit = function() {
-    $('#task_description').val(JSON.stringify(description.getContents()));
-    $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
-  };
 
   $('#add-resource').click(function(e) {
     e.preventDefault();

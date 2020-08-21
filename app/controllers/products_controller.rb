@@ -83,7 +83,7 @@ class ProductsController < ApplicationController
     if params[:search].present?
       name_products = @products.name_contains(params[:search])
       desc_products = @products.joins(:product_descriptions)
-                               .where("LOWER(description#>>'{}') like LOWER(?)", "%#{params[:search]}%")
+                               .where("LOWER(description) like LOWER(?)", "%#{params[:search]}%")
       @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
@@ -243,7 +243,7 @@ class ProductsController < ApplicationController
         if product_params[:product_description].present?
           @product_description.product_id = @product.id
           @product_description.locale = I18n.locale
-          @product_description.description = JSON.parse(product_params[:product_description])
+          @product_description.description = product_params[:product_description]
           @product_description.save
         end
 
@@ -415,7 +415,7 @@ class ProductsController < ApplicationController
     if product_params[:product_description].present?
       @product_description.product_id = @product.id
       @product_description.locale = I18n.locale
-      @product_description.description = JSON.parse(product_params[:product_description])
+      @product_description.description = product_params[:product_description]
       @product_description.save
     end
 

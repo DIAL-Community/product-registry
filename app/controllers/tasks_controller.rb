@@ -99,7 +99,7 @@ class TasksController < ApplicationController
         if task_params[:task_desc].present?
           @task_desc.task_id = @task.id
           @task_desc.locale = I18n.locale
-          @task_desc.description = JSON.parse(task_params[:task_desc])
+          @task_desc.description = task_params[:task_desc]
           @task_desc.save
         end
 
@@ -131,7 +131,7 @@ class TasksController < ApplicationController
                                                         .first || TaskDescription.new
       @task_desc.task_id = @task.id
       @task_desc.locale = I18n.locale
-      @task_desc.description = JSON.parse(task_params[:task_desc])
+      @task_desc.description = task_params[:task_desc]
       @task_desc.save
     end
 

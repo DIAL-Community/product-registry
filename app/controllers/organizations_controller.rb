@@ -53,7 +53,7 @@ class OrganizationsController < ApplicationController
     if params[:search].present?
       name_orgs = @organizations.name_contains(params[:search])
       desc_orgs = @organizations.joins(:organization_descriptions)
-                                .where("LOWER(description#>>'{}') like LOWER(?)", "%#{params[:search]}%")
+                                .where("LOWER(description) like LOWER(?)", "%#{params[:search]}%")
       @organizations = @organizations.where(id: (name_orgs + desc_orgs).uniq)
     end
 
@@ -201,7 +201,7 @@ class OrganizationsController < ApplicationController
           @organization_description = OrganizationDescription.new
           @organization_description.organization_id = @organization.id
           @organization_description.locale = I18n.locale
-          @organization_description.description = JSON.parse(organization_params[:organization_description])
+          @organization_description.description = organization_params[:organization_description]
           @organization_description.save
         end
 
@@ -330,7 +330,7 @@ class OrganizationsController < ApplicationController
     if organization_params[:organization_description].present?
       @organization_description.organization_id = @organization.id
       @organization_description.locale = I18n.locale
-      @organization_description.description = JSON.parse(organization_params[:organization_description])
+      @organization_description.description = organization_params[:organization_description]
       @organization_description.save
     end
 

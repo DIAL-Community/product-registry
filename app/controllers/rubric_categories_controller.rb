@@ -51,7 +51,7 @@ class RubricCategoriesController < ApplicationController
         if rubric_category_params[:rc_desc].present?
           @rubric_category_desc.rubric_category_id = @rubric_category.id
           @rubric_category_desc.locale = I18n.locale
-          @rubric_category_desc.description = JSON.parse(rubric_category_params[:rc_desc])
+          @rubric_category_desc.description = rubric_category_params[:rc_desc]
           @rubric_category_desc.save
         end
         format.html do
@@ -76,7 +76,7 @@ class RubricCategoriesController < ApplicationController
                                                        .first || RubricCategoryDescription.new
       @rubric_category_desc.rubric_category_id = @rubric_category.id
       @rubric_category_desc.locale = I18n.locale
-      @rubric_category_desc.description = JSON.parse(rubric_category_params[:rc_desc])
+      @rubric_category_desc.description = rubric_category_params[:rc_desc]
       @rubric_category_desc.save
     end
     respond_to do |format|

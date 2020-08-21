@@ -12,7 +12,9 @@
           <p class="mb-0">
             <strong><%= t('view.project.index.description') %>:</strong>
           </p>
-          <div id="product-viewer" class="wysiwyg-viewer"></div>
+          <div id="product-viewer" class="wysiwyg-viewer">
+            <%= @project_description.description.html_safe %>
+          </div>
         <% end %>
         <% if !@project.origin.nil? %>
           <strong><%= "#{t('view.project.show.origin')}:" %></strong>
@@ -112,6 +114,3 @@
   <% end %>
 </div>
 
-<script>
-  setUpViewer(<%= raw JSON.generate(@project_description.description) %>)    
-</script>

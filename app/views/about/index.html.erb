@@ -184,7 +184,9 @@
   </div>
 </div>
 <% else %>
-  <div id="about-viewer" class="wysiwyg-viewer"></div>
+  <div id="about-viewer" class="wysiwyg-viewer">
+    <%= @about_page.html_safe %>
+  </div>
 <% end %>
 
 <%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.0/jarallax.min.js" %>
@@ -198,9 +200,5 @@
     $('.jarallax-keep-img').jarallax({
       keepImg: true,
     });
-
-    <% if session[:portal]["slug"] != "default" && !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
-      setUpViewer(<%= raw JSON.generate(@about_page) %>) 
-    <% end %>
 
 </script>

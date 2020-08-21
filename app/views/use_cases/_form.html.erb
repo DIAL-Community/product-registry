@@ -19,16 +19,14 @@
   <label for="usecasesteps-header">
     <%= t('view.general.description') %>:
   </label>
-  <%= form.hidden_field :uc_desc, id: :use_case_desc %>
-  <div class="wysiwyg-editor mb-2" id='usecase-description'>
-  </div>
+
+  <%= form.cktext_area :uc_desc, value: @uc_desc.description.html_safe, id: 'use_case_desc' %>
 
   <label for="usecasesteps-header">
     <%= t('view.use-case.form.steps-header-description') %>:
   </label>
-  <%= form.hidden_field :ucs_header, id: :use_case_steps_header %>
-  <div class="wysiwyg-editor" id='usecasesteps-header'>
-  </div>
+
+  <%= form.cktext_area :ucs_header, value: @ucs_header.header.html_safe, id: 'use_case_steps_header' %>
 
   <%
     default_maturity = use_case.maturity.nil? ? UseCase.entity_status_types[:BETA] : use_case.maturity
@@ -124,17 +122,4 @@
   <% use_case.tags.each {|tag| %>
     tagUseCase('', '<%= tag %>');
   <% } %>
-
-  var descEditor = setUpEditor(<%= raw JSON.generate(@uc_desc.description) %>, '', 'usecase-description');
-  var headerEditor = setUpEditor(<%= raw JSON.generate(@ucs_header.header) %>, '', 'usecasesteps-header');
-  var form = document.querySelector('#use-case-form');
-  form.onsubmit = function() {
-    $('#use_case_desc').val(JSON.stringify(descEditor.getContents()));
-
-    headerEditorContent = {};
-    if (headerEditor.getText() !== "\n") {
-      headerEditorContent = headerEditor.getContents();
-    }
-    $('#use_case_steps_header').val(JSON.stringify(headerEditorContent));
-  };
 </script>

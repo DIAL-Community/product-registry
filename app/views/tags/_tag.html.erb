@@ -6,18 +6,17 @@
         <%= "#{tag.name}" %>
       <% end %>
     </h5>
-    <div id="<%= tag.slug %>" class="wysiwyg-viewer"></div>
+    <div id="<%= tag.slug %>" class="wysiwyg-viewer">
+        <%= tag.tag_descriptions
+        .select { |desc| desc.locale == I18n.locale.to_s }
+        .first
+        .description
+        .html_safe %>
+    </div>
     <p class="float-right mb-0">
       <% if user_signed_in? && policy(tag).mod_allowed? %>
         <%= link_to t('view.general.edit'), edit_tag_path(tag), :class => "card-link" %>
       <% end %>
     </p>
   </div>
-  <script>
-    setViewerForElement('<%= tag.slug %>',
-                         <%= raw JSON.generate(tag.tag_descriptions
-                                                  .select { |desc| desc.locale == I18n.locale.to_s }
-                                                  .first
-                                                  .description ) %>)
-  </script>
 </div>

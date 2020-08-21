@@ -18,14 +18,8 @@
   <label for="rubric-category-description">
     <%= t('view.rubric-category.form.description') %>
   </label>
-  <%= form.hidden_field :rc_desc, id: :rubric_category_description %>
-  <div class="wysiwyg-editor" id='rubric-category-description'>
-    <%
-      if !description.nil? && !description.description_html.nil?
-        concat description.description_html.html_safe
-      end
-    %>
-  </div>
+
+  <%= form.cktext_area :rc_desc, value: description.description.html_safe, id: 'rubric_category_description' %>
   
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :weight, id: :weight, required: true,
@@ -40,11 +34,4 @@
   </fieldset>
 <% end %>
 
-<script>
-  var description = setUpEditor(<%= raw JSON.generate(description.nil? ? {} : description.description ) %>);
-  var form = document.querySelector('#rubric-category-form');
-  form.onsubmit = function() {
-    $('#rubric_category_description').val(JSON.stringify(description.getContents()));
-  };
-</script>
 

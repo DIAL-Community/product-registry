@@ -32,7 +32,9 @@
     <div class="text-muted">
       <span class="text-muted"><%= t('view.candidate-role.index.request-reason') %></span>:
     </div>
-    <div id="tag-viewer" class="wysiwyg-viewer"></div>
+    <div id="tag-viewer" class="wysiwyg-viewer">
+      <%= @candidate_role.description.html_safe %>
+    </div>
     <p class="float-right mb-0">
       <%= link_to t('view.general.back'), candidate_roles_path, class: "card-link" %>
       <% if user_signed_in? && policy(@candidate_role).mod_allowed? %>
@@ -55,6 +57,3 @@
   </div>
 </div>
 
-<script>
-    setUpViewer(<%= raw JSON.generate(@candidate_role.description) %>)
-</script>

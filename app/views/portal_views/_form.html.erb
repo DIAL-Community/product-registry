@@ -107,9 +107,8 @@
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.landing-page') %>
   </h6>
-  <%= hidden_field_tag :about_page %>
-    <div id="about-editor" class="wysiwyg-editor">
-  </div>
+
+  <%= form.cktext_area :about_page, value: @about_page.html_safe, id: 'about_page' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.background-color') %>
@@ -122,9 +121,7 @@
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.page-footer') %>
   </h6>
-  <%= hidden_field_tag :page_footer %>
-    <div id="footer-editor" class="wysiwyg-editor">
-  </div>
+  <%= form.cktext_area :page_footer, value: @footer.html_safe, id: 'page_footer' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.header-logo') %>
@@ -141,16 +138,3 @@
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
-
-<script>
-
-  var abouteditor = setUpEditor(<%= raw JSON.generate(@about_page) %>, "<%= t('view.portal.form.about-page') %>", "about-editor");
-  var footereditor = setUpEditor(<%= raw JSON.generate(@footer) %>, "<%= t('view.portal.form.page-footer') %>", "footer-editor");
-  var form = document.querySelector('#portal-form');
-  form.onsubmit = function() {
-    var aboutPage = $('#about_page');
-    aboutPage.val(JSON.stringify(abouteditor.getContents()));
-    var footer = $('#page_footer');
-    footer.val(JSON.stringify(footereditor.getContents()));
-  };
-</script>

@@ -253,6 +253,8 @@ en:
     maturity-rubric:
       index:
         add-category: Add Category
+      form:
+        description: Description of Maturity Rubric
     notification:
       favorite-save-notification: We have added this to your favorites!
       favorite-remove-notification: We have removed this from your favorites

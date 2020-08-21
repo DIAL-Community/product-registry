@@ -47,10 +47,8 @@
     </fieldset>
   <% end %>
 
-  <%= form.hidden_field :bb_desc, id: :building_block_desc %>
-  <div class="wysiwyg-editor">
-  </div>
-
+  <%= form.cktext_area :bb_desc, value: @bb_desc.description.html_safe, id: 'building_block_desc' %>
+  
   <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
     <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
   </h6>
@@ -112,12 +110,5 @@
   <% building_block.workflows.order("name").each do |workflow| %>
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
-
-  var editor = setUpEditor(<%= raw JSON.generate(@bb_desc.description) %>);
-  var form = document.querySelector('#bb-form');
-  form.onsubmit = function() {
-    var bbDesc = $('#building_block_desc');
-    bbDesc.val(JSON.stringify(editor.getContents()));
-  };
 
 </script>

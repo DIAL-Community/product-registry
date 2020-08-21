@@ -11,6 +11,7 @@
   <%= image_tag(@building_block.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="bb-viewer" class="wysiwyg-viewer">
+      <%= @bb_desc.description.html_safe %>
     </div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), building_blocks_path, :class => "card-link" %>
@@ -81,6 +82,3 @@
   <%= commontator_thread(@building_block) %>
 </div>
 
-<script>
-    setUpViewer(<%= raw JSON.generate(@bb_desc.description) %>)
-</script>
