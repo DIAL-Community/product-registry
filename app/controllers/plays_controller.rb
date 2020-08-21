@@ -75,9 +75,9 @@ class PlaysController < ApplicationController
         if params[:play_description].present? || params[:play_outcomes].present? || params[:play_prerequisites].present?
           @play_desc.play_id = @play.id
           @play_desc.locale = I18n.locale
-          params[:play_description].present? && @play_desc.description = JSON.parse(params[:play_description])
-          params[:play_prerequisites].present? && @play_desc.prerequisites = JSON.parse(params[:play_prerequisites])
-          params[:play_outcomes].present? && @play_desc.outcomes = JSON.parse(params[:play_outcomes])
+          params[:play_description].present? && @play_desc.description = params[:play_description]
+          params[:play_prerequisites].present? && @play_desc.prerequisites = params[:play_prerequisites]
+          params[:play_outcomes].present? && @play_desc.outcomes = params[:play_outcomes]
           @play_desc.save
         end
 
@@ -124,9 +124,9 @@ class PlaysController < ApplicationController
                                                         .first || PlayDescription.new
       @play_desc.playbook_id = @play.id
       @play_desc.locale = I18n.locale
-      play_params[:play_description].present? && @play_desc.description = JSON.parse(play_params[:play_description])
-      play_params[:play_prerequisites].present? && @play_desc.prerequisites = JSON.parse(play_params[:play_prerequisites])
-      play_params[:play_outcomes].present? && @play_desc.outcomes = JSON.parse(play_params[:play_outcomes])
+      play_params[:play_description].present? && @play_desc.description = play_params[:play_description]
+      play_params[:play_prerequisites].present? && @play_desc.prerequisites = play_params[:play_prerequisites]
+      play_params[:play_outcomes].present? && @play_desc.outcomes = play_params[:play_outcomes]
       @play_desc.save
     end
 

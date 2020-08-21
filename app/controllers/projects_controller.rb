@@ -173,7 +173,7 @@ class ProjectsController < ApplicationController
           @project_description = ProjectDescription.new
           @project_description.project_id = @project.id
           @project_description.locale = I18n.locale
-          @project_description.description = JSON.parse(project_params[:project_description])
+          @project_description.description = project_params[:project_description]
           @project_description.save
         end
 
@@ -295,7 +295,7 @@ class ProjectsController < ApplicationController
     if project_params[:project_description].present?
       @project_description.project_id = @project.id
       @project_description.locale = I18n.locale
-      @project_description.description = JSON.parse(project_params[:project_description])
+      @project_description.description = project_params[:project_description]
       @project_description.save
     end
 

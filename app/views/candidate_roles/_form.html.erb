@@ -9,9 +9,7 @@
     <%= form.label :email %>
   </fieldset>
 
-  <%= form.hidden_field :description, id: 'candidate-role-description' %>
-  <div class="wysiwyg-editor mb-2">
-  </div>
+  <%= form.cktext_area :description, value: @candidate_role.description.html_safe, id: 'candidate-role-description' %>
 
   <fieldset class="form-group">
     <label for="user-role-selector">
@@ -61,11 +59,5 @@
       $(this).remove();
     });
   });
-
-  var editor = setUpEditor(<%= raw JSON.generate(@candidate_role.description) %>, '<%= t('view.candidate-role.form.description') %>');
-  var form = document.querySelector('#candidate-role-form');
-  form.onsubmit = function() {
-    var description = $('#candidate-role-description');
-    description.val(JSON.stringify(editor.getContents()));
-  };
+  
 </script>

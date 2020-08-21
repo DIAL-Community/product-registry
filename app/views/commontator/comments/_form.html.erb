@@ -33,8 +33,8 @@
     </div>
   <% end %>
 
-  <%= form.hidden_field :body, id: field_id %>
-  <div id='quill-<%= field_id %>' class="wysiwyg-editor" body-id="<%= field_id %>"></div>
+  <%= form.cktext_area :body, value: comment.body.nil? ? '' : comment.body.html_safe, id: field_id, cols: 40, ckeditor: { toolbar: 'mini' } %>
+
 
   <fieldset class="submit float-right mt-2">
     <%= form.submit t("commontator.comment.actions.#{new_record ? 'create' : 'update'}"),
@@ -47,11 +47,3 @@
   </fieldset>
 <% end %>
 
-<script>
-  var fieldId = '<%= field_id %>'
-  var comment = setUpEditor(<%= comment.body.nil? ? '{}' : comment.body.html_safe %>);
-  var form = document.querySelector('#<%= form_id %>');
-  form.onsubmit = function() {
-    $('#' + fieldId ).val(JSON.stringify(comment.getContents()));
-  };
-</script>

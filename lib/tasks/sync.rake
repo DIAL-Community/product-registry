@@ -329,11 +329,8 @@ namespace :sync do
         end
       end
 
-      description = {
-        ops: [
-          insert: csv_row['Overview of digital health implementation']
-        ]
-      }
+      description = "<p>"+csv_row['Overview of digital health implementation']+"</p>"
+  
 
       project_description = ProjectDescription.new
       project_description.locale = I18n.locale

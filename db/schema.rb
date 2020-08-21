@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_19_002149) do
+ActiveRecord::Schema.define(version: 2020_08_19_201841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "building_block_descriptions", force: :cascade do |t|
     t.bigint "building_block_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.index ["building_block_id"], name: "index_building_block_descriptions_on_building_block_id"
   end
 
@@ -111,8 +111,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "category_indicator_descriptions", force: :cascade do |t|
     t.bigint "category_indicator_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
-    t.string "description_html"
+    t.string "description", default: "", null: false
     t.index ["category_indicator_id"], name: "index_category_indicator_descriptions_on_category_indicator_id"
   end
 
@@ -129,6 +128,16 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["region_id"], name: "index_cities_on_region_id"
+  end
+
+  create_table "ckeditor_assets", force: :cascade do |t|
+    t.string "data_file_name", null: false
+    t.string "data_content_type"
+    t.integer "data_file_size"
+    t.string "type", limit: 30
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type"], name: "index_ckeditor_assets_on_type"
   end
 
   create_table "classifications", force: :cascade do |t|
@@ -248,7 +257,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
     t.string "name", null: false
     t.string "slug", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -259,7 +268,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "maturity_rubric_descriptions", force: :cascade do |t|
     t.bigint "maturity_rubric_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.string "description_html"
     t.index ["maturity_rubric_id"], name: "index_maturity_rubric_descriptions_on_maturity_rubric_id"
   end
@@ -293,7 +302,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "organization_descriptions", force: :cascade do |t|
     t.bigint "organization_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_organization_descriptions_on_organization_id"
@@ -447,7 +456,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "product_descriptions", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_product_descriptions_on_product_id"
@@ -505,7 +514,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "project_descriptions", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_project_descriptions_on_project_id"
@@ -592,7 +601,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "rubric_category_descriptions", force: :cascade do |t|
     t.bigint "rubric_category_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.string "description_html"
     t.index ["rubric_category_id"], name: "index_rubric_category_descriptions_on_rubric_category_id"
   end
@@ -654,7 +663,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "tag_descriptions", force: :cascade do |t|
     t.bigint "tag_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.index ["tag_id"], name: "index_tag_descriptions_on_tag_id"
   end
 
@@ -722,21 +731,21 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "use_case_descriptions", force: :cascade do |t|
     t.bigint "use_case_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.index ["use_case_id"], name: "index_use_case_descriptions_on_use_case_id"
   end
 
   create_table "use_case_headers", force: :cascade do |t|
     t.bigint "use_case_id", null: false
     t.string "locale", null: false
-    t.jsonb "header", default: {}, null: false
+    t.string "header", default: "", null: false
     t.index ["use_case_id"], name: "index_use_case_headers_on_use_case_id"
   end
 
   create_table "use_case_step_descriptions", force: :cascade do |t|
     t.bigint "use_case_step_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.index ["use_case_step_id"], name: "index_use_case_step_descriptions_on_use_case_step_id"
   end
 
@@ -813,7 +822,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_002149) do
   create_table "workflow_descriptions", force: :cascade do |t|
     t.bigint "workflow_id", null: false
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: "", null: false
     t.index ["workflow_id"], name: "index_workflow_descriptions_on_workflow_id"
   end
 

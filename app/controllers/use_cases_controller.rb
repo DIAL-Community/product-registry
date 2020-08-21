@@ -129,13 +129,13 @@ class UseCasesController < ApplicationController
         if use_case_params[:uc_desc].present?
           @uc_desc.use_case_id = @use_case.id
           @uc_desc.locale = I18n.locale
-          @uc_desc.description = JSON.parse(use_case_params[:uc_desc])
+          @uc_desc.description = use_case_params[:uc_desc]
           @uc_desc.save
         end
         if use_case_params[:ucs_header].present?
           @ucs_header.use_case_id = @use_case.id
           @ucs_header.locale = I18n.locale
-          @ucs_header.header = JSON.parse(use_case_params[:ucs_header])
+          @ucs_header.header = use_case_params[:ucs_header]
           @ucs_header.save
         end
         format.html { redirect_to @use_case,
@@ -165,7 +165,7 @@ class UseCasesController < ApplicationController
     if use_case_params[:uc_desc].present?
       @uc_desc.use_case_id = @use_case.id
       @uc_desc.locale = I18n.locale
-      @uc_desc.description = JSON.parse(use_case_params[:uc_desc])
+      @uc_desc.description = use_case_params[:uc_desc]
       @uc_desc.save
     end
 
@@ -182,7 +182,7 @@ class UseCasesController < ApplicationController
     if use_case_params[:ucs_header].present?
       @ucs_header.use_case_id = @use_case.id
       @ucs_header.locale = I18n.locale
-      @ucs_header.header = JSON.parse(use_case_params[:ucs_header])
+      @ucs_header.header = use_case_params[:ucs_header]
       @ucs_header.save
     end
 

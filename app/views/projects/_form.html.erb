@@ -10,9 +10,7 @@
       <%= t('view.general.duplicates', model: t('model.project')) %>
     </div>
 
-    <%= form.hidden_field :project_description, id: :project_description %>
-    <div class="wysiwyg-editor">
-    </div>
+    <%= form.cktext_area :project_description, value: @project_description.description.html_safe, id: 'project_description' %>
 
     <fieldset class="form-group mt-2">
       <%= label_tag "origins", t('view.product.index.sources') %>
@@ -114,10 +112,4 @@
     addLocation('<%= country.id %>', '<%= country.name %>');
   <% end %>
 
-  var editor = setUpEditor(<%= raw JSON.generate(@project_description.description) %>);
-  var form = document.querySelector('#project-form');
-  form.onsubmit = function() {
-    var projectDescription = $('#project_description');
-    projectDescription.val(JSON.stringify(editor.getContents()));
-  };
 </script>

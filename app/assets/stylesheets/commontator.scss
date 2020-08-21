@@ -21,6 +21,14 @@
     text-decoration: none !important;
   }
 
+  .cke_top *, .cke_bottom * {
+    padding: 3px 4px 1px !important;
+  }
+
+  .cke_toolbar_separator {
+    padding: 0px !important;
+  }
+
   .comment-list {
     .comment {
       border-top: #ddd 1px solid;

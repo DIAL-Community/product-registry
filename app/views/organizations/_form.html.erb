@@ -28,9 +28,7 @@
       </div>
     </div>
 
-    <%= form.hidden_field :organization_description, id: :organization_description %>
-    <div class="wysiwyg-editor">
-    </div>
+    <%= form.cktext_area :organization_description, value: @organization_description.description.html_safe, id: 'organization_description' %>
   
     <fieldset class="custom-file mt-2">
       <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
@@ -311,14 +309,4 @@
     addOtherName('<%= other_name %>');
   <% } %>
 
-  var editor = setUpEditor(<%= raw JSON.generate(@organization_description.description) %>, '<%= t('view.organization.form.description-placeholder') %>');
-  var form = document.querySelector('#organization-form');
-  form.onsubmit = function() {
-    var organizationDescription = $('#organization_description');
-    editorContent = {};
-    if (editor.getText() !== "\n") {
-      editorContent = editor.getContents();
-    }
-    organizationDescription.val(JSON.stringify(editorContent));
-  };
 </script>

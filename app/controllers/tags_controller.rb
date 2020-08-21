@@ -54,7 +54,7 @@ class TagsController < ApplicationController
         if tag_params[:tag_desc]
           @tag_desc.tag_id = @tag.id
           @tag_desc.locale = I18n.locale
-          @tag_desc.description = JSON.parse(tag_params[:tag_desc])
+          @tag_desc.description = tag_params[:tag_desc]
           @tag_desc.save
         end
         format.html { redirect_to tags_path, notice: 'Tag was successfully created.' }
@@ -73,7 +73,7 @@ class TagsController < ApplicationController
     if tag_params[:tag_desc]
       @tag_desc.tag_id = @tag.id
       @tag_desc.locale = I18n.locale
-      @tag_desc.description = JSON.parse(tag_params[:tag_desc])
+      @tag_desc.description = tag_params[:tag_desc]
       @tag_desc.save
     end
     respond_to do |format|

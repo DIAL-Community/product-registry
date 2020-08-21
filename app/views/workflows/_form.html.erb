@@ -10,9 +10,7 @@
     <%= t('view.general.duplicates', model: t('model.workflow')) %>
   </div>
 
-  <%= form.hidden_field :wf_desc, id: :workflow_desc %>
-  <div class="wysiwyg-editor">
-  </div>
+  <%= form.cktext_area :wf_desc, value: @wf_desc.description.html_safe, id: 'workflow_desc' %>
   
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
@@ -46,11 +44,4 @@
   <% workflow.building_blocks.order("name").each do |building_block| %>
     addBuildingBlock('<%= building_block.id %>', '<%= building_block.name %>');
   <% end %>
-
-  var editor = setUpEditor(<%= raw JSON.generate(@wf_desc.description) %>);
-  var form = document.querySelector('#workflow-form');
-  form.onsubmit = function() {
-    var workflowDesc = $('#workflow_desc');
-    workflowDesc.val(JSON.stringify(editor.getContents()));
-  };
 </script>

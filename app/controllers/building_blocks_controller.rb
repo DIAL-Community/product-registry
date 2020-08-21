@@ -95,10 +95,10 @@ class BuildingBlocksController < ApplicationController
 
     respond_to do |format|
       if !@building_block.errors.any? && @building_block.save
-        if building_block_params[:bb_desc].present?
+        if (building_block_params[:bb_desc])
           @bb_desc.building_block_id = @building_block.id
           @bb_desc.locale = I18n.locale
-          @bb_desc.description = JSON.parse(building_block_params[:bb_desc])
+          @bb_desc.description = building_block_params[:bb_desc]
           @bb_desc.save
         end
         format.html { redirect_to @building_block,
@@ -150,7 +150,7 @@ class BuildingBlocksController < ApplicationController
     if building_block_params[:bb_desc].present?
       @bb_desc.building_block_id = @building_block.id
       @bb_desc.locale = I18n.locale
-      @bb_desc.description = JSON.parse(building_block_params[:bb_desc])
+      @bb_desc.description = building_block_params[:bb_desc]
       @bb_desc.save
     end
 

@@ -58,9 +58,9 @@ class PlaybooksController < ApplicationController
       if @playbook.save
         @playbook_desc.playbook_id = @playbook.id
         @playbook_desc.locale = I18n.locale
-        playbook_params[:playbook_overview].present? && @playbook_desc.overview = JSON.parse(playbook_params[:playbook_overview])
-        playbook_params[:playbook_audience].present? && @playbook_desc.audience = JSON.parse(playbook_params[:playbook_audience])
-        playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = JSON.parse(playbook_params[:playbook_outcomes])
+        playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
+        playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
+        playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
         @playbook_desc.save
 
         if params[:logo].present?
@@ -94,9 +94,9 @@ class PlaybooksController < ApplicationController
                                                         .first || PlaybookDescription.new
       @playbook_desc.playbook_id = @playbook.id
       @playbook_desc.locale = I18n.locale
-      playbook_params[:playbook_overview].present? && @playbook_desc.overview = JSON.parse(playbook_params[:playbook_overview])
-      playbook_params[:playbook_audience].present? && @playbook_desc.audience = JSON.parse(playbook_params[:playbook_audience])
-      playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = JSON.parse(playbook_params[:playbook_outcomes])
+      playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
+      playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
+      playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
       @playbook_desc.save
     end
 

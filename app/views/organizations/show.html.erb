@@ -60,7 +60,9 @@
             @organization_description.description != {} %>
         <p class="m-2">
           <strong><%= t('view.organization.index.description') %>:</strong>
-          <div id="product-viewer" class="wysiwyg-viewer"></div>
+          <div id="product-viewer" class="wysiwyg-viewer ml-4">
+            <%= @organization_description.description.html_safe %>
+          </div>
         </p>
       <% end %>
       <% if !@organization.website.nil? %>
@@ -328,12 +330,5 @@
       }
 
       setupMapView();
-  <% end %>
-  
-  <% if !@organization_description.description.nil? &&
-        !@organization_description.description.empty? &&
-        @organization_description.description != {} &&
-        @organization_description.description != {} %>
-    setUpViewer(<%= raw JSON.generate(@organization_description.description) %>) 
   <% end %>
 </script>

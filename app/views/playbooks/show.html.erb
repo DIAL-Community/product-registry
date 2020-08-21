@@ -21,19 +21,25 @@
 <div class="card mt-2">
   
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer"></div>
+      <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer">
+        <%= @description.overview %>
+      </div>
     </div>
     <div class="card-header border-0">
         <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</h5>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer"></div>
+      <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
+      <%= @description.audience %>
+      </div>
     </div>
     <div class="card-header border-0">
         <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</h5>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer"></div>
+      <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
+      <%= @description.outcomes %>
+      </div>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
@@ -109,14 +115,6 @@
 </div>
 
 <script>
-    <% if !@description.nil? %>
-      setViewerForElement('<%= @playbook.slug %>-overview',
-                         <%= raw JSON.generate(@description.overview ) %>)
-      setViewerForElement('<%= @playbook.slug %>-audience',
-                         <%= raw JSON.generate(@description.audience ) %>)
-      setViewerForElement('<%= @playbook.slug %>-outcomes',
-                         <%= raw JSON.generate(@description.outcomes ) %>)
-    <% end %>
 
     $("#loading-spinner").hide()
 

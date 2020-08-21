@@ -54,7 +54,7 @@ class TaskTrackersController < ApplicationController
         if task_tracker_params[:tt_desc].present?
           @task_tracker_description.task_tracker = @task_tracker
           @task_tracker_description.locale = I18n.locale
-          @task_tracker_description.description = JSON.parse(task_tracker_params[:tt_desc])
+          @task_tracker_description.description = task_tracker_params[:tt_desc]
           @task_tracker_description.save
         end
         format.html do
@@ -79,7 +79,7 @@ class TaskTrackersController < ApplicationController
                                                         .first || TaskTrackerDescription.new
       @task_tracker_description.task_tracker = @task_tracker
       @task_tracker_description.locale = I18n.locale
-      @task_tracker_description.description = JSON.parse(task_tracker_params[:tt_desc])
+      @task_tracker_description.description = task_tracker_params[:tt_desc]
       @task_tracker_description.save
     end
 
@@ -131,7 +131,7 @@ class TaskTrackersController < ApplicationController
   # Only allow a list of trusted parameters through.
   def task_tracker_params
     params.require(:task_tracker)
-          .permit(:name, :slug, :last_run, :tt_desc)
+          .permit(:name, :slug, :last_run, :tt_desc, :message)
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

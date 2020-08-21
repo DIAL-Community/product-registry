@@ -56,7 +56,7 @@ class MaturityRubricsController < ApplicationController
         if maturity_rubric_params[:mr_desc].present?
           @maturity_rubric_desc.maturity_rubric_id = @maturity_rubric.id
           @maturity_rubric_desc.locale = I18n.locale
-          @maturity_rubric_desc.description = JSON.parse(maturity_rubric_params[:mr_desc])
+          @maturity_rubric_desc.description = maturity_rubric_params[:mr_desc]
           @maturity_rubric_desc.save
         end
 
@@ -82,7 +82,7 @@ class MaturityRubricsController < ApplicationController
                                                        .first || MaturityRubricDescription.new
       @maturity_rubric_desc.maturity_rubric_id = @maturity_rubric.id
       @maturity_rubric_desc.locale = I18n.locale
-      @maturity_rubric_desc.description = JSON.parse(maturity_rubric_params[:mr_desc])
+      @maturity_rubric_desc.description = maturity_rubric_params[:mr_desc]
       @maturity_rubric_desc.save
     end
     respond_to do |format|

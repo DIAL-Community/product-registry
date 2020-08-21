@@ -25,7 +25,7 @@
       </div>
     </div>
     <div id="<%= @rubric_category.slug %>" class="wysiwyg-viewer">
-      <%= !description.description_html.nil? && description.description_html.html_safe %>
+      <%= !description.description.nil? && description.description.html_safe %>
     </div>
   </div>
   <div class="card-footer border-0">
@@ -67,7 +67,7 @@
               </div>
             </div>
             <div id="<%= category_indicator.slug %>" class="wysiwyg-viewer">
-              <%= !indicator_description.description_html.nil? && indicator_description.description_html.html_safe %>
+              <%= !indicator_description.description.nil? && indicator_description.description.html_safe %>
             </div>
           </div>
           <div class="card-footer border-0">
@@ -79,10 +79,6 @@
             </div>
           </div>
         </div>
-        <script>
-          setViewerForElement('<%= category_indicator.slug %>',
-                               <%= raw JSON.generate(indicator_description.description ) %>)
-        </script>
       <% end %>
     <% else %>
       <div class="alert alert-light mb-0" role="alert">
@@ -91,7 +87,4 @@
     <% end %>
   </div>
 </div>
-<script>
-  setViewerForElement('<%= @rubric_category.slug %>',
-                       <%= raw JSON.generate(description.description) %>)
-</script>
+

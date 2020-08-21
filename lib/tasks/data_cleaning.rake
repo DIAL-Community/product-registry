@@ -109,5 +109,104 @@ namespace :data do
       desc.save
     end
   end
-  
+
+  task :migrate_editor_data => :environment do
+
+    Product.all.each do | product |
+      puts "PRODUCT: " + product.name
+      product_description = ProductDescription.where(product_id: product, locale: I18n.locale)
+                                               .first
+      if !product_description.nil?
+        desc = product_description.description.gsub("\\\"", "\"").gsub("\\\\","\\").delete_prefix('"').delete_suffix('"')
+        begin 
+          json_desc = JSON.parse desc
+          puts "JSON: " + json_desc.inspect
+          if json_desc['ops'].nil?
+            product_description.description = ''
+          else
+            text_desc = json_desc['ops'][0]['insert']
+            puts "TEXT: " + text_desc.to_s
+            product_description.description = text_desc
+          end
+          product_description.save
+        rescue JSON::ParserError => e
+        end
+      end
+    end
+
+    Organization.all.each do | org |
+      puts "ORGANIZATION: " + org.name
+      org_description = OrganizationDescription.where(organization_id: org, locale: I18n.locale)
+                                               .first
+      if !org_description.nil?
+        desc = org_description.description.gsub("\\\"", "\"").gsub("\\\\","\\").delete_prefix('"').delete_suffix('"')
+        begin 
+          json_desc = JSON.parse desc
+          puts "JSON: " + json_desc.inspect
+          if json_desc['ops'].nil?
+            org_description.description = ''
+          else
+            text_desc = json_desc['ops'][0]['insert']
+            puts "TEXT: " + text_desc.to_s
+            org_description.description = text_desc
+          end
+          org_description.save
+        rescue JSON::ParserError => e
+        end
+      end
+    end
+
+    Project.all.each do | project |
+      puts "PROJECT: " + project.name
+      project_description = ProjectDescription.where(project_id: project, locale: I18n.locale)
+                                               .first
+      if !project_description.nil?
+        desc = project_description.description.gsub("\\\"", "\"").gsub("\\\\","\\").delete_prefix('"').delete_suffix('"')
+        begin 
+          json_desc = JSON.parse desc
+          puts "JSON: " + json_desc.inspect
+          if json_desc['ops'].nil?
+            project_description.description = ''
+          else
+            text_desc = json_desc['ops'][0]['insert']
+            puts "TEXT: " + text_desc.to_s
+            project_description.description = text_desc
+          end
+          project_description.save
+        rescue JSON::ParserError => e
+        end
+      end
+    end
+
+    MaturityRubric.all.each do | rubric |
+      puts "RUBRIC: " + rubric.name
+      rubric_description = MaturityRubricDescription.where(maturity_rubric_id: rubric, locale: I18n.locale)
+                                               .first
+      if !rubric_description.nil?
+        rubric_description.description = rubric_description.description_html
+        rubric_description.save
+      end
+    end
+
+    RubricCategory.all.each do | category |
+      puts "CATEGORY: " + category.name
+      category_description = RubricCategoryDescription.where(rubric_category_id: category, locale: I18n.locale)
+                                               .first
+      if !category_description.nil?
+        category_description.description = category_description.description_html
+        category_description.save
+      end
+    end
+
+    CategoryIndicator.all.each do | indicator |
+      puts "INDICATOR: " + indicator.name
+      indicator_description = CategoryIndicatorDescription.where(category_indicator_id: indicator, locale: I18n.locale)
+                                               .first
+      if !indicator_description.nil?
+        indicator_description.description = indicator_description.description_html
+        indicator_description.save
+      end
+    end
+
+  end
 end
