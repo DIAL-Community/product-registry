@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   include Modules::MaturitySync
   include Pundit
   include FilterConcern
-  protect_from_forgery with: :exception
+  protect_from_forgery prepend: true
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 

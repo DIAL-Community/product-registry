@@ -78,6 +78,9 @@ gem 'jbuilder', '~> 2.5'
 gem 'rswag-api'
 gem 'rswag-ui'
 
+gem 'graphql'
+gem 'rack-cors'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
@@ -98,6 +101,11 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'rswag-specs'
+
+  gem 'graphiql-rails'
+
+  # Seed data generator
+  gem 'faker'
 end
 
 group :development do
@@ -115,6 +123,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Auth/login/etc
 gem 'devise'
+gem 'jwt'
 
 # Use Mailgun API to send confirmation emails
 gem 'mailgun-ruby'
+
+gem 'graphiql-rails', group: :development
