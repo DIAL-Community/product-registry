@@ -1,4 +1,7 @@
 class AddMoreUserRoleEnum < ActiveRecord::Migration[5.2]
+  # https://stackoverflow.com/a/41001595
+  disable_ddl_transaction!
+
   def up
     execute("ALTER TYPE user_role ADD VALUE 'content_writer';")
     execute("ALTER TYPE user_role ADD VALUE 'content_editor';")
