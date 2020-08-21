@@ -24,7 +24,7 @@ class CategoryIndicatorsController < ApplicationController
     authorize CategoryIndicator, :mod_allowed?
     @category_indicator = CategoryIndicator.new
     if params[:rubric_category_id]
-      @rubric_category = RubricCategory.find(params[:rubric_category_id])
+      @rubric_category = RubricCategory.find_by(slug: params[:rubric_category_id])
       @category_indicator.rubric_category = @rubric_category
     end
   end

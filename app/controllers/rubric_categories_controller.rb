@@ -23,7 +23,7 @@ class RubricCategoriesController < ApplicationController
   def new
     @rubric_category = RubricCategory.new
     if params[:maturity_rubric_id]
-      @maturity_rubric = MaturityRubric.find(params[:maturity_rubric_id])
+      @maturity_rubric = MaturityRubric.find_by(slug: params[:maturity_rubric_id])
       @rubric_category.maturity_rubric = @maturity_rubric
     end
     authorize @rubric_category, :mod_allowed?

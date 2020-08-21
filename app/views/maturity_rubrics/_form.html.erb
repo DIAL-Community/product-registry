@@ -17,7 +17,7 @@
     <%= t('view.maturity-rubric.form.description') %>
   </label>
 
-  <%= form.cktext_area :mr_desc, value: description.description.html_safe, id: 'maturity_rubric_description' %>
+  <%= form.cktext_area :mr_desc, value: description.nil? ? "" : description.description.html_safe, id: 'maturity_rubric_description' %>
 
   <fieldset class="float-right mt-4">
     <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
