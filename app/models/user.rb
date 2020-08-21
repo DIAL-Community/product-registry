@@ -17,6 +17,8 @@ class User < ApplicationRecord
   attr_accessor :is_approved
   acts_as_commontator
 
+  has_secure_token :authentication_token
+
   def set_default_role
     self.roles = [:user]
   end

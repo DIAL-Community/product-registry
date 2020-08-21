@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_18_203509) do
+ActiveRecord::Schema.define(version: 2020_08_19_002149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,10 +43,18 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
     t.index ["task_id", "activity_id"], name: "tasks_activities_idx", unique: true
   end
 
+  create_table "activity_descriptions", force: :cascade do |t|
+    t.bigint "activity_id"
+    t.string "locale", null: false
+    t.string "description", default: "", null: false
+    t.index ["activity_id"], name: "index_activity_descriptions_on_activity_id"
+  end
+
 # Could not dump table "aggregator_capabilities" because of following StandardError
 #   Unknown type 'mobile_services' for column 'service'
 
   create_table "audits", force: :cascade do |t|
+    t.integer "audit_id"
     t.string "associated_id"
     t.string "associated_type"
     t.integer "user_id"
@@ -57,7 +65,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
     t.integer "version", default: 0
     t.string "comment"
     t.datetime "created_at"
-    t.index ["action", "id", "version"], name: "auditable_index"
+    t.index ["action", "audit_id", "version"], name: "auditable_index"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["user_id", "user_role"], name: "user_index"
@@ -232,6 +240,10 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
     t.index ["region_id"], name: "index_districts_on_region_id"
   end
 
+  create_table "ecto_schema_migrations", primary_key: "version", id: :bigint, default: nil, force: :cascade do |t|
+    t.datetime "inserted_at", precision: 0
+  end
+
   create_table "glossaries", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -362,9 +374,9 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
   create_table "playbook_descriptions", force: :cascade do |t|
     t.bigint "playbook_id"
     t.string "locale", null: false
-    t.jsonb "overview", default: {}, null: false
-    t.jsonb "audience", default: {}, null: false
-    t.jsonb "outcomes", default: {}, null: false
+    t.string "overview", default: ""
+    t.string "audience", default: ""
+    t.string "outcomes", default: ""
     t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
   end
 
@@ -392,12 +404,6 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "plays_subplays", force: :cascade do |t|
-    t.bigint "parent_play_id", null: false
-    t.bigint "child_play_id", null: false
-    t.index ["parent_play_id", "child_play_id"], name: "play_rel_index", unique: true
-  end
-
   create_table "plays_tasks", force: :cascade do |t|
     t.bigint "play_id", null: false
     t.bigint "task_id", null: false
@@ -422,7 +428,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
   create_table "principle_descriptions", force: :cascade do |t|
     t.bigint "digital_principle_id"
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
+    t.string "description", default: ""
     t.index ["digital_principle_id"], name: "index_principle_descriptions_on_digital_principle_id"
   end
 
@@ -662,9 +668,9 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
   create_table "task_descriptions", force: :cascade do |t|
     t.bigint "task_id"
     t.string "locale", null: false
-    t.jsonb "description", default: {}, null: false
-    t.jsonb "prerequisites", default: {}, null: false
-    t.jsonb "outcomes", default: {}, null: false
+    t.string "description", default: ""
+    t.string "prerequisites", default: ""
+    t.string "outcomes", default: ""
     t.index ["task_id"], name: "index_task_descriptions_on_task_id"
   end
 
@@ -839,6 +845,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
   add_foreign_key "activities_principles", "digital_principles", name: "principles_activities_principle_fk"
   add_foreign_key "activities_tasks", "activities", name: "activities_tasks_activity_fk"
   add_foreign_key "activities_tasks", "tasks", name: "activities_tasks_task_fk"
+  add_foreign_key "activity_descriptions", "activities"
   add_foreign_key "aggregator_capabilities", "countries"
   add_foreign_key "aggregator_capabilities", "operator_services", column: "operator_services_id"
   add_foreign_key "aggregator_capabilities", "organizations", column: "aggregator_id"
@@ -877,8 +884,6 @@ ActiveRecord::Schema.define(version: 2020_08_18_203509) do
   add_foreign_key "organizations_states", "regions"
   add_foreign_key "playbook_answers", "playbook_questions", column: "playbook_questions_id"
   add_foreign_key "playbook_descriptions", "playbooks"
-  add_foreign_key "plays_subplays", "plays", column: "child_play_id", name: "child_play_fk"
-  add_foreign_key "plays_subplays", "plays", column: "parent_play_id", name: "parent_play_fk"
   add_foreign_key "plays_tasks", "plays", name: "tasks_plays_play_fk"
   add_foreign_key "plays_tasks", "tasks", name: "tasks_plays_task_fk"
   add_foreign_key "principle_descriptions", "digital_principles"
