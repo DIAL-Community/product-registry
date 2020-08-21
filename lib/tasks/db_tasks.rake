@@ -56,6 +56,8 @@ namespace :db do
     with_config do |app, host, db, user, pass, port|
       cmd = "export PGPASSWORD='#{pass}' && pg_dump --host #{host} --username #{user} -p #{port} " \
             "       --exclude-table-data=users " \
+            "       --exclude-table-data=users_products " \
+            "       --exclude-table-data=sessions " \
             "       --exclude-table-data=contacts " \
             "       --exclude-table-data=organizations_contacts " \
             "       --verbose --clean --no-owner --no-acl " \
