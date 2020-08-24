@@ -121,7 +121,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test 'Policy test: should follow product policy for user' do
     product = products(:one)
-    sign_in FactoryBot.create(:user, email: 'user@some-email.com', products: [product])
+    sign_in FactoryBot.create(:user, email: 'user@some-email.com', user_products: [product.id])
 
     get product_url(product)
     assert_response :success
