@@ -4,7 +4,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @setting = settings(:one)
   end
 

@@ -16,10 +16,39 @@
     </label>
   </fieldset>
 
-  <%= form.hidden_field :bb_desc, id: :building_block_desc %>
-  <div class="wysiwyg-editor">
-  </div>
+  <%
+    default_maturity = building_block.maturity.nil? ? BuildingBlock.entity_status_types[:BETA] : building_block.maturity
+    if policy(BuildingBlock).beta_only?
+  %>
+    <fieldset class="form-group mt-1">
+      <label for="building-block-maturity">
+        <%= t('view.building-block.form.maturity-level') %>
+      </label>
+      <select id="building-block-maturity" class="form-control mb-2" name="building_block[maturity]"
+              required="required" disabled="disabled">
+        <%= options_for_select(BuildingBlock.entity_status_types
+                                            .keys
+                                            .map { |status_type| [status_type.titlecase, status_type] }
+                                            .sort_by { |label, value| label }, default_maturity) %>
+      </select>
+    </fieldset>
+  <% else %>
+    <fieldset class="form-group mt-1">
+      <label for="building-block-maturity">
+        <%= t('view.building-block.form.maturity-level') %>
+      </label>
+      <select id="building-block-maturity" class="form-control mb-2" name="building_block[maturity]"
+              required="required">
+        <%= options_for_select(BuildingBlock.entity_status_types
+                                            .keys
+                                            .map { |status_type| [status_type.titlecase, status_type] }
+                                            .sort_by { |label, value| label }, default_maturity) %>
+      </select>
+    </fieldset>
+  <% end %>
 
+  <%= form.cktext_area :bb_desc, value: @bb_desc.description.html_safe, id: 'building_block_desc' %>
+  
   <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
     <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
   </h6>
@@ -27,7 +56,7 @@
     <fieldset class="form-label-group mt-2">
       <input type="text" id="product-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
-      <label for="building-block-product">
+      <label for="product-search">
         <%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>
       </label>
     </fieldset>
@@ -51,7 +80,7 @@
   <fieldset class="form-label-group mt-2">
     <input type="text" id="workflow-search" class="form-control"
            placeholder="<%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>" />
-    <label for="use-case-workflow">
+    <label for="workflow-search">
       <%= t('view.multi-select.assigned.label', model: t('model.workflow').to_s.pluralize) %>
     </label>
   </fieldset>
@@ -81,12 +110,5 @@
   <% building_block.workflows.order("name").each do |workflow| %>
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
-
-  var editor = setUpEditor(<%= raw JSON.generate(@bbDesc.description) %>);
-  var form = document.querySelector('#bb-form');
-  form.onsubmit = function() {
-    var bbDesc = $('#building_block_desc');
-    bbDesc.val(JSON.stringify(editor.getContents()));
-  };
 
 </script>

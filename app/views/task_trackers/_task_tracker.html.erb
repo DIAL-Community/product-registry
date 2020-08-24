@@ -6,7 +6,9 @@
     <%= "#{task_tracker.name}" %>
   </h5>
   <div class="card-body py-2 px-3">
-    <div id="<%= task_tracker.slug %>" class="wysiwyg-viewer"></div>
+    <div id="<%= task_tracker.slug %>" class="wysiwyg-viewer">
+      <%= description.description.html_safe %>
+    </div>
     <div class="text-muted">
       Last run: <%= task_tracker.last_run.strftime('%m/%d/%Y - %H:%M') if !task_tracker.last_run.nil? %>
     </div>
@@ -23,9 +25,3 @@
     </div>
   </div>
 </div>
-<script>
-  <% unless description.nil? %>
-    setViewerForElement('<%= task_tracker.slug %>',
-                         <%= raw JSON.generate(description.description ) %>)
-  <% end %>
-</script>

@@ -10,6 +10,9 @@
     <%= link_to t('model.glossary').to_s.pluralize.titlecase, glossaries_path, :class => 'dropdown-item' %>
     <div class="dropdown-divider"></div>
     <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
+    <% if !current_user.nil? && !current_user.roles.include?(User.user_roles[:admin]) %>
+      <%= link_to t('view.header.elevate-role'), new_candidate_role_path, class: 'dropdown-item' %>
+    <% end %>
     <% if (policy(current_user).index?) %>   
       <%= link_to t('model.setting').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
     <% end %>

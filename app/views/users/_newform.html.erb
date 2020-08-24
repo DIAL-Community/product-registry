@@ -27,10 +27,10 @@
     <label for="user-role">
       <%= t('view.user.form.role') %>
     </label>
-    <%= form.select(:role, User.roles.keys.map {|role| [role, role]}, {}, :class => "form-control mb-2") %>
+    <%= form.select(:role, User.user_roles.keys.map {|role| [role, role]}, {}, :class => "form-control mb-2") %>
   </fieldset>
 
-  <% if @user.role == "admin" %>
+  <% if @user.roles.include?(User.user_roles[:admin]) %>
   <fieldset>
     <%= form.check_box :receive_backup, {}, true, false %>
     <label class="form-label-group mt-2" for="receive_backup">

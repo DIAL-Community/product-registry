@@ -46,8 +46,7 @@ namespace :maturity_sync do
                                                     .first || MaturityRubricDescription.new
     maturity_rubric_desc.maturity_rubric_id = maturity_rubric.id
     maturity_rubric_desc.locale = I18n.locale
-    maturity_rubric_desc.description_html = description
-    maturity_rubric_desc.description = {}
+    maturity_rubric_desc.description = description
     maturity_rubric_desc.save!
 
     Dir.glob("#{params[:path]}/categories/*.md").each do |category_page|
@@ -116,8 +115,7 @@ namespace :maturity_sync do
                                                       .first || RubricCategoryDescription.new
       rubric_category_desc.rubric_category_id = rubric_category.id
       rubric_category_desc.locale = I18n.locale
-      rubric_category_desc.description_html = description
-      rubric_category_desc.description = {}
+      rubric_category_desc.description = description
       rubric_category_desc.save
 
       indicators = html_fragment.css('tbody > tr')
@@ -184,8 +182,7 @@ namespace :maturity_sync do
                                                               .first || CategoryIndicatorDescription.new
         category_indicator_desc.category_indicator_id = category_indicator.id
         category_indicator_desc.locale = I18n.locale
-        category_indicator_desc.description_html = description_html
-        category_indicator_desc.description = {}
+        category_indicator_desc.description = description_html
         category_indicator_desc.save
       end
     end
@@ -202,8 +199,7 @@ namespace :maturity_sync do
                                                     .first || MaturityRubricDescription.new
     maturity_rubric_desc.maturity_rubric_id = maturity_rubric.id
     maturity_rubric_desc.locale = I18n.locale
-    maturity_rubric_desc.description_html = "<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>"
-    maturity_rubric_desc.description = {}
+    maturity_rubric_desc.description = "<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>"
     maturity_rubric_desc.save!
 
     digisquare_maturity = YAML.load_file('config/maturity_digisquare.yml')

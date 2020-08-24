@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-  enum role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle',
-               user: 'user', org_user: 'org_user', org_product_user: 'org_product_user',
-               product_user: 'product_user', mni: 'mni' }
+  enum user_role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle',
+                    user: 'user', org_user: 'org_user', org_product_user: 'org_product_user',
+                    product_user: 'product_user', mni: 'mni', content_writer: 'content_writer',
+                    content_editor: 'content_editor' }
   after_initialize :set_default_role, if: :new_record?
 
   has_and_belongs_to_many :products, join_table: :users_products
@@ -16,8 +17,10 @@ class User < ApplicationRecord
   attr_accessor :is_approved
   acts_as_commontator
 
+  has_secure_token :authentication_token
+
   def set_default_role
-    self.role ||= :user
+    self.roles = [:user]
   end
 
   def after_database_authentication
@@ -75,10 +78,14 @@ class User < ApplicationRecord
     unless organization_id.nil?
       organization = Organization.find(organization_id)
       email_domain = /\A[^@\s]+@([^@\s]+\z)/.match(email)[1]
-      logger.info "Matching organization website: '#{organization.website}' with '#{email_domain}'."
+      logger.info("Matching organization website: '#{organization.website}' with '#{email_domain}'.")
       verified = organization.website.include?(email_domain)
-      verified && self.role = User.roles[:org_user]
-      !verified && errors.add(:organization_id, I18n.translate('view.devise.organization-nomatch'))
+      if verified
+        roles.delete_at(roles.index(User.user_roles[:user]) || roles.length)
+        roles.push(User.user_roles[:org_user])
+      else
+        errors.add(:organization_id, I18n.translate('view.devise.organization-nomatch'))
+      end
     end
   end
 
@@ -88,8 +95,9 @@ class User < ApplicationRecord
 
     return if products.empty?
 
-    organization_id.nil? && self.role = User.roles[:product_user]
-    !organization_id.nil? && self.role = User.roles[:org_product_user]
+    # Delete the default assigned role
+    roles.delete_at(roles.index(User.user_roles[:user]) || roles.length)
+    roles.push(User.user_roles[:product_user])
     skip_confirmation_notification!
   end
 

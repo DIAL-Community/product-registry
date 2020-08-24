@@ -1,0 +1,59 @@
+
+<div class="card mt-2">
+  <div class="card-body py-3 px-3">
+    <h5>
+      <%= link_to(candidate_role) do %>
+        <%= "#{candidate_role.email}" %>
+      <% end %>
+    </h5>
+    <div>
+      <span class="text-muted"><%= t('view.candidate-role.index.request-roles') %></span>:
+      <%=
+        candidate_role.roles
+                      .map { |role| t("view.user.role.#{role}") }
+                      .join(', ')
+      %>
+    </div>
+    <div>
+      <span class="text-muted"><%= t('view.candidate-role.index.request-status') %></span>:
+      <% if candidate_role.rejected.nil? %>
+        <strong>
+          <%= t('view.candidate-role.index.new') %>
+        </strong>
+        on
+        <%= candidate_role.created_at.strftime('%m/%d/%Y - %H:%M') %>
+      <% elsif candidate_role.rejected %>
+        <strong class="text-muted">
+          <%= t('view.candidate-role.index.rejected') %>
+        </strong>
+        on
+        <%= candidate_role.rejected_date.strftime('%m/%d/%Y - %H:%M') %>
+      <% else %>
+        <strong class="text-muted">
+          <%= t('view.candidate-role.index.approved') %>
+        </strong>
+        on
+        <%= candidate_role.approved_date.strftime('%m/%d/%Y - %H:%M') %>
+      <% end %>
+    </div>
+    <p class="float-right mb-0">
+      <% if user_signed_in? && policy(candidate_role).mod_allowed? %>
+        <%= link_to t('view.general.view'), candidate_role, class: "card-link" %>
+        <% if candidate_role.rejected.nil? %>
+          <%= link_to t('view.candidate-role.index.approve'),
+                      approve_candidate_role_path(candidate_role),
+                      method: :post, class: "card-link"  %>
+          <%= link_to t('view.candidate-role.index.reject'),
+                      reject_candidate_role_path(candidate_role),
+                      method: :post, class: "card-link"  %>
+        <% end %>
+        <% if candidate_role.rejected %>
+          <%= link_to t('view.candidate-role.index.approve'),
+                      approve_candidate_role_path(candidate_role),
+                      method: :post, class: "card-link"  %>
+        <% end %>
+        <%= link_to t('view.general.edit'), edit_candidate_role_path(candidate_role), class: "card-link" %>
+      <% end %>
+    </p>
+  </div>
+</div>

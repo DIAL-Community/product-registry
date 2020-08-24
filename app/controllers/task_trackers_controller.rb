@@ -12,7 +12,6 @@ class TaskTrackersController < ApplicationController
     end
 
     current_page = params[:page] || 1
-    puts "Current page : #{current_page}."
 
     @task_tracker = TaskTracker.eager_load(:task_tracker_descriptions)
     if params[:search].present?
@@ -23,7 +22,6 @@ class TaskTrackersController < ApplicationController
       @task_trackers = @task_tracker.order(:name)
                                     .paginate(page: current_page, per_page: 5)
     end
-    puts "Task : #{@task_trackers.inspect}."
     authorize(@task_trackers, :view_allowed?)
   end
 
@@ -56,7 +54,7 @@ class TaskTrackersController < ApplicationController
         if task_tracker_params[:tt_desc].present?
           @task_tracker_description.task_tracker = @task_tracker
           @task_tracker_description.locale = I18n.locale
-          @task_tracker_description.description = JSON.parse(task_tracker_params[:tt_desc])
+          @task_tracker_description.description = task_tracker_params[:tt_desc]
           @task_tracker_description.save
         end
         format.html do
@@ -81,7 +79,7 @@ class TaskTrackersController < ApplicationController
                                                         .first || TaskTrackerDescription.new
       @task_tracker_description.task_tracker = @task_tracker
       @task_tracker_description.locale = I18n.locale
-      @task_tracker_description.description = JSON.parse(task_tracker_params[:tt_desc])
+      @task_tracker_description.description = task_tracker_params[:tt_desc]
       @task_tracker_description.save
     end
 
@@ -133,7 +131,7 @@ class TaskTrackersController < ApplicationController
   # Only allow a list of trusted parameters through.
   def task_tracker_params
     params.require(:task_tracker)
-          .permit(:name, :slug, :last_run, :tt_desc)
+          .permit(:name, :slug, :last_run, :tt_desc, :message)
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

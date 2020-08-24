@@ -1,0 +1,28 @@
+.favorite-indicator {
+  position: absolute;
+  // have some space from the right and top
+  right: 0.5rem;
+  top: 2.5rem;
+  // increase the size of the icon
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.saved-entity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  min-height: 5rem;
+
+  .favorite-indicator {
+    position: absolute;
+    // have some space from the right and top
+    right: 1rem;
+    top: 0.5rem;
+    // increase the size of the icon
+    font-size: 1rem;
+    cursor: pointer;
+
+  }
+}

@@ -11,21 +11,10 @@
     <%= t('view.general.duplicates', model: t('model.use-case-step')) %>
   </div>
 
-  <%= form.hidden_field :tag_desc, id: :tag_desc %>
-  <div class="wysiwyg-editor">
-  </div>
+  <%= form.cktext_area :tag_desc, value: @tag_desc.description.html_safe, id: 'tag_desc' %>
 
   <fieldset class="float-right mt-4">
     <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
-
-<script>
-  var editor = setUpEditor(<%= raw JSON.generate(@tag_desc.description) %>);
-  var form = document.querySelector('#tag-form');
-  form.onsubmit = function() {
-    var tagDesc = $('#tag_desc');
-    tagDesc.val(JSON.stringify(editor.getContents()));
-  };
-</script>

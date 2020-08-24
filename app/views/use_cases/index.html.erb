@@ -30,9 +30,13 @@
       <a href="#" class="uc-show-hide small" id="uc-show-more">
         <%= t('view.general.show-use-case').to_s %>
       </a>
+      <fieldset class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="mature-only">
+        <label class="form-check-label" for="mature-only"><%= t('view.use-case.index.mature_only') %></label>
+      </fieldset>
     </div>
     <div class="float-right">
-      <% if user_signed_in? && policy(UseCase).mod_allowed? %>
+      <% if user_signed_in? && policy(UseCase).create_allowed? %>
         <%= link_to t('view.general.create'), new_use_case_path, :class => 'small ml-1' %>
       <% end %>
     </div>
@@ -51,5 +55,49 @@
     $("#uc-more").toggleClass('hidden')
     $("#uc-show-more").toggleClass('hidden')
     $("#uc-show-less").toggleClass('hidden')
-  })
+  });
+
+  $(".model-logo").on({
+    mouseenter: function() {
+      const indicator = $(this).find(".favorite-indicator");
+      const favorited = $(indicator).attr("data-favorited");
+      if (favorited === "true") {
+        indicator.addClass("fas fa-check-circle text-success");
+      } else {
+        indicator.addClass("fas fa-plus");
+      }
+      indicator.fadeIn();
+    },
+    mouseleave: function() {
+      $(this).find(".favorite-indicator").fadeOut();
+    }
+  });
+
+  $(".favorite-indicator").each(function(index, element) {
+    $(element).on("click", function(event) {
+      const slug = $(element).attr("data-slug");
+      const favorited = $(element).attr("data-favorited");
+
+      let path = "favorite_use_case";
+      if (favorited === "true") {
+        path = "unfavorite_use_case";
+      }
+
+      $.post(`/use_cases/${slug}/${path}`, function(data) {
+        $("#notifier").trigger({
+          type: "notify",
+          message: "<%= t('view.notification.favorite-save-notification') %>"
+        });
+        const parent = $(element).parent();
+        $(element).attr("data-favorited", favorited === "true" ? "false" : "true");
+        if (favorited !== "true") {
+          $(element).removeClass("fa-plus");
+          $(element).addClass("fa-check-circle text-success");
+        } else {
+          $(element).removeClass("fa-check-circle text-success");
+          $(element).addClass("fa-plus");
+        }
+      });
+    });
+  });
 </script>

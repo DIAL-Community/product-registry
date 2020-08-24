@@ -4,7 +4,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, role: :admin)
+    sign_in FactoryBot.create(:user, roles: [:admin])
     @product = products(:one)
   end
 
@@ -153,7 +153,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal(1, assigns(:product).sectors.length)
 
-    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', role: :admin)
+    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
 
     patch(product_url(product), params: patch_params)
     get product_url(product)

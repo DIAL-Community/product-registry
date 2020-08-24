@@ -5,6 +5,38 @@ class UseCasesController < ApplicationController
   before_action :set_sectors, only: [:new, :edit, :update, :show]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
+  def favorite_use_case
+    set_use_case
+
+    favoriting_user = current_user
+    favoriting_user.saved_use_cases.push(@use_case.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
+  def unfavorite_use_case
+    set_use_case
+
+    favoriting_user = current_user
+    favoriting_user.saved_use_cases.delete(@use_case.id)
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render :show, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
+  end
+
   # GET /use_cases
   # GET /use_cases.json
   def index
@@ -15,6 +47,10 @@ class UseCasesController < ApplicationController
     end
 
     @use_cases = filter_use_cases.order(:name)
+
+    if params[:mature].present? && params[:mature].to_s.downcase == 'true'
+      @use_cases = @use_cases.where(':tag = use_cases.maturity', tag: 'MATURE')
+    end
 
     if params[:search]
       @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
@@ -39,7 +75,7 @@ class UseCasesController < ApplicationController
 
   # GET /use_cases/new
   def new
-    authorize UseCase, :mod_allowed?
+    authorize(UseCase, :create_allowed?)
     @use_case = UseCase.new
     @uc_desc = UseCaseDescription.new
     @ucs_header = UseCaseHeader.new
@@ -66,7 +102,7 @@ class UseCasesController < ApplicationController
   # POST /use_cases
   # POST /use_cases.json
   def create
-    authorize UseCase, :mod_allowed?
+    authorize(UseCase, :create_allowed?)
     @use_case = UseCase.new(use_case_params)
     @uc_desc = UseCaseDescription.new
     @ucs_header = UseCaseHeader.new
@@ -78,18 +114,28 @@ class UseCasesController < ApplicationController
       end
     end
 
+    if policy(@use_case).beta_only?
+      if use_case_params[:maturity] != UseCase.entity_status_types[:BETA] &&
+          session[:use_case_elevated_role].to_s.downcase != 'true'
+        session[:use_case_elevated_role] = true
+      end
+
+      # Always override to beta if the user don't have the right role
+      @use_case.maturity = UseCase.entity_status_types[:BETA]
+    end
+
     respond_to do |format|
       if @use_case.save
         if use_case_params[:uc_desc].present?
           @uc_desc.use_case_id = @use_case.id
           @uc_desc.locale = I18n.locale
-          @uc_desc.description = JSON.parse(use_case_params[:uc_desc])
+          @uc_desc.description = use_case_params[:uc_desc]
           @uc_desc.save
         end
         if use_case_params[:ucs_header].present?
           @ucs_header.use_case_id = @use_case.id
           @ucs_header.locale = I18n.locale
-          @ucs_header.header = JSON.parse(use_case_params[:ucs_header])
+          @ucs_header.header = use_case_params[:ucs_header]
           @ucs_header.save
         end
         format.html { redirect_to @use_case,
@@ -119,14 +165,24 @@ class UseCasesController < ApplicationController
     if use_case_params[:uc_desc].present?
       @uc_desc.use_case_id = @use_case.id
       @uc_desc.locale = I18n.locale
-      @uc_desc.description = JSON.parse(use_case_params[:uc_desc])
+      @uc_desc.description = use_case_params[:uc_desc]
       @uc_desc.save
+    end
+
+    if policy(@use_case).beta_only?
+      if use_case_params[:maturity] != UseCase.entity_status_types[:BETA] &&
+          session[:use_case_elevated_role].to_s.downcase != 'true'
+        session[:use_case_elevated_role] = true
+      end
+
+      # Always override to beta if the user don't have the right role
+      @use_case.maturity = UseCase.entity_status_types[:BETA]
     end
 
     if use_case_params[:ucs_header].present?
       @ucs_header.use_case_id = @use_case.id
       @ucs_header.locale = I18n.locale
-      @ucs_header.header = JSON.parse(use_case_params[:ucs_header])
+      @ucs_header.header = use_case_params[:ucs_header]
       @ucs_header.save
     end
 
@@ -145,7 +201,7 @@ class UseCasesController < ApplicationController
   # DELETE /use_cases/1
   # DELETE /use_cases/1.json
   def destroy
-    authorize @use_case, :mod_allowed?
+    authorize(@use_case, :delete_allowed?)
     @use_case.destroy
     respond_to do |format|
       format.html { redirect_to use_cases_url,

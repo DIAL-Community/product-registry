@@ -19,19 +19,46 @@
   <label for="usecasesteps-header">
     <%= t('view.general.description') %>:
   </label>
-  <%= form.hidden_field :uc_desc, id: :use_case_desc %>
-  <div class="wysiwyg-editor mb-2" id='usecase-description'>
-  </div>
 
-  <label for="usecasesteps-header">Header Description:</label>
-  <%= form.hidden_field :ucs_header, id: :use_case_steps_header %>
-  <div class="wysiwyg-editor" id='usecasesteps-header'>
-  </div>
+  <%= form.cktext_area :uc_desc, value: @uc_desc.description.html_safe, id: 'use_case_desc' %>
 
-  <fieldset class="form-check mt-2">
-    <%= form.check_box :maturity, {id: 'use_case_maturity', class: 'form-check-input'}, "Mature", "Beta" %>
-    <%= form.label :maturity, t('view.use-case.form.is-mature').to_s, class: 'form-check-label' %>
-  </fieldset>
+  <label for="usecasesteps-header">
+    <%= t('view.use-case.form.steps-header-description') %>:
+  </label>
+
+  <%= form.cktext_area :ucs_header, value: @ucs_header.header.html_safe, id: 'use_case_steps_header' %>
+
+  <%
+    default_maturity = use_case.maturity.nil? ? UseCase.entity_status_types[:BETA] : use_case.maturity
+    if !current_user.roles.include?(User.user_roles[:content_editor]) &&
+        !current_user.roles.include?(User.user_roles[:admin]) &&
+        !current_user.roles.include?(User.user_roles[:ict4sdg])
+  %>
+    <fieldset class="form-group mt-2">
+      <label for="use-case-maturity">
+        <%= t('view.use-case.form.maturity-level') %>
+      </label>
+      <select id="use-case-maturity" class="form-control mb-2" name="use_case[maturity]"
+              required="required" disabled="disabled">
+        <%= options_for_select(UseCase.entity_status_types
+                                      .keys
+                                      .map { |status_type| [status_type.titlecase, status_type] }
+                                      .sort_by { |label, value| label }, default_maturity) %>
+      </select>
+    </fieldset>
+  <% else %>
+    <fieldset class="form-group mt-2">
+      <label for="use-case-maturity">
+        <%= t('view.use-case.form.maturity-level') %>
+      </label>
+      <select id="use-case-maturity" class="form-control mb-2" name="use_case[maturity]">
+        <%= options_for_select(UseCase.entity_status_types
+                                      .keys
+                                      .map { |status_type| [status_type.titlecase, status_type] }
+                                      .sort_by { |label, value| label }, default_maturity) %>
+      </select>
+    </fieldset>
+  <% end %>
 
   <div class="row mt-2">
     <div class="col-12 col-lg-6">
@@ -41,7 +68,7 @@
       <fieldset class="form-label-group mt-2">
         <input type="text" id="sdg-target-search" class="form-control"
                placeholder="<%= t('view.use-case.form.search-sdg-targets') %>" />
-        <label for="use-case-sdg-target">
+        <label for="sdg-target-search">
           <%= t('view.use-case.form.search-sdg-targets') %>
         </label>
       </fieldset>
@@ -95,12 +122,4 @@
   <% use_case.tags.each {|tag| %>
     tagUseCase('', '<%= tag %>');
   <% } %>
-
-  var descEditor = setUpEditor(<%= raw JSON.generate(@uc_desc.description) %>, '', 'usecase-description');
-  var headerEditor = setUpEditor(<%= raw JSON.generate(@ucs_header.header) %>, '', 'usecasesteps-header');
-  var form = document.querySelector('#use-case-form');
-  form.onsubmit = function() {
-    $('#use_case_desc').val(JSON.stringify(descEditor.getContents()));
-    $('#use_case_steps_header').val(JSON.stringify(headerEditor.getContents()));
-  };
 </script>

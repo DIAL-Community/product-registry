@@ -1,0 +1,20 @@
+<div id="notifier">
+  <div id="notifier-message" class="alert alert-success text-center hidden">
+  </div>
+</div>
+
+<script text="text/javascript">
+  $("#notifier").ready(function() {
+    $(this).unbind('notify');
+    $(this).bind({
+      notify: function(event) {
+        event.stopPropagation();
+
+        let fadeDuration = event.duration ? event.duration : 1000;
+        $("#notifier-message").html(event.message)
+                              .fadeIn(fadeDuration)
+                              .fadeOut(fadeDuration);
+      }
+    });
+  });
+</script>

@@ -7,16 +7,19 @@
   </h5>
   <div class="card-body">
     <div class="row">
-      <div class="col-6">
+      <div class="col-12">
         <% if !@project_description.description.nil? and !@project_description.description.empty? %>
           <p class="mb-0">
             <strong><%= t('view.project.index.description') %>:</strong>
           </p>
-          <div id="product-viewer" class="wysiwyg-viewer"></div>
+          <div id="product-viewer" class="wysiwyg-viewer">
+            <%= @project_description.description.html_safe %>
+          </div>
         <% end %>
         <% if !@project.origin.nil? %>
           <strong><%= "#{t('view.project.show.origin')}:" %></strong>
-          <%= image_tag("origins/#{@project.origin.slug}.png", class: 'origin-img-full') %>
+          <%= image_tag("origins/#{@project.origin.slug}.png", class: 'origin-img-full',
+                        'title': @project.origin.name, 'data-toggle': 'tooltip') %>
         <% end %>
       </div>
     </div>
@@ -29,8 +32,14 @@
   </div>
 </div>
 
+<% if session[:project_elevated_role].to_s.downcase == 'true' %>
+  <div class="alert alert-info mt-2 mb-0">
+    <%= t('view.candidate-role.show.request-elevation',
+        href: link_to(t('view.general.this-link'), new_candidate_role_path, class: 'card-link')).html_safe %>
+  </div>
+<% end %>
 
-<div class="mt-4">
+<div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.organization').to_s.humanize %></h5>
   </div>
@@ -56,7 +65,7 @@
   <% end %>
 </div>
 
-<div class="mt-4">
+<div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.product').to_s.humanize %></h5>
   </div>
@@ -82,6 +91,26 @@
   <% end %>
 </div>
 
-<script>
-  setUpViewer(<%= raw JSON.generate(@project_description.description) %>)    
-</script>
+<div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.country').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @project.countries.count > 0 %>
+    <div class="row">
+      <% @project.countries.order("name").each do |country| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= link_to country.name, country %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.project'), multi: t('model.country').to_s.pluralize) %>
+    </p>
+  <% end %>
+</div>
+

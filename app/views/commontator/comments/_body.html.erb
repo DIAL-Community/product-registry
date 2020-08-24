@@ -3,7 +3,6 @@
   comment
 %>
 
-<div id="quill-body-<%= comment.id %>" class="hidden">
+<div id="quill-<%= comment.id %>" body-id="quill-body-<%= comment.id %>" class="wysiwyg-viewer">
   <%= comment.body.html_safe %>
 </div>
-<div id="quill-<%= comment.id %>" body-id="quill-body-<%= comment.id %>" class="wysiwyg-viewer" />

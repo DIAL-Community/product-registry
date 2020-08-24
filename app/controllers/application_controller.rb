@@ -10,19 +10,26 @@ class ApplicationController < ActionController::Base
   include Modules::MaturitySync
   include Pundit
   include FilterConcern
-  protect_from_forgery with: :exception
+  protect_from_forgery prepend: true
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_action :configure_registration_parameters, if: :devise_controller?
   before_action :check_password_expiry
   before_action :set_locale
+  before_action :set_default_identifier
   before_action :set_portal
 
   after_action :store_action
 
   def not_found
     raise ActionController::RoutingError, 'Not Found'
+  end
+
+  def set_default_identifier
+    if session[:default_identifier].nil?
+      session[:default_identifier] = SecureRandom.uuid
+    end
   end
 
   def set_locale
@@ -62,7 +69,7 @@ class ApplicationController < ActionController::Base
           session[:portal] = PortalView.where(slug: 'default').first
         else
           PortalView.all.order(:id).each do |portal|
-            if portal.user_roles.include?(current_user.role)
+            if !(portal.user_roles && current_user.roles).empty?
               session[:portal] = portal
               break
             end
@@ -102,7 +109,8 @@ class ApplicationController < ActionController::Base
 
   def update_cookies(filter_name)
     case filter_name
-    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'product_type','organizations', 'projects', 'tags'
+    when 'products', 'origins', 'with_maturity_assessment', 'is_launchable', 'product_type',
+         'organizations', 'projects', 'tags', 'sectors'
       session[:updated_prod_filter] = true
     end
   end
@@ -405,6 +413,20 @@ class ApplicationController < ActionController::Base
       bbs_ids = product_bbs.ids
     end
     bbs_ids
+  end
+
+  def save_url
+    favoriting_user = current_user
+    favoriting_user.saved_urls.push(params[:url])
+
+    respond_to do |format|
+      # Don't re-approve approved candidate.
+      if favoriting_user.save!
+        format.json { render json: { saving: 'OK' }, status: :created }
+      else
+        format.json { head :no_content }
+      end
+    end
   end
 
   protected

@@ -5,6 +5,10 @@
       <%= link_to product.name, product, class: 'truncate-text',
         'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
       <div style="display: inline-flex;">
+        <% if product.status == "Vetted" %>
+          <i class="fa fa-check header-img mt-1" data-toggle="tooltip"
+            data-placement="top" data-original-title="<%= t('view.product.index.is_vetted') %>"></i>
+        <% end %>
         <% if product.is_launchable %>
           <i class="fa fa-rocket header-img mt-1" data-toggle="tooltip"
             data-placement="top" data-original-title="<%= t('view.product.index.is_deployable') %>"></i>
@@ -20,6 +24,11 @@
       </div>
     </div>
     <div class="model-logo">
+      <i class="favorite-indicator"
+         data-slug="<%= product.slug %>"
+         data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
+         data-toggle="tooltip"
+         data-placement="top" data-original-title="<%= t('view.product.index.add_favorite') %>"></i>
       <%= link_to(product) do %>
         <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
       <% end %>

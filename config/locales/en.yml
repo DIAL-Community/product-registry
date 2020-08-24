@@ -57,6 +57,7 @@ en:
     activity: activity
     building-block: building block
     candidate-organization: candidate organization
+    candidate-role: Candidate Role
     category-indicator: category indicator
     city: city
     contact: contact
@@ -141,6 +142,9 @@ en:
       action: "Action"
       changes: "Changes"
     building-block:
+      form:
+        all-maturity: All Maturity Level
+        maturity-level: Maturity Level
       show:
         short-description: Short Description
         full-description: Full Description
@@ -148,6 +152,8 @@ en:
         key-functionalities: Key Digital Functionalities
         example-of-use: Examples of use in different sectors
         no-data: We couldn't find any building blocks for this use case.
+        request-elevation: We noticed that you made changes to a building block but you were not able to set the maturity level of it.
+                           You might be able to do that by requesting role elevation by clicking %{href}.
       index:
         bb-product: "Example software: "
         bb-product-popover:
@@ -166,7 +172,11 @@ en:
           Interoperable with other ICT Building Blocks  
           Designed for scalability and extensibility  
           Standards-based
-        description: Each ICT Building Block page includes a description, key digital functionalities, sector-specific examples, example software products, and mappings to WorkFlows defined in this framework. The list of ICT Building Blocks, exemplar software products, and mappings is not exhaustive and more will be added in future releases. Please note that the software product examples are for illustrative purposes only. Further mapping and ranking of existing products based on maturity, sustainability and applicability to the ICT Building Blocks will be addressed overtime. 
+        description: Each ICT Building Block page includes a description, key digital functionalities, sector-specific examples, example software products, and mappings to WorkFlows defined in this framework. The list of ICT Building Blocks, exemplar software products, and mappings is not exhaustive and more will be added in future releases. Please note that the software product examples are for illustrative purposes only. Further mapping and ranking of existing products based on maturity, sustainability and applicability to the ICT Building Blocks will be addressed overtime.
+        maturity: Maturity 
+        mature_only: Show only Mature Building Blocks
+        is_beta: The specifications for this Building Block have not been validated
+        is_mature: The specifications for this Building Block have been validated
     candidate-organization:
       form:
         created: Thank you for your submission. We will carefully review your submission. Approved submission will become available in the organization list.
@@ -179,6 +189,21 @@ en:
         status-new: New Submission
         status-rejected: Rejected
         website: Website
+    candidate-role:
+      form:
+        description: Why you would like to have your role elevated? Please explain here.
+      index:
+        approve: Approve
+        approved: Approved
+        new: New request
+        reject: Reject
+        rejected: Rejected
+        request-reason: Request reason
+        request-roles: Requested roles
+        request-status: Request status
+      show:
+        request-elevation: We noticed that you tried to add organization(s) or product(s) beyond the purview of your role.
+                           You might be able to request role elevation by clicking %{href}.
     category-indicator:
       form:
         weight: Weight of the indicator
@@ -216,6 +241,10 @@ en:
       forget-password: Forget your password?
       no-confirmation: Didn't receive confirmation instructions?
       no-unlock: Didn't receive unlock instructions?
+      accept-terms: By clicking here, I accept the Terms of Service for using this website
+      terms-popup: Please accept the terms and conditions
+    feedback:
+      info-text: We would like to hear your feedback
     location:
       form:
         other-names: Other Names
@@ -224,6 +253,11 @@ en:
     maturity-rubric:
       index:
         add-category: Add Category
+      form:
+        description: Description of Maturity Rubric
+    notification:
+      favorite-save-notification: We have added this to your favorites!
+      favorite-remove-notification: We have removed this from your favorites
     organization:
       form:
         endorser: Endorser
@@ -277,6 +311,7 @@ en:
         included-products: Included Products
         interoperable-products: Interoperable Products
         is-launchable: Check to indicate product is auto-launchable.
+        is-vetted: Check to indicate product is a Vetted Digital Public Good
         low: low
         medium: medium
         osc-maturity: OSC Maturity
@@ -287,13 +322,21 @@ en:
         website: Website
         est-hosting: Estimated hosting cost
         est-invested: Estimated money invested
+        beta: Beta
+        validated: Validated
+        self-reported: Self-Reported
+        bb-mapping: Indicate if mapping is Beta or Validated
+        sdg-mapping: Indicate if mapping is Self-Reported or Validated
       index:
+        add_favorite: Add to list of favorite Products
         description: Description
         filter: Filter
         has-maturity: Has maturity?
         product-graph: Product Graph
         is_endorsed: "Used/Maintained by an Endorser"
         is_deployable: "This product is one-click deployable"
+        is_vetted: "This product is a certified global good"
+        covid-19-related: "This product can be used for COVID-19 response"
         multiple: "has multiple repositories. Information about each is displayed below."
         source: "Source: "
         sources: "Sources: "
@@ -315,6 +358,7 @@ en:
         footer_popover_maturity: "Product maturity evaluations"
         definition: A product is a software solution that may fulfill one ore more building blocks
         footer_help: The footer of the product card contains 3 rows. Hover over any icon to get more information about the data that is displayed. The first two rows may contain information about what Sustainable Development Goals this product addresses, which building blocks the products are a candidate for, product maturity information as measured by DIAL's Open Source Center or Digital Square, and what other products this product interoperates with. The bottom row will always contain information about data sources for this product - currently we retreive product data from the DIAL Open Source Center, Digital Square, and Unicef's Global Goods Candidate list.
+        covid_only: COVID-19 only.
       launch:
         auto-launch: Automatically launch an instance this product
       show:
@@ -356,7 +400,11 @@ en:
       index:
         no-data: We couldn't find any product suite in the database.
     project:
+      form:
+        org-owner-tooltip: As organization owner, you are only allowed to add / remove your organization from a project.
+        product-owner-tooltip: As product owner, you are only allowed to add / remove your own products from a project.
       index:
+        add_favorite: Add to list of favorite Projects
         budget: Budget
         description: Description
         end-date: End Date
@@ -390,6 +438,7 @@ en:
     header:
       active-portal: Active
       admin-data: Admin Data
+      elevate-role: Request Elevated Role
       principle-data: Principles Data
       mni-data: MNI Data
       ict4sdg-data: ICT4SDG Data
@@ -418,6 +467,8 @@ en:
       orgs: Organizations
       organizations: Organizations
       projects: Projects
+      playbooks: Playbooks
+      plays: Plays
       view-projects: Coming soon.
       map: Map Views
       endorser-map: Endorser map
@@ -489,7 +540,9 @@ en:
         one: Year Endorsed
         other: Years Endorsed
       share-link: Share link
-      share-link-tooltip: Click here to create a URL that can be shared to show the current page, including filters
+      share-link-tooltip: Click here to create a URL that can be shared to show the current page, including filters.
+      save-link: Save search
+      save-link-tooltip: Click here to save the URL, including filters.
     breadcrumb:
       home: Home
     sdg:
@@ -512,6 +565,8 @@ en:
         name: Name
         description: Description
         no-activity: We couldn't find any activities for this playbook.
+        create-pdf: Create PDF
+        creating-pdf: Creating PDF
       form:
         overview: Overview
         audience: Audience
@@ -525,13 +580,19 @@ en:
         phase: Phase
         resources: Resources
         assign: Assign
+        order: Order
+        question: Question
+        media: Media
         no-data: We couldn't find any tasks for this activity.
       form:
         description: Description
         phase: Phase
         resources: Resources
         plays: Plays
+        order: Order
         assign-play: Assign Play
+        question-text: Question text
+        media-prompt: If you would like to add a video to this activity, enter the URL
     play:
       index:
         no-data: We couldn't find any plays for this activity.
@@ -551,6 +612,7 @@ en:
     task:
       index:
         no-data: We couldn't find any tasks for this play.
+        media: Media
       form:
         short-description: Short Description
         full-description: Full Description
@@ -559,13 +621,19 @@ en:
         not-complete: This task has not been completed
         percent-complete: Percent Complete
         due-date: Due Date
+        order: Order
         responsible: Responsible Party
+        media-prompt: If you would like to add a video to this activity, enter the URL
     use-case:
       form:
+        all-maturity: All Maturity Level
         assigned-sdg-targets: Assigned SDG Targets
+        maturity-level: Maturity Level
         search-sdg-targets: Search and assign SDG Targets
+        steps-header-description: Steps Header Description
         is-mature: Is Mature
       index:
+        add_favorite: Add to list of favorite Use Cases
         no-data: We couldn't find any use case in the database.
         sdg-target-popover:
           one: SDG Target
@@ -582,15 +650,23 @@ en:
           Able to be improved through digital technology 
         description: Each Use Case model describes primary actors, key steps involved in achieving a specified business objective, descriptions of the WorkFlows and ICT Building Blocks involved in each step, and mappings to SDG Targets. The list of Use Case models is not exhaustive and more will be added in future releases. 
         maturity: Maturity
+        mature_only: Show only Mature Use Cases
+        is_beta: This Use Case has not been validated
+        is_mature: This Use Case has been validated
       show:
         description: Description
         steps: Steps for this use case include
         sdg-targets: SDG Targets
         no-sdg-targets: We don't have any SDG target information for this use case.
         use-case-steps: Use Case Steps
+        request-elevation: We noticed that you made changes to a use case but you were not able to set the maturity level of it.
+                           You might be able to do that by requesting role elevation by clicking %{href}.
     user:
       role:
         admin: Administrator
+        all-roles: All Roles
+        content_editor: Content Editor
+        content_writer: Content Writer
         ict4sdg: ICT 4 SDG User
         principle: Principle User
         user: Basic User
@@ -657,7 +733,9 @@ en:
       error:
         one: The form contains error.
         other: The form contains errors.
+      this-link: this link
       logo: Logo
+      is-mature: Is Mature
       name: Name
       not-available: 'We do not have any %{multi} information for this %{model}.'
       search: Search

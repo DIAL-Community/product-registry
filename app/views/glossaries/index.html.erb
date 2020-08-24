@@ -24,7 +24,9 @@
       <h5>
         <%= "#{glossary.name}" %>
       </h5>
-      <div id="<%= glossary.slug %>" class="wysiwyg-viewer"></div>
+      <div id="<%= glossary.slug %>" class="wysiwyg-viewer">
+        <%= glossary.description.html_safe %>
+      </div>
       <p class="float-right mb-0">
         <%= link_to t('view.general.show'), glossary, :class => "card-link" %>
         <% if user_signed_in? && policy(glossary).mod_allowed? %>
@@ -32,9 +34,7 @@
         <% end %>
       </p>
     </div>
-    <script>
-      setViewerForElement('<%= glossary.slug %>', <%= raw JSON.generate(glossary.description) %>)
-    </script>
+    
   </div>
 <% end %>
 

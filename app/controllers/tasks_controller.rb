@@ -35,7 +35,6 @@ class TasksController < ApplicationController
       @parent_playbook = Playbook.find_by(slug: params[:playbook_id])
       @parent_activity = Activity.find_by(slug: params[:activity_id])
     end
-    puts "Activity: " + @parent_activity.inspect
     authorize @task, :view_allowed?
   end
 
@@ -48,6 +47,7 @@ class TasksController < ApplicationController
     if params[:activity_id]
       @task.parent_activity = params[:activity_id]
       @task.parent_playbook = params[:playbook_id]
+      @order = 1
     end
   
     authorize @task, :mod_allowed?
@@ -99,7 +99,7 @@ class TasksController < ApplicationController
         if task_params[:task_desc].present?
           @task_desc.task_id = @task.id
           @task_desc.locale = I18n.locale
-          @task_desc.description = JSON.parse(task_params[:task_desc])
+          @task_desc.description = task_params[:task_desc]
           @task_desc.save
         end
 
@@ -131,7 +131,7 @@ class TasksController < ApplicationController
                                                         .first || TaskDescription.new
       @task_desc.task_id = @task.id
       @task_desc.locale = I18n.locale
-      @task_desc.description = JSON.parse(task_params[:task_desc])
+      @task_desc.description = task_params[:task_desc]
       @task_desc.save
     end
 
@@ -216,7 +216,7 @@ class TasksController < ApplicationController
   # Only allow a list of trusted parameters through.
   def task_params
     params.require(:task)
-          .permit(:name, :slug, :task_desc, :description, :complete, :due_date, :play_id, :parent_play, :parent_activity, :parent_playbook, :resources => [:name, :description, :url])
+          .permit(:name, :slug, :task_desc, :description, :complete, :due_date, :order, :media_url, :play_id, :parent_play, :parent_activity, :parent_playbook, :resources => [:name, :description, :url])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

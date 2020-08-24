@@ -17,26 +17,28 @@
     </label>
   </fieldset>
 
+  <fieldset class="form-check mt-2 mb-2">
+    <%= form.check_box :maturity, {id: 'use_case_maturity', class: 'form-check-input'}, "Mature", "Beta" %>
+    <%= form.label :maturity, t('view.general.is-mature').to_s, class: 'form-check-label' %>
+  </fieldset>
+
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.overview') %>
   </h6>
-  <%= form.hidden_field :playbook_overview, id: :playbook_overview %>
-  <div class="wysiwyg-editor" id='playbook-overview'>
-  </div>
+
+  <%= form.cktext_area :playbook_overview, value: @description.overview.html_safe, id: 'playbook_overview' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.audience') %>
   </h6>
-  <%= form.hidden_field :playbook_audience, id: :playbook_audience %>
-  <div class="wysiwyg-editor" id='playbook-audience'>
-  </div>
+
+  <%= form.cktext_area :playbook_audience, value: @description.audience.html_safe, id: 'playbook_audience' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.outcomes') %>
   </h6>
-  <%= form.hidden_field :playbook_outcomes, id: :playbook_outcomes %>
-  <div class="wysiwyg-editor" id='playbook-outcomes'>
-  </div>
+
+  <%= form.cktext_area :playbook_outcomes, value: @description.outcomes.html_safe, id: 'playbook_outcomes' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.phases') %>
@@ -68,14 +70,8 @@
     $("#"+removeId).remove();
   });
 
-  var overview = setUpEditor(<%= raw JSON.generate(@description.overview ) %>, "<%= t('view.playbook.form.overview') %>", "playbook-overview");
-  var audience = setUpEditor(<%= raw JSON.generate(@description.audience ) %>, "<%= t('view.playbook.form.audience') %>", "playbook-audience");
-  var outcomes = setUpEditor(<%= raw JSON.generate(@description.outcomes ) %>, "<%= t('view.playbook.form.outcomes') %>", "playbook-outcomes");
   var form = document.querySelector('#playbook-form');
   form.onsubmit = function(e) {
-    $('#playbook_overview').val(JSON.stringify(overview.getContents()));
-    $('#playbook_audience').val(JSON.stringify(audience.getContents()));
-    $('#playbook_outcomes').val(JSON.stringify(outcomes.getContents()));
     
     $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
   };

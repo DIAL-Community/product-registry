@@ -1,0 +1,63 @@
+<%= form_with(model: candidate_role, local: true, html: { id: 'candidate-role-form' }) do |form| %>
+  <fieldset class="form-label-group">
+    <% if !current_user.roles.include?(User.user_roles[:admin]) %>
+      <%= form.hidden_field :email %>
+    <% end %>
+    <%= form.text_field :email, id: :user_email, class: "form-control",
+                        disabled: !current_user.roles.include?(User.user_roles[:admin]),
+                        placeholder: "Email" %>
+    <%= form.label :email %>
+  </fieldset>
+
+  <%= form.cktext_area :description, value: @candidate_role.description.html_safe, id: 'candidate-role-description' %>
+
+  <fieldset class="form-group">
+    <label for="user-role-selector">
+      <%= t('view.user.form.role')%>
+    </label>
+    <select id="user-role-selector" class="form-control mb-2">
+      <option value="-1"><%= t('view.user.role.all-roles') %></option>
+      <%= options_for_select(User.user_roles
+                                 .keys
+                                 .reject do |role|
+                                    role != User.user_roles[:content_writer] &&
+                                      role != User.user_roles[:content_editor]
+                                  end
+                                 .map { |role| [t("view.user.role.#{role}"), role] }
+                                 .sort_by { |label, value| label }) %>
+    </select>
+    <div class="row mt-1">
+      <div class="col-12 badges"></div>
+    </div>
+  </fieldset>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script type="text/javascript">
+  <% candidate_role.roles.sort.each do |role| %>
+    $('#user-role-selector').next('.row').find('.badges').append(
+      '<span class="badge badge-secondary mr-1"><%= t("view.user.role.#{role}") %>' +
+      ' <input type="hidden" name="selected_roles[]" value="<%= role %>"/>' +
+      ' <i class="fas fa-window-close remove-product"></i>' +
+      '</span>'
+    );
+
+    <% if role == User.user_roles[:product_user] %>
+      $('#user-product-selector').show();
+      <% candidate_role.products.order("name").each do |product| %>
+        addProduct('<%= product.id %>', '<%= product.name %>');
+      <% end %>
+    <% end %>
+  <% end %>
+
+  $('.remove-product').on('click', function() {
+    $(this).closest('.badge').fadeOut(function() {
+      $(this).remove();
+    });
+  });
+  
+</script>

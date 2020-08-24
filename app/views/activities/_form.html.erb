@@ -16,6 +16,35 @@
     <%= form.collection_select :phase, @phases, :to_s, :to_s, { include_blank: false }, { class: "form-control inline" } %>
   </fieldset>
 
+  <fieldset class="form-label-group">
+    <%= form.number_field :order, id: :order, class: "form-control", placeholder: t('view.activity.form.order') %>
+    <%= form.label :name, t('view.activity.form.order') %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.activity.index.media') %>
+  </h6>
+  <div id="activity-media">
+    <fieldset class="form-label-group">
+      <%= form.text_field :media_url, id: :media_url, class: "form-control", placeholder: t('view.activity.form.media-prompt') %>
+      <%= form.label :media_url, t('view.activity.form.media-prompt') %>
+    </fieldset>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.activity.index.question') %>
+  </h6>
+  <div id="activity-question">
+    <fieldset class="form-label-group">
+      <%= form.text_field :question_text, id: :question_text, class: "form-control", placeholder: t('view.activity.form.question-text') %>
+      <%= form.label :question_text, t('view.activity.form.question-text') %>
+    </fieldset>
+    <fieldset class="form-label-group">
+      <%= form.text_field :answer_text, id: :answer_text, class: "form-control", placeholder: t('view.activity.form.question-text') %>
+      <%= form.label :answer_text, t('view.activity.form.question-text') %>
+    </fieldset>
+  </div>
+
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.resources') %>
     <% if user_signed_in? && policy(Playbook).mod_allowed? %>

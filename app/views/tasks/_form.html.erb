@@ -22,14 +22,8 @@
   <label for="task-description">
     <%= t('view.task.form.full-description') %>
   </label>
-  <%= form.hidden_field :task_desc, id: :task_description %>
-  <div class="wysiwyg-editor" id='task-description'>
-    <%
-      if !@description.nil? 
-        concat @description.description
-      end
-    %>
-  </div>
+  
+  <%= form.cktext_area :task_desc, value: @description.description.html_safe, id: 'task_description' %>
   
   <fieldset class="form-group form-check">
     <%= form.check_box :complete, id: :task_complete,
@@ -45,6 +39,21 @@
     <%= form.label :due_date, t('view.task.form.due-date') %>
   </fieldset>
   
+  <fieldset class="form-label-group">
+    <%= form.number_field :order, id: :order, class: "form-control", placeholder: t('view.task.form.order') %>
+    <%= form.label :name, t('view.task.form.order') %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.task.index.media') %>
+  </h6>
+  <div id="task-media">
+    <fieldset class="form-label-group">
+      <%= form.text_field :media_url, id: :media_url, class: "form-control", placeholder: t('view.task.form.media-prompt') %>
+      <%= form.label :media_url, t('view.task.form.media-prompt') %>
+    </fieldset>
+  </div>
+
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.resources') %>
     <% if user_signed_in? && policy(Play).mod_allowed? %>
@@ -95,12 +104,6 @@
   $("#organization-search").autocomplete(organizationAutoComplete);
 
   $('#task_due_date').datepicker();
-  var description = setUpEditor(<%= raw JSON.generate(@description.nil? ? {} : @description.description ) %>);
-  var form = document.querySelector('#task-form');
-  form.onsubmit = function() {
-    $('#task_description').val(JSON.stringify(description.getContents()));
-    $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
-  };
 
   $('#add-resource').click(function(e) {
     e.preventDefault();

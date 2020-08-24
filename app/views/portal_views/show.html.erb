@@ -142,7 +142,9 @@
     <h5 class="float-left mb-0"><%= t('view.portal.index.landing-page') %></h5>
   </div>
   <p class="m-2">
-    <div id="about-page" class="wysiwyg-viewer"></div>
+    <div id="about-page" class="wysiwyg-viewer">
+        <%= @about_page.html_safe %>
+    </div>
   </p>
 </div>
 
@@ -160,7 +162,9 @@
     <h5 class="float-left mb-0"><%= t('view.portal.index.page-footer') %></h5>
   </div>
   <p class="m-2">
-    <div id="page-footer" class="wysiwyg-viewer"></div>
+    <div id="page-footer" class="wysiwyg-viewer">
+        <%= @footer.html_safe %>
+    </div>
   </p>
 </div>
 
@@ -171,11 +175,3 @@
   <%= image_tag "/assets/portal_views/"+@portal_view.slug+".png", :alt => "DIAL Logo", :height => "86px", :style => "background-color: #ccc" %>
 </div>
 
-<script>
-  <% if !@about_page.nil? && !@about_page.empty? && @about_page != "{}" %>
-    setUpViewer(<%= raw JSON.generate(@about_page) %>, 'about-page') 
-  <% end %>  
-  <% if !@footer.nil? && !@footer.empty? && @footer != "{}" %>
-    setUpViewer(<%= raw JSON.generate(@footer) %>, 'page-footer') 
-  <% end %>  
-</script>

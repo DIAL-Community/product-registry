@@ -69,21 +69,24 @@
     </li>
   </ul>
 <% else %> 
-  <div id="footer-content" class="wysiwyg-viewer custom-footer"></div>
+  <div id="footer-content" class="wysiwyg-viewer custom-footer">
+  </div>
   <ul class="copyright">
     <li><%= t('view.footer.powered-by-dial') %> | <a target="_blank" rel="noreferrer noopener" href="https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry"><%= t('view.footer.gitlab') %></a></li>
   </ul>
 <% end %>
   <ul class="copyright">
-    <li>© 2019 Digital Impact Alliance</li>
+    <li>© 2020 Digital Impact Alliance</li>
     <li>
-      <a target="_blank" rel="noreferrer noopener" href="http://www.digitalimpactalliance.org/privacy-policy/"><%= t('view.footer.privacy-policy') %></a>
+      <a target="_blank" rel="noreferrer noopener" href="https://registry.dial.community/privacy"><%= t('view.footer.privacy-policy') %></a>
     </li>
   </ul>
 </footer>
 
 <script>
+$(document).on("turbolinks:load", function() {
   <% if session[:portal]["slug"] != "default" && !@footer.nil? && !@footer.empty? && @footer != "{}" %>
-    setUpViewer(<%= raw JSON.generate(@footer) %>, 'footer-content') 
+    $('#footer-content').val("<%= @footer.html_safe %>") 
   <% end %> 
+ });
 </script>

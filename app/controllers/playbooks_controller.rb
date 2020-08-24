@@ -1,6 +1,6 @@
 class PlaybooksController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_playbook, only: [:show, :edit, :update, :destroy]
+  before_action :set_playbook, only: [:show, :edit, :update, :destroy, :create_pdf, :show_pdf]
 
   # GET /playbooks
   # GET /playbooks.json
@@ -31,6 +31,9 @@ class PlaybooksController < ApplicationController
     authorize @playbook, :view_allowed?
   end
 
+  def show_pdf
+  end
+
   # GET /playbooks/new
   def new
     @playbook = Playbook.new
@@ -55,9 +58,9 @@ class PlaybooksController < ApplicationController
       if @playbook.save
         @playbook_desc.playbook_id = @playbook.id
         @playbook_desc.locale = I18n.locale
-        playbook_params[:playbook_overview].present? && @playbook_desc.overview = JSON.parse(playbook_params[:playbook_overview])
-        playbook_params[:playbook_audience].present? && @playbook_desc.audience = JSON.parse(playbook_params[:playbook_audience])
-        playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = JSON.parse(playbook_params[:playbook_outcomes])
+        playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
+        playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
+        playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
         @playbook_desc.save
 
         if params[:logo].present?
@@ -91,9 +94,9 @@ class PlaybooksController < ApplicationController
                                                         .first || PlaybookDescription.new
       @playbook_desc.playbook_id = @playbook.id
       @playbook_desc.locale = I18n.locale
-      playbook_params[:playbook_overview].present? && @playbook_desc.overview = JSON.parse(playbook_params[:playbook_overview])
-      playbook_params[:playbook_audience].present? && @playbook_desc.audience = JSON.parse(playbook_params[:playbook_audience])
-      playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = JSON.parse(playbook_params[:playbook_outcomes])
+      playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
+      playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
+      playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
       @playbook_desc.save
     end
 
@@ -134,6 +137,12 @@ class PlaybooksController < ApplicationController
     end
   end
 
+  def create_pdf
+    url = request.base_url + "/playbooks/" + @playbook.slug + "/show_pdf"
+    pdf_data = Dhalang::PDF.get_from_url(url)
+    send_data(pdf_data, filename: @playbook.slug+'.pdf', type: 'application/pdf')
+  end
+
   def duplicates
     @playbook = []
     if params[:current].present?
@@ -169,7 +178,7 @@ class PlaybooksController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_params
     params.require(:playbook)
-          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :phases => [:name, :description])
+          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :maturity, :phases => [:name, :description])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])
@@ -180,4 +189,5 @@ class PlaybooksController < ApplicationController
             end
           end
   end
+  helper_method :create_pdf
 end

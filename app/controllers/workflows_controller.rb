@@ -70,7 +70,7 @@ class WorkflowsController < ApplicationController
         if workflow_params[:wf_desc].present?
           @wf_desc.workflow_id = @workflow.id
           @wf_desc.locale = I18n.locale
-          @wf_desc.description = JSON.parse(workflow_params[:wf_desc])
+          @wf_desc.description = workflow_params[:wf_desc]
           @wf_desc.save
         end
 
@@ -101,7 +101,7 @@ class WorkflowsController < ApplicationController
     if workflow_params[:wf_desc].present?
       @wf_desc.workflow_id = @workflow.id
       @wf_desc.locale = I18n.locale
-      @wf_desc.description = JSON.parse(workflow_params[:wf_desc])
+      @wf_desc.description = workflow_params[:wf_desc]
       @wf_desc.save
     end
 

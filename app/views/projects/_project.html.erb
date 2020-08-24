@@ -6,6 +6,11 @@
         'title' => project.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
     </div>
     <div class="project-logo-frame ml-2 mt-2">
+      <i class="favorite-indicator"
+         data-slug="<%= project.slug %>"
+         data-favorited="<%= current_user.saved_projects.include?(project.id) unless current_user.nil? %>"
+         data-toggle="tooltip"
+         data-placement="top" data-original-title="<%= t('view.project.index.add_favorite') %>"></i>
       <%= link_to(project) do %>
         <div class="text-muted float-left"><%= t('model.organization').to_s.titlecase.pluralize %></div>
         <br>

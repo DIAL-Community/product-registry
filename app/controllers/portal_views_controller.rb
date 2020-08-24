@@ -25,7 +25,7 @@ class PortalViewsController < ApplicationController
     # Default to the first portal object.
     if session[:portal].nil?
       PortalView.all.each do |portal|
-        if portal.user_roles.include?(current_user.role)
+        unless (portal.user_roles & current_user.roles).empty?
           @portal_view = portal
           break
         end
@@ -34,7 +34,7 @@ class PortalViewsController < ApplicationController
 
     if !params[:id].nil?
       @portal_view = PortalView.find(params[:id])
-      if !@portal_view.nil? && !@portal_view.user_roles.include?(current_user.role)
+      if !@portal_view.nil? && (@portal_view.user_roles & current_user.roles).empty?
         @portal_view = nil
       end
     end
@@ -122,17 +122,17 @@ class PortalViewsController < ApplicationController
     end
 
     authorize @portal_view, :view_allowed?
-    if params[:about_page].present?
+    if portal_view_params[:about_page].present?
       stylesheet = Stylesheet.where(portal: @portal_view.slug).first
-      stylesheet.about_page = params[:about_page]
+      stylesheet.about_page = portal_view_params[:about_page]
       stylesheet.background_color = params[:stylesheet_color]
-      stylesheet.footer_content = params[:page_footer]
+      stylesheet.footer_content = portal_view_params[:page_footer]
       stylesheet.header_logo = @portal_view.slug+".png"
       stylesheet.save
     end
 
     respond_to do |format|
-      if @portal_view.update(portal_view_params)
+      if @portal_view.update(portal_view_params.except(:about_page, :page_footer))
         # Update the session's portal if we're editing active portal.
         if session[:portal]['id'] == @portal_view.id
           session[:portal] = @portal_view
@@ -183,7 +183,7 @@ class PortalViewsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def portal_view_params
     params.require(:portal_view)
-          .permit(:name, :description, :subdomain, :top_nav, :filter_nav, :user_roles, :product_view, :organization_view, :about_page)
+          .permit(:name, :description, :subdomain, :top_nav, :filter_nav, :user_roles, :product_view, :organization_view, :about_page, :page_footer)
           .tap do |attr|
             if params[:selected_top_navs].present?
               attr[:top_navs] =

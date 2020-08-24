@@ -6,6 +6,11 @@
           'title' => use_case.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
     </div>
     <div class="model-logo">
+      <i class="favorite-indicator" style="z-index:9;"
+         data-slug="<%= use_case.slug %>"
+         data-favorited="<%= current_user.saved_use_cases.include?(use_case.id) unless current_user.nil? %>"
+         data-toggle="tooltip"
+         data-placement="top" data-original-title="<%= t('view.use-case.index.add_favorite') %>"></i>
       <%= link_to(use_case) do %>
         <%= image_tag(use_case.image_file, class: 'card-img-top align-middle px-2 py-2 use-case-filter') %>
       <% end %>
@@ -55,11 +60,17 @@
         end
       %>
       <div class="float-right mb-1">
-        <% if use_case.maturity == "Beta" %>
-          <span class='badge badge-warning'><%= use_case.maturity %></span>
-        <% else %>
-          <span class='badge badge-success'><%= use_case.maturity %></span>
-        <% end %>
+      <% if use_case.maturity == "BETA" %>
+        <span class='badge badge-warning' data-toggle="tooltip"
+          data-placement="top" data-original-title="<%= t('view.use-case.index.is_beta') %>">
+          <%= use_case.maturity %>
+        </span>
+      <% else %>
+        <span class='badge badge-success' data-toggle="tooltip"
+          data-placement="top" data-original-title="<%= t('view.use-case.index.is_mature') %>">
+          <%= use_case.maturity %>
+        </span>
+      <% end %>
       </div>
     </div>
   </div>

@@ -1,54 +1,171 @@
-<div class="form-signin">
+<div class="row">
+  <div class="col-lg-4 col-12">
+    <div class="form-signin">
+      <div class="border rounded bg-secondary text-white clearfix border card-header mb-3">
+        <h5 class="float-left mb-0">Edit <%= resource_name.to_s.humanize %></h5>
+      </div>
 
-  <div class="text-center mb-4">
-    <h2>Edit <%= resource_name.to_s.humanize %></h2>
-  </div>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <fieldset class="form-label-group">
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", :disabled => true, :class => "form-control", :placeholder => "Email" %>
+          <%= f.label :email %>
+        </fieldset>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-    <fieldset class="form-label-group">
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", :disabled => true, :class => "form-control", :placeholder => "Email" %>
-      <%= f.label :email %>
-    </fieldset>
-
-    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-    <% end %>
-
-    <fieldset class="form-label-group">
-      <%= f.password_field :password, autocomplete: "new-password", :class => "form-control", :placeholder => "New password" %>
-      <%= f.label :password %>
-      <small class="text-muted">
-        <i>(leave blank if you don't want to change it)</i>
-        <% if @minimum_password_length %>
-          <em><%= @minimum_password_length %> characters minimum</em>
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
         <% end %>
-      </small>
-    </fieldset>
 
-    <fieldset class="form-label-group">
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", :class => "form-control", :placeholder => "Password confirmation" %>
-      <%= f.label :password_confirmation %>
-    </fieldset>
+        <fieldset class="form-label-group">
+          <%= f.password_field :password, autocomplete: "new-password", :class => "form-control", :placeholder => "New password" %>
+          <%= f.label :password %>
+          <small class="text-muted">
+            <i>(leave blank if you don't want to change it)</i>
+            <% if @minimum_password_length %>
+              <em><%= @minimum_password_length %> characters minimum</em>
+            <% end %>
+          </small>
+        </fieldset>
 
-    <fieldset class="form-label-group">
-      <%= f.password_field :current_password, autocomplete: "current-password", :class => "form-control", :placeholder => "Current password" %>
-      <%= f.label :current_password %>
-      <small class="text-muted">
-        <i>(we need your current password to confirm your changes)</i>
-      </small>
-    </fieldset>
+        <fieldset class="form-label-group">
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", :class => "form-control", :placeholder => "Password confirmation" %>
+          <%= f.label :password_confirmation %>
+        </fieldset>
 
-    <%= f.submit "Update", :class => "btn btn-block btn-primary" %>
-  <% end %>
-</div>
+        <fieldset class="form-label-group">
+          <%= f.password_field :current_password, autocomplete: "current-password", :class => "form-control", :placeholder => "Current password" %>
+          <%= f.label :current_password %>
+          <small class="text-muted">
+            <i>(we need your current password to confirm your changes)</i>
+          </small>
+        </fieldset>
 
-<div class="form-signin">
+        <%= f.submit "Update", :class => "btn btn-block btn-primary" %>
+      <% end %>
+    </div>
 
-  <div class="text-center mb-4">
-    <h3>Cancel my account</h3>
+    <div class="form-signin">
+
+      <div class="text-center mb-4">
+        <h3>Cancel my account</h3>
+      </div>
+
+      <p>
+        Unhappy?
+        <%= button_to "Delete my account", registration_path(resource_name),
+                      data: { confirm: "Are you sure?" }, method: :delete,
+                      class: "btn btn-block btn-secondary" %>
+      </p>
+      <%= link_to t('view.general.back'), :back, class: "btn btn-block btn-secondary" %>
+    </div>
   </div>
 
-  <p>Unhappy? <%= button_to "Delete my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, :class => "btn btn-block btn-secondary" %></p>
+  <div class="col-lg-4 col-12 mt-3 px-1">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
+    </div>
+    <div class="row mt-2">
+      <% Product.where(id: current_user.saved_products).order(:name).each do |product| %>
+        <div class="col-4 d-flex">
+          <div class="saved-entity w-100 index-card mt-2 px-2">
+            <i class="favorite-indicator" data-slug="<%= product.slug %>" data-type="products"></i>
+            <%= link_to product do %>
+              <%= image_tag(product.image_file, width: '100%') %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
 
-  <%= link_to "Back", :back, :class => "btn btn-block btn-secondary" %>
+    <div class="border rounded bg-secondary text-white clearfix border card-header mt-3">
+      <h5 class="float-left mb-0"><%= t('model.project').to_s.pluralize.humanize %></h5>
+    </div>
+    <div class="row mt-2">
+      <% Project.where(id: current_user.saved_projects).order(:name).each do |project| %>
+        <div class="col-4 d-flex">
+          <div class="saved-entity w-100 index-card mt-2 px-2">
+            <i class="favorite-indicator" data-slug="<%= project.slug %>" data-type="projects"></i>
+            <%= link_to project, class: "text-decoration-none" do %>
+              <%= image_tag(project.image_file, width: '100%') %>
+              <small><%= project.name %></small>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="border rounded bg-secondary text-white clearfix border card-header mt-3">
+      <h5 class="float-left mb-0"><%= t('model.use-case').to_s.titlecase.pluralize %></h5>
+    </div>
+    <div class="row mt-2">
+      <% UseCase.where(id: current_user.saved_use_cases).order(:name).each do |use_case| %>
+        <div class="col-4 d-flex">
+          <div class="saved-entity w-100 index-card mt-2 px-2">
+            <i class="favorite-indicator" data-slug="<%= use_case.slug %>" data-type="use_cases"></i>
+            <%= link_to use_case, class: "text-decoration-none" do %>
+              <%= image_tag(use_case.image_file, width: '100%') %>
+              <small><%= use_case.name %></small>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-12 mt-3">
+    <div class="border rounded bg-secondary text-white clearfix border card-header">
+      <h5 class="float-left mb-0">Saved Filters</h5>
+    </div>
+    <ul class="list-group list-group-flush mt-2">
+      <% current_user.saved_urls.each_with_index do |url, index| %>
+        <a href="<%= url %>" target="_blank"
+           class="list-group-item list-group-item-action flex-column align-items-start index-card mt-2">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Saved Search #<%= index + 1 %></h5>
+            <small>Saved</small>
+          </div>
+          <p class="mb-1"><%= url %></p>
+          <%
+            queries = extract_url_query(url)
+            queries.each do |key, value|
+              next if key == 'urlFilter'
+          %>
+            <div class="small">
+              <%= "#{key}: #{value.sub('--', ', ')}" %>
+            </div>
+          <% end %>
+        </a>
+      <% end %>
+    </ul>
+  </div>
 </div>
+
+<script type="text/javascript">
+  $(".saved-entity").on({
+    mouseenter: function() {
+      const indicator = $(this).find(".favorite-indicator");
+      indicator.addClass("fas fa-times");
+      indicator.fadeIn();
+    },
+    mouseleave: function() {
+      $(this).find(".favorite-indicator").fadeOut();
+    }
+  });
+  
+  $(".favorite-indicator").each(function(index, element) {
+    $(element).on("click", function(event) {
+      const slug = $(element).attr("data-slug");
+      const type = $(element).attr("data-type");
+      const path = `unfavorite_${type}`.slice(0, -1);
+  
+      $.post(`/${type}/${slug}/${path}`, function(data) {
+        $("#notifier").trigger({
+          type: "notify",
+          message: "<%= t('view.notification.favorite-remove-notification') %>"
+        });
+        $(element).parent(".saved-entity")
+                  .parent()
+                  .remove();
+      });
+    });
+  });
+</script>

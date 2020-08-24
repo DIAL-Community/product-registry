@@ -1,5 +1,7 @@
 class Activity < ApplicationRecord
 
+  attr_accessor :question_text
+  
   belongs_to :playbook
   has_and_belongs_to_many :tasks, join_table: :activities_tasks, dependent: :destroy
 

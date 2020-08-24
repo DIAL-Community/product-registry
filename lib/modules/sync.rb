@@ -54,7 +54,8 @@ module Modules
         if !sdgs.nil? && !sdgs.empty?
           sdgs.each do |sdg|
             sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
-            assign_sdg_to_product(sdg_obj, existing_product, 'Self-reported')
+            assign_sdg_to_product(sdg_obj, existing_product,
+                                  ProductSustainableDevelopmentGoal.mapping_status_types[:SELF_REPORTED])
           end
         end
 
@@ -113,7 +114,8 @@ module Modules
         if !sdgs.nil? && !sdgs.empty?
           sdgs.each do |sdg|
             sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg.first)
-            assign_sdg_to_product(sdg_obj, existing_product, 'Self-reported')
+            assign_sdg_to_product(sdg_obj, existing_product,
+                                  ProductSustainableDevelopmentGoal.mapping_status_types[:SELF_REPORTED])
           end
         end
 
@@ -178,7 +180,8 @@ module Modules
       if !sdgs.nil? && !sdgs.empty?
         sdgs.each do |sdg|
           sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
-          assign_sdg_to_product(sdg_obj, existing_product, 'Validated')
+          assign_sdg_to_product(sdg_obj, existing_product,
+                                ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED])
         end
       end
 
@@ -252,7 +255,8 @@ module Modules
       if !sdgs.nil? && !sdgs.empty?
         sdgs.each do |sdg|
           sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
-          assign_sdg_to_product(sdg_obj, sync_product, 'Validated')
+          assign_sdg_to_product(sdg_obj, sync_product,
+                                ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED])
         end
       end
 
@@ -290,23 +294,23 @@ module Modules
       end
     end
 
-    def assign_sdg_to_product(sdg_obj, product_obj, link_type)
+    def assign_sdg_to_product(sdg_obj, product_obj, mapping_status)
       if !sdg_obj.nil? 
-        prod_sdg = ProductsSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id, product_id: product_obj.id)
+        prod_sdg = ProductSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id, product_id: product_obj.id)
         if prod_sdg.empty?
           puts "Adding sdg #{sdg_obj.number} to product"
-          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg = ProductSustainableDevelopmentGoal.new
           new_prod_sdg.sustainable_development_goal_id = sdg_obj.id
           new_prod_sdg.product_id = product_obj.id
-          new_prod_sdg.link_type = link_type
+          new_prod_sdg.mapping_status = mapping_status
 
           new_prod_sdg.save
-        elsif prod_sdg.first.link_type.nil?
+        elsif prod_sdg.first.mapping_status.nil?
           product_obj.sustainable_development_goals.delete(sdg_obj)
-          new_prod_sdg = ProductsSustainableDevelopmentGoal.new
+          new_prod_sdg = ProductSustainableDevelopmentGoal.new
           new_prod_sdg.sustainable_development_goal_id = sdg_obj.id
           new_prod_sdg.product_id = product_obj.id
-          new_prod_sdg.link_type = link_type
+          new_prod_sdg.mapping_status = mapping_status
 
           new_prod_sdg.save
         end
@@ -384,7 +388,7 @@ module Modules
       product_description.product_id = existing_product.id
       product_description.locale = I18n.locale
       if !sync_description.nil?
-        product_description.description = JSON.generate('ops': [{ 'insert': sync_description }])
+        product_description.description = sync_description
       elsif product_description.description.nil?
         product_descriptions = YAML.load_file('config/product_description.yml')
         product_descriptions['products'].each do |pd|

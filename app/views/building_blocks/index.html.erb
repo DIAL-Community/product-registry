@@ -29,9 +29,13 @@
       <a href="#" class="bb-show-hide small" id="bb-show-more">
         <%= t('view.general.show-bb').to_s %>
       </a>
+      <fieldset class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="mature-only">
+        <label class="form-check-label" for="mature-only"><%= t('view.building-block.index.mature_only') %></label>
+      </fieldset>
     </div>
     <div class="float-right">
-      <% if user_signed_in? && policy(BuildingBlock).mod_allowed? %>
+      <% if user_signed_in? && policy(BuildingBlock).create_allowed? %>
         <%= link_to t('view.general.create'), new_building_block_path, :class => 'small ml-1' %>
       <% end %>
     </div>

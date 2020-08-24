@@ -30,9 +30,7 @@
     </div>
   </div>
 
-  <%= form.hidden_field :product_description, id: :product_description %>
-  <div class="wysiwyg-editor">
-  </div>
+  <%= form.cktext_area :product_description, value: @product_description.description.html_safe, id: 'product_description' %>
   
   <fieldset class="custom-file mt-2">
     <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file"/>
@@ -66,6 +64,12 @@
         placeholder: t('view.product.form.default-url') %>
     <%= form.label :default_url, t('view.product.form.default-url') %>
   </fieldset>
+
+  <%= form.hidden_field :status, :value => 'Not Vetted' %>
+  <%= form.check_box :status, { disabled: !policy(product).permitted_attributes.include?(:status) }, 'Vetted', 'Not Vetted' %>
+  <label class="form-label-group mt-2" for="is_launchable">
+    <%= t('view.product.form.is-vetted') %>
+  </label>
 
   <div class="row">
     <div class="col-12 col-lg-6">
@@ -129,6 +133,37 @@
         </label>
       </fieldset>
       <div class="row">
+        <div class="col-4">
+          <% if policy(Product).beta_only? %>
+            <%
+              options = options_for_select(
+                             ProductBuildingBlock
+                                 .mapping_status_types
+                                 .keys
+                                 .reject do |x|
+                                    x != ProductBuildingBlock.mapping_status_types[:BETA]
+                                  end
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1" %>
+          <% else %>
+            <%
+              options = options_for_select(
+                             ProductBuildingBlock
+                                 .mapping_status_types
+                                 .keys
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1" %>
+          <% end %>
+        </div>
+        <div class="col-8 ml-0">
+          <label for="product-building-blocks">
+            <%= t('view.product.form.bb-mapping') %>
+          </label>
+        </div>
         <div class="col-12">
           <span id="base-selected-building-blocks" class="selected-element badge badge-secondary px-1 mb-1">
             <span class="text-label"></span>
@@ -153,6 +188,37 @@
         </label>
       </fieldset>
       <div class="row">
+        <div class="col-4">
+          <% if policy(Product).beta_only? %>
+            <%
+              options = options_for_select(
+                             ProductSustainableDevelopmentGoal
+                                 .mapping_status_types
+                                 .keys
+                                 .reject do |x|
+                                    x != ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+                                  end
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1" %>
+          <% else %>
+            <%
+              options = options_for_select(
+                             ProductSustainableDevelopmentGoal
+                                 .mapping_status_types
+                                 .keys
+                                 .map { |status_type| [status_type.titlecase, status_type] }
+                                 .sort_by { |label, value| label })
+            %>
+            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1" %>
+          <% end %>
+        </div>
+        <div class="col-8 ml-0">
+          <label for="product-building-blocks">
+            <%= t('view.product.form.sdg-mapping') %>
+          </label>
+        </div>
         <div class="col-12">
           <span id="base-selected-sustainable-development-goals" class="selected-element badge badge-secondary px-1 mb-1">
             <span class="text-label"></span>
@@ -292,14 +358,4 @@
     tagProduct('', '<%= tag %>');
   <% } %>
 
-  var editor = setUpEditor(<%= raw JSON.generate(@product_description.description) %>, '<%= t('view.product.form.description-placeholder') %>');
-  var form = document.querySelector('#product-form');
-  form.onsubmit = function() {
-    var productDescription = $('#product_description');
-    editorContent = {};
-    if (editor.getText() !== "\n") {
-      editorContent = editor.getContents();
-    }
-    productDescription.val(JSON.stringify(editorContent));
-  };
 </script>

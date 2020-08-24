@@ -28,23 +28,20 @@
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.description') %>
   </h6>
-  <%= hidden_field_tag :play_description %>
-  <div class="wysiwyg-editor" id='play-description'>
-  </div>
+
+  <%= form.cktext_area :play_description, value: @description.description.html_safe, id: 'play_description' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.prerequisites') %>
   </h6>
-  <%= hidden_field_tag :play_prerequisites %>
-  <div class="wysiwyg-editor" id='play-prerequisites'>
-  </div>
+
+  <%= form.cktext_area :play_prerequisites, value: @description.prerequisites.html_safe, id: 'play_prerequisites' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.outcomes') %>
   </h6>
-  <%= hidden_field_tag :play_outcomes %>
-  <div class="wysiwyg-editor" id='play-outcomes'>
-  </div>
+
+  <%= form.cktext_area :play_outcomes, value: @description.outcomes.html_safe, id: 'play_outcomes' %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.resources') %>
@@ -65,15 +62,10 @@
 <% end %>
 
 <script>
-  var description = setUpEditor(<%= raw JSON.generate(@description.description ) %>, "<%= t('view.play.form.description') %>", "play-description");
-  var prerequisites = setUpEditor(<%= raw JSON.generate(@description.prerequisites ) %>, "<%= t('view.play.form.prerequisites') %>", "play-prerequisites");
-  var outcomes = setUpEditor(<%= raw JSON.generate(@description.outcomes ) %>, "<%= t('view.play.form.outcomes') %>", "play-outcomes");
+  
   var form = document.querySelector('#play-form');
   form.onsubmit = function() {
-    $('#play_description').val(JSON.stringify(description.getContents()));
-    $('#play_prerequisites').val(JSON.stringify(prerequisites.getContents()));
-    $('#play_outcomes').val(JSON.stringify(outcomes.getContents()));
-
+  
     $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
   };
 

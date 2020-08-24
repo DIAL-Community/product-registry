@@ -1,8 +1,21 @@
 Rails.application.routes.draw do
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+  end
+  post "/graphql", to: "graphql#execute"
+  mount Ckeditor::Engine => '/ckeditor'
   resources :task_trackers
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   mount Commontator::Engine => '/commontator'
+  resources :task_trackers
+
+  resources :candidate_roles do
+    member do
+      post 'reject'
+      post 'approve'
+    end
+  end
 
   resources :product_suites
   resources :glossaries
@@ -24,6 +37,10 @@ Rails.application.routes.draw do
   end
   resources :playbooks do
     get 'count', on: :collection
+    member do 
+      get 'create_pdf'
+      get 'show_pdf'
+    end
     resources :activities do
       resources :tasks
     end
@@ -34,14 +51,23 @@ Rails.application.routes.draw do
 
   resources :projects do
     get 'count', on: :collection
+    member do
+      post 'favorite_project'
+      post 'unfavorite_project'
+    end
   end
 
   get 'deploys/index'
   get 'about/cookies'
 
-  devise_for :users, controllers: { registrations: 'registrations' }
+  devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
   scope '/admin' do
     resources :users
+  end
+
+  devise_scope :user do
+    get '/users', to: 'registrations#new'
+    get '/users/password', to: 'devise/passwords#new'
   end
 
   root to: 'about#index'
@@ -63,6 +89,10 @@ Rails.application.routes.draw do
 
   resources :products do
     get 'count', on: :collection
+    member do
+      post 'favorite_product'
+      post 'unfavorite_product'
+    end
   end
 
   resources :building_blocks do
@@ -79,6 +109,10 @@ Rails.application.routes.draw do
   resources :use_cases do
     get 'count', on: :collection
     resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
+    member do
+      post 'favorite_use_case'
+      post 'unfavorite_use_case'
+    end
   end
 
   resources :workflows do
@@ -126,6 +160,10 @@ Rails.application.routes.draw do
   get '/agg_services', to: 'organizations#agg_services', as: :agg_services
   get '/service_capabilities', to: 'organizations#service_capabilities', as: :service_capabilities
   get '/update_capability', to: 'organizations#update_capability', as: :update_capability
+  get '/privacy', to: 'about#privacy', as: :privacy
+  get '/terms', to: 'about#terms', as: :terms
+
+  post '/save_url', to: 'application#save_url', as: :save_url
 
   get 'export', :to => 'organizations#export'
   get 'map_aggregators', :to => 'organizations#map_aggregators'
@@ -148,7 +186,7 @@ Rails.application.routes.draw do
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
-  get 'playbook_duplicates', to: 'palybooks#duplicates'
+  get 'playbook_duplicates', to: 'playbooks#duplicates'
   get 'play_duplicates', to: 'plays#duplicates'
   get 'task_duplicates', to: 'tasks#duplicates'
 

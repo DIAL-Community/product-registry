@@ -1,25 +1,45 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<div class="row">
+  <div class="col-12">
+    <div id='create-pdf', class='btn btn-outline-primary float-right mb-2')>
+      <%= "#{t('view.playbook.index.create-pdf')}" %>
+    </div>
+  </div>
+  <div id="loading-spinner" class="col-12 text-muted">
+    <div class="spinner-border spinner-border-sm float-right mb-2" role="status">
+      <span class="sr-only"><%= "#{t('view.playbook.index.creating-pdf')}" %>...</span>
+    </div>
+    <div class="float-right mb-2"><%= "#{t('view.playbook.index.creating-pdf')}" %>...</div>
+  </div>
+</div>
+
 <%= render 'shared/playbooknav', playbook: @playbook %>
 
 <div id="show-playbook">
 <div class="card mt-2">
   
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer"></div>
+      <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer">
+        <%= @description.overview %>
+      </div>
     </div>
     <div class="card-header border-0">
         <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</h5>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer"></div>
+      <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
+      <%= @description.audience %>
+      </div>
     </div>
     <div class="card-header border-0">
         <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</h5>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer"></div>
+      <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
+      <%= @description.outcomes %>
+      </div>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
@@ -45,7 +65,7 @@
       <div class="card-body p-0">
         <% if @playbook.activities.count > 0 %>
           <div class="accordion" id='<%= "#{@playbook.slug}_accordion" %>'>
-            <% @playbook.activities.each do |activity| %>
+            <% @playbook.activities.order(:order).each do |activity| %>
               <div class="card border-right-0 border-left-0 border-bottom-0">
                 <div id='<%= "#{activity.slug}_header" %>' class="card-header" 
                    data-toggle="collapse" data-target='#<%= "#{activity.slug}_collapse" %>'
@@ -95,12 +115,30 @@
 </div>
 
 <script>
-    <% if !@description.nil? %>
-      setViewerForElement('<%= @playbook.slug %>-overview',
-                         <%= raw JSON.generate(@description.overview ) %>)
-      setViewerForElement('<%= @playbook.slug %>-audience',
-                         <%= raw JSON.generate(@description.audience ) %>)
-      setViewerForElement('<%= @playbook.slug %>-outcomes',
-                         <%= raw JSON.generate(@description.outcomes ) %>)
-    <% end %>
+
+    $("#loading-spinner").hide()
+
+    $("#create-pdf").click(function () {
+      url = "/playbooks/<%= @playbook.slug %>/create_pdf"
+      fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        },
+      })
+      .then(response => response.blob())
+      .then(response => {
+          $("#loading-spinner").hide()
+          filename = "<%= @playbook.slug %>.pdf"
+          const blob = new Blob([response], {type: 'application/pdf'});
+          const downloadUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = downloadUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+      });
+      
+      $("#loading-spinner").show()
+    })
 </script>

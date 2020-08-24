@@ -10,7 +10,8 @@
     <%= t('view.general.duplicates', model: t('model.glossary')) %>
   </div>
 
-  <%= form.hidden_field :description, id: :glossary_description %>
+  <%= form.cktext_area :description, value: glossary.description.html_safe, id: 'glossary_description' %>
+
   <div class="wysiwyg-editor">
   </div>
 
@@ -20,11 +21,3 @@
   </fieldset>
 <% end %>
 
-<script>
-  var editor = setUpEditor(<%= raw JSON.generate(glossary.description) %>);
-  var form = document.querySelector('#glossary-form');
-  form.onsubmit = function() {
-    var description = $('#glossary_description');
-    description.val(JSON.stringify(editor.getContents()));
-  };
-</script>

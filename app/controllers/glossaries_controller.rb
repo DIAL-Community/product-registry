@@ -103,9 +103,6 @@ class GlossariesController < ApplicationController
       .require(:glossary)
       .permit(:name, :slug, :locale, :description)
       .tap do |attr|
-        if attr[:description].present?
-          attr[:description] = JSON.parse(attr[:description])
-        end
         if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])
           if params[:duplicate].present?

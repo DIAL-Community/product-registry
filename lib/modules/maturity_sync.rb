@@ -14,8 +14,7 @@ module Modules
                                                       .first || RubricCategoryDescription.new
       rubric_category_desc.rubric_category_id = rubric_category.id
       rubric_category_desc.locale = I18n.locale
-      rubric_category_desc.description_html = '<p>'+cat_name+'</p>'
-      rubric_category_desc.description = {}
+      rubric_category_desc.description = '<p>'+cat_name+'</p>'
       rubric_category_desc.save
 
       rubric_category
@@ -38,8 +37,7 @@ module Modules
                                                       .first || CategoryIndicatorDescription.new
       category_indicator_desc.category_indicator_id = category_indicator.id
       category_indicator_desc.locale = I18n.locale
-      category_indicator_desc.description_html = '<p>'+indicator_desc+'</p>'
-      category_indicator_desc.description = {}
+      category_indicator_desc.description = '<p>'+indicator_desc+'</p>'
       category_indicator_desc.save
     end
 
@@ -79,7 +77,7 @@ module Modules
             id: rubric_category.id,
             name: rubric_category.name,
             weight: rubric_category.weight,
-            description: !category_description.nil? && !category_description.description_html.nil? && category_description.description_html.gsub(/<\/?[^>]*>/, ''),
+            description: !category_description.nil? && !category_description.description.nil? && category_description.description.gsub(/<\/?[^>]*>/, ''),
             indicator_scores: [],
             # Number of indicator without score at the category level.
             missing_score: 0,
@@ -96,7 +94,7 @@ module Modules
               id: category_indicator.id,
               name: category_indicator.name,
               weight: category_indicator.weight,
-              description: !indicator_description.nil? && indicator_description.description_html.gsub(/<\/?[^>]*>/, ''),
+              description: !indicator_description.nil? && indicator_description.description.gsub(/<\/?[^>]*>/, ''),
               score: convert_to_numeric(indicator_value, indicator_type, category_indicator.weight)
             }
 

@@ -24,7 +24,7 @@ class CategoryIndicatorsController < ApplicationController
     authorize CategoryIndicator, :mod_allowed?
     @category_indicator = CategoryIndicator.new
     if params[:rubric_category_id]
-      @rubric_category = RubricCategory.find(params[:rubric_category_id])
+      @rubric_category = RubricCategory.find_by(slug: params[:rubric_category_id])
       @category_indicator.rubric_category = @rubric_category
     end
   end
@@ -51,7 +51,7 @@ class CategoryIndicatorsController < ApplicationController
         if category_indicator_params[:ci_desc].present?
           @category_indicator_desc.category_indicator_id = @category_indicator.id
           @category_indicator_desc.locale = I18n.locale
-          @category_indicator_desc.description = JSON.parse(category_indicator_params[:ci_desc])
+          @category_indicator_desc.description = category_indicator_params[:ci_desc]
           @category_indicator_desc.save
         end
         format.html do
@@ -79,7 +79,7 @@ class CategoryIndicatorsController < ApplicationController
                                                              .first || CategoryIndicatorDescription.new
       @category_indicator_desc.category_indicator_id = @category_indicator.id
       @category_indicator_desc.locale = I18n.locale
-      @category_indicator_desc.description = JSON.parse(category_indicator_params[:ci_desc])
+      @category_indicator_desc.description = category_indicator_params[:ci_desc]
       @category_indicator_desc.save
     end
     respond_to do |format|

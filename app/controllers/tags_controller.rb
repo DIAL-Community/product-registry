@@ -28,10 +28,12 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.json
   def show
+    authorize(@tag, :view_allowed?)
   end
 
   # GET /tags/new
   def new
+    authorize(Tag, :mod_allowed?)
     @tag = Tag.new
     @tag_desc = TagDescription.new
   end
@@ -43,6 +45,7 @@ class TagsController < ApplicationController
   # POST /tags
   # POST /tags.json
   def create
+    authorize(Tag, :mod_allowed?)
     @tag = Tag.new(tag_params)
     @tag_desc = TagDescription.new
 
@@ -51,7 +54,7 @@ class TagsController < ApplicationController
         if tag_params[:tag_desc]
           @tag_desc.tag_id = @tag.id
           @tag_desc.locale = I18n.locale
-          @tag_desc.description = JSON.parse(tag_params[:tag_desc])
+          @tag_desc.description = tag_params[:tag_desc]
           @tag_desc.save
         end
         format.html { redirect_to tags_path, notice: 'Tag was successfully created.' }
@@ -66,10 +69,11 @@ class TagsController < ApplicationController
   # PATCH/PUT /tags/1
   # PATCH/PUT /tags/1.json
   def update
+    authorize(@tag, :mod_allowed?)
     if tag_params[:tag_desc]
       @tag_desc.tag_id = @tag.id
       @tag_desc.locale = I18n.locale
-      @tag_desc.description = JSON.parse(tag_params[:tag_desc])
+      @tag_desc.description = tag_params[:tag_desc]
       @tag_desc.save
     end
     respond_to do |format|
@@ -86,6 +90,7 @@ class TagsController < ApplicationController
   # DELETE /tags/1
   # DELETE /tags/1.json
   def destroy
+    authorize(@tag, :mod_allowed?)
     @tag.destroy
     respond_to do |format|
       format.html { redirect_to tags_url, notice: 'Tag was successfully destroyed.' }
@@ -102,8 +107,8 @@ class TagsController < ApplicationController
         @tags = Tag.where(slug: current_slug).to_a
       end
     end
-    authorize Tag, :view_allowed?
-    render json: @tags, only: [:name]
+    @tags = authorize(Tag, :view_allowed?)
+    render(json: @tags, only: [:name])
   end
 
   private

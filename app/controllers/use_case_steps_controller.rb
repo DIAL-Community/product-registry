@@ -55,7 +55,7 @@ class UseCaseStepsController < ApplicationController
         if use_case_step_params[:ucs_desc]
           @ucs_desc.use_case_step_id = @use_case_step.id
           @ucs_desc.locale = I18n.locale
-          @ucs_desc.description = JSON.parse(use_case_step_params[:ucs_desc])
+          @ucs_desc.description = use_case_step_params[:ucs_desc]
           @ucs_desc.save
         end
         format.html { redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step), notice: 'Use case step was successfully created.' }
@@ -73,7 +73,7 @@ class UseCaseStepsController < ApplicationController
     if use_case_step_params[:ucs_desc]
       @ucs_desc.use_case_step_id = @use_case_step.id
       @ucs_desc.locale = I18n.locale
-      @ucs_desc.description = JSON.parse(use_case_step_params[:ucs_desc])
+      @ucs_desc.description = use_case_step_params[:ucs_desc]
       @ucs_desc.save
     end
 

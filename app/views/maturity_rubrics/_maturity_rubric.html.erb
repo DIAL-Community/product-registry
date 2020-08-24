@@ -7,7 +7,7 @@
   </h5>
   <div class="card-body py-2 px-3">
     <div id="<%= maturity_rubric.slug %>" class="wysiwyg-viewer">
-      <%= !description.nil? && !description.description_html.nil? && description.description_html.html_safe %>
+      <%= !description.nil? && !description.description.nil? && description.description.html_safe %>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
@@ -39,7 +39,7 @@
                    data-parent='#<%= "#{maturity_rubric.slug}_accordion" %>'>
                   <div class="card-body p-3">
                     <div id='<%= "#{rubric_category.slug}_viewer" %>'>
-                      <%= !category_description.nil? && !category_description.description_html.nil? && category_description.description_html.html_safe %>
+                      <%= !category_description.nil? && !category_description.description.nil? && category_description.description.html_safe %>
                     </div>
                     <% if rubric_category.category_indicators.count > 0 %>
                       <h6 class="font-weight-bold"><%= t('view.rubric-category.index.category-heading') %>:</h6>
@@ -66,8 +66,6 @@
               </div>
               <script>
                 <% if !category_description.nil? %>
-                setViewerForElement('<%= "#{rubric_category.slug}_viewer" %>',
-                                     <%= raw JSON.generate(category_description.description ) %>);
                 $('#<%= "#{rubric_category.slug}_collapse" %>').on('hidden.bs.collapse', function () {
                   const iTag = $('#<%= "#{rubric_category.slug}_header" %>').find('i');
                   iTag.removeClass('fa-angle-up').addClass('fa-angle-down');
@@ -97,9 +95,4 @@
       </div>
     </div>
   </div>
-  <script>
-    <% if !description.nil? %>
-      setViewerForElement('<%= maturity_rubric.slug %>',
-                         <%= raw JSON.generate(description.description ) %>)
-    <% end %>
-  </script>
+  

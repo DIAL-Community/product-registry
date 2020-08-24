@@ -10,6 +10,7 @@
   <%= image_tag(@workflow.image_file, class: 'card-img-top px-2 py-2 mx-auto workflow-filter', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="workflow-viewer" class="wysiwyg-viewer">
+      <%= @wf_desc.description.html_safe %>
     </div>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), workflows_path, :class => "card-link" %>
@@ -84,6 +85,3 @@
   </div>
 <% end %>
 
-<script>
-        setUpViewer(<%= raw JSON.generate(@wf_desc.description) %>)
-</script>
