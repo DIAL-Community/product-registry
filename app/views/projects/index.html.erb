@@ -40,14 +40,16 @@
       const favorited = $(element).attr("data-favorited");
 
       let path = "favorite_project";
+      let message = "<%= t('view.notification.favorite-save-notification') %>";
       if (favorited === "true") {
         path = "unfavorite_project";
+        message = "<%= t('view.notification.favorite-remove-notification') %>";
       }
 
       $.post(`/projects/${slug}/${path}`, function(data) {
         $("#notifier").trigger({
           type: "notify",
-          message: "<%= t('view.notification.favorite-save-notification') %>"
+          message: message
         });
         const parent = $(element).parent();
         $(element).attr("data-favorited", favorited === "true" ? "false" : "true");
