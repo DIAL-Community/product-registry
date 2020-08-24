@@ -49,7 +49,7 @@ class UseCasesController < ApplicationController
     @use_cases = filter_use_cases.order(:name)
 
     if params[:mature].present? && params[:mature].to_s.downcase == 'true'
-      @use_cases = @use_cases.where(':tag = use_cases.maturity', tag: 'Mature')
+      @use_cases = @use_cases.where(':tag = use_cases.maturity', tag: 'MATURE')
     end
 
     if params[:search]

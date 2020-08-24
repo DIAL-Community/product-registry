@@ -17,7 +17,7 @@ class BuildingBlocksController < ApplicationController
     @building_blocks = filter_building_blocks.order(:name)
 
     if params[:mature].present? && params[:mature].to_s.downcase == 'true'
-      @building_blocks = @building_blocks.where(':tag = building_blocks.maturity', tag: 'Mature')
+      @building_blocks = @building_blocks.where(':tag = building_blocks.maturity', tag: 'MATURE')
     end
 
     if params[:search]
