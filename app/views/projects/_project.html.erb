@@ -10,7 +10,7 @@
          data-slug="<%= project.slug %>"
          data-favorited="<%= current_user.saved_projects.include?(project.id) unless current_user.nil? %>"
          data-toggle="tooltip"
-         data-placement="top" data-original-title="<%= t('view.project.index.add_favorite') %>"></i>
+         data-placement="top" data-original-title="<%= t('view.project.index.toggle-favorite') %>"></i>
       <%= link_to(project) do %>
         <div class="text-muted float-left"><%= t('model.organization').to_s.titlecase.pluralize %></div>
         <br>
