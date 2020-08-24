@@ -328,7 +328,7 @@ en:
         bb-mapping: Indicate if mapping is Beta or Validated
         sdg-mapping: Indicate if mapping is Self-Reported or Validated
       index:
-        add_favorite: Add to list of favorite Products
+        toggle-favorite: Add to / remove from list of favorite products
         description: Description
         filter: Filter
         has-maturity: Has maturity?
@@ -404,7 +404,7 @@ en:
         org-owner-tooltip: As organization owner, you are only allowed to add / remove your organization from a project.
         product-owner-tooltip: As product owner, you are only allowed to add / remove your own products from a project.
       index:
-        add_favorite: Add to list of favorite Projects
+        toggle-favorite: Add to / remove from list of favorite projects
         budget: Budget
         description: Description
         end-date: End Date
@@ -633,7 +633,7 @@ en:
         steps-header-description: Steps Header Description
         is-mature: Is Mature
       index:
-        add_favorite: Add to list of favorite Use Cases
+        toggle-favorite: Add to / remove from list of favorite use cases
         no-data: We couldn't find any use case in the database.
         sdg-target-popover:
           one: SDG Target
