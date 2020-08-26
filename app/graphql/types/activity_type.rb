@@ -10,5 +10,8 @@ module Types
     field :playbook_questions_id, Integer, null: true
     field :order, Integer, null: true
     field :media_url, String, null: true
+
+    field :activity_descriptions, [Types::ActivityDescriptionType], null: true
+    field :tasks, [Types::TaskType], null: true
   end
 end

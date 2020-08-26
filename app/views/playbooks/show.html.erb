@@ -22,7 +22,7 @@
   
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer">
-        <%= @description.overview %>
+        <%= @description.overview.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
@@ -30,7 +30,7 @@
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
-      <%= @description.audience %>
+      <%= @description.audience.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
@@ -38,7 +38,7 @@
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
-      <%= @description.outcomes %>
+      <%= @description.outcomes.html_safe %>
       </div>
     </div>
     <div class="card mt-2">
