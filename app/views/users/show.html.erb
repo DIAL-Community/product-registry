@@ -35,13 +35,14 @@
   </div>
 </div>
 
-<% if @user.products.count > 0 %>
+<% if @user.user_products.count > 0 %>
   <div class="mt-2">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
     </div>
     <div class="row">
-      <% @user.products.each do |product| %>
+      <% @user.user_products.each do |product_id| %>
+        <% product = Product.find(product_id) %>
         <div class="col-6 col-lg-4 mt-2">
           <div class="card flex-row">
             <%= link_to product do %>
