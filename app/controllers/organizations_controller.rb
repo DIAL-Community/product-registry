@@ -115,14 +115,14 @@ class OrganizationsController < ApplicationController
     @organization = Organization.new(organization_params)
     @organization.set_current_user(current_user)
 
-    if (params[:selected_sectors].present?)
+    if params[:selected_sectors].present?
       params[:selected_sectors].keys.each do |sector_id|
         @sector = Sector.find(sector_id)
         @organization.sectors.push(@sector)
       end
     end
 
-    if (params[:contact].present?)
+    if params[:contact].present?
       contact = Contact.new
       contact.name = params[:contact][:name]
       contact.email = params[:contact][:email]
@@ -151,7 +151,7 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    if (params[:selected_products].present?)
+    if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
         product = Product.find(product_id)
         @organization.products.push(product)
@@ -184,7 +184,7 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    if (params[:logo].present?)
+    if params[:logo].present?
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
@@ -226,7 +226,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1.json
   def update
     authorize @organization, :mod_allowed?
-    if (params[:selected_sectors].present?)
+    if params[:selected_sectors].present?
       sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
         sector = Sector.find(sector_id)
@@ -243,7 +243,6 @@ class OrganizationsController < ApplicationController
         end
       end
 
-      organization_contacts = []
       params[:selected_contacts].each do |selected_contact|
         organization_contact = @organization.organizations_contacts.find_by(contact_id: selected_contact)
         if organization_contact && organization_contact.ended_at.nil?
@@ -251,12 +250,11 @@ class OrganizationsController < ApplicationController
         end
 
         organization_contact = OrganizationsContact.new
-        organization_contact.contact = Contact.find(selected_contact)
+        organization_contact.contact = Contact.find_by(id: selected_contact)
         organization_contact.started_at = Time.now.utc
-        organization_contacts.push(organization_contact)
-      end
 
-      @organization.organizations_contacts << organization_contacts
+        @organization.organizations_contacts << organization_contact
+      end
     else
       OrganizationsContact.where(organization_id: @organization.id)
                           .update(ended_at: Time.now.utc)
@@ -272,7 +270,7 @@ class OrganizationsController < ApplicationController
     @organization.countries = countries.to_a
 
     products = Set.new
-    if (params[:selected_products].present?)
+    if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
         product = Product.find(product_id)
         products.add(product)
@@ -317,7 +315,7 @@ class OrganizationsController < ApplicationController
     end
     @organization.offices = offices.to_a
 
-    if (params[:logo].present?)
+    if params[:logo].present?
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
@@ -520,7 +518,7 @@ class OrganizationsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      @organization = Organization.find_by(slug: params[:id]) or not_found
+      @organization = Organization.find_by(slug: params[:id])
       if @organization.nil? && params[:id].scan(/\D/).empty?
         @organization = Organization.find(params[:id])
       end

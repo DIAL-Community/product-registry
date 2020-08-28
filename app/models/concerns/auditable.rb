@@ -9,7 +9,11 @@ module Auditable
   def create_audit(action)
     audit_log = Audit.new
     audit_log.associated_type = self.class.name
-    audit_log.associated_id = self.slug
+    if self.has_attribute?(:slug)
+      audit_log.associated_id = self.slug
+    else 
+      audit_log.associated_id = get_parent_slug(self)
+    end
     audit_log.action = action
     if action == "UPDATED" && self.saved_change_to_id?
       audit_log.action = "CREATED"
@@ -52,63 +56,53 @@ module Auditable
     @image_changed
   end
 
+  def get_parent_slug(child_object)
+    if child_object.class.name == UseCaseDescription.name
+      return UseCase.find(child_object.use_case_id).slug
+    elsif child_object.class.name == BuildingBlockDescription.name
+      return BuildingBlock.find(child_object.building_block_id).slug
+    elsif child_object.class.name == WorkflowDescription.name
+      return Workflow.find(child_object.workflow_id).slug
+    elsif child_object.class.name == ProductDescription.name
+      return Product.find(child_object.product_id).slug
+    else
+      return "None"
+    end
+  end
+
   def association_add(new_obj)
     initialize_association_changes
-    if new_obj.class.name == ProductSector.name
-      curr_change = { id: new_obj.sector.slug, action: "ADD" }
-    elsif new_obj.class.name == ProductBuildingBlock.name
-      curr_change = { id: new_obj.building_block.slug, action: "ADD" }
-    elsif new_obj.class.name == ProductSustainableDevelopmentGoal.name
-      curr_change = { id: new_obj.sustainable_development_goal.slug, action: "ADD" }
+    if new_obj.class.name == SdgTarget.name
+      curr_change = { id: new_obj.name, action: "ADD" }
+    elsif new_obj.auditable_association_object
+      curr_change = { id: new_obj.audit_id_value, action: "ADD" }
     else
       curr_change = { id: new_obj.slug, action: "ADD" }
     end
-    log_association(curr_change, new_obj.class.name)
+    log_association(curr_change, new_obj)
   end
 
   def association_remove(old_obj)
     initialize_association_changes
-    if old_obj.class.name == ProductSector.name
-      curr_change = { id: old_obj.sector.slug, action: "REMOVE" }
-    elsif old_obj.class.name == ProductBuildingBlock.name
-      curr_change = { id: old_obj.building_block.slug, action: "REMOVE" }
-    elsif old_obj.class.name == ProductSustainableDevelopmentGoal.name
-      curr_change = { id: old_obj.sustainable_development_goal.slug, action: "REMOVE" }
+    if old_obj.class.name == SdgTarget.name
+      curr_change = { id: old_obj.name, action: "REMOVE" }
+    elsif old_obj.auditable_association_object
+      curr_change = { id: old_obj.audit_id_value, action: "REMOVE" }
     else
       curr_change = { id: old_obj.slug, action: "REMOVE" }
     end
-    log_association(curr_change, old_obj.class.name)
+    log_association(curr_change, old_obj)
   end
 
-  def log_association(curr_change, obj_name)
-    case obj_name
-    when "Organization"
-      (@association_changes[:organizations] ||= []) << curr_change
-    when "Sector"
-      (@association_changes[:sectors] ||= []) << curr_change
-    when "ProductSector"
-      (@association_changes[:sectors] ||= []) << curr_change
-    when "Product"
-      (@association_changes[:products] ||= []) << curr_change
-    when "SustainableDevelopmentGoal"
-      (@association_changes[:sdgs] ||= []) << curr_change
-    when "ProductSustainableDevelopmentGoal"
-      (@association_changes[:sdgs] ||= []) << curr_change
-    when "BuildingBlock"
-      (@association_changes[:building_blocks] ||= []) << curr_change
-    when "ProductBuildingBlock"
-      (@association_changes[:building_blocks] ||= []) << curr_change
-    when "Origin"
-      (@association_changes[:origins] ||= []) << curr_change
-    when "Location"
-      (@association_changes[:locations] ||= []) << curr_change
-    when "Contact"
-      (@association_changes[:contacts] ||= []) << curr_change
-    when "Project"
-      (@association_changes[:projects] ||= []) << curr_change
-    when "ProductProductRelationship"
-      (@association_changes[:products] ||= []) << curr_change
+  def log_association(curr_change, object)
+    return if curr_change[:id].nil?
+
+    field_name = object.class.name.pluralize.downcase
+    if object.auditable_association_object
+      field_name = object.audit_field_name.downcase
     end
+    (@association_changes[field_name] ||= []) << curr_change
+    @association_changes[field_name].uniq!
   end
 
   def initialize_association_changes

@@ -4,6 +4,7 @@ class UseCasesController < ApplicationController
   before_action :set_use_case, only: [:show, :edit, :update, :destroy]
   before_action :set_sectors, only: [:new, :edit, :update, :show]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_current_user, only: [:edit, :update, :destroy]
 
   def favorite_use_case
     set_use_case
@@ -104,7 +105,9 @@ class UseCasesController < ApplicationController
   def create
     authorize(UseCase, :create_allowed?)
     @use_case = UseCase.new(use_case_params)
+    @use_case.set_current_user(current_user)
     @uc_desc = UseCaseDescription.new
+    @uc_desc.set_current_user(current_user)
     @ucs_header = UseCaseHeader.new
 
     if (params[:selected_sdg_targets])
@@ -231,6 +234,11 @@ class UseCasesController < ApplicationController
 
     def set_sectors
       @sectors = Sector.order(:name)
+    end
+
+    def set_current_user
+      @use_case.set_current_user(current_user)
+      @uc_desc.set_current_user(current_user)
     end
 
   # Never trust parameters from the scary internet, only allow the white list through.

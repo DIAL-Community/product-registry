@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  include Auditable
   attr_accessor :task_desc, :parent_play, :parent_playbook, :parent_activity
 
   has_many :task_descriptions, dependent: :destroy

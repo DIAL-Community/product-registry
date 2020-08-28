@@ -1344,7 +1344,8 @@ CREATE TABLE public.organizations_contacts (
     contact_id bigint NOT NULL,
     started_at timestamp without time zone,
     ended_at timestamp without time zone,
-    id bigint NOT NULL
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
 
 
@@ -1455,8 +1456,29 @@ ALTER SEQUENCE public.organizations_locations_id_seq OWNED BY public.organizatio
 CREATE TABLE public.organizations_products (
     organization_id bigint NOT NULL,
     product_id bigint NOT NULL,
-    org_type public.org_type_orig DEFAULT 'owner'::public.org_type_orig
+    org_type public.org_type_orig DEFAULT 'owner'::public.org_type_orig,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: organizations_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_products_id_seq OWNED BY public.organizations_products.id;
 
 
 --
@@ -1836,8 +1858,29 @@ CREATE TABLE public.product_building_blocks (
     building_block_id bigint NOT NULL,
     product_id bigint NOT NULL,
     link_type character varying DEFAULT 'Beta'::character varying,
-    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL
+    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: product_building_blocks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_building_blocks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_building_blocks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_building_blocks_id_seq OWNED BY public.product_building_blocks.id;
 
 
 --
@@ -1942,7 +1985,8 @@ CREATE TABLE public.product_product_relationships (
     id bigint NOT NULL,
     from_product_id bigint NOT NULL,
     to_product_id bigint NOT NULL,
-    relationship_type public.relationship_type NOT NULL
+    relationship_type public.relationship_type NOT NULL,
+    slug character varying NOT NULL
 );
 
 
@@ -1972,8 +2016,29 @@ ALTER SEQUENCE public.product_product_relationships_id_seq OWNED BY public.produ
 CREATE TABLE public.product_sectors (
     product_id bigint NOT NULL,
     sector_id bigint NOT NULL,
-    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL
+    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: product_sectors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_sectors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_sectors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_sectors_id_seq OWNED BY public.product_sectors.id;
 
 
 --
@@ -2026,8 +2091,29 @@ CREATE TABLE public.product_suites_product_versions (
 CREATE TABLE public.product_sustainable_development_goals (
     product_id bigint NOT NULL,
     sustainable_development_goal_id bigint NOT NULL,
-    mapping_status public.mapping_status_type NOT NULL
+    mapping_status public.mapping_status_type NOT NULL,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: product_sustainable_development_goals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_sustainable_development_goals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_sustainable_development_goals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_sustainable_development_goals_id_seq OWNED BY public.product_sustainable_development_goals.id;
 
 
 --
@@ -3533,6 +3619,13 @@ ALTER TABLE ONLY public.organizations_locations ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: organizations_products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_products ALTER COLUMN id SET DEFAULT nextval('public.organizations_products_id_seq'::regclass);
+
+
+--
 -- Name: organizations_states id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3610,6 +3703,13 @@ ALTER TABLE ONLY public.principle_descriptions ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: product_building_blocks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_building_blocks ALTER COLUMN id SET DEFAULT nextval('public.product_building_blocks_id_seq'::regclass);
+
+
+--
 -- Name: product_classifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3638,10 +3738,24 @@ ALTER TABLE ONLY public.product_product_relationships ALTER COLUMN id SET DEFAUL
 
 
 --
+-- Name: product_sectors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sectors ALTER COLUMN id SET DEFAULT nextval('public.product_sectors_id_seq'::regclass);
+
+
+--
 -- Name: product_suites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_suites ALTER COLUMN id SET DEFAULT nextval('public.product_suites_id_seq'::regclass);
+
+
+--
+-- Name: product_sustainable_development_goals id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sustainable_development_goals ALTER COLUMN id SET DEFAULT nextval('public.product_sustainable_development_goals_id_seq'::regclass);
 
 
 --
@@ -4163,6 +4277,14 @@ ALTER TABLE ONLY public.organizations
 
 
 --
+-- Name: organizations_products organizations_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_products
+    ADD CONSTRAINT organizations_products_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: organizations_states organizations_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4251,6 +4373,14 @@ ALTER TABLE ONLY public.principle_descriptions
 
 
 --
+-- Name: product_building_blocks product_building_blocks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_building_blocks
+    ADD CONSTRAINT product_building_blocks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: product_classifications product_classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4283,11 +4413,27 @@ ALTER TABLE ONLY public.product_product_relationships
 
 
 --
+-- Name: product_sectors product_sectors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sectors
+    ADD CONSTRAINT product_sectors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: product_suites product_suites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_suites
     ADD CONSTRAINT product_suites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_sustainable_development_goals product_sustainable_development_goals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sustainable_development_goals
+    ADD CONSTRAINT product_sustainable_development_goals_pkey PRIMARY KEY (id);
 
 
 --
@@ -6600,6 +6746,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200819002149'),
 ('20200819201841'),
 ('20200824180728'),
-('20200824180910');
+('20200824180910'),
+('20200825202250'),
+('20200825202909'),
+('20200826134558'),
+('20200826134741'),
+('20200826134916'),
+('20200826205015');
+
 
 

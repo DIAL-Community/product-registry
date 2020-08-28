@@ -82,3 +82,6 @@ setEnv.sh
 .env
 
 prod/ssl/data/*
+
+.history
+lib/tasks/local_setup.rake

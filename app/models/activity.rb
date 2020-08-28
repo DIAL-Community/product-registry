@@ -1,4 +1,5 @@
 class Activity < ApplicationRecord
+  include Auditable
 
   attr_accessor :question_text
   

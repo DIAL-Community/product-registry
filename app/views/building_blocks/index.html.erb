@@ -37,6 +37,9 @@
     <div class="float-right">
       <% if user_signed_in? && policy(BuildingBlock).create_allowed? %>
         <%= link_to t('view.general.create'), new_building_block_path, :class => 'small ml-1' %>
+        <span class="small mr-1">&nbsp;|</span>
+        <%= link_to t('view.organization.index.view-audit').titlecase,
+                    audits_path(type: "BuildingBlock"), class: 'small mr-1' %>
       <% end %>
     </div>
   </div>
