@@ -10,7 +10,7 @@ class ProductsController < ApplicationController
   def map
     @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
     @product_relationships = ProductProductRelationship.order(:id).eager_load(:from_product, :to_product)
-    render layout: 'layouts/raw'
+    render(layout: 'layouts/raw')
   end
 
   def favorite_product
@@ -51,7 +51,7 @@ class ProductsController < ApplicationController
     if params[:without_paging]
       @products = Product.name_contains(params[:search])
                          .order(Product.arel_table['name'].lower.asc)
-      authorize @products, :view_allowed?
+      authorize(@products, :view_allowed?)
       return
     end
 
@@ -91,7 +91,7 @@ class ProductsController < ApplicationController
                          .paginate(page: current_page, per_page: 20)
                          .order(:name)
 
-    authorize @products, :view_allowed?
+    authorize(@products, :view_allowed?)
   end
 
   def count
@@ -109,14 +109,14 @@ class ProductsController < ApplicationController
       product_count = product_count.where(id: session[:product_filtered_ids])
     end
 
-    authorize Product, :view_allowed?
-    render json: product_count.count
+    authorize(Product, :view_allowed?)
+    render(json: product_count.count)
   end
 
   # GET /products/1
   # GET /products/1.json
   def show
-    authorize @product, :view_allowed?
+    authorize(@product, :view_allowed?)
     # All of this data will be passed to the launch partial and used by javascript
     @jenkins_url = Rails.application.secrets.jenkins_url
     @jenkins_user = Rails.application.secrets.jenkins_user
@@ -135,33 +135,41 @@ class ProductsController < ApplicationController
     if !@maturity_scores.nil?
       @maturity_scores = @maturity_scores[:category_scores]
     end
-    
   end
 
   # GET /products/new
   def new
-    authorize Product, :create_allowed?
+    authorize(Product, :create_allowed?)
     @product = Product.new
     @product_description = ProductDescription.new
   end
 
   # GET /products/1/edit
   def edit
-    authorize @product, :mod_allowed?
+    authorize(@product, :mod_allowed?)
   end
 
   # POST /products
   # POST /products.json
   def create
-    authorize Product, :create_allowed?
+    authorize(Product, :create_allowed?)
     @product = Product.new(product_params)
     @product.set_current_user(current_user)
     @product_description = ProductDescription.new
+    @product_description.set_current_user(current_user)
 
     if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
-        @products.organizations.push(organization)
+
+        next if organization.nil?
+
+        organization_product = OrganizationsProduct.new
+        organization_product.organization = organization
+        organization_product.product = @product
+        organization_product.association_source = OrganizationsProduct.RIGHT
+
+        @product.organizations_products.push(organization_product)
       end
     end
 
@@ -184,20 +192,36 @@ class ProductsController < ApplicationController
     if params[:selected_interoperable_products].present?
       params[:selected_interoperable_products].keys.each do |product_id|
         to_product = Product.find(product_id)
-        @product.interoperates_with.push(to_product)
+
+        next if to_product.nil?
+
+        interoperable_product = ProductProductRelationship.new
+        interoperable_product.relationship_type = ProductProductRelationship.relationship_types[:interoperates_with]
+        interoperable_product.to_product = to_product
+        interoperable_product.from_product = @product
+
+        @product.interop_relationships.push(interoperable_product)
       end
     end
 
     if params[:selected_included_products].present?
       params[:selected_included_products].keys.each do |product_id|
         to_product = Product.find(product_id)
-        @product.includes.push(to_product)
+
+        next if to_product.nil?
+
+        contains_product = ProductProductRelationship.new
+        contains_product.relationship_type = ProductProductRelationship.relationship_types[:contains]
+        contains_product.to_product = to_product
+        contains_product.from_product = @product
+
+        @product.include_relationships << contains_product
       end
     end
 
-    if params[:selected_building_blocks].present?
+    if params[:selected_building_blocks].present? && policy(@product).adding_mapping_allowed?
       params[:selected_building_blocks].keys.each do |building_block_id|
-        new_prod_bb = ProductsBuildingBlock.new
+        new_prod_bb = ProductBuildingBlock.new
         new_prod_bb.building_block_id = building_block_id
 
         mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
@@ -238,7 +262,7 @@ class ProductsController < ApplicationController
     end
 
     respond_to do |format|
-      if !@product.errors.any? && @product.save
+      if !@product.errors.any? && @product.save!
 
         if product_params[:product_description].present?
           @product_description.product_id = @product.id
@@ -247,15 +271,19 @@ class ProductsController < ApplicationController
           @product_description.save
         end
 
-        format.html { redirect_to @product,
-                      flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) }}
+        format.html do
+          redirect_to @product,
+                      flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) }
+        end
         format.json { render :show, status: :created, location: @product }
       else
-        errMsg = ""
+        logger.error("Create returning errors: #{@product.errors}.")
+
+        error_message = ""
         @product.errors.each do |attr, err|
-          errMsg = err
+          error_message = err
         end
-        format.html { redirect_to new_product_url, flash: { error: errMsg } }
+        format.html { redirect_to new_product_url, flash: { error: error_message } }
         format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
@@ -264,16 +292,36 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    authorize @product, :mod_allowed?
-  
-    organizations = Set.new
+    authorize(@product, :mod_allowed?)
+
     if params[:selected_organizations].present?
-      params[:selected_organizations].keys.each do |organization_id|
+      existing_orgs = OrganizationsProduct.where(product_id: @product.id)
+                                          .pluck('organization_id')
+      ui_orgs = params[:selected_organizations].keys.map(&:to_i)
+
+      removed_orgs = existing_orgs - ui_orgs
+      logger.debug("Removing: #{removed_orgs} product - organizations relationship.")
+
+      removed_orgs.each do |organization_id|
+        @product.organizations.delete(organization_id)
+      end
+
+      added_orgs = ui_orgs - existing_orgs
+      logger.debug("Adding: #{added_orgs} product - organizations relationship.")
+
+      added_orgs.each do |organization_id|
         organization = Organization.find(organization_id)
-        organizations.add(organization)
+
+        next if organization.nil?
+
+        organization_product = OrganizationsProduct.new
+        organization_product.organization = organization
+        organization_product.product = @product
+        organization_product.association_source = OrganizationsProduct.RIGHT
+
+        @product.organizations_products << organization_product
       end
     end
-    @product.organizations = organizations.to_a
 
     if params[:selected_sectors].present? &&
        (policy(@product).removing_mapping_allowed? || policy(@product).adding_mapping_allowed?)
@@ -421,8 +469,10 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.errors.none? && @product.update(product_params)
-        format.html { redirect_to @product,
-                      flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }}
+        format.html do
+          redirect_to @product,
+                      flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }
+        end
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }
@@ -434,21 +484,23 @@ class ProductsController < ApplicationController
   # DELETE /products/1
   # DELETE /products/1.json
   def destroy
-    authorize @product, :mod_allowed?
+    authorize(@product, :mod_allowed?)
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.product').to_s.humanize) }}
+      format.html do
+        redirect_to products_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.product').to_s.humanize) }
+      end
       format.json { head :no_content }
     end
   end
 
   def duplicates
-    @products = Array.new
+    @products = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
+      if current_slug != original_slug
         @products = Product.where(slug: current_slug)
       end
 
@@ -456,8 +508,8 @@ class ProductsController < ApplicationController
         @products = Product.where(':other_name = ANY(aliases)', other_name: params[:current])
       end
     end
-    authorize Product, :view_allowed?
-    render json: @products, :only => [:name]
+    authorize(Product, :view_allowed?)
+    render(json: @products, :only => [:name])
   end
 
   def productlist
@@ -554,10 +606,9 @@ class ProductsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_product
-      if !params[:id].scan(/\D/).empty?
-        @product = Product.find_by(slug: params[:id]) or not_found
-      else
-        @product = Product.find_by(id: params[:id]) or not_found
+      @product = Product.find_by(slug: params[:id])
+      if @product.nil? && params[:id].scan(/\D/).empty?
+        @product = Product.find_by(id: params[:id])
       end
       @product_description = ProductDescription.where(product_id: @product, locale: I18n.locale)
                                                .first
@@ -572,6 +623,7 @@ class ProductsController < ApplicationController
 
     def set_current_user
       @product.set_current_user(current_user)
+      @product_description.set_current_user(current_user)
     end
 
     def load_maturity

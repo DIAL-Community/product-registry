@@ -5,11 +5,14 @@ class Product < ApplicationRecord
 
   has_many :product_descriptions
   has_many :product_versions
-  has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products
+  has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products,
+                          after_add: :association_add, before_remove: :association_remove
   has_many :product_classifications
   has_many :classifications, through: :product_classifications
 
-  has_and_belongs_to_many :organizations, after_add: :association_add, before_remove: :association_remove
+  has_many :organizations_products, after_add: :association_add, before_remove: :association_remove
+  has_many :organizations, through: :organizations_products,
+                           after_add: :association_add, before_remove: :association_remove
 
   has_many :product_sectors, dependent: :delete_all,
                              after_add: :association_add, before_remove: :association_remove
@@ -35,12 +38,14 @@ class Product < ApplicationRecord
                                            after_add: :association_add, before_remove: :association_remove
 
   has_many :include_relationships, -> { where(relationship_type: 'composed') },
-           foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
+           foreign_key: :from_product_id, class_name: 'ProductProductRelationship',
+           after_add: :association_add, before_remove: :association_remove
   has_many :includes, through: :include_relationships, source: :to_product,
                       after_add: :association_add, before_remove: :association_remove
 
   has_many :interop_relationships, -> { where(relationship_type: 'interoperates') },
-           foreign_key: :from_product_id, class_name: 'ProductProductRelationship'
+           foreign_key: :from_product_id, class_name: 'ProductProductRelationship',
+           after_add: :association_add, before_remove: :association_remove
   has_many :interoperates_with, through: :interop_relationships, source: :to_product,
                                 after_add: :association_add, before_remove: :association_remove
 

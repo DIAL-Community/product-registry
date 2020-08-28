@@ -1,4 +1,5 @@
 class Play < ApplicationRecord
+  include Auditable
   attr_accessor :play_outcomes, :play_description, :play_prerequisites, :playbook_id, :activity_id
 
   has_many :play_descriptions, dependent: :destroy

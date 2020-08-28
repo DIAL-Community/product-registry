@@ -1,7 +1,7 @@
 class Organization < ApplicationRecord
-  enum org_type: { endorser: 'endorser', mni: 'mni', product: 'product' }, _suffix: true
-
   include Auditable
+
+  enum org_type: { endorser: 'endorser', mni: 'mni', product: 'product' }, _suffix: true
 
   attr_accessor :organization_description
 
@@ -36,12 +36,17 @@ class Organization < ApplicationRecord
                                      dependent: :delete_all,
                                      after_add: :association_add,
                                      before_remove: :association_remove
-  has_many :organizations_contacts
-  has_many :contacts, through: :organizations_contacts
-  has_many :organizations_products
-  has_many :products, through: :organizations_products
+
+  has_many :organizations_contacts, after_add: :association_add, before_remove: :association_remove
+  has_many :contacts, through: :organizations_contacts,
+                      after_add: :association_add, before_remove: :association_remove
+
+  has_many :organizations_products, after_add: :association_add, before_remove: :association_remove
+  has_many :products, through: :organizations_products,
+                      after_add: :association_add, before_remove: :association_remove
+
   has_many :organization_descriptions, dependent: :destroy
-  has_many :offices, dependent: :destroy
+  has_many :offices, dependent: :destroy, after_add: :association_add, before_remove: :association_remove
 
   acts_as_commontable
 

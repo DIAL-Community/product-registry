@@ -117,7 +117,7 @@
 
 <script>
   <% use_case.sdg_targets.order("target_number").each do |sdg_target| %>
-    addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.target_number %> : <%= sdg_target.name %>');
+    addSdgTarget('<%= sdg_target.id %>', '<%= sdg_target.target_number %> : <%= sdg_target.name[0..40] %>');
   <% end %>
   <% use_case.tags.each {|tag| %>
     tagUseCase('', '<%= tag %>');
