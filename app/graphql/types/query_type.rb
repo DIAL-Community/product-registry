@@ -7,12 +7,11 @@ module Types
     end
 
     field :playbook, Types::PlaybookType, null: false do
-      argument :id, ID, required: true
+      argument :slug, String, required: true
     end
 
-    def playbook(id:)
-      puts Playbook.find(id).inspect
-      Playbook.find(id)
+    def playbook(slug:)
+      Playbook.find_by(slug: slug)
     end
 
     field :me, Types::UserType, null: false 

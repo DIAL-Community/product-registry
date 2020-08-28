@@ -9,5 +9,7 @@ module Types
     field :resources, GraphQL::Types::JSON, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
+    field :task_descriptions, [Types::TaskDescriptionType], null: true
   end
 end
