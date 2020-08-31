@@ -19,7 +19,7 @@ class AboutController < ApplicationController
 
     db_health = system(sys_command)
 
-    render json: {"health": db_health}
+    render json: {"psql": db_health}
   end
 
 end
