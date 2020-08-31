@@ -13,11 +13,14 @@ class UseCaseStepsController < ApplicationController
     @ucs_desc = UseCaseStepDescription.new
     if params[:use_case_id]
       if !params[:use_case_id].scan(/\D/).empty?
-        @use_case = UseCase.find_by(slug: params[:id])
+        @use_case = UseCase.find_by(slug: params[:use_case_id])
       else
-        @use_case = UseCase.find_by(id: params[:id])
+        @use_case = UseCase.find_by(id: params[:use_case_id])
       end
-      @use_case_step.use_case = @use_case
+      if !@use_case.nil?
+        @use_case_step.use_case = @use_case
+        @use_case_step.use_case_id = @use_case.id
+      end
     end
   end
 
