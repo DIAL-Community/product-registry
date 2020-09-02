@@ -69,8 +69,7 @@ class BuildingBlocksController < ApplicationController
         new_prod_bb.product_id = product_id
 
         mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-        if current_user.roles.include?(User.user_roles[:admin]) ||
-           current_user.roles.include?(User.user_roles[:content_editor])
+        unless policy(@building_block).beta_only?
           mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
         end
         new_prod_bb.mapping_status = mapping_status
@@ -158,8 +157,7 @@ class BuildingBlocksController < ApplicationController
           new_prod_bb.product_id = product_id
 
           mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-          if current_user.roles.include?(User.user_roles[:admin]) ||
-             current_user.roles.include?(User.user_roles[:content_editor])
+          unless policy(@building_block).beta_only?
             mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
           end
           new_prod_bb.mapping_status = mapping_status

@@ -7,6 +7,8 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
+    return [] if user.nil?
+
     if user.roles.include?(User.user_roles[:admin]) ||
          user.roles.include?(User.user_roles[:principle]) ||
          user.roles.include?(User.user_roles[:mni])
@@ -63,6 +65,8 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def export_contacts_allowed?
+    return false if user.nil?
+
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:principle]) ||
       user.roles.include?(User.user_roles[:mni])
