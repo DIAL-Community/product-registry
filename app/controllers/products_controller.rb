@@ -179,8 +179,7 @@ class ProductsController < ApplicationController
         new_prod_sector.sector_id = sector_id
 
         mapping_status = ProductSector.mapping_status_types[:BETA]
-        if current_user.roles.include?(User.user_roles[:admin]) ||
-           current_user.roles.include?(User.user_roles[:content_editor])
+        unless policy(@product).beta_only?
           mapping_status = ProductSector.mapping_status_types[:VALIDATED]
         end
         new_prod_sector.mapping_status = mapping_status
@@ -225,8 +224,7 @@ class ProductsController < ApplicationController
         new_prod_bb.building_block_id = building_block_id
 
         mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-        if current_user.roles.include?(User.user_roles[:admin]) ||
-           current_user.roles.include?(User.user_roles[:content_editor])
+        unless policy(@product).beta_only?
           mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
         end
         new_prod_bb.mapping_status = mapping_status
@@ -241,8 +239,7 @@ class ProductsController < ApplicationController
         new_prod_sdg.sustainable_development_goal_id = sustainable_development_goal_id
 
         mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
-        if current_user.roles.include?(User.user_roles[:admin]) ||
-           current_user.roles.include?(User.user_roles[:content_editor])
+        unless policy(@product).beta_only?
           mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
         end
         new_prod_sdg.mapping_status = mapping_status
@@ -348,8 +345,7 @@ class ProductsController < ApplicationController
           new_prod_sector.sector_id = sector_id
 
           mapping_status = ProductSector.mapping_status_types[:BETA]
-          if current_user.roles.include?(User.user_roles[:admin]) ||
-             current_user.roles.include?(User.user_roles[:content_editor])
+          unless policy(@product).beta_only?
             mapping_status = ProductSector.mapping_status_types[:VALIDATED]
           end
           new_prod_sector.mapping_status = mapping_status
@@ -402,8 +398,7 @@ class ProductsController < ApplicationController
           new_prod_bb.building_block_id = bb_id
 
           mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-          if current_user.roles.include?(User.user_roles[:admin]) ||
-             current_user.roles.include?(User.user_roles[:content_editor])
+          unless policy(@product).beta_only?
             mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
           end
           new_prod_bb.mapping_status = mapping_status
@@ -439,8 +434,7 @@ class ProductsController < ApplicationController
           new_prod_sdg.sustainable_development_goal_id = sdg_id
 
           mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
-          if current_user.roles.include?(User.user_roles[:admin]) ||
-             current_user.roles.include?(User.user_roles[:content_editor])
+          unless policy(@product).beta_only?
             mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
           end
           new_prod_sdg.mapping_status = mapping_status
