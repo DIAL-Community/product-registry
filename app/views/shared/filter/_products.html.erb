@@ -45,7 +45,7 @@
         <%= label_tag "origins", t('view.product.index.sources') %>
         <%= collection_select(nil, "origins", Origin.all.order(:name), :id, :name,
             { selected: params[:name], include_blank: t('view.filternav.title.origin')},
-            { class: 'form-control filter-element' }) %>
+            { class: 'form-control filter-element text-muted' }) %>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
         <%= label_tag "product_type", t('view.product.index.types') %>
-        <select class="form-control filter-element" id="product_type" name="product_type">
+        <select class="form-control filter-element text-muted" id="product_type" name="product_type">
           <option value>All</option>
           <option value="product">Product</option>
           <option value="dataset">Dataset</option>

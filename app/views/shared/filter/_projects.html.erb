@@ -32,4 +32,17 @@
   <div class="row">
     <div class="col-12 badges"></div>
   </div>
+  <div class="row">
+    <div class="col-12 ml-1">
+      <div class="form-group mb-1">
+        <%= label_tag "project_origins", t('view.product.index.sources') %>
+        <%= collection_select(nil, "project_origins", Origin.all.order(:name), :id, :name,
+            { selected: params[:name], include_blank: t('view.filternav.title.project-origin')},
+            { class: 'form-control filter-element text-muted' }) %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 badges"></div>
+  </div>
 </div>

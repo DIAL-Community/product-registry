@@ -239,6 +239,7 @@ class ApplicationController < ActionController::Base
     all_filters["origins"] = sanitize_session_values 'origins'
     all_filters["organizations"] = sanitize_session_values 'organizations'
     all_filters["projects"] = sanitize_session_values 'projects'
+    all_filters["project_origins"] = sanitize_session_values 'project_origins'
 
     all_filters["endorser_only"] = sanitize_session_value 'endorser_only'
     all_filters["aggregator_only"] = sanitize_session_value 'aggregator_only'
@@ -255,9 +256,9 @@ class ApplicationController < ActionController::Base
 
     filter_set = !(all_filters["countries"].empty? && all_filters["products"].empty? && all_filters["sectors"].empty? && 
                      all_filters["years"].empty? && all_filters["organizations"].empty? && all_filters["origins"].empty? && 
-                     all_filters["projects"].empty? && all_filters["tags"].empty? && all_filters["sdgs"].empty? && 
-                     all_filters["use_cases"].empty? && all_filters["workflows"].empty? && all_filters["bbs"].empty? &&
-                     all_filters["product_type"].empty?) ||
+                     all_filters["projects"].empty? && all_filters["project_origins"].empty? && all_filters["tags"].empty? && 
+                     all_filters["sdgs"].empty? && all_filters["use_cases"].empty? && all_filters["workflows"].empty? && 
+                     all_filters["bbs"].empty? && all_filters["product_type"].empty?) ||
                      all_filters["endorser_only"] || all_filters["aggregator_only"] || 
                      all_filters["with_maturity_assessment"] || all_filters["is_launchable"]
 

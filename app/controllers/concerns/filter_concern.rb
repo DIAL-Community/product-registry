@@ -204,18 +204,19 @@ module FilterConcern
       all_filters, filter_set = sanitize_all_filters
     end
 
+    all_projects = Project.order(:slug)
     if !filter_set
-      return Project.order(:slug)
+      return all_projects
     end
 
-    org_ids.nil? && org_ids = get_organizations_from_filters(all_filters)
-    org_filtered = (!all_filters["years"].empty? || !all_filters["organizations"].empty? || all_filters["endorser_only"] || all_filters["aggregator_only"] ||
-                    !all_filters["sectors"].empty? || !all_filters["countries"].empty?)
+    if !all_filters["project_origins"].empty?
+      all_projects = all_projects.where('origin_id in (?)', all_filters["project_origins"])
+    end
 
-    org_project_ids = []
-    if !org_ids.empty? && org_filtered
-      org_project_ids += Project.joins(:organizations)
-                                .where('organizations.id in (?)', org_ids)
+    country_project_ids = []
+    if !all_filters["countries"].empty?
+      country_project_ids = all_projects.joins(:locations)
+                                .where('location_id in (?)', all_filters["countries"])
                                 .ids
     end
 
@@ -242,13 +243,16 @@ module FilterConcern
     product_project_ids = []
     product_ids = filter_and_intersect_arrays([sdg_products, bb_products, products])
     if !products.nil? && !products.empty?
-      product_project_ids += Project.joins(:products)
+      product_project_ids += all_projects.joins(:products)
                                     .where('products.id in (?)', products)
                                     .ids
     end
-    project_filtered_ids = filter_and_intersect_arrays([all_filters["projects"], org_project_ids, product_project_ids])
 
-    return Project.where(id: project_filtered_ids).order(:slug)
+    project_filtered_ids = filter_and_intersect_arrays([all_filters["projects"], country_project_ids, product_project_ids])
+
+    projects = all_projects.where(id: project_filtered_ids).order(:slug)
+
+    return projects
   end
 
   def filter_products(all_filters=nil, filter_set=nil, project_product_ids = nil, org_ids = nil, org_products = nil, products = nil)
@@ -286,7 +290,7 @@ module FilterConcern
 
     products.nil? && products = get_products_from_filters(all_filters)
 
-    products + filter_and_intersect_arrays([sdg_products, bb_products, project_product_ids])
+    filter_and_intersect_arrays([products, sdg_products, bb_products, project_product_ids])
   end
 
   def filter_organizations(all_filters=nil, filter_set=nil, project_product_ids = nil, org_ids = nil, org_products = nil, products = nil)
@@ -349,12 +353,13 @@ module FilterConcern
     end
 
     org_ids.nil? && org_ids = get_organizations_from_filters(all_filters)
+
     other_filtered = !(all_filters["products"].empty? && all_filters["origins"].empty? && all_filters["projects"].empty? && all_filters["tags"].empty? && all_filters["product_type"].empty? &&
-                    all_filters["sdgs"].empty? && all_filters["use_cases"].empty? && all_filters["workflows"].empty? && all_filters["bbs"].empty?) ||
+                    all_filters["sdgs"].empty? && all_filters["use_cases"].empty? && all_filters["workflows"].empty? && all_filters["bbs"].empty? && all_filters["countries"].empty?) ||
                     all_filters["with_maturity_assessment"] || all_filters["is_launchable"]
 
     if (other_filtered)
-      filter_org_ids = filter_and_intersect_arrays([org_products + org_projects, org_ids])
+      filter_org_ids = filter_and_intersect_arrays([org_projects + org_products + org_ids])
     else
       filter_org_ids = org_ids
     end
@@ -408,6 +413,7 @@ module FilterConcern
                            .not('organizations.id in (select organization_id from organizations_products)')
       end
     end
+
     org_list.ids
   end
 
@@ -415,10 +421,15 @@ module FilterConcern
     project_product_ids = []
 
     org_filtered = (!all_filters["years"].empty? || !all_filters["organizations"].empty? || all_filters["endorser_only"] || 
-              all_filters["aggregator_only"] || !all_filters["sectors"].empty? || !all_filters["countries"].empty?)
+              all_filters["aggregator_only"] || !all_filters["sectors"].empty?)
 
-    !all_filters["projects"].empty? && project_product_ids = Product.joins(:projects)
-                                                     .where('projects.id in (?)', all_filters["projects"])
+    country_filters = []
+    !all_filters["countries"].empty? && country_filters += Project.joins(:locations)
+                                                     .where('locations.id in (?)', all_filters["countries"])
+                                                     .ids
+
+    !all_filters["projects"].empty? && project_product_ids += Product.joins(:projects)
+                                                     .where('projects.id in (?)', all_filters["projects"]+country_filters)
                                                      .ids
 
     # Filter out project based on organization filter above.
@@ -448,6 +459,11 @@ module FilterConcern
 
   def get_products_from_filters(all_filters)
     # Check to see if the filter has already been set
+    product_filter_set = (!all_filters["products"].empty? || !all_filters["origins"].empty? ||
+                            !all_filters["tags"].empty? || !all_filters["sectors"].empty? ||
+                            all_filters["with_maturity_assessment"] || all_filters["is_launchable"] ||
+                            !all_filters["product_type"].empty?)
+
     product_list = []
     if session[:updated_prod_filter].nil? || session[:updated_prod_filter].to_s.downcase == 'true'
       filter_products = Product.where(is_child: false)
@@ -490,21 +506,14 @@ module FilterConcern
                                          .where('sectors.id in (?)', all_filters["sectors"])
       end
 
-      product_filter_set = (!all_filters["products"].empty? || !all_filters["origins"].empty? ||
-                            !all_filters["tags"].empty? || !all_filters["sectors"].empty? ||
-                            all_filters["with_maturity_assessment"] || all_filters["is_launchable"] ||
-                            all_filters["product_type"])
-
-      if product_filter_set
-        product_list += filter_products.ids
-      end
+      product_list += filter_products.ids
 
       # Set the cookies for caching
       session[:updated_prod_filter] = false
       session[:filter_products] = product_list.join(',')
       session[:prod_filter_set] = product_filter_set
     else
-      product_list = session[:filter_products].split(',').map(&:to_i)
+      product_filter_set && product_list = session[:filter_products].split(',').map(&:to_i)
     end
     product_list
   end
