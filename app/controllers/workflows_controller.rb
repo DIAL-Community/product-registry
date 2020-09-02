@@ -3,6 +3,7 @@ class WorkflowsController < ApplicationController
   
   before_action :set_workflow, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_current_user, only: [:edit, :update, :destroy]
 
   # GET /workflows
   # GET /workflows.json
@@ -56,7 +57,9 @@ class WorkflowsController < ApplicationController
   def create
     authorize Workflow, :mod_allowed?
     @workflow = Workflow.new(workflow_params)
+    @workflow.set_current_user(current_user)
     @wf_desc = WorkflowDescription.new
+    @wf_desc.set_current_user(current_user)
 
     if params[:selected_building_blocks].present?
       params[:selected_building_blocks].keys.each do |building_block_id|
@@ -154,6 +157,11 @@ class WorkflowsController < ApplicationController
       if !@wf_desc
         @wf_desc = WorkflowDescription.new
       end
+    end
+
+    def set_current_user
+      @workflow.set_current_user(current_user)
+      @wf_desc.set_current_user(current_user)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

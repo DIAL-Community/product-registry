@@ -487,6 +487,7 @@ en:
         building-block: Filter by Building Block
         country: Filter by Country
         origin: Filter by Product Origin
+        project-origin: Filter by Project Origin
         type: Filter by Product Type
         product: Filter by Product
         project: Filter by Project
@@ -511,6 +512,9 @@ en:
       origins:
         one: Product Source
         other: Product Sources
+      project_origins:
+        one: Project Source
+        other: Project Sources
       product-type: Product Type
       products:
         one: Product

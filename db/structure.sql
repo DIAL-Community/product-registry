@@ -353,6 +353,37 @@ ALTER SEQUENCE public.activities_tasks_id_seq OWNED BY public.activities_tasks.i
 
 
 --
+-- Name: activity_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.activity_descriptions (
+    id bigint NOT NULL,
+    activity_id bigint,
+    locale character varying NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL
+);
+
+
+--
+-- Name: activity_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.activity_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: activity_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.activity_descriptions_id_seq OWNED BY public.activity_descriptions.id;
+
+
+--
 -- Name: aggregator_capabilities; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -444,7 +475,7 @@ CREATE TABLE public.building_block_descriptions (
     id bigint NOT NULL,
     building_block_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -597,8 +628,7 @@ CREATE TABLE public.category_indicator_descriptions (
     id bigint NOT NULL,
     category_indicator_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    description_html character varying
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -692,6 +722,40 @@ CREATE SEQUENCE public.cities_id_seq
 --
 
 ALTER SEQUENCE public.cities_id_seq OWNED BY public.cities.id;
+
+
+--
+-- Name: ckeditor_assets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ckeditor_assets (
+    id bigint NOT NULL,
+    data_file_name character varying NOT NULL,
+    data_content_type character varying,
+    data_file_size integer,
+    type character varying(30),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ckeditor_assets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ckeditor_assets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ckeditor_assets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ckeditor_assets_id_seq OWNED BY public.ckeditor_assets.id;
 
 
 --
@@ -1023,7 +1087,7 @@ CREATE TABLE public.glossaries (
     name character varying NOT NULL,
     slug character varying NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1094,8 +1158,7 @@ CREATE TABLE public.maturity_rubric_descriptions (
     id bigint NOT NULL,
     maturity_rubric_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    description_html character varying
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -1229,7 +1292,7 @@ CREATE TABLE public.organization_descriptions (
     id bigint NOT NULL,
     organization_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1281,7 +1344,8 @@ CREATE TABLE public.organizations_contacts (
     contact_id bigint NOT NULL,
     started_at timestamp without time zone,
     ended_at timestamp without time zone,
-    id bigint NOT NULL
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
 
 
@@ -1392,8 +1456,29 @@ ALTER SEQUENCE public.organizations_locations_id_seq OWNED BY public.organizatio
 CREATE TABLE public.organizations_products (
     organization_id bigint NOT NULL,
     product_id bigint NOT NULL,
-    org_type public.org_type_orig DEFAULT 'owner'::public.org_type_orig
+    org_type public.org_type_orig DEFAULT 'owner'::public.org_type_orig,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: organizations_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_products_id_seq OWNED BY public.organizations_products.id;
 
 
 --
@@ -1511,9 +1596,9 @@ CREATE TABLE public.playbook_descriptions (
     id bigint NOT NULL,
     playbook_id bigint,
     locale character varying NOT NULL,
-    overview jsonb DEFAULT '{}'::jsonb NOT NULL,
-    audience jsonb DEFAULT '{}'::jsonb NOT NULL,
-    outcomes jsonb DEFAULT '{}'::jsonb NOT NULL
+    overview character varying DEFAULT ''::character varying NOT NULL,
+    audience character varying DEFAULT ''::character varying NOT NULL,
+    outcomes character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -1742,7 +1827,7 @@ CREATE TABLE public.principle_descriptions (
     id bigint NOT NULL,
     digital_principle_id bigint,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -1773,8 +1858,29 @@ CREATE TABLE public.product_building_blocks (
     building_block_id bigint NOT NULL,
     product_id bigint NOT NULL,
     link_type character varying DEFAULT 'Beta'::character varying,
-    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL
+    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: product_building_blocks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_building_blocks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_building_blocks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_building_blocks_id_seq OWNED BY public.product_building_blocks.id;
 
 
 --
@@ -1815,7 +1921,7 @@ CREATE TABLE public.product_descriptions (
     id bigint NOT NULL,
     product_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1879,7 +1985,8 @@ CREATE TABLE public.product_product_relationships (
     id bigint NOT NULL,
     from_product_id bigint NOT NULL,
     to_product_id bigint NOT NULL,
-    relationship_type public.relationship_type NOT NULL
+    relationship_type public.relationship_type NOT NULL,
+    slug character varying NOT NULL
 );
 
 
@@ -1909,8 +2016,29 @@ ALTER SEQUENCE public.product_product_relationships_id_seq OWNED BY public.produ
 CREATE TABLE public.product_sectors (
     product_id bigint NOT NULL,
     sector_id bigint NOT NULL,
-    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL
+    mapping_status public.mapping_status_type DEFAULT 'BETA'::public.mapping_status_type NOT NULL,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: product_sectors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_sectors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_sectors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_sectors_id_seq OWNED BY public.product_sectors.id;
 
 
 --
@@ -1963,8 +2091,29 @@ CREATE TABLE public.product_suites_product_versions (
 CREATE TABLE public.product_sustainable_development_goals (
     product_id bigint NOT NULL,
     sustainable_development_goal_id bigint NOT NULL,
-    mapping_status public.mapping_status_type NOT NULL
+    mapping_status public.mapping_status_type NOT NULL,
+    id bigint NOT NULL,
+    slug character varying NOT NULL
 );
+
+
+--
+-- Name: product_sustainable_development_goals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_sustainable_development_goals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_sustainable_development_goals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_sustainable_development_goals_id_seq OWNED BY public.product_sustainable_development_goals.id;
 
 
 --
@@ -2067,7 +2216,7 @@ CREATE TABLE public.project_descriptions (
     id bigint NOT NULL,
     project_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2308,8 +2457,7 @@ CREATE TABLE public.rubric_category_descriptions (
     id bigint NOT NULL,
     rubric_category_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    description_html character varying
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -2482,8 +2630,8 @@ CREATE TABLE public.stylesheets (
     id bigint NOT NULL,
     portal character varying,
     background_color character varying,
-    about_page jsonb DEFAULT '{}'::jsonb NOT NULL,
-    footer_content jsonb DEFAULT '{}'::jsonb NOT NULL,
+    about_page character varying DEFAULT ''::character varying NOT NULL,
+    footer_content character varying DEFAULT ''::character varying NOT NULL,
     header_logo character varying
 );
 
@@ -2549,7 +2697,7 @@ CREATE TABLE public.tag_descriptions (
     id bigint NOT NULL,
     tag_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -2612,9 +2760,9 @@ CREATE TABLE public.task_descriptions (
     id bigint NOT NULL,
     task_id bigint,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    prerequisites jsonb DEFAULT '{}'::jsonb NOT NULL,
-    outcomes jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL,
+    prerequisites character varying DEFAULT ''::character varying NOT NULL,
+    outcomes character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -2809,7 +2957,7 @@ CREATE TABLE public.use_case_descriptions (
     id bigint NOT NULL,
     use_case_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -2840,7 +2988,7 @@ CREATE TABLE public.use_case_headers (
     id bigint NOT NULL,
     use_case_id bigint NOT NULL,
     locale character varying NOT NULL,
-    header jsonb DEFAULT '{}'::jsonb NOT NULL
+    header character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -2871,7 +3019,7 @@ CREATE TABLE public.use_case_step_descriptions (
     id bigint NOT NULL,
     use_case_step_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -3075,7 +3223,10 @@ CREATE TABLE public.users (
     saved_use_cases bigint[] DEFAULT '{}'::bigint[],
     saved_projects bigint[] DEFAULT '{}'::bigint[],
     saved_urls character varying[] DEFAULT '{}'::character varying[],
-    roles public.user_role[] DEFAULT '{}'::public.user_role[]
+    roles public.user_role[] DEFAULT '{}'::public.user_role[],
+    authentication_token text,
+    authentication_token_created_at timestamp without time zone,
+    user_products bigint[] DEFAULT '{}'::bigint[]
 );
 
 
@@ -3153,7 +3304,7 @@ CREATE TABLE public.workflow_descriptions (
     id bigint NOT NULL,
     workflow_id bigint NOT NULL,
     locale character varying NOT NULL,
-    description jsonb DEFAULT '{}'::jsonb NOT NULL
+    description character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -3251,6 +3402,13 @@ ALTER TABLE ONLY public.activities_tasks ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: activity_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_descriptions ALTER COLUMN id SET DEFAULT nextval('public.activity_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: aggregator_capabilities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3311,6 +3469,13 @@ ALTER TABLE ONLY public.category_indicators ALTER COLUMN id SET DEFAULT nextval(
 --
 
 ALTER TABLE ONLY public.cities ALTER COLUMN id SET DEFAULT nextval('public.cities_id_seq'::regclass);
+
+
+--
+-- Name: ckeditor_assets id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('public.ckeditor_assets_id_seq'::regclass);
 
 
 --
@@ -3454,6 +3619,13 @@ ALTER TABLE ONLY public.organizations_locations ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: organizations_products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_products ALTER COLUMN id SET DEFAULT nextval('public.organizations_products_id_seq'::regclass);
+
+
+--
 -- Name: organizations_states id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3531,6 +3703,13 @@ ALTER TABLE ONLY public.principle_descriptions ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: product_building_blocks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_building_blocks ALTER COLUMN id SET DEFAULT nextval('public.product_building_blocks_id_seq'::regclass);
+
+
+--
 -- Name: product_classifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3559,10 +3738,24 @@ ALTER TABLE ONLY public.product_product_relationships ALTER COLUMN id SET DEFAUL
 
 
 --
+-- Name: product_sectors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sectors ALTER COLUMN id SET DEFAULT nextval('public.product_sectors_id_seq'::regclass);
+
+
+--
 -- Name: product_suites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_suites ALTER COLUMN id SET DEFAULT nextval('public.product_suites_id_seq'::regclass);
+
+
+--
+-- Name: product_sustainable_development_goals id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sustainable_development_goals ALTER COLUMN id SET DEFAULT nextval('public.product_sustainable_development_goals_id_seq'::regclass);
 
 
 --
@@ -3828,6 +4021,14 @@ ALTER TABLE ONLY public.activities_tasks
 
 
 --
+-- Name: activity_descriptions activity_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_descriptions
+    ADD CONSTRAINT activity_descriptions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: aggregator_capabilities aggregator_capabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3905,6 +4106,14 @@ ALTER TABLE ONLY public.category_indicators
 
 ALTER TABLE ONLY public.cities
     ADD CONSTRAINT cities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ckeditor_assets ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ckeditor_assets
+    ADD CONSTRAINT ckeditor_assets_pkey PRIMARY KEY (id);
 
 
 --
@@ -4068,6 +4277,14 @@ ALTER TABLE ONLY public.organizations
 
 
 --
+-- Name: organizations_products organizations_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_products
+    ADD CONSTRAINT organizations_products_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: organizations_states organizations_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4156,6 +4373,14 @@ ALTER TABLE ONLY public.principle_descriptions
 
 
 --
+-- Name: product_building_blocks product_building_blocks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_building_blocks
+    ADD CONSTRAINT product_building_blocks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: product_classifications product_classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4188,11 +4413,27 @@ ALTER TABLE ONLY public.product_product_relationships
 
 
 --
+-- Name: product_sectors product_sectors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sectors
+    ADD CONSTRAINT product_sectors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: product_suites product_suites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.product_suites
     ADD CONSTRAINT product_suites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_sustainable_development_goals product_sustainable_development_goals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_sustainable_development_goals
+    ADD CONSTRAINT product_sustainable_development_goals_pkey PRIMARY KEY (id);
 
 
 --
@@ -4546,6 +4787,13 @@ CREATE INDEX index_activities_on_playbook_questions_id ON public.activities USIN
 
 
 --
+-- Name: index_activity_descriptions_on_activity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activity_descriptions_on_activity_id ON public.activity_descriptions USING btree (activity_id);
+
+
+--
 -- Name: index_aggregator_capabilities_on_aggregator_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4648,6 +4896,13 @@ CREATE INDEX index_category_indicators_on_rubric_category_id ON public.category_
 --
 
 CREATE INDEX index_cities_on_region_id ON public.cities USING btree (region_id);
+
+
+--
+-- Name: index_ckeditor_assets_on_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ckeditor_assets_on_type ON public.ckeditor_assets USING btree (type);
 
 
 --
@@ -5089,6 +5344,13 @@ CREATE INDEX index_use_case_steps_on_use_case_id ON public.use_case_steps USING 
 --
 
 CREATE INDEX index_use_cases_on_sector_id ON public.use_cases USING btree (sector_id);
+
+
+--
+-- Name: index_users_on_authentication_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_authentication_token ON public.users USING btree (authentication_token);
 
 
 --
@@ -5581,6 +5843,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 ALTER TABLE ONLY public.product_indicators
     ADD CONSTRAINT fk_rails_2c154e19b9 FOREIGN KEY (category_indicator_id) REFERENCES public.category_indicators(id);
+
+
+--
+-- Name: activity_descriptions fk_rails_2f297ddb80; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_descriptions
+    ADD CONSTRAINT fk_rails_2f297ddb80 FOREIGN KEY (activity_id) REFERENCES public.activities(id);
 
 
 --
@@ -6470,8 +6740,19 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200812015747'),
 ('20200812155025'),
 ('20200814184009'),
+('20200818153517'),
 ('20200818202930'),
-('20200818203509');
+('20200818203509'),
+('20200819002149'),
+('20200819201841'),
+('20200824180728'),
+('20200824180910'),
+('20200825202250'),
+('20200825202909'),
+('20200826134558'),
+('20200826134741'),
+('20200826134916'),
+('20200826205015');
 
 
 

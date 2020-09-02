@@ -6,6 +6,9 @@
     <div class="float-right">
       <% if user_signed_in? && policy(Project).mod_allowed? %>
         <%= link_to t('view.general.create'), new_project_path, :class => 'small mr-1' %>
+        <span class="small mr-1">&nbsp;|</span>
+        <%= link_to t('view.organization.index.view-audit').titlecase,
+                    audits_path(type: "Project"), class: 'small mr-1' %>
       <% end %>
     </div>
   </div>

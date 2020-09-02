@@ -162,6 +162,7 @@ Rails.application.routes.draw do
   get '/update_capability', to: 'organizations#update_capability', as: :update_capability
   get '/privacy', to: 'about#privacy', as: :privacy
   get '/terms', to: 'about#terms', as: :terms
+  get '/healthcheck', to: 'about#healthcheck', as: :healthcheck
 
   post '/save_url', to: 'application#save_url', as: :save_url
 

@@ -93,7 +93,7 @@ class User < ApplicationRecord
     # Skip validation for already created user, only for new user.
     return if persisted?
 
-    return if products.empty?
+    return if user_products.empty?
 
     # Delete the default assigned role
     roles.delete_at(roles.index(User.user_roles[:user]) || roles.length)

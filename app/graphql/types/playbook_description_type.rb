@@ -3,8 +3,8 @@ module Types
     field :id, ID, null: false
     field :playbook_id, Integer, null: true
     field :locale, String, null: false
-    field :overview, GraphQL::Types::JSON, null: false
-    field :audience, GraphQL::Types::JSON, null: false
-    field :outcomes, GraphQL::Types::JSON, null: false
+    field :overview, String, null: false
+    field :audience, String, null: false
+    field :outcomes, String, null: false
   end
 end

@@ -1,4 +1,5 @@
 class Workflow < ApplicationRecord
+  include Auditable
   has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_workflows, dependent: :destroy
   has_and_belongs_to_many :building_blocks, join_table: :workflows_building_blocks
 

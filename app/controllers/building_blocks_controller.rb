@@ -3,6 +3,7 @@ class BuildingBlocksController < ApplicationController
 
   before_action :set_building_block, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate]
+  before_action :set_current_user, only: [:edit, :update, :destroy]
 
   # GET /building_blocks
   # GET /building_blocks.json
@@ -58,12 +59,23 @@ class BuildingBlocksController < ApplicationController
   def create
     authorize(BuildingBlock, :create_allowed?)
     @building_block = BuildingBlock.new(building_block_params)
+    @building_block.set_current_user(current_user)
     @bb_desc = BuildingBlockDescription.new
+    @bb_desc.set_current_user(current_user)
 
-    if params[:selected_products].present?
+    if params[:selected_products].present? &&  policy(@building_block).adding_mapping_allowed?
       params[:selected_products].keys.each do |product_id|
-        product = Product.find(product_id)
-        @building_block.products.push(product)
+        new_prod_bb = ProductBuildingBlock.new
+        new_prod_bb.product_id = product_id
+
+        mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
+        unless policy(@building_block).beta_only?
+          mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
+        end
+        new_prod_bb.mapping_status = mapping_status
+        new_prod_bb.association_source = ProductBuildingBlock.RIGHT
+
+        @building_block.product_building_blocks << new_prod_bb
       end
     end
 
@@ -120,14 +132,41 @@ class BuildingBlocksController < ApplicationController
   def update
     authorize @building_block, :mod_allowed?
 
-    products = Set.new
-    if params[:selected_products].present?
-      params[:selected_products].keys.each do |product_id|
-        product = Product.find(product_id)
-        products.add(product)
+    if params[:selected_products].present? &&
+       (policy(@building_block).removing_mapping_allowed? || policy(@building_block).adding_mapping_allowed?)
+
+      existing_products = ProductBuildingBlock.where(building_block_id: @building_block.id)
+                                              .pluck('product_id')
+      ui_products = params[:selected_products].keys.map(&:to_i)
+
+      if policy(@building_block).removing_mapping_allowed?
+        removed_products = existing_products - ui_products
+        logger.debug("Removing: #{removed_products} building block - products relationship.")
+
+        removed_products.each do |product_id|
+          @building_block.products.delete(product_id)
+        end
+      end
+
+      if policy(@building_block).adding_mapping_allowed?
+        added_products = ui_products - existing_products
+        logger.debug("Adding: #{added_products} building block - products relationship.")
+
+        added_products.each do |product_id|
+          new_prod_bb = ProductBuildingBlock.new
+          new_prod_bb.product_id = product_id
+
+          mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
+          unless policy(@building_block).beta_only?
+            mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
+          end
+          new_prod_bb.mapping_status = mapping_status
+          new_prod_bb.association_source = ProductBuildingBlock.RIGHT
+
+          @building_block.product_building_blocks << new_prod_bb
+        end
       end
     end
-    @building_block.products = products.to_a
 
     workflows = Set.new
     if params[:selected_workflows].present?
@@ -214,6 +253,11 @@ class BuildingBlocksController < ApplicationController
       if !@bb_desc
         @bb_desc = BuildingBlockDescription.new
       end
+    end
+
+    def set_current_user
+      @building_block.set_current_user(current_user)
+      @bb_desc.set_current_user(current_user)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

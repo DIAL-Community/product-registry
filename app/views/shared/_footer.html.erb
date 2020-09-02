@@ -86,7 +86,7 @@
 <script>
 $(document).on("turbolinks:load", function() {
   <% if session[:portal]["slug"] != "default" && !@footer.nil? && !@footer.empty? && @footer != "{}" %>
-    $('#footer-content').val("<%= @footer.html_safe %>") 
+    $('#footer-content').html("<%= @footer.html_safe %>") 
   <% end %> 
  });
 </script>

@@ -22,7 +22,9 @@
 
   $(".feedback-button").on("click", function() {
     $("#feedback-overlay").fadeIn();
-    $("#feedback-survey").append("<iframe src='<%= embedded_survey_form %>&embedded=true' width='640' height='820' frameborder='0' marginheight='0' marginwidth='0'>Loading…</iframe>");
+    $("#feedback-survey").append(`
+      <iframe src="<%= embedded_survey_form %>&embedded=true" class="survey-iframe">Loading…</iframe>
+    `);
     $("#feedback-survey").fadeIn();
   });
 

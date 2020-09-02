@@ -7,6 +7,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :maturity, String, null: true
+    field :image_file, String, null: true
 
     field :playbook_descriptions, [Types::PlaybookDescriptionType], null: true
     field :activities, [Types::ActivityType], null: true

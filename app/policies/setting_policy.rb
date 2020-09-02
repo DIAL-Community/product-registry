@@ -7,11 +7,11 @@ class SettingPolicy < ApplicationPolicy
   end
 
   def mod_allowed?
-    user.roles.include?(User.user_roles[:admin])
+    !user.nil? && user.roles.include?(User.user_roles[:admin])
   end
 
   def view_allowed?
-    user.roles.include?(User.user_roles[:admin])
+    !user.nil? && user.roles.include?(User.user_roles[:admin])
   end
 
   def permitted_attributes

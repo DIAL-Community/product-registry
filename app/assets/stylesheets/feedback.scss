@@ -16,8 +16,8 @@
   right:0;
   // Overlay will be the top most after survey
   background-color:#fff;
-  opacity:0.9;
-  z-index:1001;
+  opacity: 0.9;
+  z-index: 9001;
 }
 
 #feedback-survey {
@@ -25,7 +25,21 @@
   right: 0;
   bottom: 0;
   // Survey will be the top most
-  background-color:#fff;
-  opacity:1;
-  z-index:1002;
+  background-color: #fff;
+  opacity: 0.9;
+  z-index: 9002;
+}
+
+@media screen and (max-height: 800px) {
+  #feedback-survey {
+    // Scroll the survey if the window is smaller than the survey
+    overflow: scroll;
+    height: 100%;
+  }
+}
+
+.survey-iframe {
+  width: 640px;
+  border: none;
+  height: 800px;
 }

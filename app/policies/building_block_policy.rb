@@ -42,4 +42,23 @@ class BuildingBlockPolicy < ApplicationPolicy
         !user.roles.include?(User.user_roles[:admin]) &&
         !user.roles.include?(User.user_roles[:ict4sdg])
   end
+
+  # Admin and content editor are allowed to remove product mapping.
+  # Product owner is allowed if the product belongs to the owner.
+  def removing_mapping_allowed?
+    return false if user.nil?
+
+    user.roles.include?(User.user_roles[:admin]) ||
+      user.roles.include?(User.user_roles[:content_editor])
+  end
+
+  # Admin, content editor and content writer are allowed to add product mapping.
+  # Product owner is allowed if the product belongs to the owner.
+  def adding_mapping_allowed?
+    return false if user.nil?
+
+    user.roles.include?(User.user_roles[:admin]) ||
+      user.roles.include?(User.user_roles[:content_editor]) ||
+      user.roles.include?(User.user_roles[:content_writer])
+  end
 end
