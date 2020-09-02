@@ -21,8 +21,3 @@ rake sync:update_statistics_data
 rake sync:sync_digital_health_atlas_data
 rake maturity_sync:sync_data['/maturity-rubric']
 
-# Migrate existing data to the new structure
-rake geocode:migrate_projects_locations_with_google
-rake geocode:migrate_organizations_locations_with_google
-rake geocode:migrate_aggregator_capabilities_to_country
-rake geocode:migrate_operator_services_to_country
