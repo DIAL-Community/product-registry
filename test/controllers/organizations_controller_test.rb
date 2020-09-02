@@ -228,10 +228,10 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     add_parameter = { 'filter_name': 'countries', 'filter_value': first_location.id, 'filter_label': first_location.name }
     post '/add_filter', params: add_parameter
 
-    # Country filter: should return only the above org
+    # Country filter: should return the above org plus the first org, which has a project assigned to that location
     get organizations_url
-    assert_equal(1, assigns(:organizations).count)
-    assert_equal(second_organization.name, assigns(:organizations)[0].name)
+    assert_equal(2, assigns(:organizations).count)
+    assert_equal(second_organization.name, assigns(:organizations)[1].name)
 
     # Combination assessment with origins:
     # * should return 0 organizations
@@ -245,7 +245,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/remove_filter', params: remove_parameter
 
     get organizations_url
-    assert_equal(1, assigns(:organizations).count)
+    assert_equal(2, assigns(:organizations).count)
 
     remove_parameter = { filter_array: { '0' => { filter_name: 'countries' } } }
     post '/remove_filter', params: remove_parameter

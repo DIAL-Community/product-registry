@@ -64,6 +64,11 @@
     - name: Mifos Android
     - name: Mifos Mobile
     - name: Mifos Web App
+- name: OpenRefine
+  parent:
+    - name: OpenRefine
+  children:
+    - name: Reconcile CVS
 - name: Open Street Map
   parent:
     - name: HOTOSM Tasking Manager

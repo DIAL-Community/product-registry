@@ -4,7 +4,7 @@ class OrganizationsProduct < ApplicationRecord
   belongs_to :organization
   belongs_to :product
 
-  enum org_type: { owner: 'owner', maintainer: 'maintainer', funder: 'funder' }
+  enum org_type: { owner: 'owner', maintainer: 'maintainer', funder: 'funder', implementer: 'implementer' }
 
   after_initialize :set_default_type, if: :new_record?
   after_initialize :default_association_source, if: :auditable_association_object
