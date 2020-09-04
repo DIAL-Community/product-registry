@@ -530,33 +530,17 @@ class ProductsController < ApplicationController
         { :name => org.name, :website => 'https://'+org.website.to_s, :org_type => org_prod.org_type }
       end
 
-      license_file = ""
-      if !product.license_analysis.nil?
-        license_data = product.license_analysis.split(/\r?\n/)
-        license_data.each do |license_line|
-          if license_line.include?("Matched files")
-            license_files = license_line.split(':')[1]
-            if license_files.include?(',')
-              license_file = product.repository + '/' + license_files.split(',').first.gsub(/\s+/, "")
-            else
-              license_file = product.repository + '/' + license_files.gsub(/\s+/, "")
-            end
-          end
-        end
-      end
+      # Get data from publicgoods_data attribute
+      publicgoods_name = product.publicgoods_data['name']
+      publicgoods_licenseURL = product.publicgoods_data['licenseURL']
+      publicgoods_aliases = product.publicgoods_data['aliases']
 
       description = ProductDescription.where(product_id: product, locale: I18n.locale).first
 
-      product_description = ""
-      if !description.nil?
-        desc_json = description["description"].to_s
-        if !desc_json.nil?
-          desc = desc_json.split(':')[2]
-          if !desc.nil?
-            desc = desc.gsub("}]}","").tr('"','')
-            product_description = desc
-          end
-        end
+      if description.nil? 
+        product_desc = ""
+      else
+        product_desc = description.description
       end
 
       repositoryURL=""
@@ -564,8 +548,7 @@ class ProductsController < ApplicationController
         repositoryURL = product.repository
       end
 
-      #puts "WEBSITE: " + product.website
-      { :name => product.name, :description => product_description, :website => 'https://'+product.website.to_s, :license => [{:spdx => product.license, :licenseURL => license_file}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => [ "software" ], :repositoryURL => repositoryURL, :organizations => org_list.as_json }
+      { :name => product.name, :publicgoods_name => publicgoods_name, :aliases => publicgoods_aliases.as_json, :description => product_desc, :website => 'https://'+product.website.to_s, :license => [{:spdx => product.license, :licenseURL => publicgoods_licenseURL}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => [ "software" ], :repositoryURL => repositoryURL, :organizations => org_list.as_json }
     end
 
     curr_products.each do |prod|
