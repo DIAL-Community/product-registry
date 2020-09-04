@@ -210,17 +210,22 @@ namespace :sync do
         puts entry
         
         curr_prod = Product.where(slug: entry.chomp('.json').gsub("-","_")).first
-        curr_prod['aliases'].each do |prod_alias|
+        if curr_prod.nil? 
+          alias_name = entry.chomp('.json').gsub("-", " ").titlecase.gsub(" And ", " and ")
+          curr_prod = Product.find_by("? = ANY(aliases)", alias_name)
+        end
+        curr_prod['aliases'] && curr_prod['aliases'].each do |prod_alias|
           alias_file = prod_alias.downcase.gsub(" ","-")+".json"
-          if File.exist?('../publicgoods/products/'+alias_file)
+          if File.exist?(params[:path]+"/"+alias_file)
             product_file = alias_file
           end
         end
       end
-      if File.exist?("../publicgoods/products/"+product_file)
-        FileUtils.cp_r("./export/"+entry, "../publicgoods/products/"+product_file)
+      if File.exist?(params[:path]+"/"+product_file)
+        FileUtils.cp_r("./export/"+entry, params[:path]+"/"+product_file)
       else
-        puts "CANT FIND: " + product_file
+        puts "NEW PRODUCT: " + product_file
+        FileUtils.cp_r("./export/"+entry, params[:path]+"/"+product_file)
       end
     end
   end

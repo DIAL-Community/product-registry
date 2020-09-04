@@ -131,13 +131,15 @@ module Modules
           end
         end
 
+        # Update specific information that we need to save for later syncing
+        existing_product.publicgoods_data["name"] = json_data["name"]
+        existing_product.publicgoods_data["aliases"] = json_data["aliases"]
+
         update_attributes(json_data, existing_product)
 
         existing_product.save
 
-        if is_new
-          update_product_description(existing_product, json_data['description'])
-        end
+        update_product_description(existing_product, json_data['description'])
       end
     end
 
@@ -331,6 +333,7 @@ module Modules
           sync_product.license = license
         else
           sync_product.license = license.first['spdx']
+          sync_product.publicgoods_data["licenseURL"] = license.first['licenseURL']
         end
       end
 
@@ -615,11 +618,24 @@ module Modules
     end
 
     def export_products(source)
-      session = ActionDispatch::Integration::Session.new(Rails.application)
-      session.get "/productlist?source="+source
-      prod_list = JSON.parse(session.response.body)
+      #session = ActionDispatch::Integration::Session.new(Rails.application)
+      #session.get "/productlist?source="+source
+      server_uri = URI.parse("https://registry.dial.community/productlist?source="+source)
+      http = Net::HTTP.new(server_uri.host, server_uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Get.new(server_uri.path)
+      response = http.request(request)
+      prod_list = JSON.parse(response.body)
       prod_list.each do |prod|
-        File.open("export/"+slug_em(prod['name']).gsub("_","-")+".json","w") do |f|
+        publicgoods_name = prod['publicgoods_name']
+        if publicgoods_name.nil?
+          publicgoods_name = prod['name']
+          puts "NEW PRODUCT: " + publicgoods_name
+        end
+        prod.except!('publicgoods_name', 'aliases')
+        prod['name'] = publicgoods_name
+        File.open("export/"+slug_em(publicgoods_name, 100).gsub("_","-")+".json","w") do |f|
           f.write(JSON.pretty_generate prod)
         end
       end
