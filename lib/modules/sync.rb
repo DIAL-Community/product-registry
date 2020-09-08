@@ -362,6 +362,7 @@ module Modules
             sync_product.organizations << org
           else
             org.website = cleanup_url(organization['website'])
+            org.name = organization['name']
             org.save
           end
           if !sync_product.organizations.include?(org)
@@ -621,22 +622,27 @@ module Modules
       #session = ActionDispatch::Integration::Session.new(Rails.application)
       #session.get "/productlist?source="+source
       server_uri = URI.parse("https://registry.dial.community/productlist?source="+source)
-      http = Net::HTTP.new(server_uri.host, server_uri.port)
-      http.use_ssl = true
-
-      request = Net::HTTP::Get.new(server_uri.path)
-      response = http.request(request)
-      prod_list = JSON.parse(response.body)
+      
+      response = Net::HTTP.get(server_uri)
+      prod_list = JSON.parse(response)
       prod_list.each do |prod|
         publicgoods_name = prod['publicgoods_name']
         if publicgoods_name.nil?
           publicgoods_name = prod['name']
           puts "NEW PRODUCT: " + publicgoods_name
         end
-        prod.except!('publicgoods_name', 'aliases')
+        if prod['aliases'].nil?
+          prod.except!('aliases')
+        end
+        prod.except!('publicgoods_name')
+        puts "SECTOR LIST: " + prod['sectors'].to_s
         prod['name'] = publicgoods_name
+        json_string = JSON.pretty_generate prod
+        regex = /(?<content>"(?:[^\\"]|\\.)+")|(?<open>\{)\s+(?<close>\})|(?<open>\[)\s+(?<close>\])/m
+        json_string = json_string.gsub(regex, '\k<open>\k<content>\k<close>')
+        json_string = json_string + "\n"
         File.open("export/"+slug_em(publicgoods_name, 100).gsub("_","-")+".json","w") do |f|
-          f.write(JSON.pretty_generate prod)
+          f.write(json_string)
         end
       end
     end

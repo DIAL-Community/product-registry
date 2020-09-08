@@ -206,7 +206,6 @@ namespace :sync do
 
     Dir.entries('./export').select { |item| item.include? '.json' }.each do |entry|
       product_file = entry
-      if !File.exist?('./products/'+product_file)
         puts entry
         
         curr_prod = Product.where(slug: entry.chomp('.json').gsub("-","_")).first
@@ -220,7 +219,6 @@ namespace :sync do
             product_file = alias_file
           end
         end
-      end
       if File.exist?(params[:path]+"/"+product_file)
         FileUtils.cp_r("./export/"+entry, params[:path]+"/"+product_file)
       else
