@@ -525,7 +525,7 @@ class ProductsController < ApplicationController
         sector.name
       end
 
-      org_list = product.organizations.map do |org|
+      org_list = product.organizations.order(:name).map do |org|
         org_prod = OrganizationsProduct.where(product_id: product, organization_id: org).first
         { :name => org.name, :website => 'https://'+org.website.to_s, :org_type => org_prod.org_type }
       end

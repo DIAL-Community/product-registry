@@ -15,13 +15,13 @@ products:
     repositoryURL: https://github.com/OpenConceptLab/oclapi
   - name: CommCare
     description: Mobile data collection platform to improve the quality and efficiency of services in the most remote corners of the world.
-    website: www.dimagi.com
+    website: www.dimagi.com/commcare
     organizations: [{"name":"Dimagi","website":"dimagi.com","org_type":"owner"}]
     SDGs: [3,6,10]
     license: APL-2.0
     repositoryURL: https://github.com/dimagi/commcare-hq
-  - name: Community Health Toolkit
-    description: CHT provides a collection of open source technologies and open access design, technical, and implementer resources that help you build and deploy digital tools for community health. 
+  - name: Medic Mobile
+    description: Medic Mobile Community Health Toolkit provides a collection of open source technologies and open access design, technical, and implementer resources that help you build and deploy digital tools for community health. 
     website: communityhealthtoolkit.org
     organizations: [{"name":"Medic Mobile","website":"medicmobile.org","org_type":"owner"}]
     SDGs: [3,6,10]
