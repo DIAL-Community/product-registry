@@ -8,6 +8,9 @@ class UseCasesController < ApplicationController
 
   def favorite_use_case
     set_use_case
+    if current_user.nil? || @use_case.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_use_cases.push(@use_case.id)
@@ -15,15 +18,18 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
 
   def unfavorite_use_case
     set_use_case
+    if current_user.nil? || @use_case.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_use_cases.delete(@use_case.id)
@@ -31,9 +37,9 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end

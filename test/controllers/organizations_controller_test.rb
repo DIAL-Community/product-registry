@@ -14,10 +14,10 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get organizations_url(:search=>"Organization Again")
+    get organizations_url(search: "Organization Again")
     assert_equal(1, assigns(:organizations).count)
 
-    get organizations_url(:search=>"InvalidOrg")
+    get organizations_url(search: "InvalidOrg")
     assert_equal(0, assigns(:organizations).count)
   end
 
@@ -27,7 +27,8 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creating organization without logo should not fail" do
-    post organizations_url, params: { organization: { name: "Some Name", slug: 'some_name', when_endorsed: '11/16/2018' }}
+    post organizations_url,
+         params: { organization: { name: "Some Name", slug: 'some_name', when_endorsed: '11/16/2018' } }
     created_organization = Organization.last
 
     assert_equal created_organization.name, "Some Name"
@@ -35,7 +36,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updating organization without logo should not fail" do
-    patch organization_url(@organization), params: { organization: {name: "Some New Name" } }
+    patch organization_url(@organization), params: { organization: { name: "Some New Name" } }
 
     updated_organization = Organization.find(@organization.id)
     assert_equal updated_organization.name, "Some New Name"
@@ -45,47 +46,62 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   test "should slug digits" do
     digit_org_name = "1234-56-789 011"
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, logo: uploaded_file }
-    saved_organization = Organization.last;
+    post organizations_url,
+         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+                   reslug: true, logo: uploaded_file }
+    saved_organization = Organization.last
     assert_equal saved_organization.slug, "123456789_011"
 
     digit_org_name = "1234 56 789 011"
     uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, logo: uploaded_file }
-    saved_organization = Organization.last;
+    post organizations_url,
+         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+                   reslug: true, logo: uploaded_file }
+    saved_organization = Organization.last
     assert_equal saved_organization.slug, "1234_56_789_011"
   end
 
   test "should append counter to duplicate slugs" do
     digit_org_name = "ABCD 56 789 011"
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, logo: uploaded_file }
-    saved_organization = Organization.last;
+    post organizations_url,
+         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+                   reslug: true, logo: uploaded_file }
+    saved_organization = Organization.last
     assert_equal saved_organization.slug, "abcd_56_789_011"
 
     digit_org_name = "ABCD?$% 56 789 011"
     uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true, logo: uploaded_file }
-    saved_organization = Organization.last;
+    post organizations_url,
+         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+                   reslug: true, duplicate: true, logo: uploaded_file }
+    saved_organization = Organization.last
     assert_equal saved_organization.slug, "abcd_56_789_011_dup1"
 
     digit_org_name = "ABCD?$% 56 789 011"
     uploaded_file = fixture_file_upload('files/other-logo.png', 'image/png')
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true, logo: uploaded_file }
-    saved_organization = Organization.last;
+    post organizations_url,
+         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+                   reslug: true, duplicate: true, logo: uploaded_file }
+    saved_organization = Organization.last
     assert_equal saved_organization.slug, "abcd_56_789_011_dup2"
 
     digit_org_name = "ABCD?$% 56 789 011"
     uploaded_file = fixture_file_upload('files/more-logo.png', 'image/png')
-    post organizations_url, params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' }, reslug: true, duplicate: true, logo: uploaded_file }
-    saved_organization = Organization.last;
+    post organizations_url,
+         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+                   reslug: true, duplicate: true, logo: uploaded_file }
+    saved_organization = Organization.last
     assert_equal saved_organization.slug, "abcd_56_789_011_dup3"
   end
 
   test "should create organization" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     assert_difference('Organization.count') do
-      post organizations_url, params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: 'testslug', website: @organization.website, when_endorsed: '11/16/2018' }, logo: uploaded_file }
+      post organizations_url,
+           params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name,
+                                     slug: 'testslug', website: @organization.website, when_endorsed: '11/16/2018' },
+                     logo: uploaded_file }
     end
 
     assert_redirected_to organization_url(Organization.last)
@@ -109,7 +125,11 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update organization" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
-    patch organization_url(@organization), params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: @organization.slug, website: @organization.website, when_endorsed: '11/16/2018' }, logo: uploaded_file }
+    patch organization_url(@organization),
+          params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name,
+                                    slug: @organization.slug, website: @organization.website,
+                                    when_endorsed: '11/16/2018' },
+                    logo: uploaded_file }
     assert_redirected_to organization_url(@organization)
   end
 
@@ -225,7 +245,9 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     second_organization.locations.push(first_location)
     second_organization.save
 
-    add_parameter = { 'filter_name': 'countries', 'filter_value': first_location.id, 'filter_label': first_location.name }
+    add_parameter = { 'filter_name': 'countries',
+                      'filter_value': first_location.id,
+                      'filter_label': first_location.name }
     post '/add_filter', params: add_parameter
 
     # Country filter: should return the above org plus the first org, which has a project assigned to that location
@@ -323,10 +345,185 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     get edit_organization_url(@organization)
     assert_response :redirect
 
-    patch organization_url(@organization), params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name, slug: @organization.slug, website: @organization.website, when_endorsed: '11/16/2018' } }
+    patch organization_url(@organization),
+          params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name,
+                                    slug: @organization.slug, website: @organization.website,
+                                    when_endorsed: '11/16/2018' } }
     assert_response :redirect
 
     delete organization_url(@organization)
     assert_response :redirect
+  end
+
+  test 'organization changes should be logged' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'admin@abba.org', roles: ['admin'])
+
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+
+    country = countries(:one)
+    product = products(:one)
+    sector = sectors(:one)
+    project = projects(:one)
+
+    assert_difference('Organization.count') do
+      post organizations_url, params: { organization: { name: "Some Name", slug: 'some_name',
+                                                        when_endorsed: '11/16/2018' },
+                                        contact: { name: "Example Contact", email: 'a@a.com' },
+                                        selected_countries: { country.id => country.id },
+                                        selected_sectors: { sector.id => sector.id },
+                                        selected_products: { product.id => product.id },
+                                        selected_projects: { project.id => project.id },
+                                        duplicate: true, reslug: true, logo: uploaded_file }
+    end
+
+    created_organization = Organization.last
+    assert_redirected_to organization_url(created_organization)
+
+    assert_equal(created_organization.countries.length, 1)
+    assert_equal(created_organization.sectors.length, 1)
+    assert_equal(created_organization.products.length, 1)
+    assert_equal(created_organization.projects.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'CREATED')
+    assert_equal(created_audit.username, 'admin@abba.org')
+
+    # Audit will have 3 elements:
+    # * Base entity changes.
+    # * Mapping changes (optional)
+    # * Image changes (optional)
+    assert_equal(created_audit.audit_changes.length, 3)
+
+    mapping_changes_audit = created_audit.audit_changes[1]
+    assert_equal(mapping_changes_audit.keys.length, 5)
+    assert_equal(mapping_changes_audit['countries'].length, 1)
+    assert_equal(mapping_changes_audit['sectors'].length, 1)
+    assert_equal(mapping_changes_audit['products'].length, 1)
+    assert_equal(mapping_changes_audit['projects'].length, 1)
+    assert_equal(mapping_changes_audit['contacts'].length, 1)
+
+    other_project = projects(:two)
+    patch organization_url(created_organization), params: {
+      organization: {
+        name: created_organization.name, website: created_organization.website
+      },
+      selected_projects: {
+        project.id => project.id,
+        other_project.id => other_project.id
+      }
+    }
+
+    updated_organization = Organization.find(created_organization.id)
+    assert_redirected_to organization_url(updated_organization)
+    assert_equal(updated_organization.projects.length, 2)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'admin@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    assert_equal(mapping_changes_audit['projects'].length, 1)
+
+    other_sector = sectors(:two)
+    patch organization_url(updated_organization), params: {
+      organization: {
+        name: updated_organization.name, website: updated_organization.website
+      },
+      selected_sectors: {
+        other_sector.id => other_sector.id
+      }
+    }
+
+    updated_organization = Organization.find(updated_organization.id)
+    assert_redirected_to organization_url(updated_organization)
+    # Content editor users are allowed to remove and add mapping.
+    assert_equal(updated_organization.sectors.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'admin@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    # One for removing original sector and one for adding new sector.
+    assert_equal(mapping_changes_audit['sectors'].length, 2)
+
+    patch organization_url(updated_organization), params: {
+      organization: {
+        name: updated_organization.name, website: updated_organization.website
+      },
+      selected_sectors: {}
+    }
+
+    updated_organization = Organization.find(updated_organization.id)
+    assert_redirected_to organization_url(updated_organization)
+    # Content editor users are allowed to remove mapping
+    assert_equal(updated_organization.sectors.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'admin@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+  end
+
+  test 'mni user allowed to edit mni organizations' do
+    patch organization_url(@organization), params: { organization: { name: "Some Name", is_mni: true } }
+
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['mni'])
+
+    get edit_organization_url(@organization)
+    assert_response :success
+
+    patch organization_url(@organization), params: { organization: { name: "Another Name" } }
+
+    updated_organization = Organization.find(@organization.id)
+    assert_redirected_to organization_url(updated_organization)
+    assert_equal updated_organization.name, "Another Name"
+
+    get edit_organization_url(organizations(:two))
+    assert_response :redirect
+
+    patch organization_url(organizations(:two)), params: { organization: { name: "Different Name" } }
+    assert_response :redirect
+
+    updated_organization = Organization.find(organizations(:two).id)
+    assert_equal updated_organization.name, "Organization Again"
+  end
+
+  test 'principle user allowed to edit principle organizations' do
+    patch organization_url(@organization), params: { organization: { name: "Some Name", is_endorser: true } }
+
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['principle'])
+
+    get edit_organization_url(@organization)
+    assert_response :success
+
+    patch organization_url(@organization), params: { organization: { name: "Another Name" } }
+
+    updated_organization = Organization.find(@organization.id)
+    assert_redirected_to organization_url(updated_organization)
+    assert_equal updated_organization.name, "Another Name"
+
+    get edit_organization_url(organizations(:two))
+    assert_response :redirect
+
+    patch organization_url(organizations(:two)), params: { organization: { name: "Different Name" } }
+    assert_response :redirect
+
+    updated_organization = Organization.find(organizations(:two).id)
+    assert_equal updated_organization.name, "Organization Again"
   end
 end

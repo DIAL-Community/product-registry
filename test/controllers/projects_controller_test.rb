@@ -107,4 +107,37 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'favoriting should save to saved_projects array' do
+    delete(destroy_user_session_url)
+    post(favorite_project_project_url(@project), as: :json)
+    assert_response :unauthorized
+
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    last_user = User.last
+    assert_equal(last_user.saved_projects.length, 0)
+
+    post(favorite_project_project_url(@project), as: :json)
+    assert_response :ok
+
+    last_user = User.last
+    assert_equal(last_user.saved_projects.length, 1)
+  end
+
+  test 'unfavoriting should remove from saved_projects array' do
+    delete(destroy_user_session_url)
+    post(unfavorite_project_project_url(@project), as: :json)
+    assert_response :unauthorized
+
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org', saved_projects: [@project.id])
+
+    last_user = User.last
+    assert_equal(last_user.saved_projects.length, 1)
+
+    post(unfavorite_project_project_url(@project), as: :json)
+    assert_response :ok
+
+    last_user = User.last
+    assert_equal(last_user.saved_projects.length, 0)
+  end
 end
