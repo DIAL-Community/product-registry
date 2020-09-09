@@ -93,6 +93,7 @@ class BuildingBlocksController < ApplicationController
       rescue StandardError => e
         @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
+      @building_block.set_image_changed(params[:logo].original_filename)
     end
 
     if policy(@building_block).beta_only?
@@ -184,6 +185,7 @@ class BuildingBlocksController < ApplicationController
       rescue StandardError => e
         @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
+      @building_block.set_image_changed(params[:logo].original_filename)
     end
 
     if building_block_params[:bb_desc].present?

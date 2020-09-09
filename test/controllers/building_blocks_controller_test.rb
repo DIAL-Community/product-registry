@@ -117,4 +117,193 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     delete building_block_url(@building_block)
     assert_response :redirect
   end
+
+  test 'content writer user shoud not be able to remove mappings' do
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+
+    product = products(:one)
+    workflow = workflows(:one)
+
+    assert_difference('BuildingBlock.count') do
+      post building_blocks_url, params: { building_block: { name: @building_block.name, maturity: 'BETA' },
+                                          selected_products: { product.id => product.id },
+                                          selected_workflows: { workflow.id => workflow.id },
+                                          duplicate: true, reslug: true, logo: uploaded_file }
+    end
+
+    created_building_block = BuildingBlock.last
+    assert_redirected_to building_block_url(created_building_block)
+
+    assert_equal(created_building_block.products.length, 1)
+    assert_equal(created_building_block.workflows.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'CREATED')
+    assert_equal(created_audit.username, User.last.email)
+
+    # Audit will have 3 elements:
+    # * Base entity changes.
+    # * Mapping changes (optional)
+    # * Image changes (optional)
+    assert_equal(created_audit.audit_changes.length, 3)
+
+    mapping_changes_audit = created_audit.audit_changes[1]
+    assert_equal(mapping_changes_audit.keys.length, 2)
+    assert_equal(mapping_changes_audit['products'].length, 1)
+    assert_equal(mapping_changes_audit['workflows'].length, 1)
+
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+
+    other_product = products(:two)
+    patch building_block_url(created_building_block), params: {
+      building_block: {
+        name: created_building_block.name
+      },
+      selected_products: {
+        product.id => product.id,
+        other_product.id => other_product.id
+      }
+    }
+
+    updated_building_block = BuildingBlock.find(created_building_block.id)
+    assert_redirected_to building_block_url(updated_building_block)
+    assert_equal(updated_building_block.products.length, 2)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'nonadmin@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    assert_equal(mapping_changes_audit['products'].length, 1)
+
+    patch building_block_url(updated_building_block), params: {
+      building_block: {
+        name: updated_building_block.name
+      },
+      selected_products: {
+        other_product.id => other_product.id
+      }
+    }
+
+    updated_building_block = BuildingBlock.find(updated_building_block.id)
+    assert_redirected_to building_block_url(updated_building_block)
+    # Content writer users are not allowed to remove mapping, but allowed to add.
+    assert_equal(updated_building_block.products.length, 2)
+  end
+
+  test 'content editor user should be able to remove mapping' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'content_editor@abba.org', roles: ['content_editor'])
+
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+
+    product = products(:one)
+    workflow = workflows(:one)
+
+    assert_difference('BuildingBlock.count') do
+      post building_blocks_url, params: { building_block: { name: @building_block.name, maturity: 'BETA' },
+                                          selected_products: { product.id => product.id },
+                                          selected_workflows: { workflow.id => workflow.id },
+                                          duplicate: true, reslug: true, logo: uploaded_file }
+    end
+
+    created_building_block = BuildingBlock.last
+    assert_redirected_to building_block_url(created_building_block)
+
+    assert_equal(created_building_block.products.length, 1)
+    assert_equal(created_building_block.workflows.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'CREATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 3 elements:
+    # * Base entity changes.
+    # * Mapping changes (optional)
+    # * Image changes (optional)
+    assert_equal(created_audit.audit_changes.length, 3)
+
+    mapping_changes_audit = created_audit.audit_changes[1]
+    assert_equal(mapping_changes_audit.keys.length, 2)
+    assert_equal(mapping_changes_audit['products'].length, 1)
+    assert_equal(mapping_changes_audit['workflows'].length, 1)
+
+    other_product = products(:two)
+    patch building_block_url(created_building_block), params: {
+      building_block: {
+        name: created_building_block.name
+      },
+      selected_products: {
+        product.id => product.id,
+        other_product.id => other_product.id
+      }
+    }
+
+    updated_building_block = BuildingBlock.find(created_building_block.id)
+    assert_redirected_to building_block_url(updated_building_block)
+    assert_equal(updated_building_block.products.length, 2)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    assert_equal(mapping_changes_audit['products'].length, 1)
+
+    another_product = products(:two)
+    patch building_block_url(updated_building_block), params: {
+      building_block: {
+        name: updated_building_block.name
+      },
+      selected_products: {
+        another_product.id => another_product.id
+      }
+    }
+
+    updated_building_block = BuildingBlock.find(updated_building_block.id)
+    assert_redirected_to building_block_url(updated_building_block)
+    # Content editor users are allowed to remove and add mapping.
+    assert_equal(updated_building_block.products.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    # One for removing original sector and one for adding new sector.
+    assert_equal(mapping_changes_audit['products'].length, 1)
+
+    patch building_block_url(updated_building_block), params: {
+      building_block: {
+        name: updated_building_block.name
+      },
+      selected_products: {}
+    }
+
+    updated_building_block = BuildingBlock.find(updated_building_block.id)
+    assert_redirected_to building_block_url(updated_building_block)
+    # Content editor users are allowed to remove mapping
+    assert_equal(updated_building_block.products.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+  end
 end

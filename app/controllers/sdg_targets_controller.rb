@@ -42,7 +42,7 @@ class SdgTargetsController < ApplicationController
   def sdg_target_params
     params
       .require(:sdg_target)
-      .permit(:name, :confirmation, :description)
+      .permit(:name, :slug, :confirmation, :description, :target_number, :sdg_number)
       .tap do |attr|
         if (params[:reslug].present?)
           attr[:slug] = slug_em(attr[:name])

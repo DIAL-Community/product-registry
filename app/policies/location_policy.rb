@@ -9,6 +9,8 @@ class LocationPolicy < ApplicationPolicy
   def permitted_attributes
     if user.roles.include?(User.user_roles[:admin])
       [:id, :name, :confirmation, :aliases, :slug]
+    else
+      []
     end
   end
 
