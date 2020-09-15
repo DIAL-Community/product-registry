@@ -209,4 +209,36 @@ namespace :data do
     end
 
   end
+
+  task :descriptions_to_html => :environment do
+    server_uri = URI.parse("https://registry.dial.community/use_cases.json")
+    response = Net::HTTP.get(server_uri)
+    use_case_list = JSON.parse(response)
+    html_out = uc_to_html(use_case_list)
+    File.write("export/use_cases.html", html_out)
+
+    server_uri = URI.parse("https://registry.dial.community/workflows.json")  
+    response = Net::HTTP.get(server_uri)
+    workflow_list = JSON.parse(response)
+    html_out = wf_to_html(use_case_list)
+    File.write("export/workflows.html", html_out)
+
+    server_uri = URI.parse("https://registry.dial.community/building_blocks.json")  
+    response = Net::HTTP.get(server_uri)
+    bb_list = JSON.parse(response)
+    html_out = bb_to_html(bb_list)
+    File.write("export/building_blocks.html", html_out)
+
+    server_uri = URI.parse("https://registry.dial.community/organizations.json?without_paging=true")  
+    response = Net::HTTP.get(server_uri)
+    org_list = JSON.parse(response)
+    html_out = org_to_html(org_list)
+    File.write("export/organizations.html", html_out)
+
+    server_uri = URI.parse("https://registry.dial.community/products.json?without_paging=true")  
+    response = Net::HTTP.get(server_uri)
+    prod_list = JSON.parse(response)
+    html_out = prod_to_html(prod_list)
+    File.write("export/products.html", html_out)
+  end
 end
