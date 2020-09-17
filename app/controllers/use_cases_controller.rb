@@ -16,7 +16,6 @@ class UseCasesController < ApplicationController
     favoriting_user.saved_use_cases.push(@use_case.id)
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
         format.json { render :show, status: :ok }
       else
@@ -35,7 +34,6 @@ class UseCasesController < ApplicationController
     favoriting_user.saved_use_cases.delete(@use_case.id)
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
         format.json { render :show, status: :ok }
       else

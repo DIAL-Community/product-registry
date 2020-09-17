@@ -13,7 +13,6 @@ class ProjectsController < ApplicationController
     favoriting_user.saved_projects.push(@project.id)
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
         format.json { render :show, status: :ok }
       else
@@ -32,7 +31,6 @@ class ProjectsController < ApplicationController
     favoriting_user.saved_projects.delete(@project.id)
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
         format.json { render :show, status: :ok }
       else

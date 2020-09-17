@@ -117,23 +117,24 @@
     </div>
     <ul class="list-group list-group-flush mt-2">
       <% current_user.saved_urls.each_with_index do |url, index| %>
-        <a href="<%= url %>" target="_blank"
-           class="list-group-item list-group-item-action flex-column align-items-start index-card mt-2">
+        <div class="list-group-item index-card mt-2 saved-search">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">Saved Search #<%= index + 1 %></h5>
-            <small>Saved</small>
+            <i class="saved-indicator" data-index="<%= index %>"></i>
           </div>
-          <p class="mb-1"><%= url %></p>
-          <%
-            queries = extract_url_query(url)
-            queries.each do |key, value|
-              next if key == 'urlFilter'
-          %>
-            <div class="small">
-              <%= "#{key}: #{value.sub('--', ', ')}" %>
-            </div>
-          <% end %>
-        </a>
+          <a href="<%= url %>" target="_blank" class="text-decoration-none">
+            <p class="mb-1"><%= url.gsub(/\#\?.*/, '') %></p>
+            <%
+              queries = extract_url_query(url)
+              queries.each do |key, value|
+                next if key == 'urlFilter'
+            %>
+              <div class="small">
+                <%= "#{key}: #{value.sub('--', ', ')}" %>
+              </div>
+            <% end %>
+          </a>
+        </div>
       <% end %>
     </ul>
   </div>
@@ -149,6 +150,33 @@
     mouseleave: function() {
       $(this).find(".favorite-indicator").fadeOut();
     }
+  });
+
+  $(".saved-search").on({
+    mouseenter: function() {
+      const indicator = $(this).find(".saved-indicator");
+      indicator.addClass("fas fa-times");
+      indicator.fadeIn();
+    },
+    mouseleave: function() {
+      $(this).find(".saved-indicator").fadeOut();
+    }
+  });
+  
+  $(".saved-indicator").each(function(index, element) {
+    $(element).on("click", function(event) {
+      const index = $(element).attr("data-index");
+  
+      $.post('/remove_url', { index: index }, function(data) {
+        $("#notifier").trigger({
+          type: "notify",
+          message: "<%= t('view.notification.favorite-remove-notification') %>"
+        });
+        $(element).parent()
+                  .parent(".saved-search")
+                  .remove();
+      });
+    });
   });
   
   $(".favorite-indicator").each(function(index, element) {

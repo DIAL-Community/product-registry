@@ -23,7 +23,6 @@ class ProductsController < ApplicationController
     favoriting_user.saved_products.push(@product.id)
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
         format.json { render :show, status: :ok }
       else
@@ -42,7 +41,6 @@ class ProductsController < ApplicationController
     favoriting_user.saved_products.delete(@product.id)
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
         format.json { render :show, status: :ok }
       else

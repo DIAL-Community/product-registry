@@ -417,15 +417,35 @@ class ApplicationController < ActionController::Base
   end
 
   def save_url
+    if current_user.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
+
     favoriting_user = current_user
     favoriting_user.saved_urls.push(params[:url])
 
     respond_to do |format|
-      # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render json: { saving: 'OK' }, status: :created }
+        format.json { render json: { saved_url: params[:url] }, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render json: { saved_url: params[:url] }, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def remove_url
+    if current_user.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
+
+    favoriting_user = current_user
+    deleted_url = favoriting_user.saved_urls.delete_at(params[:index].to_i)
+
+    respond_to do |format|
+      if favoriting_user.save!
+        format.json { render json: { deleted_url: deleted_url }, status: :ok }
+      else
+        format.json { render json: { deleted_url: deleted_url }, status: :unprocessable_entity }
       end
     end
   end

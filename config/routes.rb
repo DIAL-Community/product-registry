@@ -172,6 +172,7 @@ Rails.application.routes.draw do
   get '/healthcheck', to: 'about#healthcheck', as: :healthcheck
 
   post '/save_url', to: 'application#save_url', as: :save_url
+  post '/remove_url', to: 'application#remove_url', as: :remove_url
 
   get 'export', :to => 'organizations#export'
   get 'map_aggregators', :to => 'organizations#map_aggregators'
