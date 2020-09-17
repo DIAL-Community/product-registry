@@ -149,11 +149,16 @@ class LocationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
+      permitted_attributes = policy(Location).permitted_attributes
+      unless @location.nil?
+        permitted_attributes = policy(@location).permitted_attributes
+      end
+
       params
         .require(:location)
         .permit(:name, :confirmation, :aliases, :slug)
         .tap do |attr|
-          if policy(Location).permitted_attributes.include?(:aliases)
+          if permitted_attributes.include?(:aliases)
             valid_aliases = []
             if params[:other_names].present?
               valid_aliases = params[:other_names].reject(&:empty?)

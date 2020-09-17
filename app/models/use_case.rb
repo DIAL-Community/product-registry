@@ -1,3 +1,5 @@
+require('csv')
+
 class UseCase < ApplicationRecord
   include EntityStatusType
   include Auditable
@@ -32,5 +34,38 @@ class UseCase < ApplicationRecord
   # overridden
   def to_param
     slug
+  end
+
+  def self.to_csv
+    attributes = %w{id name slug description sdg_targets use_case_steps}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |p|
+        sdg_targets = p.sdg_targets
+                       .map(&:name)
+                       .join('; ')
+        use_case_steps = p.use_case_steps
+                          .map(&:name)
+                          .join('; ')
+        csv << [p.id, p.name, p.slug, p.description, sdg_targets, use_case_steps]
+      end
+    end
+  end
+
+  def self.serialization_options
+    {
+      except: [:created_at, :updated_at, :description],
+      include: {
+        use_case_descriptions: { only: [:description] },
+        sdg_targets: { only: [:name, :target_number] },
+        use_case_steps: { only: [:name, :description], 
+          include: {
+            use_case_step_descriptions: { only: [:description] }
+          }
+        } 
+      }
+    }
   end
 end

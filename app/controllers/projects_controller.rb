@@ -5,6 +5,9 @@ class ProjectsController < ApplicationController
 
   def favorite_project
     set_project
+    if current_user.nil? || @project.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_projects.push(@project.id)
@@ -12,15 +15,18 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
 
   def unfavorite_project
     set_project
+    if current_user.nil? || @project.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_projects.delete(@project.id)
@@ -28,9 +34,9 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
@@ -92,6 +98,19 @@ class ProjectsController < ApplicationController
 
     authorize @projects, :view_allowed?
     render json: @projects.count
+  end
+
+  def export_data
+    @projects = Project.where(id: filter_projects).eager_load(:organizations, :products)
+    authorize(@projects, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @projects, filename: 'exported-project'
+      end
+      format.json do
+        render json: @projects.to_json(Project.serialization_options)
+      end
+    end
   end
 
   def show

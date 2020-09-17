@@ -6,6 +6,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in FactoryBot.create(:user, roles: [:admin])
     @use_case = use_cases(:one)
+    @sectors = Sector.order(:name)
   end
 
   test "should get index" do
@@ -102,5 +103,89 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
 
     delete use_case_url(@use_case)
     assert_response :redirect
+  end
+
+  test 'favoriting should save to saved_use_cases array' do
+    delete(destroy_user_session_url)
+    post(favorite_use_case_use_case_url(@use_case), as: :json)
+    assert_response :unauthorized
+
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+
+    last_user = User.last
+    assert_equal(last_user.saved_use_cases.length, 0)
+
+    post(favorite_use_case_use_case_url(@use_case), as: :json)
+    assert_response :ok
+
+    last_user = User.last
+    assert_equal(last_user.saved_use_cases.length, 1)
+  end
+
+  test 'unfavoriting should remove from saved_use_cases array' do
+    delete(destroy_user_session_url)
+    post(unfavorite_use_case_use_case_url(@use_case), as: :json)
+    assert_response :unauthorized
+
+    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org', saved_use_cases: [@use_case.id])
+
+    last_user = User.last
+    assert_equal(last_user.saved_use_cases.length, 1)
+
+    post(unfavorite_use_case_use_case_url(@use_case), as: :json)
+    assert_response :ok
+
+    last_user = User.last
+    assert_equal(last_user.saved_use_cases.length, 0)
+  end
+
+  test 'content editor user should be able to remove mapping' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'content_editor@abba.org', roles: ['content_editor'])
+
+    assert_difference('UseCase.count') do
+      post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
+                                                maturity: 'BETA',
+                                                sector_id: @use_case.sector_id, slug: @use_case.slug } }
+    end
+
+    created_use_case = UseCase.last
+    assert_redirected_to use_case_url(created_use_case)
+
+    assert_equal(created_use_case.sdg_targets.length, 0)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'CREATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 3 elements:
+    # * Base entity changes.
+    # * Mapping changes (optional)
+    # * Image changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    sdg_target = sdg_targets(:one)
+    other_target = sdg_targets(:two)
+    uc_params = {
+      use_case: {
+        name: created_use_case.name,
+        slug: created_use_case.slug,
+        description: "Updated desc"
+      }
+    }
+    
+    patch use_case_url(created_use_case), params: uc_params
+
+    updated_use_case = UseCase.find(created_use_case.id)
+    assert_redirected_to use_case_url(updated_use_case)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
   end
 end

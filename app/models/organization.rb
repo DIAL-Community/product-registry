@@ -1,3 +1,5 @@
+require('csv')
+
 class Organization < ApplicationRecord
   include Auditable
 
@@ -66,5 +68,41 @@ class Organization < ApplicationRecord
   # overridden
   def to_param
     slug
+  end
+
+  def self.to_csv
+    attributes = %w{id name slug when_endorsed website is_endorser is_mni countries offices}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |o|
+        countries = o.countries
+                     .map(&:name)
+                     .join('; ')
+        offices = o.offices
+                   .map(&:city)
+                   .join('; ')
+
+        csv << [o.id, o.name, o.slug, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries, offices]
+      end
+    end
+  end
+
+  def self.serialization_options
+    {
+      except: [:created_at, :updated_at],
+      include: {
+        countries: { only: [:name, :slug, :code] },
+        offices: {
+          only: [:name, :city],
+          include: {
+            country: { only: [:name, :slug, :code] },
+            region: { only: [:name] }
+          }
+        },
+        products: { only: [:name] }
+      }
+    }
   end
 end

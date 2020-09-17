@@ -15,6 +15,9 @@ class ProductsController < ApplicationController
 
   def favorite_product
     set_product
+    if current_user.nil? || @product.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_products.push(@product.id)
@@ -22,15 +25,18 @@ class ProductsController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
 
   def unfavorite_product
     set_product
+    if current_user.nil? || @product.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_products.delete(@product.id)
@@ -38,9 +44,9 @@ class ProductsController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
@@ -111,6 +117,19 @@ class ProductsController < ApplicationController
 
     authorize(Product, :view_allowed?)
     render(json: product_count.count)
+  end
+
+  def export_data
+    @products = Product.where(id: filter_products).eager_load(:organizations, :origins, :building_blocks, :sustainable_development_goals)
+    authorize(@products, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @products, filename: 'exported-product'
+      end
+      format.json do
+        render json: @products.to_json(Product.serialization_options)
+      end
+    end
   end
 
   # GET /products/1
@@ -462,7 +481,7 @@ class ProductsController < ApplicationController
     end
 
     respond_to do |format|
-      if @product.errors.none? && @product.update(product_params)
+      if @product.errors.none? && @product.update!(product_params)
         format.html do
           redirect_to @product,
                       flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }
@@ -610,9 +629,14 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
+      permitted_attributes = policy(Product).permitted_attributes
+      unless @product.nil?
+        permitted_attributes = policy(@product).permitted_attributes
+      end
+
       params
         .require(:product)
-        .permit(policy(Product).permitted_attributes)
+        .permit(permitted_attributes)
         .tap do |attr|
           if attr[:website].present?
             # Handle both:
@@ -635,21 +659,21 @@ class ProductsController < ApplicationController
           if attr[:est_invested].present? && !attr[:est_invested].nil?
             attr[:est_invested] = attr[:est_invested].to_i
           end
-          if policy(Product).permitted_attributes.include?(:aliases)
+          if permitted_attributes.include?(:aliases)
             valid_aliases = []
             if params[:other_names].present?
               valid_aliases = params[:other_names].reject(&:empty?)
             end
             attr[:aliases] = valid_aliases
           end
-          if policy(Product).permitted_attributes.include?(:tags)
+          if permitted_attributes.include?(:tags)
             valid_tags = []
             if params[:product_tags].present?
               valid_tags = params[:product_tags].reject(&:empty?).map(&:downcase)
             end
             attr[:tags] = valid_tags
           end
-          if params[:reslug].present? && policy(Product).permitted_attributes.include?(:slug)
+          if params[:reslug].present? && permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
             if params[:duplicate].present?
               first_duplicate = Product.slug_starts_with(attr[:slug]).order(slug: :desc).first

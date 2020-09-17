@@ -92,6 +92,9 @@ en:
     operator_services: Operator Services
   view:
     about:
+      active_users: Active users in the past 24 hours
+      help: For information on how to use the catalog, reference our documentation site
+      help_link: here
       sdg_title: "SDG Digital Investment Framework"
       sdg_subtitle: "A Whole-of-Government Approach to Coordinating Investment in Digital Technologies to Achieve the SDGs"
       enter_catalog: "Explore the Catalog"
@@ -164,6 +167,8 @@ en:
           one: Mapping to Associated Workflow
           other: Mapping to Associated Workflows
         definition: Building blocks are enterprise-ready, reusable software components providing key functionality facilitating generic WorkFlows across multiple sectors.
+        export-json: Export (json)
+        export-csv: Export (csv)
         characteristics: |
           Reusable software components  
           Can be open-source, commercial off-the-shelf (COTS), or freely available with open access to data  
@@ -177,6 +182,7 @@ en:
         mature_only: Show only Mature Building Blocks
         is_beta: The specifications for this Building Block have not been validated
         is_mature: The specifications for this Building Block have been validated
+        view-audit: View audit log
     candidate-organization:
       form:
         created: Thank you for your submission. We will carefully review your submission. Approved submission will become available in the organization list.
@@ -267,6 +273,8 @@ en:
         when-endorsed: When endorsed
         description-placeholder: Description of the organization goes here.
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
         endorsers: Endorsers
         aggregators: Aggregators
         description: Description
@@ -328,6 +336,8 @@ en:
         bb-mapping: Indicate if mapping is Beta or Validated
         sdg-mapping: Indicate if mapping is Self-Reported or Validated
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
         toggle-favorite: Add to / remove from list of favorite products
         description: Description
         filter: Filter
@@ -404,6 +414,8 @@ en:
         org-owner-tooltip: As organization owner, you are only allowed to add / remove your organization from a project.
         product-owner-tooltip: As product owner, you are only allowed to add / remove your own products from a project.
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
         toggle-favorite: Add to / remove from list of favorite projects
         budget: Budget
         description: Description
@@ -436,6 +448,7 @@ en:
       ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
       powered-by-dial: Powered by DIAL
     header:
+      about: About
       active-portal: Active
       admin-data: Admin Data
       elevate-role: Request Elevated Role
@@ -637,6 +650,8 @@ en:
         steps-header-description: Steps Header Description
         is-mature: Is Mature
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
         toggle-favorite: Add to / remove from list of favorite use cases
         no-data: We couldn't find any use case in the database.
         sdg-target-popover:
@@ -703,6 +718,8 @@ en:
         description: Description
         other-names: Other Names
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
         no-data: We couldn't find workflow matching to the search phrase.
         use-case-popover:
           one: Mapped Use Case
@@ -755,7 +772,6 @@ en:
       definitions: Click to see more terms and definitions
       map-legend: Click for information on how to read the product cards
       characteristics: Characteristics
-      description: Description
       show-use-case: What is a Use Case?
       show-sdg: What is a Sustainable Development Goal?
       show-workflow: What is a Workflow?

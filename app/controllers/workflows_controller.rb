@@ -34,6 +34,19 @@ class WorkflowsController < ApplicationController
     render json: @workflows.count
   end
 
+  def export_data
+    @workflows = Workflow.where(id: filter_workflows).eager_load(:building_blocks, :use_case_steps)
+    authorize(@workflows, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @workflows, filename: 'exported-workflow'
+      end
+      format.json do
+        render json: @workflows.to_json(Workflow.serialization_options)
+      end
+    end
+  end
+
   # GET /workflows/1
   # GET /workflows/1.json
   def show

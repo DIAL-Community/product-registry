@@ -184,7 +184,8 @@ CREATE TYPE public.mobile_services AS ENUM (
 CREATE TYPE public.org_type AS ENUM (
     'owner',
     'maintainer',
-    'funder'
+    'funder',
+    'implementer'
 );
 
 
@@ -199,10 +200,32 @@ CREATE TYPE public.org_type_orig AS ENUM (
 
 
 --
+-- Name: org_type_save; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.org_type_save AS ENUM (
+    'owner',
+    'maintainer',
+    'funder'
+);
+
+
+--
 -- Name: product_type; Type: TYPE; Schema: public; Owner: -
 --
 
 CREATE TYPE public.product_type AS ENUM (
+    'product',
+    'dataset',
+    'content'
+);
+
+
+--
+-- Name: product_type_save; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.product_type_save AS ENUM (
     'product',
     'dataset'
 );
@@ -2174,8 +2197,9 @@ CREATE TABLE public.products (
     est_hosting integer,
     est_invested integer,
     maturity_score integer,
-    product_type public.product_type DEFAULT 'product'::public.product_type,
-    status character varying
+    product_type public.product_type_save DEFAULT 'product'::public.product_type_save,
+    status character varying,
+    publicgoods_data jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -6752,7 +6776,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200826134558'),
 ('20200826134741'),
 ('20200826134916'),
-('20200826205015');
-
+('20200826205015'),
+('20200831211606'),
+('20200904163226');
 
 

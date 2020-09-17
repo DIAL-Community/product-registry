@@ -1,4 +1,7 @@
 <li class="mt-2">
+  <strong><%= link_to t('view.header.about'), about_path, :class => 'nav-link' %></strong>
+</li>
+<li class="mt-2">
   <strong><%= link_to t('view.header.sign-up'), new_user_registration_path, :class => 'nav-link' %></strong>
 </li>
 <li class="mt-2">
@@ -9,11 +12,4 @@
      class="nav-link">
     <strong><%= t('view.header.documentation') %></strong>
   </a>
-</li>
-<li class="mt-2">
-  <strong>
-    <%= link_to t('view.header.feedback'),
-                'mailto:catalog-support@dial.community',
-                target: '_blank', class: 'nav-link' %>
-  </strong>
 </li>

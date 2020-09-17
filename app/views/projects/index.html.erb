@@ -9,7 +9,15 @@
         <span class="small mr-1">&nbsp;|</span>
         <%= link_to t('view.organization.index.view-audit').titlecase,
                     audits_path(type: "Project"), class: 'small mr-1' %>
+        <span class="small mr-1">&nbsp;|</span>
       <% end %>
+      <%= link_to t('view.project.index.export-json'),
+                  export_data_projects_path(format: 'json'),
+                  target: :_blank, class: 'small mr-1' %>
+      <span class="small mr-1">&nbsp;|</span>
+      <%= link_to t('view.project.index.export-csv'),
+                  export_data_projects_path(format: 'csv'),
+                  target: :_blank, class: 'small mr-1' %>
     </div>
   </div>
 </div>

@@ -8,6 +8,9 @@ class UseCasesController < ApplicationController
 
   def favorite_use_case
     set_use_case
+    if current_user.nil? || @use_case.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_use_cases.push(@use_case.id)
@@ -15,15 +18,18 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
 
   def unfavorite_use_case
     set_use_case
+    if current_user.nil? || @use_case.nil?
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
 
     favoriting_user = current_user
     favoriting_user.saved_use_cases.delete(@use_case.id)
@@ -31,9 +37,9 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if favoriting_user.save!
-        format.json { render :show, status: :created }
+        format.json { render :show, status: :ok }
       else
-        format.json { head :no_content }
+        format.json { render :show, status: :unprocessable_entity }
       end
     end
   end
@@ -66,6 +72,19 @@ class UseCasesController < ApplicationController
 
     authorize @use_cases, :view_allowed?
     render json: @use_cases.count
+  end
+
+  def export_data
+    @use_cases = UseCase.where(id: filter_use_cases).eager_load(:sdg_targets, :use_case_steps, :use_case_descriptions)
+    authorize(@use_cases, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @use_cases, filename: 'exported-use-case'
+      end
+      format.json do
+        render json: @use_cases.to_json(UseCase.serialization_options)
+      end
+    end
   end
 
   # GET /use_cases/1

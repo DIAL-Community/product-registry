@@ -14,7 +14,8 @@ class OrganizationPolicy < ApplicationPolicy
          user.roles.include?(User.user_roles[:mni])
       [:id, :name, :is_endorser, :is_mni, :when_endorsed, :website, :slug, :logo,
        :organization_description, :aliases]
-    elsif user.roles.include?(User.user_roles[:org_user])
+    elsif user.roles.include?(User.user_roles[:org_user]) &&
+          @record.is_a?(Organization) && user.organization_id == @record.id
       [:name, :logo, :organization_description]
     else
       [:logo]
@@ -32,13 +33,13 @@ class OrganizationPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:org_user]) &&
-        record.is_a?(Organization) && user.organization_id == record.id
+        @record.is_a?(Organization) && user.organization_id == @record.id
 
     return true if user.roles.include?(User.user_roles[:principle]) &&
-        record.is_a?(Organization) && record.is_endorser
+        @record.is_a?(Organization) && @record.is_endorser
 
     return true if user.roles.include?(User.user_roles[:mni]) &&
-        record.is_a?(Organization) && record.is_mni
+        @record.is_a?(Organization) && @record.is_mni
 
     user.roles.include?(User.user_roles[:admin])
   end
@@ -57,7 +58,7 @@ class OrganizationPolicy < ApplicationPolicy
     #     user.roles.include?(User.user_roles[:admin])
 
     # return true if user.roles.include?(User.user_roles[:org_user]) &&
-    #     record.is_a?(Organization) && user.organization_id == record.id
+    #     @record.is_a?(Organization) && user.organization_id == @record.id
 
     # # get the org for the user
     # user_org = Organization.where(id: user.organization_id).first
@@ -82,7 +83,7 @@ class OrganizationPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:org_user]) &&
-      record.is_a?(Organization) && user.organization_id == record.id
+      @record.is_a?(Organization) && user.organization_id == @record.id
 
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:content_editor])
@@ -94,7 +95,7 @@ class OrganizationPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:org_user]) &&
-      record.is_a?(Organization) && user.organization_id == record.id
+      @record.is_a?(Organization) && user.organization_id == @record.id
 
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:content_editor]) ||

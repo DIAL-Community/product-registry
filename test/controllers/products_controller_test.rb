@@ -27,7 +27,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "creating product without logo should not fail" do
-    post products_url, params: { product: { name: "Some Name", slug: 'some_name' }}
+    post products_url, params: { product: { name: "Some Name", slug: 'some_name' } }
     created_product = Product.last
 
     assert_equal created_product.name, "Some Name"
@@ -35,7 +35,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updating product without logo should not fail" do
-    patch product_url(@product), params: { product: {name: "Some New Name" } }
+    patch product_url(@product), params: { product: { name: "Some New Name" } }
 
     updated_product = Product.find(@product.id)
     assert_equal updated_product.name, "Some New Name"
@@ -64,7 +64,9 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update product" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
-    patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug, website: @product.website }, logo: uploaded_file }
+    patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug,
+                                                      website: @product.website },
+                                           logo: uploaded_file }
     assert_redirected_to product_url(@product)
   end
 
@@ -137,7 +139,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     patch_params = { product: {
       name: 'Some new product name',
-      website: 'some-fancy-website.com',
+      website: 'some-fancy-website.com'
     }, selected_sectors: {
       "#{sector.id}": sector.id
     }, other_names: ['', ' ', 'some-alias'] }
@@ -145,18 +147,18 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     patch(product_url(product), params: patch_params)
     get product_url(product)
 
-    assert_not_equal('Some new product name', assigns(:product).name)
-    assert_not_equal('some-fancy-website.com', assigns(:product).website)
+    assert_equal('Some new product name', assigns(:product).name)
+    assert_equal('some-fancy-website.com', assigns(:product).website)
 
-    assert_equal('Product', assigns(:product).name)
-    assert_equal('website.org', assigns(:product).website)
+    assert_not_equal('Product', assigns(:product).name)
+    assert_not_equal('website.org', assigns(:product).website)
 
     assert_equal(1, assigns(:product).sectors.length)
 
     sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
 
-    patch(product_url(product), params: patch_params)
-    get product_url(product)
+    patch(product_url(products(:two)), params: patch_params)
+    get product_url(products(:two))
 
     assert_equal('Some new product name', assigns(:product).name)
     assert_equal('some-fancy-website.com', assigns(:product).website)
@@ -174,10 +176,365 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     get edit_product_url(@product)
     assert_response :redirect
 
-    patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug, website: @product.website } }
+    patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug,
+                                                      website: @product.website } }
     assert_response :redirect
 
     delete product_url(@product)
     assert_response :redirect
+  end
+
+  test 'favoriting should save to saved_products array' do
+    delete(destroy_user_session_url)
+    post(favorite_product_product_url(@product), as: :json)
+    assert_response :unauthorized
+
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org')
+
+    last_user = User.last
+    assert_equal(last_user.saved_products.length, 0)
+
+    post(favorite_product_product_url(@product), as: :json)
+    assert_response :ok
+
+    last_user = User.last
+    assert_equal(last_user.saved_products.length, 1)
+  end
+
+  test 'unfavoriting should remove from saved_products array' do
+    delete(destroy_user_session_url)
+    post(unfavorite_product_product_url(@product), as: :json)
+    assert_response :unauthorized
+
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', saved_products: [@product.id])
+
+    last_user = User.last
+    assert_equal(last_user.saved_products.length, 1)
+
+    post(unfavorite_product_product_url(@product), as: :json)
+    assert_response :ok
+
+    last_user = User.last
+    assert_equal(last_user.saved_products.length, 0)
+  end
+
+  test 'product user allowed to edit own product' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['product_user'],
+                                     user_products: [@product.id, products(:three).id])
+
+    get edit_product_url(@product)
+    assert_response :success
+
+    patch product_url(@product), params: { product: { name: "Some New Name" } }
+
+    updated_product = Product.find(@product.id)
+    assert_redirected_to product_url(updated_product)
+    assert_equal updated_product.name, "Some New Name"
+
+    get edit_product_url(products(:three))
+    assert_response :success
+
+    get edit_product_url(products(:two))
+    assert_response :redirect
+
+    patch product_url(products(:two)), params: { product: { name: "Some New Name" } }
+    assert_response :redirect
+
+    updated_product = Product.find(products(:two).id)
+    assert_equal updated_product.name, "Product Again"
+  end
+
+  test 'content writer user should be able to create product' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+
+    building_block = building_blocks(:one)
+    organization = organizations(:one)
+    included_product = products(:one)
+    interop_product = products(:two)
+    sector = sectors(:one)
+    sustainable_development_goal = sustainable_development_goals(:one)
+
+    assert_no_difference('Product.count') do
+      post products_url, params: { product: { name: @product.name, website: @product.website },
+                                   selected_building_blocks: { building_block.id => building_block.id },
+                                   selected_sectors: { sector.id => sector.id },
+                                   selected_sustainable_development_goals: {
+                                     sustainable_development_goal.id => sustainable_development_goal.id
+                                   },
+                                   selected_included_products: { included_product.id => included_product.id },
+                                   selected_interoperable_products: { interop_product.id => interop_product.id },
+                                   selected_organizations: { organization.id => organization.id },
+                                   duplicate: true, reslug: true, logo: uploaded_file }
+    end
+    assert_response :redirect
+  end
+
+  test 'content writer user shoud not be able to remove mappings' do
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+
+    building_block = building_blocks(:one)
+    organization = organizations(:one)
+    included_product = products(:one)
+    interop_product = products(:two)
+    sector = sectors(:one)
+    sustainable_development_goal = sustainable_development_goals(:one)
+
+    assert_difference('Product.count') do
+      post products_url, params: { product: { name: @product.name, website: @product.website },
+                                   selected_building_blocks: { building_block.id => building_block.id },
+                                   selected_sectors: { sector.id => sector.id },
+                                   selected_sustainable_development_goals: {
+                                     sustainable_development_goal.id => sustainable_development_goal.id
+                                   },
+                                   selected_included_products: { included_product.id => included_product.id },
+                                   selected_interoperable_products: { interop_product.id => interop_product.id },
+                                   selected_organizations: { organization.id => organization.id },
+                                   duplicate: true, reslug: true, logo: uploaded_file }
+    end
+
+    created_product = Product.last
+    assert_redirected_to product_url(created_product)
+
+    assert_equal(created_product.building_blocks.length, 1)
+    assert_equal(created_product.sectors.length, 1)
+    assert_equal(created_product.sustainable_development_goals.length, 1)
+    assert_equal(created_product.includes.length, 1)
+    assert_equal(created_product.interoperates_with.length, 1)
+    assert_equal(created_product.organizations.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'CREATED')
+    assert_equal(created_audit.username, User.last.email)
+
+    # Audit will have 3 elements:
+    # * Base entity changes.
+    # * Mapping changes (optional)
+    # * Image changes (optional)
+    assert_equal(created_audit.audit_changes.length, 3)
+
+    mapping_changes_audit = created_audit.audit_changes[1]
+    assert_equal(mapping_changes_audit.keys.length, 6)
+    assert_equal(mapping_changes_audit['buildingblocks'].length, 1)
+    assert_equal(mapping_changes_audit['sectors'].length, 1)
+    assert_equal(mapping_changes_audit['sustainabledevelopmentgoals'].length, 1)
+    assert_equal(mapping_changes_audit['contains'].length, 1)
+    assert_equal(mapping_changes_audit['interoperates_with'].length, 1)
+    assert_equal(mapping_changes_audit['organizations'].length, 1)
+
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+
+    other_building_block = building_blocks(:two)
+    patch product_url(created_product), params: {
+      product: {
+        name: created_product.name, website: created_product.website
+      },
+      selected_building_blocks: {
+        building_block.id => building_block.id,
+        other_building_block.id => other_building_block.id
+      }
+    }
+
+    updated_product = Product.find(created_product.id)
+    assert_redirected_to product_url(updated_product)
+    assert_equal(updated_product.building_blocks.length, 2)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'nonadmin@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    assert_equal(mapping_changes_audit['buildingblocks'].length, 1)
+
+    other_sector = sectors(:two)
+    patch product_url(updated_product), params: {
+      product: {
+        name: updated_product.name, website: updated_product.website
+      },
+      selected_sectors: {
+        other_sector.id => other_sector.id
+      }
+    }
+
+    updated_product = Product.find(updated_product.id)
+    assert_redirected_to product_url(updated_product)
+    # Content writer users are not allowed to remove mapping, but allowed to add.
+    assert_equal(updated_product.sectors.length, 2)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'nonadmin@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    assert_equal(mapping_changes_audit['sectors'].length, 1)
+
+    patch product_url(updated_product), params: {
+      product: {
+        name: updated_product.name, website: updated_product.website
+      },
+      selected_sectors: {}
+    }
+
+    updated_product = Product.find(updated_product.id)
+    assert_redirected_to product_url(updated_product)
+    # Content writer users are not allowed to remove mapping
+    assert_equal(updated_product.sectors.length, 2)
+  end
+
+  test 'content editor user should be able to remove mapping' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'content_editor@abba.org', roles: ['content_editor'])
+
+    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+
+    building_block = building_blocks(:one)
+    organization = organizations(:one)
+    included_product = products(:one)
+    interop_product = products(:two)
+    sector = sectors(:one)
+    sustainable_development_goal = sustainable_development_goals(:one)
+
+    assert_difference('Product.count') do
+      post products_url, params: { product: { name: @product.name, website: @product.website },
+                                   selected_building_blocks: { building_block.id => building_block.id },
+                                   selected_sectors: { sector.id => sector.id },
+                                   selected_sustainable_development_goals: {
+                                     sustainable_development_goal.id => sustainable_development_goal.id
+                                   },
+                                   selected_included_products: { included_product.id => included_product.id },
+                                   selected_interoperable_products: { interop_product.id => interop_product.id },
+                                   selected_organizations: { organization.id => organization.id },
+                                   duplicate: true, reslug: true, logo: uploaded_file }
+    end
+
+    created_product = Product.last
+    assert_redirected_to product_url(created_product)
+
+    assert_equal(created_product.building_blocks.length, 1)
+    assert_equal(created_product.sectors.length, 1)
+    assert_equal(created_product.sustainable_development_goals.length, 1)
+    assert_equal(created_product.includes.length, 1)
+    assert_equal(created_product.interoperates_with.length, 1)
+    assert_equal(created_product.organizations.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'CREATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 3 elements:
+    # * Base entity changes.
+    # * Mapping changes (optional)
+    # * Image changes (optional)
+    assert_equal(created_audit.audit_changes.length, 3)
+
+    mapping_changes_audit = created_audit.audit_changes[1]
+    assert_equal(mapping_changes_audit.keys.length, 6)
+    assert_equal(mapping_changes_audit['buildingblocks'].length, 1)
+    assert_equal(mapping_changes_audit['sectors'].length, 1)
+    assert_equal(mapping_changes_audit['sustainabledevelopmentgoals'].length, 1)
+    assert_equal(mapping_changes_audit['contains'].length, 1)
+    assert_equal(mapping_changes_audit['interoperates_with'].length, 1)
+    assert_equal(mapping_changes_audit['organizations'].length, 1)
+
+    other_building_block = building_blocks(:two)
+    patch product_url(created_product), params: {
+      product: {
+        name: created_product.name, website: created_product.website
+      },
+      selected_building_blocks: {
+        building_block.id => building_block.id,
+        other_building_block.id => other_building_block.id
+      }
+    }
+
+    updated_product = Product.find(created_product.id)
+    assert_redirected_to product_url(updated_product)
+    assert_equal(updated_product.building_blocks.length, 2)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    assert_equal(mapping_changes_audit['buildingblocks'].length, 1)
+
+    other_sector = sectors(:two)
+    patch product_url(updated_product), params: {
+      product: {
+        name: updated_product.name, website: updated_product.website
+      },
+      selected_sectors: {
+        other_sector.id => other_sector.id
+      }
+    }
+
+    updated_product = Product.find(updated_product.id)
+    assert_redirected_to product_url(updated_product)
+    # Content editor users are allowed to remove and add mapping.
+    assert_equal(updated_product.sectors.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+
+    mapping_changes_audit = created_audit.audit_changes[0]
+    # One for removing original sector and one for adding new sector.
+    assert_equal(mapping_changes_audit['sectors'].length, 2)
+
+    patch product_url(updated_product), params: {
+      product: {
+        name: updated_product.name, website: updated_product.website
+      },
+      selected_sectors: {}
+    }
+
+    updated_product = Product.find(updated_product.id)
+    assert_redirected_to product_url(updated_product)
+    # Content editor users are allowed to remove mapping
+    assert_equal(updated_product.sectors.length, 1)
+
+    created_audit = Audit.last
+    assert_equal(created_audit.action, 'UPDATED')
+    assert_equal(created_audit.username, 'content_editor@abba.org')
+
+    # Audit will have 1 elements:
+    # * Mapping changes (optional)
+    assert_equal(created_audit.audit_changes.length, 1)
+  end
+
+  test 'opening product page should generate event record' do
+    delete(destroy_user_session_url)
+    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+
+    number_of_user_events = UserEvent.count
+
+    get product_url(@product)
+    assert_equal(UserEvent.count, number_of_user_events + 1)
+
+    last_user_event = UserEvent.last
+
+    assert_equal(last_user_event.email, 'nonadmin@abba.org')
+    assert_equal(last_user_event.extended_data['slug'], @product.slug)
+    assert_equal(last_user_event.extended_data['name'], @product.name)
   end
 end

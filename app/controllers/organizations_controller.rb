@@ -90,6 +90,19 @@ class OrganizationsController < ApplicationController
     )
   end
 
+  def export_data
+    @organizations = Organization.where(id: filter_organizations).eager_load(:countries, :offices, :products)
+    authorize(@organizations, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @organizations, filename: 'exported-organization'
+      end
+      format.json do
+        render json: @organizations.to_json(Organization.serialization_options)
+      end
+    end
+  end
+
   # GET /organizations/1
   # GET /organizations/1.json
   def show
@@ -657,14 +670,20 @@ class OrganizationsController < ApplicationController
   end
 
     def set_core_services
-      @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT', 'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice'];
+      @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT', 'SLA',
+                        'SMS', 'User-Interface', 'USSD', 'Voice']
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
+      permitted_attributes = policy(Organization).permitted_attributes
+      unless @organization.nil?
+        permitted_attributes = policy(@organization).permitted_attributes
+      end
+
       params
         .require(:organization)
-        .permit(policy(Organization).permitted_attributes)
+        .permit(permitted_attributes)
         .tap do |attr|
           if attr[:website].present?
             # Handle both:
@@ -678,14 +697,14 @@ class OrganizationsController < ApplicationController
           if attr[:when_endorsed].present?
             attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y')
           end
-          if policy(Organization).permitted_attributes.include?(:aliases)
+          if permitted_attributes.include?(:aliases)
             valid_aliases = []
             if params[:other_names].present?
               valid_aliases = params[:other_names].reject(&:empty?)
             end
             attr[:aliases] = valid_aliases
           end
-          if params[:reslug].present? && policy(Organization).permitted_attributes.include?(:slug)
+          if params[:reslug].present? && permitted_attributes.include?(:slug)
             attr[:slug] = slug_em(attr[:name])
             if params[:duplicate].present?
               first_duplicate = Organization.slug_starts_with(attr[:slug]).order(slug: :desc).first

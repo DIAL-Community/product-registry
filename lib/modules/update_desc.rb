@@ -49,5 +49,76 @@ module Modules
         end
       end
     end
+
+    def uc_to_html(use_case_list)
+      html_output = "<h1>Use Cases</h1>"
+      use_case_list.each do |use_case|
+        puts "USE CASE: " + use_case["name"]
+        html_output += "<h2>"+use_case["name"]+"</h2>"
+        use_case["use_case_descriptions"].each do |uc_desc|
+          html_output += uc_desc["description"]
+        end
+        use_case_steps = use_case["use_case_steps"]
+        if use_case_steps.count
+          html_output += "<h3>Use Case Steps</h3>"
+        end
+        use_case_steps.each do |uc_step|
+          html_output += "<h4>"+uc_step["name"]+"</h4>"
+          step_descriptions = uc_step["use_case_step_descriptions"]
+          step_descriptions.each do |step_desc|
+            html_output += step_desc["description"]
+          end
+        end
+      end
+      html_output
+    end
+
+    def wf_to_html(workflow_list)
+      html_output = "<h1>Workflows</h1>"
+      workflow_list.each do |workflow|
+        puts "WORKFLOW: " + workflow["name"]
+        html_output += "<h2>"+workflow["name"]+"</h2>"
+        workflow["workflow_descriptions"] && workflow["workflow_descriptions"].each do |wf_desc|
+          html_output += wf_desc["description"]
+        end
+      end
+      html_output
+    end
+
+    def bb_to_html(bb_list)
+      html_output = "<h1>Building Blocks</h1>"
+      bb_list.each do |bb|
+        puts "BUILDING BLOCK: " + bb["name"]
+        html_output += "<h2>"+bb["name"]+"</h2>"
+        bb["building_block_descriptions"] && bb["building_block_descriptions"].each do |bb_desc|
+          html_output += bb_desc["description"]
+        end
+      end
+      html_output
+    end
+
+    def org_to_html(org_list)
+      html_output = "<h1>Organizations</h1>"
+      org_list.each do |org|
+        puts "ORGANIZATION: " + org["name"]
+        html_output += "<h2>"+org["name"]+"</h2>"
+        org["organization_descriptions"] && org["organization_descriptions"].each do |org_desc|
+          html_output += org_desc["description"]
+        end
+      end
+      html_output
+    end
+
+    def prod_to_html(prod_list)
+      html_output = "<h1>Products</h1>"
+      prod_list.each do |prod|
+        puts "PRODUCT: " + prod["name"]
+        html_output += "<h2>"+prod["name"]+"</h2>"
+        prod["product_descriptions"] && prod["product_descriptions"].each do |prod_desc|
+          html_output += prod_desc["description"]
+        end
+      end
+      html_output
+    end
   end
 end

@@ -117,10 +117,14 @@ class ProductSuitesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_suite_params
+    permitted_attributes = policy(ProductSuite).permitted_attributes
+    unless @product_suite.nil?
+      permitted_attributes = policy(@product_suite).permitted_attributes
+    end
     params.require(:product_suite)
-          .permit(policy(ProductSuite).permitted_attributes)
+          .permit(permitted_attributes)
           .tap do |attr|
-            if params[:reslug].present? && policy(ProductSuite).permitted_attributes.include?(:slug)
+            if params[:reslug].present? && permitted_attributes.include?(:slug)
               attr[:slug] = slug_em(attr[:name])
               if params[:duplicate].present?
                 first_duplicate = ProductSuite.slug_starts_with(attr[:slug]).order(slug: :desc).first

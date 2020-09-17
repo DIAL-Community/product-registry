@@ -90,8 +90,8 @@ class CandidateRolesController < ApplicationController
   # POST /candidate_roles.json
   def create
     session[:return_to] ||= request.referer
-    authorize(CandidateRole, :create_allowed?)
     @candidate_role = CandidateRole.new(candidate_role_params)
+    authorize(@candidate_role, :create_allowed?)
 
     if params[:selected_roles].present?
       params[:selected_roles].each do |selected_role|
@@ -102,7 +102,7 @@ class CandidateRolesController < ApplicationController
     respond_to do |format|
       if @candidate_role.save
         session.delete(:request_elevated_role)
-        if policy(CandidateRole).view_allowed?
+        if policy(@candidate_role).view_allowed?
           format.html { redirect_to @candidate_role, notice: 'Candidate role was successfully created.' }
           format.json { render :show, status: :created, location: @candidate_role }
         else
