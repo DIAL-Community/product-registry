@@ -21,3 +21,7 @@ end
 json.sectors organization.sectors do |sector|
   json.merge! sector.id
 end
+
+json.organization_descriptions organization.organization_descriptions do |org_desc|
+  json.extract! org_desc, :description, :locale
+end
