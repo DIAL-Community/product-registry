@@ -92,6 +92,9 @@ en:
     operator_services: Operator Services
   view:
     about:
+      active_users: Active users in the past 24 hours
+      help: For information on how to use the catalog, reference our documentation site
+      help_link: here
       sdg_title: "SDG Digital Investment Framework"
       sdg_subtitle: "A Whole-of-Government Approach to Coordinating Investment in Digital Technologies to Achieve the SDGs"
       enter_catalog: "Explore the Catalog"
@@ -436,6 +439,7 @@ en:
       ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
       powered-by-dial: Powered by DIAL
     header:
+      about: About
       active-portal: Active
       admin-data: Admin Data
       elevate-role: Request Elevated Role
@@ -755,7 +759,6 @@ en:
       definitions: Click to see more terms and definitions
       map-legend: Click for information on how to read the product cards
       characteristics: Characteristics
-      description: Description
       show-use-case: What is a Use Case?
       show-sdg: What is a Sustainable Development Goal?
       show-workflow: What is a Workflow?

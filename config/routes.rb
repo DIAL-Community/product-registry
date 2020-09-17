@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
   get 'deploys/index'
   get 'about/cookies'
+  get 'about', to: 'about#index'
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
   scope '/admin' do
@@ -70,7 +71,7 @@ Rails.application.routes.draw do
     get '/users/password', to: 'devise/passwords#new'
   end
 
-  root to: 'about#index'
+  root to: redirect('/products')
 
   resources :covid, only: [:index]
 
