@@ -36,6 +36,19 @@ class BuildingBlocksController < ApplicationController
     render json: @building_blocks.count
   end
 
+  def export_data
+    @building_blocks = BuildingBlock.where(id: filter_building_blocks).eager_load(:products, :workflows, :building_block_descriptions)
+    authorize(@building_blocks, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @building_blocks, filename: 'exported-building-block'
+      end
+      format.json do
+        render json: @building_blocks.to_json(BuildingBlock.serialization_options)
+      end
+    end
+  end
+
   # GET /building_blocks/1
   # GET /building_blocks/1.json
   def show

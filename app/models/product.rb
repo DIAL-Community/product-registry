@@ -1,3 +1,5 @@
+require('csv')
+
 class Product < ApplicationRecord
   include Auditable
 
@@ -74,5 +76,36 @@ class Product < ApplicationRecord
   # overridden
   def to_param
     slug
+  end
+
+  def self.to_csv
+    attributes = %w{id name slug website repository organizations origins}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |p|
+        organizations = p.organizations
+                         .map(&:name)
+                         .join('; ')
+        origins = p.origins
+                   .map(&:name)
+                   .join('; ')
+
+        csv << [p.id, p.name, p.slug, p.website, p.repository, organizations, origins]
+      end
+    end
+  end
+
+  def self.serialization_options
+    {
+      except: [:statistics, :licensewebsite_analysis, :default_url, :publicgoods_data, :status, :created_at, :updated_at],
+      include: {
+        organizations: { only: [:name] },
+        origins: { only: [:name] },
+        building_blocks: { only: [:name]},
+        sustainable_development_goals: { only: [:number, :name] }
+      }
+    }
   end
 end

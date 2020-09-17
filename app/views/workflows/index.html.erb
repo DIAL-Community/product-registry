@@ -34,7 +34,15 @@
     <div class="float-right">
       <% if user_signed_in? && policy(Workflow).mod_allowed? %>
         <%= link_to t('view.general.create'), new_workflow_path, :class => 'small ml-1' %>
+        <span class="small mr-1">&nbsp;|</span>
       <% end %>
+      <%= link_to t('view.workflow.index.export-json'),
+                  export_data_workflows_path(format: 'json'),
+                  target: :_blank, class: 'small mr-1' %>
+      <span class="small mr-1">&nbsp;|</span>
+      <%= link_to t('view.workflow.index.export-csv'),
+                  export_data_workflows_path(format: 'csv'),
+                  target: :_blank, class: 'small mr-1' %>
     </div>
   </div>
 </div>

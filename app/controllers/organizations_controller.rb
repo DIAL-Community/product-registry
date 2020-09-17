@@ -90,6 +90,19 @@ class OrganizationsController < ApplicationController
     )
   end
 
+  def export_data
+    @organizations = Organization.where(id: filter_organizations).eager_load(:countries, :offices, :products)
+    authorize(@organizations, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @organizations, filename: 'exported-organization'
+      end
+      format.json do
+        render json: @organizations.to_json(Organization.serialization_options)
+      end
+    end
+  end
+
   # GET /organizations/1
   # GET /organizations/1.json
   def show

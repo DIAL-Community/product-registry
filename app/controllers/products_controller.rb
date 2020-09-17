@@ -119,6 +119,19 @@ class ProductsController < ApplicationController
     render(json: product_count.count)
   end
 
+  def export_data
+    @products = Product.where(id: filter_products).eager_load(:organizations, :origins, :building_blocks, :sustainable_development_goals)
+    authorize(@products, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @products, filename: 'exported-product'
+      end
+      format.json do
+        render json: @products.to_json(Product.serialization_options)
+      end
+    end
+  end
+
   # GET /products/1
   # GET /products/1.json
   def show

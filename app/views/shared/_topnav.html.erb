@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <% if session[:portal]["slug"] == "default" %>
           <a href="/products">
-            <%= image_tag "logo-dial.png", :alt => "DIAL Logo", :height => "86px" %>
+            <%= image_tag "logo-dial.png", :alt => "DIAL Logo", :height => "86px", :width => "300px" %>
           </a>
         <% else %>
           <%= image_tag "/assets/portal_views/"+session[:portal]["slug"]+".png", :alt => "DIAL Logo", :height => "86px" %>

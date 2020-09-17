@@ -2198,7 +2198,8 @@ CREATE TABLE public.products (
     est_invested integer,
     maturity_score integer,
     product_type public.product_type_save DEFAULT 'product'::public.product_type_save,
-    status character varying
+    status character varying,
+    publicgoods_data jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -6776,7 +6777,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200826134741'),
 ('20200826134916'),
 ('20200826205015'),
-('20200831211606');
-
+('20200831211606'),
+('20200904163226');
 
 

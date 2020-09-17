@@ -40,11 +40,20 @@
       <%= link_to t('view.general.create'), new_product_path, class: 'small mr-1' %>
       <span class="small mr-1">&nbsp;|</span>
       <%= link_to t('view.organization.index.view-audit').titlecase, audits_path(type: "Product"), :class => 'small mr-1' %>
+      <span class="small mr-1">&nbsp;|</span>
     <% else %>
       <%= link_to t('view.general.create'),
           'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
           class: 'small mr-1', target: :_blank  %>
+      <span class="small mr-1">&nbsp;|</span>
     <% end %>
+    <%= link_to t('view.product.index.export-json'),
+                export_data_products_path(format: 'json'),
+                target: :_blank, class: 'small mr-1' %>
+    <span class="small mr-1">&nbsp;|</span>
+    <%= link_to t('view.product.index.export-csv'),
+                export_data_products_path(format: 'csv'),
+                target: :_blank, class: 'small mr-1' %>
     </div>
   </div>
 </div>
