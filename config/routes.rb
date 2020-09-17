@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
   resources :projects do
     get 'count', on: :collection
+    get 'export_data', on: :collection
     member do
       post 'favorite_project'
       post 'unfavorite_project'
@@ -89,6 +90,7 @@ Rails.application.routes.draw do
 
   resources :products do
     get 'count', on: :collection
+    get 'export_data', on: :collection
     member do
       post 'favorite_product'
       post 'unfavorite_product'
@@ -97,6 +99,7 @@ Rails.application.routes.draw do
 
   resources :building_blocks do
     get 'count', on: :collection
+    get 'export_data', on: :collection
   end
 
   resources :sustainable_development_goals, only: [:index, :show] do
@@ -108,6 +111,7 @@ Rails.application.routes.draw do
   resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
   resources :use_cases do
     get 'count', on: :collection
+    get 'export_data', on: :collection
     resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
     member do
       post 'favorite_use_case'
@@ -117,6 +121,7 @@ Rails.application.routes.draw do
 
   resources :workflows do
     get 'count', on: :collection
+    get 'export_data', on: :collection
   end
 
   resources :deploys do
@@ -126,6 +131,7 @@ Rails.application.routes.draw do
 
   resources :organizations do
     get 'count', on: :collection
+    get 'export_data', on: :collection
   end
 
   resources :operator_services

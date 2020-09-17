@@ -1,3 +1,5 @@
+require('csv')
+
 class Project < ApplicationRecord
   include Auditable
   attr_accessor :project_description
@@ -62,5 +64,36 @@ class Project < ApplicationRecord
     else
       return "/assets/origins/origin_placeholder.png"
     end
+  end
+
+  def self.to_csv
+    attributes = %w{id name slug origin organizations products}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |p|
+        organizations = p.organizations
+                         .map(&:name)
+                         .join('; ')
+        products = p.products
+                    .map(&:name)
+                    .join('; ')
+
+        csv << [p.id, p.name, p.slug, p.origin.name, organizations, products]
+      end
+    end
+  end
+
+  def self.serialization_options
+    {
+      except: [:created_at, :updated_at],
+      include: {
+        organizations: { only: [:name, :slug] },
+        products: {
+          only: [:name, :slug]
+        }
+      }
+    }
   end
 end

@@ -100,6 +100,19 @@ class ProjectsController < ApplicationController
     render json: @projects.count
   end
 
+  def export_data
+    @projects = Project.where(id: filter_projects).eager_load(:organizations, :products)
+    authorize(@projects, :view_allowed?)
+    respond_to do |format|
+      format.csv do
+        render csv: @projects, filename: 'exported-project'
+      end
+      format.json do
+        render json: @projects.to_json(Project.serialization_options)
+      end
+    end
+  end
+
   def show
     authorize @project, :view_allowed?
   end
