@@ -1,3 +1,11 @@
+<div class="alert alert-info mb-0 text-center" role="alert">
+  <%= t("view.about.help") %>
+  <a href="https://docs.osc.dial.community/projects/product-registry/en/latest/" target="_blank">
+    <%= t("view.about.help_link") %>
+  </a>
+</div>
+<div class="alert alert-info mb-0 text-center" role="alert" id="active-users">
+</div>
 <% if session[:portal]["slug"] == "default" %>
 <div id="covid-section" class="about-jumbotron">
   <h1 class="display-5 text-muted">DIAL Online Catalog Supports COVID-19 Response</h1>
@@ -189,16 +197,50 @@
   </div>
 <% end %>
 
-<%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.0/jarallax.min.js" %>
+<%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.0/jarallax.min.js", async: true, onload: 'initJarallax()' %>
 <script>
 
-    /* init Jarallax */
-    $('.jarallax').jarallax({
-      speed: 0.2
-    });
+    function initJarallax() {
+      /* init Jarallax */
+      $('.jarallax').jarallax({
+        speed: 0.2
+      });
 
-    $('.jarallax-keep-img').jarallax({
-      keepImg: true,
+      $('.jarallax-keep-img').jarallax({
+        keepImg: true,
+      });
+    }
+
+    function formatDate(date) {
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
+
+      return [year, month, day].join('-');
+    }
+
+    // Query users from Matomo analytics data
+    const today = new Date()
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+
+    var url = "https://stats.dial.community?module=API&method=VisitsSummary.getVisits";
+    url += "&idSite=7&period=range&date="+formatDate(yesterday)+","+formatDate(today)+"&format=JSON&token_auth=anonymous";
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: 'jsonp',
+        crossDomain: true,
+        success: function (data){
+            $("#active-users").html("<%= t('view.about.active_users') %>: "+data.value)
+        }
     });
 
 </script>
