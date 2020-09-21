@@ -169,6 +169,36 @@ class ApplicationController < ActionController::Base
     render json: true
   end
 
+  def add_filters
+    return unless params.key?('filters')
+
+    retval = false
+
+    filters = params['filters'].values
+    filters.each do |filter|
+      filter_name = filter['filter_name']
+      filter_obj = {}
+      filter_obj['value'] = filter['filter_value']
+      filter_obj['label'] = filter['filter_label']
+      if filter['filter_label'].nil? || filter['filter_label'].empty?
+        session[filter_name.to_s] = filter_obj
+        retval = true
+      else
+        existing_value = session[filter_name.to_s]
+        existing_value.nil? && existing_value = []
+        unless existing_value.include?(filter_obj)
+          existing_value.push(filter_obj)
+          retval = true
+        end
+        session[filter_name.to_s] = existing_value
+      end
+      update_cookies(filter_name)
+    end
+
+    session[:filtered_time] = Time.now.strftime('%Q')
+    render(json: retval)
+  end
+
   def add_filter
     return unless params.key? 'filter_name'
 
