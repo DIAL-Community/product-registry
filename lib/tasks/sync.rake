@@ -276,6 +276,14 @@ namespace :sync do
     end
   end
 
+  task :update_language_data, [] => :environment do
+    puts 'Updating language data for products.'
+
+    Product.all.each do |product|
+      sync_product_languages(product)
+    end
+  end
+
   task :sync_digital_health_atlas_data, [] => :environment do
     dha_origin = Origin.find_by(name: 'Digital Health Atlas')
     if dha_origin.nil?

@@ -756,5 +756,48 @@ module Modules
       response_json = JSON.parse(response.body)
       response_json['access_token']
     end
+
+    def sync_product_languages(product)
+      return if product.repository.blank?
+
+      puts "Processing: #{product.repository}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product.repository.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      github_uri = URI.parse('https://api.github.com/graphql')
+      http = Net::HTTP.new(github_uri.host, github_uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(github_uri.path)
+      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
+      request.body = { 'query' => graph_ql_languages(owner, repo) }.to_json
+
+      response = http.request(request)
+      product.language_data = JSON.parse(response.body)
+
+      if product.save!
+        puts "Product language data saved for: #{product.name}."
+      end
+    end
+
+    def graph_ql_languages(owner, repo)
+      '{'\
+      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
+      '    languages(first: 20, orderBy: {field: SIZE, direction: DESC}) {'\
+      '      totalCount'\
+      '      totalSize'\
+      '      edges {'\
+      '        size'\
+      '        node {'\
+      '          name'\
+      '          color'\
+      '        }'\
+      '      }'\
+      '    }'\
+      '  }'\
+      '}'\
+    end
   end
 end

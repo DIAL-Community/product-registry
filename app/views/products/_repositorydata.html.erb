@@ -1,6 +1,6 @@
   <div class="card my-3">
     <h5 class="card-header bg-secondary text-white">
-      <%= t('view.product.show.statistics') %>
+      <%= t('view.product.show.repository-info') %>
       <%
         last_updated = DateTime.parse(repository_data['updatedAt'])
         last_month = Date.today.months_ago(1)
@@ -54,5 +54,6 @@
           <h4><%= repository_data['mergedPullRequestCount']['totalCount'] %></h4>
         </div>
       </div>
+      <%= render 'languages', product: @product %>
     </div>
   </div>
