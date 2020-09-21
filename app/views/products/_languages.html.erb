@@ -1,0 +1,42 @@
+<%
+  # Bail if we don't have product data
+  return if product.language_data == {}
+
+  language_data = product.language_data['data']['repository']['languages']['edges']
+  total_lines = product.language_data['data']['repository']['languages']['totalSize'].to_f
+  legends = []
+%>
+<div>
+  <h6 class="card-text text-muted mt-2 mb-2">
+    <strong>Languages:</strong>
+  </h6>
+  <div class="mb-2">
+    <div class="progress">
+      <% language_data.each do |language| %>
+        <%
+          name = language['node']['name']
+          bg = language['node']['color']
+
+          size = language['size'].to_f
+          percentage = (size / total_lines * 10000).round / 100.0
+
+          legends << [name, bg, percentage]
+        %>
+        <div class="progress-bar" role="progressbar" style="width: <%= percentage %>%; background-color: <%= bg %>;"
+             aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100">
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <% legends.each do |legend| %>
+      <div class="col-6 d-inline">
+        <svg style="color:<%= legend[1] %>; fill: currentColor;" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"></path>
+        </svg>
+        <span class="text-gray-dark text-bold mr-1"><%= legend[0] %></span>
+        <span><%= legend[2] %>%</span>
+      </div>
+    <% end %>
+  </div>
+</div>
