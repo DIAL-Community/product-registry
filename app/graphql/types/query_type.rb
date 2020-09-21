@@ -14,6 +14,14 @@ module Types
       Playbook.find_by(slug: slug)
     end
 
+    field :activity, Types::ActivityType, null: false do
+      argument :activitySlug, String, required: true
+    end
+
+    def activity(activitySlug:)
+      Activity.find_by(slug: activitySlug)
+    end
+
     field :me, Types::UserType, null: false 
 
     def me
