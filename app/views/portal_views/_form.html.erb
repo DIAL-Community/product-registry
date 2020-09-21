@@ -108,7 +108,7 @@
     <%= t('view.portal.index.landing-page') %>
   </h6>
 
-  <%= form.cktext_area :about_page, value: @about_page.html_safe, id: 'about_page' %>
+  <%= form.cktext_area :about_page, value: @about_page.html_safe, id: 'about_page', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.background-color') %>
@@ -121,7 +121,7 @@
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.page-footer') %>
   </h6>
-  <%= form.cktext_area :page_footer, value: @footer.html_safe, id: 'page_footer' %>
+  <%= form.cktext_area :page_footer, value: @footer.html_safe, id: 'page_footer', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.header-logo') %>

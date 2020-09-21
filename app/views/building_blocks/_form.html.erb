@@ -47,7 +47,7 @@
     </fieldset>
   <% end %>
 
-  <%= form.cktext_area :bb_desc, value: @bb_desc.description.html_safe, id: 'building_block_desc' %>
+  <%= form.cktext_area :bb_desc, value: @bb_desc.description.html_safe, id: 'building_block_desc', ckeditor: { allowedContent: true } %>
   
   <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
     <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>

@@ -29,19 +29,19 @@
     <%= t('view.play.form.description') %>
   </h6>
 
-  <%= form.cktext_area :play_description, value: @description.description.html_safe, id: 'play_description' %>
+  <%= form.cktext_area :play_description, value: @description.description.html_safe, id: 'play_description', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.prerequisites') %>
   </h6>
 
-  <%= form.cktext_area :play_prerequisites, value: @description.prerequisites.html_safe, id: 'play_prerequisites' %>
+  <%= form.cktext_area :play_prerequisites, value: @description.prerequisites.html_safe, id: 'play_prerequisites', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.outcomes') %>
   </h6>
 
-  <%= form.cktext_area :play_outcomes, value: @description.outcomes.html_safe, id: 'play_outcomes' %>
+  <%= form.cktext_area :play_outcomes, value: @description.outcomes.html_safe, id: 'play_outcomes', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.play.form.resources') %>

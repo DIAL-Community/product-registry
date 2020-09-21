@@ -19,7 +19,7 @@
     <%= t('view.rubric-category.form.description') %>
   </label>
 
-  <%= form.cktext_area :rc_desc, value: description.nil? ? "" : description.description.html_safe, id: 'rubric_category_description' %>
+  <%= form.cktext_area :rc_desc, value: description.nil? ? "" : description.description.html_safe, id: 'rubric_category_description', ckeditor: { allowedContent: true } %>
   
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :weight, id: :weight, required: true,

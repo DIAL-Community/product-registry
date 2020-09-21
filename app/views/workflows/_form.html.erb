@@ -10,7 +10,7 @@
     <%= t('view.general.duplicates', model: t('model.workflow')) %>
   </div>
 
-  <%= form.cktext_area :wf_desc, value: @wf_desc.description.html_safe, id: 'workflow_desc' %>
+  <%= form.cktext_area :wf_desc, value: @wf_desc.description.html_safe, id: 'workflow_desc', ckeditor: { allowedContent: true } %>
   
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>

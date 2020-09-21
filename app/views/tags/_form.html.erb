@@ -11,7 +11,7 @@
     <%= t('view.general.duplicates', model: t('model.use-case-step')) %>
   </div>
 
-  <%= form.cktext_area :tag_desc, value: @tag_desc.description.html_safe, id: 'tag_desc' %>
+  <%= form.cktext_area :tag_desc, value: @tag_desc.description.html_safe, id: 'tag_desc', ckeditor: { allowedContent: true } %>
 
   <fieldset class="float-right mt-4">
     <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>

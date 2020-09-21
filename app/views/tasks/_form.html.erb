@@ -23,7 +23,7 @@
     <%= t('view.task.form.full-description') %>
   </label>
   
-  <%= form.cktext_area :task_desc, value: @description.description.html_safe, id: 'task_description' %>
+  <%= form.cktext_area :task_desc, value: @description.description.html_safe, id: 'task_description', ckeditor: { allowedContent: true } %>
   
   <fieldset class="form-group form-check">
     <%= form.check_box :complete, id: :task_complete,

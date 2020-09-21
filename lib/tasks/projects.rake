@@ -47,7 +47,7 @@ namespace :projects do
         classification.indicator = indicator
         classification.name = desc
         classification.description = desc
-        classification.source = "WHO"
+        classification.source = "Digital Health Atlas"
         classification.save
       end
     end
