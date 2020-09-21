@@ -175,6 +175,13 @@ class ProductsController < ApplicationController
     @product_description = ProductDescription.new
     @product_description.set_current_user(current_user)
 
+    if params[:selected_projects].present?
+      params[:selected_projects].keys.each do |project_id|
+        project = Project.find(project_id)
+        @product.projects.push(project) unless project.nil?
+      end
+    end
+
     if params[:selected_organizations].present?
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
@@ -307,6 +314,15 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     authorize(@product, :mod_allowed?)
+
+    projects = Set.new
+    if params[:selected_projects].present?
+      params[:selected_projects].keys.each do |project_id|
+        project = Project.find(project_id)
+        projects.add(project) unless project.nil?
+      end
+    end
+    @product.projects = projects.to_a
 
     if params[:selected_organizations].present?
       existing_orgs = OrganizationsProduct.where(product_id: @product.id)

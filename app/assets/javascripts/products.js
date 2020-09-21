@@ -17,6 +17,10 @@ function tagProduct(value, label) {
   $(copy).show();
 }
 
+function addProject(value, label) {
+  addElement("base-selected-projects", "selected_projects", value, label);
+}
+
 function productsReady() {
   // hook drop down item click event
   $("#digisquare-element .dropdown-item").click(function() {
@@ -36,6 +40,10 @@ function productsReady() {
   const tagAutoComplete = autoComplete("/tags.json?without_paging=true", tagProduct)
   $("#base-selected-tags").hide();
   $("#tag-search").autocomplete(tagAutoComplete);
+
+  var projectAutoComplete = autoComplete("/projects.json?without_paging=true", addProject)
+  $('#base-selected-projects').hide();
+  $("#project-search").autocomplete(projectAutoComplete);
 
   $("button.add-other-name").click(function(event) {
     event.preventDefault();

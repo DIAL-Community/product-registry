@@ -405,6 +405,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     interop_product = products(:two)
     sector = sectors(:one)
     sustainable_development_goal = sustainable_development_goals(:one)
+    project = projects(:one)
 
     assert_difference('Product.count') do
       post products_url, params: { product: { name: @product.name, website: @product.website },
@@ -416,6 +417,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
                                    selected_included_products: { included_product.id => included_product.id },
                                    selected_interoperable_products: { interop_product.id => interop_product.id },
                                    selected_organizations: { organization.id => organization.id },
+                                   selected_projects: { project.id => project.id },
                                    duplicate: true, reslug: true, logo: uploaded_file }
     end
 
@@ -428,6 +430,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(created_product.includes.length, 1)
     assert_equal(created_product.interoperates_with.length, 1)
     assert_equal(created_product.organizations.length, 1)
+    assert_equal(created_product.projects.length, 1)
 
     created_audit = Audit.last
     assert_equal(created_audit.action, 'CREATED')
@@ -440,13 +443,14 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(created_audit.audit_changes.length, 3)
 
     mapping_changes_audit = created_audit.audit_changes[1]
-    assert_equal(mapping_changes_audit.keys.length, 6)
+    assert_equal(mapping_changes_audit.keys.length, 7)
     assert_equal(mapping_changes_audit['buildingblocks'].length, 1)
     assert_equal(mapping_changes_audit['sectors'].length, 1)
     assert_equal(mapping_changes_audit['sustainabledevelopmentgoals'].length, 1)
     assert_equal(mapping_changes_audit['contains'].length, 1)
     assert_equal(mapping_changes_audit['interoperates_with'].length, 1)
     assert_equal(mapping_changes_audit['organizations'].length, 1)
+    assert_equal(mapping_changes_audit['projects'].length, 1)
 
     other_building_block = building_blocks(:two)
     patch product_url(created_product), params: {

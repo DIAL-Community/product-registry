@@ -366,6 +366,27 @@
   </div>
 </div>
 
+<div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.project').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @product.projects.count > 0 %>
+    <div class="row">
+      <% @product.projects.order("name").each do |project| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= link_to project.name, project %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.project').to_s.pluralize) %>
+  <% end %>
+</div>
+
 <% if @product.classifications.count > 0 %>
 <div class="card-deck mt-2">
   <div class="card">
