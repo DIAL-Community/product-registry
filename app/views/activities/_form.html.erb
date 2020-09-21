@@ -6,10 +6,10 @@
     <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
-  <fieldset class="form-label-group">
-    <%= form.text_field :description, id: :description, class: "form-control", placeholder: t('view.activity.form.description') %>
-    <%= form.label :description, t('view.activity.form.description') %>
-  </fieldset>
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.activity.form.description') %>
+  </h6>
+  <%= form.cktext_area :activity_description, value: @description.description.html_safe, id: 'activity_description' %>
 
   <fieldset class="form-group mb-1">
     <strong class="text-muted inline"><%= form.label :phase, t('view.activity.form.phase') %></strong>
@@ -100,8 +100,4 @@ $('.remove-resource').click(function(e) {
   $("#"+removeId).remove();
 });
 
-$("#activity-form").on('submit', function(e) {
-  $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
-  return true;
-})
 </script>

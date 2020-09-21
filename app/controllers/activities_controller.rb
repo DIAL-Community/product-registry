@@ -37,6 +37,7 @@ class ActivitiesController < ApplicationController
   # GET /activities/new
   def new
     @activity = Activity.new
+    @playbook_desc = PlaybookDescription.new
     if params[:playbook_id]
       @activity.playbook_id = params[:playbook_id]
       @playbook = Playbook.find_by(slug: params[:playbook_id])
@@ -106,6 +107,11 @@ class ActivitiesController < ApplicationController
 
     respond_to do |format|
       if @activity.save
+        @activity_desc = PlaybookDescription.new
+        @activity_desc.activity_id = @playbook.id
+        @activity_desc.locale = I18n.locale
+        activity_params[:activity_description].present? && @activity_desc.description = activity_params[:activity_description]
+        @activity_desc.save
         format.html do
           redirect_to playbook_path(@playbook),
                     notice: t('messages.model.created', model: t('model.activity').to_s.humanize)
@@ -122,9 +128,28 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1.json
   def update
     authorize @activity, :mod_allowed?
+    if activity_params[:activity_desc].present?
+      @activity_desc = ActivityDescription.where(activity_id: @activity.id,
+                                                              locale: I18n.locale)
+                                                        .first || ActivityDescription.new
+      @activity_desc.activity_id = @activity.id
+      @activity_desc.locale = I18n.locale
+      activity_params[:activity_desc].present? && @activity_desc.description = activity_params[:activity_desc]
+      @activity_desc.save
+    end
 
     if @activity.playbook_id
       @playbook = Playbook.find(@activity.playbook_id)
+    end
+
+    if activity_params[:activity_description].present?
+      @activity_desc = ActivityDescription.where(activity_id: @activity.id,
+                                                              locale: I18n.locale)
+                                                        .first || ActivityDescription.new
+      @activity_desc.activity_id = @activity.id
+      @activity_desc.locale = I18n.locale
+      activity_params[:activity_description].present? && @activity_desc.description = activity_params[:activity_description]
+      @activity_desc.save
     end
 
     if !activity_params[:question_text].nil?
@@ -191,16 +216,26 @@ class ActivitiesController < ApplicationController
     else
       @activity = Activity.find(params[:id]) || not_found
     end
+
+    @description = ActivityDescription.where(activity_id: @activity, locale: I18n.locale)
+                                               .first
+    if @description.nil?
+      @description = ActivityDescription.new
+    end
+
     if !@activity.playbook_questions_id.nil?
       @question = PlaybookQuestion.find(@activity.playbook_questions_id)
       @answers = PlaybookAnswer.find_by(playbook_questions_id: @activity.playbook_questions_id)
     end
+    @description = @activity.activity_descriptions
+                                 .select { |desc| desc.locale == I18n.locale.to_s }
+                                 .first
   end
 
   # Only allow a list of trusted parameters through.
   def activity_params
     params.require(:activity)
-      .permit(:name, :slug, :description, :phase, :order, :media_url, :question_text, :playbook_id, :resources => [:name, :description, :url])
+      .permit(:name, :slug, :activity_description, :phase, :order, :media_url, :question_text, :playbook_id, :resources => [:name, :description, :url])
       .tap do |attr|
         if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])
