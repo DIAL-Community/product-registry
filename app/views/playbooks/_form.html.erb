@@ -26,19 +26,19 @@
     <%= t('view.playbook.form.overview') %>
   </h6>
 
-  <%= form.cktext_area :playbook_overview, value: @description && @description.overview.html_safe, id: 'playbook_overview' %>
+  <%= form.cktext_area :playbook_overview, value: @description && @description.overview.html_safe, id: 'playbook_overview', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.audience') %>
   </h6>
 
-  <%= form.cktext_area :playbook_audience, value: @description && @description.audience.html_safe, id: 'playbook_audience' %>
+  <%= form.cktext_area :playbook_audience, value: @description && @description.audience.html_safe, id: 'playbook_audience', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.outcomes') %>
   </h6>
 
-  <%= form.cktext_area :playbook_outcomes, value: @description && @description.outcomes.html_safe, id: 'playbook_outcomes' %>
+  <%= form.cktext_area :playbook_outcomes, value: @description && @description.outcomes.html_safe, id: 'playbook_outcomes', ckeditor: { allowedContent: true } %>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.phases') %>

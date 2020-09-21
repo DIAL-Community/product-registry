@@ -226,12 +226,12 @@
     }
 
     // Query users from Matomo analytics data
-    const today = new Date()
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
+    const usersToday = new Date()
+    const usersYesterday = new Date(usersToday)
+    usersYesterday.setDate(usersYesterday.getDate() - 1)
 
     var url = "https://stats.dial.community?module=API&method=VisitsSummary.getVisits";
-    url += "&idSite=7&period=range&date="+formatDate(yesterday)+","+formatDate(today)+"&format=JSON&token_auth=anonymous";
+    url += "&idSite=7&period=range&date="+formatDate(usersYesterday)+","+formatDate(usersToday)+"&format=JSON&token_auth=anonymous";
 
     $.ajax({
         type: "GET",

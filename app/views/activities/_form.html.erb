@@ -9,7 +9,7 @@
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.activity.form.description') %>
   </h6>
-  <%= form.cktext_area :activity_description, value: @description.description.html_safe, id: 'activity_description' %>
+  <%= form.cktext_area :activity_description, value: @description.description.html_safe, id: 'activity_description', ckeditor: { allowedContent: true } %>
 
   <fieldset class="form-group mb-1">
     <strong class="text-muted inline"><%= form.label :phase, t('view.activity.form.phase') %></strong>

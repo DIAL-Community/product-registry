@@ -10,7 +10,7 @@
     <%= t('view.general.duplicates', model: t('model.glossary')) %>
   </div>
 
-  <%= form.cktext_area :description, value: glossary.description.html_safe, id: 'glossary_description' %>
+  <%= form.cktext_area :description, value: glossary.description.html_safe, id: 'glossary_description', ckeditor: { allowedContent: true } %>
 
   <div class="wysiwyg-editor">
   </div>

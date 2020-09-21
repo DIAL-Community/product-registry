@@ -20,13 +20,13 @@
     <%= t('view.general.description') %>:
   </label>
 
-  <%= form.cktext_area :uc_desc, value: @uc_desc.description.html_safe, id: 'use_case_desc' %>
+  <%= form.cktext_area :uc_desc, value: @uc_desc.description.html_safe, id: 'use_case_desc', ckeditor: { allowedContent: true } %>
 
   <label for="usecasesteps-header">
     <%= t('view.use-case.form.steps-header-description') %>:
   </label>
 
-  <%= form.cktext_area :ucs_header, value: @ucs_header.header.html_safe, id: 'use_case_steps_header' %>
+  <%= form.cktext_area :ucs_header, value: @ucs_header.header.html_safe, id: 'use_case_steps_header', ckeditor: { allowedContent: true } %>
 
   <%
     default_maturity = use_case.maturity.nil? ? UseCase.entity_status_types[:BETA] : use_case.maturity

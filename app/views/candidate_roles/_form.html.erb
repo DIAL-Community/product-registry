@@ -9,7 +9,7 @@
     <%= form.label :email %>
   </fieldset>
 
-  <%= form.cktext_area :description, value: @candidate_role.description.html_safe, id: 'candidate-role-description' %>
+  <%= form.cktext_area :description, value: @candidate_role.description.html_safe, id: 'candidate-role-description', ckeditor: { allowedContent: true } %>
 
   <fieldset class="form-group">
     <label for="user-role-selector">

@@ -10,7 +10,7 @@
       <%= t('view.general.duplicates', model: t('model.project')) %>
     </div>
 
-    <%= form.cktext_area :project_description, value: @project_description.description.html_safe, id: 'project_description' %>
+    <%= form.cktext_area :project_description, value: @project_description.description.html_safe, id: 'project_description', ckeditor: { allowedContent: true } %>
 
     <fieldset class="form-group mt-2">
       <%= label_tag "origins", t('view.product.index.sources') %>

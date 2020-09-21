@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <%= form.cktext_area :product_description, value: @product_description.description.html_safe, id: 'product_description' %>
+  <%= form.cktext_area :product_description, value: @product_description.description.html_safe, id: 'product_description', ckeditor: { allowedContent: true } %>
   
   <fieldset class="custom-file mt-2">
     <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file"/>
