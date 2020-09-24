@@ -110,7 +110,7 @@ const addFilters = function(filters) {
       updateCount();
       loadMainDiv();
       $.each(filters, function(_index, filter) {
-        let currValue = [{ value: filter['filter_value'], label: filter['filter_label'] }];
+        var currValue = [{ value: filter['filter_value'], label: filter['filter_label'] }];
         if (filter['filter_label'] === '') {
           currValue = { value: filter['filter_value'] };
         }
