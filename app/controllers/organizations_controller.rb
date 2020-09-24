@@ -499,35 +499,38 @@ class OrganizationsController < ApplicationController
 
   private
 
-  def create_office_using_city(city_id)
-    city = City.find(city_id)
+    def create_office_using_city(city_id)
+      city = City.find(city_id)
 
-    return if city.nil?
+      return if city.nil?
 
-    office = Office.new
-    office.city = city.name
+      office = Office.new
+      office.city = city.name
 
-    city_name = city.name
-    region_name = nil
-    country_code = nil
+      city_name = city.name
+      region_name = nil
+      country_code = nil
 
-    country = nil
-    unless city.region.nil?
-      region_name = city.region.name
-      country = city.region.country
+      region = Region.find(city.region_id)
+      country = nil
+      unless region.nil?
+        region_name = region.name
+        office.region_id = region.id
+        country = Country.find(region.country_id)
+      end
+
+      unless country.nil?
+        country_code = country.code
+        office.country_id = country.id
+      end
+
+      address = "#{city_name}, #{region_name}, #{country_code}"
+      office.name = address
+
+      office.latitude = city.latitude
+      office.longitude = city.longitude
+      office
     end
-
-    unless country.nil?
-      country_code = country.code
-    end
-
-    address = "#{city_name}, #{region_name}, #{country_code}"
-    office.name = address
-
-    office.latitude = city.latitude
-    office.longitude = city.longitude
-    office
-  end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
