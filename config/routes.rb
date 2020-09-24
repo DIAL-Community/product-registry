@@ -160,6 +160,7 @@ Rails.application.routes.draw do
 
   get '/object_counts', to: 'application#object_counts', as: :object_counts
   post '/add_filter', to: 'application#add_filter', as: :add_filter
+  post '/add_filters', to: 'application#add_filters', as: :add_filters
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
   post '/remove_all_filters', to: 'application#remove_all_filters', as: :remove_all_filters
   get '/get_filters', to: 'application#get_filters', as: :get_filters
