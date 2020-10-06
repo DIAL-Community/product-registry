@@ -69,7 +69,11 @@ class Product < ApplicationRecord
     if File.exist?(File.join('public', 'assets', 'products', "#{slug}.png"))
       return "/assets/products/#{slug}.png"
     else
-      return "/assets/products/prod_placeholder.png"
+      if product_type == "dataset"
+        return "/assets/products/dataset_placeholder.png"
+      else
+        return "/assets/products/prod_placeholder.png"
+      end
     end
   end
 

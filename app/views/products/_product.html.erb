@@ -31,6 +31,9 @@
          data-placement="top" data-original-title="<%= t('view.product.index.toggle-favorite') %>"></i>
       <%= link_to(product) do %>
         <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
+        <% if product.product_type == "dataset" %>
+        <div class="text-muted text-center"><%= t('view.product.index.dataset') %></div>
+        <% end %>
       <% end %>
     </div>
     <div class="card-footer footer-padding">
