@@ -46,7 +46,7 @@
       </ul>
     </h6>
   <% end %>
-  <% if !product_description.description.nil? and !product_description.description.empty? %>
+  <% if product_description && !product_description.description.nil? && !product_description.description.empty? %>
     <h6 class="card-text text-muted mt-2 mb-2">
       <strong><%= t('view.product.index.description') %>:</strong>
       <div id="product-viewer-<%= product.slug %>" class="wysiwyg-viewer">
