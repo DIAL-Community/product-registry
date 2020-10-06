@@ -147,6 +147,7 @@ module Modules
         # Update specific information that we need to save for later syncing
         existing_product.publicgoods_data["name"] = json_data["name"]
         existing_product.publicgoods_data["aliases"] = json_data["aliases"]
+        existing_product.publicgoods_data["stage"] = json_data["stage"]
 
         update_attributes(json_data, existing_product)
 
@@ -369,7 +370,7 @@ module Modules
             org = Organization.new
             org.name = org_name
             org.slug = slug_em(org_name,100)
-            org.website = organization['website']
+            org.website = cleanup_url(organization['website'])
             org.save
             org_product = OrganizationsProduct.new
             org_product.org_type = organization['org_type']

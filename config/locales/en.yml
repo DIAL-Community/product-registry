@@ -340,6 +340,7 @@ en:
         export-csv: Export (csv)
         toggle-favorite: Add to / remove from list of favorite products
         description: Description
+        dataset: Dataset
         filter: Filter
         has-maturity: Has maturity?
         product-graph: Product Graph
