@@ -50,7 +50,7 @@
     <h6 class="card-text text-muted mt-2 mb-2">
       <strong><%= t('view.product.index.description') %>:</strong>
       <div id="product-viewer-<%= product.slug %>" class="wysiwyg-viewer">
-        <%= @product_description.description.html_safe %>
+        <%= product_description.description.html_safe %>
       </div>
     </h6>
   <% end %>
