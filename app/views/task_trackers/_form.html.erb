@@ -13,7 +13,7 @@
     <%= t('view.general.duplicates', model: t('model.task-tracker')) %>
   </div>
 
-  <%= form.cktext_area :tt_desc, value: !description.nil? && description.description.html_safe, id: 'task_tracker_desc' %>
+  <%= form.cktext_area :tt_desc, value: !description.nil? && description.description.html_safe, id: 'task_tracker_desc', ckeditor: { allowedContent: true } %>
 
   <fieldset class="form-label-group">
     <%= form.text_field :message, id: :task_tracker_message, class: "form-control", placeholder: t('view.general.message') %>

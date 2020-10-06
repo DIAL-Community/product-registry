@@ -155,21 +155,21 @@
     <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sector').to_s.humanize.pluralize %></h5>
     <div class="card-body">
       <% if @product.sectors.count > 0 %>
-        <% @product.sectors.each_slice(3) do |sector_row| %>
+        <% @product.sectors.each_slice(2) do |sector_row| %>
         <div class="card-deck">
           <% sector_row.each do |sector| %>
             <div class="card">
               <div class="card-body">
                 <%= link_to sector do %>
-                  <div class="p-2 ml-1 clearfix">
-                    <p class="mb-0 float-left"><%= sector.name %></p>
+                  <div class="p-1 clearfix">
+                    <p class="mb-0 text-center"><%= sector.name %></p>
                   </div>
                 <% end %>
               </div>
             </div>
           <% end %>
-          <% if sector_row.size < 3  %>
-            <% (3 - sector_row.size).times do |x| %>
+          <% if sector_row.size < 2  %>
+            <% (2 - sector_row.size).times do |x| %>
               <div class="card card-placeholder">
               </div>
             <% end %>
@@ -364,6 +364,27 @@
       <% end %>
     </div>
   </div>
+</div>
+
+<div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.project').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @product.projects.count > 0 %>
+    <div class="row">
+      <% @product.projects.order("name").each do |project| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= link_to project.name, project %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <%= t('view.general.not-available', model: t('model.organization'), multi: t('model.project').to_s.pluralize) %>
+  <% end %>
 </div>
 
 <% if @product.classifications.count > 0 %>

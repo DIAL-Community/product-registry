@@ -103,6 +103,24 @@ var addFilter = function(id, value, label) {
   $('#' + id).val('');
 }
 
+const addFilters = function(filters) {
+  $.post('/add_filters',
+    { filters: filters },
+    function () {
+      updateCount();
+      loadMainDiv();
+      $.each(filters, function(_index, filter) {
+        var currValue = [{ value: filter['filter_value'], label: filter['filter_label'] }];
+        if (filter['filter_label'] === '') {
+          currValue = { value: filter['filter_value'] };
+        }
+        addToList(filter['filter_name'], currValue);
+        incrementFilterCount(filter['filter_name']);
+      });
+    }
+  );
+}
+
 var getUrlParams = function()
 {
     var vars = [], hash;
@@ -121,6 +139,7 @@ var loadFilters = function() {
   if (urlParams.urlFilter) {
     delete urlParams['urlFilter']
     $.post('/remove_all_filters', { }, function() {
+      const filters = []
       Object.keys(urlParams).map(function(urlParam) {
         clearFilterCount(urlParam)
         if (urlParam == 'use_cases' || urlParam == 'workflows' || urlParam == 'building_blocks' || urlParam === 'tags' ||
@@ -128,12 +147,21 @@ var loadFilters = function() {
           paramValues = urlParams[urlParam].split('--')
           paramValues.map(function(paramValue) {
             paramValueLabel = paramValue.split('-')
-            addFilter(urlParam, paramValueLabel[0], decodeURIComponent(paramValueLabel[1]))
+            filters.push({
+              filter_name: urlParam,
+              filter_value: paramValueLabel[0],
+              filter_label: decodeURIComponent(paramValueLabel[1])
+            });
           })
         } else {
-          addFilter(urlParam, urlParams[urlParam], '')
+          filters.push({
+            filter_name: urlParam,
+            filter_value: urlParams[urlParam],
+            filter_label: ''
+          });
         }
-      })
+      });
+      addFilters(filters);
     })
   } else {
     // Get all filters and add to List

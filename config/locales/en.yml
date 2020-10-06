@@ -383,6 +383,7 @@ en:
         active-version: Current version
         license: License
         license-unknown: Unknown
+        repository-info: Repository Info
         statistics: Statistics
         star: Stars
         watcher: Watcher Count

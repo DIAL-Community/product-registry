@@ -153,6 +153,7 @@ namespace :sync do
               end
               
             end
+            blacklist_product.organizations.delete_all
             blacklist_product.product_versions.each do |version|
               puts "Deleting "+version.version
               version.destroy
@@ -273,6 +274,14 @@ namespace :sync do
 
     Product.all.each do |product|
       update_tco_data(product)
+    end
+  end
+
+  task :update_language_data, [] => :environment do
+    puts 'Updating language data for products.'
+
+    Product.all.each do |product|
+      sync_product_languages(product)
     end
   end
 

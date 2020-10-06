@@ -46,7 +46,7 @@ const scrollProductHandler = function () {
     const covidChecked = $('#covid-only').prop("checked");
     url = `${url}&covid=${covidChecked}`;
 
-    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 800;
+    const shouldExecuteXhr = $(window).scrollTop() > $(document).height() - $(window).height() - 2400;
     if (!isNaN(currentPage) && !currentlyLoadingProducts && shouldExecuteXhr) {
       currentlyLoadingProducts = true;
       $('#product-list > div').addClass('existing-product');
