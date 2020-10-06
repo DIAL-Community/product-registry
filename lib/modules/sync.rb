@@ -68,7 +68,8 @@ module Modules
     end
 
     def sync_public_product(json_data)
-      if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
+      if !json_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
+        puts "SYNCING " + json_data.to_s
         unicef_origin = Origin.find_by(slug: 'unicef')
         name_aliases = [json_data['name']]
         if !json_data['aliases'].nil?
@@ -123,12 +124,24 @@ module Modules
         if !sectors.nil? && !sectors.empty?
           sectors.each do |sector|
             sector_obj = Sector.find_by(name: sector)
+            if sector_obj.nil?
+              # Create the sector
+              puts "Creating Sector: " + sector
+              sector_obj = Sector.new
+              sector_obj.name = sector
+              sector_obj.slug = slug_em(sector)
+              sector_obj.save!
+            end
             # Check to see if the sector exists already
             if !existing_product.sectors.include?(sector_obj)
               puts "Adding sector " + sector_obj.name + " to product"
               existing_product.sectors << sector_obj
             end
           end
+        end
+
+        if json_data['type'][0].downcase == 'data'
+          existing_product.product_type = 'dataset'
         end
 
         # Update specific information that we need to save for later syncing
@@ -346,15 +359,16 @@ module Modules
       organizations = product['organizations']
       if !organizations.nil? && !organizations.empty?
         organizations.each do |organization|
-          org = Organization.where('lower(name) = lower(?)', organization['name'])[0]
+          org_name = organization['name'].gsub('\'','')
+          org = Organization.where('lower(name) = lower(?)', org_name)[0]
           if org.nil?
-            org = Organization.where("aliases @> ARRAY['"+organization['name']+"']::varchar[]").first
+            org = Organization.where("aliases @> ARRAY['"+org_name+"']::varchar[]").first
           end
           if org.nil?
             # Create a new organization and assign it as an owner
             org = Organization.new
-            org.name = organization['name']
-            org.slug = slug_em(organization['name'])
+            org.name = org_name
+            org.slug = slug_em(org_name,100)
             org.website = organization['website']
             org.save
             org_product = OrganizationsProduct.new
@@ -362,7 +376,7 @@ module Modules
             sync_product.organizations << org
           else
             org.website = cleanup_url(organization['website'])
-            org.name = organization['name']
+            org.name = org_name
             org.save
           end
           if !sync_product.organizations.include?(org)

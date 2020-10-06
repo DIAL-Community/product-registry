@@ -88,6 +88,7 @@
     - name: ODK Build
     - name: ODK Collect
     - name: ODK XLS Form Offline
+    - name: ODK-X Survey
 - name: Open Food Facts
   parent:
     - name: Open Food Facts Android
@@ -100,6 +101,7 @@
   children: 
     - name: Open MRS Android Client
     - name: Open MRS Core
+    - name: OpenMRS Concept Dictionary
 - name: Oppia
   parent:
     - name: Oppia

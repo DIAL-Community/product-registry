@@ -155,21 +155,21 @@
     <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sector').to_s.humanize.pluralize %></h5>
     <div class="card-body">
       <% if @product.sectors.count > 0 %>
-        <% @product.sectors.each_slice(3) do |sector_row| %>
+        <% @product.sectors.each_slice(2) do |sector_row| %>
         <div class="card-deck">
           <% sector_row.each do |sector| %>
             <div class="card">
               <div class="card-body">
                 <%= link_to sector do %>
-                  <div class="p-2 ml-1 clearfix">
-                    <p class="mb-0 float-left"><%= sector.name %></p>
+                  <div class="p-1 clearfix">
+                    <p class="mb-0 text-center"><%= sector.name %></p>
                   </div>
                 <% end %>
               </div>
             </div>
           <% end %>
-          <% if sector_row.size < 3  %>
-            <% (3 - sector_row.size).times do |x| %>
+          <% if sector_row.size < 2  %>
+            <% (2 - sector_row.size).times do |x| %>
               <div class="card card-placeholder">
               </div>
             <% end %>
