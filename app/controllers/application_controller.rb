@@ -27,8 +27,18 @@ class ApplicationController < ActionController::Base
   end
 
   def set_default_identifier
+    logger.info("Default session identifier: #{session[:default_identifier]}.")
     if session[:default_identifier].nil?
       session[:default_identifier] = SecureRandom.uuid
+
+      user_event = UserEvent.new
+      user_event.identifier = session[:default_identifier]
+      user_event.event_type = UserEvent.event_types[:initial_load]
+      user_event.event_datetime = Time.now
+
+      if user_event.save!
+        logger.info("User event '#{UserEvent.event_types[:initial_load]}' for #{user_event.identifier} saved.")
+      end
     end
   end
 

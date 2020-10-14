@@ -64,7 +64,9 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
   scope '/admin' do
-    resources :users
+    resources :users do
+      get 'statistics', on: :collection
+    end
   end
 
   devise_scope :user do
