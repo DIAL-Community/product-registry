@@ -20,6 +20,7 @@ module ApplicationHelper
 
   def hide_sidenav
     current_page?('/about/cookies') ||
+    current_page?('/admin/users/statistics') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
   end

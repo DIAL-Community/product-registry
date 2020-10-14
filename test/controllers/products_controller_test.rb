@@ -531,9 +531,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
 
     number_of_user_events = UserEvent.count
-
     get product_url(@product)
-    assert_equal(UserEvent.count, number_of_user_events + 1)
+    assert_equal(UserEvent.count, number_of_user_events + 2)
 
     last_user_event = UserEvent.last
 
