@@ -1,24 +1,33 @@
-version: '3.7'
+version: "3.7"
 services:
- web:
- # image: localhost:5000/t4d-product-backlog:${T4D_VERSION}
-  build:
-    context: .
-    target: build-web
-  environment:
-    - RAILS_SERVE_STATIC_FILES=true
-    - RAILS_ENV=production
-    - POSTGRES_USER=${POSTGRES_USER}
-    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    - POSTGRES_DB=${POSTGRES_DB}
-    - POSTGRES_HOST=${POSTGRES_HOST}
-    - POSTGRES_PORT=${POSTGRES_PORT}
-  entrypoint: /t4d/docker-entrypoint.sh
-  command: bundle exec rails s -p 3000 -b '0.0.0.0'
-  restart: always
-  volumes:
-   - .:/t4d
-   - ./prod/logrotate.d/registry:/etc/logrotate.d/registry
-  ports:
-   - 80:3000
- 
+  web:
+    # image: localhost:5000/t4d-product-backlog:${T4D_VERSION}
+    build:
+      context: .
+      target: build-web
+    environment:
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_ENV=production
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    entrypoint: /t4d/docker-entrypoint.sh
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    restart: always
+    volumes:
+      - .:/t4d
+      - ./prod/logrotate.d/registry:/etc/logrotate.d/registry
+    ports:
+      - 80:3000
+  redis:
+    image: redis
+    command: "--port ${REDIS_PORT}"
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    expose:
+      - "${REDIS_PORT}"
+    restart: always
