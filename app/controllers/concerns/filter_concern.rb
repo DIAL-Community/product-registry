@@ -376,15 +376,6 @@ module FilterConcern
     end
   end
 
-  def filter_plays(all_filters=nil, filter_set=nil, project_product_ids = nil, org_ids = nil, org_products = nil, products = nil)
-    plays = []
-    if !all_filters["plays"].nil? && !all_filters["plays"].empty?
-      plays = Play.where(id: all_filters["plays"])
-    else
-      plays = Play.all
-    end
-  end
-
   def get_organizations_from_filters(all_filters)
     # Filter out the organization first based on the arguments.
     org_list = Organization.order(:slug)

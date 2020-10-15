@@ -1,0 +1,26 @@
+<script src="https://unpkg.com/grapesjs"></script>
+<link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
+
+<style>
+  .gjs-off-prv {
+    display: none !important;
+  }
+</style>
+
+<div id="gjs" style="height:0px; overflow:hidden"></div>
+
+<script type="text/javascript">
+  const editor = grapesjs.init({
+    height: '100vh',
+    width: '100%',
+    container: '#gjs',
+    storageManager: {
+      type: 'remote',
+      autoload: true,
+      urlLoad: '<%= load_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
+      headers: { 'Content-Type': 'application/json' }
+    },
+  });
+
+  editor.on('storage:end:load', () => editor.runCommand('preview'));
+</script>

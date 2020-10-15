@@ -25,6 +25,49 @@ class PlaybooksController < ApplicationController
     authorize @playbooks, :view_allowed?
   end
 
+  def upload_design_images
+    uploaded_filenames = []
+    uploaded_files = params[:files]
+    root_rails = Rails.root.join('public', 'assets', 'playbooks', 'design_images') 
+    uploaded_files.each do |uploaded_file|
+      File.open("#{root_rails}/#{uploaded_file.original_filename}", 'wb') do |file|
+        file.write(uploaded_file.read)
+        uploaded_filenames << "/assets/playbooks/design_images/#{uploaded_file.original_filename}"
+      end
+    end
+
+    respond_to { |format| format.json { render json: { data: uploaded_filenames }, status: :ok } }
+  end
+
+  def static_design
+    set_playbook
+  end
+
+  def view_design
+    set_playbook
+  end
+
+  def show_design
+    set_playbook
+  end
+
+  def load_design
+    set_playbook
+
+    design = {}
+    if !@playbook.design_components.nil? && !@playbook.design_components.blank?
+      design['gjs-components'] = @playbook.design_components
+    end
+    if !@playbook.design_styles.nil? && !@playbook.design_styles.blank?
+      design['gjs-styles'] = @playbook.design_styles
+    end
+    if !@playbook.design_assets.nil? && !@playbook.design_assets.blank?
+      design['gjs-assets'] = @playbook.design_assets
+    end
+
+    respond_to { |format| format.json { render json: design, status: :ok } }
+  end
+
   # GET /playbook/1
   # GET /playbook/1.json
   def show
@@ -168,11 +211,21 @@ class PlaybooksController < ApplicationController
       @playbook = Playbook.find(params[:id]) || not_found
     end
 
+    @pages = []
+    parent_pages = PlaybookPage.where("playbook_id=? and parent_page_id is null", @playbook.id).order(:page_order)
+    parent_pages.each do |page|
+      @pages << page
+      child_pages = PlaybookPage.where(parent_page_id: page)
+      if !child_pages.empty?
+        child_pages.each do |child_page|
+          @pages << child_page
+        end
+      end
+    end
+
     @description = @playbook.playbook_descriptions
                                  .select { |desc| desc.locale == I18n.locale.to_s }
                                  .first
-
-    @activities = Activity.where(playbook_id: @playbook)
   end
 
   # Only allow a list of trusted parameters through.
