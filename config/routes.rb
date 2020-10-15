@@ -35,14 +35,22 @@ Rails.application.routes.draw do
     get 'count', on: :collection
     resources :tasks
   end
+
+  #resources :playbook_pages, only: [:index, :update, :create, :destroy]
   resources :playbooks do
     get 'count', on: :collection
-    member do 
-      get 'create_pdf'
-      get 'show_pdf'
-    end
-    resources :activities do
-      resources :tasks
+    post 'upload_design_images', on: :collection
+    resources :playbook_pages do
+      member do
+        get 'edit_content'
+        get 'view_design'
+        get 'show_design'
+        get 'load_design'
+        post 'save_design'
+        patch 'save_design'
+        get 'create_pdf'
+        get 'show_pdf'
+      end
     end
   end
 

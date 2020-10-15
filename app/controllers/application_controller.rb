@@ -143,11 +143,9 @@ class ApplicationController < ActionController::Base
     products = filter_products(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
     orgs = filter_organizations(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
     playbooks = filter_playbooks(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
-    plays = filter_plays(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
 
     render json: { "sdgCount": sdgs.count, "useCaseCount": use_cases.count, "workflowCount": workflows.count, "bbCount": bbs.count,
-           "projectCount": projects.count, "productCount": products.count, "orgCount": orgs.count,
-           "playbookCount": playbooks.count, "playCount": plays.count}
+           "projectCount": projects.count, "productCount": products.count, "orgCount": orgs.count, "playbookCount": playbooks.count}
     
   end
 

@@ -1,0 +1,80 @@
+<%= form_with(model: playbook_page, url: playbook_playbook_pages_path, local: true, html: { id: 'page-form' }) do |form| %>
+  <%= form.hidden_field :playbook_id, id: :playbook_id %>
+
+  <fieldset class="form-label-group">
+    <%= form.text_field :name, id: :page_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.label :name, t('view.general.name') %>
+  </fieldset>
+
+  <fieldset class="form-group mb-1">
+    <strong class="text-muted inline"><%= form.label :phase, t('view.playbook-page.form.phase') %></strong>
+    <%= form.collection_select :phase, @phases, :to_s, :to_s, { include_blank: false }, { class: "form-control inline" } %>
+  </fieldset>
+
+  <fieldset class="form-group mb-0">
+    <strong class="text-muted inline"><%= form.label :parent_page_id, t('view.playbook-page.form.parent').to_s.titlecase, class: 'text-muted mt-2' %></strong>
+    <% options = options_from_collection_for_select(@pages.nil? ? [] : @pages, "id", "name") %>
+    <%= form.select :parent_page_id, options, {:include_blank => true},  :class => "custom-select mb-2" %>
+  </fieldset>
+
+  <fieldset class="form-label-group">
+    <%= form.number_field :page_order, id: :page_order, class: "form-control", placeholder: t('view.playbook-page.form.order') %>
+    <%= form.label :name, t('view.playbook-page.form.order') %>
+  </fieldset>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.playbook-page.form.media') %>
+  </h6>
+  <div id="activity-media">
+    <fieldset class="form-label-group">
+      <%= form.text_field :media_url, id: :media_url, class: "form-control", placeholder: t('view.playbook-page.form.media-prompt') %>
+      <%= form.label :media_url, t('view.playbook-page.form.media-prompt') %>
+    </fieldset>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.playbook-page.form.question') %>
+  </h6>
+  <div id="activity-question">
+    <fieldset class="form-label-group">
+      <%= form.text_field :question_text, id: :question_text, class: "form-control", placeholder: t('view.playbook-page.form.question-text') %>
+      <%= form.label :question_text, t('view.playbook-page.form.question-text') %>
+    </fieldset>
+    <button class="btn btn-secondary text-white mb-3"><%= t('view.playbook-page.form.add-answer') %></button>
+    <fieldset class="form-label-group">
+      <%= form.text_field :answer_text, id: :answer_text, class: "form-control", placeholder: t('view.playbook-page.form.question-text') %>
+      <%= form.label :answer_text, t('view.playbook-page.form.answer-text') %>
+    </fieldset>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.playbook-page.form.resources') %>
+    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+      <a href="#" class="card-link float-right" id="add-resource" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
+    <% end %>
+  </h6>
+  <div id="activity-resources">
+    <% @page.resources.each do |resource| %>
+      <%= render :partial => 'resource', :object => resource %>
+    <% end %>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+<% end %>
+
+<script>
+  $('#add-resource').click(function(e) {
+    e.preventDefault();
+    $("#activity-resources").append("<%= escape_javascript render(partial: 'resource', object: {}) %>")
+  });
+
+  $('.remove-resource').click(function(e) {
+    e.preventDefault();
+    removeId = e.currentTarget.id.split('-')[1].replace(" ", "-")
+    $("#"+removeId).remove();
+  });
+
+</script>

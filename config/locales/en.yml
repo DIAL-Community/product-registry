@@ -69,6 +69,7 @@ en:
     office: office
     organization: organization
     playbook: playbook
+    playbook-page: playbook page
     play: play
     portal-view: portal view
     product: product
@@ -584,7 +585,7 @@ en:
         phases: Phases
         name: Name
         description: Description
-        no-activity: We couldn't find any activities for this playbook.
+        no-page: We couldn't find any pages for this playbook.
         create-pdf: Create PDF
         creating-pdf: Creating PDF
       form:
@@ -594,56 +595,26 @@ en:
         phases: Phases
         name: Name
         description: Description
-    activity:
+    playbook-page:
       index:
-        description: Description
-        phase: Phase
-        resources: Resources
-        assign: Assign
-        order: Order
+        contents: Contents
+        edit-content: Edit Content
+      form:
+        name: Name
+        contents: Contents
+        editor-type: Use Page Builder Editor
         question: Question
-        media: Media
-        no-data: We couldn't find any tasks for this activity.
-      form:
-        description: Description
-        phase: Phase
-        resources: Resources
-        plays: Plays
-        order: Order
-        assign-play: Assign Play
         question-text: Question text
-        media-prompt: If you would like to add a video to this activity, enter the URL
-    play:
-      index:
-        no-data: We couldn't find any plays for this activity.
-        description: Description
-        prerequisites: Prerequisites
-        outcomes: Outcomes
-        author: Author
-        version: Version
-        resources: Resources
-      form:
-        short-description: Short Description
-        description: Full Description
-        prerequisites: Prerequisites
-        outcomes: Outcomes
-        resources: Resources
-        url: URL
-    task:
-      index:
-        no-data: We couldn't find any tasks for this play.
-        media: Media
-      form:
-        short-description: Short Description
-        full-description: Full Description
-        is-complete: Is Complete?
-        complete: This task is complete
-        not-complete: This task has not been completed
-        percent-complete: Percent Complete
-        due-date: Due Date
+        answer-text: Answer text
+        add-answer: Add Answer
+        phase: Phase
         order: Order
-        responsible: Responsible Party
+        media: Media
+        resources: Resources
         media-prompt: If you would like to add a video to this activity, enter the URL
+        description: Description
+        url: URL
+        parent: Parent Page
     use-case:
       form:
         all-maturity: All Maturity Level

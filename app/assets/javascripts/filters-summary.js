@@ -10,7 +10,6 @@ var updateCount = function() {
     $('#org-badge').html(countObject.orgCount)
     $('#project-badge').html(countObject.projectCount)
     $('#playbook-badge').html(countObject.playbookCount)
-    $('#play-badge').html(countObject.playCount)
   });
 }
 
@@ -23,4 +22,3 @@ $(document).on('products#index:loaded', updateCount);
 $(document).on('organizations#index:loaded', updateCount);
 $(document).on('projects#index:loaded', updateCount);
 $(document).on('playbooks#index:loaded', updateCount);
-$(document).on('plays#index:loaded', updateCount);

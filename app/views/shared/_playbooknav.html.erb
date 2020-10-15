@@ -14,9 +14,9 @@
               <strong><%= phase["name"] %></strong>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <% playbook.activities.each do |activity| %>
-                <% if activity.phase == phase["name"] %>
-                  <%= link_to activity.name, playbook_activity_path(@playbook, activity), :class => 'dropdown-item' %>
+              <% playbook.playbook_pages.each do |page| %>
+                <% if page.phase == phase["name"] %>
+                  <%= link_to page.name, playbook_playbook_page_path(@playbook, page), :class => 'dropdown-item' %>
                 <% end %>
               <% end %>
             </div>

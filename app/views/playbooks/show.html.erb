@@ -55,39 +55,52 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.activity').pluralize.titlecase %></h5>
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.playbook-page').pluralize.titlecase %></h5>
         <% if user_signed_in? && policy(Playbook).mod_allowed? %>
           <%= link_to t('view.general.add'),
-                      new_playbook_activity_path(@playbook),
+                      new_playbook_playbook_page_path(@playbook),
                       class: "card-link float-right", style: "color: #fbab18 !important" %>
         <% end %>
       </div>
       <div class="card-body p-0">
-        <% if @playbook.activities.count > 0 %>
+        <% if @pages.count > 0 %>
           <div class="accordion" id='<%= "#{@playbook.slug}_accordion" %>'>
-            <% @playbook.activities.order(:order).each do |activity| %>
+            <% @pages.each do |page| %>
               <div class="card border-right-0 border-left-0 border-bottom-0">
-                <div id='<%= "#{activity.slug}_header" %>' class="card-header" 
-                   data-toggle="collapse" data-target='#<%= "#{activity.slug}_collapse" %>'
-                   aria-expanded="true" aria-controls='<%= "#{activity.slug}_collapse" %>'>
-                  <h6 class="mb-0 float-left font-weight-bold">
-                    <%= activity.name %>&nbsp;
+                <div id='<%= "#{page.slug}_header" %>' class="card-header" 
+                   data-toggle="collapse" data-target='#<%= "#{page.slug}_collapse" %>'
+                   aria-expanded="true" aria-controls='<%= "#{page.slug}_collapse" %>'>
+                  <h6 class="mb-0 float-left font-weight-bold <% if page.parent_page_id %>ml-3<% end %>">
+                    <%= page.name %>&nbsp;
                   </h6>
-                  (<%= activity.phase %>)
+                  (<%= page.phase %>)
                   <i class="fa fa-angle-down float-right"></i>
                 </div>
-                <div id='<%= "#{activity.slug}_collapse" %>' class="collapse"
-                   aria-labelledby='<%= "#{activity.slug}_header" %>'
+                <div id='<%= "#{page.slug}_collapse" %>' class="collapse"
+                   aria-labelledby='<%= "#{page.slug}_header" %>'
                    data-parent='#<%= "#{@playbook.slug}_accordion" %>'>
                   <div class="card-body p-3">
-                    <div id='<%= "#{activity.slug}_viewer" %>'>
-                      <%= activity.description %>
+                    <div id='<%= "#{page.slug}_viewer" %>' style="height: 300px; overflow-y: hidden;">
+                      <% @page_contents = PageContent.find_by(playbook_page_id: page.id, locale: I18n.locale) %>
+                      <% if @page_contents %>
+                        <% if @page_contents.editor_type == "simple" %>
+                          <%= @page_contents.html.html_safe %>
+                        <% else %>
+                          <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
+                        <% end %>
+                      <% end %>
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="float-right mb-0">
-                          <%= link_to t('view.general.view'), playbook_activity_path(@playbook, activity),
+                          <%= link_to t('view.general.view'), playbook_playbook_page_path(@playbook, page),
                                       class: "card-link" %>
+                          <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+                            <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
+                          <% end %>
+                          <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+                            <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
+                          <% end %>
                         </div>
                       </div>
                     </div>
@@ -98,11 +111,13 @@
           </div>
           <% else %>
             <div class="alert alert-light mb-0" role="alert">
-              <%= t('view.playbook.index.no-activity') %>
+              <%= t('view.playbook.index.no-page') %>
             </div>
           <% end %>
         </div>
       </div>
+      <div class="card mt-2">
+      
       <div class="card-footer border-0">
         <div class="float-right mb-0">
           <% if user_signed_in? && policy(Playbook).mod_allowed? %>
@@ -141,4 +156,8 @@
       
       $("#loading-spinner").show()
     })
+    
+    $(document).on("turbolinks:load", function() {
+      $('[data-toggle="popover"]').popover()
+    });
 </script>

@@ -1,0 +1,74 @@
+<script src="https://unpkg.com/grapesjs"></script>
+<script src="https://unpkg.com/grapesjs-preset-webpage"></script>
+<script src="https://unpkg.com/grapesjs-lory-slider"></script>
+<script src="https://unpkg.com/grapesjs-tabs"></script>
+<script src="https://unpkg.com/grapesjs-custom-code"></script>
+<script src="https://unpkg.com/grapesjs-touch"></script>
+<script src="https://unpkg.com/grapesjs-parser-postcss"></script>
+<script src="https://unpkg.com/grapesjs-tooltip"></script>
+<script src="https://unpkg.com/grapesjs-tui-image-editor"></script>
+<script src="https://unpkg.com/grapesjs-typed"></script>
+<script src="https://unpkg.com/grapesjs-style-bg"></script>
+<script src="https://unpkg.com/toastr"></script>
+<script src="https://nribeka.gitlab.io/js/grapesjs-custom-tooltip.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
+
+<%= form_with(model: @page_contents, url: save_design_playbook_playbook_page_path, local: true, html: { id: 'page-form' }) do |form| %>
+<div id='<%= !@page_contents["name"].nil? && @page_contents["name"].gsub(" ", "-") %>'>
+  <fieldset class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="editor_type" name="editor_type">
+    <label class="form-check-label" for="editor-type"><%= t('view.playbook-page.form.editor-type') %></label>
+  </fieldset>
+
+  <div id="simple-editor">
+    <form>
+    <%= form.cktext_area :page_html, value: @page_contents["html"] && @page_contents["html"].html_safe, id: 'page_contents[html]', ckeditor: { height: 600, allowedContent: true } %>
+
+  </div>
+
+  <div id="page-builder" class="hidden">
+    <%= render('/playbook_pages/designer/grapes_style.css') %>
+
+    <div id="gjs" style="height:0px; overflow:hidden"></div>
+    <script type="text/javascript">
+      <%= render('/playbook_pages/designer/grapes_config.js') %>
+    </script>
+
+    <script type="text/javascript">
+      <%= render('/playbook_pages/designer/show_design.js') %>
+    </script>
+  </div>
+
+  <fieldset class="float-right mt-4">
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
+    <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+  </fieldset>
+
+</div>
+<% end %>
+
+<script>
+
+  $(document).ready(function() {
+    if ("<%= @page_contents.editor_type %>" == "simple") {
+      $("#editor_type").removeAttr('checked');
+    } else {
+      $("#editor_type").attr('checked', 'true');
+      $("#simple-editor").toggleClass('hidden')
+      $("#page-builder").toggleClass('hidden')
+    }
+  })
+
+  $("#submit-btn").on('click', function(e) {
+    if ($("#editor_type").is(':checked')) {
+      $(".fa-save").click()
+      //e.preventDefault();
+    }
+  })
+
+  $("#editor_type").on('click', function() {
+    $("#simple-editor").toggleClass('hidden')
+    $("#page-builder").toggleClass('hidden')
+  })
+</script>
