@@ -277,7 +277,7 @@ class PlaybookPagesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_page_params
     params.require(:playbook_page)
-      .permit(:name, :slug, :phase, :order, :media_url, :question_text, :playbook_id, :parent_page_id, :editor_type,
+      .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :playbook_id, :parent_page_id, :editor_type,
              :resources => [:name, :description, :url])
       .tap do |attr|
         if params[:reslug].present?

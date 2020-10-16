@@ -31,12 +31,8 @@ Rails.application.routes.draw do
 
   resources :tasks, only: [:index, :update, :create, :destroy]
   resources :activities, only: [:index, :update, :create, :destroy]
-  resources :plays do
-    get 'count', on: :collection
-    resources :tasks
-  end
 
-  #resources :playbook_pages, only: [:index, :update, :create, :destroy]
+  resources :playbook_pages, only: [:index, :update, :create, :destroy]
   resources :playbooks do
     get 'count', on: :collection
     post 'upload_design_images', on: :collection
@@ -207,8 +203,6 @@ Rails.application.routes.draw do
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
   get 'playbook_duplicates', to: 'playbooks#duplicates'
-  get 'play_duplicates', to: 'plays#duplicates'
-  get 'task_duplicates', to: 'tasks#duplicates'
 
   get 'covidresources', :to => 'covid#resources'
   get 'productlist', :to => 'products#productlist', as: :productlist
