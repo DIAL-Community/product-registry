@@ -1,4 +1,4 @@
-<%= form_with(model: playbook_page, url: playbook_playbook_pages_path, local: true, html: { id: 'page-form' }) do |form| %>
+<%= form_with(model: playbook_page, local: true, html: { id: 'page-form' }) do |form| %>
   <%= form.hidden_field :playbook_id, id: :playbook_id %>
 
   <fieldset class="form-label-group">
