@@ -241,15 +241,18 @@ class PlaybookPagesController < ApplicationController
   def set_page_contents
     if @page_contents.nil?
       if !params[:id].scan(/\D/).empty?
-        @page_contents = PageContent.find(params[:id])
+        @page = PlaybookPage.find_by(slug: params[:id])
+        @playbook = Playbook.find(@page.playbook_id)
+        @page_contents = PageContent.find_by(playbook_page_id: @page.id)
       else
         @page = PlaybookPage.find(params[:id])
         @playbook = Playbook.find(@page.playbook_id)
         @page_contents = PageContent.find_by(playbook_page_id: params[:id])
-        if @page_contents.nil? 
-          @page_contents = PageContent.new
-          @page_contents.playbook_page_id = params[:id]
-        end
+      end
+      if @page_contents.nil? 
+        @page_contents = PageContent.new
+        @page_contents.playbook_page_id = @page.id
+        @page_contents.editor_type = "simple"
       end
     end
   end
