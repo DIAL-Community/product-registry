@@ -23,8 +23,8 @@
 
   <div id="simple-editor">
     <form>
-    <%= form.cktext_area :page_html, value: @page_contents["html"] && @page_contents["html"].html_safe, id: 'page_contents[html]', ckeditor: { height: 600, allowedContent: true } %>
-
+    <%= form.cktext_area :page_html, value: @page_contents["html"] && @page_contents["html"].html_safe, id: 'page_contents', ckeditor: { height: 600, allowedContent: true } %>
+    </form>
   </div>
 
   <div id="page-builder" class="hidden">
