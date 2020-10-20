@@ -3,15 +3,15 @@
 
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(Activity).mod_allowed? %>
-      <%= link_to  t('view.general.delete-with-model', model: t('model.activity').titlecase), @page,
-                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.activity')) },
+    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.playbook-page').titlecase), @page,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.playbook-page')) },
                   class: 'btn btn-outline-secondary float-left' %>
     <% end %>
   </div>
 </div>
 
-<div id="show-activity">
+<div id="show-page">
 <div class="card mt-2">
   <h5 class="card-header bg-light border-0 font-weight-bold">
     <%= "#{@page.name}" %>
@@ -21,20 +21,22 @@
       <%= t('view.playbook-page.index.contents') %>: 
     </h6>
     <div class="card-body py-2 px-3">
-      <% @page_contents.each do |page_content| %>
-        <%= @page_content.content.html_safe %>
+      <% if @page_contents.editor_type == "simple" %>
+        <%= @page_contents.html.html_safe %>
+      <% else %>
+        <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
       <% end %>
     </div>
     <h6 class="card-text text-muted mt-2 mb-2">
-      <%= t('view.activity.index.phase') %>: 
+      <%= t('view.playbook-page.index.phase') %>: 
     </h6>
     <p class="ml-4"><%= @page.phase %></p>
     <h6 class="card-text text-muted mt-2 mb-2">
-      <%= t('view.activity.index.order') %>: <%= @page.order %>
+      <%= t('view.playbook-page.index.order') %>: <%= @page.page_order %>
     </h6>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.activity.index.media') %>:</h5>
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.media') %>:</h5>
       </div>
       <div class="card-body p-0">
         <% if !@page.media_url.nil? && !@page.media_url.empty? && !@page.media_url.equals('') %>
@@ -46,7 +48,7 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.activity.index.question') %>:</h5>
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.question') %>:</h5>
       </div>
       <div class="card-body p-0">
         <% if !@question.nil? %>
@@ -58,7 +60,7 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.activity.index.resources') %>:</h5>
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.resources') %>:</h5>
       </div>
       <div class="card-body p-0">
         <% @page.resources.each do |resource| %>
@@ -71,20 +73,10 @@
         <% end %>
       </div>
     </div>
-    <div class="card mt-2">
-      <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.task').pluralize.titlecase %></h5>
-        <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-          <%= link_to t('view.general.add'),
-            new_playbook_activity_task_path(@playbook, @page),
-            class: "card-link float-right", style: "color: #fbab18 !important" %>
-        <% end %>
-      </div>
-    </div>
     <div class="card-footer border-0">
       <div class="float-right mb-0">
         <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-          <%= link_to t('view.general.edit'), edit_playbook_activity_path(@playbook, @page), class: "card-link" %>
+          <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
         <% end %>
       </div>
     </div>
