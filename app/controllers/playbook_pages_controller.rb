@@ -57,6 +57,7 @@ class PlaybookPagesController < ApplicationController
       @phases = @playbook.phases.map do |phase|
         phase["name"]
       end
+      @pages = PlaybookPage.where(playbook_id: @playbook.id)
     end
     authorize Playbook, :mod_allowed?
   end
