@@ -13,7 +13,7 @@
 
   <fieldset class="form-group mb-0">
     <strong class="text-muted inline"><%= form.label :parent_page_id, t('view.playbook-page.form.parent').to_s.titlecase, class: 'text-muted mt-2' %></strong>
-    <% options = options_from_collection_for_select(@pages.nil? ? [] : @pages, "id", "name") %>
+    <% options = options_from_collection_for_select(@pages.nil? ? [] : @pages, "id", "name", @page.parent_page_id) %>
     <%= form.select :parent_page_id, options, {:include_blank => true},  :class => "custom-select mb-2" %>
   </fieldset>
 
