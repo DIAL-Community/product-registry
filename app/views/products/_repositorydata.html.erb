@@ -3,12 +3,12 @@
       <%= t('view.product.show.repository-info') %>
       <%
         last_updated = DateTime.parse(repository_data['updatedAt'])
-        last_month = Date.today.months_ago(1)
+        last_three_month = Date.today.months_ago(3)
         last_year = Date.today.years_ago(1)
 
         if last_updated >= last_month
           concat("<span class='badge badge-success'>#{t('view.product.show.very-active')}</span>".html_safe)
-        elsif last_updated > last_year && last_updated < last_month
+        elsif last_updated > last_year && last_updated < last_three_month
           concat("<span class='badge badge-warning'>#{t('view.product.show.not-very-active')}</span>".html_safe)
         else
           concat("<span class='badge badge-danger'>#{t('view.product.show.inactive')}</span>".html_safe)
