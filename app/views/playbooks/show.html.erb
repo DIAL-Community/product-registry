@@ -1,3 +1,20 @@
+<style>
+  @font-face {
+    font-family: FAIcons;
+    src: url('<%= asset_path("/assets/fa-solid-900.woff") %>'), url('<%= asset_path("/assets/fa-solid-900.woff") %>') format('woff');
+  }
+
+  [data-toggle="collapse"].collapsed i:before{
+    font-family: FAIcons;
+    content: "\f067";
+  }
+
+  [data-toggle="collapse"] i:before{
+    font-family: FAIcons;
+    content: "\f068";
+  }
+</style>
+
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
@@ -67,14 +84,14 @@
           <div class="accordion" id='<%= "#{@playbook.slug}_accordion" %>'>
             <% @pages.each do |page| %>
               <div class="card border-right-0 border-left-0 border-bottom-0">
-                <div id='<%= "#{page.slug}_header" %>' class="card-header" 
+                <div id='<%= "#{page.slug}_header" %>' class="card-header"
                    data-toggle="collapse" data-target='#<%= "#{page.slug}_collapse" %>'
                    aria-expanded="true" aria-controls='<%= "#{page.slug}_collapse" %>'>
                   <h6 class="mb-0 float-left font-weight-bold <% if page.parent_page_id %>ml-3<% end %>">
                     <%= page.name %>&nbsp;
                   </h6>
                   (<%= page.phase %>)
-                  <i class="fa fa-angle-down float-right"></i>
+                  <i class="float-right"></i>
                 </div>
                 <div id='<%= "#{page.slug}_collapse" %>' class="collapse"
                    aria-labelledby='<%= "#{page.slug}_header" %>'
@@ -156,8 +173,10 @@
       
       $("#loading-spinner").show()
     })
-    
-    $(document).on("turbolinks:load", function() {
+
+    function initPlaybookShow() {
       $('[data-toggle="popover"]').popover()
-    });
+    }
+
+    $(document).on('playbooks#show:loaded', initPlaybookShow);
 </script>
