@@ -599,6 +599,11 @@ en:
       index:
         contents: Contents
         edit-content: Edit Content
+        phase: Phase
+        order: Order
+        media: Media
+        question: Question
+        resources: Resources
       form:
         name: Name
         contents: Contents
