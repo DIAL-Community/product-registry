@@ -23,7 +23,7 @@
     <div class="card-body py-2 px-3">
       <% if @page_contents.editor_type == "simple" %>
         <%= @page_contents.html.html_safe %>
-      <% else %>
+      <% elsif @page_contents.editor_type == "builder" %>
         <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
       <% end %>
     </div>
