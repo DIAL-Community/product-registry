@@ -241,15 +241,18 @@ class PlaybookPagesController < ApplicationController
   def set_page_contents
     if @page_contents.nil?
       if !params[:id].scan(/\D/).empty?
-        @page_contents = PageContent.find(params[:id])
+        @page = PlaybookPage.find_by(slug: params[:id])
+        @playbook = Playbook.find(@page.playbook_id)
+        @page_contents = PageContent.find_by(playbook_page_id: @page.id)
       else
         @page = PlaybookPage.find(params[:id])
         @playbook = Playbook.find(@page.playbook_id)
         @page_contents = PageContent.find_by(playbook_page_id: params[:id])
-        if @page_contents.nil? 
-          @page_contents = PageContent.new
-          @page_contents.playbook_page_id = params[:id]
-        end
+      end
+      if @page_contents.nil? 
+        @page_contents = PageContent.new
+        @page_contents.playbook_page_id = @page.id
+        @page_contents.editor_type = "simple"
       end
     end
   end
@@ -277,7 +280,7 @@ class PlaybookPagesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_page_params
     params.require(:playbook_page)
-      .permit(:name, :slug, :phase, :order, :media_url, :question_text, :playbook_id, :parent_page_id, :editor_type,
+      .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :playbook_id, :parent_page_id, :editor_type,
              :resources => [:name, :description, :url])
       .tap do |attr|
         if params[:reslug].present?

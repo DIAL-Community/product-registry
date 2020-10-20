@@ -215,7 +215,7 @@ class PlaybooksController < ApplicationController
     parent_pages = PlaybookPage.where("playbook_id=? and parent_page_id is null", @playbook.id).order(:page_order)
     parent_pages.each do |page|
       @pages << page
-      child_pages = PlaybookPage.where(parent_page_id: page)
+      child_pages = PlaybookPage.where(parent_page_id: page).order(:page_order)
       if !child_pages.empty?
         child_pages.each do |child_page|
           @pages << child_page
