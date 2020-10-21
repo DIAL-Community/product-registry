@@ -15,13 +15,13 @@ setTimeout(function() {
     },
     storageManager: {
       type: 'remote',
-      stepsBeforeSave: 3,
+      stepsBeforeSave: 4,
       autosave: true,
       autoload: true,
       urlStore: '<%= save_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
       urlLoad: '<%= load_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
       params: { authenticity_token: '<%= form_authenticity_token %>' },
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
     },
     styleManager: {
       clearProperties: 1
@@ -132,8 +132,6 @@ setTimeout(function() {
       setTimeout(function() {
         localStorage.clear();
       }, 0);
-
-      // console.log('Editor data: ', editor);
     }
   });
 
@@ -161,9 +159,11 @@ setTimeout(function() {
   cmdm.add('save-output-to-db', {
     // TODO: Need to lock the UI and release it after it.
     run: function(editor) {
-      editor.store(function(response) {
-        // console.log('Server response: ', response);
-      });
+      editor.store();
+      // If we want to handle message from the server.
+      // editor.store(function(response) {
+      //   console.log('Server response: ', response);
+      // });
     }
   });
 

@@ -77,6 +77,7 @@
       <div class="float-right mb-0">
         <% if user_signed_in? && policy(Playbook).mod_allowed? %>
           <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
+          <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
         <% end %>
       </div>
     </div>

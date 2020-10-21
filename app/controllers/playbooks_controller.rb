@@ -39,35 +39,6 @@ class PlaybooksController < ApplicationController
     respond_to { |format| format.json { render json: { data: uploaded_filenames }, status: :ok } }
   end
 
-  def static_design
-    set_playbook
-  end
-
-  def view_design
-    set_playbook
-  end
-
-  def show_design
-    set_playbook
-  end
-
-  def load_design
-    set_playbook
-
-    design = {}
-    if !@playbook.design_components.nil? && !@playbook.design_components.blank?
-      design['gjs-components'] = @playbook.design_components
-    end
-    if !@playbook.design_styles.nil? && !@playbook.design_styles.blank?
-      design['gjs-styles'] = @playbook.design_styles
-    end
-    if !@playbook.design_assets.nil? && !@playbook.design_assets.blank?
-      design['gjs-assets'] = @playbook.design_assets
-    end
-
-    respond_to { |format| format.json { render json: design, status: :ok } }
-  end
-
   # GET /playbook/1
   # GET /playbook/1.json
   def show
