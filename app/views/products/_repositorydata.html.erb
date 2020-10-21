@@ -6,7 +6,7 @@
         last_three_month = Date.today.months_ago(3)
         last_year = Date.today.years_ago(1)
 
-        if last_updated >= last_month
+        if last_updated >= last_three_month
           concat("<span class='badge badge-success'>#{t('view.product.show.very-active')}</span>".html_safe)
         elsif last_updated > last_year && last_updated < last_three_month
           concat("<span class='badge badge-warning'>#{t('view.product.show.not-very-active')}</span>".html_safe)
