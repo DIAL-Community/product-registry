@@ -199,13 +199,17 @@ class PlaybookPagesController < ApplicationController
       return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
     end
 
-    if params.has_key?(:editor_type) && params[:editor_type] == "on"
+    if params.key?(:editor_type) && params[:editor_type] == "on"
       # This means that it is a page builder and has already been saved
-      return respond_to { |format| format.html { redirect_to playbook_path(@playbook),
-            notice: t('messages.model.created', model: t('model.playbook-page').to_s.humanize) } }
+      return respond_to do |format|
+        format.html do
+          redirect_to playbook_path(@playbook),
+                      notice: t('messages.model.created', model: t('model.playbook-page').to_s.humanize)
+        end
+      end
     end
 
-    if params.has_key?(:page_content)
+    if params.key?(:page_content)
       @page_contents.html = params['page_content']['page_html']
       @page_contents.css = ""
       @page_contents.editor_type = "simple"
@@ -221,16 +225,13 @@ class PlaybookPagesController < ApplicationController
     @page_contents.locale = I18n.locale
 
     respond_to do |format|
+      puts "Format of the request: #{format.inspect}."
       if @page_contents.save!
         format.html do
           redirect_to playbook_path(@playbook),
                       notice: t('messages.model.created', model: t('model.playbook-page').to_s.humanize)
         end
-        format.json do
-          redirect_to playbook_path(@playbook, format: :html),
-            notice: t('messages.model.created', model: t('model.playbook-page').to_s.humanize)
-
-        end
+        format.json { render json: { design: 'Saved successfully.' }, status: :ok }
       else
         format.html { render :edit_content }
         format.json { render json: { design: 'Saving failed.' }, status: :unprocessable_entity }
