@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(CandidateRole).mod_allowed? %>
+    <% if user_signed_in? && policy(CandidateRole).create_allowed? %>
       <%= link_to(new_candidate_role_path, class: 'btn btn-outline-secondary float-left') do %>
         <%= "#{t('view.general.create')} #{t('model.candidate-role').to_s.titlecase}" %>
       <% end %>
