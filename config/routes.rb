@@ -3,7 +3,6 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
   post "/graphql", to: "graphql#execute"
-  mount Ckeditor::Engine => '/ckeditor'
   resources :task_trackers
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
@@ -31,18 +30,22 @@ Rails.application.routes.draw do
 
   resources :tasks, only: [:index, :update, :create, :destroy]
   resources :activities, only: [:index, :update, :create, :destroy]
-  resources :plays do
-    get 'count', on: :collection
-    resources :tasks
-  end
+
+  resources :playbook_pages, only: [:index, :update, :create, :destroy]
   resources :playbooks do
     get 'count', on: :collection
-    member do 
-      get 'create_pdf'
-      get 'show_pdf'
-    end
-    resources :activities do
-      resources :tasks
+    post 'upload_design_images', on: :collection
+    resources :playbook_pages do
+      member do
+        get 'edit_content'
+        get 'view_design'
+        get 'show_design'
+        get 'load_design'
+        post 'save_design'
+        patch 'save_design'
+        get 'create_pdf'
+        get 'show_pdf'
+      end
     end
   end
 
@@ -64,7 +67,9 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
   scope '/admin' do
-    resources :users
+    resources :users do
+      get 'statistics', on: :collection
+    end
   end
 
   devise_scope :user do
@@ -197,8 +202,8 @@ Rails.application.routes.draw do
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
   get 'playbook_duplicates', to: 'playbooks#duplicates'
-  get 'play_duplicates', to: 'plays#duplicates'
-  get 'task_duplicates', to: 'tasks#duplicates'
+
+  post '/froala_image/upload' => 'froala_images#upload'
 
   get 'covidresources', :to => 'covid#resources'
   get 'productlist', :to => 'products#productlist', as: :productlist

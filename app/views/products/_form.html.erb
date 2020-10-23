@@ -30,7 +30,8 @@
     </div>
   </div>
 
-  <%= form.cktext_area :product_description, value: @product_description.description.html_safe, id: 'product_description', ckeditor: { allowedContent: true } %>
+  <input type="hidden" id="product_desc" name="product[product_description]" />
+  <div id="prod_desc_editor"> </div>
   
   <fieldset class="custom-file mt-2">
     <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file"/>
@@ -352,7 +353,7 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
@@ -385,5 +386,22 @@
   <% product.tags.each {|tag| %>
     tagProduct('', '<%= tag %>');
   <% } %>
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#product_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#prod_desc_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @product_description.description.nil? ? "" : @product_description.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
 
 </script>

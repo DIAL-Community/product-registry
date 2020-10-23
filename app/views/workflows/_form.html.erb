@@ -10,8 +10,9 @@
     <%= t('view.general.duplicates', model: t('model.workflow')) %>
   </div>
 
-  <%= form.cktext_area :wf_desc, value: @wf_desc.description.html_safe, id: 'workflow_desc', ckeditor: { allowedContent: true } %>
-  
+  <input type="hidden" id="workflow_desc" name="workflow[wf_desc]" />
+  <div id="workflow_editor"> </div>
+   
   <h6 class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
   </h6>
@@ -35,7 +36,7 @@
     </div>
   </div>
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
@@ -44,4 +45,22 @@
   <% workflow.building_blocks.order("name").each do |building_block| %>
     addBuildingBlock('<%= building_block.id %>', '<%= building_block.name %>');
   <% end %>
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#workflow_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#workflow_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @wf_desc.description.nil? ? "" : @wf_desc.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+  
 </script>

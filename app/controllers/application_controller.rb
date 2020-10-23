@@ -27,8 +27,18 @@ class ApplicationController < ActionController::Base
   end
 
   def set_default_identifier
+    logger.info("Default session identifier: #{session[:default_identifier]}.")
     if session[:default_identifier].nil?
       session[:default_identifier] = SecureRandom.uuid
+
+      user_event = UserEvent.new
+      user_event.identifier = session[:default_identifier]
+      user_event.event_type = UserEvent.event_types[:initial_load]
+      user_event.event_datetime = Time.now
+
+      if user_event.save!
+        logger.info("User event '#{UserEvent.event_types[:initial_load]}' for #{user_event.identifier} saved.")
+      end
     end
   end
 
@@ -133,11 +143,9 @@ class ApplicationController < ActionController::Base
     products = filter_products(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
     orgs = filter_organizations(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
     playbooks = filter_playbooks(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
-    plays = filter_plays(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
 
     render json: { "sdgCount": sdgs.count, "useCaseCount": use_cases.count, "workflowCount": workflows.count, "bbCount": bbs.count,
-           "projectCount": projects.count, "productCount": products.count, "orgCount": orgs.count,
-           "playbookCount": playbooks.count, "playCount": plays.count}
+           "projectCount": projects.count, "productCount": products.count, "orgCount": orgs.count, "playbookCount": playbooks.count}
     
   end
 

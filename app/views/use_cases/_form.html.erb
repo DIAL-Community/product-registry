@@ -20,14 +20,16 @@
     <%= t('view.general.description') %>:
   </label>
 
-  <%= form.cktext_area :uc_desc, value: @uc_desc.description.html_safe, id: 'use_case_desc', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="uc_desc" name="use_case[uc_desc]" />
+  <div id="use_case_desc_editor"> </div>
+  
   <label for="usecasesteps-header">
     <%= t('view.use-case.form.steps-header-description') %>:
   </label>
 
-  <%= form.cktext_area :ucs_header, value: @ucs_header.header.html_safe, id: 'use_case_steps_header', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="ucs_header" name="use_case[ucs_header]" />
+  <div id="ucs_header_editor"> </div>
+  
   <%
     default_maturity = use_case.maturity.nil? ? UseCase.entity_status_types[:BETA] : use_case.maturity
     if !current_user.roles.include?(User.user_roles[:content_editor]) &&
@@ -110,7 +112,7 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn"%>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
@@ -122,4 +124,35 @@
   <% use_case.tags.each {|tag| %>
     tagUseCase('', '<%= tag %>');
   <% } %>
+
+  var descEditor;
+  var headerEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#use_case_desc_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @uc_desc.description.nil? ? "" : @uc_desc.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+
+    headerEditor = new FroalaEditor('#ucs_header_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      headerEditor.html.set("<%= @ucs_header.header.nil? ? "" : @ucs_header.header.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#uc_desc").val(descHtml)
+
+    var headerHtml = headerEditor.html.get()
+    $("#ucs_header").val(headerHtml)
+  });
+
 </script>

@@ -28,8 +28,9 @@
       </div>
     </div>
 
-    <%= form.cktext_area :organization_description, value: @organization_description.description.html_safe, id: 'organization_description', ckeditor: { allowedContent: true } %>
-  
+    <input type="hidden" id="org_desc" name="organization[organization_description]" />
+    <div id="org_desc_editor"> </div>
+    
     <fieldset class="custom-file mt-2">
       <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
       <label class="custom-file-label" for="logo-file">
@@ -280,7 +281,7 @@
     <% end %>
 
     <fieldset class="float-right mt-4">
-      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
       <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
@@ -308,5 +309,22 @@
   <% organization.aliases.each {|other_name| %>
     addOtherName('<%= other_name %>');
   <% } %>
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#org_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#org_desc_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @organization_description.description.nil? ? "" : @organization_description.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
 
 </script>

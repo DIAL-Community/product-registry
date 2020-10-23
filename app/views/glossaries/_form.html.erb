@@ -10,14 +10,32 @@
     <%= t('view.general.duplicates', model: t('model.glossary')) %>
   </div>
 
-  <%= form.cktext_area :description, value: glossary.description.html_safe, id: 'glossary_description', ckeditor: { allowedContent: true } %>
-
-  <div class="wysiwyg-editor">
-  </div>
+  <input type="hidden" id="glossary_desc" name="glossary[description]" />
+  <div id="glossary_desc_editor"></div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => 'submit-btn' %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
+
+<script>
+  var descEditor;
+
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#glossary_desc_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= glossary.description.nil? ? "" : glossary.description.squish.gsub("\\\"","\"").gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#glossary_desc").val(descHtml)
+  });
+</script>
 

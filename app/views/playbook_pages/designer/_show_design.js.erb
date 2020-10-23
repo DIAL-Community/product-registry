@@ -1,0 +1,287 @@
+
+setTimeout(function() {
+  var editor = grapesjs.init({
+    avoidInlineStyle: 1,
+    height: '100vh',
+    width: '100%',
+    container: '#gjs',
+    fromElement: 1,
+    showOffsets: 1,
+    selectorManager: {
+      componentFirst: true
+    },
+    assetManager: {
+      upload: '<%= upload_design_images_playbooks_path %>',
+    },
+    storageManager: {
+      type: 'remote',
+      stepsBeforeSave: 4,
+      autosave: true,
+      autoload: true,
+      urlStore: '<%= save_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
+      urlLoad: '<%= load_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
+      params: { authenticity_token: '<%= form_authenticity_token %>' },
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+    },
+    styleManager: {
+      clearProperties: 1
+    },
+    protectedCss: `<%= render('/playbook_pages/designer/hexagon.css').html_safe %>`,
+    plugins: [
+      'grapesjs-lory-slider',
+      'grapesjs-tabs',
+      'grapesjs-custom-code',
+      'grapesjs-touch',
+      'grapesjs-parser-postcss',
+      'grapesjs-tooltip',
+      'grapesjs-tui-image-editor',
+      'grapesjs-typed',
+      'grapesjs-style-bg',
+      'gjs-preset-webpage',
+      'grapesjs-custom-tooltip'
+    ],
+    pluginsOpts: {
+      'grapesjs-lory-slider': {
+        sliderBlock: {
+          category: 'Extra'
+        }
+      },
+      'grapesjs-tabs': {
+        tabsBlock: {
+          category: 'Extra'
+        }
+      },
+      'grapesjs-typed': {
+        block: {
+          category: 'Extra',
+          content: {
+            type: 'typed',
+            'type-speed': 40,
+            strings: [
+              'Text row one',
+              'Text row two',
+              'Text row three',
+            ],
+          }
+        }
+      },
+      'grapesjs-tui-image-editor': {
+        hideHeader: false,
+        upload: true,
+        // TODO: Upload is uploading without mime. Causing issue when editing again.
+      },
+      'gjs-preset-webpage': {
+        modalImportTitle: 'Import Template',
+        modalImportLabel: '<div style="margin-bottom: 1rem">Paste here your HTML/CSS and click Import</div>',
+        modalImportContent: function(editor) {
+          return `${editor.getHtml()} <style> ${editor.getCss()} </style>`
+        },
+        filestackOpts: null,
+        aviaryOpts: false,
+        blocksBasicOpts: {
+          flexGrid: 1
+        },
+      },
+    },
+  });
+
+  var blockManager = editor.BlockManager;
+
+  blockManager.add('single-hexagon-block', {
+    label: `
+    <div>
+      <%= image_tag('single_hexagon.png', style: "width: 2rem;") %>
+      <div style="padding-top: 0.5rem;">Single hexagon</div>
+    </div>
+    `,
+    category: 'Basic',
+    content: `<%= render("/playbook_pages/designer/single_hexagon.html").html_safe %>`,
+  });
+
+  blockManager.add('multi-hexagon-block', {
+    label: `
+    <div>
+      <%= image_tag('multi_hexagon.png', style: "width: 2rem;") %>
+      <div style="margin-top: 1rem;">Multi hexagon</div>
+    </div>
+    `,
+    category: 'Basic',
+    content: `<%= render("/playbook_pages/designer/multi_hexagon.html").html_safe %>`,
+  });
+
+  editor.I18n.addMessages({
+    en: {
+      styleManager: {
+        properties: {
+          'background-repeat': 'Repeat',
+          'background-position': 'Position',
+          'background-attachment': 'Attachment',
+          'background-size': 'Size',
+        }
+      },
+    }
+  });
+
+  const pn = editor.Panels;
+  const modal = editor.Modal;
+  const cmdm = editor.Commands;
+  cmdm.add('canvas-clear', function() {
+    if (confirm('Are you sure to clean the canvas?')) {
+      editor.DomComponents.clear();
+      editor.CssComposer.clear();
+      setTimeout(function() {
+        localStorage.clear();
+      }, 0);
+    }
+  });
+
+  cmdm.add('set-device-desktop', {
+    run: function(editor) {
+      editor.setDevice('Desktop');
+    },
+    stop: function() {},
+  });
+
+  cmdm.add('set-device-tablet', {
+    run: function(editor) {
+      editor.setDevice('Tablet');
+    },
+    stop: function() {},
+  });
+
+  cmdm.add('set-device-mobile', {
+    run: function(editor) {
+      editor.setDevice('Mobile portrait');
+    },
+    stop: function() {},
+  });
+
+  cmdm.add('save-output-to-db', {
+    // TODO: Need to lock the UI and release it after it.
+    run: function(editor) {
+      editor.store();
+      // If we want to handle message from the server.
+      // editor.store(function(response) {
+      //   console.log('Server response: ', response);
+      // });
+    }
+  });
+
+  pn.addButton('options', {
+    id: 'save-document',
+    className: 'fa fa-save',
+    command: function() {
+      editor.runCommand('save-output-to-db');
+    },
+    attributes: {
+      'title': 'Save design',
+      'data-tooltip-pos': 'bottom',
+    },
+  });
+
+  // Simple warn notifier
+  const origWarn = console.warn;
+  toastr.options = {
+    closeButton: true,
+    preventDuplicates: true,
+    showDuration: 250,
+    hideDuration: 150
+  };
+  console.warn = function(msg) {
+    if (msg.indexOf('[undefined]') == -1) {
+      toastr.warning(msg);
+    }
+    origWarn(msg);
+  };
+
+  // Add and beautify tooltips
+  [
+    ['sw-visibility', 'Show Borders'],
+    ['preview', 'Preview'],
+    ['fullscreen', 'Fullscreen'],
+    ['export-template', 'Export'],
+    ['undo', 'Undo'],
+    ['redo', 'Redo'],
+    ['gjs-open-import-webpage', 'Import'],
+    ['canvas-clear', 'Clear canvas']
+  ]
+  .forEach(function(item) {
+    pn.getButton('options', item[0]).set('attributes', {
+      title: item[1],
+      'data-tooltip-pos': 'bottom'
+    });
+  });
+  
+  [
+    ['open-sm', 'Style Manager'],
+    ['open-layers', 'Layers'],
+    ['open-blocks', 'Blocks']
+  ]
+  .forEach(function(item) {
+    pn.getButton('views', item[0]).set('attributes', {
+      title: item[1],
+      'data-tooltip-pos': 'bottom'
+    });
+  });
+  const titles = document.querySelectorAll('*[title]');
+
+  for (let i = 0; i < titles.length; i++) {
+    const el = titles[i];
+    let title = el.getAttribute('title');
+    title = title ? title.trim() : '';
+    if (!title) {
+      break;
+    }
+    el.setAttribute('data-tooltip', title);
+    el.setAttribute('title', '');
+  }
+
+  // Show borders by default
+  pn.getButton('options', 'sw-visibility').set('active', 1);
+
+
+  // Store and load events
+  editor.on('storage:load', function(e) {
+    // console.log('Loaded ', e);
+  });
+  editor.on('storage:store', function(e) {
+    // console.log('Stored ', e);
+  });
+
+  // Do stuff on load
+  editor.on('load', function() {
+    const $ = grapesjs.$;
+
+    // Load and show settings and style manager
+    const openTmBtn = pn.getButton('views', 'open-tm');
+    openTmBtn && openTmBtn.set('active', 1);
+    const openSm = pn.getButton('views', 'open-sm');
+    openSm && openSm.set('active', 1);
+
+    // Add Settings Sector
+    const traitsSector = $(
+      '<div class="gjs-sm-sector no-select"> ' +
+      '  <div class="gjs-sm-title"> ' +
+      '    <span class="icon-settings fa fa-cog"></span> ' +
+      '    Settings ' +
+      '  </div> ' +
+      '  <div class="gjs-sm-properties" style="display: none;"></div> ' +
+      '</div>');
+    const traitsProps = traitsSector.find('.gjs-sm-properties');
+    traitsProps.append($('.gjs-trt-traits'));
+    $('.gjs-sm-sectors').before(traitsSector);
+    traitsSector.find('.gjs-sm-title').on('click', function() {
+      const traitStyle = traitsProps.get(0).style;
+      const hidden = traitStyle.display == 'none';
+      if (hidden) {
+        traitStyle.display = 'block';
+      } else {
+        traitStyle.display = 'none';
+      }
+    });
+
+    // Open block manager
+    const openBlocksBtn = editor.Panels.getButton('views', 'open-blocks');
+    openBlocksBtn && openBlocksBtn.set('active', 1);
+  });
+}, 1000)

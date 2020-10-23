@@ -49,6 +49,8 @@ public/assets/**/*.webp
 public/assets/**/*.js
 !public/assets/workflows/*.svg
 
+public/assets/playbooks/design_images/*
+
 # Uploaded assets
 public/uploads
 
@@ -75,6 +77,7 @@ public/assets/organizations/testslug.png
 public/assets/products/product.png
 public/assets/products/product_dup1.png
 public/assets/organizations/organization.png
+public/version.txt
 
 /coverage
 
@@ -85,3 +88,5 @@ prod/ssl/data/*
 
 .history
 lib/tasks/local_setup.rake
+
+.vscode

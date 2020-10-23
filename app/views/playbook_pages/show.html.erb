@@ -1,0 +1,81 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+      <%= link_to  t('view.general.delete-with-model', model: t('model.playbook-page').titlecase), @page,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.playbook-page')) },
+                  class: 'btn btn-outline-secondary float-left' %>
+    <% end %>
+  </div>
+</div>
+
+<div id="show-page">
+<div class="card mt-2">
+  <h5 class="card-header bg-light border-0 font-weight-bold">
+    <%= "#{@page.name}" %>
+  </h5>
+  <div class="card-body py-2 px-3">
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <%= t('view.playbook-page.index.contents') %>: 
+    </h6>
+    <div class="card-body py-2 px-3">
+      <% if @page_contents.editor_type == "simple" %>
+        <%= !@page_contents.html.nil? && @page_contents.html.html_safe %>
+      <% elsif @page_contents.editor_type == "builder" %>
+        <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
+      <% end %>
+    </div>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <%= t('view.playbook-page.index.phase') %>: 
+    </h6>
+    <p class="ml-4"><%= @page.phase %></p>
+    <h6 class="card-text text-muted mt-2 mb-2">
+      <%= t('view.playbook-page.index.order') %>: <%= @page.page_order %>
+    </h6>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.question') %>:</h5>
+      </div>
+      <div class="card-body p-2">
+        <% if !@question.nil? %>
+          <div class="ml-4 mt-2">
+          <strong>Question Text: </strong><%= @question.question_text %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.other-info') %></h5>
+      </div>
+      <div class="card-body p-2 ml-4">
+        <h6 class="font-weight-bold"><%= t('view.playbook-page.index.resources') %>:</h6>
+        <% @page.resources.each do |resource| %>
+          <div class="ml-4 mt-2">
+            <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
+            </div>
+            <div class="ml-5 mb-3">
+            <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
+          </div>
+        <% end %>
+        <h6 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.media') %>:</h6>
+        <% if !@page.media_url.nil? && !@page.media_url.empty? && !@page.media_url.equals('') %>
+          <div class="ml-4 mt-2">
+          <iframe src="<%= @page.media_url %>" width=800 height=450 allowfullscreen></iframe>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    </div>
+    <div class="card-footer border-0">
+      <div class="float-right mb-0">
+        <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+          <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
+          <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
