@@ -3,7 +3,6 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
   post "/graphql", to: "graphql#execute"
-  mount Ckeditor::Engine => '/ckeditor'
   resources :task_trackers
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
@@ -203,6 +202,8 @@ Rails.application.routes.draw do
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
   get 'playbook_duplicates', to: 'playbooks#duplicates'
+
+  post '/froala_image/upload' => 'froala_images#upload'
 
   get 'covidresources', :to => 'covid#resources'
   get 'productlist', :to => 'products#productlist', as: :productlist

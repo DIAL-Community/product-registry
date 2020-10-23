@@ -47,7 +47,8 @@
     </fieldset>
   <% end %>
 
-  <%= form.cktext_area :bb_desc, value: @bb_desc.description.html_safe, id: 'building_block_desc', ckeditor: { allowedContent: true } %>
+  <input type="hidden" id="bb_desc" name="building_block[bb_desc]" />
+  <div id="bb_desc_editor"> </div>
   
   <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
     <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
@@ -98,12 +99,14 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
   <% end %>
 
 <script>
+  var descEditor;
+  
   <% building_block.products.order("name").each do |product| %>
     addProduct('<%= product.id %>', '<%= product.name %>');
   <% end %>
@@ -111,4 +114,17 @@
     addWorkflow('<%= workflow.id %>', '<%= workflow.name %>');
   <% end %>
 
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#bb_desc_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= !@bb_desc.description.nil? ? "" : @bb_desc.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#bb_desc").val(descHtml)
+  });
 </script>

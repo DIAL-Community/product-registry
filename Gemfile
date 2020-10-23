@@ -24,7 +24,7 @@ gem 'addressable'
 
 gem 'pundit'
 
-gem 'ckeditor'
+gem 'wysiwyg-rails'
 gem 'carrierwave'
 gem 'mini_magick'
 

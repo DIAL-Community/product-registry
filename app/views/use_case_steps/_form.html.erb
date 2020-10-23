@@ -20,8 +20,9 @@
     <%= t('view.general.duplicates', model: t('model.use-case-step')) %>
   </div>
 
-  <%= form.cktext_area :ucs_desc, value: @ucs_desc.description.html_safe, id: 'ucs_desc', ckeditor: { allowedContent: true } %>
-  
+  <input type="hidden" id="step_desc" name="use_case_step[ucs_desc]" />
+  <div id="step_editor"> </div>
+   
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :step_number, id: :step_number, required: true,
                         value: calculate_step_number(use_case_step),
@@ -76,7 +77,7 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
@@ -88,4 +89,19 @@
   <% use_case_step.products.order("name").each do |product| %>
     addProduct('<%= product.id %>', '<%= product.name %>');
   <% end %>
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#step_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#step_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @ucs_desc.description.nil? ? "" : @ucs_desc.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
 </script>

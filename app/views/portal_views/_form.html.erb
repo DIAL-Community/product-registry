@@ -108,8 +108,9 @@
     <%= t('view.portal.index.landing-page') %>
   </h6>
 
-  <%= form.cktext_area :about_page, value: @about_page.html_safe, id: 'about_page', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="about_page" name="portal_view[about_page]" />
+  <div id="about_editor"> </div>
+  
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.background-color') %>
   </h6>
@@ -121,7 +122,8 @@
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.page-footer') %>
   </h6>
-  <%= form.cktext_area :page_footer, value: @footer.html_safe, id: 'page_footer', ckeditor: { allowedContent: true } %>
+  <input type="hidden" id="page_footer" name="portal_view[page_footer]" />
+  <div id="footer_editor"> </div>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.header-logo') %>
@@ -134,7 +136,38 @@
   </fieldset>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
+
+<script>
+
+  var aboutEditor;
+  var footerEditor;
+
+  $(document).ready(function() {
+    aboutEditor = new FroalaEditor('#about_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      aboutEditor.html.set("<%= @about_page.nil? ? "" : @about_page.squish.gsub("\"","\\\"").html_safe %>")
+    });
+
+    footerEditor = new FroalaEditor('#footer_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      footerEditor.html.set("<%= @footer.nil? ? "" : @footer.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+
+  $("#submit-btn").on('click', function(e) {
+    var aboutHtml = aboutEditor.html.get()
+    $("#about_page").val(aboutHtml)
+
+    var footerHtml = footerEditor.html.get()
+    $("#page_footer").val(footerHtml)
+  });
+</script>

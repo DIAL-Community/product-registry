@@ -11,10 +11,30 @@
     <%= t('view.general.duplicates', model: t('model.use-case-step')) %>
   </div>
 
-  <%= form.cktext_area :tag_desc, value: @tag_desc.description.html_safe, id: 'tag_desc', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="tag_desc" name="tag[tag_desc]" />
+  <div id="tag_editor"> </div>
+  
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
+
+<script>
+
+$("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#tag_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#tag_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @tag_desc.description.nil? ? "" : @tag_desc.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+</script>

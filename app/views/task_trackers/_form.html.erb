@@ -13,16 +13,36 @@
     <%= t('view.general.duplicates', model: t('model.task-tracker')) %>
   </div>
 
-  <%= form.cktext_area :tt_desc, value: !description.nil? && description.description.html_safe, id: 'task_tracker_desc', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="task_desc" name="task_tracker[tt_desc]" />
+  <div id="task_editor"> </div>
+  
   <fieldset class="form-label-group">
     <%= form.text_field :message, id: :task_tracker_message, class: "form-control", placeholder: t('view.general.message') %>
     <%= form.label :message, t('view.general.message') %>
   </fieldset>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
+
+<script>
+
+$("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#task_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#task_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= description.nil? ? "" : description.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+</script>
 

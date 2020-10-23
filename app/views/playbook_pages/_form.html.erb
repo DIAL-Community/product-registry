@@ -23,16 +23,6 @@
   </fieldset>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook-page.form.media') %>
-  </h6>
-  <div id="activity-media">
-    <fieldset class="form-label-group">
-      <%= form.text_field :media_url, id: :media_url, class: "form-control", placeholder: t('view.playbook-page.form.media-prompt') %>
-      <%= form.label :media_url, t('view.playbook-page.form.media-prompt') %>
-    </fieldset>
-  </div>
-
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook-page.form.question') %>
   </h6>
   <div id="activity-question">
@@ -44,6 +34,19 @@
     <fieldset class="form-label-group">
       <%= form.text_field :answer_text, id: :answer_text, class: "form-control", placeholder: t('view.playbook-page.form.question-text') %>
       <%= form.label :answer_text, t('view.playbook-page.form.answer-text') %>
+    </fieldset>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-4 mb-0">
+    <%= t('view.playbook-page.form.other-info') %>
+  </h6>
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.playbook-page.form.media') %>
+  </h6>
+  <div id="activity-media">
+    <fieldset class="form-label-group">
+      <%= form.text_field :media_url, id: :media_url, class: "form-control", placeholder: t('view.playbook-page.form.media-prompt') %>
+      <%= form.label :media_url, t('view.playbook-page.form.media-prompt') %>
     </fieldset>
   </div>
 

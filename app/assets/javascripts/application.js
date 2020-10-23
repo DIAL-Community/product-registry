@@ -21,6 +21,17 @@
 //= require bootstrap
 //= require cookies_eu
 //= require_directory .
+//= require froala_editor.min
+//= require plugins/image.min.js
+//= require plugins/image_manager.min.js
+//= require plugins/align.min.js
+//= require plugins/colors.min.js
+//= require plugins/link.min.js
+//= require plugins/lists.min.js
+//= require plugins/font_family.min.js
+//= require plugins/font_size.min.js
+//= require plugins/table.min.js
+//= require plugins/video.min.js
 
 function triggerPageEvents() {
   var action = $('#main-body').attr("data-action");

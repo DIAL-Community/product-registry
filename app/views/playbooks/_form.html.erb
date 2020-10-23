@@ -26,20 +26,23 @@
     <%= t('view.playbook.form.overview') %>
   </h6>
 
-  <%= form.cktext_area :playbook_overview, value: @description && @description.overview.html_safe, id: 'playbook_overview', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="playbook_overview" name="playbook[playbook_overview]" />
+  <div id="overview_editor"> </div>
+  
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.audience') %>
   </h6>
 
-  <%= form.cktext_area :playbook_audience, value: @description && @description.audience.html_safe, id: 'playbook_audience', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="playbook_audience" name="playbook[playbook_audience]" />
+  <div id="audience_editor"> </div>
+  
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.outcomes') %>
   </h6>
 
-  <%= form.cktext_area :playbook_outcomes, value: @description && @description.outcomes.html_safe, id: 'playbook_outcomes', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="playbook_outcomes" name="playbook[playbook_outcomes]" />
+  <div id="outcomes_editor"> </div>
+  
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.phases') %>
     <% if user_signed_in? && policy(Playbook).mod_allowed? %>
@@ -53,7 +56,7 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
@@ -75,4 +78,41 @@
     
     $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
   };
+
+  var overviewEditor;
+  var audienceEditor;
+  var outcomesEditor;
+  $(document).ready(function() {
+    overviewEditor = new FroalaEditor('#overview_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      overviewEditor.html.set("<%= @description.overview.nil? ? "" : @description.overview.squish.gsub("\"","\\\"").html_safe %>")
+    });
+
+    audienceEditor = new FroalaEditor('#audience_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      audienceEditor.html.set("<%= @description.audience.nil? ? "" : @description.audience.squish.gsub("\"","\\\"").html_safe %>")
+    });
+
+    outcomesEditor = new FroalaEditor('#outcomes_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      outcomesEditor.html.set("<%= @description.outcomes.nil? ? "" : @description.outcomes.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+  $("#submit-btn").on('click', function(e) {
+    var overviewHtml = overviewEditor.html.get()
+    $("#playbook_overview").val(overviewHtml)
+
+    var audienceHtml = audienceEditor.html.get()
+    $("#playbook_audience").val(audienceHtml)
+
+    var outcomesHtml = outcomesEditor.html.get()
+    $("#playbook_outcomes").val(outcomesHtml)
+  });
 </script>
