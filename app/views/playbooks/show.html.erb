@@ -71,42 +71,7 @@
         <% if @pages.count > 0 %>
             <% @pages.each do |page| %>
               <div class="card border-right-0 border-left-0 border-bottom-0">
-                <div id='<%= "#{page.slug}_header" %>' class="card-header card-btn"
-                   data-toggle="collapse" data-target='#<%= "#{page.slug}_collapse" %>'>
-                  <h6 class="mb-0 float-left font-weight-bold <% if page.parent_page_id %>ml-3<% end %>">
-                    <%= page.name %>&nbsp;
-                  </h6>
-                  (<%= page.phase %>)
-                  <i class="fas fa-plus float-right"></i>
-                </div>
-                <div id='<%= "#{page.slug}_collapse" %>' class="collapse">
-                  <div class="card-body p-3">
-                    <div id='<%= "#{page.slug}_viewer" %>' style="height: 300px; overflow-y: hidden;">
-                      <% @page_contents = PageContent.find_by(playbook_page_id: page.id, locale: I18n.locale) %>
-                      <% if @page_contents %>
-                        <% if @page_contents.editor_type == "simple" %>
-                          <%= @page_contents.html.html_safe %>
-                        <% else %>
-                          <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
-                        <% end %>
-                      <% end %>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="float-right mb-0">
-                          <%= link_to t('view.general.view'), playbook_playbook_page_path(@playbook, page),
-                                      class: "card-link" %>
-                          <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-                            <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
-                          <% end %>
-                          <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-                            <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
-                          <% end %>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <%= render 'page', page: page %>
               </div>
             <% end %>
           <% else %>

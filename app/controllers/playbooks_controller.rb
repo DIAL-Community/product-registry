@@ -188,8 +188,16 @@ class PlaybooksController < ApplicationController
       @pages << page
       child_pages = PlaybookPage.where(parent_page_id: page).order(:page_order)
       if !child_pages.empty?
+        page.child_pages = []
         child_pages.each do |child_page|
-          @pages << child_page
+          page.child_pages << child_page
+          grandchild_pages = PlaybookPage.where(parent_page_id: child_page).order(:page_order)
+          if !grandchild_pages.empty?
+            child_page.child_pages = []
+            grandchild_pages.each do |grandchild_page|
+              child_page.child_pages << grandchild_page
+            end
+          end
         end
       end
     end

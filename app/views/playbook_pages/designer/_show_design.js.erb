@@ -1,6 +1,7 @@
+var grapesEditor;
 
-setTimeout(function() {
-  var editor = grapesjs.init({
+function initGrapes() {
+  grapesEditor = grapesjs.init({
     avoidInlineStyle: 1,
     height: '100vh',
     width: '100%',
@@ -85,7 +86,7 @@ setTimeout(function() {
     },
   });
 
-  var blockManager = editor.BlockManager;
+  var blockManager = grapesEditor.BlockManager;
 
   blockManager.add('single-hexagon-block', {
     label: `
@@ -109,7 +110,7 @@ setTimeout(function() {
     content: `<%= render("/playbook_pages/designer/multi_hexagon.html").html_safe %>`,
   });
 
-  editor.I18n.addMessages({
+  grapesEditor.I18n.addMessages({
     en: {
       styleManager: {
         properties: {
@@ -122,13 +123,13 @@ setTimeout(function() {
     }
   });
 
-  const pn = editor.Panels;
-  const modal = editor.Modal;
-  const cmdm = editor.Commands;
+  var pn = grapesEditor.Panels;
+  var modal = grapesEditor.Modal;
+  var cmdm = grapesEditor.Commands;
   cmdm.add('canvas-clear', function() {
     if (confirm('Are you sure to clean the canvas?')) {
-      editor.DomComponents.clear();
-      editor.CssComposer.clear();
+      grapesEditor.DomComponents.clear();
+      grapesEditor.CssComposer.clear();
       setTimeout(function() {
         localStorage.clear();
       }, 0);
@@ -171,7 +172,7 @@ setTimeout(function() {
     id: 'save-document',
     className: 'fa fa-save',
     command: function() {
-      editor.runCommand('save-output-to-db');
+      grapesEditor.runCommand('save-output-to-db');
     },
     attributes: {
       'title': 'Save design',
@@ -180,7 +181,7 @@ setTimeout(function() {
   });
 
   // Simple warn notifier
-  const origWarn = console.warn;
+  var origWarn = console.warn;
   toastr.options = {
     closeButton: true,
     preventDuplicates: true,
@@ -223,10 +224,10 @@ setTimeout(function() {
       'data-tooltip-pos': 'bottom'
     });
   });
-  const titles = document.querySelectorAll('*[title]');
+  var titles = document.querySelectorAll('*[title]');
 
   for (let i = 0; i < titles.length; i++) {
-    const el = titles[i];
+    var el = titles[i];
     let title = el.getAttribute('title');
     title = title ? title.trim() : '';
     if (!title) {
@@ -241,25 +242,25 @@ setTimeout(function() {
 
 
   // Store and load events
-  editor.on('storage:load', function(e) {
+  grapesEditor.on('storage:load', function(e) {
     // console.log('Loaded ', e);
   });
-  editor.on('storage:store', function(e) {
+  grapesEditor.on('storage:store', function(e) {
     // console.log('Stored ', e);
   });
 
   // Do stuff on load
-  editor.on('load', function() {
-    const $ = grapesjs.$;
+  grapesEditor.on('load', function() {
+    var $ = grapesjs.$;
 
     // Load and show settings and style manager
-    const openTmBtn = pn.getButton('views', 'open-tm');
+    var openTmBtn = pn.getButton('views', 'open-tm');
     openTmBtn && openTmBtn.set('active', 1);
-    const openSm = pn.getButton('views', 'open-sm');
+    var openSm = pn.getButton('views', 'open-sm');
     openSm && openSm.set('active', 1);
 
     // Add Settings Sector
-    const traitsSector = $(
+    var traitsSector = $(
       '<div class="gjs-sm-sector no-select"> ' +
       '  <div class="gjs-sm-title"> ' +
       '    <span class="icon-settings fa fa-cog"></span> ' +
@@ -267,12 +268,12 @@ setTimeout(function() {
       '  </div> ' +
       '  <div class="gjs-sm-properties" style="display: none;"></div> ' +
       '</div>');
-    const traitsProps = traitsSector.find('.gjs-sm-properties');
+    var traitsProps = traitsSector.find('.gjs-sm-properties');
     traitsProps.append($('.gjs-trt-traits'));
     $('.gjs-sm-sectors').before(traitsSector);
     traitsSector.find('.gjs-sm-title').on('click', function() {
-      const traitStyle = traitsProps.get(0).style;
-      const hidden = traitStyle.display == 'none';
+      var traitStyle = traitsProps.get(0).style;
+      var hidden = traitStyle.display == 'none';
       if (hidden) {
         traitStyle.display = 'block';
       } else {
@@ -281,7 +282,8 @@ setTimeout(function() {
     });
 
     // Open block manager
-    const openBlocksBtn = editor.Panels.getButton('views', 'open-blocks');
+    var openBlocksBtn = grapesEditor.Panels.getButton('views', 'open-blocks');
     openBlocksBtn && openBlocksBtn.set('active', 1);
   });
-}, 1000)
+
+}
