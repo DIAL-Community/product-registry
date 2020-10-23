@@ -129,6 +129,8 @@
   var headerEditor;
   $(document).ready(function() {
     descEditor = new FroalaEditor('#use_case_desc_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
@@ -136,6 +138,8 @@
     });
 
     headerEditor = new FroalaEditor('#ucs_header_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
