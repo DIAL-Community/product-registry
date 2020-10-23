@@ -22,7 +22,7 @@
     </h6>
     <div class="card-body py-2 px-3">
       <% if @page_contents.editor_type == "simple" %>
-        <%= @page_contents.html.html_safe %>
+        <%= !@page_contents.html.nil? && @page_contents.html.html_safe %>
       <% elsif @page_contents.editor_type == "builder" %>
         <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
       <% end %>
@@ -36,21 +36,9 @@
     </h6>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.media') %>:</h5>
-      </div>
-      <div class="card-body p-0">
-        <% if !@page.media_url.nil? && !@page.media_url.empty? && !@page.media_url.equals('') %>
-          <div class="ml-4 mt-2">
-          <iframe src="<%= @page.media_url %>" width=800 height=450 allowfullscreen></iframe>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <div class="card mt-2">
-      <div class="card-header border-0">
         <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.question') %>:</h5>
       </div>
-      <div class="card-body p-0">
+      <div class="card-body p-2">
         <% if !@question.nil? %>
           <div class="ml-4 mt-2">
           <strong>Question Text: </strong><%= @question.question_text %>
@@ -60,15 +48,22 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.resources') %>:</h5>
+        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.other-info') %></h5>
       </div>
-      <div class="card-body p-0">
+      <div class="card-body p-2 ml-4">
+        <h6 class="font-weight-bold"><%= t('view.playbook-page.index.resources') %>:</h6>
         <% @page.resources.each do |resource| %>
           <div class="ml-4 mt-2">
-          <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
+            <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
+            </div>
+            <div class="ml-5 mb-3">
+            <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
           </div>
-          <div class="ml-5 mb-3">
-          <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
+        <% end %>
+        <h6 class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.media') %>:</h6>
+        <% if !@page.media_url.nil? && !@page.media_url.empty? && !@page.media_url.equals('') %>
+          <div class="ml-4 mt-2">
+          <iframe src="<%= @page.media_url %>" width=800 height=450 allowfullscreen></iframe>
           </div>
         <% end %>
       </div>

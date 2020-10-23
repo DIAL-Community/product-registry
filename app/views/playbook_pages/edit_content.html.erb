@@ -21,10 +21,8 @@
     <label class="form-check-label" for="editor-type"><%= t('view.playbook-page.form.editor-type') %></label>
   </fieldset>
 
+  <input type="hidden" id="page_content" name="page_content" />
   <div id="simple-editor">
-    <form>
-    <%= form.cktext_area :page_html, value: @page_contents["html"] && @page_contents["html"].html_safe, id: 'page_contents', ckeditor: { height: 600, allowedContent: true } %>
-    </form>
   </div>
 
   <div id="page-builder" class="hidden">
@@ -49,8 +47,16 @@
 <% end %>
 
 <script>
+  var editor;
 
   $(document).ready(function() {
+    editor = new FroalaEditor('#simple-editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      editor.html.set("<%= @page_contents.html.nil? ? "" : @page_contents.html.squish.gsub("\"","\\\"").html_safe %>")
+    });
+
     if ("<%= @page_contents.editor_type %>" == "simple") {
       $("#editor_type").removeAttr('checked');
     } else {
@@ -61,10 +67,12 @@
   })
 
   $("#submit-btn").on('click', function(e) {
+    var html = editor.html.get()
+    $("#page_content").val(html)
+    
     if ($("#editor_type").is(':checked')) {
       $(".fa-save").click()
-      //e.preventDefault();
-    }
+    } 
   })
 
   $("#editor_type").on('click', function() {

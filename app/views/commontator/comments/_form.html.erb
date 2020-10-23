@@ -33,12 +33,12 @@
     </div>
   <% end %>
 
-  <%= form.cktext_area :body, value: comment.body.nil? ? '' : comment.body.html_safe, id: field_id, cols: 40, ckeditor: { toolbar: 'mini' } %>
-
+  <input type="hidden" id="field_id" name="comment[body]" />
+  <div id="comment_editor"> </div>
 
   <fieldset class="submit float-right mt-2">
     <%= form.submit t("commontator.comment.actions.#{new_record ? 'create' : 'update'}"),
-                    class: "btn btn-primary" %>
+                    class: "btn btn-primary", id: "submit-btn" %>
     <%=
       form.submit(
         t('commontator.comment.actions.cancel'), name: 'cancel', class: "btn btn-secondary"
@@ -46,4 +46,23 @@
     %>
   </fieldset>
 <% end %>
+
+<script>
+  $("#submit-btn").on('click', function(e) {
+    var commentHtml = commentEditor.html.get()
+    $("#field_id").val(commentHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    commentEditor = new FroalaEditor('#comment_editor', {
+      toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough'],
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      commentEditor.html.set("<%= comment.body.nil? ? "" : comment.body.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+</script>
 

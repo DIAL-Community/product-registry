@@ -604,6 +604,7 @@ en:
         media: Media
         question: Question
         resources: Resources
+        other-info: Other Information
       form:
         name: Name
         contents: Contents
@@ -620,6 +621,7 @@ en:
         description: Description
         url: URL
         parent: Parent Page
+        other-info: Other Information
     use-case:
       form:
         all-maturity: All Maturity Level

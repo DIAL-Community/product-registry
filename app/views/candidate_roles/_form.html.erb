@@ -9,8 +9,9 @@
     <%= form.label :email %>
   </fieldset>
 
-  <%= form.cktext_area :description, value: @candidate_role.description.html_safe, id: 'candidate-role-description', ckeditor: { allowedContent: true } %>
-
+  <input type="hidden" id="role_desc" name="candidate_role[description]" />
+  <div id="role_desc_editor"> </div>
+  
   <fieldset class="form-group">
     <label for="user-role-selector">
       <%= t('view.user.form.role')%>
@@ -32,7 +33,7 @@
   </fieldset>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
     <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
   </fieldset>
 <% end %>
@@ -58,6 +59,21 @@
     $(this).closest('.badge').fadeOut(function() {
       $(this).remove();
     });
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#role_desc_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @candidate_role.description.nil? ? "" : @candidate_role.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#role_desc").val(descHtml)
   });
   
 </script>

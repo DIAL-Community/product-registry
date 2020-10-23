@@ -10,8 +10,9 @@
       <%= t('view.general.duplicates', model: t('model.project')) %>
     </div>
 
-    <%= form.cktext_area :project_description, value: @project_description.description.html_safe, id: 'project_description', ckeditor: { allowedContent: true } %>
-
+    <input type="hidden" id="project_desc" name="project[project_description]" />
+    <div id="project_desc_editor"> </div>
+    
     <fieldset class="form-group mt-2">
       <%= label_tag "origins", t('view.product.index.sources') %>
       <%= form.collection_select(:origin_id, Origin.all.order(:name), :id, :name,
@@ -94,7 +95,7 @@
     </div>
 
     <fieldset class="float-right mt-4">
-      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
       <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
     </fieldset>
   <% end %>
@@ -111,5 +112,20 @@
   <% project.countries.order("name").each do |country| %>
     addLocation('<%= country.id %>', '<%= country.name %>');
   <% end %>
+
+  $("#submit-btn").on('click', function(e) {
+    var descHtml = descEditor.html.get()
+    $("#project_desc").val(descHtml)
+  });
+
+  var descEditor;
+  $(document).ready(function() {
+    descEditor = new FroalaEditor('#project_desc_editor', {
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      descEditor.html.set("<%= @project_description.description.nil? ? "" : @project_description.description.squish.gsub("\"","\\\"").html_safe %>")
+    });
+  });
 
 </script>
