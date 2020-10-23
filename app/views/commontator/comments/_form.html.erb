@@ -56,6 +56,8 @@
   var descEditor;
   $(document).ready(function() {
     commentEditor = new FroalaEditor('#comment_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough'],
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'

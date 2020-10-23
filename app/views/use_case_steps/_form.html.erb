@@ -98,6 +98,8 @@
   var descEditor;
   $(document).ready(function() {
     descEditor = new FroalaEditor('#step_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {

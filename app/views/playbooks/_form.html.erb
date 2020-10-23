@@ -84,6 +84,8 @@
   var outcomesEditor;
   $(document).ready(function() {
     overviewEditor = new FroalaEditor('#overview_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
@@ -91,6 +93,8 @@
     });
 
     audienceEditor = new FroalaEditor('#audience_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
@@ -98,6 +102,8 @@
     });
 
     outcomesEditor = new FroalaEditor('#outcomes_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
