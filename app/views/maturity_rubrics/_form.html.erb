@@ -38,7 +38,7 @@
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
-      descEditor.html.set("<%= description.description.nil? ? "" : description.description.squish.gsub("\"","\\\"").html_safe %>")
+      descEditor.html.set("<%= description.nil? ? "" : description.description.squish.gsub("\"","\\\"").html_safe %>")
     });
   });
 
