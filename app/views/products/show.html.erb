@@ -332,9 +332,10 @@
                         <% indicator_score = 100 %>
                       <% end %>
                       <% if !indicator[:score].nil? %>
-                          <p>Indicator: <%= indicator[:name] %>,
-                          Score: <%= indicator_score %> / 100 </p>
-                          <p class="ml-4 text-muted">Description: <%= raw indicator[:description] %></p>
+                        <p>Indicator: <%= indicator[:name] %>,
+                        Score: <%= indicator_score %> / 100 </p>
+                        <p class="text-muted">Description: <%= raw indicator[:description] %></p>
+                        <hr />
                       <% end %>
                     <% end %>
                     </div>
