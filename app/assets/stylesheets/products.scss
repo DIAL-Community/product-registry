@@ -1,6 +1,7 @@
 // Place all the styles related to the Products controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'bootstrap';
 
 .maturity-element {
   .list-group {
@@ -8,6 +9,46 @@
 
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+}
+
+#product-page {
+  #organization-list, #building-block-list, #sdg-list, #interop-list, #include-list {
+    @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+      .col-6 {
+        padding-right: 0;
+        &:nth-child(2n) {
+          padding-right: $spacer;
+        }
+        &:nth-child(1), &:nth-child(2) {
+          margin-top: 0 !important;
+        }
+      }
+    }
+  
+    @media only screen and (min-device-width: 736px) {
+      .col-md-4 {
+        padding-right: 0;
+        &:nth-child(3n) {
+          padding-right: $spacer;
+        }
+        &:nth-child(1), &:nth-child(2), &:nth-child(3) {
+          margin-top: 0 !important;
+        }
+      }
+    }
+  }
+
+  #sector-list {
+    .col-6 {
+      padding-right: 0;
+      &:nth-child(2n) {
+        padding-right: $spacer;
+      }
+      &:nth-child(1), &:nth-child(2) {
+        margin-top: 0 !important;
+      }
     }
   }
 }

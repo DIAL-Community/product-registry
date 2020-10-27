@@ -1,7 +1,7 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
-<br clear="both"/>
+<div id="product-page">
 
 <div class="card mt-2">
   <h5 class="card-header bg-secondary text-white">
@@ -14,25 +14,25 @@
   </h5>
   <div class="card-body">
     <div class="row">
-      <div class="col-3">
-        <div style="display:flex; align-items:center; flex-grow:1">
+      <div class="col-12 col-md-3">
+        <div style="display:flex; align-items:center; flex-grow:1; justify-content: center;">
           <%= image_tag(@product.image_file, class: 'card-img-top align-middle') %>
         </div>
       </div>
       <% if @child_products.empty? %>
-        <div class="col-6 mt-2">
+        <div class="col-12 col-md-6 mt-2">
           <%= render 'productdata', product: @product, product_description: @product_description %>
         </div>
       <% else %>
-        <div class="col-6 mt-2">
+        <div class="col-12 col-md-6 mt-2">
           <h6 class="card-text text-muted mt-2 mb-2">
               <%= @product.name %> <%= t('view.product.index.multiple') %>
           </h6>
         </div>
       <% end %>
     </div>
-    <div class="row">
-      <div class="col-4">
+    <div class="row mt-2">
+      <div class="col-12 col-md-6">
         <% if !@product.tags.empty? %>
             <small class="font-italic">
             <%= t('model.tag').titlecase.pluralize %>:
@@ -40,7 +40,7 @@
             </small>
         <% end %>
       </div>
-      <div class="offset-4 col-4">
+      <div class="col-12 col-md-6">
         <p class="float-right mb-0" >
           <%= link_to t('view.general.back'), products_path, :class => "card-link" %>
           <% if user_signed_in? && policy(@product).mod_allowed? %>
@@ -60,10 +60,10 @@
     </h5>
     <div class="card-body p-3">
       <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <%= render 'productdata', product: @product, product_description: @product_description %>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <% statistics_data = @product.statistics %>
           <% unless statistics_data['data'].nil? %>
             <% repository_data = statistics_data['data']['repository'] %>
@@ -91,10 +91,10 @@
       </h5>
       <div class="card-body p-3">
         <div class="row">
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <%= render 'productdata', product: child_product, product_description: curr_description %>
           </div>
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <% statistics_data = child_product.statistics %>
             <% unless statistics_data['data'].nil? %>
               <% repository_data = statistics_data['data']['repository'] %>
@@ -120,208 +120,195 @@
   <% end %>
 <% end %>
 
-<div class="card-deck mt-2">
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.organization').to_s.humanize.pluralize %></h5>
-    <div class="card-body">
-      <% if @product.organizations.count > 0 %>
-        <% @product.organizations.each_slice(3) do |org_row| %>
-          <div class="card-deck">
-            <% org_row.each do |organization| %>
-              <div class="card">
-                <div class="card-body">
-                  <%= link_to organization do %>
-                    <%= image_tag(organization.image_file, class: 'card-image align-middle p-0') %>
+<div class="row">
+  <div class="col-12 col-md-6 mt-2">
+    <div id="organization-list" class="card">
+      <h5 class="card-header bg-secondary text-white clearfix">
+        <%= t('model.organization').to_s.humanize.pluralize %>
+      </h5>
+      <div class="card-body">
+        <% if @product.organizations.count > 0 %>
+          <div class="row">
+            <% @product.organizations.each do |organization| %>
+              <div class="col-6 col-md-4 mt-2 d-flex align-items-stretch">
+                <div class="card">
+                  <div class="card-body">
+                    <%= link_to organization do %>
+                      <%= image_tag(organization.image_file, class: 'card-image align-middle p-0') %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.organization').to_s.pluralize) %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mt-2">
+    <div id="sector-list" class="card">
+      <h5 class="card-header bg-secondary text-white clearfix">
+        <%= t('model.sector').to_s.humanize.pluralize %>
+      </h5>
+      <div class="card-body">
+        <% if @product.sectors.count > 0 %>
+          <div class="row">
+            <% @product.sectors.each do |sector| %>
+              <div class="col-6 mt-2">
+                <div class="card">
+                  <div class="card-body p-2">
+                    <%= link_to sector do %>
+                      <div class="p-1 clearfix">
+                        <p class="mb-0 text-center"><%= sector.name %></p>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.sector').to_s.pluralize) %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mt-2">
+    <div id="building-block-list" class="card">
+      <h5 class="card-header bg-secondary text-white">
+        <%= t('model.building-block').to_s.pluralize.titlecase %>
+      </h5>
+      <div class="card-body">
+        <% if @product.building_blocks.count > 0 %>
+          <div class="row">
+            <% @product.building_blocks.each do |bb| %>
+              <div class="col-6 col-md-4 mt-2 d-flex align-items-stretch">
+                <div class="card">
+                  <div class="card-body">
+                    <%= link_to bb do %>
+                      <%= image_tag(bb.image_file, class: 'card-image align-middle p-0',
+                                    title: bb.name, 'data-toggle': 'tooltip', 'data-placement': 'top' ) %>
+                    <% end %>
+                  </div>
+                  <% product_bb = @product.product_building_blocks.where(building_block_id: bb.id) %>
+                  <% if !product_bb.first.nil? %>
+                    <div class="text-muted text-center"><%= product_bb.first.link_type %></div>
                   <% end %>
                 </div>
               </div>
             <% end %>
-            <% if org_row.size < 3  %>
-              <% (3 - org_row.size).times do |x| %>
-                <div class="card card-placeholder">
+          </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.building-block').to_s.pluralize) %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mt-2">
+    <div id="sdg-list" class="card">
+      <h5 class="card-header bg-secondary text-white clearfix">
+        <%= t('model.sdg').to_s.upcase.pluralize %>
+      </h5>
+      <div class="card-body">
+        <% if @product.product_sustainable_development_goals.count > 0 %>
+          <div class="row">
+            <% @product.product_sustainable_development_goals.each do |product_sdg| %>
+              <div class="col-6 col-md-4 mt-2 d-flex align-items-stretch">
+                <div class="card">
+                  <div class="card-body">
+                    <%= link_to product_sdg.sustainable_development_goal do %>
+                      <%= image_tag(product_sdg.sustainable_development_goal.image_file, width: 50, class: 'card-image align-middle p-0') %>
+                    <% end %>
+                  </div>
+                  <% if !product_sdg.nil? %>
+                    <div class="text-muted text-center"><%= product_sdg.mapping_status %></div>
+                  <% end %>
                 </div>
-              <% end %>
+              </div>
             <% end %>
           </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.general.not-available', model: t('model.product'), multi: t('model.sustainable-development-goal').to_s.pluralize) %>
+          </p>
         <% end %>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.general.not-available', model: t('model.product'), multi: t('model.organization').to_s.pluralize) %>
-        </p>
-      <% end %>
+      </div>
     </div>
   </div>
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sector').to_s.humanize.pluralize %></h5>
-    <div class="card-body">
-      <% if @product.sectors.count > 0 %>
-        <% @product.sectors.each_slice(2) do |sector_row| %>
-        <div class="card-deck">
-          <% sector_row.each do |sector| %>
-            <div class="card">
-              <div class="card-body">
-                <%= link_to sector do %>
-                  <div class="p-1 clearfix">
-                    <p class="mb-0 text-center"><%= sector.name %></p>
+
+  <div class="col-12 col-md-6 mt-2">
+    <div id="interop-list" class="card">
+      <h5 class="card-header bg-secondary text-white clearfix">
+        <%= t('view.product.form.interoperable-products') %>
+      </h5>
+      <div class="card-body">
+        <% if @product.interoperates_with.count > 0 %>
+          <div class="row">
+            <% @product.interoperates_with.each do |product| %>
+              <div class="col-6 col-md-4 mt-2 d-flex align-items-stretch">
+                <div class="card">
+                  <div class="card-body">
+                    <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
+                    <%= link_to product do %>
+                      <%= image_tag(product.image_file, width: 50, class: 'card-image align-middle') %>
+                    <% end %>
                   </div>
-                <% end %>
+                </div>
               </div>
-            </div>
-          <% end %>
-          <% if sector_row.size < 2  %>
-            <% (2 - sector_row.size).times do |x| %>
-              <div class="card card-placeholder">
+            <%end %>
+          </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.product.show.no-interrop-product') %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mt-2">
+    <div id="include-list" class="card">
+      <h5 class="card-header bg-secondary text-white clearfix">
+        <%= t('view.product.form.included-products') %>
+      </h5>
+      <div class="card-body">
+        <% if @product.includes.count > 0 %>
+          <div class="row">
+            <% @product.includes.each do |product| %>
+              <div class="col-6 col-md-4 mt-2 d-flex align-items-stretch">
+                <div class="card">
+                  <div class="card-body">
+                    <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
+                    <%= link_to product do %>
+                      <%= image_tag(product.image_file, width: 50, class: 'card-image align-middle') %>
+                    <% end %>
+                  </div>
+                </div>
               </div>
             <% end %>
-          <% end %>
-        </div>
+          </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.product.show.no-include-product') %>
+          </p>
         <% end %>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.general.not-available', model: t('model.product'), multi: t('model.sector').to_s.pluralize) %>
-        </p>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="card-deck mt-2">
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white"><%= t('model.building-block').to_s.pluralize.titlecase %></h5>
-    <div class="card-body">
-    <% if @product.building_blocks.count > 0 %>
-      <% @product.building_blocks.each_slice(3) do |bb_row| %>
-        <div class="card-deck">
-          <% bb_row.each do |bb| %>
-            <div class="card">
-              <div class="card-body">
-                <%= link_to bb do %>
-                  <%= image_tag(bb.image_file, class: 'card-image align-middle p-0', title: bb.name, 'data-toggle': 'tooltip', 'data-placement': 'top' ) %>
-                <% end %>
-              </div>
-              <% product_bb = @product.product_building_blocks.where(building_block_id: bb.id) %>
-              <% if !product_bb.first.nil? %>
-                <div class="text-muted text-center"><%= product_bb.first.link_type %></div>
-              <% end %>
-            </div>
-          <% end %>
-          <% if bb_row.size < 3  %>
-            <% (3 - bb_row.size).times do |x| %>
-              <div class="card card-placeholder">
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.general.not-available', model: t('model.product'), multi: t('model.building-block').to_s.pluralize) %>
-        </p>
-      <% end %>
-    </div>
-  </div>
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white clearfix"><%= t('model.sdg').to_s.upcase.pluralize %></h5>
-    <div class="card-body">
-      <% if @product.product_sustainable_development_goals.count > 0 %>
-        <% @product.product_sustainable_development_goals.each_slice(3) do |product_sdg_row| %>
-        <div class="card-deck">
-          <% product_sdg_row.each do |product_sdg| %>
-            <div class="card">
-              <div class="card-body">
-                <%= link_to product_sdg.sustainable_development_goal do %>
-                  <%= image_tag(product_sdg.sustainable_development_goal.image_file, width: 50, class: 'card-image align-middle p-0') %>
-                <% end %>
-              </div>
-              <% if !product_sdg.nil? %>
-                <div class="text-muted ml-4"><%= product_sdg.mapping_status %></div>
-              <% end %>
-            </div>
-          <% end %>
-          <% if product_sdg_row.size < 3  %>
-            <% (3 - product_sdg_row.size).times do |x| %>
-              <div class="card card-placeholder">
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-        <% end %>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.general.not-available', model: t('model.product'), multi: t('model.sustainable-development-goal').to_s.pluralize) %>
-        </p>
-      <% end %>
-    </div>
-  </div>
-</div>
-
-<div class="card-deck mt-2">
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white clearfix"><%= t('view.product.form.interoperable-products') %></h5>
-    <div class="card-body">
-      <% if @product.interoperates_with.count > 0 %>
-        <% @product.interoperates_with.each_slice(3) do |product_row| %>
-        <div class="card-deck">
-          <% product_row.each do |product| %>
-            <div class="card">
-              <div class="card-body">
-                <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
-                <%= link_to product do %>
-                  <%= image_tag(product.image_file, width: 50, class: 'card-image align-middle') %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-          <% if product_row.size < 3  %>
-            <% (3 - product_row.size).times do |x| %>
-              <div class="card card-placeholder">
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-        <%end %>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.product.show.no-interrop-product') %>
-        </p>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white clearfix"><%= t('view.product.form.included-products') %></h5>
-    <div class="card-body">
-      <% if @product.includes.count > 0 %>
-        <% @product.includes.each_slice(3) do |product_row| %>
-        <div class="card-deck">
-          <% product_row.each do |product| %>
-            <div class="card">
-              <div class="card-body">
-                <!-- <h5 class="card-title"><%= link_to product.name, product %></h5> -->
-                <%= link_to product do %>
-                  <%= image_tag(product.image_file, width: 50, class: 'card-image align-middle') %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-          <% if product_row.size < 3  %>
-            <% (3 - product_row.size).times do |x| %>
-              <div class="card card-placeholder">
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-        <% end %>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.product.show.no-include-product') %>
-        </p>
-      <% end %>
-    </div>
-  </div>
-</div>
-
-<div class="card-deck mt-2">
+<div class="mt-2">
   <div class="card">
     <h5 class="card-header bg-secondary text-white"><%= t('view.product.form.product-maturity') %></h5>
     <div class="card-body">
@@ -388,8 +375,7 @@
 </div>
 
 <% if @product.classifications.count > 0 %>
-<div class="card-deck mt-2">
-  <div class="card">
+  <div class="card mt-2">
     <h5 class="card-header bg-secondary text-white">
         <%= t('view.product.show.classifications') %>
     </h5>
@@ -405,61 +391,63 @@
 
     </div>
   </div>
-</div>
 <% end %>
-<div class="card-deck mt-2">
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white">
-        <%= t('view.product.show.cost-data') %>
-    </h5>
-    <div class="card-body">
-      <% if @product.code_lines.nil? && @product.cocomo.nil? && @product.est_hosting.nil? && @product.est_invested.nil? %>
-        <p class="card-text text-muted">
-          <%= t('view.product.show.no-cost-data') %>
-        </p>
-      <% else %>
-        <div class="row">
-          <div class="col-5 col-xs-12 mt-3">
-            <div class="text-muted"><%= t('view.product.show.code-lines') %></div>
-            <h4 class="ml-4"><%= @product.code_lines %></h4>
-          </div>
-          <div class="col-6 col-xs-12 mt-3" data-toggle="tooltip" data-placement="top" data-original-title="<%= t('view.product.show.cocomo') %>">
-            <div class="text-muted"><%= t('view.product.show.est-effort') %>
-              <i class="fas fa-info-circle ml-1"></i>
-            </div>
-            <h4 class="ml-4"><%= @product.cocomo %></h4>
-          </div>
-        </div>
-        <% if !@product.est_hosting.nil? || !@product.est_invested.nil? %>
+
+<div class="row">
+  <div class="col-12 col-md-6 mt-2">
+    <div class="card">
+      <h5 class="card-header bg-secondary text-white">
+          <%= t('view.product.show.cost-data') %>
+      </h5>
+      <div class="card-body">
+        <% if @product.code_lines.nil? && @product.cocomo.nil? && @product.est_hosting.nil? && @product.est_invested.nil? %>
+          <p class="card-text text-muted">
+            <%= t('view.product.show.no-cost-data') %>
+          </p>
+        <% else %>
           <div class="row">
-            <div class="col-5 col-xs-12 mt-3">
-              <div class="text-muted"><%= t('view.product.show.est-hosting') %></div>
-              <h4 class="ml-4"><%= @product.est_hosting %></h4>
+            <div class="col-12 col-md-6">
+              <div class="text-muted"><%= t('view.product.show.code-lines') %></div>
+              <h5><%= @product.code_lines %></h5>
             </div>
-            <div class="col-6 col-xs-12 mt-3">
-              <div class="text-muted"><%= t('view.product.show.est-invested') %></div>
-              <h4 class="ml-4"><%= @product.est_invested %></h4>
+            <div class="col-12 col-md-6" data-toggle="tooltip" data-placement="top" 
+                 data-original-title="<%= t('view.product.show.cocomo') %>">
+              <div class="text-muted"><%= t('view.product.show.est-effort') %>
+                <i class="fas fa-info-circle ml-1"></i>
+              </div>
+              <h5><%= @product.cocomo %></h5>
             </div>
+            <% if !@product.est_hosting.nil? || !@product.est_invested.nil? %>
+              <div class="col-12 col-md-6">
+                <div class="text-muted"><%= t('view.product.show.est-hosting') %></div>
+                <h5><%= @product.est_hosting %></h5>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="text-muted"><%= t('view.product.show.est-invested') %></div>
+                <h5><%= @product.est_invested %></h5>
+              </div>
+            <% end %>
           </div>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
-
-  <div class="card">
-    <h5 class="card-header bg-secondary text-white">
-        <%= t('view.product.show.auto-launch') %>
-    </h5>
-    <div class="card-body">
-      <% if @product.is_launchable %>
-        <div id="launchdata">
-        <%= render partial: "launch" %>
-        </div>
-      <% else %>
-        <p class="card-text text-muted">
-          <%= t('view.product.show.not-auto-launch') %>
-        </p>
-      <% end %>
+  <div class="col-12 col-md-6 mt-2">
+    <div class="card">
+      <h5 class="card-header bg-secondary text-white">
+          <%= t('view.product.show.auto-launch') %>
+      </h5>
+      <div class="card-body">
+        <% if @product.is_launchable %>
+          <div id="launchdata">
+          <%= render partial: "launch" %>
+          </div>
+        <% else %>
+          <p class="card-text text-muted">
+            <%= t('view.product.show.not-auto-launch') %>
+          </p>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
@@ -469,4 +457,6 @@
     <h5 class="float-left mb-0"><%= t('view.general.comment').to_s.titlecase.pluralize %></h5>
   </div>
   <%= commontator_thread(@product) %>
+</div>
+
 </div>
