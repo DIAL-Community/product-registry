@@ -1,20 +1,4 @@
 /*
- * Function to animate elements matched by the selector.
- */
-const animateCss = function(selector, animationName, callback) {
-  $(selector).addClass(`animated ${animationName}`);
-
-  const handleAnimationEnd = function() {
-    $(selector).removeClass(`animated ${animationName}`);
-    $(selector).off('animationend');
-
-    if (typeof callback === 'function') callback();
-  }
-
-  $(selector).on('animationend', handleAnimationEnd);
-}
-
-/*
  * Delay execution of a function for ms (milliseconds).
  * This is used in the search handler to wait until user
  * is done with entering the search term.

@@ -126,4 +126,20 @@ const fixPopover = function() {
   });
 }
 
+/*
+ * Function to animate elements matched by the selector.
+ */
+const animateCss = function(selector, animationName, callback) {
+  $(selector).addClass(`animated ${animationName}`);
+
+  const handleAnimationEnd = function() {
+    $(selector).removeClass(`animated ${animationName}`);
+    $(selector).off('animationend');
+
+    if (typeof callback === 'function') callback();
+  }
+
+  $(selector).on('animationend', handleAnimationEnd);
+}
+
 $(document).on("infinite-scroll", fixPopover);
