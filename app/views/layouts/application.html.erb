@@ -3,6 +3,7 @@
   <head>
     <title>DIAL Catalog of Digital Solutions</title>
     <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="turbolinks-cache-control" content="no-cache">
     <%= yield(:header_scripts) %>
     <link href="<%= stylesheet_path(session[:portal]['slug']) %>" rel="stylesheet" type="text/css" />
@@ -15,15 +16,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@4.6.5/ol.css"
             integrity="sha256-72AsUmsoxyYb+HfGS44LqAscCOz3Ch/B1oUyos9lBM0="
             crossorigin="anonymous">
-  
+    
     <script src="https://cdn.jsdelivr.net/npm/openlayers@4.6.5/dist/ol.js"
               integrity="sha256-77IKwU93jwIX7zmgEBfYGHcmeO0Fx2MoWB/ooh9QkBA="
               crossorigin="anonymous"></script>
-    <script src="https://use.fontawesome.com/0e9b3310ee.js"></script>
-    <link rel="stylesheet"
-              href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-              integrity= "sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-              crossorigin="anonymous"> 
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>  
     <style>
@@ -122,10 +122,12 @@
       <% else %>
         <div id="content" class="container-fluid">
           <div class="row">
-            <div class="col-3 nav-container bg-dark">
+            <div class="col-12 d-block d-md-none">
+            </div>
+            <div id="left-filter" class="col-12 col-md-3 d-none d-md-block nav-container bg-dark">
               <%= render '/shared/filternav' %>
             </div>
-            <div class="col-9">
+            <div id="right-content" class="col-12 col-md-9">
               <%= render '/shared/summarynav' %>
               <%= render '/shared/activefilter' %>
               <%= yield %>

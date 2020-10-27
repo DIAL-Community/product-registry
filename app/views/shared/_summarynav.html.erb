@@ -1,9 +1,49 @@
+<style>
+  #summary-nav .btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
 <div id="summary-nav" class="row mb-2 bg-dark">
   <div class="col-12">
-    <div class="list-group w-100 flex-fill list-group-horizontal-md list-group-vertical-sm bg-transparent">
-      <% session[:portal]["top_navs"].each do |top_nav| %>
-        <%= render "/shared/summary/#{top_nav}" %>
+    <div class="list-group w-100 flex-fill list-group-horizontal bg-transparent">
+      <div class="d-block d-md-none list-group-item text-center bg-transparent">
+        <a class="btn btn-secondary content-toggler" href="#">
+          <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+        </a>
+      </div>
+      <% session[:portal]["top_navs"].each_with_index do |top_nav, index| %>
+        <%= render "/shared/summary/#{top_nav}", { index: index, max_nav: 3, context: 'top-summary' } %>
       <% end %>
+      <div class="d-block d-md-none">
+        <div class="list-group-item dropdown text-center bg-transparent">
+          <a class="btn btn-secondary" data-toggle="dropdown" href="#" role="button"
+             id="summaryExtendedDropdown" aria-haspopup="true" aria-expanded="false">...</a>
+          <div class="dropdown-menu dropdown-menu-right bg-dark" aria-labelledby="summaryExtendedDropdown">
+            <% session[:portal]["top_navs"].each_with_index do |top_nav, index| %>
+              <% next  if index <= 2 %>
+              <%= render "/shared/summary/#{top_nav}", { index: index, max_nav: 3, context: 'drop-summary' } %>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  $('.content-toggler').click(function(e) {
+    e.preventDefault();
+
+    const displayLeftFilter = function() {
+      $('#right-content').attr('style', 'display: none !important;');
+      $('#left-filter').attr('style', 'display: block !important;');
+      animateCss('#left-filter', 'slideInLeft faster');
+    }
+
+    if (!$('#left-filter').is(':visible')) {
+      animateCss('#right-content', 'fadeOut faster', displayLeftFilter);
+    }
+  });
+</script>

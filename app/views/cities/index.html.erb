@@ -12,8 +12,8 @@
   <thead class="thead-light">
     <tr>
       <th><%= t('view.general.name') %></th>
-      <th><%= t('model.region').titlecase %></th>
-      <th><%= t('model.country').titlecase %></th>
+      <th class="d-none d-md-table-cell"><%= t('model.region').titlecase %></th>
+      <th class="d-none d-md-table-cell"><%= t('model.country').titlecase %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -22,15 +22,26 @@
     <% if @cities.count > 0 %>
       <% @cities.each do |city| %>
         <tr>
-          <td><%= city.name %></td>
-          <td><%= city.region.name unless city.region.nil? %></td>
-          <td><%= city.region.country.name unless city.region.nil? || city.region.country.nil? %></td>
+          <td class="d-none d-md-table-cell"><%= city.name %></td>
+          <td class="d-none d-md-table-cell"><%= city.region.name unless city.region.nil? %></td>
+          <td class="d-none d-md-table-cell"><%= city.region.country.name unless city.region.nil? || city.region.country.nil? %></td>
+          <td class="d-table-cell d-md-none">
+            <%= city.name %>
+            <div class="text-muted">
+              <%= t('model.region').titlecase %>:
+              <strong><%= city.region.name unless city.region.nil? %></strong>
+            </div>
+            <div class="text-muted">
+              <%= t('model.country').titlecase %>:
+              <strong><%= city.region.country.name unless city.region.nil? || city.region.country.nil? %></strong>
+            </div>
+          </td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">
                <%= t('view.general.action') %>
             </a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu dropdown-menu-right">
               <%= link_to t('view.general.view'), city, :class =>"dropdown-item" %>
             </div>
           </td>
@@ -46,4 +57,4 @@
   </tbody>
 </table>
 
-<%= will_paginate @cities, :class => "float-right digg-pagination" %>
+<%= will_paginate @cities, class: 'float-right digg-pagination', inner_window: 1 %>

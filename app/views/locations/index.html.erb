@@ -32,7 +32,7 @@
                aria-haspopup="true" aria-expanded="false">
               <%= t('view.general.action') %>
             </a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu dropdown-menu-right">
               <%= link_to t('view.general.view'), location, :class =>"dropdown-item"  %>
               <% if user_signed_in? && policy(location).mod_allowed? %>
                 <%= link_to t('view.general.edit'), edit_location_path(location), :class =>"dropdown-item"  %>
@@ -54,4 +54,4 @@
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @locations, :class => "float-right digg-pagination" %>
+<%= will_paginate @locations, class: 'float-right digg-pagination', inner_window: 1 %>

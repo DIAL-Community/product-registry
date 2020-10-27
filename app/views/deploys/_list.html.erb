@@ -1,10 +1,11 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Name</th>
-      <th>Status</th>
-      <th>Url</th>
-      <th colspan="3"></th>
+      <th class="d-none d-md-table-cell">Name</th>
+      <th class="d-none d-md-table-cell">Status</th>
+      <th class="d-none d-md-table-cell">URL</th>
+      <th class="d-table-cell d-md-none">Deploy</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -12,12 +13,21 @@
     <% if @deploys.count > 0 %>
       <% @deploys.each do |deploy| %>
         <tr>
-          <td><%= deploy.instance_name %></td>
-          <td><%= deploy.status %></td>
-          <td><%= link_to deploy.url, "#{deploy.url}", target: :_blank %></td>
+          <td class="d-none d-md-table-cell"><%= deploy.instance_name %></td>
+          <td class="d-none d-md-table-cell"><%= deploy.status %></td>
+          <td class="d-none d-md-table-cell"><%= link_to deploy.url, "#{deploy.url}", target: :_blank %></td>
+          <td class="d-table-cell d-md-none">
+            <%= deploy.instance_name %>
+            <div class="text-muted">
+              Status: <%= deploy.status %>
+            </div>
+            <div class="text-muted">
+              <%= link_to deploy.url, "#{deploy.url}", target: :_blank %>
+            </div>
+          </td>
           <td class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
-              <div class="dropdown-menu">
+              <div class="dropdown-menu dropdown-menu-right">
               <%= link_to 'View', deploy_path(deploy.id), :class =>"dropdown-item"  %>
               <div class="dropdown-divider"></div>
               <%= link_to 'Delete', deploy_path(deploy.id), method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
