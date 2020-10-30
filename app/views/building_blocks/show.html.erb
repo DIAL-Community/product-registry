@@ -35,19 +35,20 @@
       <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
     </div>
     <div class="row">
-      <% if @building_block.products %>
-        <% @building_block.products.each do |product| %>
-          <div class="col-6 col-lg-4 mt-2">
-            <div class="card flex-row">
-              <%= link_to product do %>
-                <%= image_tag(product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+      <% @building_block.product_building_blocks.each do |bb_product| %>
+        <div class="col-6 col-md-3 mt-2">
+          <div class="card">
+            <div class="d-flex flex-row align-self-center">
+              <%= link_to bb_product.product do %>
+                <%= image_tag(bb_product.product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
               <% end %>
               <div class="card-body align-middle my-auto px-2 py-2">
-                <%= link_to product.name, product %>
+                <%= link_to bb_product.product.name, bb_product.product %>
               </div>
             </div>
+            <div class="text-muted text-center"><%= bb_product.mapping_status %></div>
           </div>
-        <% end %>
+        </div>
       <% end %>
     </div>
   </div>

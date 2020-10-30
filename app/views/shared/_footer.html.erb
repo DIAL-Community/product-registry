@@ -1,10 +1,10 @@
 <footer id="footer">
 <% if session[:portal]["slug"] == "default" %>
+  <div class="sponsors description">
+    <a href="https://digitalimpactalliance.org">The Digital Impact Alliance</a>
+    <%= t('view.footer.tag-line') %>
+  </div>
   <ul class="icons sponsors">
-    <li class="description">
-      <a href="https://digitalimpactalliance.org">The Digital Impact Alliance</a>
-      <%= t('view.footer.tag-line') %>
-    </li>
     <li><%= image_tag "unf-logo.png", :alt => "United Nations Foundation" %></li>
     <li><%= image_tag "bill-n-melinda-logo.png", :alt => "Bill and Melinda Gates Foundation" %></li>
     <li><%= image_tag "sweden-logo.png", :alt => "Swedish International Development Cooperation Agency" %></li>
@@ -44,16 +44,19 @@
     <li>
       <a target="_blank" rel="noreferrer noopener" href="https://twitter.com/DIAL_Community"
          class="fab fa-twitter" style="text-decoration:none;">
+         <span class="d-md-none d-inline-block">Twitter</span>
       </a>
     </li>
     <li>
       <a target="_blank" rel="noreferrer noopener" href="https://facebook.com/DigitalImpactAlliance"
          class="fab fa-facebook" style="text-decoration:none;">
+         <span class="d-md-none d-inline-block">Facebook</span>
       </a>
     </li>
     <li>
       <a target="_blank" rel="noreferrer noopener" href="https://www.instagram.com/dial_community"
          class="fab fa-instagram" style="text-decoration:none;">
+         <span class="d-md-none d-inline-block">Instagram</span>
       </a>
     </li>
   </ul>
@@ -89,9 +92,9 @@
 </footer>
 
 <script>
-$(document).on("turbolinks:load", function() {
   <% if session[:portal]["slug"] != "default" && !@footer.nil? && !@footer.empty? && @footer != "{}" %>
-    $('#footer-content').html("<%= @footer.html_safe %>") 
-  <% end %> 
- });
+    $(document).on("turbolinks:load", function() {
+      $('#footer-content').html("<%= @footer.html_safe %>");
+    });
+  <% end %>
 </script>

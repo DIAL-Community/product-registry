@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(Activity).mod_allowed? %>
+    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
       <%= link_to(new_activity_path, class: 'btn btn-outline-primary float-left') do %>
         <%= "#{t('view.general.create')} #{t('model.activity').to_s.titlecase}" %>
       <% end %>

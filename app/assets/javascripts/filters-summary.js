@@ -2,14 +2,14 @@ var updateCount = function() {
 
   $.when($.ajax('/object_counts'))
   .done(function(countObject) {
-    $('#sdg-badge').html(countObject.sdgCount)
-    $('#use-case-badge').html(countObject.useCaseCount)
-    $('#workflow-badge').html(countObject.workflowCount)
-    $('#bb-badge').html(countObject.bbCount)
-    $('#product-badge').html(countObject.productCount)
-    $('#org-badge').html(countObject.orgCount)
-    $('#project-badge').html(countObject.projectCount)
-    $('#playbook-badge').html(countObject.playbookCount)
+    $('.sdg-badge').html(countObject.sdgCount)
+    $('.use-case-badge').html(countObject.useCaseCount)
+    $('.workflow-badge').html(countObject.workflowCount)
+    $('.bb-badge').html(countObject.bbCount)
+    $('.product-badge').html(countObject.productCount)
+    $('.org-badge').html(countObject.orgCount)
+    $('.project-badge').html(countObject.projectCount)
+    $('.playbook-badge').html(countObject.playbookCount)
   });
 }
 

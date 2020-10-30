@@ -17,6 +17,17 @@
 .step-indicator.active {
   opacity: 1;
 }
+
+#help-modal img {
+  width: 45rem;
+}
+
+@media only screen and (max-device-width: 768px) {
+  #help-modal img {
+    width: 20rem;
+  }
+}
+
 </style>
 
 <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="Help Modal" aria-hidden="true">
@@ -24,13 +35,13 @@
     <div class="modal-content">
       <div class="modal-body bg-secondary">
         <div class="step">
-          <%= image_tag('help/filter-help.png', class: 'align-middle', style: 'width: 45rem;') %>
+          <%= image_tag('help/filter-help.png', class: 'align-middle') %>
         </div>
         <div class="step">
-          <%= image_tag('help/filter-active.png', class: 'align-middle', style: 'width: 45rem;') %>
+          <%= image_tag('help/filter-active.png', class: 'align-middle') %>
         </div>
         <div class="step">
-          <%= image_tag('help/filter-counter.png', class: 'align-middle', style: 'width: 45rem;') %>
+          <%= image_tag('help/filter-counter.png', class: 'align-middle') %>
         </div>
         <div class="text-center pt-2">
           <span class="step-indicator"></span>

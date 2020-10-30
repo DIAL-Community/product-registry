@@ -1,4 +1,12 @@
-<li class="list-group-item w-100 text-center bg-transparent">
+<%
+  hidden_class = 'd-none d-md-block'
+  if (context == 'top-summary' && index < max_nav) ||
+     (context == 'drop-summary' && index >= max_nav)
+    hidden_class = 'd-block'
+  end
+%>
+
+<div class="list-group-item w-100 text-center bg-transparent <%= hidden_class %>">
   <%= link_to projects_path do %>
     <%
       btn_class = 'btn-secondary'
@@ -8,10 +16,10 @@
     %>
     <span class="w-100 btn <%= btn_class %>">
       <%= image_tag "project.png", :width => "20px" %>
-      <span class="d-none d-lg-inline-block">
+      <span class="d-none d-xl-inline-block">
         <%= t('model.project').titlecase.pluralize %>
       </span>
-      <span id="project-badge" class="badge badge-light">--</span>
+      <span class="project-badge badge badge-light">--</span>
     </span>
   <% end %>
-</li>
+</div>

@@ -2,7 +2,12 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <% if user_signed_in? && policy(OperatorService).mod_allowed? %>
-  <%= link_to t('view.general.create'), new_operator_service_path, :class => 'btn btn-outline-secondary float-left ml-1' %>
+  <%= link_to new_operator_service_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
+    <span class="d-none d-md-block"><%= t('view.general.create') %></span>
+    <span class="d-block d-md-none">
+      <i class="fa fa-plus fa-sm" aria-hidden="true"></i>
+    </span>
+  <% end %>
 <% end %>
 <div class="float-right pb-2">
   <%= form_tag(operator_services_path, :method => "get", id: "search-form", class: "form-inline") do %>
@@ -32,7 +37,7 @@
              aria-haspopup="true" aria-expanded="false">
             <%= t('view.general.action') %>
           </a>
-          <div class="dropdown-menu">
+          <div class="dropdown-menu dropdown-menu-right">
             <%= link_to t('view.general.view'), operator_service_path(operator.name), :class =>"dropdown-item"  %>
             <% if user_signed_in? && policy(operator).mod_allowed? %>
               <%= link_to t('view.general.edit'), edit_operator_service_path(operator.name), :class =>"dropdown-item"  %>

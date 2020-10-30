@@ -1,6 +1,7 @@
 class PlaybookPagesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_playbook_page, only: [:show, :edit, :update, :destroy]
+  before_action :redirect_cancel, only: [:create, :update, :save_design]
 
   # GET /playbook_pages
   # GET /playbook_pages.json
@@ -240,6 +241,10 @@ class PlaybookPagesController < ApplicationController
   end
 
   private
+
+  def redirect_cancel
+    redirect_to playbook_path(params[:playbook_id]) if params[:cancel]
+  end
 
   def set_page_contents
     if @page_contents.nil?

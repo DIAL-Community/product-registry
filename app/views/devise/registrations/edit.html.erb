@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-4 col-12">
-    <div class="form-signin">
+    <div class="form-signin px-0">
       <div class="border rounded bg-secondary text-white clearfix border card-header mb-3">
         <h5 class="float-left mb-0">Edit <%= resource_name.to_s.humanize %></h5>
       </div>
@@ -42,24 +42,25 @@
         <%= f.submit "Update", :class => "btn btn-block btn-primary" %>
       <% end %>
     </div>
+    <hr />
 
-    <div class="form-signin">
+    <div class="form-signin mt-3 p-0">
 
-      <div class="text-center mb-4">
-        <h3>Cancel my account</h3>
+      <div class="border rounded bg-secondary text-white clearfix border card-header mb-3">
+        <h5 class="float-left mb-0">Delete account</h3>
       </div>
 
       <p>
-        Unhappy?
+        Delete account?
         <%= button_to "Delete my account", registration_path(resource_name),
                       data: { confirm: "Are you sure?" }, method: :delete,
-                      class: "btn btn-block btn-secondary" %>
+                      class: "btn btn-block btn-outline-secondary" %>
       </p>
-      <%= link_to t('view.general.back'), :back, class: "btn btn-block btn-secondary" %>
     </div>
+    <hr />
   </div>
 
-  <div class="col-lg-4 col-12 mt-3 px-1">
+  <div class="col-lg-4 col-12 mt-3 px-lg-0">
     <div class="border rounded bg-secondary text-white clearfix border card-header">
       <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
     </div>

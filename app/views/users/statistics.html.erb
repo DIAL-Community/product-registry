@@ -1,91 +1,97 @@
-<style>
-  #user-statistics .card {
-    max-width: calc(33% - 30px);
-  }
-</style>
-
-<div id="user-statistics" class="mt-3">
-
-  <div class="row">
+<div id="user-statistics" class="mt-2">
+  <div id="statistic-filter" class="collapse row">
     <div class="col-12">
       <div class="float-right pb-2">
-        <%= form_tag(statistics_users_path, :method => "get", id: "filter-form", class: "form-inline") do %>
-          <div class="form-group mr-sm-2">
+        <%= form_tag(statistics_users_path, :method => "get", id: "filter-form", class: "d-md-flex d-block") do %>
+          <fieldset class="form-group mr-md-2 mb-2">
             <label for="identifier" class="sr-only">Identifier or email</label>
             <%= text_field_tag :search, params[:search],
                                placeholder: "Identifier or email",
                                class: "form-control" %>
-          </div>
-          <div class="form-group mr-sm-2">
+          </fieldset>
+          <fieldset class="form-group mr-md-2 mb-2">
             <label for="start_date" class="sr-only">Start date</label>
             <%= text_field_tag :start_date, params[:start_date],
                                placeholder: "Start date",
                                class: "form-control pick-date" %>
-          </div>
-          <div class="form-group mr-sm-2">
+          </fieldset>
+          <fieldset class="form-group mr-md-2 mb-2">
             <label for="end_date" class="sr-only">End date</label>
             <%= text_field_tag :end_date, params[:end_date],
                                placeholder: "End date",
                                class: "form-control pick-date" %>
-          </div>
-          <%= submit_tag "Filter", :class => "btn btn-primary" %>
+          </fieldset>
+          <fieldset class="form-group float-right mb-1">
+            <a class="btn btn-secondary float-right d-md-none d-block" data-toggle="collapse" href="#statistic-filter" role="button"
+               aria-expanded="false" aria-controls="statistic-filter">
+              Hide Filter
+            </a>
+            <%= submit_tag "Filter", :class => "btn btn-primary mr-2" %>
+          </fieldset>
         <% end %>
       </div>
     </div>
   </div>
-
   <div class="row">
-    <div class="col-12">
-      <div class="card-deck">
+    <div id="statistic-filter-toggler" class="col-12 mb-2 d-md-none d-block">
+      <a class="btn btn-primary float-right" data-toggle="collapse" href="#statistic-filter" role="button"
+         aria-expanded="false" aria-controls="statistic-filter">
+        Open Filter
+      </a>
+    </div>
+  </div>
 
-        <div class="card">
-          <div class="bg-secondary text-white card-header">
-            <h5 class="text-center">Identifier With Most Event</h5>
-          </div>
-          <div class="card-body">
-            <%=
-              "#{@number_distinct_user.identifier.split("-")[0]} - #{@number_distinct_user.count} event(s)" \
-              unless @number_distinct_user.nil?
-            %>
-          </div>
+  <div id="statistic-highlight" class="row">
+    <div class="col-md-3 col-6">
+      <div class="card h-100">
+        <div class="bg-secondary text-white card-header">
+          <h5 class="text-center">ID - Most Event</h5>
         </div>
-
-        <div class="card">
-          <div class="bg-secondary text-white card-header">
-            <h5 class="text-center">User With Most Event</h5>
-          </div>
-          <div class="card-body">
-            <%=
-              "#{@number_login_user.email} - #{@number_login_user.count} event(s)" \
-              unless @number_login_user.nil?
-            %>
-          </div>
+        <div class="card-body">
+          <%=
+            "#{@number_distinct_user.identifier[0..7]} - #{@number_distinct_user.count} event(s)" \
+            unless @number_distinct_user.nil?
+          %>
         </div>
-
-        <div class="card">
-          <div class="bg-secondary text-white card-header">
-            <h5 class="text-center">Most Visited Product</h5>
-          </div>
-          <div class="card-body">
-            <%=
-              "#{@most_visited_product[0]} - #{@most_visited_product[1]} event(s)" \
-              unless @most_visited_product.nil?
-            %>
-          </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card h-100">
+        <div class="bg-secondary text-white card-header">
+          <h5 class="text-center">User - Most Event</h5>
         </div>
-
-        <div class="card">
-          <div class="bg-secondary text-white card-header">
-            <h5 class="text-center">Most Recorded Event</h5>
-          </div>
-          <div class="card-body">
-            <%=
-              "#{UserEvent.event_types[@most_recorded_event.event_type]} - #{@most_recorded_event.count} event(s)" \
-              unless @most_recorded_event.nil?
-            %>
-          </div>
+        <div class="card-body">
+          <%=
+            "#{@number_login_user.email} - #{@number_login_user.count} event(s)" \
+            unless @number_login_user.nil?
+          %>
         </div>
-
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card h-100">
+        <div class="bg-secondary text-white card-header">
+          <h5 class="text-center">Most Visited Product</h5>
+        </div>
+        <div class="card-body">
+          <%=
+            "#{@most_visited_product[0]} - #{@most_visited_product[1]} event(s)" \
+            unless @most_visited_product.nil?
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card h-100">
+        <div class="bg-secondary text-white card-header">
+          <h5 class="text-center">Most Recorded Event</h5>
+        </div>
+        <div class="card-body">
+          <%=
+            "#{UserEvent.event_types[@most_recorded_event.event_type]} - #{@most_recorded_event.count} event(s)" \
+            unless @most_recorded_event.nil?
+          %>
+        </div>
       </div>
     </div>
   </div>
@@ -94,28 +100,69 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th>Identifier</th>
-      <th>Email</th>
-      <th>Event Type</th>
-      <th>Event Time</th>
-      <th>Extended Data</th>
+      <th class="d-none d-md-table-cell">Event Time</th>
+      <th class="d-none d-md-table-cell">Identifier</th>
+      <th class="d-none d-md-table-cell">Email</th>
+      <th class="d-none d-md-table-cell">Event Type</th>
+      <th class="d-none d-md-table-cell">Extended Data</th>
+      <th class="d-table-cell d-md-none">Event</th>
     </tr>
   </thead>
 
   <tbody>
     <% @user_events.each do |user_event| %>
       <tr>
-        <td><%= user_event.identifier %></td>
-        <td><%= user_event.email %></td>
-        <td><%= UserEvent.event_types[user_event.event_type] %></td>
-        <td><%= user_event.event_datetime.strftime("%m/%d/%Y %H:%M:%S") %></td>
-        <td><pre><%= JSON.pretty_generate(user_event.extended_data) %></pre></td>
+        <td class="d-none d-md-table-cell">
+          <%= user_event.event_datetime.strftime("%m/%d/%Y %H:%M:%S") %>
+        </td>
+        <td class="d-none d-md-table-cell">
+          <%= user_event.identifier[0..7] %>
+        </td>
+        <td class="d-none d-md-table-cell">
+          <%= user_event.email %>
+        </td>
+        <td class="d-none d-md-table-cell">
+          <%= UserEvent.event_types[user_event.event_type] %>
+        </td>
+        <td class="d-none d-md-table-cell">
+          <% if user_event.extended_data.to_s != '{}' %>
+            <pre><%= JSON.pretty_generate(user_event.extended_data) %></pre>
+          <% end %>
+        </td>
+        <td class="d-table-cell d-md-none">
+          <div class="text-muted">
+            <%= user_event.event_datetime.strftime("%m/%d/%Y %H:%M:%S") %>
+          </div>
+          <div class="text-muted">
+            By: <%= user_event.identifier[0..7] %>
+            <% unless user_event.email.nil? %>
+              - <strong><%= user_event.email %></strong>
+            <% end %>
+          </div>
+          <div class="text-muted">
+            Type:
+            <strong><%= UserEvent.event_types[user_event.event_type] %></strong>
+          </div>
+          <div class="text-muted">
+            <strong>Extended data:</strong>
+            <% if user_event.extended_data.to_s != '{}' %>
+              <pre><%= JSON.pretty_generate(user_event.extended_data) %></pre>
+            <% end %>
+          </div>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @user_events, :class => "float-right digg-pagination" %>
+<%= will_paginate @user_events, class: 'float-right digg-pagination', inner_window: 1 %>
 
 <script type="text/javascript">
   $(".pick-date").datepicker();
+
+  $('#statistic-filter').on('hide.bs.collapse', function() {
+    $('#statistic-filter-toggler').fadeIn();
+  });
+  $('#statistic-filter').on('show.bs.collapse', function() {
+    $('#statistic-filter-toggler').attr('style', 'display: none !important;');
+  });
 </script>

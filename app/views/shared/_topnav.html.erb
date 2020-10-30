@@ -3,7 +3,7 @@
     <nav id="header" class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container-fluid">
         <% if session[:portal]["slug"] == "default" %>
-          <a href="/products">
+          <a class="header-logo-nav" href="/products">
             <%= image_tag "logo-dial.png", :alt => "DIAL Logo", :height => "86px", :width => "300px" %>
           </a>
         <% else %>
@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown mt-2">
-              <strong><%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'nav-link' %></strong>
+              <strong><%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'nav-link covid-item' %></strong>
             </li>
             <% if user_signed_in? %>
               <% if (policy(current_user).index?) %>
@@ -38,3 +38,14 @@
     </nav>
   </div>
 </div>
+
+<script type="text/javascript">
+  var collapseLeftNav = function() {
+    $('#navbarCollapse').collapse('hide');
+  }
+  // Revert state of the main top nav on mobile when clicking any nav item.
+  $('.header-logo-nav').on('click', collapseLeftNav);
+  $('.dropdown-item').on('click', collapseLeftNav);
+  $('.unauth-item').on('click', collapseLeftNav);
+  $('.covid-item').on('click', collapseLeftNav);
+</script>

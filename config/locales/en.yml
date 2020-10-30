@@ -720,6 +720,8 @@ en:
         other-names: Other Names
         short-description: Short Description
     general:
+      add-favorite: Add to favorite
+      remove-favorite: Remove from favorite
       action: Action
       add: Add
       back: Back

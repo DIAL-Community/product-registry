@@ -1,6 +1,7 @@
 // Place all the styles related to the Products controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'bootstrap';
 
 .maturity-element {
   .list-group {
@@ -8,6 +9,66 @@
 
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+}
+
+#product-list {
+  @media only screen and (max-device-width: 768px) {
+    .right-marker {
+      border-right: 1px solid $gray-500;
+    }
+
+    .context-menu .btn:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+#product-page {
+  .ui-accordion .ui-accordion-content {
+    padding-top: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0;
+  }
+
+  #organization-list, #building-block-list, #sdg-list, #interop-list, #include-list, #project-list {
+    @media only screen and (max-device-width: 768px) {
+      .col-6 {
+        padding-right: 0;
+        &:nth-child(2n) {
+          padding-right: $spacer;
+        }
+        &:nth-child(1), &:nth-child(2) {
+          margin-top: 0 !important;
+        }
+      }
+    }
+  
+    @media only screen and (min-device-width: 768px) {
+      .col-md-4 {
+        padding-right: 0;
+        &:nth-child(3n) {
+          padding-right: $spacer;
+        }
+        &:nth-child(1), &:nth-child(2), &:nth-child(3) {
+          margin-top: 0 !important;
+        }
+      }
+    }
+  }
+
+  #sector-list {
+    .col-6 {
+      padding-right: 0;
+      &:nth-child(2n) {
+        padding-right: $spacer;
+      }
+      &:nth-child(1), &:nth-child(2) {
+        margin-top: 0 !important;
+      }
     }
   }
 }
@@ -236,4 +297,10 @@
 #maturity-nav .agg-badge{
   display:inline;
   margin-left: 5px;
+}
+
+@media only screen and (max-device-width: 768px) {
+  .legend-img {
+    width: 380px;
+  }
 }

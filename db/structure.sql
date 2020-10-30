@@ -974,6 +974,37 @@ ALTER SEQUENCE public.districts_id_seq OWNED BY public.districts.id;
 
 
 --
+-- Name: froala_images; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.froala_images (
+    id bigint NOT NULL,
+    picture character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: froala_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.froala_images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: froala_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.froala_images_id_seq OWNED BY public.froala_images.id;
+
+
+--
 -- Name: glossaries; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3261,6 +3292,13 @@ ALTER TABLE ONLY public.districts ALTER COLUMN id SET DEFAULT nextval('public.di
 
 
 --
+-- Name: froala_images id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.froala_images ALTER COLUMN id SET DEFAULT nextval('public.froala_images_id_seq'::regclass);
+
+
+--
 -- Name: glossaries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3838,6 +3876,14 @@ ALTER TABLE ONLY public.digital_principles
 
 ALTER TABLE ONLY public.districts
     ADD CONSTRAINT districts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: froala_images froala_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.froala_images
+    ADD CONSTRAINT froala_images_pkey PRIMARY KEY (id);
 
 
 --
@@ -6182,6 +6228,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200916213058'),
 ('20200922195357'),
 ('20200924233939'),
-('20201006172734');
+('20201006172734'),
+('20201021202217');
 
 

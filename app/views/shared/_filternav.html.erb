@@ -1,6 +1,9 @@
 <div id="filter-nav" class="card">
   <div class="card-header bg-secondary text-white">
-    <i class="fas fa-question-circle float-right" style="margin-top: 4px; cursor: pointer;" data-toggle="modal" data-target="#help-modal"></i>
+    <i class="fa fa-times-circle content-toggler float-right d-block d-md-none"
+       style="margin-top: 4px; margin-left: 4px; cursor: pointer;" aria-hidden="true"></i>
+    <i class="fa fa-question-circle float-right" style="margin-top: 4px; cursor: pointer;"
+       data-toggle="modal" data-target="#help-modal"></i>
     <h5 class="nav-header"><%= t('view.filternav.framework') %></h5>
   </div>
   <div class="card-body p-0 accordion-section">
@@ -45,3 +48,19 @@
 </div>
 
 <%= render 'shared/help' %>
+
+<script type="text/javascript">
+  $('.content-toggler').click(function(e) {
+    const hideLeftFilter = function() {
+      console.log('Hiding left filter!');
+      $('#left-filter').attr('style', 'display: none !important;');
+      $('#right-content').attr('style', 'display: block !important;');
+      animateCss('#right-content', 'fadeIn faster');
+    }
+
+    if ($('#left-filter').is(':visible')) {
+      console.log('Left filter is visible');
+      animateCss('#left-filter', 'slideOutLeft faster', hideLeftFilter);
+    }
+  });
+</script>
