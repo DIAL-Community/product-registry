@@ -12,9 +12,19 @@ $(".model-logo").on({
       indicator.addClass("fas fa-plus");
     }
     indicator.fadeIn();
+
+    const infoIndicator = $(this).find(".info-indicator");
+    infoIndicator.addClass("fas fa-info");
+    infoIndicator.fadeIn();
+
+    const editIndicator = $(this).find(".edit-indicator");
+    editIndicator.addClass("far fa-edit");
+    editIndicator.fadeIn();
   },
   mouseleave: function() {
     $(this).find(".favorite-indicator").fadeOut();
+    $(this).find(".info-indicator").fadeOut();
+    $(this).find(".edit-indicator").fadeOut();
   }
 });
 
@@ -43,6 +53,35 @@ $(".favorite-indicator").each(function(index, element) {
       } else {
         $(element).removeClass("fa-check-circle text-success");
         $(element).addClass("fa-plus");
+      }
+    });
+  });
+});
+
+$(".favorite-context-menu").each(function(index, element) {
+  $(element).on("click", function(event) {
+    event.preventDefault();
+    const slug = $(element).attr("data-slug");
+    const favorited = $(element).attr("data-favorited");
+
+    let path = "favorite_product";
+    let message = "<%= t('view.notification.favorite-save-notification') %>";
+    if (favorited === "true") {
+      path = "unfavorite_product";
+      message = "<%= t('view.notification.favorite-remove-notification') %>";
+    }
+
+    $.post(`/products/${slug}/${path}`, function(data) {
+      $("#notifier").trigger({
+        type: "notify",
+        message: message
+      });
+      const parent = $(element).parent();
+      $(element).attr("data-favorited", favorited === "true" ? "false" : "true");
+      if (favorited !== "true") {
+        $(element).text("<%= t('view.general.remove-favorite') %>");
+      } else {
+        $(element).text("<%= t('view.general.add-favorite') %>");
       }
     });
   });

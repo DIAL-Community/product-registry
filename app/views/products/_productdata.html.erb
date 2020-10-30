@@ -1,57 +1,92 @@
+<%
+  # We're using 3-8-1 grid composition on md, lg, and xl.
+  # We're using 12-0 grid composition on xs, sm.
+%>
   <% if !product.website.nil? and !product.website.empty? %>
-    <h6 class="card-text text-muted mt-2 mb-2">
-      <strong><%= t('view.product.form.website') %>:</strong>
-      <a href="//<%= @product.website %>" target="_blank" rel="noreferrer noopener"><%= @product.website %> &#x29c9;</a>
-    </h6>
+    <div class="row mt-2 mb-2">
+      <div class="col-12 col-md-3 text-muted">
+        <strong><%= t('view.product.form.website') %>:</strong>
+      </div>
+      <div class="col-12 col-md-8">
+        <a href="//<%= @product.website %>" target="_blank" rel="noreferrer noopener">
+          <%= @product.website %> &#x29c9;
+        </a>
+      </div>
+    </div>
   <% end %>
-  <h6 class="card-text text-muted mt-2 mb-2">
-    <strong><%= t('view.product.form.repository') %>:</strong>
-    <% if !product.repository.blank? %>
-      <% if product.repository.start_with?('http') %>
-        <a href="<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
+  <div class="row mt-2 mb-2">
+    <div class="col-12 col-md-3 text-muted">
+      <strong><%= t('view.product.form.repository') %>:</strong>
+    </div>
+    <div class="col-12 col-md-8">
+      <% if !product.repository.blank? %>
+        <% if product.repository.start_with?('http') %>
+          <a href="<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
+        <% else %>
+          <a href="//<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
+        <% end %>
       <% else %>
-        <a href="//<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
+        <%= t('view.product.show.na') %>
       <% end %>
-    <% else %>
-      <%= t('view.product.show.na') %>
-    <% end %>
-  </h6>
+    </div>
+  </div>
   <% if !product.product_versions.nil? and !product.product_versions.empty? %>
-    <h6 class="card-text text-muted mt-2 mb-2">
-      <strong><%= t('view.product.show.active-version') %>:</strong>
-      <%= product.product_versions.last.version %>
-    </h6>
+    <div class="row text-muted mt-2 mb-2">
+      <div class="col-12 col-md-3">
+        <strong><%= t('view.product.show.active-version') %>:</strong>
+      </div>
+      <div class="col-12 col-md-8">
+        <%= product.product_versions.last.version %>
+      </div>
+    </div>
   <% end %>
-  <h6 class="card-text text-muted mt-2 mb-2">
-    <strong><%= t('view.product.show.license') %>:</strong>
-    <%= product.license.blank? ? t('view.product.show.na') :
-        product.license == 'NOASSERTION' ? t('view.product.show.license-unknown') :
-        product.license
-    %>
-  </h6>
+  <div class="row text-muted mt-2 mb-2">
+    <div class="col-12 col-md-3">
+      <strong><%= t('view.product.show.license') %>:</strong>
+    </div>
+    <div class="col-12 col-md-8">
+      <%= product.license.blank? ? t('view.product.show.na') :
+          product.license == 'NOASSERTION' ? t('view.product.show.license-unknown') :
+          product.license
+      %>
+    </div>
+  </div>
   <% if !product.origins.nil? and !@product.origins.empty? %>
-    <h6 class="card-text text-muted mt-2 mb-2">
-    <strong><%= t('view.product.index.sources') %></strong>
-    <% product.origins.each do |origin| %>
-      <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
-    <% end %>
+    <div class="row text-muted mt-2 mb-2">
+      <div class="col-12 col-md-3">
+        <strong><%= t('view.product.index.sources') %></strong>
+      </div>
+      <div class="col-12 col-md-8">
+        <% product.origins.each do |origin| %>
+          <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
   <% if !product.aliases.empty? %>
-    <h6 class="card-text text-muted mt-2 mb-2">
-      <strong><%= t('view.product.form.other-names') %>:</strong>
-      <ul>
-        <% product.aliases.each{|other_name| %>
-          <li><%= other_name %></li>
-        <%}%>
-      </ul>
-    </h6>
+    <div class="row text-muted mt-2 mb-2">
+      <div class="col-12 col-md-3">
+        <strong><%= t('view.product.form.other-names') %>:</strong>
+      </div>
+      <div class="col-12 col-md-8">
+        <ul>
+          <% product.aliases.each{|other_name| %>
+            <li><%= other_name %></li>
+          <%}%>
+        </ul>
+      </div>
+    </div>
   <% end %>
   <% if product_description && !product_description.description.nil? && !product_description.description.empty? %>
-    <h6 class="card-text text-muted mt-2 mb-2">
-      <strong><%= t('view.product.index.description') %>:</strong>
-      <div id="product-viewer-<%= product.slug %>" class="wysiwyg-viewer">
-        <%= product_description.description.html_safe %>
+    <div class="row text-muted mt-2 mb-2">
+      <div class="col-12 col-md-3">
+        <strong><%= t('view.product.index.description') %>:</strong>
       </div>
-    </h6>
+      <div class="col-12 col-md-8">
+        <div id="product-viewer-<%= product.slug %>" class="wysiwyg-viewer text-justify">
+          <%= product_description.description.html_safe %>
+        </div>
+      </div>
+    </div>
   <% end %>
 
