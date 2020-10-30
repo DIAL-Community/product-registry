@@ -43,3 +43,11 @@
   border: none;
   height: 800px;
 }
+
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+  .survey-iframe {
+    width: 350px;
+    border: none;
+  }
+}
