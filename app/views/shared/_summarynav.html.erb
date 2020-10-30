@@ -19,7 +19,9 @@
       <div class="d-block d-md-none">
         <div class="list-group-item dropdown text-center bg-transparent">
           <a class="btn btn-secondary" data-toggle="dropdown" href="#" role="button"
-             id="summaryExtendedDropdown" aria-haspopup="true" aria-expanded="false">...</a>
+             id="summaryExtendedDropdown" aria-haspopup="true" aria-expanded="false">
+             <i class="fas fa-ellipsis-v"></i>
+          </a>
           <div class="dropdown-menu dropdown-menu-right bg-dark" aria-labelledby="summaryExtendedDropdown">
             <% session[:portal]["top_navs"].each_with_index do |top_nav, index| %>
               <% next  if index <= 2 %>

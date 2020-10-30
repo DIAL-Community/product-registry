@@ -34,11 +34,8 @@ module SustainableDevelopmentGoalsHelper
     names
   end
 
-  def sdg_footer_popover(elements, title)
-    content = '<div class="border rounded bg-secondary text-white clearfix border card-header">' +
-              t(title, count: elements.count) +
-              '</div>' \
-              '<div>' + sdg_format_popover(elements) + '</div>'
+  def sdg_footer_popover(elements)
+    content = '<div>' + sdg_format_popover(elements) + '</div>'
     content.html_safe
   end
 

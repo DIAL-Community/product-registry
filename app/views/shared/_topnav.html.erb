@@ -3,7 +3,7 @@
     <nav id="header" class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container-fluid">
         <% if session[:portal]["slug"] == "default" %>
-          <a href="/products">
+          <a class="header-logo-nav" href="/products">
             <%= image_tag "logo-dial.png", :alt => "DIAL Logo", :height => "86px", :width => "300px" %>
           </a>
         <% else %>
@@ -40,13 +40,12 @@
 </div>
 
 <script type="text/javascript">
-  $('.dropdown-item').on('click', function(e) {
+  var collapseLeftNav = function() {
     $('#navbarCollapse').collapse('hide');
-  });
-  $('.unauth-item').on('click', function(e) {
-    $('#navbarCollapse').collapse('hide');
-  });
-  $('.covid-item').on('click', function(e) {
-    $('#navbarCollapse').collapse('hide');
-  });
+  }
+  // Revert state of the main top nav on mobile when clicking any nav item.
+  $('.header-logo-nav').on('click', collapseLeftNav);
+  $('.dropdown-item').on('click', collapseLeftNav);
+  $('.unauth-item').on('click', collapseLeftNav);
+  $('.covid-item').on('click', collapseLeftNav);
 </script>

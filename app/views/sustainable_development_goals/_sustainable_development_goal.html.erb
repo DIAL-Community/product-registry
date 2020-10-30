@@ -1,7 +1,7 @@
 
 <div class="col-lg-5ths col-md-4 d-flex mt-2">
   <div class="card w-100 index-card">
-    <div class="card-header bg-secondary text-white small truncate-parent">
+    <div class="card-header bg-secondary text-white truncate-parent">
       <%= link_to sustainable_development_goal.name, sustainable_development_goal, class: 'truncate-text',
         'title' => sustainable_development_goal.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
     </div>
@@ -14,8 +14,7 @@
       <%
         sdg_targets = sdg_footer(sustainable_development_goal, 'sdg_targets')
         if sdg_targets.count > 0
-          content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{sdg_footer_popover(sdg_targets, 'view.sdg.index.sdg-target-popover')}'>"
+          content = "<div class='footer-row mb-2'>"
           concat(content.html_safe)
           sdg_targets.each do |sdg_target|
             concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip],
@@ -25,8 +24,9 @@
         end
         use_cases = sdg_footer(sustainable_development_goal, 'use_cases')
         if use_cases.count > 0
-          content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{sdg_footer_popover(use_cases, 'view.workflow.index.use-case-popover')}'>"
+          content = "<div class='footer-row' data-toggle='popover' data-placement='top'
+                          data-title='#{t('view.workflow.index.use-case-popover', count: use_cases.count)}'
+                          data-html='true' data-content='#{sdg_footer_popover(use_cases)}'>"
           concat(content.html_safe)
           concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1'))
           

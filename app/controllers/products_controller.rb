@@ -247,10 +247,11 @@ class ProductsController < ApplicationController
         new_prod_bb = ProductBuildingBlock.new
         new_prod_bb.building_block_id = building_block_id
 
-        mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-        unless policy(@product).beta_only?
-          mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
-        end
+        mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[params[:sdg_mapping]]
+        mapping_status ||= ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+        !policy(@product).beta_only? &&
+          params[:sdg_mapping] == ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED] &&
+          mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
         new_prod_bb.mapping_status = mapping_status
 
         @product.product_building_blocks << new_prod_bb
@@ -262,10 +263,11 @@ class ProductsController < ApplicationController
         new_prod_sdg = ProductSustainableDevelopmentGoal.new
         new_prod_sdg.sustainable_development_goal_id = sustainable_development_goal_id
 
-        mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
-        unless policy(@product).beta_only?
+        mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[params[:sdg_mapping]]
+        mapping_status ||= ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+        !policy(@product).beta_only? &&
+          params[:sdg_mapping] == ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED] &&
           mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
-        end
         new_prod_sdg.mapping_status = mapping_status
 
         @product.product_sustainable_development_goals << new_prod_sdg
@@ -430,10 +432,12 @@ class ProductsController < ApplicationController
           new_prod_bb = ProductBuildingBlock.new
           new_prod_bb.building_block_id = bb_id
 
-          mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-          unless policy(@product).beta_only?
-            mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
-          end
+          mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[params[:sdg_mapping]]
+          mapping_status ||= ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+          !policy(@product).beta_only? &&
+            params[:sdg_mapping] == ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED] &&
+            mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
+
           new_prod_bb.mapping_status = mapping_status
 
           @product.product_building_blocks << new_prod_bb
@@ -466,10 +470,11 @@ class ProductsController < ApplicationController
           new_prod_sdg = ProductSustainableDevelopmentGoal.new
           new_prod_sdg.sustainable_development_goal_id = sdg_id
 
-          mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
-          unless policy(@product).beta_only?
+          mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[params[:sdg_mapping]]
+          mapping_status ||= ProductSustainableDevelopmentGoal.mapping_status_types[:BETA]
+          !policy(@product).beta_only? &&
+            params[:sdg_mapping] == ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED] &&
             mapping_status = ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
-          end
           new_prod_sdg.mapping_status = mapping_status
 
           @product.product_sustainable_development_goals << new_prod_sdg
