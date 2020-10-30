@@ -29,10 +29,8 @@ module WorkflowsHelper
     images
   end
 
-  def workflow_footer_popover(elements, title)
-    content = '<div class="border rounded bg-secondary text-white clearfix border card-header">' +
-              t(title, count: elements.count) +
-              '</div><div>' + workflow_format_popover(elements) + '</div>'
+  def workflow_footer_popover(elements)
+    content = '<div>' + workflow_format_popover(elements) + '</div>'
     content.html_safe
   end
 

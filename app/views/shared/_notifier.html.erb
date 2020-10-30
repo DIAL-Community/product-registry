@@ -10,10 +10,11 @@
       notify: function(event) {
         event.stopPropagation();
 
-        let fadeDuration = event.duration ? event.duration : 1000;
+        let fadeDuration = event.duration ? event.duration : 1500;
         $("#notifier-message").html(event.message)
                               .fadeIn(fadeDuration)
                               .fadeOut(fadeDuration);
+        return false;
       }
     });
   });

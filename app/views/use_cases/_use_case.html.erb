@@ -1,7 +1,7 @@
 
 <div class="col-lg-5ths col-md-4 d-flex mt-2">
   <div class="card w-100 index-card">
-    <div class="card-header bg-secondary text-white small truncate-parent">
+    <div class="card-header bg-secondary text-white truncate-parent">
       <%= link_to use_case.name, use_case, class: 'truncate-text',
           'title' => use_case.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
     </div>
@@ -20,8 +20,7 @@
       <%
         sdg_targets = uc_footer(use_case, 'sdg_targets')
         if sdg_targets.count > 0
-          content = "<div class='footer-row mb-2' data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{uc_footer_popover(sdg_targets, 'view.use-case.index.sdg-target-popover')}'>"
+          content = "<div class='footer-row mb-2'>"
           concat(content.html_safe)
 
           sdg_targets.each do |sdg_target|
@@ -33,8 +32,7 @@
 
         workflows = uc_footer(use_case, 'workflows')
         if workflows.count > 0
-          content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{uc_footer_popover(workflows, 'view.use-case.index.workflow-popover')}'>"
+          content = "<div class='footer-row'>"
           concat(content.html_safe)
           workflows.each do |workflow|
             concat(image_tag(workflow[:filename], title: workflow[:tooltip],
@@ -62,12 +60,12 @@
       <div class="float-right mb-1">
       <% if use_case.maturity == "BETA" %>
         <span class='badge badge-warning' data-toggle="tooltip"
-          data-placement="top" data-original-title="<%= t('view.use-case.index.is_beta') %>">
+          data-placement="top" data-original-title="<%= t('view.use-case.index.is_beta').humanize %>">
           <%= use_case.maturity %>
         </span>
       <% else %>
         <span class='badge badge-success' data-toggle="tooltip"
-          data-placement="top" data-original-title="<%= t('view.use-case.index.is_mature') %>">
+          data-placement="top" data-original-title="<%= t('view.use-case.index.is_mature').humanize %>">
           <%= use_case.maturity %>
         </span>
       <% end %>

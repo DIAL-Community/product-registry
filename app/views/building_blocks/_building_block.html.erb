@@ -1,6 +1,6 @@
 
 <div class="col-lg-5ths col-md-4 d-flex mt-2">
-  <div class="card w-100 index-card small">
+  <div class="card w-100 index-card">
     <div class="card-header bg-secondary text-white truncate-parent">
       <%= link_to building_block.name, building_block, class: 'truncate-text',
           'title' => building_block.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
@@ -15,8 +15,7 @@
       <%
         workflows = bb_footer(building_block, 'workflows')
         if workflows.count > 0
-          content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{bb_footer_popover(workflows, 'view.building-block.index.bb-workflow-popover')}'>"
+          content = "<div class='footer-row'>"
           concat(content.html_safe)
 
           workflows.each do |workflow|
@@ -28,8 +27,7 @@
 
         products = bb_footer(building_block, 'products')
         if products.count > 0
-          content = "<div class='footer-row' data-toggle='popover' data-placement='bottom'
-                          data-html='true' data-content='#{bb_footer_popover(products, 'view.building-block.index.bb-product-popover')}'>"
+          content = "<div class='footer-row'>"
           concat(content.html_safe)
 
           products.each do |product|
@@ -47,12 +45,12 @@
       <div class="float-right mb-1">
         <% if building_block.maturity == "BETA" %>
           <span class='badge badge-warning' data-toggle="tooltip"
-            data-placement="top" data-original-title="<%= t('view.building-block.index.is_beta') %>">
+            data-placement="top" data-original-title="<%= t('view.building-block.index.is_beta').humanize %>">
             <%= building_block.maturity %>
           </span>
         <% else %>
           <span class='badge badge-success' data-toggle="tooltip"
-            data-placement="top" data-original-title="<%= t('view.building-block.index.is_mature') %>">
+            data-placement="top" data-original-title="<%= t('view.building-block.index.is_mature').humanize %>">
             <%= building_block.maturity %>
           </span>
         <% end %>

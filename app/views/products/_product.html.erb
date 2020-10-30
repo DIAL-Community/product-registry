@@ -1,6 +1,6 @@
 
 <div class="col-lg-5ths col-md-4 d-flex mt-2">
-  <div class="card w-100 index-card small">
+  <div class="card w-100 index-card">
     <div class="card-header bg-secondary text-white truncate-parent">
       <%= link_to product.name, product, class: 'truncate-text',
         'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
@@ -23,12 +23,28 @@
         <% end %>
       </div>
     </div>
-    <div class="model-logo">
-      <i class="favorite-indicator"
-         data-slug="<%= product.slug %>"
-         data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
-         data-toggle="tooltip"
-         data-placement="top" data-original-title="<%= t('view.product.index.toggle-favorite') %>"></i>
+    <div class="card-body model-logo">
+      <div class="overlay d-none d-lg-block">
+        <i class="favorite-indicator text-secondary"
+           data-slug="<%= product.slug %>"
+           data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
+           data-toggle="tooltip"
+           data-placement="top" data-original-title="<%= t('view.product.index.toggle-favorite') %>"></i>
+        <%
+          product_description = product.product_descriptions
+                                       .where(product_id: product, locale: I18n.locale)
+                                       .first&.description
+          product_description ||= product.name
+        %>
+        <% unless product_description.nil? %>
+          <i class="info-indicator text-secondary" data-toggle="tooltip" data-placement="top"
+             data-original-title="<%= strip_tags(product_description) %>"></i>
+        <% end %>
+        <%= link_to edit_product_path(product), class: "text-secondary" do%>
+          <i class="edit-indicator" data-toggle="tooltip" data-placement="top"
+             data-original-title="Edit <%= product.name %>."></i>
+        <% end %>
+      </div>
       <%= link_to(product) do %>
         <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
         <% if product.product_type == "dataset" %>
@@ -36,53 +52,68 @@
         <% end %>
       <% end %>
     </div>
-    <div class="card-footer footer-padding">
-        <% category, images = get_footer_row(product, 1) %>
-        <% if images.count > 0 %>
-          <div class="footer-row" data-toggle="popover" data-placement="bottom" data-html="true" data-content='<%= get_row_popover(category,images) %>'>
-        <% else %>
+    <div class="card-footer">
+      <div class="row h-100">
+        <div class="col-10 col-md-12 right-marker">
+          <% # Footer line 1: SDG %>
+          <% category, images = get_footer_row(product, 1) %>
           <div class="footer-row">
-        <% end %>
-          <% images.each do |image| %>
-            <% if image["gradient"] %>
-              <div class="digisquare-gauge-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
-                <p class="footer-score"><%= image["filename"] %></p>
-              </div>
-            <% elsif image["osc"] %>
-              <div class="osc-small" title data-toggle="tooltip" data-placement="top" data-original-title="<%= image["tooltip"] %>">
-                <p class="osc-footer-score"><%= image["filename"] %></p>
-              </div>
-            <% else %>
-              <%= image_tag(image["filename"], class: 'footer-img', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
+            <% images.each do |image| %>
+              <%= image_tag(image["filename"], class: 'footer-img', 'title': image["tooltip"],
+                           'data-toggle': 'tooltip', 'data-placement': 'top') %>
             <% end %>
-          <% end %>
-        </div>
-        <% category, images = get_footer_row(product, 2) %>
-        <% if images.count > 0 %>
-          <div class="footer-row mt-1" data-toggle="popover" data-placement="bottom" data-html="true" data-content='<%= get_row_popover(category,images) %>'>
-        <% else %>
+          </div>
+          <% # Footer line 2: Maturity, BB, Compatability or License %>
+          <% category, images = get_footer_row(product, 2) %>
           <div class="footer-row mt-1">
-        <% end %>
-          <% images.each do |image| %>
-            <% if image["license"] %>
-              <p class="footer-source mb-1"><%= t('view.product.show.license') %></p>
-              <p class="footer-source float-right mb-1"><%= product.license %></p>
-            <% elsif image["maturity"] %>
-              <p class="footer-source mb-1"><%= t('view.product.index.footer_maturity_score') %></p>
-              <p class="footer-source float-right mb-1"><%= product.maturity_score.nil? ? 0 : product.maturity_score %></p>
-            <% else %>
-              <%= image_tag(image["filename"], class: 'footer-img', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
+            <% images.each do |image| %>
+              <% if image["license"] %>
+                <p class="footer-source mb-1"><%= t('view.product.show.license') %>:</p>
+                <p class="footer-source float-right mb-1"><%= product.license %></p>
+              <% elsif image["maturity"] %>
+                <p class="footer-source mb-1"><%= t('view.product.index.footer_maturity_score') %></p>
+                <p class="footer-source float-right mb-1">
+                  <%= product.maturity_score.nil? ? 0 : product.maturity_score %>
+                </p>
+              <% else %>
+                <%= image_tag(image["filename"], class: 'footer-img', 'title': image["tooltip"],
+                             'data-toggle': 'tooltip', 'data-placement': 'top') %>
+              <% end %>
             <% end %>
-          <% end %>
+          </div>
+          <% # Footer line 3: Source %>
+          <% category, images = get_footer_row(product, 3) %>
+          <div class="footer-row">
+            <p class="footer-source mb-0"><%= get_source_label(product) %></p>
+            <% images.each do |image| %>
+              <%= image_tag(image["filename"], class: 'footer-img-right', 'title': image["tooltip"],
+                           'data-toggle': 'tooltip', 'data-placement': 'top') %>
+            <% end %>
+          </div>
         </div>
-        <% category, images = get_footer_row(product, 3) %>
-        <div class="footer-row" data-container="body" data-toggle="popover" data-placement="bottom">
-          <p class="footer-source"><%= get_source_label(product) %></p>
-          <% images.each do |image| %>
-            <%= image_tag(image["filename"], class: 'footer-img-right', 'title' => image["tooltip"], 'data-toggle' => 'tooltip', 'data-placement' => 'top') %>
-          <% end %>
+        <div class="col-2 d-md-none h-100 d-flex justify-content-center dropup context-menu">
+          <button type="button" class="btn bg-transparent" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-2x align-self-center"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="product-context-menu">
+            <% if user_signed_in? && policy(product).mod_allowed? %>
+              <%
+                # See index.html.erb to see handler for this link.
+              %>
+              <a href="#" class="dropdown-item favorite-context-menu"
+                 data-slug="<%= product.slug %>"
+                 data-favorited="<%= current_user.saved_products.include?(product.id) %>">
+                 <%= "Remove from favorite" if current_user.saved_products.include?(product.id) %>
+                 <%= "Add to favorite" unless current_user.saved_products.include?(product.id) %>
+              </a>
+              <%= link_to "Edit this product", edit_product_path(product), :class => 'dropdown-item' %>
+              <div class="dropdown-divider"></div>
+            <% end %>
+            <%= link_to "View this product", product, :class => 'dropdown-item' %>
+          </div>
         </div>
-      </small>
+      </div>
     </div>
   </div>
 </div>
