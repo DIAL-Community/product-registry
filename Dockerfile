@@ -19,12 +19,14 @@ RUN git clone https://github.com/publicgoods/maturity-rubric.git /maturity-rubri
 COPY cron-sync /etc/cron.d/cron-sync
 RUN crontab /etc/cron.d/cron-sync
 
+WORKDIR /tmp
+ENV BUNDLER_VERSION 2.1.4
+COPY Gemfile /tmp/Gemfile
+COPY Gemfile.lock /tmp/Gemfile.lock
+
+RUN gem install bundler && bundle install --jobs 10 --retry 5
+
 RUN mkdir /t4d
 WORKDIR /t4d
-COPY Gemfile /t4d/Gemfile
-COPY Gemfile.lock /t4d/Gemfile.lock
-
-ENV BUNDLER_VERSION 2.1.4
-RUN gem install bundler && bundle install --jobs 10 --retry 5
 
 COPY . /t4d
