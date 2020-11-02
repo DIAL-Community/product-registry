@@ -27,14 +27,13 @@
                     <div class="card-text">
                       Use Cases
                     </div>
-                    <div class="card-text text-muted">
-                      
+                    <div class="card-text">
                       <ul>
-                      <% use_cases.each do |use_case| %>
-                        <li>
-                        <%= link_to(use_case[:name], use_case_path(use_case[:id])) %>
-                        </li>
-                      <% end %>
+                        <% use_cases.each do |use_case| %>
+                          <li>
+                          <%= link_to(use_case[:name], use_case_path(use_case[:id])) %>
+                          </li>
+                        <% end %>
                       </ul>
                     </div>
                   </div>
@@ -44,12 +43,8 @@
           <% end %>
       <% end %>
     </div>
-    <p class="float-right mb-0" >
+    <p class="float-right mb-0 mt-2" >
       <%= link_to t('view.general.back'), sustainable_development_goals_path, :class => "card-link" %>
     </p>
   </div>
-</div>
-
-<div class="mt-4">
-  
 </div>

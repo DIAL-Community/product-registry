@@ -24,12 +24,7 @@
       </div>
     </div>
     <div class="card-body model-logo">
-      <div class="overlay d-none d-lg-block">
-        <i class="favorite-indicator text-secondary"
-           data-slug="<%= product.slug %>"
-           data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
-           data-toggle="tooltip"
-           data-placement="top" data-original-title="<%= t('view.product.index.toggle-favorite') %>"></i>
+      <div class="overlay d-none d-lg-block indicator-list">
         <%
           product_description = product.product_descriptions
                                        .where(product_id: product, locale: I18n.locale)
@@ -40,6 +35,11 @@
           <i class="info-indicator text-secondary" data-toggle="tooltip" data-placement="top"
              data-original-title="<%= strip_tags(product_description) %>"></i>
         <% end %>
+        <i class="favorite-indicator text-secondary"
+           data-slug="<%= product.slug %>"
+           data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
+           data-toggle="tooltip"
+           data-placement="top" data-original-title="<%= t('view.product.index.toggle-favorite') %>"></i>
         <%= link_to edit_product_path(product), class: "text-secondary" do%>
           <i class="edit-indicator" data-toggle="tooltip" data-placement="top"
              data-original-title="Edit <%= product.name %>."></i>
@@ -104,13 +104,14 @@
               <a href="#" class="dropdown-item favorite-context-menu"
                  data-slug="<%= product.slug %>"
                  data-favorited="<%= current_user.saved_products.include?(product.id) %>">
-                 <%= "Remove from favorite" if current_user.saved_products.include?(product.id) %>
-                 <%= "Add to favorite" unless current_user.saved_products.include?(product.id) %>
+                 <%= t('view.general.remove-favorite') if current_user.saved_products.include?(product.id) %>
+                 <%= t('view.general.add-favorite') unless current_user.saved_products.include?(product.id) %>
               </a>
-              <%= link_to "Edit this product", edit_product_path(product), :class => 'dropdown-item' %>
+              <%= link_to "#{t('view.general.edit')} #{t('model.product')}",
+                          edit_product_path(product), :class => 'dropdown-item' %>
               <div class="dropdown-divider"></div>
             <% end %>
-            <%= link_to "View this product", product, :class => 'dropdown-item' %>
+            <%= link_to "#{t('view.general.view')} #{t('model.product')}", product, :class => 'dropdown-item' %>
           </div>
         </div>
       </div>

@@ -11,11 +11,11 @@ const buildingBlockIndexReady = function() {
     const checked = $('#mature-only').prop("checked");
     const url = `${window.location.pathname}?mature=${checked}`;
     
-    $('#current-list > div').addClass('existing-building-block');
+    $('#building-block-list > div').addClass('existing-building-block');
     animateCss('.existing-building-block', 'fadeOut faster', removeElements);
     
     $.getScript(url, function() {
-      $('#current-list').attr('data-current-page', 1);
+      $('#building-block-list').attr('data-current-page', 1);
       animateCss('.to-be-animated', 'fadeIn faster', removeClasses);
     });
   }

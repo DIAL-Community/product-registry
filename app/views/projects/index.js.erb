@@ -7,7 +7,7 @@ $(".project-logo-frame").on({
     if (favorited === "true") {
       indicator.addClass("fas fa-check-circle text-success");
     } else {
-      indicator.addClass("fas fa-plus");
+      indicator.addClass("fas fa-plus-circle");
     }
     indicator.fadeIn();
   },
@@ -36,11 +36,11 @@ $(".favorite-indicator").each(function(index, element) {
       const parent = $(element).parent();
       $(element).attr("data-favorited", favorited === "true" ? "false" : "true");
       if (favorited !== "true") {
-        $(element).removeClass("fa-plus");
+        $(element).removeClass("fa-plus-circle");
         $(element).addClass("fa-check-circle text-success");
       } else {
         $(element).removeClass("fa-check-circle text-success");
-        $(element).addClass("fa-plus");
+        $(element).addClass("fa-plus-circle");
       }
     });
   });
