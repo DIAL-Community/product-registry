@@ -13,19 +13,6 @@
   }
 }
 
-#product-list {
-  @media only screen and (max-device-width: 768px) {
-    .right-marker {
-      border-right: 1px solid $gray-500;
-    }
-
-    .context-menu .btn:focus {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-  }
-}
-
 #product-page {
   .ui-accordion .ui-accordion-content {
     padding-top: 0.5rem;
