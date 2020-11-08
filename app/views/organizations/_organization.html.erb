@@ -10,20 +10,39 @@
         <%= image_tag(organization.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
       <% end %>
     </div>
-    <div class="card-footer h-100 py-2">
-      <% if organization.website.present? %>
-        <small>
-          <a href="<%= "//" + organization.website %>" target="_blank" rel="noreferrer noopener">
-            <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
-          </a>
-        </small>
-        <br/>
-      <% end %>
-      <% if organization.is_endorser %>
-      <small class="text-muted">
-        <%= raw "#{image_tag('digiprins.png', width: 16)} #{t('view.organization.index.endorsed-date')}  #{organization.when_endorsed.year}" %>
-      </small>
-      <% end %>
+    <div class="card-footer py-2">
+      <div class="row h-100">
+        <div class="col-10 col-md-12 right-marker">
+          <% if organization.website.present? %>
+            <small>
+              <a href="<%= "//" + organization.website %>" target="_blank" rel="noreferrer noopener">
+                <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
+              </a>
+            </small>
+            <br/>
+          <% end %>
+          <% if organization.is_endorser %>
+            <small class="text-muted">
+              <%= raw "#{image_tag('digiprins.png', width: 16)} #{t('view.organization.index.endorsed-date')}  #{organization.when_endorsed.year}" %>
+            </small>
+          <% end %>
+        </div>
+        <div class="col-2 d-md-none h-100 d-flex justify-content-center dropup context-menu">
+          <button id="organization-context-menu" type="button" class="btn bg-transparent" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-2x align-self-center"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="organization-context-menu">
+            <% if user_signed_in? && policy(organization).mod_allowed? %>
+              <%= link_to "#{t('view.general.edit')} #{t('model.organization')}",
+                          edit_organization_path(organization), class: 'dropdown-item' %>
+              <div class="dropdown-divider"></div>
+            <% end %>
+            <%= link_to "#{t('view.general.view')} #{t('model.organization')}",
+                        organization, class: 'dropdown-item' %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

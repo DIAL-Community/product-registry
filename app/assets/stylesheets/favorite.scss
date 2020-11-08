@@ -1,27 +1,8 @@
-.favorite-indicator {
+.indicator-list {
   position: absolute;
   // have some space from the right and top
   right: 0.5rem;
-  top: 3rem;
-  // increase the size of the icon
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.info-indicator {
-  position: absolute;
-  // have some space from the right and top
-  left: 0.5rem;
-  top: 3rem;
-  // increase the size of the icon
-  font-size: 1.5rem;
-}
-
-.edit-indicator {
-  position: absolute;
-  // have some space from the right and top
-  left: 0.5rem;
-  bottom: 7em;
+  top: 2.5rem;
   // increase the size of the icon
   font-size: 1.5rem;
   cursor: pointer;

@@ -10,49 +10,68 @@
         <%= image_tag(workflow.image_file, class: 'card-img-top align-middle py-2 workflow-filter') %>
       <% end %>
     </div>
-    <div class="card-footer footer-padding">
-      <%
-        use_cases = workflow_footer(workflow, 'use_cases')
-        if use_cases.count > 0
-          content = "<div class='footer-row' data-toggle='popover' data-placement='top'
-                          data-title='#{t('view.workflow.index.use-case-popover', count: use_cases.count)}'
-                          data-html='true' data-content='#{workflow_footer_popover(use_cases)}'>"
-          concat(content.html_safe)
-          concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1 use-case-filter'))
-                
-          content = "<span class='small text-muted ml-1 use-case-color'>#{use_cases.size} #{t('model.use-case').titlecase.pluralize(use_cases.size)}</span>"
-          concat(content.html_safe)
+    <div class="card-footer">
+      <div class="row h-100">
+        <div class="col-10 col-md-12 right-marker">
+          <%
+            use_cases = workflow_footer(workflow, 'use_cases')
+            if use_cases.count > 0
+              content = "<div class='footer-row' data-toggle='popover' data-placement='top'
+                              data-title='#{t('view.workflow.index.use-case-popover', count: use_cases.count)}'
+                              data-html='true' data-content='#{workflow_footer_popover(use_cases)}'>"
+              concat(content.html_safe)
+              concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1 use-case-filter'))
 
-          # When we have image for each workflow, we can use the following code.
-          # workflows.each do |workflow|
-          #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-          #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-          # end
-          concat('</div>'.html_safe)
-        end
+              content = "<span class='small text-muted ml-1 use-case-color'>#{use_cases.size} #{t('model.use-case').titlecase.pluralize(use_cases.size)}</span>"
+              concat(content.html_safe)
 
-        building_blocks = workflow_footer(workflow, 'building_blocks')
-        if building_blocks.count > 0
-          content = "<div class='footer-row mb-2'>"
-          concat(content.html_safe)
+              # When we have image for each workflow, we can use the following code.
+              # workflows.each do |workflow|
+              #   concat(image_tag(workflow[:filename], title: workflow[:tooltip],
+              #                   class: 'footer-img', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+              # end
+              concat('</div>'.html_safe)
+            end
 
-          building_blocks.each do |building_block|
-            concat(image_tag(building_block[:filename], title: building_block[:tooltip],
-                             class: 'footer-img-small mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
-          end
-          concat('</div>'.html_safe)
-        end
+            building_blocks = workflow_footer(workflow, 'building_blocks')
+            if building_blocks.count > 0
+              content = "<div class='footer-row mb-2'>"
+              concat(content.html_safe)
 
-        if use_cases.count == 0
-          content = '<div class="footer-row"></div>'
-          concat(content.html_safe)
-        end
+              building_blocks.each do |building_block|
+                concat(image_tag(building_block[:filename], title: building_block[:tooltip],
+                                 class: 'footer-img-small mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+              end
+              concat('</div>'.html_safe)
+            end
 
-        if building_blocks.count == 0
-          content = '<div class="footer-row mb-2"></div>'
-          concat(content.html_safe)
-        end
-      %>
+            if use_cases.count == 0
+              content = '<div class="footer-row"></div>'
+              concat(content.html_safe)
+            end
+
+            if building_blocks.count == 0
+              content = '<div class="footer-row mb-2"></div>'
+              concat(content.html_safe)
+            end
+          %>
+        </div>
+        <div class="col-2 d-md-none h-100 d-flex justify-content-center dropup context-menu">
+          <button id="wf-context-menu" type="button" class="btn bg-transparent" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-2x align-self-center"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="wf-context-menu">
+            <% if user_signed_in? && policy(workflow).mod_allowed? %>
+              <%= link_to "#{t('view.general.edit')} #{t('model.workflow')}",
+                          edit_workflow_path(workflow), class: 'dropdown-item' %>
+              <div class="dropdown-divider"></div>
+            <% end %>
+            <%= link_to "#{t('view.general.view')} #{t('model.workflow')}",
+                        workflow, class: 'dropdown-item' %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

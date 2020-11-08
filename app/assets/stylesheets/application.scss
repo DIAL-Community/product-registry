@@ -24,6 +24,20 @@
 $font-size-base: 0.85rem;
 @import 'bootstrap';
 
+#building-block-list, #sdg-list, #product-list, #use-case-list,
+#workflow-list, #organization-list, #project-list {
+  @media only screen and (max-device-width: 768px) {
+    .right-marker {
+      border-right: 1px solid $gray-500;
+    }
+
+    .context-menu .btn:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
 body,
 html {
   display: flex;
