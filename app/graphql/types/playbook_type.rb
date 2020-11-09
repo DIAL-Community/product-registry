@@ -9,7 +9,7 @@ module Types
     field :maturity, String, null: true
     field :image_file, String, null: true
 
+    field :playbook_pages, [Types::PlaybookPageType], null: true
     field :playbook_descriptions, [Types::PlaybookDescriptionType], null: true
-    field :activities, [Types::ActivityType], null: true
   end
 end

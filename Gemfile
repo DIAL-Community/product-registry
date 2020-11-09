@@ -103,8 +103,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rswag-specs'
 
-  gem 'graphiql-rails'
-
   # Seed data generator
   gem 'faker'
 end
