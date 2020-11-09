@@ -3,6 +3,8 @@ class PlaybookPage < ApplicationRecord
 
   attr_accessor :question_text, :child_pages
 
+  has_many :page_contents, dependent: :destroy
+
   def to_param
     slug
   end
