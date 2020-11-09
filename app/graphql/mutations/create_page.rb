@@ -1,4 +1,4 @@
-class Mutations::CreateActivity < Mutations::BaseMutation
+class Mutations::CreatePage < Mutations::BaseMutation
   require 'modules/slugger'
 
   include Modules::Slugger
@@ -9,22 +9,22 @@ class Mutations::CreateActivity < Mutations::BaseMutation
   argument :order, Integer, required: true
   argument :playbook_id, Integer, required: true
 
-  field :activity, Types::ActivityType, null: false
+  field :page, Types::PlaybookPageType, null: false
   field :errors, [String], null: false
 
   def resolve(name:, description:, phase:, order:, playbook_id:)
-    activity = Activity.new(name: name, description: description, phase: phase, order: order, playbook_id: playbook_id)
-    activity.slug = slug_em(name)
-    if activity.save
+    playbook_page = PlaybookPage.new(name: name, description: description, phase: phase, order: order, playbook_id: playbook_id)
+    playbook_page.slug = slug_em(name)
+    if playbook_page.save
       # Successful creation, return the created object with no errors
       {
-        activity: activity,
+        playbook_page: playbook_page,
         errors: [],
       }
     else
       # Failed save, return the errors to the client
       {
-        activity: nil,
+        playbook_page: nil,
         errors: user.errors.full_messages
       }
     end
