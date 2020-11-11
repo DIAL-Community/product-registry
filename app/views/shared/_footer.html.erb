@@ -1,14 +1,21 @@
 <footer id="footer">
 <% if session[:portal]["slug"] == "default" %>
-  <div class="sponsors description">
+  <div class="sponsors description pb-0">
     <a href="https://digitalimpactalliance.org">The Digital Impact Alliance</a>
     <%= t('view.footer.tag-line') %>
   </div>
+  <ul class="icons sponsors mb-0">
+    <li><%= image_tag "unf-logo.png", :alt => "United Nations Foundation", :height => 50 %></li>
+    <li><%= image_tag "bill-n-melinda-logo.png", :alt => "Bill and Melinda Gates Foundation", :height => 50 %></li>
+    <li><%= image_tag "sweden-logo.png", :alt => "Swedish International Development Cooperation Agency", :height => 50 %></li>
+    <li><%= image_tag "dfid-logo.png", :alt => "Department for International Development", :height => 50 %></li>
+  </ul>
+  <div class="sponsors description pt-1 pb-0">
+    <%= t('view.footer.sponsor-line') %>
+  </div>
   <ul class="icons sponsors">
-    <li><%= image_tag "unf-logo.png", :alt => "United Nations Foundation" %></li>
-    <li><%= image_tag "bill-n-melinda-logo.png", :alt => "Bill and Melinda Gates Foundation" %></li>
-    <li><%= image_tag "sweden-logo.png", :alt => "Swedish International Development Cooperation Agency" %></li>
-    <li><%= image_tag "dfid-logo.png", :alt => "Department for International Development", :height => 94 %></li>
+    <li><%= image_tag "giz-logo.png", :alt => "Deutsche Gesellschaft für Internationale Zusammenarbeit", :height => 90 %></li>
+    <li><%= image_tag "bmz-logo.png", :alt => "Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung", :height => 90 %></li>
   </ul>
   <ul class="copyright">
     <li>

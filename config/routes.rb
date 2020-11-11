@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     post 'upload_design_images', on: :collection
     resources :playbook_pages do
       member do
+        get 'copy_page'
         get 'edit_content'
         get 'view_design'
         get 'show_design'
