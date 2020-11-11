@@ -23,6 +23,18 @@
   </fieldset>
 
   <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.playbook-page.form.page-contents') %>
+  </h6>
+  <div id="activity-resources">
+    <% @page.page_contents.each do |contents| %>
+      <%= form.text_area :content_html, id: :content_html, class: "form-control", value: contents.html %>
+      <%= form.label :content_html, t('view.playbook-page.form.html') %>
+      <%= form.text_area :content_css, id: :content_css, class: "form-control", value: contents.css %>
+      <%= form.label :content_css, t('view.playbook-page.form.css') %>
+    <% end %>
+  </div>
+
+  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook-page.form.question') %>
   </h6>
   <div id="activity-question">

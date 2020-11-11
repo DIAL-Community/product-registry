@@ -1,6 +1,6 @@
 class PlaybookPagesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_playbook_page, only: [:show, :edit, :update, :destroy]
+  before_action :set_playbook_page, only: [:show, :edit, :update, :destroy, :copy_page]
   before_action :redirect_cancel, only: [:create, :update, :save_design]
 
   # GET /playbook_pages
@@ -88,7 +88,7 @@ class PlaybookPagesController < ApplicationController
       if @page.save
         format.html do
           redirect_to @playbook,
-                    notice: t('messages.model.created', model: t('model.playbook_page').to_s.humanize)
+                    notice: t('messages.model.created', model: t('model.playbook-page').to_s.humanize)
         end
         format.json { render :show, status: :created, location: @page }
       else
@@ -115,11 +115,20 @@ class PlaybookPagesController < ApplicationController
       @page.playbook_questions_id = question.id
     end
 
+    if !playbook_page_params[:content_html].nil?
+      @page_contents = PageContent.find_by(playbook_page_id: @page.id)
+      if !@page_contents.nil? 
+        @page_contents.html = playbook_page_params[:content_html]
+        @page_contents.css = playbook_page_params[:content_css]
+        @page_contents.save!
+      end
+    end
+
     respond_to do |format|
       if @page.update(playbook_page_params)
         format.html do
           redirect_to playbook_path(@playbook),
-                      notice: t('messages.model.updated', model: t('model.playbook_page').to_s.humanize)
+                      notice: t('messages.model.updated', model: t('model.playbook-page').to_s.humanize)
         end
         format.json { render :show, status: :ok, location: @page }
       else
@@ -139,7 +148,31 @@ class PlaybookPagesController < ApplicationController
     respond_to do |format|
       format.html do
         redirect_to playbook_path(@playbook),
-                    notice: t('messages.model.deleted', model: t('model.playbook_page').to_s.humanize)
+                    notice: t('messages.model.deleted', model: t('model.playbook-page').to_s.humanize)
+      end
+      format.json { head :no_content }
+    end
+  end
+
+  def copy_page
+    authorize Playbook, :mod_allowed?
+    @playbook = Playbook.find(@page.playbook_id)
+
+    @new_page = @page.dup
+    @new_page.name = @page.name + " Copy"
+    @new_page.slug = @page.slug + "_copy"
+    @new_page.save!
+
+    @page.page_contents.each do |contents|
+      new_contents = contents.dup
+      new_contents.playbook_page = @new_page
+      new_contents.save!
+    end
+
+    respond_to do |format|
+      format.html do
+        redirect_to playbook_path(@playbook),
+                    notice: t('messages.model.copied', model: t('model.playbook-page').to_s.humanize)
       end
       format.json { head :no_content }
     end
@@ -288,8 +321,8 @@ class PlaybookPagesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_page_params
     params.require(:playbook_page)
-      .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :playbook_id, :parent_page_id, :editor_type,
-             :resources => [:name, :description, :url])
+      .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :playbook_id, :parent_page_id, :content_html, :content_css,
+            :editor_type, :resources => [:name, :description, :url])
       .tap do |attr|
         if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])
