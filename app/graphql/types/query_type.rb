@@ -31,12 +31,12 @@ module Types
       playbook
     end
 
-    field :playbook_page, Types::PlaybookPageType, null: false do
-      argument :playbookPageSlug, String, required: true
+    field :page_contents, Types::PageContentType, null: false do
+      argument :playbookPageId, ID, required: true
     end
 
-    def playbook_page(playbookPageSlug:)
-      PlaybookPage.find_by(slug: playbookPageSlug)
+    def page_contents(playbookPageId:)
+      PageContent.find_by(playbook_page_id: playbookPageId)
     end
 
     field :me, Types::UserType, null: false 

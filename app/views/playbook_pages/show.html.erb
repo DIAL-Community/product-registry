@@ -7,6 +7,9 @@
       <%= link_to  t('view.general.delete-with-model', model: t('model.playbook-page').titlecase), @page,
                   method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.playbook-page')) },
                   class: 'btn btn-outline-secondary float-left' %>
+
+      <%= link_to  t('view.general.copy-with-model', model: t('model.playbook-page').titlecase), copy_page_playbook_playbook_page_path(@playbook, @page), data: { confirm: t('view.general.copy-confirmation', model: t('model.playbook-page')) },
+                  class: 'btn btn-outline-secondary float-left ml-2' %>
     <% end %>
   </div>
 </div>
