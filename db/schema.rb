@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_21_202217) do
+ActiveRecord::Schema.define(version: 2020_11_03_202113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,23 @@ ActiveRecord::Schema.define(version: 2020_10_21_202217) do
     t.datetime "ended_at"
     t.index ["candidate_organization_id", "contact_id"], name: "index_candidate_contacts_on_candidate_id_and_contact_id"
     t.index ["contact_id", "candidate_organization_id"], name: "index_candidate_contacts_on_contact_id_and_candidate_id"
+  end
+
+  create_table "candidate_products", force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "name", null: false
+    t.string "website", null: false
+    t.string "repository", null: false
+    t.string "submitter_email", null: false
+    t.boolean "rejected"
+    t.datetime "rejected_date"
+    t.bigint "rejected_by_id"
+    t.datetime "approved_date"
+    t.bigint "approved_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_candidate_products_on_approved_by_id"
+    t.index ["rejected_by_id"], name: "index_candidate_products_on_rejected_by_id"
   end
 
 # Could not dump table "candidate_roles" because of following StandardError
@@ -795,6 +812,8 @@ ActiveRecord::Schema.define(version: 2020_10_21_202217) do
   add_foreign_key "building_block_descriptions", "building_blocks"
   add_foreign_key "candidate_organizations", "users", column: "approved_by_id"
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
+  add_foreign_key "candidate_products", "users", column: "approved_by_id"
+  add_foreign_key "candidate_products", "users", column: "rejected_by_id"
   add_foreign_key "candidate_roles", "users", column: "approved_by_id"
   add_foreign_key "candidate_roles", "users", column: "rejected_by_id"
   add_foreign_key "category_indicator_descriptions", "category_indicators"

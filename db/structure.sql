@@ -478,6 +478,45 @@ ALTER SEQUENCE public.candidate_organizations_id_seq OWNED BY public.candidate_o
 
 
 --
+-- Name: candidate_products; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.candidate_products (
+    id bigint NOT NULL,
+    slug character varying NOT NULL,
+    name character varying NOT NULL,
+    website character varying NOT NULL,
+    repository character varying NOT NULL,
+    rejected boolean,
+    rejected_date timestamp without time zone,
+    rejected_by_id bigint,
+    approved_date timestamp without time zone,
+    approved_by_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: candidate_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.candidate_products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: candidate_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.candidate_products_id_seq OWNED BY public.candidate_products.id;
+
+
+--
 -- Name: candidate_roles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3194,6 +3233,13 @@ ALTER TABLE ONLY public.candidate_organizations ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: candidate_products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_products ALTER COLUMN id SET DEFAULT nextval('public.candidate_products_id_seq'::regclass);
+
+
+--
 -- Name: candidate_roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3764,6 +3810,14 @@ ALTER TABLE ONLY public.building_blocks
 
 ALTER TABLE ONLY public.candidate_organizations
     ADD CONSTRAINT candidate_organizations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: candidate_products candidate_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_products
+    ADD CONSTRAINT candidate_products_pkey PRIMARY KEY (id);
 
 
 --
@@ -4484,6 +4538,20 @@ CREATE INDEX index_candidate_organizations_on_approved_by_id ON public.candidate
 --
 
 CREATE INDEX index_candidate_organizations_on_rejected_by_id ON public.candidate_organizations USING btree (rejected_by_id);
+
+
+--
+-- Name: index_candidate_products_on_approved_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_products_on_approved_by_id ON public.candidate_products USING btree (approved_by_id);
+
+
+--
+-- Name: index_candidate_products_on_rejected_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_candidate_products_on_rejected_by_id ON public.candidate_products USING btree (rejected_by_id);
 
 
 --
@@ -5380,6 +5448,14 @@ ALTER TABLE ONLY public.building_block_descriptions
 
 
 --
+-- Name: candidate_products fk_rails_1f7a4bef04; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_products
+    ADD CONSTRAINT fk_rails_1f7a4bef04 FOREIGN KEY (approved_by_id) REFERENCES public.users(id);
+
+
+--
 -- Name: deploys fk_rails_1ffce4bab2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5713,6 +5789,14 @@ ALTER TABLE ONLY public.playbook_pages
 
 ALTER TABLE ONLY public.aggregator_capabilities
     ADD CONSTRAINT fk_rails_ee0ee7b8e7 FOREIGN KEY (country_id) REFERENCES public.countries(id);
+
+
+--
+-- Name: candidate_products fk_rails_eed5af50b9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_products
+    ADD CONSTRAINT fk_rails_eed5af50b9 FOREIGN KEY (rejected_by_id) REFERENCES public.users(id);
 
 
 --
@@ -6229,6 +6313,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200922195357'),
 ('20200924233939'),
 ('20201006172734'),
-('20201021202217');
+('20201021202217'),
+('20201103202113');
 
 

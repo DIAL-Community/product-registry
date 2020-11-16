@@ -136,6 +136,10 @@ var tasksDuplicateCheck = function() {
   duplicateCheck("task_name", "/task_duplicates.json");
 }
 
+var candidateProductDuplicateCheck = function() {
+  duplicateCheck("candidate_product_name", "/candidate_product_duplicates.json");
+}
+
 $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
@@ -180,3 +184,5 @@ $(document).on('plays#edit:loaded', playsDuplicateCheck);
 $(document).on('plays#new:loaded', playsDuplicateCheck);
 $(document).on('tasks#edit:loaded', tasksDuplicateCheck);
 $(document).on('tasks#new:loaded', tasksDuplicateCheck);
+$(document).on('candidate_products#edit:loaded', candidateProductDuplicateCheck);
+$(document).on('candidate_products#new:loaded', candidateProductDuplicateCheck);

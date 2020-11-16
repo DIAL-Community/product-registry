@@ -58,6 +58,7 @@ en:
     activity: activity
     building-block: building block
     candidate-organization: candidate organization
+    candidate-product: candidate product
     candidate-role: Candidate Role
     category-indicator: category indicator
     city: city
@@ -198,6 +199,20 @@ en:
         status-new: New Submission
         status-rejected: Rejected
         website: Website
+    candidate-product:
+      form:
+        created: Thank you for your submission. We will carefully review your submission.
+                 Approved submission will become available in the organization list.
+      index:
+        approve: Approve
+        no-data: We couldn't find any candidate product in the database.
+        reject: Reject
+        status: Status
+        status-approved: Approved
+        status-new: New Submission
+        status-rejected: Rejected
+        submitter-email: Submitter Email
+        website: Website
     candidate-role:
       form:
         description: Why you would like to have your role elevated? Please explain here.
@@ -329,6 +344,7 @@ en:
         other-names: Other names
         description-placeholder: Enter product description here
         repository: Code repository
+        submitter-email: Your Email
         start-assessment: Start assessing this product.
         website: Website
         est-hosting: Estimated hosting cost

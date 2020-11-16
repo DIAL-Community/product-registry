@@ -1,0 +1,2 @@
+class CandidateProduct < ApplicationRecord
+end
