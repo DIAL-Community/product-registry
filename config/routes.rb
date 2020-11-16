@@ -2,12 +2,21 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
+
   post "/graphql", to: "graphql#execute"
-  resources :task_trackers
+
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   mount Commontator::Engine => '/commontator'
+
   resources :task_trackers
+
+  resources :candidate_products do
+    member do
+      post 'reject'
+      post 'approve'
+    end
+  end
 
   resources :candidate_roles do
     member do
@@ -203,6 +212,7 @@ Rails.application.routes.draw do
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
   get 'playbook_duplicates', to: 'playbooks#duplicates'
+  get 'candidate_product_duplicates', to: 'candidate_products#duplicates'
 
   post '/froala_image/upload' => 'froala_images#upload'
 

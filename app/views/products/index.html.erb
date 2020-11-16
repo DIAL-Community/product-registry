@@ -43,8 +43,8 @@
       <span class="small mr-1">&nbsp;|</span>
     <% else %>
       <%= link_to t('view.general.create'),
-          'https://github.com/unicef/publicgoods-candidates#how-to-submit-a-new-candidate-for-a-digital-public-good',
-          class: 'small mr-1', target: :_blank  %>
+          new_candidate_product_path,
+          class: 'small mr-1' %>
       <span class="small mr-1">&nbsp;|</span>
     <% end %>
     <%= link_to t('view.product.index.export-json'),

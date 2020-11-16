@@ -1,0 +1,2 @@
+module CandidateProductsHelper
+end
