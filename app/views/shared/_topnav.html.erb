@@ -4,7 +4,8 @@
       <div class="container-fluid">
         <% if session[:portal]["slug"] == "default" %>
           <a class="header-logo-nav" href="/products">
-            <%= image_tag "logo-dial.png", :alt => "DIAL Logo", :height => "86px", :width => "300px" %>
+            <%= image_tag "logo-dial-300w.png", alt: "DIAL Logo", sizes: '(max-width: 400px) 250px, 300px',
+                          srcset: {'logo-dial-250w.png': '250w', 'logo-dial-300w.png': '300w' } %>
           </a>
         <% else %>
           <%= image_tag "/assets/portal_views/"+session[:portal]["slug"]+".png", :alt => "DIAL Logo", :height => "86px" %>
