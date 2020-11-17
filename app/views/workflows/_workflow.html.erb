@@ -7,7 +7,8 @@
     </div>
     <div class="model-logo">
       <%= link_to(workflow) do %>
-        <%= image_tag(workflow.image_file, class: 'card-img-top align-middle py-2 workflow-filter') %>
+        <%= image_tag(workflow.image_file, class: 'align-middle py-2 workflow-filter',
+                      style: 'max-width: 100%; height: 160px;') %>
       <% end %>
     </div>
     <div class="card-footer">
