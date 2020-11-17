@@ -23,7 +23,7 @@
         <% end %>
       </div>
     </div>
-    <div class="card-body model-logo">
+    <div class="card-body model-logo product-logo">
       <div class="overlay d-none d-lg-block indicator-list">
         <%
           product_description = product.product_descriptions
@@ -46,7 +46,7 @@
         <% end %>
       </div>
       <%= link_to(product) do %>
-        <%= image_tag(product.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
+        <%= image_tag(product.image_file, class: 'product-logo-img align-middle', skip_pipeline: true) %>
         <% if product.product_type == "dataset" %>
         <div class="text-muted text-center"><%= t('view.product.index.dataset') %></div>
         <% end %>
