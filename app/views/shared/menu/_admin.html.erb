@@ -14,7 +14,8 @@
     <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
     <%= link_to t('model.user-event').to_s.pluralize.titlecase, statistics_users_path, :class => 'dropdown-item' %>
     <div class="dropdown-divider"></div>
-    <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, candidate_organizations_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, candidate_organizations_path, class: 'dropdown-item' %>
+    <%= link_to t('model.candidate-product').to_s.pluralize.titlecase, candidate_products_path, class: 'dropdown-item' %>
     <%= link_to t('model.candidate-role').to_s.pluralize.titlecase, candidate_roles_path, :class => 'dropdown-item' %>
     <% if (policy(current_user).mni?) %>
       <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>

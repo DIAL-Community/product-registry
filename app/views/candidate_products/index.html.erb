@@ -1,0 +1,113 @@
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<% if user_signed_in? %>
+  <%= link_to new_candidate_product_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
+    <span class="d-none d-md-block"><%= t('view.general.create') %></span>
+    <span class="d-block d-md-none">
+      <i class="fa fa-plus fa-sm" aria-hidden="true"></i>
+    </span>
+  <% end %>
+<% end %>
+<div class="float-right pb-2">
+  <%= form_tag(candidate_products_path, :method => "get", id: "search-form", class: "form-inline") do %>
+    <%= text_field_tag :search, params[:search],
+        placeholder: t('view.general.search-placeholder', model: t('model.candidate-product').to_s.pluralize),
+        class: "form-control" %>
+    <div class="input-group-append">
+      <%= submit_tag t('view.general.search'), :class => "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th class="d-none d-md-table-cell">
+        <%= t('view.general.name') %>
+      </th>
+      <th class="d-none d-md-table-cell">
+        <%= t('view.candidate-product.index.website') %>
+      </th>
+      <th class="d-none d-md-table-cell">
+        <%= t('view.candidate-product.index.status') %>
+      </th>
+      <th class="d-table-cell d-md-none">
+        <%= t('model.candidate-product').titlecase %>
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @candidate_products.count > 0 %>
+      <% @candidate_products.each do |candidate_product| %>
+        <tr>
+          <td class="d-none d-md-table-cell"><%= candidate_product.name %></td>
+          <td class="d-none d-md-table-cell"><%= candidate_product.website %></td>
+          <td class="d-none d-md-table-cell">
+            <%= candidate_product.rejected.nil? ?
+                t('view.candidate-product.index.status-new') :
+                candidate_product.rejected ?
+                  t('view.candidate-product.index.status-rejected') :
+                  t('view.candidate-product.index.status-approved')
+            %>
+          </td>
+          <td class="d-table-cell d-md-none">
+            <%= candidate_product.name %>
+            <div class="text-muted">
+              <%= candidate_product.website %>
+            </div>
+            <div class="text-muted">
+              <%= candidate_product.rejected.nil? ?
+                  t('view.candidate-product.index.status-new') :
+                  candidate_product.rejected ?
+                    t('view.candidate-product.index.status-rejected') :
+                    t('view.candidate-product.index.status-approved')
+              %>
+            </div>
+          </td>
+          <td class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+               aria-haspopup="true" aria-expanded="false">
+              <%= t('view.general.action') %>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <%= link_to t('view.general.view'), candidate_product, :class =>"dropdown-item"  %>
+              <% if user_signed_in? && policy(candidate_product).mod_allowed? %>
+                <% if candidate_product.rejected.nil? || candidate_product.rejected %>
+                  <%= link_to t('view.general.edit'), edit_candidate_product_path(candidate_product), :class =>"dropdown-item"  %>
+                <% end %>
+                <div class="dropdown-divider"></div>
+                <% if candidate_product.rejected.nil? %>
+                  <%= link_to t('view.candidate-product.index.approve'),
+                              approve_candidate_product_path(candidate_product),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <%= link_to t('view.candidate-product.index.reject'),
+                              reject_candidate_product_path(candidate_product),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <% if candidate_product.rejected %>
+                  <%= link_to t('view.candidate-product.index.approve'),
+                              approve_candidate_product_path(candidate_product),
+                              method: :post, :class =>"dropdown-item"  %>
+                  <div class="dropdown-divider"></div>
+                <% end %>
+                <%= link_to t('view.general.delete'), candidate_product, method: :delete,
+                            data: { confirm: t('view.general.delete-confirmation', model: t('model.candidate-product')) },
+                            class: "dropdown-item" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="5">
+          <small class="text-muted"><%= t('view.candidate-product.index.no-data') %></small>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

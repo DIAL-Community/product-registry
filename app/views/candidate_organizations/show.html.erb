@@ -37,8 +37,8 @@
   </div>
   <p class="float-right mb-0 mr-2" >
     <% if user_signed_in? && policy(@candidate_organization).mod_allowed? %>
-      <%= link_to t('view.general.back'), candidate_organizations_path, :class => "card-link" %>
-      <%= link_to 'Edit', edit_candidate_organization_path(@candidate_organization), :class => "card-link" %>
+      <%= link_to t('view.general.back'), candidate_organizations_path, class: "card-link" %>
+      <%= link_to t('view.general.edit'), edit_candidate_organization_path(@candidate_organization), class: "card-link" %>
     <% end %>
   </p>
 </div>

@@ -14,7 +14,9 @@
            data-placement="top" data-original-title="<%= t('view.use-case.index.toggle-favorite') %>"></i>
       </div>
       <%= link_to(use_case) do %>
-        <%= image_tag(use_case.image_file, class: 'card-img-top align-middle px-2 py-2 use-case-filter') %>
+        <%= image_tag(use_case.image_file,
+                     class: 'align-middle px-2 py-2 use-case-filter',
+                     style: 'max-width: 100%; height: 160px;') %>
       <% end %>
     </div>
 

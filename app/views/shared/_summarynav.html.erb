@@ -14,7 +14,22 @@
         </a>
       </div>
       <% session[:portal]["top_navs"].each_with_index do |top_nav, index| %>
-        <%= render "/shared/summary/#{top_nav}", { index: index, max_nav: 3, context: 'top-summary' } %>
+        <%
+          current_index = index
+          current_controller = top_nav
+          
+          if current_controller == 'sdgs'
+            current_controller = 'sustainable_development_goals'
+            if !current_page?(controller: current_controller, action: 'index')
+              current_index = 1
+            end
+          end
+
+          if current_page?(controller: current_controller, action: 'index')
+            current_index = 0
+          end
+        %>
+        <%= render "/shared/summary/#{top_nav}", { index: current_index, max_nav: 1, context: 'top-summary' } %>
       <% end %>
       <div class="d-block d-md-none">
         <div class="list-group-item dropdown text-center bg-transparent">
@@ -24,8 +39,18 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right bg-dark" aria-labelledby="summaryExtendedDropdown">
             <% session[:portal]["top_navs"].each_with_index do |top_nav, index| %>
-              <% next  if index <= 2 %>
-              <%= render "/shared/summary/#{top_nav}", { index: index, max_nav: 3, context: 'drop-summary' } %>
+              <%
+                current_index = index
+                current_controller = top_nav
+                if current_controller == 'sdgs'
+                  current_controller = 'sustainable_development_goals'
+                  if !current_page?(controller: current_controller, action: 'index')
+                    current_index = 1
+                  end
+                end
+                next if current_page?(controller: current_controller, action: 'index')
+              %>
+              <%= render "/shared/summary/#{top_nav}", { index: current_index, max_nav: 1, context: 'drop-summary' } %>
             <% end %>
           </div>
         </div>
