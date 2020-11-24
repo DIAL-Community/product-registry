@@ -83,6 +83,9 @@ function initGrapes() {
           flexGrid: 1
         },
       },
+      canvas: {
+          styles: ['https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,700,700italic&subset=latin,vietnamese,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek'],
+      },
     },
   });
 
@@ -253,6 +256,13 @@ function initGrapes() {
   grapesEditor.on('load', function() {
     var $ = grapesjs.$;
 
+    // Add new fonts
+    let fontProperty = grapesEditor.StyleManager.getProperty('typography', 'font-family')
+    let list = fontProperty.get('list');
+    list.push({ value: 'Roboto, Arial, sans-serif', name: 'Roboto' });
+    fontProperty.set('list', list);
+    grapesEditor.StyleManager.render();
+
     // Load and show settings and style manager
     var openTmBtn = pn.getButton('views', 'open-tm');
     openTmBtn && openTmBtn.set('active', 1);
@@ -286,4 +296,5 @@ function initGrapes() {
     openBlocksBtn && openBlocksBtn.set('active', 1);
   });
 
+  return grapesEditor;
 }
