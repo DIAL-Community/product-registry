@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,700,700italic&subset=latin,vietnamese,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek' rel='stylesheet' type='text/css'>
 
 <%= form_with(model: @page_contents, url: save_design_playbook_playbook_page_path, local: true, html: { id: 'page-form' }) do |form| %>
 <div id='<%= !@page_contents["name"].nil? && @page_contents["name"].gsub(" ", "-") %>'>
@@ -15,7 +16,6 @@
     <%= render('/playbook_pages/designer/grapes_style.css') %>
 
     <div id="gjs" style="height:0px; overflow:hidden"></div>
-
   </div>
 
   <fieldset class="float-right mt-4">
@@ -44,16 +44,49 @@
 </script>
 
 <script defer>
+  var simpleEditor;
+  var grapesEditor;
+
   $(document).ready(function() {
     initializeEditors();
 
     simpleEditor = new FroalaEditor('#simple-editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      htmlRemoveTags: [],
+      events: {
+        'html.set': function() {
+          var target = document.querySelector("#simple-editor div[data-component-marker='popover-content']");
+          if (target) {
+            var mutationObserver = new MutationObserver(function(mutationList) {
+              mutationList.forEach(function(mutation) {
+                var popover = mutation.target.parentNode.closest("div[data-component-marker='playbook-popover']");
+                var content = mutation.target.parentNode.closest("div[data-component-marker='popover-content']");
+                popover.setAttribute('data-content', content.innerHTML);
+              });
+            });
+            var config = { subtree: true, attributes: true, childList: true, characterData: true };
+            mutationObserver.observe(target, config);
+          }
+        }
+      },
+      fontFamily: {
+        "Roboto,sans-serif": 'Roboto',
+        "Arial": 'Arial',
+        "Georgia": 'Georgia',
+        "Impact": 'Impact',
+        "Tahoma": 'Tahoma',
+        "Times New Roman": 'Times New Roman',
+        "Verdana": 'Verdana'
+      },
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
-      simpleEditor.html.set("<%= @page_contents.html.nil? ? "" : @page_contents.html.squish.gsub(/<script.*?>[\s\S]*<\/script>/i, "").gsub("\"","\\\"").gsub("\'","\\\'").html_safe %>")
+      simpleEditor.html.set("<%= @page_contents.html.nil? ? "" : @page_contents.html
+                                                                               .squish
+                                                                               .gsub("\"","\\\"")
+                                                                               .gsub("</script>","<\\\/script>")
+                                                                               .html_safe %>");
     });
 
     if ("<%= @page_contents.editor_type %>" == "simple") {
@@ -63,14 +96,14 @@
       $("#simple-editor").toggleClass('hidden')
       $("#page-builder").toggleClass('hidden')
     }
-  })
+  });
 
   $("#submit-btn").on('click', function(e) {
-    var html = simpleEditor.html.get()
-    $("#page_content").val(html)
+    var html = simpleEditor.html.get();
+    $("#page_content").val(html);
     
     if ($("#editor_type").is(':checked')) {
-      $(".fa-save").click()
+      grapesEditor.store();
     } 
   })
 
@@ -82,7 +115,9 @@
     } else {
       // Update the simple editor with the current page builder
       var html = grapesEditor.getHtml();
-      simpleEditor.html.set(html);
+      var css = grapesEditor.getCss();
+      var content = "<style>"+css+"</style>"+html
+      simpleEditor.html.set(content);
     }
     $("#simple-editor").toggleClass('hidden')
     $("#page-builder").toggleClass('hidden')
@@ -92,7 +127,7 @@
     if (typeof toastr === 'undefined') {
       setTimeout(initializeEditors, 500);
     } else {
-      initGrapes();
+      grapesEditor = initGrapes();
     }
   }
 </script>

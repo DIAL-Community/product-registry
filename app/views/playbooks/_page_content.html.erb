@@ -1,0 +1,7 @@
+<% if @page_contents %>
+  <% if @page_contents.editor_type == "simple" %>
+    <%= @page_contents.html.html_safe %>
+  <% else %>
+    <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
+  <% end %>
+<% end %>
