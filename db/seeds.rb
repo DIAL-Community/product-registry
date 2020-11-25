@@ -41,6 +41,14 @@ if Setting.where(slug: 'default_map_center_position').count.zero?
                   value: 'country')
 end
 
+if Setting.where(slug: 'default_sector_list').count.zero?
+  Setting.create!(name: 'Default Sector List',
+                  slug: 'default_sector_list',
+                  description: "The list of sectors that will be used for product and project " \
+                              "assignments. DIAL's sector list is the default.",
+                  value: 'DIAL OSC')
+end
+
 if Tag.where(slug: 'covid19').count.zero?
   tag = Tag.create! name: 'COVID-19',
                     slug: 'covid19'

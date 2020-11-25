@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_03_202113) do
+ActiveRecord::Schema.define(version: 2020_11_25_162851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -526,6 +526,7 @@ ActiveRecord::Schema.define(version: 2020_11_03_202113) do
     t.datetime "updated_at", null: false
     t.string "name", null: false
     t.string "slug", null: false
+    t.string "project_url"
     t.index ["origin_id"], name: "index_projects_on_origin_id"
   end
 
@@ -545,12 +546,8 @@ ActiveRecord::Schema.define(version: 2020_11_03_202113) do
     t.index ["project_id", "location_id"], name: "projects_locations_idx", unique: true
   end
 
-  create_table "projects_organizations", id: false, force: :cascade do |t|
-    t.bigint "project_id", null: false
-    t.bigint "organization_id", null: false
-    t.index ["organization_id", "project_id"], name: "organizations_projects_idx", unique: true
-    t.index ["project_id", "organization_id"], name: "projects_organizations_idx", unique: true
-  end
+# Could not dump table "projects_organizations" because of following StandardError
+#   Unknown type 'org_type' for column 'org_type'
 
   create_table "projects_products", id: false, force: :cascade do |t|
     t.bigint "project_id", null: false
@@ -617,7 +614,11 @@ ActiveRecord::Schema.define(version: 2020_11_03_202113) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_displayable"
-    t.index ["slug"], name: "index_sectors_on_slug", unique: true
+    t.bigint "parent_sector_id"
+    t.bigint "origin_id"
+    t.index ["origin_id"], name: "index_sectors_on_origin_id"
+    t.index ["parent_sector_id"], name: "index_sectors_on_parent_sector_id"
+    t.index ["slug", "origin_id", "parent_sector_id"], name: "index_sectors_on_slug_and_origin_id_and_parent_sector_id", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -886,6 +887,8 @@ ActiveRecord::Schema.define(version: 2020_11_03_202113) do
   add_foreign_key "regions", "countries"
   add_foreign_key "rubric_categories", "maturity_rubrics"
   add_foreign_key "rubric_category_descriptions", "rubric_categories"
+  add_foreign_key "sectors", "origins"
+  add_foreign_key "sectors", "sectors", column: "parent_sector_id"
   add_foreign_key "tag_descriptions", "tags"
   add_foreign_key "task_tracker_descriptions", "task_trackers"
   add_foreign_key "use_case_descriptions", "use_cases"

@@ -389,7 +389,7 @@ module FilterConcern
     end
 
     !all_filters["countries"].empty? && org_list = org_list.joins(:locations).where('locations.id in (?)', all_filters["countries"])
-    !all_filters["sectors"].empty? && org_list = org_list.joins(:sectors).where('sectors.id in (?)', all_filters["sectors"])
+    !all_filters["sectors"].empty? && org_list = org_list.joins(:sectors).where('sectors.id in (?) or sectors.parent_sector_id in (?)', all_filters["sectors"], all_filters["sectors"])
     !all_filters["years"].empty? && org_list = org_list.where('extract(year from when_endorsed) in (?)', all_filters["years"])
 
     if !session[:portal]['organization_views'].nil?
@@ -494,7 +494,7 @@ module FilterConcern
 
       unless all_filters['sectors'].empty?
         filter_products = filter_products.joins(:sectors)
-                                         .where('sectors.id in (?)', all_filters["sectors"])
+                                         .where('sectors.id in (?) or sectors.parent_sector_id in (?)', all_filters["sectors"], all_filters["sectors"])
       end
 
       product_list += filter_products.ids

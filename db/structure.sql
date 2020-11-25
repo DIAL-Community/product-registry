@@ -2203,7 +2203,8 @@ CREATE TABLE public.projects (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     name character varying NOT NULL,
-    slug character varying NOT NULL
+    slug character varying NOT NULL,
+    project_url character varying
 );
 
 
@@ -2294,7 +2295,8 @@ ALTER SEQUENCE public.projects_locations_id_seq OWNED BY public.projects_locatio
 
 CREATE TABLE public.projects_organizations (
     project_id bigint NOT NULL,
-    organization_id bigint NOT NULL
+    organization_id bigint NOT NULL,
+    org_type public.org_type DEFAULT 'owner'::public.org_type
 );
 
 
@@ -2482,7 +2484,9 @@ CREATE TABLE public.sectors (
     slug character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_displayable boolean
+    is_displayable boolean,
+    parent_sector_id bigint,
+    origin_id bigint
 );
 
 
@@ -4982,10 +4986,24 @@ CREATE UNIQUE INDEX index_sdgs_on_slug ON public.sustainable_development_goals U
 
 
 --
--- Name: index_sectors_on_slug; Type: INDEX; Schema: public; Owner: -
+-- Name: index_sectors_on_origin_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_sectors_on_slug ON public.sectors USING btree (slug);
+CREATE INDEX index_sectors_on_origin_id ON public.sectors USING btree (origin_id);
+
+
+--
+-- Name: index_sectors_on_parent_sector_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sectors_on_parent_sector_id ON public.sectors USING btree (parent_sector_id);
+
+
+--
+-- Name: index_sectors_on_slug_and_origin_id_and_parent_sector_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_sectors_on_slug_and_origin_id_and_parent_sector_id ON public.sectors USING btree (slug, origin_id, parent_sector_id);
 
 
 --
@@ -5400,6 +5418,14 @@ ALTER TABLE ONLY public.offices
 
 
 --
+-- Name: sectors fk_rails_0c5b9fc834; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sectors
+    ADD CONSTRAINT fk_rails_0c5b9fc834 FOREIGN KEY (origin_id) REFERENCES public.origins(id);
+
+
+--
 -- Name: playbook_pages fk_rails_0d854afcc1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5477,6 +5503,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 ALTER TABLE ONLY public.product_indicators
     ADD CONSTRAINT fk_rails_2c154e19b9 FOREIGN KEY (category_indicator_id) REFERENCES public.category_indicators(id);
+
+
+--
+-- Name: sectors fk_rails_2fafddb8c8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sectors
+    ADD CONSTRAINT fk_rails_2fafddb8c8 FOREIGN KEY (parent_sector_id) REFERENCES public.sectors(id);
 
 
 --
@@ -6314,6 +6348,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200924233939'),
 ('20201006172734'),
 ('20201021202217'),
-('20201103202113');
+('20201103202113'),
+('20201123194715'),
+('20201125162851');
 
 
