@@ -447,6 +447,7 @@ en:
         source: Source
       show:
         origin: Origin
+        project-url: Project URL
       map:
         projects: Map of Projects
         all-projects: All projects
@@ -454,6 +455,11 @@ en:
     sector:
       index:
         no-data: We couldn't find any sector in the database.
+        parent: Parent Sector
+        origin: Origin
+      form:
+        origin: Origin
+        parent: Parent Sector
     setting:
       index:
         no-data: No settings currently defined in the database

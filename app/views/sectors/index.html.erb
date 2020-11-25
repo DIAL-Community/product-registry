@@ -23,7 +23,9 @@
   <thead class="thead-light">
     <tr>
       <th><%= t('view.general.name') %></th>
-      <th colspan="3"></th>
+      <th><%= t('view.sector.index.parent') %></th>
+      <th><%= t('view.sector.index.origin') %></th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -32,6 +34,13 @@
       <% @sectors.each do |sector| %>
         <tr>
           <td><%= sector.name %></td>
+          <% if !sector.parent_sector_id.nil? %>
+            <% parent_sector = Sector.find(sector.parent_sector_id) %>
+            <td><%= parent_sector.name %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td><%= sector.origin.name %></td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">

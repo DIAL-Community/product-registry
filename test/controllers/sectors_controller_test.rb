@@ -27,8 +27,9 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create sector" do
+    @origin = origins(:one)
     assert_difference('Sector.count') do
-      post sectors_url, params: { sector: { name: 'Another sector', slug: 'another_sector' } }
+      post sectors_url, params: { sector: { name: 'Another sector', slug: 'another_sector', origin_id: @origin.id } }
     end
 
     assert_redirected_to sector_url(Sector.last)

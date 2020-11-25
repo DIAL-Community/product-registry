@@ -5,6 +5,12 @@
     <%= "#{t('model.sector').to_s.titlecase}: #{@sector.name}" %>
   </h5>
   <div class="card-body py-2">
+    <% if !@sector.parent_sector_id.nil? %>
+      <% parent_sector = Sector.find(@sector.parent_sector_id) %>
+      <%= "#{t('view.sector.index.parent')}: #{parent_sector.name}" %>
+    <% end %>
+    <p>
+    <%= "#{t('view.sector.index.origin')}: #{@sector.origin.name}" %>
     <div class="float-right" >
       <%= link_to t('view.general.back'), sectors_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@sector).mod_allowed? %>

@@ -82,6 +82,8 @@ public/version.txt
 
 /coverage
 
+utils/GIZ_Projects.csv
+
 setEnv.sh
 .env
 
