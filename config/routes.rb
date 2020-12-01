@@ -87,7 +87,7 @@ Rails.application.routes.draw do
     get '/users/password', to: 'devise/passwords#new'
   end
 
-  root to: redirect('/products')
+  root to: redirect(path: '/products')
 
   resources :covid, only: [:index]
 

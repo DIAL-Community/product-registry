@@ -335,7 +335,7 @@ namespace :sync do
             existing_subsector = Sector.find_by(slug: subsector_slug, parent_sector_id: existing_sector.id, origin_id: giz_origin.id)
             if existing_subsector.nil?
               new_sector = Sector.new
-              new_sector.name = subsector
+              new_sector.name = sector_name + ": " + subsector
               new_sector.slug = subsector_slug
               new_sector.origin_id = giz_origin.id
               new_sector.is_displayable = true

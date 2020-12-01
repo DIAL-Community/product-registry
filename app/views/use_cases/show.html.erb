@@ -21,11 +21,14 @@
       <%= @use_case.maturity %>
     </div>
   </div>
+
   <%= image_tag(@use_case.image_file, class: 'card-img-top px-2 py-2 mx-auto use-case-filter', style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="usecase-viewer" class="wysiwyg-viewer">
       <%= @uc_desc.description.html_safe %>
     </div>
+    <div class="font-weight-bold inline"><%= t('model.sector').titlecase %>: </div>
+    <div class="inline"><%= @use_case.sector.name %></div>
     <div class="row">
       <div class="col-4">
         <% if !@use_case.tags.empty? %>

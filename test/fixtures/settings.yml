@@ -17,3 +17,9 @@ three:
   slug: default_covid19_tag
   description: The default tag name for COVID-19 related objects.
   value: COVID-19
+
+four:
+  name: Default Sector List
+  slug: default_sector_list
+  description: The sector list to use
+  value: DIAL OSC

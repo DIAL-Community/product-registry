@@ -12,7 +12,8 @@
 
   <fieldset class="form-group mb-0">
     <%= form.label :sector_id, t('model.sector').to_s.titlecase, class: 'custom-label' %>:
-    <% options = options_from_collection_for_select(@sectors.nil? ? [] : @sectors, 'id', 'name', use_case.sector_id) %>
+    <% origin_name = session[:org] ? session[:org] : Setting.find_by(slug: 'default_sector_list').value %>
+    <% options = options_for_select(Sector.build_filter(origin_name).collect {|sector| [sector['name'], sector['id'] ] }, {selected: use_case.sector_id}) %>
     <%= form.select :sector_id, options, {}, :class => "custom-select mb-2" %>
   </fieldset>
 
