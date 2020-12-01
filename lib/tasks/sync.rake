@@ -441,7 +441,9 @@ namespace :sync do
       end
 
       project["platforms"].each do |platform|
-        product_name = products_data.select {|product| product["id"] == platform["id"] }[0]["name"] 
+        product = products_data.select {|product| product["id"] == platform["id"] }[0]
+        next if product.nil?
+        product_name = product["name"] 
         slug = slug_em product_name
         product = Product.first_duplicate(product_name, slug)
         if !product.nil?
@@ -449,6 +451,13 @@ namespace :sync do
             existing_project.products << product
           end
         end
+      end
+
+      project_url = "https://digitalhealthatlas.org/"+I18n.locale.to_s+"/-/projects/"+project["id"].to_s+"/published"
+      existing_project.project_url = project_url
+
+      if existing_project.save!
+        puts "Project #{existing_project.name} saved!"
       end
       
       org_id = project["organisation"]
@@ -463,7 +472,7 @@ namespace :sync do
         proj_org.save!
       end
 
-      project["donors"].each do |donor|
+      project["donors"] && project["donors"].each do |donor|
         donor_name = org_data.select {|org| org["id"] == donor }[0]["name"]
         donor_org = Organization.name_contains(donor_name)
 
@@ -476,7 +485,7 @@ namespace :sync do
         end
       end
 
-      project["implementing_partners"].each do |implementer|
+      project["implementing_partners"] && project["implementing_partners"].each do |implementer|
         implementer_org = Organization.name_contains(implementer)
 
         if !implementer_org.empty? && !existing_project.organizations.include?(implementer_org[0])
@@ -486,13 +495,6 @@ namespace :sync do
           proj_org.organization_id = implementer_org[0].id
           proj_org.save!
         end
-      end
-
-      project_url = "https://digitalhealthatlas.org/"+I18n.locale.to_s+"/-/projects/"+project["id"].to_s+"/published"
-      existing_project.project_url = project_url
-
-      if existing_project.save!
-        puts "Project #{existing_project.name} saved!"
       end
     end
   end
