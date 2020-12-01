@@ -22,7 +22,8 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
-        <%= select_tag("sectors", options_for_select(Sector.build_list.collect {|sector| [sector['name'], sector['id'] ] }),
+        <% origin_name = session[:org] ? session[:org] : Setting.find_by(slug: 'default_sector_list').value %>
+        <%= select_tag("sectors", options_for_select(Sector.build_filter(origin_name).collect {|sector| [sector['name'], sector['id'] ] }),
             { selected: params[:name], include_blank: t('view.filternav.title.sector'), 
               class: 'form-control filter-element' }) %>
       </div>

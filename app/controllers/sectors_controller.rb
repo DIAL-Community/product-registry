@@ -6,7 +6,12 @@ class SectorsController < ApplicationController
   # GET /sectors.json
   def index
     if params[:without_paging]
-      @sectors = Sector
+      origin_name = session[:org] ? session[:org] : Setting.find_by(slug: 'default_sector_list').value 
+      origin = Origin.find_by(name: origin_name)
+      if origin.nil?
+        origin = Origin.find_by(name:Setting.find_by(slug: 'default_sector_list').value)
+      end
+      @sectors = Sector.where(origin_id: origin.id)
       !params[:search].blank? && @sectors = @sectors.name_contains(params[:search])
       !params[:display_only].nil? && @sectors = @sectors.where(is_displayable: true)
       @sectors = @sectors.order(:name)
