@@ -2,19 +2,7 @@
 <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
 
 <style>
-[component-marker="popover-content"] {
-  display: none;
-}
-</style>
-
-<style>
   <%= @page_contents.css.html_safe %>
 </style>
 
 <%= @page_contents.html.html_safe %>
-
-<script type="text/javascript">
-  $(document).on("turbolinks:load", function() {
-    $('[data-toggle="popover"]').popover();
-  });
-</script>

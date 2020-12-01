@@ -149,6 +149,8 @@ module Modules
         existing_product.publicgoods_data["aliases"] = json_data["aliases"]
         existing_product.publicgoods_data["stage"] = json_data["stage"]
 
+        existing_product.save
+
         update_attributes(json_data, existing_product)
 
         existing_product.save
@@ -374,7 +376,9 @@ module Modules
             org.save
             org_product = OrganizationsProduct.new
             org_product.org_type = organization['org_type']
-            sync_product.organizations << org
+            org_product.organization_id = org.id
+            org_product.product_id = sync_product.id
+            org_product.save!
           else
             org.website = cleanup_url(organization['website'])
             org.name = org_name
@@ -384,7 +388,9 @@ module Modules
             puts "  Adding org to product: #{org.name}"
             org_product = OrganizationsProduct.new
             org_product.org_type = organization['org_type']
-            sync_product.organizations << org
+            org_product.organization_id = org.id
+            org_product.product_id = sync_product.id
+            org_product.save!
           end
         end
       end

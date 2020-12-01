@@ -50,6 +50,7 @@ public/assets/**/*.js
 !public/assets/workflows/*.svg
 
 public/assets/playbooks/design_images/*
+public/assets/playbooks/pictures/*
 
 # Uploaded assets
 public/uploads
@@ -80,6 +81,8 @@ public/assets/organizations/organization.png
 public/version.txt
 
 /coverage
+
+utils/GIZ_Projects.csv
 
 setEnv.sh
 .env

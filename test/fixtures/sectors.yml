@@ -3,7 +3,9 @@
 one:
   name: Sector1
   slug: sector1
+  origin: one
 
 two:
   name: Sector2
   slug: sector2
+  origin: two

@@ -286,6 +286,71 @@ namespace :sync do
     end
   end
 
+  task :sync_giz_sectors, [] => :environment do
+    # First, set all existing sector origins to DIAL
+    dial_origin = Origin.find_by(name: 'DIAL OSC')
+    Sector.where('origin_id is null').update_all origin_id: dial_origin.id
+
+    giz_origin = Origin.find_by(name: 'GIZ')
+    if giz_origin.nil?
+      giz_origin = Origin.new
+      giz_origin.name = 'GIZ'
+      giz_origin.slug = slug_em giz_origin.name
+      giz_origin.description = 'Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH'
+
+      if giz_origin.save
+        puts 'GIZ as origin is created.'
+      end
+    end
+
+    project_list = CSV.parse(File.read('utils/GIZ_Projects.csv'), headers: true)
+
+    project_list.each do |project|
+      sector_name = project[19]
+      if !sector_name.nil?
+        sector_name = sector_name.strip
+        sector_slug = slug_em sector_name
+        existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
+        puts "Sector Name: " + sector_name
+        if existing_sector.nil?
+          new_sector = Sector.new
+          new_sector.name = sector_name
+          new_sector.slug = sector_slug
+          new_sector.origin_id = giz_origin.id
+          new_sector.is_displayable = true
+          new_sector.save!
+          puts "Sector Created"
+
+          existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
+        else
+          puts "Sector exists"
+        end
+        subsectors = project[20]
+        if !subsectors.nil? 
+          subsector_array = subsectors.split(',')
+          subsector_array.each do |subsector|
+            subsector = subsector.strip
+            subsector_slug = slug_em subsector
+            puts "Subsector: " + subsector
+            existing_subsector = Sector.find_by(slug: subsector_slug, parent_sector_id: existing_sector.id, origin_id: giz_origin.id)
+            if existing_subsector.nil?
+              new_sector = Sector.new
+              new_sector.name = subsector
+              new_sector.slug = subsector_slug
+              new_sector.origin_id = giz_origin.id
+              new_sector.is_displayable = true
+              new_sector.parent_sector_id = existing_sector.id
+              new_sector.save!
+              puts "Sub-Sector Created"
+            else
+              puts "Subsector exists"
+            end
+          end
+        end
+      end
+    end
+  end
+
   task :sync_digital_health_atlas_data, [] => :environment do
     dha_origin = Origin.find_by(name: 'Digital Health Atlas')
     if dha_origin.nil?
@@ -299,30 +364,49 @@ namespace :sync do
       end
     end
 
-    csv_table = CSV.parse(File.read('utils/DHA-Data.csv'), headers: true)
+    structure_uri = URI.parse("https://qa.whomaps.pulilab.com/api/projects/structure/")
+    structure_response = Net::HTTP.get(structure_uri)
+    structure_data = JSON.parse(structure_response)
+    products_data = structure_data["technology_platforms"]
 
-    csv_table.each do |csv_row|
-      project_name = csv_row[0]
+    projects_uri = URI.parse("https://qa.whomaps.pulilab.com/api/search/?page=1&type=list&page_size=500")
+    projects_response = Net::HTTP.get(projects_uri)
+    dha_data = JSON.parse(projects_response)
 
-      existing_project = Project.find_by(name: project_name)
-      next unless existing_project.nil?
+    country_uri = URI.parse("https://qa.whomaps.pulilab.com/api/landing-country/")
+    country_response = Net::HTTP.get(country_uri)
+    country_data = JSON.parse(country_response)
 
-      existing_project = Project.new
-      existing_project.name = project_name
-      existing_project.slug = slug_em existing_project.name
-      existing_project.origin = dha_origin
+    org_uri = URI.parse("https://qa.whomaps.pulilab.com/api/organisations/")
+    org_response = Net::HTTP.get(org_uri)
+    org_data = JSON.parse(org_response)
 
-      country_name = csv_row['Country']
+    dha_data["results"]["projects"].each do |project|
+      project_name = project["name"]
+
+      existing_project = Project.find_by(name: project_name, origin_id: dha_origin.id)
+      
+      if existing_project.nil?
+        existing_project = Project.new
+        existing_project.name = project_name
+        existing_project.slug = slug_em existing_project.name
+        existing_project.origin = dha_origin
+      end
+
+      country_id = project["country"]
+      country_name = country_data.select {|country| country["id"] == country_id }[0]["name"]
       location = Location.find_by(name: country_name, location_type: 'country')
       if !location.nil?
-        existing_project.locations << location
+        if !existing_project.locations.include?(location)
+          existing_project.locations << location
+        end
       end
 
       # There's two date. We will always try to use the start date.
       # If start date is nil, then we will try to use the implementing date.
-      start_date = csv_row['Start Date']
+      start_date = project["start_date"]
       if start_date.nil?
-        start_date = csv_row['Implementing Date']
+        start_date = project["implementation_dates"]
       end
 
       if !start_date.nil?
@@ -333,40 +417,79 @@ namespace :sync do
         end
       end
 
-      end_date = csv_row['End Date']
+      end_date = project["end_date"]
       if !end_date.nil?
         begin
-          existing_project.end_date = Date.parse(csv_row['End Date'].to_s)
+          existing_project.end_date = Date.parse(end_date.to_s)
         rescue ArgumentError
-          puts "Invalid end date: #{csv_row['End Date']}"
+          puts "Invalid end date: #{end_date}"
         end
       end
 
-      description = "<p>"+csv_row['Overview of digital health implementation']+"</p>"
+      description = "<p>"+project["implementation_overview"]+"</p>"
   
+      project_description = ProjectDescription.find_by(project_id: existing_project.id, locale: I18n.locale)
+      if project_description.nil?
+        project_description = ProjectDescription.new
+        project_description.locale = I18n.locale
+        project_description.description = description
 
-      project_description = ProjectDescription.new
-      project_description.locale = I18n.locale
-      project_description.description = description
-
-      existing_project.project_descriptions << project_description
-
-      product = Product.find_by(name: csv_row['Software'])
-      if !product.nil?
-        existing_project.products << product
+        existing_project.project_descriptions << project_description
+      else
+        project_description.description = description
+        project_description.save!
       end
 
-      organizations = Set.new
-      organization = Organization.find_by(name: csv_row['Organisation Name'])
-      !organization.nil? && organizations.add(organization)
+      project["platforms"].each do |platform|
+        product_name = products_data.select {|product| product["id"] == platform["id"] }[0]["name"] 
+        slug = slug_em product_name
+        product = Product.first_duplicate(product_name, slug)
+        if !product.nil?
+          if !existing_project.products.include?(product)
+            existing_project.products << product
+          end
+        end
+      end
+      
+      org_id = project["organisation"]
+      org_name = org_data.select {|org| org["id"] == org_id }[0]["name"]
+      org = Organization.name_contains(org_name)
+      
+      if !org.empty? && !existing_project.organizations.include?(org[0])  
+        proj_org = ProjectsOrganization.new
+        proj_org.org_type = 'owner'
+        proj_org.project_id = existing_project.id
+        proj_org.organization_id = org[0].id
+        proj_org.save!
+      end
 
-      organization = Organization.find_by(name: csv_row['Donors'])
-      !organization.nil? && organizations.add(organization)
+      project["donors"].each do |donor|
+        donor_name = org_data.select {|org| org["id"] == donor }[0]["name"]
+        donor_org = Organization.name_contains(donor_name)
 
-      organization = Organization.find_by(name: csv_row['Implementing Partners'])
-      !organization.nil? && organizations.add(organization)
+        if !donor_org.empty? && !existing_project.organizations.include?(donor_org[0])
+          proj_org = ProjectsOrganization.new
+          proj_org.org_type = 'funder'
+          proj_org.project_id = existing_project.id
+          proj_org.organization_id = donor_org[0].id
+          proj_org.save!
+        end
+      end
 
-      existing_project.organizations = organizations.to_a
+      project["implementing_partners"].each do |implementer|
+        implementer_org = Organization.name_contains(implementer)
+
+        if !implementer_org.empty? && !existing_project.organizations.include?(implementer_org[0])
+          proj_org = ProjectsOrganization.new
+          proj_org.org_type = 'implementer'
+          proj_org.project_id = existing_project.id
+          proj_org.organization_id = implementer_org[0].id
+          proj_org.save!
+        end
+      end
+
+      project_url = "https://digitalhealthatlas.org/"+I18n.locale.to_s+"/-/projects/"+project["id"].to_s+"/published"
+      existing_project.project_url = project_url
 
       if existing_project.save!
         puts "Project #{existing_project.name} saved!"

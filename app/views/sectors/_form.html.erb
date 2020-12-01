@@ -4,6 +4,18 @@
       <%= form.label :name, t('view.general.name') %>
     </fieldset>
 
+    <fieldset class="form-group">
+      <%= form.label :origin_id, t('view.sector.form.origin') %>
+      <%= form.collection_select :origin_id, Origin.order(:name), :id, :name,
+                                 { selected: sector.origin_id, include_blank: false}, { id: 'sector_origin_id', class: 'form-control' } %>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <%= form.label :parent_sector_id, t('view.sector.form.parent') %>
+      <%= form.collection_select :parent_sector_id, Sector.where("parent_sector_id is null").order(:name), :id, :name,
+                                 { selected: sector.parent_sector_id, include_blank: true}, { id: 'sector_parent_sector_id', class: 'form-control' } %>
+    </fieldset>
+
     <input id="original_name" type="hidden" value="<%= sector.name %>" />
     <div id="duplicate-warning" class="alert alert-warning">
       <%= t('view.general.duplicates', model: t('model.sector')) %>

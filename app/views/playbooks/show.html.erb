@@ -1,6 +1,12 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
+<style>
+[data-component-marker="popover-content"] {
+  display: none;
+}
+</style>
+
 <div class="row">
   <div class="col-12">
     <div id='create-pdf', class='btn btn-outline-primary float-right mb-2')>

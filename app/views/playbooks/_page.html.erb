@@ -16,14 +16,7 @@
       <% end %>
     <% end %>
     <div id='<%= "#{page.slug}_viewer" %>' style="height: 300px; overflow-y: hidden;" class="ml-3 mt-2">
-      <% @page_contents = PageContent.find_by(playbook_page_id: page.id, locale: I18n.locale) %>
-      <% if @page_contents %>
-        <% if @page_contents.editor_type == "simple" %>
-          <%= @page_contents.html.html_safe %>
-        <% else %>
-          <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
-        <% end %>
-      <% end %>
+      <%= render 'page_content', page_contents: @page_contents, playbook: @playbook %>
     </div>
     <div class="row">
       <div class="col-12">
@@ -41,3 +34,11 @@
     </div>
   </div>
 </div>
+
+<script>
+$("#<%= "#{page.slug}_collapse" %>").on("show.bs.collapse", function(){
+  <% @page_contents = PageContent.find_by(playbook_page_id: page.id, locale: I18n.locale) %>
+  $("#<%= "#{page.slug}_viewer" %>").html("<%= j(render partial: 'page_content', page_contents: @page_contents, playbook: @playbook) %>");
+  $('[data-toggle="popover"]').popover();
+})
+</script>

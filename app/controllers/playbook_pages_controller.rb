@@ -213,8 +213,13 @@ class PlaybookPagesController < ApplicationController
     set_page_contents
 
     design = {}
-    if !@page_contents.components.nil? && !@page_contents.components.blank?
-      design['gjs-components'] = @page_contents.components
+    # Currently, we are not using the components, as we need to use html to transfer
+    # between simple and page builder editors
+    #if !@page_contents.components.nil? && !@page_contents.components.blank?
+    #  design['gjs-components'] = @page_contents.components
+    #end
+    if !@page_contents.html.nil? && !@page_contents.html.blank?
+      design['gjs-html'] = @page_contents.html
     end
     if !@page_contents.styles.nil? && !@page_contents.styles.blank?
       design['gjs-styles'] = @page_contents.styles
@@ -259,7 +264,6 @@ class PlaybookPagesController < ApplicationController
     @page_contents.locale = I18n.locale
 
     respond_to do |format|
-      puts "Format of the request: #{format.inspect}."
       if @page_contents.save!
         format.html do
           redirect_to playbook_path(@playbook),
