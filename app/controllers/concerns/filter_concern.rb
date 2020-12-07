@@ -115,7 +115,7 @@ module FilterConcern
     products.nil? && products = get_products_from_filters(all_filters)
 
     workflow_product_ids = []
-    product_ids = filter_and_intersect_arrays([all_filters["products"], sdg_products, org_products, project_product_ids])
+    product_ids = filter_and_intersect_arrays([products, sdg_products, org_products, project_product_ids])
     if !product_ids.nil? && !product_ids.empty?
       workflow_product_ids = get_workflows_from_products(product_ids)
     end
@@ -289,8 +289,7 @@ module FilterConcern
     end
 
     products.nil? && products = get_products_from_filters(all_filters)
-
-    filter_and_intersect_arrays([products, sdg_products, bb_products, project_product_ids])
+    filter_and_intersect_arrays([products, sdg_products, bb_products])
   end
 
   def filter_organizations(all_filters=nil, filter_set=nil, project_product_ids = nil, org_ids = nil, org_products = nil, products = nil)
