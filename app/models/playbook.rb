@@ -1,9 +1,9 @@
 class Playbook < ApplicationRecord
   include Auditable
   attr_accessor :playbook_overview, :playbook_audience, :playbook_outcomes
-  
+
   has_many :playbook_descriptions, dependent: :destroy
-  has_many :playbook_pages, dependent: :destroy
+  has_many :playbook_pages, -> { order(page_order: :asc).where(parent_page_id: nil) }, dependent: :destroy
 
   scope :name_contains, ->(name) { where('LOWER(name) like LOWER(?)', "%#{name}%") }
   scope :slug_starts_with, ->(slug) { where('LOWER(slug) like LOWER(?)', "#{slug}\\_%") }
