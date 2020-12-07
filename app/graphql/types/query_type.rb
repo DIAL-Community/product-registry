@@ -13,15 +13,17 @@ module Types
     end
 
     def playbook(slug:)
-      playbook = Playbook.includes(:playbook_pages).where(playbook_pages: { parent_page_id: nil }).find_by(slug: slug)
+      playbook = Playbook.find_by(slug: slug)
       playbook.playbook_pages.each do |page|
-        child_pages = PlaybookPage.where(parent_page_id: page).order(:page_order)
+        child_pages = PlaybookPage.where(parent_page_id: page)
+                                  .order(:page_order)
         next if child_pages.empty?
 
         page.child_pages = []
         child_pages.each do |child_page|
           page.child_pages << child_page
-          grandchild_pages = PlaybookPage.where(parent_page_id: child_page).order(:page_order)
+          grandchild_pages = PlaybookPage.where(parent_page_id: child_page)
+                                         .order(:page_order)
           next if grandchild_pages.empty?
 
           child_page.child_pages = []
@@ -51,6 +53,7 @@ module Types
 
         child_page.snippet = excerpt(page_content.html, search, radius: 40)
         matched_child_pages << child_page
+
         grandchild_pages = PlaybookPage.where(parent_page_id: child_page)
                                        .order(:page_order)
         child_page.child_pages = []
