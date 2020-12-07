@@ -27,7 +27,6 @@ function initGrapes() {
     styleManager: {
       clearProperties: 1
     },
-    protectedCss: `<%= render('/playbook_pages/designer/hexagon.css').html_safe %>`,
     plugins: [
       'grapesjs-lory-slider',
       'grapesjs-tabs',
@@ -39,7 +38,8 @@ function initGrapes() {
       'grapesjs-typed',
       'grapesjs-style-bg',
       'gjs-preset-webpage',
-      'grapesjs-custom-tooltip'
+      'grapesjs-custom-tooltip',
+      'grapesjs-custom-button'
     ],
     pluginsOpts: {
       'grapesjs-lory-slider': {
@@ -89,6 +89,7 @@ function initGrapes() {
     },
   });
 
+  /*
   var blockManager = grapesEditor.BlockManager;
 
   blockManager.add('single-hexagon-block', {
@@ -112,6 +113,7 @@ function initGrapes() {
     category: 'Basic',
     content: `<%= render("/playbook_pages/designer/multi_hexagon.html").html_safe %>`,
   });
+  */
 
   grapesEditor.I18n.addMessages({
     en: {
