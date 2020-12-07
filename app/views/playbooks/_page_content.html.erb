@@ -1,10 +1,9 @@
 <% if @page_contents %>
-  <div class="fr-view">
-    <% if @page_contents.editor_type == "simple" %>
+  <% if @page_contents.editor_type == "simple" %>
+    <div class="fr-view">
       <%= @page_contents.html.html_safe %>
-      </div>
-    <% else %>
-      <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
-    <% end %>
-  </div>
+    </div>
+  <% else %>
+    <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
+  <% end %>
 <% end %>
