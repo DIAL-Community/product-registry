@@ -554,6 +554,7 @@ class OrganizationsController < ApplicationController
         #@countries = Location.where('name in (?)', country_list)
         @can_view_mni = policy(@organization).view_capabilities_allowed?
       end
+      @owner = User.where("organization_id=?", @organization.id)
     end
 
     def set_current_user

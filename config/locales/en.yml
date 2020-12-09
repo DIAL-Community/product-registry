@@ -315,6 +315,7 @@ en:
         current: Current
         unknown: Unknown
         with-org: With organization
+        owner: If you are a part of this organization, you can update the org information. Find more information 
     portal:
       index: 
         landing-page: Landing Page
@@ -427,6 +428,7 @@ en:
         cocomo: The estimated effort is calculated using the COCOMO method. 
         classifications: Product classifications
         classification-source: Source
+        owner: If you are the owner of this product, you can update this product information. Find more information 
     product-suite:
       index:
         no-data: We couldn't find any product suite in the database.

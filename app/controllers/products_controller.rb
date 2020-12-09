@@ -635,6 +635,8 @@ class ProductsController < ApplicationController
       if !@child_products.empty?
         @child_descriptions = ProductDescription.where(product_id: @child_products)
       end
+
+      @owner = User.where("?=ANY(user_products)", @product.id)
     end
 
     def set_current_user

@@ -13,6 +13,14 @@
     <% end %>
   </h5>
   <div class="card-body">
+    <% if @owner.empty? %>
+    <div class="alert alert-info my-2 text-center" role="alert">
+      <%= t("view.product.show.owner") %>
+      <a href="https://docs.osc.dial.community/projects/product-registry/en/latest/product_owner.html" target="_blank">
+        <%= t("view.about.help_link") %>
+      </a>
+    </div>
+    <% end %>
     <div class="row">
       <div class="col-12 col-md-3">
         <div style="display:flex; align-items:center; flex-grow:1; justify-content: center;">

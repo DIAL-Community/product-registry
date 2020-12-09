@@ -87,6 +87,14 @@
           </ul>
         </p>
       <% end %>
+      <% if @owner.empty? %>
+        <div class="alert alert-info my-2 text-center" role="alert">
+          <%= t("view.organization.show.owner") %>
+          <a href="https://docs.osc.dial.community/projects/product-registry/en/latest/org_owner.html" target="_blank">
+            <%= t("view.about.help_link") %>
+          </a>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="row">
