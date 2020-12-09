@@ -39,4 +39,42 @@ class Sector < ApplicationRecord
     slug
   end
 
+  def self_url(options = {})
+    return "#{options[:api_path]}/sectors/#{slug}" if options[:api_path].present?
+    return options[:item_path] if options[:item_path].present?
+    return "#{options[:collection_path]}/#{slug}" if options[:collection_path].present?
+  end
+
+  def collection_url(options = {})
+    return "#{options[:api_path]}/sectors" if options[:api_path].present?
+    return options[:item_path].sub("/#{slug}", '') if options[:item_path].present?
+    return options[:collection_path] if options[:collection_path].present?
+  end
+
+  def api_path(options = {})
+    return options[:api_path] if options[:api_path].present?
+    return options[:item_path].sub("/sectors/#{slug}", '') if options[:item_path].present?
+    return options[:collection_path].sub('/sectors', '') if options[:collection_path].present?
+  end
+
+  def as_json(options = {})
+    json = super(options)
+    if options[:include_relationships].present?
+      json['organizations'] = organizations.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
+      json['use_cases'] = use_cases.as_json({ only: [:name, :slug], api_path: api_path(options) })
+    end
+    if options[:collection_path].present? || options[:api_path].present?
+      json['self_url'] = self_url(options)
+    end
+    if options[:item_path].present?
+      json['collection_url'] = collection_url(options)
+    end
+    json
+  end
+
+  def self.serialization_options
+    {
+      except: [:id, :created_at, :updated_at]
+    }
+  end
 end

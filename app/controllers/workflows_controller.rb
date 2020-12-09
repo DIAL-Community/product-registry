@@ -1,9 +1,172 @@
 class WorkflowsController < ApplicationController
   include FilterConcern
-  
+  include ApiFilterConcern
+
   before_action :set_workflow, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_current_user, only: [:edit, :update, :destroy]
+
+  def unique_search
+    record = Workflow.eager_load(:workflow_descriptions, :building_blocks,
+                                 :use_case_steps, use_case_steps: :use_case)
+                     .find_by(slug: params[:id])
+    if record.nil?
+      return render(json: {}, status: :not_found)
+    end
+
+    render(json: record.to_json(Workflow.serialization_options
+                                        .merge({
+                                          item_path: request.original_url,
+                                          include_relationships: true
+                                        })))
+  end
+
+  def simple_search
+    default_page_size = 20
+    workflows = Workflow
+
+    current_page = 1
+    if params[:page].present? && params[:page].to_i > 0
+      current_page = params[:page].to_i
+    end
+
+    if params[:search].present?
+      workflows = workflows.name_contains(params[:search])
+    end
+
+    results = {
+      url: request.original_url,
+      count: workflows.count,
+      page_size: default_page_size
+    }
+
+    uri = URI.parse(request.original_url)
+    query = Rack::Utils.parse_query(uri.query)
+
+    if workflows.count > default_page_size * current_page
+      query["page"] = current_page + 1
+      uri.query = Rack::Utils.build_query(query)
+      results['next_page'] = URI.decode(uri.to_s)
+    end
+
+    if current_page > 1
+      query["page"] = current_page - 1
+      uri.query = Rack::Utils.build_query(query)
+      results['previous_page'] = URI.decode(uri.to_s)
+    end
+
+    results['results'] = workflows.eager_load(:workflow_descriptions, :building_blocks,
+                                              :use_case_steps, use_case_steps: :use_case)
+                                  .paginate(page: current_page, per_page: default_page_size)
+                                  .order(:slug)
+
+    uri.fragment = uri.query = nil
+    render(json: results.to_json(Workflow.serialization_options
+                                         .merge({
+                                           collection_path: uri.to_s,
+                                           include_relationships: true
+                                         })))
+  end
+
+  def complex_search
+    default_page_size = 20
+    workflows = Workflow
+
+    current_page = 1
+    if params[:page].present? && params[:page].to_i > 0
+      current_page = params[:page].to_i
+    end
+
+    if params[:search].present?
+      workflows = workflows.name_contains(params[:search])
+    end
+
+    sdg_use_case_slugs = nil
+    if valid_array_parameter(params[:sdgs])
+      sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs])
+    end
+    if sdg_use_case_slugs.nil? && valid_array_parameter(params[:sustainable_development_goals])
+      sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sustainable_development_goals])
+    end
+
+    use_case_slugs = nil
+    if valid_array_parameter(params[:use_cases])
+      use_case_slugs = params[:use_cases] if sdg_use_case_slugs.nil?
+      use_case_slugs = sdg_use_case_slugs & params[:use_cases] unless sdg_use_case_slugs.nil?
+    else
+      use_case_slugs = sdg_use_case_slugs
+    end
+
+    use_case_workflow_slugs = workflows_from_use_case_slugs(use_case_slugs) unless use_case_slugs.nil?
+
+    building_block_product_slugs = nil
+    if valid_array_parameter(params[:products])
+      building_block_product_slugs = building_blocks_from_product_slugs(params[:products])
+    end
+
+    building_block_slugs = nil
+    if valid_array_parameter(params[:building_blocks])
+      building_block_slugs = params[:building_blocks] if building_block_product_slugs.nil?
+      building_block_slugs = building_block_product_slugs & params[:building_blocks] \
+        unless building_block_product_slugs.nil?
+    else
+      building_block_slugs = building_block_product_slugs
+    end
+
+    workflow_building_block_slugs = workflows_from_building_block_slugs(building_block_slugs) \
+      unless building_block_slugs.nil?
+
+    workflow_slugs = nil
+    if valid_array_parameter(params[:workflows])
+      workflow_slugs = params[:workflows] if workflow_building_block_slugs.nil?
+      workflow_slugs = workflow_building_block_slugs & params[:workflows] \
+        unless workflow_building_block_slugs.nil?
+    else
+      workflow_slugs = workflow_building_block_slugs
+    end
+
+    if workflow_slugs.nil?
+      workflow_slugs = use_case_workflow_slugs
+    elsif !use_case_workflow_slugs.nil?
+      workflow_slugs &= use_case_workflow_slugs
+    end
+
+    workflows = workflows.where('slug in (?)', workflow_slugs) \
+      unless workflow_slugs.nil?
+
+    results = {
+      url: request.original_url,
+      count: workflows.count,
+      page_size: default_page_size
+    }
+
+    uri = URI.parse(request.original_url)
+    query = Rack::Utils.parse_query(uri.query)
+
+    if workflows.count > default_page_size * current_page
+      query["page"] = current_page + 1
+      uri.query = Rack::Utils.build_query(query)
+      results['next_page'] = URI.decode(uri.to_s)
+    end
+
+    if current_page > 1
+      query["page"] = current_page - 1
+      uri.query = Rack::Utils.build_query(query)
+      results['previous_page'] = URI.decode(uri.to_s)
+    end
+
+    results['results'] = workflows.eager_load(:workflow_descriptions, :building_blocks,
+                                              :use_case_steps, use_case_steps: :use_case)
+                                  .paginate(page: current_page, per_page: default_page_size)
+                                  .order(:slug)
+
+    uri.fragment = uri.query = nil
+    render(json: results.to_json(Workflow.serialization_options
+                                         .merge({
+                                           collection_path: uri.to_s,
+                                           include_relationships: true
+                                         })))
+  end
 
   # GET /workflows
   # GET /workflows.json

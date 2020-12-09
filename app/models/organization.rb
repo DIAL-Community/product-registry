@@ -32,7 +32,7 @@ class Organization < ApplicationRecord
                                      dependent: :delete_all,
                                      after_add: :association_add,
                                      before_remove: :association_remove
-  
+
   has_many :aggregator_capabilities, join_table: :aggregator_capabilities,
                                      foreign_key: 'aggregator_id',
                                      dependent: :delete_all,
@@ -89,9 +89,43 @@ class Organization < ApplicationRecord
     end
   end
 
+  def self_url(options = {})
+    return "#{options[:api_path]}/organizations/#{slug}" if options[:api_path].present?
+    return options[:item_path] if options[:item_path].present?
+    return "#{options[:collection_path]}/#{slug}" if options[:collection_path].present?
+  end
+
+  def collection_url(options = {})
+    return "#{options[:api_path]}/organizations" if options[:api_path].present?
+    return options[:item_path].sub("/#{slug}", '') if options[:item_path].present?
+    return options[:collection_path] if options[:collection_path].present?
+  end
+
+  def api_path(options = {})
+    return options[:api_path] if options[:api_path].present?
+    return options[:item_path].sub("/organizations/#{slug}", '') if options[:item_path].present?
+    return options[:collection_path].sub('/organizations', '') if options[:collection_path].present?
+  end
+
+  def as_json(options = {})
+    json = super(options)
+    if options[:include_relationships].present?
+      json['countries'] = countries.as_json({ only: [:name, :slug, :code], api_path: api_path(options) })
+      json['offices'] = offices.as_json({ only: [:name, :slug, :city], api_path: api_path(options) })
+      json['products'] = products.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
+    end
+    if options[:collection_path].present? || options[:api_path].present?
+      json['self_url'] = self_url(options)
+    end
+    if options[:item_path].present?
+      json['collection_url'] = collection_url(options)
+    end
+    json
+  end
+
   def self.serialization_options
     {
-      except: [:created_at, :updated_at],
+      except: [:id, :created_at, :updated_at],
       include: {
         countries: { only: [:name, :slug, :code] },
         offices: {
@@ -101,7 +135,8 @@ class Organization < ApplicationRecord
             region: { only: [:name] }
           }
         },
-        products: { only: [:name] }
+        products: { only: [:name, :slug] },
+        projects: { only: [:name, :slug] }
       }
     }
   end

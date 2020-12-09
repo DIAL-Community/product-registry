@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+    mount(GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql")
   end
 
   post "/graphql", to: "graphql#execute"
@@ -149,6 +149,55 @@ Rails.application.routes.draw do
     get 'count', on: :collection
     get 'export_data', on: :collection
   end
+
+  # Start of external API routes
+  get 'api/v1/organizations/:id', to: 'organizations#unique_search'
+  get 'api/v1/organizations', to: 'organizations#simple_search'
+  post 'api/v1/organizations', to: 'organizations#complex_search'
+
+  get 'api/v1/building_blocks/:id', to: 'building_blocks#unique_search'
+  get 'api/v1/building_blocks', to: 'building_blocks#simple_search'
+  post 'api/v1/building_blocks', to: 'building_blocks#complex_search'
+
+  get 'api/v1/cities/:id', to: 'cities#unique_search'
+  get 'api/v1/cities', to: 'cities#simple_search'
+
+  get 'api/v1/countries/:id', to: 'countries#unique_search'
+  get 'api/v1/countries', to: 'countries#simple_search'
+
+  get 'api/v1/products/:id', to: 'products#unique_search'
+  get 'api/v1/products', to: 'products#simple_search'
+  post 'api/v1/products', to: 'products#complex_search'
+
+  get 'api/v1/projects/:id', to: 'projects#unique_search'
+  get 'api/v1/projects', to: 'projects#simple_search'
+
+  get 'api/v1/sectors/:id', to: 'sectors#unique_search'
+  get 'api/v1/sectors', to: 'sectors#simple_search'
+
+  get 'api/v1/sdgs/:id', to: 'sustainable_development_goals#unique_search'
+  get 'api/v1/sdgs', to: 'sustainable_development_goals#simple_search'
+  post 'api/v1/sdgs', to: 'sustainable_development_goals#complex_search'
+
+  get 'api/v1/sustainable_development_goals/:id', to: 'sustainable_development_goals#unique_search'
+  get 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#simple_search'
+  post 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#complex_search'
+
+  get 'api/v1/tags/:id', to: 'tags#unique_search'
+  get 'api/v1/tags', to: 'tags#simple_search'
+
+  get 'api/v1/use_cases/:id', to: 'use_cases#unique_search'
+  get 'api/v1/use_cases', to: 'use_cases#simple_search'
+  post 'api/v1/use_cases', to: 'use_cases#complex_search'
+
+  get 'api/v1/use_cases/:id/use_case_steps/:step_id', to: 'use_case_steps#unique_search'
+  get 'api/v1/use_cases/:id/use_case_steps', to: 'use_case_steps#simple_search'
+
+  get 'api/v1/workflows/:id', to: 'workflows#unique_search'
+  get 'api/v1/workflows', to: 'workflows#simple_search'
+  post 'api/v1/workflows', to: 'workflows#complex_search'
+
+  # End of external API routes
 
   resources :operator_services
   resources :audits, only: [:index]

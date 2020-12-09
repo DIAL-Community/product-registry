@@ -23,9 +23,9 @@
   <thead class="thead-light">
     <tr>
       <th><%= t('view.general.name') %></th>
-      <th><%= t('view.sector.index.parent') %></th>
-      <th><%= t('view.sector.index.origin') %></th>
-      <th colspan="1"></th>
+      <th class="d-none d-md-table-cell"><%= t('view.sector.index.parent') %></th>
+      <th class="d-none d-md-table-cell"><%= t('view.sector.index.origin') %></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -33,14 +33,28 @@
     <% if @sectors.count > 0 %>
       <% @sectors.each do |sector| %>
         <tr>
-          <td><%= sector.name %></td>
+          <td class="d-none d-md-table-cell"><%= sector.name %></td>
           <% if !sector.parent_sector_id.nil? %>
             <% parent_sector = Sector.find(sector.parent_sector_id) %>
-            <td><%= parent_sector.name %></td>
+            <td class="d-none d-md-table-cell"><%= parent_sector.name %></td>
           <% else %>
-            <td></td>
+            <td class="d-none d-md-table-cell"></td>
           <% end %>
-          <td><%= sector.origin.name %></td>
+          <td class="d-none d-md-table-cell"><%= sector.origin.name unless sector.origin.nil? %></td>
+          <td class="d-table-cell d-md-none">
+            <%= sector.name %>
+            <div class="text-muted">
+              <%= t('view.sector.index.parent').titlecase %>:
+              <% if !sector.parent_sector_id.nil? %>
+              <% parent_sector = Sector.find(sector.parent_sector_id) %>
+                <strong><%= parent_sector.name %></strong>
+              <% end %>
+            </div>
+            <div class="text-muted">
+              <%= t('view.sector.index.origin').titlecase %>:
+              <strong><%= sector.origin.name unless sector.origin.nil? %></strong>
+            </div>
+          </td>
           <td class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">

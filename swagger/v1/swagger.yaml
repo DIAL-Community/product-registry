@@ -4,2961 +4,694 @@ info:
   title: API v1
   version: v1
 paths:
-  "/audits":
+  "/api/v1/building_blocks/{slug}":
     get:
-      summary:
-        summary: List of all available audits for an object.
+      summary: Retrieves a building block.
       tags:
-      - Audit Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: type
-        in: query
-        schema:
-          type: string
-        enum:
-        - Organization
-        - Product
-        description: Select one of the available object type.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/building_blocks/count":
-    get:
-      summary:
-        summary: Count number of current building blocks.
-      tags:
-      - Building Block Controller
-      responses:
-        '200':
-          description:
-            description: Success
-  "/building_blocks":
-    get:
-      summary:
-        summary: List of all existing building blocks in the database.
-      tags:
-      - Building Block Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow building blocks.
-      responses:
-        '200':
-          description:
-            description: Success
-    post:
-      summary:
-        summary: Create a new building block.
-      tags:
-      - Building Block Controller
-      consumes:
-      - multipart/form-data
+      - Building Blocks
       produces:
       - application/json
       parameters:
-      - name: building_block[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the building block.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual building block form.
-      responses:
-        '200':
-          description:
-            description: Success
-        '401':
-          description:
-            description: Unauthorized
-  "/building_blocks/{id}":
-    get:
-      summary:
-        summary: Find a single building block by their id.
-      tags:
-      - Building Block Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: id
+      - name: slug
         in: path
+        type: string
         required: true
-        schema:
-          type: string
-        description: The id of the building block.
       responses:
         '200':
           description:
-            description: Success
-    patch:
-      summary:
-        summary: Update a single building block object.
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/building_blocks":
+    get:
+      summary: Search for building blocks.
       tags:
-      - Building Block Controller
-      consumes:
-      - multipart/form-data
+      - Building Blocks
       produces:
       - application/json
       parameters:
-      - name: id
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      responses:
+        '200':
+          description:
+            description: Success.
+    post:
+      summary: Search for building blocks.
+      tags:
+      - Building Blocks
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      - name: request_body
+        in: body
+        schema:
+          type: object
+          properties:
+            sdgs:
+              type: array
+              description: SDG
+              items:
+                type: string
+            use_cases:
+              type: array
+              items:
+                type: string
+            workflows:
+              type: array
+              items:
+                type: string
+            building_blocks:
+              type: array
+              items:
+                type: string
+            products:
+              type: array
+              items:
+                type: string
+        description: JSON to narrow results.
+      responses:
+        '200':
+          description:
+            description: Success.
+  "/api/v1/cities/{slug}":
+    get:
+      summary: Retrieves a city.
+      tags:
+      - Cities
+      produces:
+      - application/json
+      parameters:
+      - name: slug
         in: path
-        required: true
-        schema:
-          type: string
-        description: The id of the building block.
-      - name: building_block[name]
-        in: formData
         type: string
         required: true
-        description: The name of the building block.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual building block form.
       responses:
         '200':
           description:
-            description: Success
-    delete:
-      summary:
-        summary: Delete a single building block object.
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/cities":
+    get:
+      summary: Search for cities.
       tags:
-      - Building Block Controller
-      consumes:
-      - multipart/form-data
+      - Cities
       produces:
       - application/json
       parameters:
-      - name: id
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      responses:
+        '200':
+          description:
+            description: Success.
+  "/api/v1/countries/{slug}":
+    get:
+      summary: Retrieves a country.
+      tags:
+      - Countries
+      produces:
+      - application/json
+      parameters:
+      - name: slug
         in: path
-        required: true
-        schema:
-          type: string
-        description: The id of the building block.
-      - name: authenticity_token
-        in: formData
         type: string
         required: true
-        description: Token from an actual building block form.
       responses:
-        '204':
+        '200':
           description:
-            description: Success
-  "/building_block_duplicates":
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/countries":
     get:
-      summary:
-        summary: Find duplicates of building block object.
+      summary: Search for countries.
       tags:
-      - Building Block Controller
-      consumes:
-      - application/json
+      - Countries
       produces:
       - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: Success
-  "/candidate_organizations/{id}/reject":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the candidate organization.
-      required: true
-    - name: authenticity_token
-      in: formData
-      type: string
-      required: true
-      description: Token from an actual candidate organization form.
-    post:
-      summary:
-        summary: Reject a candidate organization.
-      tags:
-      - Candidate Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      responses:
-        '201':
-          description:
-            description: Success
-  "/candidate_organizations/{id}/approve":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the candidate organization.
-      required: true
-    - name: authenticity_token
-      in: formData
-      type: string
-      required: true
-      description: Token from an actual candidate organization form.
-    post:
-      summary:
-        summary: Approve a candidate organization.
-      tags:
-      - Candidate Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      responses:
-        '201':
-          description:
-            description: Success
-  "/candidate_organizations":
-    get:
-      summary:
-        summary: Get the list of all available candidate organization.
-      tags:
-      - Candidate Organization Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow candidate.
-      responses:
-        '200':
-          description:
-            description: Success
-    post:
-      summary:
-        summary: Propose a new candidate organization.
-      tags:
-      - Candidate Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: candidate_organization[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the candidate organization.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object.
-      - name: contact[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the contact for the organization.
-      - name: contact[email]
-        in: formData
-        type: string
-        description: The email of the contact for the organization
-      - name: contact[title]
-        in: formData
-        type: string
-        description: The title of the contact for the organization.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual candidate organization form.
-      - name: g-recaptcha-response
-        in: formData
-        type: string
-        required: true
-        description: Response from recaptcha. Generate this by clicking the recaptcha
-          and see the network op.
-      responses:
-        '201':
-          description:
-            description: Success
-  "/candidate_organizations/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the candidate organization.
-      required: true
-    get:
-      summary:
-        summary: Find a single candidate organization by their id.
-      tags:
-      - Candidate Organization Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      responses:
-        '200':
-          description:
-            description: Success
-    patch:
-      summary:
-        summary: Update a candidate organization by their id.
-      tags:
-      - Candidate Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: candidate_organization[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the candidate organization.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual candidate organization form.
-      - name: g-recaptcha-response
-        in: formData
-        type: string
-        required: true
-        description: Response token recaptcha. Generate this by clicking the recaptcha
-          and see the network op.
-      responses:
-        '200':
-          description:
-            description: Success
-    delete:
-      summary:
-        summary: Delete candidate organization by their id.
-      tags:
-      - Candidate Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual candidate organization form.
-      responses:
-        '204':
-          description:
-            description: Success
-  "/candidate_organization_duplicates":
-    get:
-      summary:
-        summary: Find duplicates of candidate organization.
-      tags:
-      - Candidate Organization Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: Success
-  "/category_indicators":
-    post:
-      summary:
-        summary: Create category indicator
-      tags:
-      - Category Indicator Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: category_indicator[rubric_category_id]
-        in: formData
-        type: integer
-        required: true
-        description: The id of the rubric category.
-      - name: category_indicator[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the indicator.
-      - name: category_indicator[weight]
-        in: formData
-        type: number
-        required: true
-        description: The weight of the indicator.
-      - name: category_indicator[indicator_type]
-        in: formData
-        required: true
-        enum:
-        - scale
-        - numeric
-        - boolean
-        description: The type of the indicator at source.
-      - name: category_indicator[source_indicator]
-        in: formData
-        type: string
-        required: true
-        description: The name of the indicator at source.
-      - name: category_indicator[data_source]
-        in: formData
-        type: string
-        required: true
-        description: The source of the indicator.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/category_indicators/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: Id for the category indicator
-      required: true
-    patch:
-      summary:
-        summary: Update category indicator
-      tags:
-      - Category Indicator Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: category_indicator[rubric_category_id]
-        in: formData
-        type: integer
-        required: true
-        description: The id of the rubric category.
-      - name: category_indicator[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the indicator.
-      - name: category_indicator[weight]
-        in: formData
-        type: number
-        description: The weight of the indicator.
-      - name: category_indicator[indicator_type]
-        in: formData
-        required: true
-        enum:
-        - scale
-        - numeric
-        - boolean
-        description: The type of the indicator at source.
-      - name: category_indicator[source_indicator]
-        in: formData
-        type: string
-        description: The name of the indicator at source.
-      - name: category_indicator[data_source]
-        in: formData
-        type: string
-        description: The source of the indicator.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a category indicator
-      tags:
-      - Category Indicator Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/maturity_rubrics/{maturity_rubric_id}/rubric_categories/{rubric_category_id}/category_indicators/{id}":
-    parameters:
-    - name: maturity_rubric_id
-      in: path
-      type: string
-      description: Id for the maturity rubric
-      required: true
-    - name: rubric_category_id
-      in: path
-      type: string
-      description: Id for the rubric category
-      required: true
-    - name: id
-      in: path
-      type: string
-      description: Id for the category indicator
-      required: true
-    get:
-      summary:
-        summary: Show category indicator
-      tags:
-      - Category Indicator Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/category_indicator_duplicates":
-    get:
-      summary:
-        summary: Find duplicates category indicator
-      tags:
-      - Category Indicator Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/contacts":
-    get:
-      summary:
-        summary: List all available contacts
-      tags:
-      - Contact Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow contact.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new contact.
-      tags:
-      - Contact Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: contact[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the contact.
-      - name: contact[email]
-        in: formData
-        type: string
-        description: The email of the contact.
-      - name: contact[title]
-        in: formData
-        type: string
-        description: The title of the contact.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual contact form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/contacts/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the contact
-      required: true
-    get:
-      summary:
-        summary: Find a contact by their id.
-      tags:
-      - Contact Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a contact by their id.
-      tags:
-      - Contact Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: contact[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the contact.
-      - name: contact[email]
-        in: formData
-        type: string
-        description: The email of the contact.
-      - name: contact[title]
-        in: formData
-        type: string
-        description: The title of the contact.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual contact form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a contact by their contact id
-      tags:
-      - Contact Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual contact form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/contact_duplicates":
-    get:
-      summary:
-        summary: Find duplicates of contact.
-      tags:
-      - Contact Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/glossaries":
-    get:
-      summary:
-        summary: List available terms from the glossary.
-      tags:
-      - Glossary Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow terms.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create new term in the glossary.
-      tags:
-      - Glossary Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: glossary[name]
-        in: formData
-        type: string
-        required: true
-        description: The term of the glossary.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/glossaries/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the term.
-      required: true
-    get:
-      summary:
-        summary: Find a term from glossary with their id.
-      tags:
-      - Glossary Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update term in the glossary using their id.
-      tags:
-      - Glossary Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: glossary[name]
-        in: formData
-        type: string
-        required: true
-        description: The term of the glossary.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a term from glossary using their id.
-      tags:
-      - Glossary Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/glossary_duplicates":
-    get:
-      summary:
-        summary: Find duplicate glossary terms.
-      tags:
-      - Glossary Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/locations":
-    get:
-      summary:
-        summary: List all available locations.
-      tags:
-      - Location Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow locations.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new location.
-      tags:
-      - Location Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: location[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the location.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/locations/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the location.
-      required: true
-    get:
-      summary:
-        summary: Find a location by their id.
-      tags:
-      - Location Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a location by their id.
-      tags:
-      - Location Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: location[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the location.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a location by their id.
-      tags:
-      - Location Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/location_duplicates":
-    get:
-      summary:
-        summary: Find duplicates of locations.
-      tags:
-      - Location Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/maturity_rubrics":
-    get:
-      summary:
-        summary: List all maturity rubric
-      tags:
-      - Maturity Rubric Controller
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create maturity rubric
-      tags:
-      - Maturity Rubric Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: maturity_rubric[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the maturity.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/maturity_rubrics/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The maturity rubric id.
-      required: true
-    get:
-      summary:
-        summary: Show maturity rubric
-      tags:
-      - Maturity Rubric Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update maturity rubric
-      tags:
-      - Maturity Rubric Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: maturity_rubric[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the maturity.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete maturity rubric
-      tags:
-      - Maturity Rubric Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/maturity_rubric_duplicates":
-    get:
-      summary:
-        summary: Find duplicates maturity rubric
-      tags:
-      - Maturity Rubric Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
+      - name: page
         in: query
         schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
-  "/operator_services":
+            description: Success.
+  "/api/v1/organizations/{slug}":
     get:
-      summary:
-        summary: List available operator services.
+      summary: Retrieves an organization.
       tags:
-      - Operator Service Controller
+      - Organizations
+      produces:
+      - application/json
+      parameters:
+      - name: slug
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description:
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/organizations":
+    get:
+      summary: Search for organizations.
+      tags:
+      - Organizations
+      produces:
+      - application/json
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
+            description: Success.
     post:
-      summary:
-        summary: Create a new operator service.
+      summary: Search for organizations.
       tags:
-      - Operator Service Controller
+      - Organizations
       consumes:
-      - multipart/form-data
+      - application/json
       produces:
       - application/json
-      parameters:
-      - name: operator_service[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the operator service.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/operator_services/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: id
-      required: true
-    get:
-      summary:
-        summary: Find an operator service by their id.
-      tags:
-      - Operator Service Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update an operator service by their id.
-      tags:
-      - Operator Service Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: operator_service[name]
-        in: formData
-        type: string
-        description: The name of the operator service.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete an operator service by their id.
-      tags:
-      - Operator Service Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/organizations/count":
-    get:
-      summary:
-        summary: Count all available organizations.
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/organizations":
-    get:
-      summary:
-        summary: List all available organizations.
-      tags:
-      - Organization Controller
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      - name: request_body
+        in: body
+        schema:
+          type: object
+          properties:
+            countries:
+              type: array
+              items:
+                type: string
+            sectors:
+              type: array
+              items:
+                type: string
+            endorsing_years:
+              type: array
+              items:
+                type: string
+        description: JSON to narrow results.
       responses:
         '200':
           description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new organization.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the organization.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/organizations/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: id
-      required: true
+            description: Success.
+  "/api/v1/products/{slug}":
     get:
-      summary:
-        summary: Find an organization by their id.
+      summary: Retrieves a product.
       tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update an organization by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
+      - Products
       produces:
       - application/json
       parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        description: The name of the organization.
-      - name: authenticity_token
-        in: formData
+      - name: slug
+        in: path
         type: string
         required: true
-        description: Token from an actual form.
       responses:
         '200':
           description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete an organization by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
+            description: Success.
+        '404':
           description:
-            description: successful
-  "/locations/{location_id}/organizations":
-    parameters:
-    - name: location_id
-      in: path
-      type: string
-      description: location_id
-      required: true
+            description: 'Error: Not Found.'
+  "/api/v1/products":
     get:
-      summary:
-        summary: List all organizations in a location.
+      summary: Search for products.
       tags:
-      - Organization Controller
+      - Products
+      produces:
+      - application/json
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
+            description: Success.
     post:
-      summary:
-        summary: Add an organization to a location.
+      summary: Search for products.
       tags:
-      - Organization Controller
+      - Products
       consumes:
-      - multipart/form-data
+      - application/json
       produces:
       - application/json
-      parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the organization.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/locations/{location_id}/organizations/{id}":
-    parameters:
-    - name: location_id
-      in: path
-      type: string
-      description: location_id
-      required: true
-    - name: id
-      in: path
-      type: string
-      description: id
-      required: true
-    get:
-      summary:
-        summary: Find an organization for a location by their id.
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update an organization for a location by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        description: The name of the organization.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Remove an organization for a location by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sectors/{sector_id}/organizations":
-    parameters:
-    - name: sector_id
-      in: path
-      type: string
-      description: sector_id
-      required: true
-    get:
-      summary:
-        summary: List organizations for a sector.
-      tags:
-      - Organization Controller
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      - name: request_body
+        in: body
+        schema:
+          type: object
+          properties:
+            sdgs:
+              type: array
+              description: SDG
+              items:
+                type: string
+            use_cases:
+              type: array
+              items:
+                type: string
+            workflows:
+              type: array
+              items:
+                type: string
+            building_blocks:
+              type: array
+              items:
+                type: string
+            products:
+              type: array
+              items:
+                type: string
+        description: JSON to narrow results.
       responses:
         '200':
           description:
-            description: successful
-    post:
-      summary:
-        summary: Add an organization to a sector.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the workflow.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sectors/{sector_id}/organizations/{id}":
-    parameters:
-    - name: sector_id
-      in: path
-      type: string
-      description: sector_id
-      required: true
-    - name: id
-      in: path
-      type: string
-      description: id
-      required: true
+            description: Success.
+  "/api/v1/projects/{slug}":
     get:
-      summary:
-        summary: Find an organization for a sector by their id.
+      summary: Retrieves a project.
       tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update an organization for a sector by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
+      - Projects
       produces:
       - application/json
       parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        description: The name of the workflow.
-      - name: authenticity_token
-        in: formData
+      - name: slug
+        in: path
         type: string
         required: true
-        description: Token from an actual form.
       responses:
         '200':
           description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete an organization for a sector by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
+            description: Success.
+        '404':
           description:
-            description: successful
-  "/contacts/{contact_id}/organizations":
-    parameters:
-    - name: contact_id
-      in: path
-      type: string
-      description: contact_id
-      required: true
+            description: 'Error: Not Found.'
+  "/api/v1/projects":
     get:
-      summary:
-        summary: List all organizations for a contact.
+      summary: Search for projects.
       tags:
-      - Organization Controller
+      - Projects
+      produces:
+      - application/json
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Add an organization to a contact.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the workflow.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/contacts/{contact_id}/organizations/{id}":
-    parameters:
-    - name: contact_id
-      in: path
-      type: string
-      description: contact_id
-      required: true
-    - name: id
-      in: path
-      type: string
-      description: id
-      required: true
-    get:
-      summary:
-        summary: Find an organization for a contact by their id.
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update an organization for a contact by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: organization[name]
-        in: formData
-        type: string
-        description: The name of the workflow.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete an organization for a contact by their id.
-      tags:
-      - Organization Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/agg_capabilities":
-    get:
-      summary:
-        summary: agg_capabilities organization
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/agg_services":
-    get:
-      summary:
-        summary: agg_services organization
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/service_capabilities":
-    get:
-      summary:
-        summary: service_capabilities organization
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/update_capability":
-    get:
-      summary:
-        summary: update_capability organization
-      tags:
-      - Organization Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/organization_duplicates":
-    get:
-      summary:
-        summary: Find duplicate organizations.
-      tags:
-      - Organization Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
+      - name: page
         in: query
         schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
-  "/product_suites":
+            description: Success.
+  "/api/v1/sectors/{slug}":
     get:
-      summary:
-        summary: List all available product suites.
+      summary: Retrieves a sector.
       tags:
-      - Product Suite Controller
+      - Sectors
+      produces:
+      - application/json
+      parameters:
+      - name: slug
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description:
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/sectors":
+    get:
+      summary: Search for sectors.
+      tags:
+      - Sectors
+      produces:
+      - application/json
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new product suite.
-      tags:
-      - Product Suite Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: product_suite[name]
-        in: formData
-        type: string
-        description: The name of the product suite.
-      - name: product_suite[description]
-        in: formData
-        type: string
-        description: The description of the product suite.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/product_suites/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: Product suite id.
-      required: true
-    get:
-      summary:
-        summary: Find a product suite by their id.
-      tags:
-      - Product Suite Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a product suite by their id.
-      tags:
-      - Product Suite Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: product_suite[name]
-        in: formData
-        type: string
-        description: The name of the product suite.
-      - name: product_suite[description]
-        in: formData
-        type: string
-        description: The description of the product suite.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a product suite by their id.
-      tags:
-      - Product Suite Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/product_suite_duplicates":
-    get:
-      summary:
-        summary: Find duplicate product suites
-      tags:
-      - Product Suite Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
+      - name: page
         in: query
         schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
-  "/products/count":
+            description: Success.
+  "/api/v1/sdgs/{slug}":
     get:
-      summary:
-        summary: Count total number of products.
+      summary: Retrieves an sustainable development goals.
       tags:
-      - Product Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/products":
-    get:
-      summary:
-        summary: List all available products.
-      tags:
-      - Product Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow products.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new product.
-      tags:
-      - Product Controller
-      consumes:
-      - multipart/form-data
+      - Sustainable Development Goals
       produces:
       - application/json
       parameters:
-      - name: product[name]
-        in: formData
+      - name: slug
+        in: path
         type: string
         required: true
-        description: The name of the product.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
       responses:
         '200':
           description:
-            description: successful
-  "/products/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the product.
-      required: true
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/sdgs":
     get:
-      summary:
-        summary: Find a product by their id.
+      summary: Search for sustainable development goals.
       tags:
-      - Product Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a product by their id.
-      tags:
-      - Product Controller
-      consumes:
-      - multipart/form-data
+      - Sustainable Development Goals
       produces:
       - application/json
-      parameters:
-      - name: product[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the product.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a product by their id.
-      tags:
-      - Product Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/product_duplicates":
-    get:
-      summary:
-        summary: Find duplcate of products.
-      tags:
-      - Product Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/productlist":
-    get:
-      summary:
-        summary: Export products in standard json format.
-      tags:
-      - Product Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: source
-        in: query
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/projects":
-    get:
-      summary:
-        summary: List all available projects.
-      tags:
-      - Project Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/projects/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: id
-      required: true
-    get:
-      summary:
-        summary: Find a project by their id.
-      tags:
-      - Project Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a project by their id.
-      tags:
-      - Project Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/rubric_categories":
-    post:
-      summary:
-        summary: Create rubric category
-      tags:
-      - Rubric Category Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: rubric_category[maturity_rubric_id]
-        in: formData
-        type: integer
-        required: true
-        description: The id of the rubric.
-      - name: rubric_category[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the category.
-      - name: rubric_category[weight]
-        in: formData
-        type: number
-        required: true
-        description: The weight of the category.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/rubric_categories/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The rubric category id.
-      required: true
-    patch:
-      summary:
-        summary: Update rubric category
-      tags:
-      - Rubric Category Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: rubric_category[maturity_rubric_id]
-        in: formData
-        type: integer
-        required: true
-        description: The id of the rubric.
-      - name: rubric_category[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the category.
-      - name: rubric_category[weight]
-        in: formData
-        type: number
-        description: The weight of the category.
-      - name: reslug
-        in: formData
-        enum:
-        - 'true'
-        type: boolean
-        required: true
-        description: Should we regenerate slug for this object?
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete rubric category
-      tags:
-      - Rubric Category Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/maturity_rubrics/{maturity_rubric_id}/rubric_categories/{id}":
-    parameters:
-    - name: maturity_rubric_id
-      in: path
-      type: string
-      description: The maturity rubric id.
-      required: true
-    - name: id
-      in: path
-      type: string
-      description: The rubric category id.
-      required: true
-    get:
-      summary:
-        summary: Show rubric category
-      tags:
-      - Rubric Category Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/rubric_category_duplicates":
-    get:
-      summary:
-        summary: Find duplicates rubric category
-      tags:
-      - Rubric Category Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sdg_targets":
-    get:
-      summary:
-        summary: List all available SDG targets.
-      tags:
-      - SDG Target Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sdg_targets/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: SDG Target id.
-      required: true
-    get:
-      summary:
-        summary: Find an SDG target by their id.
-      tags:
-      - SDG Target Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sectors":
-    get:
-      summary:
-        summary: List all available sectors.
-      tags:
-      - Sector Controller
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new sector.
-      tags:
-      - Sector Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: sector[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the sector.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sectors/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: Sector id.
-      required: true
-    get:
-      summary:
-        summary: Find a sector by their id.
-      tags:
-      - Sector Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a sector by their id.
-      tags:
-      - Sector Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: sector[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the sector.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a sector by their id.
-      tags:
-      - Sector Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sector_duplicates":
-    get:
-      summary:
-        summary: Find duplicate sectors.
-      tags:
-      - Sector Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
+      - name: page
         in: query
         schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
-  "/settings":
+            description: Success.
+  "/api/v1/tags/{slug}":
     get:
-      summary:
-        summary: List all available settings.
+      summary: Retrieves a tag.
       tags:
-      - Settings Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/settings/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: Setting id.
-      required: true
-    get:
-      summary:
-        summary: Find a setting by their id.
-      tags:
-      - Settings Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a setting by their id.
-      tags:
-      - Settings Controller
-      consumes:
-      - multipart/form-data
+      - Tags
       produces:
       - application/json
       parameters:
-      - name: setting[name]
-        in: formData
-        type: string
-        description: Name of the setting.
-      - name: setting[description]
-        in: formData
-        type: string
-        description: Description of the setting.
-      - name: setting[value]
-        in: formData
-        type: string
-        description: Value of the setting.
-      - name: authenticity_token
-        in: formData
+      - name: slug
+        in: path
         type: string
         required: true
-        description: Token from an actual form.
       responses:
         '200':
           description:
-            description: successful
-  "/sustainable_development_goals/count":
-    get:
-      summary:
-        summary: Count available sustainable development goal.
-      tags:
-      - SDG Controller
-      responses:
-        '200':
+            description: Success.
+        '404':
           description:
-            description: successful
-  "/sustainable_development_goals":
+            description: 'Error: Not Found.'
+  "/api/v1/tags":
     get:
-      summary:
-        summary: List all available sustainable development goals
+      summary: Search for tags.
       tags:
-      - SDG Controller
+      - Tags
+      produces:
+      - application/json
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sustainable_development_goals/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: SDG id.
-      required: true
-    get:
-      summary:
-        summary: Find a sustainable development goal by their id.
-      tags:
-      - SDG Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/use_cases/count":
-    get:
-      summary:
-        summary: Count available use cases.
-      tags:
-      - Use Case Controller
-      responses:
-        '200':
-          description:
-            description: successful
-  "/use_cases":
-    get:
-      summary:
-        summary: List all available use cases.
-      tags:
-      - Use Case Controller
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
+      - name: page
         in: query
         schema:
-          type: string
-        description: Search term to narrow use case.
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new use case.
-      tags:
-      - Use Case Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: use_case[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the use case.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/use_cases/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: Use case id.
-      required: true
+            description: Success.
+  "/api/v1/use_cases/{slug}":
     get:
-      summary:
-        summary: Find a use case by their id.
+      summary: Retrieves a use case.
       tags:
-      - Use Case Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a use case by their id.
-      tags:
-      - Use Case Controller
-      consumes:
-      - multipart/form-data
+      - Use Cases
       produces:
       - application/json
       parameters:
-      - name: use_case[name]
-        in: formData
+      - name: slug
+        in: path
         type: string
         required: true
-        description: The name of the use case.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
       responses:
         '200':
           description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a use case by their id.
-      tags:
-      - Use Case Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
+            description: Success.
+        '404':
           description:
-            description: successful
-  "/sectors/{sector_id}/use_cases":
-    parameters:
-    - name: sector_id
-      in: path
-      type: string
-      description: sector_id
-      required: true
+            description: 'Error: Not Found.'
+  "/api/v1/use_cases":
     get:
-      summary:
-        summary: List all use cases associated with a sector.
+      summary: Search for use cases.
       tags:
-      - Use Case Controller
+      - Use Cases
       produces:
       - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: search
-        in: query
-        schema:
-          type: string
-        description: Search term to narrow use cases.
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new use case for a sector.
-      tags:
-      - Use Case Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: use_case[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the use case.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/sectors/{sector_id}/use_cases/{id}":
-    parameters:
-    - name: sector_id
-      in: path
-      type: string
-      description: Sector id.
-      required: true
-    - name: id
-      in: path
-      type: string
-      description: Use case id.
-      required: true
-    get:
-      summary:
-        summary: Find a use case for a sector.
-      tags:
-      - Use Case Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a use case associated with a sector.
-      tags:
-      - Use Case Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: use_case[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the use case.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Remove a use case from a sector.
-      tags:
-      - Use Case Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/use_case_duplicates":
-    get:
-      summary:
-        summary: Find duplicate use cases.
-      tags:
-      - Use Case Controller
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      parameters:
-      - name: current
-        in: query
-        schema:
-          type: string
-      - name: original
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description:
-            description: successful
-  "/admin/users":
-    get:
-      summary:
-        summary: List all available users.
-      tags:
-      - User Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    post:
-      summary:
-        summary: Create a new user.
-      tags:
-      - User Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: user[email]
-        in: formData
-        type: string
-        required: true
-        description: Email address of the user.
-      - name: user[password]
-        in: formData
-        type: string
-        required: true
-        description: Password of the user.
-      - name: user[password_confirmation]
-        in: formData
-        type: string
-        required: true
-        description: Password confirmation of the user.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/admin/users/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the user.
-      required: true
-    get:
-      summary:
-        summary: Find a user by their id.
-      tags:
-      - User Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a user by their id.
-      tags:
-      - User Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: user[email]
-        in: formData
-        type: string
-        description: Email address of the user.
-      - name: user[password]
-        in: formData
-        type: string
-        description: Password of the user.
-      - name: user[password_confirmation]
-        in: formData
-        type: string
-        description: Password confirmation of the user.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a user by their id.
-      tags:
-      - User Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/workflows/count":
-    get:
-      summary:
-        summary: Count available workflows.
-      tags:
-      - Workflow Controller
       parameters:
       - name: search
         in: query
         schema:
           type: string
         description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
       responses:
         '200':
           description:
-            description: successful
-  "/workflows":
-    get:
-      summary:
-        summary: List all available workflows.
+            description: Success.
+    post:
+      summary: Search for use cases.
       tags:
-      - Workflow Controller
-      produces:
-      - application/json
+      - Use Cases
       consumes:
+      - application/json
+      produces:
       - application/json
       parameters:
       - name: search
         in: query
         schema:
           type: string
-        description: Search term to narrow workflows.
+        description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      - name: request_body
+        in: body
+        schema:
+          type: object
+          properties:
+            sdgs:
+              type: array
+              description: SDG
+              items:
+                type: string
+            use_cases:
+              type: array
+              items:
+                type: string
+            workflows:
+              type: array
+              items:
+                type: string
+            building_blocks:
+              type: array
+              items:
+                type: string
+            products:
+              type: array
+              items:
+                type: string
+        description: JSON to narrow results.
       responses:
         '200':
           description:
-            description: successful
+            description: Success.
+  "/api/v1/workflows/{slug}":
+    get:
+      summary: Retrieves a workflow.
+      tags:
+      - Workflows
+      produces:
+      - application/json
+      parameters:
+      - name: slug
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description:
+            description: Success.
+        '404':
+          description:
+            description: 'Error: Not Found.'
+  "/api/v1/workflows":
+    get:
+      summary: Search for workflows.
+      tags:
+      - Workflows
+      produces:
+      - application/json
+      parameters:
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      responses:
+        '200':
+          description:
+            description: Success.
     post:
-      summary:
-        summary: Create a new workflow.
+      summary: Search for workflows.
       tags:
-      - Workflow Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: workflow[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the workflow.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/workflows/{id}":
-    parameters:
-    - name: id
-      in: path
-      type: string
-      description: The id of the workflow.
-      required: true
-    get:
-      summary:
-        summary: Find a workflow by their id.
-      tags:
-      - Workflow Controller
-      responses:
-        '200':
-          description:
-            description: successful
-    patch:
-      summary:
-        summary: Update a workflow by their id.
-      tags:
-      - Workflow Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: workflow[name]
-        in: formData
-        type: string
-        required: true
-        description: The name of the workflow.
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-    delete:
-      summary:
-        summary: Delete a workflow by their id.
-      tags:
-      - Workflow Controller
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      parameters:
-      - name: authenticity_token
-        in: formData
-        type: string
-        required: true
-        description: Token from an actual form.
-      responses:
-        '200':
-          description:
-            description: successful
-  "/workflow_duplicates":
-    get:
-      summary:
-        summary: Find duplicate workflows.
-      tags:
-      - Workflow Controller
+      - Workflows
       consumes:
       - application/json
       produces:
       - application/json
       parameters:
-      - name: current
+      - name: search
         in: query
         schema:
           type: string
-      - name: original
+        description: Search term to narrow results.
+      - name: page
         in: query
-        required: true
         schema:
-          type: string
+          type: integer
+        description: Page to narrow results.
+      - name: request_body
+        in: body
+        schema:
+          type: object
+          properties:
+            sdgs:
+              type: array
+              items:
+                type: string
+            use_cases:
+              type: array
+              items:
+                type: string
+            workflows:
+              type: array
+              items:
+                type: string
+            building_blocks:
+              type: array
+              items:
+                type: string
+            products:
+              type: array
+              items:
+                type: string
+        description: JSON to narrow results.
       responses:
         '200':
           description:
-            description: successful
+            description: Success.
