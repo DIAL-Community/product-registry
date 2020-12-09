@@ -34,11 +34,15 @@ class ApplicationController < ActionController::Base
 
       user_event = UserEvent.new
       user_event.identifier = session[:default_identifier]
-      user_event.event_type = UserEvent.event_types[:initial_load]
+      if request.path_info.include?('/api/v1/')
+        user_event.event_type = UserEvent.event_types[:api_request]
+      else
+        user_event.event_type = UserEvent.event_types[:initial_load]
+      end
       user_event.event_datetime = Time.now
 
       if user_event.save!
-        logger.info("User event '#{UserEvent.event_types[:initial_load]}' for #{user_event.identifier} saved.")
+        logger.info("User event '#{user_event.event_type}' for #{user_event.identifier} saved.")
       end
     end
   end

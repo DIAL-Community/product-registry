@@ -3,6 +3,83 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
+  def unique_search
+    record = Project.find_by(slug: params[:id])
+    if record.nil?
+      return render(json: {}, status: :not_found)
+    end
+
+    render(json: record.to_json(Project.serialization_options))
+  end
+
+  def simple_search
+    default_page_size = 20
+    projects = Project.order(:slug)
+
+    current_page = 1
+    if params[:page].present? && params[:page].to_i > 0
+      current_page = params[:page].to_i
+    end
+
+    if params[:search].present?
+      projects = projects.name_contains(params[:search])
+    end
+
+    projects = projects.paginate(page: current_page, per_page: default_page_size)
+
+    results = {
+      url: request.original_url,
+      count: projects.count,
+      page_size: default_page_size
+    }
+
+    if projects.count > default_page_size * current_page
+      results['next_page'] = current_page + 1
+    end
+
+    if current_page > 1
+      results['previous_page'] = current_page - 1
+    end
+
+    results['results'] = projects
+
+    render(json: results.to_json(Project.serialization_options))
+  end
+
+  def complex_search
+    default_page_size = 20
+    projects = Project.order(:slug)
+
+    current_page = 1
+    if params[:page].present? && params[:page].to_i > 0
+      current_page = params[:page].to_i
+    end
+
+    if params[:search].present?
+      projects = projects.name_contains(params[:search])
+    end
+
+    projects = projects.paginate(page: current_page, per_page: default_page_size)
+
+    results = {
+      url: request.original_url,
+      count: projects.count,
+      page_size: default_page_size
+    }
+
+    if projects.count > default_page_size * current_page
+      results['next_page'] = current_page + 1
+    end
+
+    if current_page > 1
+      results['previous_page'] = current_page - 1
+    end
+
+    results['results'] = projects
+
+    render(json: results.to_json(Project.serialization_options))
+  end
+
   def favorite_project
     set_project
     if current_user.nil? || @project.nil?
