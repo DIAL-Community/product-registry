@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_162851) do
+ActiveRecord::Schema.define(version: 2020_12_11_182046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,7 +328,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_162851) do
   end
 
 # Could not dump table "organizations_products" because of following StandardError
-#   Unknown type 'org_type_orig' for column 'org_type'
+#   Unknown type 'org_type' for column 'org_type'
 
   create_table "organizations_sectors", id: false, force: :cascade do |t|
     t.bigint "sector_id", null: false
