@@ -95,18 +95,21 @@ class OrganizationsController < ApplicationController
     if params[:countries].present?
       countries = params[:countries].reject { |x| x.nil? || x.empty? }
       organizations = organizations.joins(:countries)
-                                   .where('countries.code in (?)', countries)
+                                   .where('countries.code in (?)', countries) \
+        unless countries.empty?
     end
 
     if params[:sectors].present?
       sectors = params[:sectors].reject { |x| x.nil? || x.empty? }
       organizations = organizations.joins(:sectors)
-                                   .where('sectors.slug in (?)', sectors)
+                                   .where('sectors.slug in (?)', sectors) \
+        unless sectors.empty?
     end
 
     if params[:endorsing_years].present?
       years = params[:endorsing_years].reject { |x| x.nil? || x.empty? }
-      organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
+      organizations = organizations.where('extract(year from when_endorsed) in (?)', years) \
+        unless years.empty?
     end
 
     results = {

@@ -171,17 +171,16 @@ Rails.application.routes.draw do
 
   get 'api/v1/projects/:id', to: 'projects#unique_search'
   get 'api/v1/projects', to: 'projects#simple_search'
+  post 'api/v1/projects', to: 'projects#complex_search'
 
   get 'api/v1/sectors/:id', to: 'sectors#unique_search'
   get 'api/v1/sectors', to: 'sectors#simple_search'
 
   get 'api/v1/sdgs/:id', to: 'sustainable_development_goals#unique_search'
   get 'api/v1/sdgs', to: 'sustainable_development_goals#simple_search'
-  post 'api/v1/sdgs', to: 'sustainable_development_goals#complex_search'
 
   get 'api/v1/sustainable_development_goals/:id', to: 'sustainable_development_goals#unique_search'
   get 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#simple_search'
-  post 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#complex_search'
 
   get 'api/v1/tags/:id', to: 'tags#unique_search'
   get 'api/v1/tags', to: 'tags#simple_search'

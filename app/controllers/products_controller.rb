@@ -41,7 +41,8 @@ class ProductsController < ApplicationController
     if params[:origins].present?
       origins = params[:origins].reject { |x| x.nil? || x.empty? }
       products = products.joins(:origins)
-                         .where('origins.slug in (?)', origins)
+                         .where(origins: { slug: origins }) \
+        unless origins.empty?
     end
 
     products = products.paginate(page: current_page, per_page: default_page_size)
@@ -98,7 +99,8 @@ class ProductsController < ApplicationController
     if params[:origins].present?
       origins = params[:origins].reject { |x| x.nil? || x.empty? }
       products = products.joins(:origins)
-                         .where('origins.slug in (?)', origins)
+                         .where(origins: { slug: origins }) \
+        unless origins.empty?
     end
 
     sdg_use_case_slugs = nil
@@ -151,6 +153,7 @@ class ProductsController < ApplicationController
       product_slugs = building_block_product_slugs
     end
 
+    product_slugs = product_slugs.reject { |x| x.nil? || x.empty? }
     products = products.where(slug: product_slugs) unless product_slugs.nil?
 
     results = {

@@ -4,17 +4,23 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def unique_search
-    record = Project.find_by(slug: params[:id])
+    record = Project.eager_load(:countries, :organizations, :products, :origin,
+                                :sustainable_development_goals, :sectors)
+                    .find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
 
-    render(json: record.to_json(Project.serialization_options))
+    render(json: record.to_json(Project.serialization_options
+                                       .merge({
+                                         item_path: request.original_url,
+                                         include_relationships: true
+                                       })))
   end
 
   def simple_search
     default_page_size = 20
-    projects = Project.order(:slug)
+    projects = Project
 
     current_page = 1
     if params[:page].present? && params[:page].to_i > 0
@@ -25,7 +31,11 @@ class ProjectsController < ApplicationController
       projects = projects.name_contains(params[:search])
     end
 
-    projects = projects.paginate(page: current_page, per_page: default_page_size)
+    if params[:origins].present?
+      origins = params[:origins].reject { |x| x.nil? || x.empty? }
+      projects = projects.where(origin: Origin.where(slug: origins)) \
+        unless origins.empty?
+    end
 
     results = {
       url: request.original_url,
@@ -33,22 +43,37 @@ class ProjectsController < ApplicationController
       page_size: default_page_size
     }
 
+    uri = URI.parse(request.original_url)
+    query = Rack::Utils.parse_query(uri.query)
+
     if projects.count > default_page_size * current_page
-      results['next_page'] = current_page + 1
+      query["page"] = current_page + 1
+      uri.query = Rack::Utils.build_query(query)
+      results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      results['previous_page'] = current_page - 1
+      query["page"] = current_page - 1
+      uri.query = Rack::Utils.build_query(query)
+      results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = projects
+    results['results'] = projects.eager_load(:countries, :organizations, :origin, :products,
+                                             :sustainable_development_goals, :sectors)
+                                 .paginate(page: current_page, per_page: default_page_size)
+                                 .order(:slug)
 
-    render(json: results.to_json(Project.serialization_options))
+    uri.fragment = uri.query = nil
+    render(json: results.to_json(Project.serialization_options
+                                        .merge({
+                                          collection_path: uri.to_s,
+                                          include_relationships: true
+                                        })))
   end
 
   def complex_search
     default_page_size = 20
-    projects = Project.order(:slug)
+    projects = Project
 
     current_page = 1
     if params[:page].present? && params[:page].to_i > 0
@@ -59,7 +84,39 @@ class ProjectsController < ApplicationController
       projects = projects.name_contains(params[:search])
     end
 
-    projects = projects.paginate(page: current_page, per_page: default_page_size)
+    if params[:origins].present?
+      origins = params[:origins].reject { |x| x.nil? || x.empty? }
+      projects = projects.where(origin: Origin.where(slug: origins)) \
+        unless origins.empty?
+    end
+
+    if params[:sectors].present?
+      sectors = params[:sectors].reject { |x| x.nil? || x.empty? }
+      projects = projects.joins(:sectors)
+                         .where('sectors.slug in (?)', sectors) \
+        unless sectors.empty?
+    end
+
+    if params[:products].present?
+      products = params[:products].reject { |x| x.nil? || x.empty? }
+      projects = projects.joins(:products)
+                         .where('products.slug in (?)', products) \
+        unless products.empty?
+    end
+
+    if params[:organizations].present?
+      organizations = params[:organizations].reject { |x| x.nil? || x.empty? }
+      projects = projects.joins(:organizations)
+                         .where('organizations.slug in (?)', organizations) \
+        unless organizations.empty?
+    end
+
+    if params[:countries].present?
+      countries = params[:countries].reject { |x| x.nil? || x.empty? }
+      projects = projects.joins(:countries)
+                         .where('countries.slug in (?)', countries) \
+        unless countries.empty?
+    end
 
     results = {
       url: request.original_url,
@@ -67,17 +124,32 @@ class ProjectsController < ApplicationController
       page_size: default_page_size
     }
 
+    uri = URI.parse(request.original_url)
+    query = Rack::Utils.parse_query(uri.query)
+
     if projects.count > default_page_size * current_page
-      results['next_page'] = current_page + 1
+      query["page"] = current_page + 1
+      uri.query = Rack::Utils.build_query(query)
+      results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      results['previous_page'] = current_page - 1
+      query["page"] = current_page - 1
+      uri.query = Rack::Utils.build_query(query)
+      results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = projects
+    results['results'] = projects.eager_load(:countries, :organizations, :products, :origin,
+                                             :sustainable_development_goals, :sectors)
+                                 .paginate(page: current_page, per_page: default_page_size)
+                                 .order(:slug)
 
-    render(json: results.to_json(Project.serialization_options))
+    uri.fragment = uri.query = nil
+    render(json: results.to_json(Project.serialization_options
+                                        .merge({
+                                          collection_path: uri.to_s,
+                                          include_relationships: true
+                                        })))
   end
 
   def favorite_project
