@@ -10,7 +10,7 @@
       <%= "#{t('view.sector.index.parent')}: #{parent_sector.name}" %>
     <% end %>
     <p>
-    <%= "#{t('view.sector.index.origin')}: #{@sector.origin.name}" %>
+    <%= "#{t('view.sector.index.origin')}: #{@sector.origin.name}" unless @sector.origin.nil? %>
     <div class="float-right" >
       <%= link_to t('view.general.back'), sectors_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@sector).mod_allowed? %>

@@ -9,4 +9,10 @@ class Tag < ApplicationRecord
   def to_param
     slug
   end
+
+  def self.serialization_options
+    {
+      except: [:created_at, :updated_at]
+    }
+  end
 end
