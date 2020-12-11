@@ -412,14 +412,16 @@ module Modules
                                               .first || ProductDescription.new
       product_description.product_id = existing_product.id
       product_description.locale = I18n.locale
-      if !sync_description.nil?
-        product_description.description = sync_description
-      elsif product_description.description.nil?
-        product_descriptions = YAML.load_file('config/product_description.yml')
-        product_descriptions['products'].each do |pd|
-          if existing_product.slug == pd['slug']
-            product_description.description = pd['description']
-            puts "Assigning description from yml for: #{existing_product.slug}"
+      if product_description.description.nil?
+        if !sync_description.nil?
+          product_description.description = sync_description
+        else
+          product_descriptions = YAML.load_file('config/product_description.yml')
+          product_descriptions['products'].each do |pd|
+            if existing_product.slug == pd['slug']
+              product_description.description = pd['description']
+              puts "Assigning description from yml for: #{existing_product.slug}"
+            end
           end
         end
       end
