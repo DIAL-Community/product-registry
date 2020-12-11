@@ -131,6 +131,7 @@ class WorkflowsController < ApplicationController
       workflow_slugs &= use_case_workflow_slugs
     end
 
+    workflow_slugs = workflow_slugs.reject { |x| x.nil? || x.empty? }
     workflows = workflows.where('slug in (?)', workflow_slugs) \
       unless workflow_slugs.nil?
 

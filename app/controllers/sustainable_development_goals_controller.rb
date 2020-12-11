@@ -80,53 +80,6 @@ class SustainableDevelopmentGoalsController < ApplicationController
                                                            })))
   end
 
-  def complex_search
-    default_page_size = 20
-    sustainable_development_goals = SustainableDevelopmentGoal
-
-    current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
-
-    if params[:search].present?
-      sustainable_development_goals = sustainable_development_goals.name_contains(params[:search])
-    end
-
-    results = {
-      url: request.original_url,
-      count: sustainable_development_goals.count,
-      page_size: default_page_size
-    }
-
-    uri = URI.parse(request.original_url)
-    query = Rack::Utils.parse_query(uri.query)
-
-    if sustainable_development_goals.count > default_page_size * current_page
-      query["page"] = current_page + 1
-      uri.query = Rack::Utils.build_query(query)
-      results['next_page'] = URI.decode(uri.to_s)
-    end
-
-    if current_page > 1
-      query["page"] = current_page - 1
-      uri.query = Rack::Utils.build_query(query)
-      results['previous_page'] = URI.decode(uri.to_s)
-    end
-
-    results['results'] = sustainable_development_goals.eager_load(:sdg_targets, sdg_targets: :use_cases)
-                                                      .paginate(page: current_page,
-                                                                per_page: default_page_size)
-                                                      .order(:number)
-
-    uri.fragment = uri.query = nil
-    render(json: results.to_json(SustainableDevelopmentGoal.serialization_options
-                                                           .merge({
-                                                             include_relationships: true,
-                                                             collection_path: uri.to_s
-                                                           })))
-  end
-
   # GET /sustainable_development_goals
   # GET /sustainable_development_goals.json
   def index

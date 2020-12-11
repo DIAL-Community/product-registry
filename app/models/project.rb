@@ -66,6 +66,44 @@ class Project < ApplicationRecord
     end
   end
 
+  def self_url(options = {})
+    return "#{options[:api_path]}/projects/#{slug}" if options[:api_path].present?
+    return options[:item_path] if options[:item_path].present?
+    return "#{options[:collection_path]}/#{slug}" if options[:collection_path].present?
+  end
+
+  def collection_url(options = {})
+    return "#{options[:api_path]}/projects" if options[:api_path].present?
+    return options[:item_path].sub("/#{slug}", '') if options[:item_path].present?
+    return options[:collection_path] if options[:collection_path].present?
+  end
+
+  def api_path(options = {})
+    return options[:api_path] if options[:api_path].present?
+    return options[:item_path].sub("/projects/#{slug}", '') if options[:item_path].present?
+    return options[:collection_path].sub('/projects', '') if options[:collection_path].present?
+  end
+
+  def as_json(options = {})
+    json = super(options)
+    json['origin'] = origin.as_json({ only: [:name, :slug], api_path: api_path(options), api_source: 'projects' })
+    if options[:include_relationships].present?
+      json['countries'] = countries.as_json({ only: [:name, :slug, :code], api_path: api_path(options) })
+      json['organizations'] = organizations.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
+      json['products'] = products.as_json({ only: [:name, :slug], api_path: api_path(options) })
+      json['sectors'] = sectors.as_json({ only: [:name, :slug], api_path: api_path(options) })
+      json['sustainable_development_goals'] = sustainable_development_goals.as_json({ only: [:name, :slug, :number],
+                                                                                      api_path: api_path(options) })
+    end
+    if options[:collection_path].present? || options[:api_path].present?
+      json['self_url'] = self_url(options)
+    end
+    if options[:item_path].present?
+      json['collection_url'] = collection_url(options)
+    end
+    json
+  end
+
   def self.to_csv
     attributes = %w{id name slug origin organizations products}
 
@@ -87,7 +125,7 @@ class Project < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:created_at, :updated_at],
+      except: [:id, :origin_id, :created_at, :updated_at],
       include: {
         organizations: { only: [:name, :slug] },
         products: {

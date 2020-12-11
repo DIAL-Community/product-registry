@@ -123,7 +123,7 @@ class Product < ApplicationRecord
     json = super(options)
     if options[:include_relationships].present?
       json['organizations'] = organizations.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
-      json['origins'] = origins.as_json({ only: [:name, :slug], api_path: api_path(options) })
+      json['origins'] = origins.as_json({ only: [:name, :slug], api_path: api_path(options), api_source: 'products' })
       json['building_blocks'] = building_blocks.as_json({ only: [:name, :slug], api_path: api_path(options) })
       json['sustainable_development_goals'] = sustainable_development_goals.as_json({ only: [:name, :slug, :number],
                                                                                       api_path: api_path(options) })

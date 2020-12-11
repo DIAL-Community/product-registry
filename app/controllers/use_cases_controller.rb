@@ -136,6 +136,7 @@ class UseCasesController < ApplicationController
       use_case_slugs &= sdg_use_case_slugs
     end
 
+    use_case_slugs = use_case_slugs.reject { |x| x.nil? || x.empty? }
     use_cases = use_cases.where('slug in (?)', use_case_slugs) \
       unless use_case_slugs.nil?
 

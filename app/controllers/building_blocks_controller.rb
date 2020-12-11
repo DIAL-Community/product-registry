@@ -131,6 +131,7 @@ class BuildingBlocksController < ApplicationController
       building_block_slugs &= building_block_product_slugs
     end
 
+    building_block_slugs = building_block_slugs.reject { |x| x.nil? || x.empty? }
     building_blocks = building_blocks.where(slug: building_block_slugs) \
       unless building_block_slugs.nil?
 

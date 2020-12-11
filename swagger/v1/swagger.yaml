@@ -71,7 +71,6 @@ paths:
           properties:
             sdgs:
               type: array
-              description: SDG
               items:
                 type: string
             use_cases:
@@ -326,7 +325,6 @@ paths:
           properties:
             sdgs:
               type: array
-              description: SDG
               items:
                 type: string
             use_cases:
@@ -387,6 +385,59 @@ paths:
         schema:
           type: integer
         description: Page to narrow results.
+      responses:
+        '200':
+          description:
+            description: Success.
+    post:
+      summary: Search for projects.
+      tags:
+      - Projects
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search term to narrow results.
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page to narrow results.
+      - name: request_body
+        in: body
+        schema:
+          type: object
+          properties:
+            countries:
+              type: array
+              items:
+                type: string
+            organizations:
+              type: array
+              items:
+                type: string
+            origins:
+              type: array
+              items:
+                type: string
+            products:
+              type: array
+              items:
+                type: string
+            sdgs:
+              type: array
+              items:
+                type: string
+            sectors:
+              type: array
+              items:
+                type: string
+        description: JSON to narrow results.
       responses:
         '200':
           description:
@@ -581,7 +632,6 @@ paths:
           properties:
             sdgs:
               type: array
-              description: SDG
               items:
                 type: string
             use_cases:

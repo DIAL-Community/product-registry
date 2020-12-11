@@ -54,7 +54,6 @@ RSpec.describe('Products V1 API', type: :request) do
         properties: {
           sdgs: {
             type: :array,
-            description: 'SDG',
             items: {
               type: :string
             }

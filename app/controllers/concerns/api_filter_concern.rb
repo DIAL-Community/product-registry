@@ -8,6 +8,9 @@ module ApiFilterConcern
   def use_cases_from_sdg_slugs(sdg_slugs)
     use_case_slugs = []
     if !sdg_slugs.nil? && !sdg_slugs.empty?
+      sdg_slugs = sdg_slugs.reject { |x| x.nil? || x.empty? }
+      return use_case_slugs if sdg_slugs.empty?
+
       sdg_numbers = SustainableDevelopmentGoal.where(slug: sdg_slugs)
                                               .select(:number)
                                               .map(&:number)
@@ -26,6 +29,9 @@ module ApiFilterConcern
   def sdgs_from_use_case_slugs(use_case_slugs)
     sdg_slugs = []
     if !use_case_slugs.nil? && !use_case_slugs.empty?
+      use_case_slugs = use_case_slugs.reject { |x| x.nil? || x.empty? }
+      return sdg_slugs if use_case_slugs.empty?
+
       sdg_numbers = SdgTarget.joins(:use_cases)
                              .where(use_cases: { slug: use_case_slugs })
                              .select('sdg_targets.sdg_number')
@@ -44,6 +50,9 @@ module ApiFilterConcern
   def workflows_from_use_case_slugs(use_case_slugs)
     workflow_slugs = []
     if !use_case_slugs.nil? && !use_case_slugs.empty?
+      use_case_slugs = use_case_slugs.reject { |x| x.nil? || x.empty? }
+      return workflow_slugs if use_case_slugs.empty?
+
       use_case_step_slugs = UseCase.joins(:use_case_steps)
                                    .where(use_cases: { slug: use_case_slugs })
                                    .select('use_case_steps.slug')
@@ -62,6 +71,9 @@ module ApiFilterConcern
   def use_cases_from_workflow_slugs(workflow_slugs)
     use_case_slugs = []
     if !workflow_slugs.nil? && !workflow_slugs.empty?
+      workflow_slugs = workflow_slugs.reject { |x| x.nil? || x.empty? }
+      return use_case_slugs if workflow_slugs.empty?
+
       use_case_step_slugs = Workflow.joins(:use_case_steps)
                                     .where(workflows: { slug: workflow_slugs })
                                     .select('use_case_steps.slug')
@@ -80,6 +92,9 @@ module ApiFilterConcern
   def building_blocks_from_workflow_slugs(workflow_slugs)
     building_block_slugs = []
     if !workflow_slugs.nil? && !workflow_slugs.empty?
+      workflow_slugs = workflow_slugs.reject { |x| x.nil? || x.empty? }
+      return building_block_slugs if workflow_slugs.empty?
+
       building_block_slugs += BuildingBlock.joins(:workflows)
                                            .where(workflows: { slug: workflow_slugs })
                                            .select(:slug)
@@ -91,6 +106,9 @@ module ApiFilterConcern
   def workflows_from_building_block_slugs(building_block_slugs)
     workflow_slugs = []
     if !building_block_slugs.nil? && !building_block_slugs.empty?
+      building_block_slugs = building_block_slugs.reject { |x| x.nil? || x.empty? }
+      return workflow_slugs if building_block_slugs.empty?
+
       workflow_slugs += Workflow.joins(:building_blocks)
                                 .where(building_blocks: { slug: building_block_slugs })
                                 .select(:slug)
@@ -102,6 +120,9 @@ module ApiFilterConcern
   def products_from_building_block_slugs(building_block_slugs)
     product_slugs = []
     if !building_block_slugs.nil? && !building_block_slugs.empty?
+      building_block_slugs = building_block_slugs.reject { |x| x.nil? || x.empty? }
+      return product_slugs if building_block_slugs.empty?
+
       product_slugs += Product.joins(:building_blocks)
                               .where(building_blocks: { slug: building_block_slugs })
                               .select(:slug)
@@ -113,6 +134,9 @@ module ApiFilterConcern
   def building_blocks_from_product_slugs(product_slugs)
     building_block_slugs = []
     if !product_slugs.nil? && !product_slugs.empty?
+      product_slugs = product_slugs.reject { |x| x.nil? || x.empty? }
+      return building_block_slugs if product_slugs.empty?
+
       building_block_slugs += BuildingBlock.joins(:products)
                                            .where(products: { slug: product_slugs })
                                            .select(:slug)
