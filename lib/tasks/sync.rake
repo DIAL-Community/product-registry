@@ -286,7 +286,7 @@ namespace :sync do
     end
   end
 
-  task :sync_giz_sectors, [] => :environment do
+  task :sync_giz_projects, [] => :environment do
     # First, set all existing sector origins to DIAL
     dial_origin = Origin.find_by(name: 'DIAL OSC')
     Sector.where('origin_id is null').update_all origin_id: dial_origin.id
@@ -303,51 +303,27 @@ namespace :sync do
       end
     end
 
-    project_list = CSV.parse(File.read('utils/GIZ_Projects.csv'), headers: true)
+    # Download German and English versions of projects list
+    uri = URI('https://digitalportfolio.toolkit-digitalisierung.de/en/projects/export/')
 
-    project_list.each do |project|
-      sector_name = project[19]
-      if !sector_name.nil?
-        sector_name = sector_name.strip
-        sector_slug = slug_em sector_name
-        existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
-        puts "Sector Name: " + sector_name
-        if existing_sector.nil?
-          new_sector = Sector.new
-          new_sector.name = sector_name
-          new_sector.slug = sector_slug
-          new_sector.origin_id = giz_origin.id
-          new_sector.is_displayable = true
-          new_sector.save!
-          puts "Sector Created"
+    Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+      request = Net::HTTP::Get.new uri
 
-          existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
-        else
-          puts "Sector exists"
-        end
-        subsectors = project[20]
-        if !subsectors.nil? 
-          subsector_array = subsectors.split(',')
-          subsector_array.each do |subsector|
-            subsector = subsector.strip
-            subsector_slug = slug_em subsector
-            puts "Subsector: " + subsector
-            existing_subsector = Sector.find_by(slug: subsector_slug, parent_sector_id: existing_sector.id, origin_id: giz_origin.id)
-            if existing_subsector.nil?
-              new_sector = Sector.new
-              new_sector.name = sector_name + ": " + subsector
-              new_sector.slug = subsector_slug
-              new_sector.origin_id = giz_origin.id
-              new_sector.is_displayable = true
-              new_sector.parent_sector_id = existing_sector.id
-              new_sector.save!
-              puts "Sub-Sector Created"
-            else
-              puts "Subsector exists"
-            end
-          end
-        end
-      end
+      response = http.request request
+      puts "RESPONSE: " + response['location']
+    end
+    english_uri = URI.parse("https://digitalportfolio.toolkit-digitalisierung.de/en/projects/export/")
+    english_response = Net::HTTP.get(english_uri, :use_ssl => true)
+    puts "ENGLISH response: " + english_response.inspect
+    english_csv = CSV.parse(english_response, headers: true)
+
+    german_uri = URI.parse("https://digitalportfolio.toolkit-digitalisierung.de/en/projects/export/")
+    german_response = Net::HTTP.get(german_uri)
+    german_csv = CSV.parse(german_response, headers: true)
+
+    english_csv.each do |project|
+      puts project.inspect
+      #sync_giz_project(project)
     end
   end
 

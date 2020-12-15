@@ -396,6 +396,51 @@ module Modules
       end
     end
 
+    def sync_giz_project(project)
+      sector_name = project[19]
+      if !sector_name.nil?
+        sector_name = sector_name.strip
+        sector_slug = slug_em sector_name
+        existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
+        puts "Sector Name: " + sector_name
+        if existing_sector.nil?
+          new_sector = Sector.new
+          new_sector.name = sector_name
+          new_sector.slug = sector_slug
+          new_sector.origin_id = giz_origin.id
+          new_sector.is_displayable = true
+          new_sector.save!
+          puts "Sector Created"
+
+          existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
+        else
+          puts "Sector exists"
+        end
+        subsectors = project[20]
+        if !subsectors.nil? 
+          subsector_array = subsectors.split(',')
+          subsector_array.each do |subsector|
+            subsector = subsector.strip
+            subsector_slug = slug_em subsector
+            puts "Subsector: " + subsector
+            existing_subsector = Sector.find_by(slug: subsector_slug, parent_sector_id: existing_sector.id, origin_id: giz_origin.id)
+            if existing_subsector.nil?
+              new_sector = Sector.new
+              new_sector.name = sector_name + ": " + subsector
+              new_sector.slug = subsector_slug
+              new_sector.origin_id = giz_origin.id
+              new_sector.is_displayable = true
+              new_sector.parent_sector_id = existing_sector.id
+              new_sector.save!
+              puts "Sub-Sector Created"
+            else
+              puts "Subsector exists"
+            end
+          end
+        end
+      end
+    end
+
     def cleanup_url(maybe_url)
       cleaned_url = ''
       unless maybe_url.blank?
