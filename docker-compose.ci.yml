@@ -29,7 +29,7 @@ services:
    - postgres
  redis:
   image: redis
-  command: "--port ${REDIS_PORT}"
+  command: "--requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}"
   environment:
     - REDIS_PORT=${REDIS_PORT}
   ports:
