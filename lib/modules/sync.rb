@@ -396,33 +396,121 @@ module Modules
       end
     end
 
-    def sync_giz_project(project)
-      sector_name = project[19]
+    def sync_giz_project(english_project, german_project, giz_origin)
+      # Create sector if it does not exist
+      english_sectors = create_or_update_sector(english_project[19], english_project[20], "en", giz_origin)
+      german_sectors = create_or_update_sector(german_project[19], german_project[20], "de", giz_origin)
+
+      # Create new project or update existing project
+      new_project = Project.where(name: english_project[0]).first || Project.new
+      new_project.name = english_project[0].force_encoding('UTF-8')
+      new_project.slug = slug_em(english_project[0])
+      new_project.origin_id = giz_origin.id
+      if !english_project[25].nil?
+        new_project.project_url = english_project[25]
+      end
+      new_project.save!
+
+      # Assign to sectors
+      english_sectors.each do |sector_id|
+        sector = Sector.find(sector_id)
+        if !new_project.sectors.include?(sector)
+          new_project.sectors << sector
+        end
+      end
+
+      german_sectors.each do |sector_id|
+        sector = Sector.find(sector_id)
+        if !new_project.sectors.include?(sector)
+          new_project.sectors << sector
+        end
+      end
+
+      # Assign to SDGs
+      if !english_project[24].nil?
+        sdg_list = english_project[24].sub("Peace, Justice", "Peace Justice").sub("Reduced Inequality", "Reduced Inequalities").sub("Industry, Innovation, and", "Industry Innovation and")
+        sdg_names = sdg_list.split(',')
+        sdg_names.each do |sdg_name|
+          sdg_slug = slug_em(sdg_name.strip)  
+          sdg = SustainableDevelopmentGoal.find_by(slug: sdg_slug)
+          if !new_project.sustainable_development_goals.include?(sdg)
+            new_project.sustainable_development_goals << sdg
+          end
+        end
+      end
+
+      # Assign to locations
+      country_names = english_project[15].split(',')
+      country_names.each do |country_name|
+        country = Country.find_by(name: country_name.strip)
+        if !country.nil?
+          if !new_project.countries.include?(country)
+            new_project.countries << country
+          end
+          # Add any German aliases to the country
+
+        end
+      end
+
+      # Create both English and German descriptions
+      project_desc = ProjectDescription.where(project_id: new_project.id, locale: "en").first || ProjectDescription.new
+      project_desc.project_id = new_project.id
+      if english_project[2].nil?
+        english_project[2] = "No description"
+      end
+      project_desc.description = english_project[2]
+      project_desc.locale = "en"
+      project_desc.save!
+
+      project_desc = ProjectDescription.where(project_id: new_project.id, locale: "de").first || ProjectDescription.new
+      project_desc.project_id = new_project.id
+      if german_project[2].nil?
+        german_project[2] = "Kein description"
+      end
+      project_desc.description = german_project[2]
+      project_desc.locale = "de"
+      project_desc.save!
+
+      # Create links to Digital Principles
+      principles = DigitalPrinciple.all.order(:id)
+      for principle_col in 30..38 do
+        principle_index = principle_col-30
+        if english_project[principle_col] == "1" 
+          if !new_project.digital_principles.include?(principles[principle_index])
+            new_project.digital_principles << principles[principle_index]
+          end
+        end
+      end
+
+      new_project.save!
+    end
+
+    def create_or_update_sector(sector_name, subsectors, locale, giz_origin)
+      sector_array = []
       if !sector_name.nil?
         sector_name = sector_name.strip
         sector_slug = slug_em sector_name
         existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
-        puts "Sector Name: " + sector_name
         if existing_sector.nil?
           new_sector = Sector.new
           new_sector.name = sector_name
           new_sector.slug = sector_slug
           new_sector.origin_id = giz_origin.id
           new_sector.is_displayable = true
+          new_sector.locale = locale
           new_sector.save!
-          puts "Sector Created"
+          puts "Sector Created: " + sector_name
 
           existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
-        else
-          puts "Sector exists"
         end
-        subsectors = project[20]
+
+        sector_array << existing_sector.id
+
         if !subsectors.nil? 
           subsector_array = subsectors.split(',')
           subsector_array.each do |subsector|
             subsector = subsector.strip
             subsector_slug = slug_em subsector
-            puts "Subsector: " + subsector
             existing_subsector = Sector.find_by(slug: subsector_slug, parent_sector_id: existing_sector.id, origin_id: giz_origin.id)
             if existing_subsector.nil?
               new_sector = Sector.new
@@ -430,15 +518,19 @@ module Modules
               new_sector.slug = subsector_slug
               new_sector.origin_id = giz_origin.id
               new_sector.is_displayable = true
+              new_sector.locale = locale
               new_sector.parent_sector_id = existing_sector.id
               new_sector.save!
-              puts "Sub-Sector Created"
+              puts "Sub-Sector Created: " + subsector
+
+              sector_array << new_sector.id
             else
-              puts "Subsector exists"
+              sector_array << existing_subsector.id
             end
           end
         end
       end
+      sector_array
     end
 
     def cleanup_url(maybe_url)

@@ -524,8 +524,12 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:id]) || not_found
     end
 
-    @project_description = ProjectDescription.where(project_id: @project, locale: I18n.locale)
-                                             .first
+    @project_description = ProjectDescription.where(project_id: @project, locale: I18n.locale).first
+
+    if @project_description.nil?
+      @project_description = ProjectDescription.where(project_id: @project, locale: "en").first
+    end
+
     if @project_description.nil?
       @project_description = ProjectDescription.new
     end
