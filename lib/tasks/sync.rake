@@ -303,28 +303,44 @@ namespace :sync do
       end
     end
 
+    # Get credentials for Toolkit
+    uri = URI('https://digitalportfolio.toolkit-digitalisierung.de/en/wp-json/giz/v1/users/login/')
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Post.new(uri.path)
+    request.set_form_data({"email" => ENV['TOOLKIT_EMAIL'], "password" => ENV['TOOLKIT_PASSWORD']})
+
+    response = http.request(request)
+    cookies = response.header['Set-Cookie']
+
     # Download German and English versions of projects list
     uri = URI('https://digitalportfolio.toolkit-digitalisierung.de/en/projects/export/')
 
-    Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
-      request = Net::HTTP::Get.new uri
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-      response = http.request request
-      puts "RESPONSE: " + response['location']
+    request = Net::HTTP::Get.new(uri.path)
+    request['Cookie'] = cookies
+    english_response = http.request(request)
+    
+    english_csv = CSV.parse(english_response.body, headers: true)
+
+    uri = URI('https://digitalportfolio.toolkit-digitalisierung.de/projects/export/')
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(uri.path)
+    request['Cookie'] = cookies
+    german_response = http.request(request)
+    
+    german_csv = CSV.parse(german_response.body, headers: true)
+
+    english_csv.each_with_index do |english_project, index|
+      german_project = german_csv[index]
+      sync_giz_project(english_project, german_project, giz_origin)
     end
-    english_uri = URI.parse("https://digitalportfolio.toolkit-digitalisierung.de/en/projects/export/")
-    english_response = Net::HTTP.get(english_uri, :use_ssl => true)
-    puts "ENGLISH response: " + english_response.inspect
-    english_csv = CSV.parse(english_response, headers: true)
-
-    german_uri = URI.parse("https://digitalportfolio.toolkit-digitalisierung.de/en/projects/export/")
-    german_response = Net::HTTP.get(german_uri)
-    german_csv = CSV.parse(german_response, headers: true)
-
-    english_csv.each do |project|
-      puts project.inspect
-      #sync_giz_project(project)
-    end
+ 
   end
 
   task :sync_digital_health_atlas_data, [] => :environment do
@@ -371,10 +387,10 @@ namespace :sync do
 
       country_id = project["country"]
       country_name = country_data.select {|country| country["id"] == country_id }[0]["name"]
-      location = Location.find_by(name: country_name, location_type: 'country')
-      if !location.nil?
-        if !existing_project.locations.include?(location)
-          existing_project.locations << location
+      country = Country.find_by(name: country_name)
+      if !country.nil?
+        if !existing_project.countries.include?(country)
+          existing_project.countries << country
         end
       end
 

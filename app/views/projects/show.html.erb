@@ -17,9 +17,11 @@
           </div>
         <% end %>
         <% if !@project.origin.nil? %>
-          <strong><%= "#{t('view.project.show.origin')}:" %></strong>
-          <%= image_tag("origins/#{@project.origin.slug}.png", class: 'origin-img-full',
-                        'title': @project.origin.name, 'data-toggle': 'tooltip') %>
+          <div class="pt-2">
+            <strong><%= "#{t('view.project.show.origin')}:" %></strong>
+            <%= image_tag("origins/#{@project.origin.slug}.png", class: 'origin-img-full',
+                          'title': @project.origin.name, 'data-toggle': 'tooltip') %>
+          </div>
         <% end %>
         <p class="mt-3">
         <% if !@project.project_url.nil? %>
@@ -119,6 +121,74 @@
   <% else %>
     <p class="card-text text-muted">
       <%= t('view.general.not-available', model: t('model.project'), multi: t('model.country').to_s.pluralize) %>
+    </p>
+  <% end %>
+
+  <div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.sector').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @project.sectors.count > 0 %>
+    <div class="row">
+      <% @project.sectors.order("name").each do |sector| %>
+        <% if sector.locale == I18n.locale.to_s %>
+          <div class="col-6 col-lg-4 mt-2">
+            <div class="card h-100">
+              <div class="card-body py-2">
+                <p class="card-text text-muted" style="flex: 1"><%= link_to sector.name, sector %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.project'), multi: t('model.sector').to_s.pluralize) %>
+    </p>
+  <% end %>
+
+  <div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.sustainable-development-goal').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @project.sustainable_development_goals.count > 0 %>
+    <div class="row">
+      <% @project.sustainable_development_goals.order("name").each do |sdg| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= link_to sdg.name, sdg %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.project'), multi: t('model.sustainable-development-goal').to_s.pluralize) %>
+    </p>
+  <% end %>
+
+  <div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.digital-principle').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @project.digital_principles.count > 0 %>
+    <div class="row">
+      <% @project.digital_principles.order("name").each do |principle| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= principle.name %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.project'), multi: t('model.digital-principle').to_s.pluralize) %>
     </p>
   <% end %>
 </div>
