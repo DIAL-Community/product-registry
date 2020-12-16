@@ -1421,9 +1421,9 @@ ALTER SEQUENCE public.organizations_locations_id_seq OWNED BY public.organizatio
 CREATE TABLE public.organizations_products (
     organization_id bigint NOT NULL,
     product_id bigint NOT NULL,
-    org_type public.org_type_orig DEFAULT 'owner'::public.org_type_orig,
     id bigint NOT NULL,
-    slug character varying NOT NULL
+    slug character varying NOT NULL,
+    org_type public.org_type DEFAULT 'owner'::public.org_type
 );
 
 
@@ -2239,6 +2239,36 @@ ALTER SEQUENCE public.projects_countries_id_seq OWNED BY public.projects_countri
 
 
 --
+-- Name: projects_digital_principles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.projects_digital_principles (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    digital_principle_id bigint NOT NULL
+);
+
+
+--
+-- Name: projects_digital_principles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.projects_digital_principles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_digital_principles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.projects_digital_principles_id_seq OWNED BY public.projects_digital_principles.id;
+
+
+--
 -- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2486,7 +2516,8 @@ CREATE TABLE public.sectors (
     updated_at timestamp without time zone NOT NULL,
     is_displayable boolean,
     parent_sector_id bigint,
-    origin_id bigint
+    origin_id bigint,
+    locale character varying DEFAULT 'en'::character varying
 );
 
 
@@ -3594,6 +3625,13 @@ ALTER TABLE ONLY public.projects_countries ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: projects_digital_principles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_digital_principles ALTER COLUMN id SET DEFAULT nextval('public.projects_digital_principles_id_seq'::regclass);
+
+
+--
 -- Name: projects_locations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -4214,6 +4252,14 @@ ALTER TABLE ONLY public.project_descriptions
 
 ALTER TABLE ONLY public.projects_countries
     ADD CONSTRAINT projects_countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: projects_digital_principles projects_digital_principles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_digital_principles
+    ADD CONSTRAINT projects_digital_principles_pkey PRIMARY KEY (id);
 
 
 --
@@ -4951,6 +4997,20 @@ CREATE INDEX index_projects_countries_on_project_id ON public.projects_countries
 
 
 --
+-- Name: index_projects_digital_principles_on_digital_principle_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_digital_principles_on_digital_principle_id ON public.projects_digital_principles USING btree (digital_principle_id);
+
+
+--
+-- Name: index_projects_digital_principles_on_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_digital_principles_on_project_id ON public.projects_digital_principles USING btree (project_id);
+
+
+--
 -- Name: index_projects_on_origin_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4986,6 +5046,13 @@ CREATE UNIQUE INDEX index_sdgs_on_slug ON public.sustainable_development_goals U
 
 
 --
+-- Name: index_sector_slug_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_sector_slug_unique ON public.sectors USING btree (slug, origin_id, parent_sector_id, locale);
+
+
+--
 -- Name: index_sectors_on_origin_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4997,13 +5064,6 @@ CREATE INDEX index_sectors_on_origin_id ON public.sectors USING btree (origin_id
 --
 
 CREATE INDEX index_sectors_on_parent_sector_id ON public.sectors USING btree (parent_sector_id);
-
-
---
--- Name: index_sectors_on_slug_and_origin_id_and_parent_sector_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_sectors_on_slug_and_origin_id_and_parent_sector_id ON public.sectors USING btree (slug, origin_id, parent_sector_id);
 
 
 --
@@ -5498,6 +5558,14 @@ ALTER TABLE ONLY public.candidate_organizations
 
 
 --
+-- Name: projects_digital_principles fk_rails_28bb8bf3f7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_digital_principles
+    ADD CONSTRAINT fk_rails_28bb8bf3f7 FOREIGN KEY (project_id) REFERENCES public.projects(id);
+
+
+--
 -- Name: product_indicators fk_rails_2c154e19b9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5519,6 +5587,14 @@ ALTER TABLE ONLY public.sectors
 
 ALTER TABLE ONLY public.organization_descriptions
     ADD CONSTRAINT fk_rails_3a6b8edce9 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: projects_digital_principles fk_rails_3eb4109c7d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects_digital_principles
+    ADD CONSTRAINT fk_rails_3eb4109c7d FOREIGN KEY (digital_principle_id) REFERENCES public.digital_principles(id);
 
 
 --
@@ -6350,6 +6426,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201021202217'),
 ('20201103202113'),
 ('20201123194715'),
-('20201125162851');
+('20201125162851'),
+('20201211182046'),
+('20201214204504');
 
 
