@@ -51,6 +51,7 @@ public/assets/**/*.js
 
 public/assets/playbooks/design_images/*
 public/assets/playbooks/pictures/*
+public/assets/playbooks/*
 
 # Uploaded assets
 public/uploads
