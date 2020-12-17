@@ -86,10 +86,39 @@
     overviewEditor = new FroalaEditor('#overview_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      fontFamily: {
+        "Roboto,sans-serif": 'Roboto',
+        "Arial": 'Arial',
+        "Georgia": 'Georgia',
+        "Impact": 'Impact',
+        "Tahoma": 'Tahoma',
+        "Times New Roman": 'Times New Roman',
+        "Verdana": 'Verdana'
+      },
+      events: {
+        'html.set': function() {
+          var target = document.querySelector("#simple-editor div[data-component-marker='popover-content']");
+          if (target) {
+            var mutationObserver = new MutationObserver(function(mutationList) {
+              mutationList.forEach(function(mutation) {
+                var popover = mutation.target.parentNode.closest("div[data-component-marker='playbook-popover']");
+                var content = mutation.target.parentNode.closest("div[data-component-marker='popover-content']");
+                popover.setAttribute('data-content', content.innerHTML);
+              });
+            });
+            var config = { subtree: true, attributes: true, childList: true, characterData: true };
+            mutationObserver.observe(target, config);
+          }
+        }
+      },
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
-      overviewEditor.html.set("<%= @description.overview.nil? ? "" : @description.overview.squish.gsub("\"","\\\"").html_safe %>")
+      overviewEditor.html.set("<%= @description.overview.nil? ? "" : @description.overview
+                                                                               .squish
+                                                                               .gsub("\"","\\\"")
+                                                                               .gsub("</script>","<\\\/script>")
+                                                                               .html_safe %>");
     });
 
     audienceEditor = new FroalaEditor('#audience_editor', {

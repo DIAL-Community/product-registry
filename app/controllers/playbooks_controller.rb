@@ -102,7 +102,7 @@ class PlaybooksController < ApplicationController
   # PATCH/PUT /playbooks/1.json
   def update
     authorize @playbook, :mod_allowed?
-    if playbook_params[:playbook_desc].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present?
+    if playbook_params[:playbook_overview].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present?
       @playbook_desc = PlaybookDescription.where(playbook_id: @playbook.id,
                                                               locale: I18n.locale)
                                                         .first || PlaybookDescription.new
