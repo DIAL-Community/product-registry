@@ -86,6 +86,7 @@
     overviewEditor = new FroalaEditor('#overview_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       fontFamily: {
         "Roboto,sans-serif": 'Roboto',
         "Arial": 'Arial',
@@ -124,6 +125,7 @@
     audienceEditor = new FroalaEditor('#audience_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
@@ -133,6 +135,7 @@
     outcomesEditor = new FroalaEditor('#outcomes_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {

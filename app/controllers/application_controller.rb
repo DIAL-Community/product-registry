@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
   before_action :set_default_identifier
   before_action :set_portal
-  before_action :set_organization
+  before_action :set_org_session
 
   after_action :store_action
 
@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_organization
+  def set_org_session
     if params[:org]
       session[:org] = params[:org]
     end

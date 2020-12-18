@@ -22,6 +22,8 @@
 //= require cookies_eu
 //= require_directory .
 //= require froala_editor.min
+//= require languages/de.js
+//= require languages/fr.js
 //= require plugins/image.min.js
 //= require plugins/image_manager.min.js
 //= require plugins/align.min.js

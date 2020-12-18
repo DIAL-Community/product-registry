@@ -78,7 +78,7 @@ class PortalViewsController < ApplicationController
   # POST /portal_views.json
   def create
     authorize PortalView, :view_allowed?
-    @portal_view = PortalView.new(portal_view_params)
+    @portal_view = PortalView.new(portal_view_params.except(:about_page, :page_footer))
 
     respond_to do |format|
       if @portal_view.save
@@ -91,12 +91,12 @@ class PortalViewsController < ApplicationController
           end
         end
 
-        if params[:about_page].present?
+        if portal_view_params[:about_page].present?
           stylesheet = Stylesheet.new
           stylesheet.portal = @portal_view.slug
-          stylesheet.about_page = params[:about_page]
-          stylesheet.background_color = params[:stylesheet_color]
-          stylesheet.footer_content = params[:page_footer]
+          stylesheet.about_page = portal_view_params[:about_page]
+          stylesheet.background_color = portal_view_params[:stylesheet_color]
+          stylesheet.footer_content = portal_view_params[:page_footer]
           stylesheet.header_logo = @portal_view.slug+".png"
           stylesheet.save
         end
@@ -123,7 +123,10 @@ class PortalViewsController < ApplicationController
 
     authorize @portal_view, :view_allowed?
     if portal_view_params[:about_page].present?
-      stylesheet = Stylesheet.where(portal: @portal_view.slug).first
+      stylesheet = Stylesheet.where(portal: @portal_view.slug).first || Stylesheet.new
+      if stylesheet.portal.nil?
+        stylesheet.portal = slug_em(portal_view_params[:name])
+      end
       stylesheet.about_page = portal_view_params[:about_page]
       stylesheet.background_color = params[:stylesheet_color]
       stylesheet.footer_content = portal_view_params[:page_footer]
