@@ -132,6 +132,7 @@
     descEditor = new FroalaEditor('#use_case_desc_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
@@ -141,6 +142,7 @@
     headerEditor = new FroalaEditor('#ucs_header_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {

@@ -58,6 +58,7 @@
     commentEditor = new FroalaEditor('#comment_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough'],
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'

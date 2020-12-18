@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_11_182046) do
+ActiveRecord::Schema.define(version: 2020_12_14_204504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -537,6 +537,13 @@ ActiveRecord::Schema.define(version: 2020_12_11_182046) do
     t.index ["project_id"], name: "index_projects_countries_on_project_id"
   end
 
+  create_table "projects_digital_principles", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "digital_principle_id", null: false
+    t.index ["digital_principle_id"], name: "index_projects_digital_principles_on_digital_principle_id"
+    t.index ["project_id"], name: "index_projects_digital_principles_on_project_id"
+  end
+
   create_table "projects_locations", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.bigint "location_id", null: false
@@ -616,9 +623,10 @@ ActiveRecord::Schema.define(version: 2020_12_11_182046) do
     t.boolean "is_displayable"
     t.bigint "parent_sector_id"
     t.bigint "origin_id"
+    t.string "locale", default: "en"
     t.index ["origin_id"], name: "index_sectors_on_origin_id"
     t.index ["parent_sector_id"], name: "index_sectors_on_parent_sector_id"
-    t.index ["slug", "origin_id", "parent_sector_id"], name: "index_sectors_on_slug_and_origin_id_and_parent_sector_id", unique: true
+    t.index ["slug", "origin_id", "parent_sector_id", "locale"], name: "index_sector_slug_unique", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -874,6 +882,8 @@ ActiveRecord::Schema.define(version: 2020_12_11_182046) do
   add_foreign_key "projects", "origins"
   add_foreign_key "projects_countries", "countries"
   add_foreign_key "projects_countries", "projects"
+  add_foreign_key "projects_digital_principles", "digital_principles"
+  add_foreign_key "projects_digital_principles", "projects"
   add_foreign_key "projects_locations", "locations", name: "projects_locations_location_fk"
   add_foreign_key "projects_locations", "projects", name: "projects_locations_project_fk"
   add_foreign_key "projects_organizations", "organizations", name: "projects_organizations_organization_fk"

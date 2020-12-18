@@ -65,6 +65,7 @@
   $(document).ready(function() {
     descEditor = new FroalaEditor('#role_desc_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
+      language: "<%= I18n.locale %>",
       attribution: false,
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'

@@ -526,6 +526,23 @@ class OrganizationsController < ApplicationController
   end
 
   def map
+    if !session[:org].nil?
+      # Check settings
+      map_setting_slug = session[:org].downcase+'_map_view'
+      default_map = Setting.where(slug: map_setting_slug).first
+      if !default_map.nil?
+        case default_map.value
+        when 'project'
+          redirect_to map_projects_osm_path
+        when 'aggregator'
+          redirect_to map_aggregators_osm_path
+        when 'endorser'
+          redirect_to map_osm_path
+        end
+      end
+    end
+
+    # If we didn't redirect, load the default map view
     @organizations = Organization.eager_load(:locations)
     authorize @organizations, :view_allowed?
   end
