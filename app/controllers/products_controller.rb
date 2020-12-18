@@ -237,6 +237,25 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
+    if !session[:org].nil?
+      # Check settings
+      view_setting_slug = session[:org].downcase+'_default_view'
+      default_view = Setting.where(slug: view_setting_slug).first
+      if !default_view.nil?
+        case default_view.value
+        when 'custom'
+          session[:portal] = PortalView.where(slug: session[:org].downcase).first
+          if !session[:portal].nil?
+            redirect_to about_path
+          end
+        when 'map'
+          redirect_to map_path
+        when 'wizard'
+          redirect_to wizard_path
+        end
+      end
+    end
+
     if params[:without_paging]
       @products = Product.name_contains(params[:search])
                          .order(Product.arel_table['name'].lower.asc)

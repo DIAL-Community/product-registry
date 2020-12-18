@@ -239,9 +239,6 @@ Rails.application.routes.draw do
   post '/remove_url', to: 'application#remove_url', as: :remove_url
 
   get 'export', :to => 'organizations#export'
-  get 'map_aggregators', :to => 'organizations#map_aggregators'
-  get 'map', :to => 'organizations#map'
-  get 'map_fs', :to => 'organizations#map_fs'
   get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
   get 'contact_duplicates', :to => 'contacts#duplicates'
   get 'location_duplicates', :to => 'locations#duplicates'
@@ -271,7 +268,9 @@ Rails.application.routes.draw do
   get 'map_projects', to: 'projects#map_projects'
   get 'map_covid', to: 'projects#map_covid'
 
+  get 'map', to: 'organizations#map'
   get 'map_osm', to: 'organizations#map_osm'
+  get 'map_fs', :to => 'organizations#map_fs'
   get 'map_aggregators_osm', to: 'organizations#map_aggregators_osm'
   get 'map_projects_osm', to: 'projects#map_projects_osm'
 end

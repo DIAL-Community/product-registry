@@ -67,6 +67,7 @@
     descEditor = new FroalaEditor('#ci_desc_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
+      language: "<%= I18n.locale %>",
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
