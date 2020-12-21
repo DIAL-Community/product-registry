@@ -22,7 +22,7 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
-        <%= collection_select(nil, "countries", Location.where(location_type: 'country').order(:name), :id, :name,
+        <%= collection_select(nil, "countries", Country.order(:name), :id, :name,
             { selected: params[:name], include_blank: t('view.filternav.title.country') },
             { class: 'form-control filter-element' }) %>
       </div>

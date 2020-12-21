@@ -15,11 +15,31 @@ const scrollHandlerProject = function() {
   });
 }
 
+function tagProject(value, label) {
+  const copy = $("#base-selected-tags").clone();
+
+  $(copy).removeAttr("id");
+  $(copy).find(".text-label").html(label);
+
+  const input = $(copy).find("input");
+  $(input).attr("name",  "project_tags[]");
+  $(input).val(label);
+
+  $(copy).appendTo($("#base-selected-tags").parent());
+
+  $(copy).show();
+}
+
 const projectsReady = function() {
   // Init the autocomplete for the country field.
   var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addLocation)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
+
+  // Init the autocomplete for the tags field.
+  var tagAutoComplete = autoComplete("/tags.json?without_paging=true", tagProject)
+  $('#base-selected-tags').hide();
+  $("#tag-search").autocomplete(tagAutoComplete);
 }
 
 $(document).on('projects#index:loaded', scrollHandlerProject);
