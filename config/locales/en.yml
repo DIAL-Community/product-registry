@@ -454,6 +454,8 @@ en:
       map:
         projects: Map of Projects
         all-projects: All projects
+        all-sectors: All sectors
+        all-tags: All tags
         covid-response: COVID-19 Response
     sector:
       index:

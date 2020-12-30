@@ -538,7 +538,7 @@ class ProjectsController < ApplicationController
   def project_params
     params
       .require(:project)
-      .permit(:name, :origin_id, :project_description, :slug)
+      .permit(:name, :origin_id, :project_description, :slug, :tags)
       .tap do |attr|
         if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])
@@ -547,6 +547,11 @@ class ProjectsController < ApplicationController
             attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
           end
         end
+        valid_tags = []
+        if params[:project_tags].present?
+          valid_tags = params[:project_tags].reject(&:empty?)
+        end
+        attr[:tags] = valid_tags
       end
   end
 end

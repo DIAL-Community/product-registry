@@ -172,6 +172,28 @@
 
   <div class="mt-2">
   <div class="border rounded bg-secondary text-white clearfix border card-header">
+    <h5 class="float-left mb-0"><%= t('model.tag').to_s.pluralize.humanize %></h5>
+  </div>
+  <% if @project.tags.count > 0 %>
+    <div class="row">
+      <% @project.tags.each do |tag| %>
+        <div class="col-6 col-lg-4 mt-2">
+          <div class="card h-100">
+            <div class="card-body py-2">
+              <p class="card-text text-muted" style="flex: 1"><%= tag %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="card-text text-muted">
+      <%= t('view.general.not-available', model: t('model.project'), multi: t('model.sustainable-development-goal').to_s.pluralize) %>
+    </p>
+  <% end %>
+
+  <div class="mt-2">
+  <div class="border rounded bg-secondary text-white clearfix border card-header">
     <h5 class="float-left mb-0"><%= t('model.digital-principle').to_s.pluralize.humanize %></h5>
   </div>
   <% if @project.digital_principles.count > 0 %>
