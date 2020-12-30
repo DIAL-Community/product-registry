@@ -38,6 +38,32 @@ const loadProjectTiles = function () {
     }),
   });
 
+  const sectorMarkerHoldingLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('marker_shadow.png') %>"
+      })
+    }),
+  });
+
+  const tagMarkerHoldingLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [11, 29],
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: "<%= asset_path('marker_shadow.png') %>"
+      })
+    }),
+  });
+
   const baseLayer = new ol.layer.Tile({
     source: new ol.source.OSM()
   });
@@ -81,9 +107,10 @@ const loadProjectTiles = function () {
           id: project.id,
           name: project.name,
           slug: project.slug,
-          countries: project.countries
+          countries: project.countries,
+          sectors: project.sectors,
+          tags: project.tags
         }
-
         const option = new Option(project.name, project.id);
         $(option).html(project.name);
         $('#project-selector').append(option);
@@ -91,7 +118,7 @@ const loadProjectTiles = function () {
         projects[normalized.id] = normalized;
         project.countries.forEach(function(country) {
           const projectsCountry = projectsByCountry[country] || []
-          projectsCountry.push(normalized.id);
+          projectsCountry.push(normalized);
           projectsByCountry[country] = projectsCountry;
         });
       });
@@ -181,23 +208,21 @@ const loadProjectTiles = function () {
       selectedMarkerLayer.getSource().addFeature(projectFeature);
       projectMarkerLayer.setOpacity(dimmedOpacity);
 
-      const projectIds = projectFeature.get("projects");
-      if (projectIds.length == 1) {
-        const project = projects[projectIds[0]];
-        const content = buildPopupContent(project);
+      const projects = projectFeature.get("projects");
+      if (projects.length == 1) {
+        const content = buildPopupContent(projects[0]);
         $(element).html(content);
         $(element).show();
       } else {
         const contentDiv = $('<div class="card p-0" style="overflow: hidden; max-height: 10rem"/>');
 
-        const contentHeader = $('<h6 class="card-header py-2 px-2">' + projectIds.length + ' Projects</h6>');
+        const contentHeader = $('<h6 class="card-header py-2 px-2">' + projects.length + ' Projects</h6>');
         contentDiv.append(contentHeader);
 
         const projectElements = $('<div class="list-group" style="overflow-y: auto;" />');
         contentDiv.append(projectElements);
 
-        projectIds.forEach(function (aggregatorId) {
-          const project = projects[aggregatorId];
+        projects.forEach(function (project) {
           const projectInfo = $('<div class="list-group-item list-group-item-action py-2 px-2" />');
 
           projectInfo.click(function() {
@@ -249,49 +274,106 @@ const loadProjectTiles = function () {
     projects: []
   }
 
-  $('#project-selector').change(function() {
-    const projectId = $(this).val();
-    
-    $('#project-osm-info').hide();
-    resetSelectedLayer();
+  $.getJSON(
+    '/sectors.json?display_only=true&without_paging=true',
+    function(sectors) {
+      sectors.forEach(function(sector) {
+        const option = new Option(sector.name, sector.id);
+        $(option).html(sector.name);
+        $('#sector-selector').append(option);
+      });
+    }
+  );
 
-    // Remove partial features.
-    projectMarkerLayer.getSource().forEachFeature(function(feature) {
-      if (feature.get("partialProjects") === true) {
+  $('#sector-selector').change(function() {
+      const sectorId = $(this).val();
+      $('#project-osm-info').hide();
+      resetSelectedLayer();
+
+      projectMarkerLayer.getSource().forEachFeature(function(iFeature) {
+        if (iFeature.get("partialSectors") === true) {
+          projectMarkerLayer.getSource().removeFeature(iFeature);
+        }
+      })
+      sectorMarkerHoldingLayer.getSource().forEachFeature(function(iFeature) {
+        projectMarkerLayer.getSource().addFeature(iFeature);
+      });
+      sectorMarkerHoldingLayer.getSource().clear();
+      // Reset the holder.
+      highlightHolder.projects.length = 0;
+
+      projectMarkerLayer.getSource().forEachFeature(function(feature) {
+        if (parseInt(sectorId) === -1)
+          return;
+
+        const filteredProjects = feature.get("projects")
+                                        .filter(function(project) {
+                                          return $.inArray(parseInt(sectorId), project.sectors) > -1
+                                        });
         projectMarkerLayer.getSource().removeFeature(feature);
-      }
-    })
+        sectorMarkerHoldingLayer.getSource().addFeature(feature);
+        highlightHolder.projects.push(feature);
 
-    // Add back all features from temporary holder. 
-    highlightHolder.projects.forEach(function(feature) {
-      projectMarkerLayer.getSource().addFeature(feature);
-    });
+        if (filteredProjects.length > 0) {
+          projectMarkerLayer.getSource().addFeature(new ol.Feature({
+            name: feature.get("name"),
+            geometry: feature.get("geometry"),
+            projects: filteredProjects,
+            partialSectors: true,
+          }));
+        }
+      });
+  });
 
-    // Reset the holder.
-    highlightHolder.projects.length = 0;
+  $.getJSON(
+    '/tags.json?display_only=true&without_paging=true',
+    function(tags) {
+      tags.forEach(function(tag) {
+        const option = new Option(tag.name, tag.name);
+        $(option).html(tag.name);
+        $('#tag-selector').append(option);
+      });
+    }
+  );
 
-    projectMarkerLayer.getSource().forEachFeature(function(feature) {
-      if (parseInt(projectId) === -1) {
-        return;
-      }
+  $('#tag-selector').change(function() {
+      const tagName = $(this).val();
+      $('#project-osm-info').hide();
+      resetSelectedLayer();
 
-      const filteredProjects = feature.get("projects")
-                                      .filter(function(id) {
-                                        return projectId == id;
-                                      });
+      projectMarkerLayer.getSource().forEachFeature(function(iFeature) {
+        if (iFeature.get("partialTags") === true) {
+          projectMarkerLayer.getSource().removeFeature(iFeature);
+        }
+      })
+      tagMarkerHoldingLayer.getSource().forEachFeature(function(iFeature) {
+        projectMarkerLayer.getSource().addFeature(iFeature);
+      });
+      tagMarkerHoldingLayer.getSource().clear();
+      // Reset the holder.
+      highlightHolder.projects.length = 0;
 
-      projectMarkerLayer.getSource().removeFeature(feature);
-      highlightHolder.projects.push(feature);
+      projectMarkerLayer.getSource().forEachFeature(function(feature) {
+        if (tagName === -1)
+          return;
 
-      if (filteredProjects.length > 0) {
-        projectMarkerLayer.getSource().addFeature(new ol.Feature({
-          name: feature.get("name"),
-          geometry: feature.get("geometry"),
-          projects: filteredProjects,
-          partialProjects: true
-        }));
-      }
-    });
+        const filteredProjects = feature.get("projects")
+                                        .filter(function(project) {
+                                          return $.inArray(tagName, project.tags) > -1
+                                        });
+        projectMarkerLayer.getSource().removeFeature(feature);
+        tagMarkerHoldingLayer.getSource().addFeature(feature);
+        highlightHolder.projects.push(feature);
+
+        if (filteredProjects.length > 0) {
+          projectMarkerLayer.getSource().addFeature(new ol.Feature({
+            name: feature.get("name"),
+            geometry: feature.get("geometry"),
+            projects: filteredProjects,
+            partialTags: true,
+          }));
+        }
+      });
   });
 
   map.on('click', clickHandler);
@@ -299,22 +381,22 @@ const loadProjectTiles = function () {
 }
 
 const projectOsmMapLoadedHandler = function() {
-    const positionGranted = function(position) {
-      if (position.coords) {
-        console.log('Readjusting map center and zoom ...');
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        const geoCoordinate = ol.proj.transform([parseFloat(longitude), parseFloat(latitude)], 'EPSG:4326', 'EPSG:3857');
-        // Center the map to the coordinate
+  const positionGranted = function(position) {
+    if (position.coords) {
+      console.log('Readjusting map center and zoom ...');
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      const geoCoordinate = ol.proj.transform([parseFloat(longitude), parseFloat(latitude)], 'EPSG:4326', 'EPSG:3857');
+      // Center the map to the coordinate
 
-        projectMap = $('#project-osm').data('map');
-        projectMap.getView().setCenter(geoCoordinate);
-        projectMap.getView().setZoom(6);
-      }
+      projectMap = $('#project-osm').data('map');
+      projectMap.getView().setCenter(geoCoordinate);
+      projectMap.getView().setZoom(6);
     }
-    <% if !Setting.find_by(slug: 'default_map_center_position', value: 'country').nil? %>
-      requestGeoPosition(positionGranted);
-    <% end %>
   }
+  <% if !Setting.find_by(slug: 'default_map_center_position', value: 'country').nil? %>
+    requestGeoPosition(positionGranted);
+  <% end %>
+}
 
 $(document).on('projects#map_projects_osm:loaded', loadProjectTiles);

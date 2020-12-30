@@ -215,8 +215,14 @@ module FilterConcern
 
     country_project_ids = []
     if !all_filters["countries"].empty?
-      country_project_ids = all_projects.joins(:locations)
-                                .where('location_id in (?)', all_filters["countries"])
+      country_project_ids = all_projects.joins(:countries)
+                                .where('country_id in (?)', all_filters["countries"])
+                                .ids
+    end
+
+    tag_project_ids = []
+    if !all_filters["tags"].empty?
+      tag_project_ids = all_projects.where("tags @> '{#{all_filters["tags"].join(',')}}'::varchar[]")
                                 .ids
     end
 
@@ -248,7 +254,7 @@ module FilterConcern
                                     .ids
     end
 
-    project_filtered_ids = filter_and_intersect_arrays([all_filters["projects"], country_project_ids, product_project_ids])
+    project_filtered_ids = filter_and_intersect_arrays([all_filters["projects"], country_project_ids, tag_project_ids, product_project_ids])
 
     projects = all_projects.where(id: project_filtered_ids).order(:slug)
 

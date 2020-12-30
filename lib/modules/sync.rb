@@ -426,6 +426,15 @@ module Modules
         end
       end
 
+      # Assign tags
+      if !english_project[23].nil?
+        proj_tags = english_project[23].gsub(/\s*\(.+\)/, '').split(',').map(&:strip)
+        proj_tags.each do |proj_tag|
+          Tag.where(name: proj_tag,slug: slug_em(proj_tag)).first_or_create
+        end
+        new_project.tags = proj_tags
+      end
+
       # Assign to SDGs
       if !english_project[24].nil?
         sdg_list = english_project[24].sub("Peace, Justice", "Peace Justice").sub("Reduced Inequality", "Reduced Inequalities").sub("Industry, Innovation, and", "Industry Innovation and")
