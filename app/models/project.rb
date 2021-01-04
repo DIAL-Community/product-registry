@@ -55,7 +55,7 @@ class Project < ApplicationRecord
     end
   end
 
-  def origin_image_file
+  def origin_image_file(origin)
     if !origin.nil?
       if File.exist?(File.join('public', 'assets', 'origins', "#{origin.slug}.png"))
         return "/assets/origins/#{origin.slug}.png"
