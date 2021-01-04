@@ -2204,7 +2204,8 @@ CREATE TABLE public.projects (
     updated_at timestamp without time zone NOT NULL,
     name character varying NOT NULL,
     slug character varying NOT NULL,
-    project_url character varying
+    project_url character varying,
+    tags character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -6428,6 +6429,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201123194715'),
 ('20201125162851'),
 ('20201211182046'),
-('20201214204504');
+('20201214204504'),
+('20201221140408');
 
 
