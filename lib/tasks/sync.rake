@@ -419,6 +419,11 @@ namespace :sync do
       end
 
       description = "<p>"+project["implementation_overview"]+"</p>"
+
+      sector = Sector.find_by(name: "Health")
+      if !existing_project.sectors.include?(sector)
+        existing_project.sectors << sector
+      end
   
       project_description = ProjectDescription.find_by(project_id: existing_project.id, locale: I18n.locale)
       if project_description.nil?
