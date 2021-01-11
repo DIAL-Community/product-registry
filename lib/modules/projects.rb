@@ -7,7 +7,7 @@ include Modules::Slugger
 module Modules
   module Projects
     OOB_URI = "urn:ietf:wg:oauth:2.0:oob".freeze
-    APPLICATION_NAME = "DIAL Online Catalog".freeze
+    APPLICATION_NAME = "DIAL Catalog of Digital Solutions".freeze
     CREDENTIALS_PATH = Rails.root.join("lib/assets/credentials.json").freeze
     # The file token.yaml stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first

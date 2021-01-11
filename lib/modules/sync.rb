@@ -149,6 +149,10 @@ module Modules
         existing_product.publicgoods_data["aliases"] = json_data["aliases"]
         existing_product.publicgoods_data["stage"] = json_data["stage"]
 
+        if json_data["stage"] == "DPG"
+          existing_product.status = Product::VETTED
+        end
+
         existing_product.save
 
         update_attributes(json_data, existing_product)

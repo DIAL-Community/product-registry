@@ -367,9 +367,10 @@ en:
         product-graph: Product Graph
         is_endorsed: "Used/Maintained by an Endorser"
         is_deployable: "This product is one-click deployable"
-        is_vetted: "This product is a certified global good"
+        is_vetted: "This product has been screened as a Digital Public Good by the Digital Public Goods Alliance"
         covid-19-related: "This product can be used for COVID-19 response"
         multiple: "has multiple repositories. Information about each is displayed below."
+        status: Status
         source: "Source: "
         sources: "Sources: "
         source_dial: "Digital Impact Alliance Open Source Center"

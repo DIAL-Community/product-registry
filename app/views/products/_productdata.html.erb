@@ -89,4 +89,17 @@
       </div>
     </div>
   <% end %>
+  <% if !@product.status.nil? %>
+    <div class="row text-muted mt-2 mb-2">
+      <div class="col-12 col-md-3">
+        <strong><%= t('view.product.index.status') %>:</strong>
+      </div>
+      <div class="col-12 col-md-8"> 
+        <%= @product.status %>
+        <% if @product.status == Product::VETTED %>
+          <div class="inline ml-2">(<%= t('view.product.index.is_vetted') %>)</div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 

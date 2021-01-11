@@ -5,7 +5,7 @@
       <%= link_to product.name, product, class: 'truncate-text',
         'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
       <div style="display: inline-flex;">
-        <% if product.status == "Vetted" %>
+        <% if product.status == Product::VETTED %>
           <i class="fa fa-check header-img mt-1" data-toggle="tooltip"
             data-placement="top" data-original-title="<%= t('view.product.index.is_vetted') %>"></i>
         <% end %>
