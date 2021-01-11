@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-lg-4 col-12">
     <div class="form-signin px-0">
-      <div class="border rounded bg-secondary text-white clearfix border card-header mb-3">
-        <h5 class="float-left mb-0">Edit <%= resource_name.to_s.humanize %></h5>
+      <div class="rounded bg-secondary text-white card-header mb-3">
+        Edit <%= resource_name.to_s.humanize %>
       </div>
 
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
@@ -46,8 +46,8 @@
 
     <div class="form-signin mt-3 p-0">
 
-      <div class="border rounded bg-secondary text-white clearfix border card-header mb-3">
-        <h5 class="float-left mb-0">Delete account</h3>
+      <div class="rounded bg-secondary text-white card-header mb-3">
+        Delete account
       </div>
 
       <p>
@@ -61,8 +61,8 @@
   </div>
 
   <div class="col-lg-4 col-12 mt-3 px-lg-0">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
+    <div class="rounded bg-secondary text-white card-header">
+      <%= t('model.product').to_s.pluralize.humanize %>
     </div>
     <div class="row mt-2">
       <% Product.where(id: current_user.saved_products).order(:name).each do |product| %>
@@ -77,8 +77,8 @@
       <% end %>
     </div>
 
-    <div class="border rounded bg-secondary text-white clearfix border card-header mt-3">
-      <h5 class="float-left mb-0"><%= t('model.project').to_s.pluralize.humanize %></h5>
+    <div class="rounded bg-secondary text-white card-header mt-3">
+      <%= t('model.project').to_s.pluralize.humanize %>
     </div>
     <div class="row mt-2">
       <% Project.where(id: current_user.saved_projects).order(:name).each do |project| %>
@@ -87,15 +87,14 @@
             <i class="favorite-indicator" data-slug="<%= project.slug %>" data-type="projects"></i>
             <%= link_to project, class: "text-decoration-none" do %>
               <%= image_tag(project.image_file, width: '100%') %>
-              <small><%= project.name %></small>
             <% end %>
           </div>
         </div>
       <% end %>
     </div>
 
-    <div class="border rounded bg-secondary text-white clearfix border card-header mt-3">
-      <h5 class="float-left mb-0"><%= t('model.use-case').to_s.titlecase.pluralize %></h5>
+    <div class="rounded bg-secondary text-white card-header mt-3">
+      <%= t('model.use-case').to_s.titlecase.pluralize %>
     </div>
     <div class="row mt-2">
       <% UseCase.where(id: current_user.saved_use_cases).order(:name).each do |use_case| %>
@@ -104,7 +103,6 @@
             <i class="favorite-indicator" data-slug="<%= use_case.slug %>" data-type="use_cases"></i>
             <%= link_to use_case, class: "text-decoration-none" do %>
               <%= image_tag(use_case.image_file, width: '100%') %>
-              <small><%= use_case.name %></small>
             <% end %>
           </div>
         </div>
@@ -113,14 +111,14 @@
   </div>
 
   <div class="col-lg-4 col-12 mt-3">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0">Saved Filters</h5>
+    <div class="rounded bg-secondary text-white card-header">
+      Saved Filters
     </div>
     <ul class="list-group list-group-flush mt-2">
       <% current_user.saved_urls.each_with_index do |url, index| %>
         <div class="list-group-item index-card mt-2 saved-search">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Saved Search #<%= index + 1 %></h5>
+            <div class="mb-1">Saved Search #<%= index + 1 %></div>
             <i class="saved-indicator" data-index="<%= index %>"></i>
           </div>
           <a href="<%= url %>" target="_blank" class="text-decoration-none">

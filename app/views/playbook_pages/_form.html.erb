@@ -22,9 +22,9 @@
     <%= form.label :name, t('view.playbook-page.form.order') %>
   </fieldset>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook-page.form.page-contents') %>
-  </h6>
+  </div>
   <div id="activity-resources">
     <% @page.page_contents.each do |contents| %>
       <%= form.text_area :content_html, id: :content_html, class: "form-control", value: contents.html %>
@@ -34,9 +34,9 @@
     <% end %>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook-page.form.question') %>
-  </h6>
+  </div>
   <div id="activity-question">
     <fieldset class="form-label-group">
       <%= form.text_field :question_text, id: :question_text, class: "form-control", placeholder: t('view.playbook-page.form.question-text') %>
@@ -49,12 +49,12 @@
     </fieldset>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-4 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-4 mb-0">
     <%= t('view.playbook-page.form.other-info') %>
-  </h6>
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  </div>
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook-page.form.media') %>
-  </h6>
+  </div>
   <div id="activity-media">
     <fieldset class="form-label-group">
       <%= form.text_field :media_url, id: :media_url, class: "form-control", placeholder: t('view.playbook-page.form.media-prompt') %>
@@ -62,12 +62,12 @@
     </fieldset>
   </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook-page.form.resources') %>
     <% if user_signed_in? && policy(Playbook).mod_allowed? %>
       <a href="#" class="card-link float-right" id="add-resource" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
     <% end %>
-  </h6>
+  </div>
   <div id="activity-resources">
     <% @page.resources.each do |resource| %>
       <%= render :partial => 'resource', :object => resource %>

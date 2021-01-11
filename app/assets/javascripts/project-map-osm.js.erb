@@ -164,7 +164,7 @@ const loadProjectTiles = function () {
   // Build popup content for a single project marker feature
   const buildPopupContent = function(project) {
     return `<div class="card p-0">
-              <h6 class="card-header py-2 px-2">${project.name}</h6>
+              <div class="card-header py-2 px-2">${project.name}</div>
               <p class="small py-2 px-2 mb-0">
                 <a href="/projects/${project.slug}" target="_blank" rel="noreferrer noopener">
                   <small>View project</small>
@@ -216,7 +216,7 @@ const loadProjectTiles = function () {
       } else {
         const contentDiv = $('<div class="card p-0" style="overflow: hidden; max-height: 10rem"/>');
 
-        const contentHeader = $('<h6 class="card-header py-2 px-2">' + projects.length + ' Projects</h6>');
+        const contentHeader = $('<div class="card-header py-2 px-2">' + projects.length + ' Projects</div>');
         contentDiv.append(contentHeader);
 
         const projectElements = $('<div class="list-group" style="overflow-y: auto;" />');
@@ -257,7 +257,7 @@ const loadProjectTiles = function () {
       const projectIds = feature.get("projects");
       $(element).html(
         `<div class="card map-hover p-0" style="z-index: 10;">
-          <h6 class="card-header py-2 px-2">${name}</h6>
+          <div class="card-header py-2 px-2">${name}</div>
           <p class="text-muted py-2 px-2 mb-0">
             ${projectIds.length} project(s).
             <br />
@@ -354,7 +354,7 @@ const loadProjectTiles = function () {
       highlightHolder.projects.length = 0;
 
       projectMarkerLayer.getSource().forEachFeature(function(feature) {
-        if (tagName === -1)
+        if (tagName == -1)
           return;
 
         const filteredProjects = feature.get("projects")

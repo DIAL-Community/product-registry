@@ -22,33 +22,33 @@
     <%= form.label :maturity, t('view.general.is-mature').to_s, class: 'form-check-label' %>
   </fieldset>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.overview') %>
-  </h6>
+  </div>
 
   <input type="hidden" id="playbook_overview" name="playbook[playbook_overview]" />
   <div id="overview_editor"> </div>
   
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.audience') %>
-  </h6>
+  </div>
 
   <input type="hidden" id="playbook_audience" name="playbook[playbook_audience]" />
   <div id="audience_editor"> </div>
   
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.outcomes') %>
-  </h6>
+  </div>
 
   <input type="hidden" id="playbook_outcomes" name="playbook[playbook_outcomes]" />
   <div id="outcomes_editor"> </div>
   
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.phases') %>
     <% if user_signed_in? && policy(Playbook).mod_allowed? %>
       <a href="#" class="card-link float-right" id="add-phase" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
     <% end %>
-  </h6>
+  </div>
   <div id="playbook-phases">
     <% @playbook.phases.each do |phase| %>
       <%= render :partial => 'phase', :object => phase %>

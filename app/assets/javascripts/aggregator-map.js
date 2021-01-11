@@ -200,7 +200,7 @@ function aggregatorClickHandler(evt) {
       const organization = aggregator.aggregators[aggregatorIds[0]];
       const content =
         `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
-          <h6 class="card-header py-2 px-2">${organization.name}</h6>
+          <div class="card-header py-2 px-2">${organization.name}</div>
           <p class="py-2 px-2 mb-0">
             <a href="/organizations/${organization.name.toLowerCase()}"><small>View aggregator</small></a> <br />
           </p>
@@ -209,7 +209,7 @@ function aggregatorClickHandler(evt) {
     } else {
       const contentDiv = $('<div class="card map-popup" style="overflow: hidden; max-height: 20rem; bottom: -7rem; padding: 0"/>');
       
-      const contentHeader = $('<h6 class="card-header py-2 px-2">' + aggregatorIds.length + ' Aggregators</h6>');
+      const contentHeader = $('<div class="card-header py-2 px-2">' + aggregatorIds.length + ' Aggregators</div>');
       contentDiv.append(contentHeader);
 
       const organizationElements = $('<div class="list-group" style="overflow-y: auto;" />');

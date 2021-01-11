@@ -3,10 +3,8 @@
 
 <% if @use_case_step.use_case.use_case_steps.count > 0 %>
   <div class="mt-4">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0">
-        <%= "#{t('view.use-case-step.show.other-steps')}: #{@use_case_step.use_case.name}" %>
-      </h5>
+    <div class="rounded bg-secondary text-white card-header">
+      <%= "#{t('view.use-case-step.show.other-steps')}: #{@use_case_step.use_case.name}" %>
     </div>
     <div class="row">
       <%
@@ -36,9 +34,7 @@
 
 <div class="card mt-2">
   <div class="bg-secondary text-white card-header">
-    <h5 class="float-left mb-0">
-      <%= "#{t('model.use-case-step').to_s.titlecase}: #{@use_case_step.name}" %>
-    </h5>
+    <%= "#{t('model.use-case-step').to_s.titlecase}: #{@use_case_step.name}" %>
   </div>
   <div class="card-body">
     <div id="step-desc" class="wysiwyg-viewer">
@@ -60,8 +56,8 @@
 <% if @use_case_step.workflows.count > 0 %>
   <% building_blocks = [] %>
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.titlecase%></h5>
+    <div class="rounded bg-secondary text-white card-header">
+      <%= t('model.workflow').to_s.pluralize.titlecase%>
     </div>
     <div class="row mt-2">
       <div class="col-12">
@@ -80,8 +76,8 @@
   </div>
 
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
+    <div class="rounded bg-secondary text-white card-header">
+      <%= t('model.building-block').to_s.titlecase.pluralize %>
     </div>
     <div class="row mt-2">
       <div class="col-12">

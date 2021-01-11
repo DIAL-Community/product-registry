@@ -8,7 +8,8 @@ module SustainableDevelopmentGoalsHelper
           next if use_case.nil?
 
           tooltip = use_case.name
-          image = Hash[filename: use_case.image_file, tooltip: tooltip, id: use_case.id, controller: 'use_cases']
+          image = Hash[filename: use_case.image_file, tooltip: tooltip, id: use_case.id, controller: 'use_cases',
+                       alt_text: t('alt.el-logo', el: "#{use_case.name} #{t('model.use-case')}").humanize]
           images.push(image)
         end
       end
@@ -18,11 +19,13 @@ module SustainableDevelopmentGoalsHelper
         next if sdg_target.nil?
 
         tooltip = sdg_target.name
-        image = Hash[filename: sdg_target.image_file, tooltip: tooltip, id: sdg_target.id, controller: 'sdg_targets']
+        image = Hash[filename: sdg_target.image_file,  tooltip: tooltip,
+                     id: sdg_target.id, controller: 'sdg_targets',
+                     alt_text: t('alt.el-logo', el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize]
         images.push(image)
       end
     end
-    images
+    images.uniq
   end
 
   def use_case_names(sdg_target)

@@ -1,42 +1,55 @@
 <% content_for(:header_scripts) do %>
 
 <% end %>
-<div class="card">
-  <h5 class="card-header bg-secondary text-white">
-    <div id="loading-spinner" class="spinner-border spinner-border-sm" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <%= t('view.project.map.projects') %>
-    <div class="float-right">
-      <%= link_to products_path, class: 'no-hover' do %>
-        <h5 class="text-white icon-inline"><%= t("view.about.return_catalog") %></h5>
-        <i class="fas fa-external-link-alt text-white icon-inline"></i>
-      <% end %>
-    </div>
-  </h5>
-</div>
-
-<div id="project-osm" class="map" style="height:40rem;">
-  <div id="project-osm-info" class="map-info" style="display: none;"></div>
-</div>
-<div id="country-osm-popup"></div>
-
-<div class="form-inline">
-  <div class="form-group col-12">
-    <div class="float-right">
-      <select id="sector-selector" class="custom-select">
-        <option value=-1>
-          <%= t('view.project.map.all-sectors') %>
-        </option>
-      </select>
-      <select id="tag-selector" class="custom-select">
-        <option value=-1>
-          <%= t('view.project.map.all-tags') %>
-        </option>
-      </select>
+<div class="row">
+  <div id="left-filter" class="col-12 col-md-3 col-lg-5ths d-none d-md-block nav-container bg-dark">
+    <div class="card border-bottom-0">
+      <div class="card-header bg-secondary text-white">
+        <div class="nav-header mb-0 original-font-size"><%= t('view.filternav.map-filtering') %></div>
+      </div>
+      <div class="card-body bg-dark">
+        <div class="row">
+          <div class="col-12 pl-2">
+            <label for="sector-selector" class="align-middle text-white"><%= t('view.filternav.sectors') %></label>
+            <select id="sector-selector" class="custom-select mb-2">
+              <option value=-1>
+                <%= t('view.project.map.all-sectors') %>
+              </option>
+            </select>
+            <label for="tag-selector" class="align-middle text-white"><%= t('view.filternav.tags') %></label>
+            <select id="tag-selector" class="custom-select">
+              <option value=-1>
+                <%= t('view.project.map.all-tags') %>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div id="right-content" class="col-12 col-md-9 col-lg-45ths">
+    <div class="card">
+      <div class="card-header bg-secondary text-white original-font-size">
+        <div id="loading-spinner" class="spinner-border spinner-border-sm" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <%= t('view.project.map.projects') %>
+        <div class="float-right">
+          <%= link_to products_path, class: 'no-hover' do %>
+            <div class="text-white icon-inline original-font-size"><%= t("view.about.return_catalog") %></div>
+            <i class="fas fa-external-link-alt text-white icon-inline"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div id="project-osm" class="map" style="height:40rem;">
+      <div id="project-osm-info" class="map-info" style="display: none;"></div>
+    </div>
+    <div id="country-osm-popup"></div>
+  </div>
 </div>
+
 
 <script>
   $(document).on('#project-osm:loaded', projectOsmMapLoadedHandler);

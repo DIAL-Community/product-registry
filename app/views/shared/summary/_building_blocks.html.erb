@@ -15,7 +15,10 @@
       end
     %>
     <span class="w-100 btn <%= btn_class %>">
-      <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px" %>
+      <div class="inline" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= t('model.building-block').titlecase.pluralize %>">
+      <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px", 
+                    alt: t('alt.el-icon', el: t('model.building-block')).humanize %>
+      </div>
       <span class="display-text-on-xl">
         <%= t('model.building-block').titlecase.pluralize %>
       </span>

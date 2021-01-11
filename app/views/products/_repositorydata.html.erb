@@ -1,5 +1,5 @@
   <div class="card mt-2">
-    <h5 class="card-header bg-secondary text-white">
+    <div class="card-header bg-secondary text-white">
       <%= t('view.product.show.repository-info') %>
       <%
         last_updated = DateTime.parse(repository_data['updatedAt'])
@@ -14,44 +14,44 @@
           concat("<span class='badge badge-danger'>#{t('view.product.show.inactive')}</span>".html_safe)
         end
       %>
-    </h5>
+    </div>
     <div class="card-body pt-1">
       <div class="row">
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-star"></i> <%= t('view.product.show.star') %></div>
-          <h5><%= repository_data['stargazers']['totalCount'] %></h5>
+          <div><%= repository_data['stargazers']['totalCount'] %></div>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-eye"></i> <%= t('view.product.show.watcher') %></div>
-          <h5><%= repository_data['watchers']['totalCount'] %></h5>
+          <div><%= repository_data['watchers']['totalCount'] %></div>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-code-branch"></i> <%= t('view.product.show.fork') %></div>
-          <h5><%= repository_data['forkCount'] %></h5>
+          <div><%= repository_data['forkCount'] %></div>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-file"></i> <%= t('view.product.show.current-version') %></div>
           <% if repository_data['releases']['totalCount'].to_i > 0 %>
-          <h5><%= repository_data['releases']['edges'][0]['node']['name'] %></h5>
+          <div><%= repository_data['releases']['edges'][0]['node']['name'] %></div>
           <% else %>
-          <h5><%= t('view.product.show.no-version-data') %></h5>
+          <div><%= t('view.product.show.no-version-data') %></div>
           <% end %>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-calendar"></i> <%= t('view.product.show.created') %></div>
-          <h5><%= DateTime.parse(repository_data['createdAt']).strftime("%m/%d/%Y") %></h5>
+          <div><%= DateTime.parse(repository_data['createdAt']).strftime("%m/%d/%Y") %></div>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-calendar-alt"></i> <%= t('view.product.show.last-updated') %></div>
-          <h5><%= DateTime.parse(repository_data['updatedAt']).strftime("%m/%d/%Y") %></h5>
+          <div><%= DateTime.parse(repository_data['updatedAt']).strftime("%m/%d/%Y") %></div>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-code"></i> <%= t('view.product.show.open-pr') %></div>
-          <h5><%= repository_data['openPullRequestCount']['totalCount'] %></h5>
+          <div><%= repository_data['openPullRequestCount']['totalCount'] %></div>
         </div>
         <div class="col-6 col-md-3 mt-3">
           <div class="text-muted"><i class="fas fa-check"></i> <%= t('view.product.show.merged-pr') %></div>
-          <h5><%= repository_data['mergedPullRequestCount']['totalCount'] %></h5>
+          <div><%= repository_data['mergedPullRequestCount']['totalCount'] %></div>
         </div>
       </div>
       <%= render 'languages', product: @product %>

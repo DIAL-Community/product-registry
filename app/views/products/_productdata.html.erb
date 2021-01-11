@@ -58,7 +58,9 @@
       </div>
       <div class="col-12 col-md-8">
         <% product.origins.each do |origin| %>
-          <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
+          <%= image_tag("origins/" + origin.slug + ".png",
+                        alt: t('alt.el-logo', el: origin.name).humanize,
+                        class: 'origin-img-full') %>
         <% end %>
       </div>
     </div>
@@ -86,6 +88,19 @@
         <div id="product-viewer-<%= product.slug %>" class="wysiwyg-viewer text-justify">
           <%= product_description.description.html_safe %>
         </div>
+      </div>
+    </div>
+  <% end %>
+  <% if !@product.status.nil? %>
+    <div class="row text-muted mt-2 mb-2">
+      <div class="col-12 col-md-3">
+        <strong><%= t('view.product.index.status') %>:</strong>
+      </div>
+      <div class="col-12 col-md-8"> 
+        <%= @product.status %>
+        <% if @product.status == Product::VETTED %>
+          <div class="inline ml-2">(<%= t('view.product.index.is_vetted') %>)</div>
+        <% end %>
       </div>
     </div>
   <% end %>

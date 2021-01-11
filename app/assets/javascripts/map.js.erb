@@ -216,7 +216,7 @@ mapObject.clickHandler = function(evt) {
       org = feature.get("organizations")[0];
       var content =
       `<div class="card map-popup" style="bottom: -6.5rem; padding: 0">
-        <h6 class="card-header py-2 px-2">${org.name}</h6>
+        <div class="card-header py-2 px-2">${org.name}</div>
         <p class="small py-2 px-2 mb-0">
           <a href="//${org.website}" target="_blank" rel="noreferrer noopener">${org.website}</a> <br />
           Endorser since ${org.when_endorsed} <br />
@@ -228,7 +228,7 @@ mapObject.clickHandler = function(evt) {
     } else {
       orgs = feature.get("organizations");
       var contentDiv = $('<div class="card map-popup" style="overflow: hidden; max-height: 20rem; bottom: -7rem; padding: 0"/>');
-      var contentHeader = $('<h6 class="card-header py-2 px-2">' + orgs.length + ' Organizations</h6>');
+      var contentHeader = $('<div class="card-header py-2 px-2">' + orgs.length + ' Organizations</div>');
       contentDiv.append(contentHeader);
       var orgElements = $('<div class="list-group" style="overflow-y: auto;" />');
       contentDiv.append(orgElements);

@@ -21,9 +21,9 @@
 <% @glossaries.each do |glossary| %>
   <div class="card mt-2">
     <div class="card-body py-3 px-3">
-      <h5>
+      <div>
         <%= "#{glossary.name}" %>
-      </h5>
+      </div>
       <div id="<%= glossary.slug %>" class="wysiwyg-viewer">
         <%= glossary.description.html_safe %>
       </div>

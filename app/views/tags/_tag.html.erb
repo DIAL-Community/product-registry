@@ -1,11 +1,11 @@
 
 <div class="card mt-2">
   <div class="card-body py-3 px-3">
-    <h5>
+    <div>
       <%= link_to(tag) do %>
         <%= "#{tag.name}" %>
       <% end %>
-    </h5>
+    </div>
     <div id="<%= tag.slug %>" class="wysiwyg-viewer">
         <%= tag.tag_descriptions
         .select { |desc| desc.locale == I18n.locale.to_s }

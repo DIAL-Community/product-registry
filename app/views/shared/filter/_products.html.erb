@@ -1,7 +1,8 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
     <div id="header-products-link" class="header-link-button" >
-    <%= image_tag "products_icon.png", :width => "20px", :height => "20px" %>
+    <%= image_tag "products_icon.png", :width => "20px", :height => "20px",
+                  alt: t('alt.el-icon', el: t('model.product')).humanize %>
     <span class="align-middle"><%= t('view.filternav.products') %></span>
     </div>
     <%

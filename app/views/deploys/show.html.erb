@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white">
     Deploy: <%= @deploy.instance_name %>
-  </h5>
+  </div>
   <div class="card-body">
     <p class="card-subtitle text-muted mb-2">Status: <%= @deploy.status %></p>
     <p class="card-subtitle text-muted mb-2">URL: <%= link_to @deploy.url, "#{@deploy.url}", target: :_blank %></p>
@@ -19,9 +19,9 @@
       <%= link_to t('view.general.back'), deploys_path, :class => "card-link" %>
     </p>
   </div>
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white">
     SSH User
-  </h5>
+  </div>
   <div class="card-body">
     <% if @deploy.status == "RUNNING" %>
       <%= form_tag(deploy_add_ssh_user_path(@deploy), id: "ssh-user-form", class: "form") do %>

@@ -7,7 +7,9 @@
     </div>
     <div class="model-logo">
       <%= link_to(building_block) do %>
-        <%= image_tag(building_block.image_file, class: 'card-img-top align-middle') %>
+        <%= image_tag(building_block.image_file,
+                      alt: t('alt.el-logo', el: building_block.name).humanize,
+                      class: 'card-img-top align-middle') %>
       <% end %>
     </div>
 
@@ -21,8 +23,9 @@
               concat(content.html_safe)
 
               workflows.each do |workflow|
-                concat(image_tag(workflow[:filename], title: workflow[:tooltip],
-                                class: 'footer-img-small mr-1 workflow-filter', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+                concat(image_tag(workflow[:filename], title: workflow[:tooltip], alt: workflow[:alt_text],
+                                class: 'footer-img-small mr-1 workflow-filter',
+                                'data-toggle': 'tooltip', 'data-placement': 'top'))
               end
               concat('</div>'.html_safe)
             end
@@ -33,7 +36,7 @@
               concat(content.html_safe)
 
               products.each do |product|
-                concat(image_tag(product[:filename], title: product[:tooltip],
+                concat(image_tag(product[:filename], title: product[:tooltip], alt: product[:alt_text],
                                class: 'footer-img-small mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
               end
               concat('</div>'.html_safe)
@@ -59,11 +62,11 @@
           </div>
         </div>
         <div class="col-2 d-md-none h-100 d-flex justify-content-center dropup context-menu">
-          <button id="bb-context-menu" type="button" class="btn bg-transparent" data-toggle="dropdown"
+          <button id="bb-context-menu-<%= building_block.id %>" type="button" class="btn bg-transparent" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-ellipsis-v fa-2x align-self-center"></i>
           </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bb-context-menu">
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bb-context-menu-<%= building_block.id %>">
             <% if user_signed_in? && policy(building_block).mod_allowed? %>
               <%= link_to "#{t('view.general.edit')} #{t('model.building-block')}",
                           edit_building_block_path(building_block), class: 'dropdown-item' %>

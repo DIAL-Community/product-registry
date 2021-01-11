@@ -1,14 +1,17 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white original-font-size">
     <%= "#{t('model.building-block').to_s.titlecase}: #{@building_block.name}" %>
     <div class="float-right mr-2 text-white"> 
       <%= t('view.building-block.index.maturity').to_s %>:
       <%= @building_block.maturity %>
     </div>
-  </h5>
-  <%= image_tag(@building_block.image_file, class: 'card-img-top px-2 py-2 mx-auto', style: 'width: auto; height: 250px;') %>
+  </div>
+  <%= image_tag(@building_block.image_file,
+                alt: t('alt.el-logo', el: @building_block.name).humanize,
+                class: 'card-img-top px-2 py-2 mx-auto',
+                style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="bb-viewer" class="wysiwyg-viewer">
       <%= @bb_desc.description.html_safe %>
@@ -30,9 +33,9 @@
 <% end %>
 
 <% if !@building_block.products.nil? && @building_block.products.count > 0 %>
-  <div class="mt-4">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
+  <div class="mt-2">
+    <div class="rounded bg-secondary text-white card-header original-font-size">
+      <%= t('model.product').to_s.pluralize.humanize %>
     </div>
     <div class="row">
       <% @building_block.product_building_blocks.each do |bb_product| %>
@@ -40,7 +43,9 @@
           <div class="card">
             <div class="d-flex flex-row align-self-center">
               <%= link_to bb_product.product do %>
-                <%= image_tag(bb_product.product.image_file, height: 75, class: 'card-image-top align-middle p-1') %>
+                <%= image_tag(bb_product.product.image_file, height: 75,
+                              alt: t('alt.el-logo', el: bb_product.product.name).humanize,
+                              class: 'card-image-top align-middle p-1') %>
               <% end %>
               <div class="card-body align-middle my-auto px-2 py-2">
                 <%= link_to bb_product.product.name, bb_product.product %>
@@ -55,9 +60,9 @@
 <% end %>
 
 <% if @building_block.workflows.count > 0 %>
-  <div class="mt-4 mb-4">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.workflow').to_s.pluralize.humanize %></h5>
+  <div class="mt-2">
+    <div class="rounded bg-secondary text-white card-header original-font-size">
+      <%= t('model.workflow').to_s.pluralize.humanize %>
     </div>
 
     <div class="row mt-2">
@@ -66,7 +71,9 @@
           <div class="card-body py-2">
             <% @building_block.workflows.order("name").each do |workflow| %>
               <%= link_to(workflow, style: 'text-decoration: none;') do %>
-                <%= image_tag(workflow.image_file, class: 'footer-img mr-1 workflow-filter', title: workflow.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                <%= image_tag(workflow.image_file, class: 'footer-img mr-1 workflow-filter',
+                              alt: t('alt.el-logo', el: workflow.name).humanize,
+                              title: workflow.name, 'data-toggle': 'tooltip', 'data-placement': 'top') %>
               <% end %>
             <% end %>
           </div>
@@ -77,8 +84,8 @@
 <% end %>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('view.general.comment').to_s.titlecase.pluralize %></h5>
+  <div class="rounded bg-secondary text-white card-header original-font-size">
+    <%= t('view.general.comment').to_s.titlecase.pluralize %>
   </div>
   <%= commontator_thread(@building_block) %>
 </div>

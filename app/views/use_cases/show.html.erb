@@ -12,17 +12,19 @@
 </div>
 
 <div class="card">
-  <div class="bg-secondary text-white card-header">
-    <h5 class="float-left mb-0">
-      <%= "#{t('model.use-case').to_s.titlecase}: #{@use_case.name}" %>
-    </h5>
-    <div class="float-right mr-2 text-white"> 
+  <div class="bg-secondary text-white card-header" style="font-size: 1rem;">
+    <span >
+      <%= @use_case.name %>
+    </span>
+    <div class="float-right text-white"> 
       <%= t('view.use-case.index.maturity').to_s %>:
       <%= @use_case.maturity %>
     </div>
   </div>
 
-  <%= image_tag(@use_case.image_file, class: 'card-img-top px-2 py-2 mx-auto use-case-filter', style: 'width: auto; height: 250px;') %>
+  <%= image_tag(@use_case.image_file, alt: t('alt.el-logo', el: @use_case.name).humanize,
+                class: 'card-img-top px-2 py-2 mx-auto use-case-filter',
+                style: 'width: auto; height: 250px;') %>
   <div class="card-body">
     <div id="usecase-viewer" class="wysiwyg-viewer">
       <%= @uc_desc.description.html_safe %>
@@ -59,8 +61,8 @@
 
 <% if @use_case.sdg_targets.count > 0 %>
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('view.use-case.show.sdg-targets') %></h5>
+    <div class="rounded bg-secondary text-white card-header" style="font-size: 1rem;">
+      <%= t('view.use-case.show.sdg-targets') %>
     </div>
     <div class="row mt-2">
       <div class="col-12">
@@ -73,13 +75,13 @@
 <% end %>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
+  <div class="rounded bg-secondary text-white card-header" style="font-size: 1rem;">
     <div class="row">
       <div class="col-12">
-        <h5 class="float-left mb-0"><%= t('view.use-case.show.use-case-steps') %></h5>
-        <h5 class="float-right mb-0">
+        <%= t('view.use-case.show.use-case-steps') %>
+        <div class="float-right mb-0">
           <%= link_to t('view.general.add'), new_use_case_use_case_step_path(@use_case), class: "card-link text-warning small" %>
-        </h5>
+        </div>
       </div>
     </div>
     <% if !@ucs_header.header.empty? && @ucs_header.header.to_s != '{}' %>
@@ -136,8 +138,8 @@
    end
 %>
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.building-block').to_s.titlecase.pluralize %></h5>
+    <div class="rounded bg-secondary text-white card-header" style="font-size: 1rem;">
+      <%= t('model.building-block').to_s.titlecase.pluralize %>
     </div>
     <% if !building_blocks.nil? %>
       <div class="row mt-2">
@@ -163,8 +165,8 @@
   </div>
 
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('view.general.comment').to_s.titlecase.pluralize %></h5>
+    <div class="rounded bg-secondary text-white card-header" style="font-size: 1rem;">
+      <%= t('view.general.comment').to_s.titlecase.pluralize %>
     </div>
     <%= commontator_thread(@use_case) %>
   </div>

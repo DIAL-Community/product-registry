@@ -1,7 +1,8 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
     <div id="header-use_cases-link" class="header-link-button" >
-    <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px" %>
+    <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px",
+                  alt: t('alt.el-icon', el: t('model.use-case')).humanize %>
     <span class="align-middle"><%= t('view.filternav.use_cases') %></span>
     </div>
     <%
@@ -24,6 +25,7 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
+        <label for="use_cases" class="sr-only"><%= t('model.use-case').pluralize.humanize %></label>
         <%= collection_select(nil, "use_cases", UseCase.all.order(:name), :id, :name,
             { selected: params[:name], include_blank: t('view.filternav.title.use-case') },
             { class: 'form-control filter-element' }) %>

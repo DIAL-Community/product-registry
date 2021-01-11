@@ -1,6 +1,6 @@
   <%= form_with(model: organization, multipart: true, local: true, html: { id: 'organization-form' }) do |form| %>
 
-    <fieldset class="form-label-group">
+    <fieldset class="form-label-group mt-2">
       <%= form.text_field :name, id: :organization_name,
                           disabled: !policy(organization).permitted_attributes.include?(:name),
                           class: "form-control", placeholder: t('view.general.name') %>
@@ -55,9 +55,9 @@
     </fieldset>
 
     <% if organization.new_record? %>
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('model.contact').to_s.humanize %> 
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="contact-name" name="contact[name]" class="form-control" required="true"
                placeholder="<%= t('view.general.name') %>" />
@@ -84,9 +84,9 @@
     <% end %>
 
     <% if organization.persisted? %>
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('model.contact').to_s.pluralize.humanize %> 
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="contact-search" name="contact_label" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.contact').to_s.pluralize) %>" />
@@ -108,9 +108,9 @@
     <% end %>
 
     <% if !organization.is_mni ### Start for non-MNI data section. ### %>
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.office').to_s.pluralize.humanize %> 
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="office-label" name="office_label" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.office').to_s.pluralize) %>" />
@@ -132,22 +132,22 @@
     </div>
 
     <fieldset class="form-group form-check">
-      <%= form.check_box :is_endorser, id: :organization_is_endorser,
+      <%= form.check_box :is_endorser, id: :is_endorser,
           disabled: !policy(organization).permitted_attributes.include?(:is_endorser),
           class: "form-check-input" %>
-      <%= form.label :is_endorser, t('view.organization.form.endorser'), class: "form-check-label" %>
+      <%= form.label t('view.organization.form.endorser'), for: 'is_endorser', class: "form-check-label" %>
     </fieldset>
 
     <fieldset class="form-group form-check">
-      <%= form.check_box :is_mni, id: :organization_is_aggregator,
+      <%= form.check_box :is_mni, id: :is_mni,
           disabled: !policy(organization).permitted_attributes.include?(:is_mni),
           class: "form-check-input" %>
-      <%= form.label :is_mni, t('view.organization.form.aggregator'), class: "form-check-label" %>
+      <%= form.label t('view.organization.form.aggregator'), for: 'is_mni', class: "form-check-label" %>
     </fieldset>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.sector').to_s.pluralize.humanize %> 
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="sector-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>" />
@@ -167,9 +167,9 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.product').to_s.pluralize.humanize %> 
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="product-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
@@ -189,9 +189,9 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.project').to_s.pluralize.humanize %> 
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="project-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
@@ -211,9 +211,9 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.country').to_s.pluralize.humanize %> 
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="country-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>" />
@@ -235,9 +235,9 @@
     <% end  ### End of non-MNI section ### %> 
       
     <% if organization.is_mni %>
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('model.country').to_s.pluralize.humanize %> 
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="country-search" class="form-control"
               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>" />
@@ -257,8 +257,8 @@
         </div>
       </div>
       <div class="mt-2">
-        <div class="border rounded bg-secondary text-white clearfix border card-header">
-          <h5 class="float-left mb-0"><%= t('model.operator_services').to_s.pluralize.humanize %></h5>
+        <div class="rounded bg-secondary text-white card-header">
+          <%= t('model.operator_services').to_s.pluralize.humanize %>
         </div>
         <div id="orgId" style="display:none"><%= @organization.id %></div>
         <div id="agg-nav" class="card-body accordion-section p-0">

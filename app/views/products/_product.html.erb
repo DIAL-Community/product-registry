@@ -5,7 +5,7 @@
       <%= link_to product.name, product, class: 'truncate-text',
         'title' => product.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
       <div style="display: inline-flex;">
-        <% if product.status == "Vetted" %>
+        <% if product.status == Product::VETTED %>
           <i class="fa fa-check header-img mt-1" data-toggle="tooltip"
             data-placement="top" data-original-title="<%= t('view.product.index.is_vetted') %>"></i>
         <% end %>
@@ -15,11 +15,15 @@
         <% end %>
         <% if is_endorsed(product) %>
           <%= image_tag("digiprins.png", class: 'header-img mt-1 ml-1',
-                        'title': t('view.product.index.is_endorsed'), 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                        alt: t('alt.el-logo', el: 'Principles for Digital Development'),
+                        'title': t('view.product.index.is_endorsed'),
+                        'data-toggle': 'tooltip', 'data-placement': 'top') %>
         <% end %>
         <% if coronavirus_handler(product) %>
           <%= image_tag("marker-coronavirus.png", class: 'header-img mt-1 ml-1',
-                        'title': t('view.product.index.covid-19-related'), 'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                        alt: t('alt.el-logo', el: 'Coronavirus').humanize,
+                        'title': t('view.product.index.covid-19-related'),
+                        'data-toggle': 'tooltip', 'data-placement': 'top') %>
         <% end %>
       </div>
     </div>
@@ -40,13 +44,14 @@
            data-favorited="<%= current_user.saved_products.include?(product.id) unless current_user.nil? %>"
            data-toggle="tooltip"
            data-placement="top" data-original-title="<%= t('view.product.index.toggle-favorite') %>"></i>
-        <%= link_to edit_product_path(product), class: "text-secondary" do%>
+        <%= link_to edit_product_path(product), class: "text-secondary", 'aria-label': "Edit #{product.name}." do%>
           <i class="edit-indicator" data-toggle="tooltip" data-placement="top"
              data-original-title="Edit <%= product.name %>."></i>
         <% end %>
       </div>
       <%= link_to(product) do %>
-        <%= image_tag(product.image_file, class: 'product-logo-img align-middle', skip_pipeline: true) %>
+        <%= image_tag(product.image_file, class: 'product-logo-img align-middle',
+                      alt: t('alt.el-logo', el: product.name), skip_pipeline: true) %>
         <% if product.product_type == "dataset" %>
         <div class="text-muted text-center"><%= t('view.product.index.dataset') %></div>
         <% end %>
@@ -60,7 +65,7 @@
           <div class="footer-row">
             <% images.each do |image| %>
               <%= image_tag(image["filename"], class: 'footer-img', 'title': image["tooltip"],
-                           'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                            alt: image[:alt_text], 'data-toggle': 'tooltip', 'data-placement': 'top') %>
             <% end %>
           </div>
           <% # Footer line 2: Maturity, BB, Compatability or License %>
@@ -77,7 +82,7 @@
                 </p>
               <% else %>
                 <%= image_tag(image["filename"], class: 'footer-img', 'title': image["tooltip"],
-                             'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                              alt: image[:alt_text], 'data-toggle': 'tooltip', 'data-placement': 'top') %>
               <% end %>
             <% end %>
           </div>
@@ -87,7 +92,7 @@
             <p class="footer-source mb-0"><%= get_source_label(product) %></p>
             <% images.each do |image| %>
               <%= image_tag(image["filename"], class: 'footer-img-right', 'title': image["tooltip"],
-                           'data-toggle': 'tooltip', 'data-placement': 'top') %>
+                            alt: image[:alt_text], 'data-toggle': 'tooltip', 'data-placement': 'top') %>
             <% end %>
           </div>
         </div>

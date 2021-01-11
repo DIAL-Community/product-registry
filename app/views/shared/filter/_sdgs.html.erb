@@ -1,7 +1,8 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
     <div id="header-sustainable_development_goals-link" class="header-link-button" >
-    <%= image_tag "sdgs_icon.png", :width => "20px", :height => "20px" %>
+    <%= image_tag "sdgs_icon.png", :width => "20px", :height => "20px",
+                  alt: t('alt.el-icon', el: t('model.sustainable-development-goal')).humanize %>
     <span class="align-middle"><%= t('view.filternav.sdgs') %></span>
     </div>
     <%
@@ -24,6 +25,7 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
+        <label for="sdgs" class="sr-only"><%= t('model.sustainable-development-goal').pluralize.humanize %></label>
         <%= collection_select(nil, "sdgs", SustainableDevelopmentGoal.all.order(:number), :id, :option_label,
             { selected: params[:name], include_blank: t('view.filternav.title.sdg') },
             { class: 'form-control filter-element' }) %>

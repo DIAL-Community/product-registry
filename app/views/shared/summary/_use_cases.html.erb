@@ -15,7 +15,10 @@
       end
     %>
     <span class="w-100 btn <%= btn_class %>">
-      <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px" %>
+      <div class="inline" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= t('model.use-case').titlecase.pluralize %>">
+        <%= image_tag "use_cases_icon.png", :width => "20px", :height => "20px",
+                    alt: t('alt.el-icon', el: t('model.use-case')).humanize %>
+      </div>
       <span class="display-text-on-xl">
         <%= t('model.use-case').titlecase.pluralize %>
       </span>
