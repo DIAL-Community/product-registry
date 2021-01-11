@@ -9,15 +9,15 @@ describe("products.js:", function() {
       '    <input type="hidden" value="2">' +
       '    <div class="dropdown-menu" aria-labelledby="digisquare-selector">' +
       '      <div class="dropdown-item" data-sub-indicator="1">' +
-      '        <h6>Low</h6>' +
+      '        <div>Low</div>' +
       '        <div>Some text!</div>' +
       '      </div>' +
       '      <div class="dropdown-item" data-sub-indicator="2">' +
-      '        <h6>Medium</h6>' +
+      '        <div>Medium</div>' +
       '        <div>Other text!</div>' +
       '      </div>' +
       '      <div class="dropdown-item" data-sub-indicator="3">' +
-      '        <h6>High</h6>' +
+      '        <div>High</div>' +
       '        <div>Another text!</div>' +
       '      </div>' +
       '    </div>' +

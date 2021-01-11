@@ -5,15 +5,17 @@
     </fieldset>
 
     <fieldset class="form-group">
-      <%= form.label :origin_id, t('view.sector.form.origin') %>
+      <%= form.label :origin_id, t('view.sector.form.origin'), for: "sector_origin_id" %>
       <%= form.collection_select :origin_id, Origin.order(:name), :id, :name,
-                                 { selected: sector.origin_id, include_blank: false}, { id: 'sector_origin_id', class: 'form-control' } %>
+                                 { selected: sector.origin_id, include_blank: false},
+                                 { id: 'sector_origin_id', class: 'form-control' } %>
     </fieldset>
 
     <fieldset class="form-group">
-      <%= form.label :parent_sector_id, t('view.sector.form.parent') %>
+      <%= form.label :parent_sector_id, t('view.sector.form.parent'), for: "sector_parent_sector_id" %>
       <%= form.collection_select :parent_sector_id, Sector.where("parent_sector_id is null").order(:name), :id, :name,
-                                 { selected: sector.parent_sector_id, include_blank: true}, { id: 'sector_parent_sector_id', class: 'form-control' } %>
+                                 { selected: sector.parent_sector_id, include_blank: true},
+                                 { id: 'sector_parent_sector_id', class: 'form-control' } %>
     </fieldset>
 
     <input id="original_name" type="hidden" value="<%= sector.name %>" />
@@ -21,9 +23,9 @@
       <%= t('view.general.duplicates', model: t('model.sector')) %>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="organization-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
@@ -43,9 +45,9 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('view.multi-select.assigned.title', model: t('model.use-case').to_s.pluralize.titlecase) %>
-    </h6>
+    </div>
 
     <fieldset class="form-label-group mt-2">
       <input type="text" id="use-case-search" class="form-control"

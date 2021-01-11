@@ -20,13 +20,13 @@
                                 { class: 'form-control filter-element', style: 'height: calc(1.5em + 0.75rem + 15px) !important' }) %>
     </fieldset>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
       <% if current_user.roles.include?(User.user_roles[:org_user])%>
         <i class="fa fa-info-circle" data-toggle="tooltip" data-html="true"
            title="<%= t('view.project.form.org-owner-tooltip') %>"></i>
       <% end %>
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="organization-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
@@ -46,13 +46,13 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %> 
       <% if current_user.roles.include?(User.user_roles[:product_user]) %>
         <i class="fa fa-info-circle" data-toggle="tooltip" data-html="true"
            title="<%= t('view.project.form.product-owner-tooltip') %>"></i>
       <% end %>
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="product-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
@@ -72,9 +72,9 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.country').to_s.pluralize.humanize %> 
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="country-search" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.country').to_s.pluralize) %>" />
@@ -94,9 +94,9 @@
       </div>
     </div>
 
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.tag').titlecase.pluralize %>
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="tag-search" class="form-control"
               placeholder="<%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>" />

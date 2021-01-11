@@ -4,7 +4,7 @@
        style="margin-top: 4px; margin-left: 4px; cursor: pointer;" aria-hidden="true"></i>
     <i class="fa fa-question-circle float-right" style="margin-top: 4px; cursor: pointer;"
        data-toggle="modal" data-target="#help-modal"></i>
-    <h5 class="nav-header"><%= t('view.filternav.framework') %></h5>
+    <div class="nav-header"><%= t('view.filternav.framework') %></div>
   </div>
   <div class="card-body p-0 accordion-section">
     <div id="acc-framework" class="accordion">
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="card-header bg-secondary text-white">
-    <h5 class="nav-header"><%= t('view.filternav.registry') %></h5>
+    <div class="nav-header"><%= t('view.filternav.registry') %></div>
   </div>
   <div class="card-body p-0">
     <div id="acc-registry" class="accordion">
@@ -25,7 +25,8 @@
       <% end %>
       <div class="accordion-header bg-dark">
         <span class="m-0 align-middle">
-          <%= image_tag "map_icon.png", :width => "20px", :height => "20px" %>
+          <%= image_tag "map_icon.png", width: "20px", height: "20px",
+                        alt: t('alt.el-icon', el: t('model.map').humanize) %>
           <span class="align-middle"><%= t('view.filternav.map') %></span>
           <i class="fa fa-angle-down float-right text-muted"></i>
         </span>

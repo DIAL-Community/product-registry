@@ -234,7 +234,7 @@ var launchData = {
         $("#launchDiv").append('<div id="launchForm" class="col-12" style="float:left">')
         $("#launchForm").append('<input id="orgId" type="text" class="form-control mt-2 col-10" placeholder="Organization Identifier" />')
         $("#launchForm").append('<p id="orgValidate" class="field-valid ml-3" style="color: red;">Organization Identifier is required</p>')
-        $("#launchForm").append('<select id="provider" class="form-control mt-2 col-10"><option value="DO">Digital Ocean</option><option value="AWS">AWS</option></select>')
+        $("#launchForm").append('<select id="provider" class="form-control mt-2 col-10" aria-label="Launch provider selection."><option value="DO">Digital Ocean</option><option value="AWS">AWS</option></select>')
         $("#launchForm").append('<input id="authToken" type="text" class="form-control mt-2 col-10" placeholder="Authentication Token" />')
         $("#launchForm").append('<p id="authValidate" class="field-valid ml-3" style="color: red;">Authentication Token is required</p>')
         $("#launchForm").append('<input id="accessKey" type="text" class="form-control mt-2 col-10" placeholder="Access Key" />')

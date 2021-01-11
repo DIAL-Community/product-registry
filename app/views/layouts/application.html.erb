@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>DIAL Catalog of Digital Solutions</title>
     <%= csrf_meta_tags %>
@@ -101,7 +101,7 @@
       <%= render '/shared/topnav' %>
       <% if current_page?('/about') || current_page?(root_path) || current_page?('/covid') ||
             current_page?('/covidresources') || current_page?('/privacy') || current_page?('/terms')%>
-        <div id="content" class="container">
+        <div id="content" class="container" role="main" >
           <% if current_page?('/about') %>
             <%= render 'shared/sidenav' %>
           <% end %>
@@ -109,18 +109,18 @@
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
         </div>
       <% elsif hide_sidenav %>
-        <div id="content" class="container-fluid">
+        <div id="content" class="container-fluid" role="main">
           <%= yield %>
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
         </div>
       <% elsif display_breadcrumb %>
-        <div id="content" class="container">
+        <div id="content" class="container" role="main">
           <%= render '/shared/breadcrumb' %>
           <%= yield %>
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
         </div>
       <% else %>
-        <div id="content" class="container-fluid">
+        <div id="content" class="container-fluid" role="main">
           <div class="row">
             <div class="col-12 d-block d-md-none">
             </div>

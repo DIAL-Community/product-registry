@@ -7,7 +7,9 @@
     </div>
     <div class="model-logo">
       <%= link_to(organization) do %>
-        <%= image_tag(organization.image_file, class: 'card-img-top align-middle', skip_pipeline: true) %>
+        <%= image_tag(organization.image_file, class: 'card-img-top align-middle',
+                      alt: t('alt.el-logo', el: organization.name).humanize,
+                      skip_pipeline: true) %>
       <% end %>
     </div>
     <div class="card-footer py-2">
@@ -15,7 +17,9 @@
         <div class="col-10 col-md-12 right-marker">
           <% if organization.website.present? %>
             <small>
-              <a href="<%= "//" + organization.website %>" target="_blank" rel="noreferrer noopener">
+              <a href="<%= "//" + organization.website %>"
+                 aria-label="<%= "#{organization.name} #{t('view.organization.form.website')}." %>"
+                 target="_blank" rel="noreferrer noopener">
                 <%= t('view.organization.form.website').to_s.downcase %> &#x29c9;
               </a>
             </small>
@@ -23,16 +27,19 @@
           <% end %>
           <% if organization.is_endorser %>
             <small class="text-muted">
-              <%= raw "#{image_tag('digiprins.png', width: 16)} #{t('view.organization.index.endorsed-date')}  #{organization.when_endorsed.year}" %>
+              <%= raw "#{image_tag('digiprins.png', width: 16, 
+                                   alt: t('alt.el-logo', el: "Principles for Digital Development").humanize)}
+                       #{t('view.organization.index.endorsed-date')}
+                       #{organization.when_endorsed.year}" %>
             </small>
           <% end %>
         </div>
         <div class="col-2 d-md-none h-100 d-flex justify-content-center dropup context-menu">
-          <button id="organization-context-menu" type="button" class="btn bg-transparent" data-toggle="dropdown"
+          <button id="organization-context-menu-<%= organization.id %>" type="button" class="btn bg-transparent" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-ellipsis-v fa-2x align-self-center"></i>
           </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="organization-context-menu">
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="organization-context-menu-<%= organization.id %>">
             <% if user_signed_in? && policy(organization).mod_allowed? %>
               <%= link_to "#{t('view.general.edit')} #{t('model.organization')}",
                           edit_organization_path(organization), class: 'dropdown-item' %>

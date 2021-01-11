@@ -7,7 +7,9 @@ module BuildingBlocksHelper
         next if product.nil?
 
         tooltip = t('view.building-block.index.bb-product') + product.name
-        image = Hash[filename: product.image_file, tooltip: tooltip, id: product.slug, controller: 'products']
+        image = Hash[filename: product.image_file, tooltip: tooltip, id: product.slug,
+                     alt_text: t('alt.el-logo', el: "#{product.name} #{t('model.product')}").humanize,
+                     controller: 'products']
         images.push(image)
       end
     when 'workflows'
@@ -15,7 +17,9 @@ module BuildingBlocksHelper
         next if workflow.nil?
 
         tooltip = t('view.building-block.index.bb-workflow') + workflow.name
-        image = Hash[filename: workflow.image_file, tooltip: tooltip, id: workflow.slug, controller: 'workflows']
+        image = Hash[filename: workflow.image_file, tooltip: tooltip, id: workflow.slug,
+                     alt_text: t('alt.el-logo', el: "#{workflow.name} #{t('model.workflow')}").humanize,
+                     controller: 'workflows']
         images.push(image)
       end
     end

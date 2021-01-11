@@ -1,9 +1,9 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white">
     <%= "#{t('model.setting').to_s.titlecase}: #{@setting.name}" %>
-  </h5>
+  </div>
   <div class="card-body py-2">
     <div class="row mb-2">
       <div class="col-12 text-muted">

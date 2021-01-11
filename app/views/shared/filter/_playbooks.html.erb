@@ -1,7 +1,8 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
     <div id="header-projects-link" class="header-link-button" >
-      <%= image_tag "playbook.png", :width => "20px" %>
+      <%= image_tag "playbook.png", :width => "20px",
+                  alt: t('alt.el-icon', el: t('model.playbook')).humanize %>
       <span class="align-middle"><%= t('view.filternav.playbooks') %></span>
     </div>
     <%

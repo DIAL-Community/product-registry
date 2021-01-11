@@ -1,5 +1,8 @@
 <div class="row m-3">
-  <h5><%= t('view.audit.audit-log') %><%= !@curr_type.nil? && @curr_type.titlecase.downcase %></h5>
+  <div>
+    <%= t('view.audit.audit-log') %>
+    <%= !@curr_type.nil? && @curr_type.titlecase.downcase %>
+  </div>
   <table class="table">
     <thead class="thead-light">
       <tr>

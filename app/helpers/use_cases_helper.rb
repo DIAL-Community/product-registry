@@ -7,7 +7,9 @@ module UseCasesHelper
         next if sdg_target.nil?
 
         tooltip = "Target #{sdg_target.target_number }: #{sdg_target.name}"
-        image = Hash[filename: sdg_target.image_file, tooltip: tooltip, id: sdg_target.id, controller: 'sdg_targets']
+        image = Hash[filename: sdg_target.image_file, tooltip: tooltip,
+                     alt_text: t('alt.el-logo', el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize,
+                     id: sdg_target.id, controller: 'sdg_targets']
         images.push(image)
       end
     when 'workflows'
@@ -20,7 +22,9 @@ module UseCasesHelper
         next if workflow.nil?
 
         tooltip = workflow.name
-        image = Hash[filename: workflow.image_file, tooltip: tooltip, id: workflow.id, controller: 'workflows']
+        image = Hash[filename: workflow.image_file, tooltip: tooltip,
+                     alt_text: t('alt.el-logo', el: "#{use_case.name} #{t('model.use-case')}").humanize,
+                     id: workflow.id, controller: 'workflows']
         images.push(image)
       end
     end

@@ -50,7 +50,7 @@ const loadOrganizationTiles = function () {
   // Build popup content for a single organization marker feature
   const buildPopupContent = function(organization) {
     return `<div class="card p-0">
-              <h6 class="card-header py-2 px-2">${organization.name}</h6>
+              <div class="card-header py-2 px-2">${organization.name}</div>
               <p class="small py-2 px-2 mb-0">
                 <a href="//${organization.website}" target="_blank" rel="noreferrer noopener">
                   ${organization.website}
@@ -271,7 +271,7 @@ const loadOrganizationTiles = function () {
         $(element).show();
       } else {
         const contentDiv = $('<div class="card p-0" style="overflow: hidden; max-height: 20rem;"/>');
-        const contentHeader = $(`<h6 class="card-header py-2 px-2">${organizations.length} Organizations</h6>`);
+        const contentHeader = $(`<div class="card-header py-2 px-2">${organizations.length} Organizations</div>`);
         contentDiv.append(contentHeader);
         
         const organizationElements = $('<div class="list-group" style="overflow-y: auto;" />');
@@ -316,7 +316,7 @@ const loadOrganizationTiles = function () {
       $(element).html(
         `
         <div class="card map-hover" style="padding: 0; z-index: 1000;">
-          <h6 class="card-header py-2 px-2">${selectedOrganization}</h6>
+          <div class="card-header py-2 px-2">${selectedOrganization}</div>
           <p class="py-2 px-2 mb-0">${name}</p>
         </div>
         `);

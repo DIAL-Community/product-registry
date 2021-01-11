@@ -18,9 +18,9 @@
   </fieldset>
 
   <% if candidate_organization.new_record? %>
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.contact').to_s.humanize %>
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="contact-name" name="contact[name]" class="form-control" required="true"
              placeholder="<%= t('view.general.name') %>" />
@@ -54,9 +54,9 @@
   <% end %>
 
   <% if candidate_organization.persisted? %>
-    <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+    <div class="bg-secondary text-white border rounded p-3 mb-0">
       <%= t('model.contact').to_s.pluralize.humanize %>
-    </h6>
+    </div>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="contact-search" name="contact_label" class="form-control"
              placeholder="<%= t('view.multi-select.assigned.label', model: t('model.contact').to_s.pluralize) %>" />

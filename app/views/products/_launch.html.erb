@@ -3,7 +3,9 @@
 </p>
 
 <div id="launchDiv"></div>
-<%= content_tag :div, id: "jenkinsData", data: {jenkins_url: @jenkins_url, jenkins_user: @jenkins_user, jenkins_password: @jenkins_password, job_name: @product.slug} do %>
+<%= content_tag(:div, id: "jenkinsData",
+                data: { jenkins_url: @jenkins_url, jenkins_user: @jenkins_user,
+                        jenkins_password: @jenkins_password, job_name: @product.slug }) do %>
 <% end %>
 
 <script>

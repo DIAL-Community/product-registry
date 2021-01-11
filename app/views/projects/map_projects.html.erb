@@ -2,18 +2,18 @@
 
 <% end %>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white">
     <div id="loading-spinner" class="spinner-border spinner-border-sm" role="status">
       <span class="sr-only">Loading...</span>
     </div>
     <%= t('view.project.map.projects') %>
     <div class="float-right">
       <%= link_to products_path, class: 'no-hover' do %>
-        <h5 class="text-white icon-inline"><%= t("view.about.return_catalog") %></h5>
+        <div class="text-white icon-inline"><%= t("view.about.return_catalog") %></div>
         <i class="fas fa-external-link-alt text-white icon-inline"></i>
       <% end %>
     </div>
-  </h5>
+  </div>
 </div>
 <div id="map-of-project" class="map" style="height:40rem;"></div>
 <div id="popup" class="map-popup"></div>

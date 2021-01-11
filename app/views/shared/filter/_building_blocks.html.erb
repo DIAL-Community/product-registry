@@ -1,7 +1,8 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
     <div id="header-building_blocks-link" class="header-link-button" >
-    <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px" %>
+    <%= image_tag "building_blocks_icon.png", :width => "20px", :height => "20px",
+                  alt: t('alt.el-icon', el: t('model.building-block')).humanize %>
     <span class="align-middle"><%= t('view.filternav.building_blocks') %></span>
     </div>
     <%
@@ -24,6 +25,7 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
+        <label for="building_blocks" class="sr-only"><%= t('model.building-block').pluralize.humanize %></label>
         <%= collection_select(nil, "building_blocks", BuildingBlock.all.order(:name), :id, :name,
             { selected: params[:name], include_blank: t('view.filternav.title.building-block') },
             { class: 'form-control filter-element' }) %>

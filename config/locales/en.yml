@@ -54,6 +54,13 @@ en:
   pundit:
     mod_allowed?: The operation is not allowed.
     view_allowed?: You're not allowed to view this page.
+  alt:
+    el-icon: '%{el} icon.'
+    el-logo: '%{el} logo.'
+  aria:
+    contact-us: Contact us using email
+    contribute-code: Contribute code in gitlab
+    forum: Join our forum
   model:
     activity: activity
     building-block: building block
@@ -96,6 +103,7 @@ en:
     sdg_target: SDG target
     operator_services: Operator Services
   view:
+    title: Catalog of Digital Solutions
     about:
       active_users: Active users in the past 24 hours
       help: For information on how to use the catalog, reference our documentation site

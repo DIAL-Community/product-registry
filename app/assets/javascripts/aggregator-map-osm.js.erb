@@ -178,7 +178,7 @@ const loadAggregatorTiles = function () {
   // Build popup content for a single aggregator marker feature
   const buildPopupContent = function(organization) {
     return `<div class="card p-0">
-              <h6 class="card-header py-2 px-2">${organization.name}</h6>
+              <div class="card-header py-2 px-2">${organization.name}</div>
               <p class="small py-2 px-2 mb-0">
                 <a href="/organizations/${organization.slug}" target="_blank" rel="noreferrer noopener">
                   <small>View aggregator</small>
@@ -231,7 +231,7 @@ const loadAggregatorTiles = function () {
       } else {
         const contentDiv = $('<div class="card p-0" style="overflow: hidden; max-height: 10rem"/>');
 
-        const contentHeader = $(`<h6 class="card-header py-2 px-2">${aggregatorIds.length} Aggregator(s)</h6>`);
+        const contentHeader = $(`<div class="card-header py-2 px-2">${aggregatorIds.length} Aggregator(s)</div>`);
         contentDiv.append(contentHeader);
 
         const aggregatorElements = $('<div class="list-group" style="overflow-y: auto;" />');
@@ -273,7 +273,7 @@ const loadAggregatorTiles = function () {
       const aggregatorIds = feature.get("aggregators");
       $(element).html(
         `<div class="card map-hover p-0" style="z-index: 10;">
-          <h6 class="card-header py-2 px-2">${name}</h6>
+          <div class="card-header py-2 px-2">${name}</div>
           <p class="text-muted py-2 px-2 mb-0">
             ${aggregatorIds.length} aggregator(s).
             <br />

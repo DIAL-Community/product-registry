@@ -1,15 +1,16 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
     <div id="header-projects-link" class="header-link-button" >
-      <%= image_tag "project.png", :width => "20px" %>
+      <%= image_tag "project.png", :width => "20px",
+                  alt: t('alt.el-icon', el: t('model.project')).humanize %>
       <span class="align-middle"><%= t('view.filternav.projects') %></span>
     </div>
     <%
       counter = filter_count('projects')
       if counter > 0
-        concat "<span id='accordian-countries-count' class='badge badge-light'>#{counter}</span>".html_safe
+        concat "<span id='accordian-projects-count' class='badge badge-light'>#{counter}</span>".html_safe
       else
-        concat "<span id='accordian-countries-count' class='badge badge-light'></span>".html_safe
+        concat "<span id='accordian-projects-count' class='badge badge-light'></span>".html_safe
       end
     %>
     <i class="fa fa-angle-down float-right text-muted"></i>
@@ -24,6 +25,7 @@
   <div class="row p-1 mt-1">
     <div class="col-12">
       <div class="form-group mb-1">
+        <label for="projects" class="sr-only"><%= t('model.project').pluralize.humanize %></label>
         <input type="text" id="projects" class="form-control filter-element"
           placeholder="<%= t('view.multi-select.assigned.label', model: t('model.project').to_s.pluralize) %>" />
       </div>
@@ -48,8 +50,8 @@
   <div class="row p-1 mt-1">
     <div class="col-12">
       <div class="form-group mb-1">
-        <%= label_tag "tags", t('model.tag').titlecase.pluralize %>:
-        <input type="text" id="projTags" class="form-control filter-element"
+        <%= label_tag "project-tags", t('model.tag').titlecase.pluralize %>:
+        <input type="text" id="project-tags" class="form-control filter-element"
           placeholder="<%= t('view.multi-select.assigned.label', model: t('model.tag').to_s.pluralize) %>" />
       </div>
     </div>

@@ -7,7 +7,8 @@
     </div>
     <div class="model-logo">
       <%= link_to(sustainable_development_goal) do %>
-        <%= image_tag(sustainable_development_goal.image_file, class: 'card-img-top align-middle px-2 py-2') %>
+        <%= image_tag(sustainable_development_goal.image_file, class: 'card-img-top align-middle px-2 py-2',
+                      alt: t('alt.el-logo', el: sustainable_development_goal.name).humanize) %>
       <% end %>
     </div>
     <div class="card-footer">
@@ -19,22 +20,19 @@
               content = "<div class='footer-row mb-2'>"
               concat(content.html_safe)
               sdg_targets.each do |sdg_target|
-                concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip],
+                concat(image_tag(sdg_target[:filename], title: sdg_target[:tooltip], alt: sdg_target[:alt_text],
                                  class: 'footer-img mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
               end
               concat('</div>'.html_safe)
             end
             use_cases = sdg_footer(sustainable_development_goal, 'use_cases')
             if use_cases.count > 0
-              content = "<div class='footer-row' data-toggle='popover' data-placement='top'
-                              data-title='#{t('view.workflow.index.use-case-popover', count: use_cases.count)}'
-                              data-html='true' data-content='#{sdg_footer_popover(use_cases)}'>"
+              content = "<div class='footer-row'"
               concat(content.html_safe)
-              concat(image_tag(use_cases[0][:filename], class: 'footer-img mb-1'))
-
-              content = "<span class='small text-muted ml-1'>#{@use_case_count} #{t('model.use-case').titlecase.pluralize(@use_case_count)}</span>"
-              concat(content.html_safe)
-
+              use_cases.each do |use_case|
+                concat(image_tag(use_case[:filename], title: use_case[:tooltip], alt: use_case[:alt_text],
+                                 class: 'footer-img mb-1 mr-1', 'data-toggle': 'tooltip', 'data-placement': 'top'))
+              end
               concat('</div>'.html_safe)
             end
             if sdg_targets.count == 0
@@ -48,11 +46,11 @@
           %>
         </div>
         <div class="col-2 d-md-none h-100 d-flex justify-content-center dropup context-menu">
-          <button id="sdg-context-menu" type="button" class="btn bg-transparent" data-toggle="dropdown"
+          <button id="sdg-context-menu-<%= sustainable_development_goal.id %>" type="button" class="btn bg-transparent" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-ellipsis-v fa-2x align-self-center"></i>
           </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sdg-context-menu">
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sdg-context-menu-<%= sustainable_development_goal.id %>">
             <%= link_to "#{t('view.general.view')} #{t('model.sdg').upcase}",
                         sustainable_development_goal, class: 'dropdown-item' %>
           </div>

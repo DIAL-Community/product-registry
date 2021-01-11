@@ -3,7 +3,7 @@
 
 <div class="container-fluid">
   <%= image_tag(@playbook.image_file, class: 'card-img-top align-middle inline', skip_pipeline: true) %>
-  <h5 class="inline"><%= @playbook.name %></h5>
+  <div class="inline"><%= @playbook.name %></div>
 </div>
 
 <div id="show-playbook">
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
@@ -32,7 +32,7 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.phases') %>:</h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.phases') %>:</div>
       </div>
       <div class="card-body p-0">
         <% @playbook.phases.each do |phase| %>
@@ -44,7 +44,7 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.activity').pluralize.titlecase %></h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('model.activity').pluralize.titlecase %></div>
       </div>
       <div class="card-body p-0">
         <% if @playbook.activities.count > 0 %>
@@ -54,9 +54,9 @@
                 <div id='<%= "#{activity.slug}_header" %>' class="card-header" 
                    data-toggle="collapse" data-target='#<%= "#{activity.slug}_collapse" %>'
                    aria-expanded="true" aria-controls='<%= "#{activity.slug}_collapse" %>'>
-                  <h6 class="mb-0 float-left font-weight-bold">
+                  <div class="mb-0 float-left font-weight-bold">
                     <%= activity.name %>&nbsp;
-                  </h6>
+                  </div>
                   (<%= activity.phase %>)
                 </div>
                 <div class="card-body p-3">
@@ -77,16 +77,16 @@
               </div>
               <div class="card mt-2">
                 <div class="card-header border-0">
-                  <h5 class="float-left mb-0 font-weight-bold"><%= t('model.task').pluralize.titlecase %></h5>
+                  <div class="float-left mb-0 font-weight-bold"><%= t('model.task').pluralize.titlecase %></div>
                 </div>
                 <div class="card-body p-0">
                   <% if activity.tasks.count > 0 %>
                     <div class="accordion" id='<%= "#{activity.slug}_accordion" %>'>
                       <% activity.tasks.each do |task| %>
                         <div class="card border-right-0 border-left-0 border-bottom-0">
-                          <h6 class="mb-0 float-left font-weight-bold">
+                          <div class="mb-0 float-left font-weight-bold">
                             <%= task.name %>
-                          </h6>
+                          </div>
                           <div id='<%= "#{task.slug}_collapse" %>' >
                             <div class="card-body p-3">
                               <div id='<%= "#{task.slug}_viewer" %>'>

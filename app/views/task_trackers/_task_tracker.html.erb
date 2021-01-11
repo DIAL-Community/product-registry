@@ -2,9 +2,9 @@
                              .select { |desc| desc.locale == I18n.locale.to_s }
                              .first %>
 <div class="card mt-2">
-  <h5 class="card-header bg-light border-0 font-weight-bold">
+  <div class="card-header bg-light border-0 font-weight-bold">
     <%= "#{task_tracker.name}" %>
-  </h5>
+  </div>
   <div class="card-body py-2 px-3">
     <div id="<%= task_tracker.slug %>" class="wysiwyg-viewer">
       <%= !description.nil? && description.description.html_safe %>

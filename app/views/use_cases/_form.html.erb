@@ -1,5 +1,5 @@
 <%= form_with(model: use_case, local: true, html: { id: 'use-case-form' }) do |form| %>
-  <fieldset class="form-label-group">
+  <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :use_case_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
   </fieldset>
@@ -10,11 +10,13 @@
     <%= t('view.general.duplicates', model: t('model.use-case')) %>
   </div>
 
-  <fieldset class="form-group mb-0">
-    <%= form.label :sector_id, t('model.sector').to_s.titlecase, class: 'custom-label' %>:
+  <fieldset class="form-group mt-2 mb-0">
+    <label for="sector_id" class='custom-label'>
+      <%= t('model.sector').to_s.titlecase %>:
+    </label>
     <% origin_name = session[:org] ? session[:org] : Setting.find_by(slug: 'default_sector_list').value %>
     <% options = options_for_select(Sector.build_filter(origin_name).collect {|sector| [sector['name'], sector['id'] ] }, {selected: use_case.sector_id}) %>
-    <%= form.select :sector_id, options, {}, :class => "custom-select mb-2" %>
+    <%= form.select :sector_id, options, {}, class: "custom-select mb-2", id: 'sector_id' %>
   </fieldset>
 
   <label for="usecasesteps-header">
@@ -24,7 +26,7 @@
   <input type="hidden" id="uc_desc" name="use_case[uc_desc]" />
   <div id="use_case_desc_editor"> </div>
   
-  <label for="usecasesteps-header">
+  <label for="usecasesteps-header" class="mt-2">
     <%= t('view.use-case.form.steps-header-description') %>:
   </label>
 
@@ -37,7 +39,7 @@
         !current_user.roles.include?(User.user_roles[:admin]) &&
         !current_user.roles.include?(User.user_roles[:ict4sdg])
   %>
-    <fieldset class="form-group mt-2">
+    <fieldset class="form-group mt-2 mb-0">
       <label for="use-case-maturity">
         <%= t('view.use-case.form.maturity-level') %>
       </label>
@@ -50,7 +52,7 @@
       </select>
     </fieldset>
   <% else %>
-    <fieldset class="form-group mt-2">
+    <fieldset class="form-group mt-2 mb-0">
       <label for="use-case-maturity">
         <%= t('view.use-case.form.maturity-level') %>
       </label>
@@ -63,11 +65,11 @@
     </fieldset>
   <% end %>
 
-  <div class="row mt-2">
+  <div class="row">
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white rounded original-font-size p-3 mb-0">
         <%= t('view.use-case.form.assigned-sdg-targets') %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="sdg-target-search" class="form-control"
                placeholder="<%= t('view.use-case.form.search-sdg-targets') %>" />
@@ -88,9 +90,9 @@
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white rounded original-font-size p-3 mb-0">
         <%= t('model.tag').titlecase.pluralize %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="tag-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>" />

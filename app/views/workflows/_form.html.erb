@@ -1,5 +1,5 @@
 <%= form_with(model: workflow, local: true, html: { id: 'workflow-form' }) do |form| %>
-  <fieldset class="form-label-group">
+  <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :workflow_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
   </fieldset>
@@ -11,11 +11,11 @@
   </div>
 
   <input type="hidden" id="workflow_desc" name="workflow[wf_desc]" />
-  <div id="workflow_editor"> </div>
+  <div id="workflow_editor"></div>
    
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0 original-font-size mt-2">
     <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
-  </h6>
+  </div>
 
   <fieldset class="form-label-group mt-2">
     <input type="text" id="building-block-search" class="form-control"

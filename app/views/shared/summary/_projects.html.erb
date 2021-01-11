@@ -16,7 +16,7 @@
     %>
     <span class="w-100 btn <%= btn_class %>">
       <div class="inline" data-toggle="tooltip" data-placement="bottom" data-original-title="<%= t('model.project').titlecase.pluralize %>">
-        <%= image_tag "project.png", :width => "20px" %>
+        <%= image_tag "project.png", :width => "20px", alt: t('alt.el-icon', el: t('model.project')).humanize %>
       </div>
       <span class="display-text-on-xl">
         <%= t('model.project').titlecase.pluralize %>

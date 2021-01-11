@@ -2,9 +2,9 @@
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="card mt-3">
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white">
     <%= "#{t('model.project').to_s.humanize}: #{@project.name}" %>
-  </h5>
+  </div>
   <div class="card-body">
     <div class="row">
       <div class="col-12">
@@ -49,8 +49,8 @@
 <% end %>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.organization').to_s.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.organization').to_s.humanize %>
   </div>
   <% if @project.organizations.count > 0 %>
     <div class="row">
@@ -77,8 +77,8 @@
 </div>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.product').to_s.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.product').to_s.humanize %>
   </div>
   <% if @project.products.count > 0 %>
     <div class="row">
@@ -103,8 +103,8 @@
 </div>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.country').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.country').to_s.pluralize.humanize %>
   </div>
   <% if @project.countries.count > 0 %>
     <div class="row">
@@ -125,8 +125,8 @@
   <% end %>
 
   <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.sector').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.sector').to_s.pluralize.humanize %>
   </div>
   <% if @project.sectors.count > 0 %>
     <div class="row">
@@ -149,8 +149,8 @@
   <% end %>
 
   <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.sustainable-development-goal').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.sustainable-development-goal').to_s.pluralize.humanize %>
   </div>
   <% if @project.sustainable_development_goals.count > 0 %>
     <div class="row">
@@ -171,8 +171,8 @@
   <% end %>
 
   <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.tag').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.tag').to_s.pluralize.humanize %>
   </div>
   <% if @project.tags.count > 0 %>
     <div class="row">
@@ -193,8 +193,8 @@
   <% end %>
 
   <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.digital-principle').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.digital-principle').to_s.pluralize.humanize %>
   </div>
   <% if @project.digital_principles.count > 0 %>
     <div class="row">
