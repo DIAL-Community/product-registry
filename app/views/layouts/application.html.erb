@@ -109,7 +109,7 @@
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
         </div>
       <% elsif hide_sidenav %>
-        <div id="content" class="container">
+        <div id="content" class="container-fluid">
           <%= yield %>
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
         </div>
@@ -124,10 +124,10 @@
           <div class="row">
             <div class="col-12 d-block d-md-none">
             </div>
-            <div id="left-filter" class="col-12 col-md-3 d-none d-md-block nav-container bg-dark">
+            <div id="left-filter" class="col-12 col-md-3 col-lg-5ths d-none d-md-block nav-container bg-dark">
               <%= render '/shared/filternav' %>
             </div>
-            <div id="right-content" class="col-12 col-md-9">
+            <div id="right-content" class="col-12 col-md-9 col-lg-45ths">
               <%= render '/shared/summarynav' %>
               <%= render '/shared/activefilter' %>
               <%= yield %>

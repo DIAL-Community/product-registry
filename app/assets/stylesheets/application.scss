@@ -2,7 +2,7 @@
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
  *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * Any CSS and SCSS file within this directory, lib/assets/4, or any plugin's
  * vendor/assets/stylesheets directory can be referenced here using a relative path.
  *
  * You're free to add application-wide styles to this file and they'll appear at the bottom of the
@@ -444,6 +444,13 @@ h6 {
     padding-left: 15px;
 }
 
+.col-lg-45ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
 .col-xs-5ths {
     width: 20%;
     max-width: 20%;
@@ -469,13 +476,22 @@ h6 {
     }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1400px) {
     .col-lg-5ths {
         width: 20%;
         max-width: 20%;
         flex: 0 0 20%;
         float: left;
     }
+}
+
+@media (min-width: 1400px) {
+  .col-lg-45ths {
+      width: 80%;
+      max-width: 80%;
+      flex: 0 0 80%;
+      float: right;
+  }
 }
 
 .wysiwyg-viewer.ql-container.ql-snow {

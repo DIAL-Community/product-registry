@@ -354,7 +354,7 @@ const loadProjectTiles = function () {
       highlightHolder.projects.length = 0;
 
       projectMarkerLayer.getSource().forEachFeature(function(feature) {
-        if (tagName === -1)
+        if (tagName == -1)
           return;
 
         const filteredProjects = feature.get("projects")
