@@ -15,9 +15,9 @@
 </div>
 
 <div id="show-rubric-category" class="card mt-2">
-  <h5 class="card-header border-0 font-weight-bold">
+  <div class="card-header border-0 font-weight-bold">
     <%= "#{@rubric_category.name}" %>
-  </h5>
+  </div>
   <div class="card-body py-2">
     <div class="row mb-2">
       <div class="col-12 text-muted">
@@ -42,7 +42,7 @@
 </div>
 <div id="rubric-category-indicators" class="card mt-2">
   <div class="card-header border-0 font-weight-bold">
-    <h5 class="float-left mb-0"><%= t('model.category-indicator').pluralize.titlecase %></h5>
+    <%= t('model.category-indicator').pluralize.titlecase %>
     <% if user_signed_in? && policy(RubricCategory).mod_allowed? %>
       <%= link_to t('view.general.add'),
                   new_maturity_rubric_rubric_category_category_indicator_path(@rubric_category.maturity_rubric,
@@ -57,9 +57,9 @@
                                                      .select { |desc| desc.locale == I18n.locale.to_s }
                                                      .first %>
         <div class="card border-right-0 border-left-0 border-bottom-0">
-          <h6 class="card-header border-0 font-weight-bold">
+          <div class="card-header border-0 font-weight-bold">
             <%= "#{category_indicator.name}" %>
-          </h6>
+          </div>
           <div class="card-body py-2">
             <div class="row mb-2">
               <div class="col-12 text-muted">

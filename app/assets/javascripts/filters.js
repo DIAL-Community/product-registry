@@ -264,7 +264,7 @@ var prepareFilters = function() {
 
     const tagAutoComplete = autoComplete("/tags.json?without_paging=true", addTagFilter)
     $("#tags").autocomplete(tagAutoComplete);
-    $("#projTags").autocomplete(tagAutoComplete);
+    $("#project-tags").autocomplete(tagAutoComplete);
 
     loadFilters();
 }

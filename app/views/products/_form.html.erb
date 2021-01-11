@@ -1,6 +1,6 @@
   <%= form_with(model: product, multipart: true, local: true, html: { id: 'product-form' }) do |form| %>
 
-  <fieldset class="form-label-group">
+  <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :product_name,
                         disabled: !policy(product).permitted_attributes.include?(:name),
                         class: "form-control", placeholder: t('view.general.name') %>
@@ -55,7 +55,9 @@
   </fieldset>
 
   <%= form.hidden_field :is_launchable, :value => false %>
-  <%= form.check_box :is_launchable, { disabled: !policy(product).permitted_attributes.include?(:is_launchable) }, true, false %>
+  <%= form.check_box :is_launchable, { disabled: !policy(product).permitted_attributes.include?(:is_launchable),
+                                       id: 'is_launchable' },
+                     true, false %>
   <label class="form-label-group mt-2" for="is_launchable">
     <%= t('view.product.form.is-launchable') %>
   </label>
@@ -67,17 +69,19 @@
   </fieldset>
 
   <%= form.hidden_field :status, :value => Product::NOT_VETTED %>
-  <%= form.check_box :status, { disabled: !policy(product).permitted_attributes.include?(:status) }, Product::VETTED, Product::NOT_VETTED %>
-  <label class="form-label-group mt-2" for="is_launchable">
+  <%= form.check_box :status, { disabled: !policy(product).permitted_attributes.include?(:status),
+                                id: 'is_vetted' }, 
+                                Product::VETTED, Product::NOT_VETTED %>
+  <label class="form-label-group mt-2" for="is_vetted">
     <%= t('view.product.form.is-vetted') %>
   </label>
 
   <div class="row">
 
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.multi-select.assigned.title', model: t('model.organization').to_s.pluralize.humanize) %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="organization-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.organization').to_s.pluralize) %>" />
@@ -98,9 +102,9 @@
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.multi-select.assigned.title', model: t('model.sector').to_s.pluralize.humanize) %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="sector-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>" />
@@ -124,9 +128,9 @@
 
   <div class="row">
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.multi-select.assigned.title', model: t('model.building-block').to_s.pluralize.titlecase) %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="building-block-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sector').to_s.pluralize) %>" />
@@ -148,7 +152,8 @@
                                  .map { |status_type| [status_type.titlecase, status_type] }
                                  .sort_by { |label, value| label })
             %>
-            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1" %>
+            <%= select_tag :building_block, options, disabled: true, class: "form-control filter-element mb-1",
+                           'aria-label': 'Building block mapping status' %>
           <% else %>
             <%
               options = options_for_select(
@@ -158,7 +163,8 @@
                                  .map { |status_type| [status_type.titlecase, status_type] }
                                  .sort_by { |label, value| label })
             %>
-            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1" %>
+            <%= select_tag :building_block, options, :class => "form-control filter-element mb-1",
+                           'aria-label': 'Building block mapping status'  %>
           <% end %>
         </div>
         <div class="col-8 ml-0">
@@ -179,9 +185,9 @@
     </div>
 
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.multi-select.assigned.title', model: t('model.sdg').to_s.upcase.pluralize) %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="sustainable-development-goal-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.sustainable-development-goal').to_s.pluralize) %>" />
@@ -203,7 +209,8 @@
                                  .map { |status_type| [status_type.titlecase, status_type] }
                                  .sort_by { |label, value| label })
             %>
-            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1" %>
+            <%= select_tag :sdg_mapping, options, disabled: true, class: "form-control filter-element mb-1",
+                           'aria-label': 'Sustainable development goal mapping status' %>
           <% else %>
             <%
               options = options_for_select(
@@ -213,7 +220,8 @@
                                  .map { |status_type| [status_type.titlecase, status_type] }
                                  .sort_by { |label, value| label })
             %>
-            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1" %>
+            <%= select_tag :sdg_mapping, options, :class => "form-control filter-element mb-1",
+                           'aria-label': 'Sustainable development goal mapping status' %>
           <% end %>
         </div>
         <div class="col-8 ml-0">
@@ -236,9 +244,9 @@
 
   <div class="row">
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.product.form.interoperable-products') %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="interoperate-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('view.product.form.interoperable-products').downcase) %>" />
@@ -259,9 +267,9 @@
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.product.form.included-products') %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="include-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('view.product.form.included-products').downcase) %>" />
@@ -283,9 +291,9 @@
     </div>
 
     <div class="col-12">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('model.project').to_s.pluralize.humanize %> 
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="project-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.product').to_s.pluralize) %>" />
@@ -309,9 +317,9 @@
 
   <div class="row">
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('model.tag').titlecase.pluralize %>
-      </h6>
+      </div>
       <fieldset class="form-label-group mt-2">
         <input type="text" id="tag-search" class="form-control"
                placeholder="<%= t('view.multi-select.assigned.label', model: t('model.tag').pluralize.downcase) %>" />
@@ -332,9 +340,9 @@
       </div>
     </div>
     <div class="col-12 col-lg-6">
-      <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+      <div class="bg-secondary text-white border rounded p-3 mb-0">
         <%= t('view.product.show.cost-data') %>
-      </h6>
+      </div>
       <div class="row">
         <fieldset class="form-label-group col-6 mt-2">
           <%= form.text_field :est_hosting, id: :est_hosting,

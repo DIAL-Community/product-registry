@@ -12,7 +12,9 @@ module WorkflowsHelper
         next if use_case.nil?
 
         tooltip = use_case.name
-        image = Hash[filename: use_case.image_file, tooltip: tooltip, id: use_case.slug, controller: 'use_cases']
+        image = Hash[filename: use_case.image_file, tooltip: tooltip, id: use_case.slug,
+                     alt_text: t('alt.el-logo', el: "#{use_case.name} #{t('model.use-case')}").humanize,
+                     controller: 'use_cases']
         images.push(image)
       end
     when 'building_blocks'
@@ -21,6 +23,7 @@ module WorkflowsHelper
 
         tooltip = building_block.name
         image = Hash[filename: building_block.image_file, tooltip: tooltip, id: building_block.slug,
+                     alt_text: t('alt.el-logo', el: "#{building_block.name} #{t('model.building-block')}").humanize,
                      controller: 'building_blocks']
         images.push(image)
 

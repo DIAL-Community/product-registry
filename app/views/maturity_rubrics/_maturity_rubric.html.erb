@@ -2,16 +2,16 @@
                                 .select { |desc| desc.locale == I18n.locale.to_s }
                                 .first %>
 <div class="card mt-2">
-  <h5 class="card-header bg-light border-0 font-weight-bold">
+  <div class="card-header bg-light border-0 font-weight-bold">
     <%= "#{maturity_rubric.name}" %>
-  </h5>
+  </div>
   <div class="card-body py-2 px-3">
     <div id="<%= maturity_rubric.slug %>" class="wysiwyg-viewer">
       <%= !description.nil? && !description.description.nil? && description.description.html_safe %>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.rubric-category').titlecase %></h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('model.rubric-category').titlecase %></div>
         <% if user_signed_in? && policy(MaturityRubric).mod_allowed? %>
           <%= link_to t('view.general.add'),
                       new_maturity_rubric_rubric_category_path(maturity_rubric),
@@ -29,9 +29,9 @@
                 <div id='<%= "#{rubric_category.slug}_header" %>' class="card-header" 
                    data-toggle="collapse" data-target='#<%= "#{rubric_category.slug}_collapse" %>'
                    aria-expanded="true" aria-controls='<%= "#{rubric_category.slug}_collapse" %>'>
-                  <h6 class="mb-0 float-left font-weight-bold">
+                  <div class="mb-0 float-left font-weight-bold">
                     <%= rubric_category.name %>
-                  </h6>
+                  </div>
                   <i class="fa fa-angle-down float-right"></i>
                 </div>
                 <div id='<%= "#{rubric_category.slug}_collapse" %>' class="collapse"
@@ -42,7 +42,7 @@
                       <%= !category_description.nil? && !category_description.description.nil? && category_description.description.html_safe %>
                     </div>
                     <% if rubric_category.category_indicators.count > 0 %>
-                      <h6 class="font-weight-bold"><%= t('view.rubric-category.index.category-heading') %>:</h6>
+                      <div class="font-weight-bold"><%= t('view.rubric-category.index.category-heading') %>:</div>
                       <ul>
                         <% rubric_category.category_indicators.order('category_indicators.name ASC').each do |category_indicator| %>
                           <li><%= category_indicator.name %></li>

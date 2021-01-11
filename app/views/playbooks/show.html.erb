@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
@@ -49,7 +49,7 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.phases') %>:</h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.phases') %>:</div>
       </div>
       <div class="card-body p-0">
         <% @playbook.phases.each do |phase| %>
@@ -61,7 +61,7 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <h5 class="float-left mb-0 font-weight-bold"><%= t('model.playbook-page').pluralize.titlecase %></h5>
+        <div class="float-left mb-0 font-weight-bold"><%= t('model.playbook-page').pluralize.titlecase %></div>
         <% if user_signed_in? && policy(Playbook).mod_allowed? %>
           <%= link_to t('view.general.add'),
                       new_playbook_playbook_page_path(@playbook),

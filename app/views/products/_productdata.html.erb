@@ -58,7 +58,9 @@
       </div>
       <div class="col-12 col-md-8">
         <% product.origins.each do |origin| %>
-          <%= image_tag("origins/"+origin.slug+".png", class: 'origin-img-full') %>
+          <%= image_tag("origins/" + origin.slug + ".png",
+                        alt: t('alt.el-logo', el: origin.name).humanize,
+                        class: 'origin-img-full') %>
         <% end %>
       </div>
     </div>

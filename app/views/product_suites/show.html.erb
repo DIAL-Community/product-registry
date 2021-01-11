@@ -1,9 +1,9 @@
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
-  <h5 class="card-header bg-secondary text-white">
+  <div class="card-header bg-secondary text-white">
     <%= "#{t('model.product-suite').to_s.titlecase}: #{@product_suite.name}" %>
-  </h5>
+  </div>
   <div class="card-body py-2 pl-2">
     <div class="row">
       <% @product_suite.product_versions.each do |product_version| %>

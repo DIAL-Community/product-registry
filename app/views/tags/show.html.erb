@@ -3,9 +3,9 @@
 
 <div class="card">
   <div class="card-body px-3 py-3">
-    <h5>
+    <div>
       <%= "#{t('model.tag').to_s.titlecase}: #{@tag.name}" %>
-    </h5>
+    </div>
     <div id="tag-viewer" class="wysiwyg-viewer">
       <%= @tag.tag_descriptions
             .select { |desc| desc.locale == I18n.locale.to_s }

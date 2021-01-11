@@ -1,6 +1,7 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
-    <%= image_tag "sectors_icon.png", :width => "20px", :height => "20px" %>
+    <%= image_tag "sectors_icon.png", :width => "20px", :height => "20px",
+                  alt: t('alt.el-icon', el: t('model.sector')).humanize %>
     <span class="align-middle"><%= t('view.filternav.sectors') %></span>
     <%
       counter = filter_count('sectors')
@@ -22,6 +23,7 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
+        <label for="sectors" class="sr-only"><%= t('model.sector').pluralize.humanize %></label>
         <% origin_name = session[:org] ? session[:org] : Setting.find_by(slug: 'default_sector_list').value %>
         <%= select_tag("sectors", options_for_select(Sector.build_filter(origin_name).collect {|sector| [sector['name'], sector['id'] ] }),
             { selected: params[:name], include_blank: t('view.filternav.title.sector'), 

@@ -22,12 +22,10 @@
   </div>
 </div>
 <div class="border rounded bg-secondary text-white clearfix border card-header">
-  <h5 class="float-left mb-0">
-    <%= "#{t('model.organization').to_s.humanize}:  #{@organization.name}" %>
-    <% if @organization.is_endorser %>
-      <i class="fas fa-check-circle text-success ml-2"></i>
-    <% end %>
-  </h5>
+  <%= "#{t('model.organization').to_s.humanize}:  #{@organization.name}" %>
+  <% if @organization.is_endorser %>
+    <i class="fas fa-check-circle text-success ml-2"></i>
+  <% end %>
 </div>
 
 <div class="mt-2">
@@ -111,8 +109,8 @@
 
 <% if user_signed_in? && (policy(Contact).view_allowed? || policy(@organization).mod_allowed?) %>
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.contact').to_s.pluralize.humanize %></h5>
+    <div class="rounded bg-secondary text-white card-header">
+      <%= t('model.contact').to_s.pluralize.humanize %>
     </div>
     <% if @organization.organizations_contacts.count > 0 %>
       <div class="row">
@@ -120,8 +118,8 @@
           <div class="col-6 col-lg-4 mt-2">
             <div class="card h-100">
               <div class="card-body py-2">
-                <h5 class="card-title"><%= link_to organization_contact.contact.name, organization_contact.contact %></h5>
-                <h6 class="card-subtitle text-muted"><%= organization_contact.contact.email %></h6>
+                <div class="card-title"><%= link_to organization_contact.contact.name, organization_contact.contact %></div>
+                <div class="card-subtitle text-muted"><%= organization_contact.contact.email %></div>
                 <% if !organization_contact.contact.title.blank? %>
                   <p class="card-text"><%= organization_contact.contact.title %></p>
                 <% end %>
@@ -148,8 +146,8 @@
 
 <% if !@organization.is_mni ### Start for non-MNI data section. ### %>
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.sector').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.sector').to_s.pluralize.humanize %>
   </div>
   <% if @organization.sectors.count > 0 %>
     <div class="row">
@@ -169,8 +167,8 @@
 </div>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.product').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.product').to_s.pluralize.humanize %>
   </div>
   <% if @organization.products.count > 0 %>
     <div class="row">
@@ -193,8 +191,8 @@
 </div>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.project').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.project').to_s.pluralize.humanize %>
   </div>
   <% if @organization.projects.count > 0 %>
     <div class="row">
@@ -215,8 +213,8 @@
 <% end ### End for non-MNI data section. ### %>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('model.country').to_s.pluralize.humanize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('model.country').to_s.pluralize.humanize %>
   </div>
   <% if @organization.countries.count > 0 %>
     <div class="row">
@@ -237,8 +235,8 @@
 
 <% if @organization.is_mni && @can_view_mni %>
   <div class="mt-2">
-    <div class="border rounded bg-secondary text-white clearfix border card-header">
-      <h5 class="float-left mb-0"><%= t('model.operator_services').to_s.pluralize.humanize %></h5>
+    <div class="rounded bg-secondary text-white card-header">
+      <%= t('model.operator_services').to_s.pluralize.humanize %>
     </div>
     <div id="orgId" style="display:none"><%= @organization.id %></div>
     <div id="agg-nav" class="card-body accordion-section p-0">
@@ -261,8 +259,8 @@
 <% end %>
 
 <div class="mt-2">
-  <div class="border rounded bg-secondary text-white clearfix border card-header">
-    <h5 class="float-left mb-0"><%= t('view.general.comment').to_s.titlecase.pluralize %></h5>
+  <div class="rounded bg-secondary text-white card-header">
+    <%= t('view.general.comment').to_s.titlecase.pluralize %>
   </div>
   <%= commontator_thread(@organization) %>
 </div>
@@ -321,8 +319,8 @@
         tooltip.setPosition(undefined);
         const element = tooltip.getElement();
         const content =
-          `<h5 class='text-muted m-2'><%= @organization.name %></h5>
-           <h6 class='text-muted m-2'><%= office.name %></h6>`
+          `<div class='text-muted m-2'><%= @organization.name %></div>
+           <div class='text-muted m-2'><%= office.name %></div>`
         $(element).html(content);
 
         map.on("click", function(e) {

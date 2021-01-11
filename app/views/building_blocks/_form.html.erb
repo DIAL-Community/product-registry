@@ -1,5 +1,5 @@
 <%= form_with(model: building_block, multipart: true, local: true, html: { id: 'bb-form' }) do |form| %>
-  <fieldset class="form-label-group">
+  <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
   </fieldset>
@@ -20,7 +20,7 @@
     default_maturity = building_block.maturity.nil? ? BuildingBlock.entity_status_types[:BETA] : building_block.maturity
     if policy(BuildingBlock).beta_only?
   %>
-    <fieldset class="form-group mt-1">
+    <fieldset class="form-group mt-1 mb-0">
       <label for="building-block-maturity">
         <%= t('view.building-block.form.maturity-level') %>
       </label>
@@ -33,7 +33,7 @@
       </select>
     </fieldset>
   <% else %>
-    <fieldset class="form-group mt-1">
+    <fieldset class="form-group mt-1 mb-0">
       <label for="building-block-maturity">
         <%= t('view.building-block.form.maturity-level') %>
       </label>
@@ -50,9 +50,9 @@
   <input type="hidden" id="bb_desc" name="building_block[bb_desc]" />
   <div id="bb_desc_editor"> </div>
   
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0 mt-2">
+  <div class="bg-secondary text-white rounded p-3 mb-0 mt-2 original-font-size">
     <%= t('view.multi-select.assigned.title', model: t('model.product').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
   <% if !@product %>
     <fieldset class="form-label-group mt-2">
       <input type="text" id="product-search" class="form-control"
@@ -74,9 +74,9 @@
       </div>
     </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0 original-font-size">
     <%= t('view.multi-select.assigned.title', model: t('model.workflow').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
 
   <fieldset class="form-label-group mt-2">
     <input type="text" id="workflow-search" class="form-control"

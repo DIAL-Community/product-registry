@@ -19,9 +19,9 @@
     <%= form.label :subdomain, t('view.portal.form.subdomain') %>
   </fieldset>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('view.portal-view.top-nav').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
   <% PortalView.top_navs.keys.each do |top_nav| %>
     <fieldset class="form-label-group mt-2 ml-3 inline col-3">
       <div class="custom-control custom-switch">
@@ -36,9 +36,9 @@
     </fieldset>
   <% end %>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('view.portal-view.filter-nav').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
   <% PortalView.filter_navs.keys.each do |filter_nav| %>
     <fieldset class="form-label-group mt-2 ml-3 inline col-3">
       <div class="custom-control custom-switch">
@@ -53,9 +53,9 @@
     </fieldset>
   <% end %>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('view.portal-view.user-role').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
   <% User.user_roles.keys.each do |role| %>
     <fieldset class="form-label-group mt-2 ml-3 inline col-3">
       <div class="custom-control custom-switch">
@@ -70,9 +70,9 @@
     </fieldset>
   <% end %>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('view.portal-view.product-origin').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
   <% Origin.all.each do |origin| %>
     <fieldset class="form-label-group mt-2 ml-3 inline col-3">
       <div class="custom-control custom-switch">
@@ -87,9 +87,9 @@
     </fieldset>
   <% end %>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mb-0">
     <%= t('view.multi-select.assigned.title', model: t('view.portal-view.org-type').to_s.pluralize.humanize) %>
-  </h6>
+  </div>
   <% Organization.org_types.keys.each do |org_type| %>
     <fieldset class="form-label-group mt-2 ml-3 inline col-3">
       <div class="custom-control custom-switch">
@@ -104,30 +104,30 @@
     </fieldset>
   <% end %>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.landing-page') %>
-  </h6>
+  </div>
 
   <input type="hidden" id="about_page" name="portal_view[about_page]" />
   <div id="about_editor"> </div>
   
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.background-color') %>
-  </h6>
+  </div>
   <fieldset class="form-label-group">
     <input id="stylesheet_color" name="stylesheet_color" type="text" class="form-control" placeholder="<%= t('view.portal.form.background-color') %>" value="<%= @stylesheet_color %>" />
     <%= form.label :stylesheet_color, t('view.portal.form.background-color') %>
   </fieldset>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.page-footer') %>
-  </h6>
+  </div>
   <input type="hidden" id="page_footer" name="portal_view[page_footer]" />
   <div id="footer_editor"> </div>
 
-  <h6 class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.portal.index.header-logo') %>
-  </h6>
+  </div>
   <fieldset class="custom-file mt-2">
     <input type="file" id="logo-file" name="logo" class="custom-file-input" aria-describedby="logo-file" />
     <label class="custom-file-label" for="logo-file">

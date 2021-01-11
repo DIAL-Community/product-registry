@@ -1,6 +1,7 @@
 <div class="accordion-header bg-dark">
   <span class="m-0 align-middle">
-    <%= image_tag "geographies_icon.png", :width => "20px", :height => "20px" %>
+    <%= image_tag "geographies_icon.png", :width => "20px", :height => "20px",
+                  alt: t('alt.el-icon', el: t('model.country')).humanize %>
     <span class="align-middle"><%= t('view.filternav.countries') %></span>
     <%
       counter = filter_count('countries')
@@ -22,6 +23,7 @@
   <div class="row">
     <div class="col-12 ml-1">
       <div class="form-group mb-1">
+        <label for="countries" class="sr-only"><%= t('model.location').pluralize.humanize %></label>
         <%= collection_select(nil, "countries", Country.order(:name), :id, :name,
             { selected: params[:name], include_blank: t('view.filternav.title.country') },
             { class: 'form-control filter-element' }) %>

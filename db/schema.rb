@@ -74,7 +74,6 @@ ActiveRecord::Schema.define(version: 2020_12_21_140408) do
     t.string "name", null: false
     t.string "website", null: false
     t.string "repository", null: false
-    t.string "submitter_email", null: false
     t.boolean "rejected"
     t.datetime "rejected_date"
     t.bigint "rejected_by_id"
