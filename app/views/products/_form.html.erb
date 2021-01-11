@@ -66,8 +66,8 @@
     <%= form.label :default_url, t('view.product.form.default-url') %>
   </fieldset>
 
-  <%= form.hidden_field :status, :value => 'Not Vetted' %>
-  <%= form.check_box :status, { disabled: !policy(product).permitted_attributes.include?(:status) }, 'Vetted', 'Not Vetted' %>
+  <%= form.hidden_field :status, :value => Product::NOT_VETTED %>
+  <%= form.check_box :status, { disabled: !policy(product).permitted_attributes.include?(:status) }, Product::VETTED, Product::NOT_VETTED %>
   <label class="form-label-group mt-2" for="is_launchable">
     <%= t('view.product.form.is-vetted') %>
   </label>

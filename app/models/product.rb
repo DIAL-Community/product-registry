@@ -3,6 +3,9 @@ require('csv')
 class Product < ApplicationRecord
   include Auditable
 
+  VETTED = "Vetted"
+  NOT_VETTED = "Not Vetted"
+
   attr_accessor :product_description
 
   has_many :product_descriptions

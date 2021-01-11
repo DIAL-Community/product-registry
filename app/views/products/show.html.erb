@@ -6,11 +6,6 @@
 <div class="card mt-2">
   <h5 class="card-header bg-secondary text-white">
     <%= "#{t('model.product').to_s.humanize}: #{@product.name}" %>
-    <% if !@product.status.nil? %>
-      <div class="float-right mr-2 text-white"> 
-        <%= @product.status %>
-      </div>
-    <% end %>
   </h5>
   <div class="card-body">
     <% if @owner.empty? %>
