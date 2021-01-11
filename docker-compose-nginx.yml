@@ -1,9 +1,10 @@
 version: '3.7'
 services:
  nginx:
-  image: nginx:1.15-alpine
+  image: nginx:1.19
   restart: unless-stopped
   volumes:
+   - ./prod/ssl/data/nginx/nginx.conf:/etc/nginx/nginx.conf
    - ./prod/ssl/data/nginx/prod:/etc/nginx/conf.d
    - ./prod/ssl/data/certbot/conf:/etc/letsencrypt
    - ./prod/ssl/data/certbot/www:/var/www/certbot

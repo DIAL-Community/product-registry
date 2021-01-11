@@ -89,7 +89,7 @@ utils/GIZ_Projects.csv
 setEnv.sh
 .env
 
-prod/ssl/data/*
+prod/ssl/data/
 
 .history
 lib/tasks/local_setup.rake
