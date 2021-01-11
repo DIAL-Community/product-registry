@@ -508,6 +508,7 @@ en:
       building_blocks: Building Blocks
       products: Products
       geographies: Geographies
+      countries: Countries
       locations: Locations
       sectors: Sectors
       orgs: Organizations
@@ -515,6 +516,11 @@ en:
       projects: Projects
       playbooks: Playbooks
       plays: Plays
+      tags: Tags
+      years: Years
+      aggregators: Aggregators
+      operators: Operators
+      services: Services
       view-projects: Coming soon.
       map: Map Views
       endorser-map: Endorser map
@@ -523,6 +529,7 @@ en:
       aggregator-map-with-osm: Aggregator map
       project-map: Project map
       project-map-with-osm: Project map
+      map-filtering: Map Filtering
       clear: Clear All
       with-maturity: Product with maturity assessment
       is-launchable: Product can be deployed and launched

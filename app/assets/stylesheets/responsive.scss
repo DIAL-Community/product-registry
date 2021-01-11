@@ -1,13 +1,13 @@
 .display-text-on-xl {
-  @media only screen and (min-device-width: 1301px) {
+  @media only screen and (min-width: 1351px) {
     display: inline-block !important;
   }
 
-  @media only screen and (min-device-width: 768px) and (max-device-width: 1300px) {
+  @media only screen and (min-width: 768px) and (max-width: 1350px) {
     display: none !important;
   }
 
-  @media only screen and (max-device-width: 767px) {
+  @media only screen and (max-width: 767px) {
     display: inline-block !important;
   }
 }

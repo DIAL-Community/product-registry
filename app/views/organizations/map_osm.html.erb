@@ -1,24 +1,52 @@
 <% content_for(:header_scripts) do %>
 <% end %>
-
-<div class="card">
-  <h5 class="card-header bg-secondary text-white">
-    <div id="loading-spinner" class="spinner-border spinner-border-sm" role="status">
-      <span class="sr-only">Loading...</span>
+<div class="row">
+  <div id="left-filter" class="col-12 col-md-3 col-lg-5ths d-none d-md-block nav-container bg-dark">
+    <div class="card border-bottom-0">
+      <div class="card-header bg-secondary text-white">
+        <h5 class="nav-header mb-0"><%= t('view.filternav.map-filtering') %></h5>
+      </div>
+      <div class="card-body bg-dark">
+        <div class="row">
+          <div class="col-12 pl-2">
+            <span class="align-middle text-white"><%= t('view.filternav.sectors') %></span>
+            <select id="sector" class="custom-select mb-2">
+              <option value=-1>
+                <%= t('view.organization.map.all-sectors') %>
+              </option>
+            </select>
+            <span class="align-middle text-white"><%= t('view.filternav.years') %></span>
+            <select id="year" class="custom-select">
+              <option value=-1>
+                <%= t('view.organization.map.all-years') %>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
-    <%= t('view.organization.map.title') %>
-    <div class="float-right">
-      <%= link_to products_path, class: 'no-hover' do %>
-        <h5 class="text-white icon-inline"><%= t("view.about.return_catalog") %></h5>
-        <i class="fas fa-external-link-alt text-white icon-inline"></i>
-      <% end %>
+  </div>
+  <div id="right-content" class="col-12 col-md-9 col-lg-45ths">
+    <div class="card">
+      <h5 class="card-header bg-secondary text-white">
+        <div id="loading-spinner" class="spinner-border spinner-border-sm" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <%= t('view.organization.map.title') %>
+        <div class="float-right">
+          <%= link_to products_path, class: 'no-hover' do %>
+            <h5 class="text-white icon-inline"><%= t("view.about.return_catalog") %></h5>
+            <i class="fas fa-external-link-alt text-white icon-inline"></i>
+          <% end %>
+        </div>
+      </h5>
     </div>
-  </h5>
+    <div id="map-osm" class="map" style="height:40rem;">
+      <div id="popup-osm" class="map-info" style="display: none;"></div>
+    </div>
+    <div id="country-osm"></div>
+  </div>
 </div>
-<div id="map-osm" class="map" style="height:40rem;">
-  <div id="popup-osm" class="map-info" style="display: none;"></div>
-</div>
-<div id="country-osm"></div>
 <div class="form-inline">
   <div class="form-group col-12">
     <div class="float-right">
