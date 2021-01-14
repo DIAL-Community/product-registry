@@ -130,7 +130,9 @@
             <div id="right-content" class="col-12 col-md-9 col-lg-45ths">
               <%= render '/shared/summarynav' %>
               <%= render '/shared/activefilter' %>
-              <%= yield %>
+              <div class="ml-2 mr-2">
+                <%= yield %>
+              </div>
             </div>
           </div>
           <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
