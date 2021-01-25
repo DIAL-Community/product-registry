@@ -254,7 +254,7 @@ module FilterConcern
                                     .ids
     end
 
-    project_filtered_ids = filter_and_intersect_arrays([all_filters["projects"], country_project_ids, tag_project_ids, product_project_ids])
+    project_filtered_ids = filter_and_intersect_arrays([all_filters["projects"], all_projects.ids, country_project_ids, tag_project_ids, product_project_ids])
 
     projects = all_projects.where(id: project_filtered_ids).order(:slug)
 
