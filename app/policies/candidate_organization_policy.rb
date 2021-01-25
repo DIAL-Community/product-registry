@@ -6,6 +6,11 @@ class CandidateOrganizationPolicy < ApplicationPolicy
     @record = record
   end
 
+  def create_allowed?
+    return false if user.nil?
+    true
+  end
+
   def mod_allowed?
     return false if user.nil?
 
@@ -14,7 +19,6 @@ class CandidateOrganizationPolicy < ApplicationPolicy
 
   def view_allowed?
     return false if user.nil?
-
-    user.roles.include?(User.user_roles[:admin])
+    true
   end
 end

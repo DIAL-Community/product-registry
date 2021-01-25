@@ -31,10 +31,12 @@
               t('view.candidate-product.index.status-approved')
         %>
       </p>
-      <p class="m-2">
-        <strong><%= "#{t('view.candidate-product.index.submitter-email')}:" %></strong>
-        <%= @candidate_product.submitter_email %>
-      </p>
+      <% if user_signed_in? && policy(Contact).view_allowed? %>
+        <p class="m-2">
+          <strong><%= "#{t('view.candidate-product.index.submitter-email')}:" %></strong>
+          <%= @candidate_product.submitter_email %>
+        </p>
+      <% end %>
     </div>
   </div>
   <p class="float-right mb-0 mr-2" >

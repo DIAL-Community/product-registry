@@ -19,7 +19,7 @@ class CandidateOrganizationsController < ApplicationController
   # GET /candidate_organizations/new
   def new
     @candidate_organization = CandidateOrganization.new
-    authorize(@candidate_organization, :mod_allowed?)
+    authorize(@candidate_organization, :create_allowed?)
   end
 
   # GET /candidate_organizations/1/edit
@@ -30,7 +30,7 @@ class CandidateOrganizationsController < ApplicationController
   # POST /candidate_organizations
   # POST /candidate_organizations.json
   def create
-    authorize(CandidateOrganization, :mod_allowed?)
+    authorize(CandidateOrganization, :create_allowed?)
     # Everyone including unregistered user can post and create candidate organization.
     @candidate_organization = CandidateOrganization.new(candidate_organization_params)
     @candidate_organization.set_current_user(current_user)

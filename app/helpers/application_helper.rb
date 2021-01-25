@@ -49,10 +49,7 @@ module ApplicationHelper
   def build_breadcrumbs(params)
     breadcrumbs = []
 
-    if params[:controller].downcase == 'candidate_organizations' &&
-       !policy(CandidateOrganization).view_allowed?
-      breadcrumbs << { path: 'organizations', label: t('model.organization').titlecase.pluralize }
-    elsif params[:controller].downcase == 'use_case_steps'
+    if params[:controller].downcase == 'use_case_steps'
       breadcrumbs << { path: 'use_cases', label: t('model.use-case').titlecase.pluralize }
       if params[:use_case_id].present?
         uc_step_path = "use_cases/#{params[:use_case_id]}"
