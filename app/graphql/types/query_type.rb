@@ -71,10 +71,11 @@ module Types
 
     field :page_contents, Types::PageContentType, null: false do
       argument :playbook_page_id, ID, required: true
+      argument :locale, String, required: false, default_value: 'en'
     end
 
-    def page_contents(playbook_page_id:)
-      PageContent.find_by(playbook_page_id: playbook_page_id)
+    def page_contents(playbook_page_id:, locale:)
+      PageContent.find_by(playbook_page_id: playbook_page_id, locale: locale[0, 2])
     end
 
     field :me, Types::UserType, null: false

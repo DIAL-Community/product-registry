@@ -1,4 +1,3 @@
-<body data-turbolinks="false">
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
@@ -27,6 +26,21 @@
     <%= "#{@page.name}" %>
   </div>
   <div class="card-body py-2 px-3">
+    <div class="row">
+      <div class="col-12 mt-2">
+        <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input type="radio" name="language" id="lang-en" value="en" autocomplete="off" checked> English
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="language" id="lang-fr" value="fr" autocomplete="off"> France
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="language" id="lang-de" value="de" autocomplete="off"> Deutsch
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="card-text text-muted mt-2 mb-2">
       <%= t('view.playbook-page.index.contents') %>: 
     </div>
@@ -83,6 +97,7 @@
     </div>
     <div class="card-footer border-0">
       <div class="float-right mb-0">
+        <%= link_to t('view.general.back'), playbook_path(@playbook), :class => "card-link" %>
         <% if user_signed_in? && policy(Playbook).mod_allowed? %>
           <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
           <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
@@ -91,4 +106,22 @@
     </div>
   </div>
 </div>
-</body>
+
+<script type="text/javascript" defer>
+
+  $("input[name=language]").on('change', switchLanguage);
+  
+  function switchLanguage() {
+    console.log("Switching the editor language!");
+    const langValue = $("input[name=language]:checked").val();
+
+    $.get(`${window.location.pathname}?language=${langValue}`, function (data) {
+      const parsedDom = $('<div>').append($.parseHTML(data));
+      const frView = $('.fr-view', parsedDom);
+      const frViewStyle = $('.fr-view-style', parsedDom);
+
+      $(".fr-view").replaceWith(frView);
+      $(".fr-view-style").replaceWith(frViewStyle);
+    });
+  }
+</script>

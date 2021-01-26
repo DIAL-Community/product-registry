@@ -1,6 +1,6 @@
 var grapesEditor;
 
-function initGrapes() {
+function initGrapes(language) {
   grapesEditor = grapesjs.init({
     avoidInlineStyle: 1,
     height: '100vh',
@@ -19,8 +19,8 @@ function initGrapes() {
       stepsBeforeSave: 4,
       autosave: true,
       autoload: true,
-      urlStore: '<%= save_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
-      urlLoad: '<%= load_design_playbook_playbook_page_path(@playbook, @page_contents.playbook_page_id) %>',
+      urlStore: `<%= save_design_playbook_playbook_page_path(@playbook, @page) %>?language=${language}`,
+      urlLoad: `<%= load_design_playbook_playbook_page_path(@playbook, @page) %>?language=${language}`,
       params: { authenticity_token: '<%= form_authenticity_token %>' },
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
     },
