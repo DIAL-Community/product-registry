@@ -215,9 +215,9 @@ class PlaybookPagesController < ApplicationController
     design = {}
     # Currently, we are not using the components, as we need to use html to transfer
     # between simple and page builder editors
-    #if !@page_contents.components.nil? && !@page_contents.components.blank?
-    #  design['gjs-components'] = @page_contents.components
-    #end
+    # if !@page_contents.components.nil? && !@page_contents.components.blank?
+    #   design['gjs-components'] = @page_contents.components
+    # end
     if !@page_contents.html.nil? && !@page_contents.html.blank?
       design['gjs-html'] = @page_contents.html
     end
@@ -261,7 +261,7 @@ class PlaybookPagesController < ApplicationController
       @page_contents.editor_type = "builder"
     end
 
-    @page_contents.locale = I18n.locale
+    @page_contents.locale = params['language'] || I18n.locale
 
     respond_to do |format|
       if @page_contents.save!
@@ -284,18 +284,26 @@ class PlaybookPagesController < ApplicationController
   end
 
   def set_page_contents
+    language = I18n.locale
+    if params['language'].present?
+      language = params['language']
+    end
+
     if @page_contents.nil?
       if !params[:id].scan(/\D/).empty?
         @page = PlaybookPage.find_by(slug: params[:id])
         @playbook = Playbook.find(@page.playbook_id)
-        @page_contents = PageContent.find_by(playbook_page_id: @page.id)
+        @page_contents = PageContent.find_by(playbook_page_id: @page.id, locale: language)
       else
         @page = PlaybookPage.find(params[:id])
         @playbook = Playbook.find(@page.playbook_id)
-        @page_contents = PageContent.find_by(playbook_page_id: params[:id])
+        @page_contents = PageContent.find_by(playbook_page_id: params[:id], locale: language)
       end
-      if @page_contents.nil? 
-        @page_contents = PageContent.new
+
+      if @page_contents.nil?
+        en_contents = PageContent.find_by(playbook_page_id: @page.id, locale: 'en') if language != 'en'
+        @page_contents = en_contents.dup unless en_contents.nil?
+        @page_contents = PageContent.new if @page_contents.nil?
         @page_contents.playbook_page_id = @page.id
         @page_contents.editor_type = "simple"
       end
@@ -310,7 +318,12 @@ class PlaybookPagesController < ApplicationController
       @page = PlaybookPage.find(params[:id]) || not_found
     end
 
-    @page_contents = PageContent.where(playbook_page_id: @page, locale: I18n.locale).first
+    language = I18n.locale
+    if params['language'].present?
+      language = params['language']
+    end
+
+    @page_contents = PageContent.where(playbook_page_id: @page, locale: language).first
 
     if @page_contents.nil?
       @page_contents = PageContent.new

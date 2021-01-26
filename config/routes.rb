@@ -48,8 +48,6 @@ Rails.application.routes.draw do
       member do
         get 'copy_page'
         get 'edit_content'
-        get 'view_design'
-        get 'show_design'
         get 'load_design'
         post 'save_design'
         patch 'save_design'

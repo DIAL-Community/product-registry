@@ -20,9 +20,8 @@ module ApplicationHelper
   end
 
   def hide_sidenav
-    current_page?('/about/cookies') || current_page?('/map_projects_osm') || current_page?('/map_osm') || current_page?('/map_aggregators_osm') ||
-      (params[:controller] == 'playbooks' && params[:action] == 'show_design') ||
-      (params[:controller] == 'playbooks' && params[:action] == 'view_design') ||
+    current_page?('/about/cookies') || current_page?('/map_projects_osm') ||
+      current_page?('/map_osm') || current_page?('/map_aggregators_osm') ||
       (params[:controller] == 'playbook_pages' && params[:action] == 'edit_content') ||
       current_page?('/admin/users/statistics') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
