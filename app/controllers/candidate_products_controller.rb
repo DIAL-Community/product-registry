@@ -1,5 +1,6 @@
 class CandidateProductsController < ApplicationController
   before_action :set_candidate_product, only: [:show, :edit, :update, :destroy, :duplicate, :approve, :reject]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
 
   def approve
     set_candidate_product
@@ -50,25 +51,30 @@ class CandidateProductsController < ApplicationController
   # GET /candidate_products.json
   def index
     @candidate_products = CandidateProduct.all
+    authorize(@candidate_products, :view_allowed?)
   end
 
   # GET /candidate_products/1
   # GET /candidate_products/1.json
   def show
+    authorize(@candidate_product, :view_allowed?)
   end
 
   # GET /candidate_products/new
   def new
     @candidate_product = CandidateProduct.new
+    authorize(@candidate_product, :create_allowed?)
   end
 
   # GET /candidate_products/1/edit
   def edit
+    authorize(@candidate_product, :mod_allowed?)
   end
 
   # POST /candidate_products
   # POST /candidate_products.json
   def create
+    authorize(CandidateProduct, :create_allowed?)
     @candidate_product = CandidateProduct.new(candidate_product_params)
 
     respond_to do |format|
@@ -85,6 +91,7 @@ class CandidateProductsController < ApplicationController
   # PATCH/PUT /candidate_products/1
   # PATCH/PUT /candidate_products/1.json
   def update
+    authorize(@candidate_product, :mod_allowed?)
     respond_to do |format|
       if @candidate_product.update(candidate_product_params)
         format.html { redirect_to @candidate_product, notice: 'Candidate product was successfully updated.' }
@@ -99,6 +106,7 @@ class CandidateProductsController < ApplicationController
   # DELETE /candidate_products/1
   # DELETE /candidate_products/1.json
   def destroy
+    authorize(@candidate_product, :mod_allowed?)
     @candidate_product.destroy
     respond_to do |format|
       format.html { redirect_to candidate_products_url, notice: 'Candidate product was successfully destroyed.' }
@@ -117,6 +125,7 @@ class CandidateProductsController < ApplicationController
                                               .to_a
       end
     end
+    authorize(CandidateProduct, :view_allowed?)
     render(json: @candidate_products, only: [:name])
   end
 
@@ -137,8 +146,8 @@ class CandidateProductsController < ApplicationController
           .tap do |attr|
             if attr[:website].present?
               attr[:website] = attr[:website].strip
-                                             .sub(/^https?\:\/\//i,'')
-                                             .sub(/^https?\/\/\:/i,'')
+                                             .sub(/^https?\:\/\//i, '')
+                                             .sub(/^https?\/\/\:/i, '')
                                              .sub(/\/$/, '')
             end
             if params[:reslug].present?

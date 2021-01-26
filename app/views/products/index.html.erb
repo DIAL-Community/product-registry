@@ -36,15 +36,19 @@
     <%= link_to t('view.product.index.product-graph'), productmap_path, class: 'small mr-1',
                 target: "_blank", rel: "noreferrer noopener" %>
     <span class="small mr-1">&nbsp;|</span>
-    <% if user_signed_in? && policy(Product).create_allowed? %>
-      <%= link_to t('view.general.create'), new_product_path, class: 'small mr-1' %>
-      <span class="small mr-1">&nbsp;|</span>
-      <%= link_to t('view.organization.index.view-audit').titlecase, audits_path(type: "Product"), :class => 'small mr-1' %>
-      <span class="small mr-1">&nbsp;|</span>
-    <% else %>
-      <%= link_to t('view.general.create'),
-          new_candidate_product_path,
-          class: 'small mr-1' %>
+    <% if user_signed_in? %>
+      <% if policy(Product).create_allowed? %>
+        <%= link_to t('view.general.create'), new_product_path, class: 'small mr-1' %>
+        <span class="small mr-1">&nbsp;|</span>
+        <%= link_to t('view.organization.index.view-audit').titlecase, audits_path(type: "Product"), :class => 'small mr-1' %>
+        <span class="small mr-1">&nbsp;|</span>
+      <% elsif policy(CandidateProduct).create_allowed? %>
+        <%= link_to t('view.general.create'), new_candidate_product_path, class: 'small mr-1' %>
+        <span class="small mr-1">&nbsp;|</span>
+      <% end %>
+    <% end %>
+    <% if !user_signed_in? %>
+      <%= link_to t('view.general.create'), new_candidate_product_path, class: 'small mr-1' %>
       <span class="small mr-1">&nbsp;|</span>
     <% end %>
     <%= link_to t('view.product.index.export-json'),
