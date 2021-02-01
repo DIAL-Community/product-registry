@@ -137,6 +137,8 @@ module ProductsHelper
             tooltip = t("view.product.index.source_digital_square")
           when "unicef"
             tooltip = t("view.product.index.source_unicef")
+          when "dpga"
+            tooltip = t("view.product.index.source_dpga")
           end
           image = Hash["filename" => "origins/" + origin.slug + ".png",
                        alt_text: t('alt.el-logo', el: tooltip).humanize, "tooltip" => tooltip]
