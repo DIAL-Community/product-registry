@@ -661,6 +661,7 @@ en:
         phase: Phase
         order: Order
         media: Media
+        mapped-action: Mapped Action
         resources: Resources
         media-prompt: If you would like to add a video to this activity, enter the URL
         description: Description

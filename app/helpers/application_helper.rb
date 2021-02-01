@@ -77,11 +77,7 @@ module ApplicationHelper
         playbook_path = "playbooks/#{params[:playbook_id]}"
         playbook_name = Playbook.find_by(slug: params[:playbook_id]).name
         breadcrumbs << { path: playbook_path, label: playbook_name }
-        if params[:playbook_page_id].present?
-          playbook_page_path = "#{breadcrumbs[-1][:path]}/activities/#{params[:activity_id]}"
-          page_name = PlaybookPage.find_by(slug: params[:playbook_page_id]).name
-          breadcrumbs << { path: playbook_page_path, label: page_name }
-        end
+        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/playbook_pages", label: '' }
       end
     else
       breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }

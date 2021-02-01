@@ -65,10 +65,18 @@
         <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.question') %>:</div>
       </div>
       <div class="card-body p-2">
-        <% if !@question.nil? %>
+        <% if !@page.playbook_question.nil? %>
           <div class="ml-4 mt-2">
-          <strong>Question Text: </strong><%= @question.question_text %>
+            <strong>Question Text: </strong><%= @page.playbook_question.question_text %>
           </div>
+          <% @page.playbook_question
+                  .playbook_answers
+                  .sort_by {|answer| answer.answer_text }
+                  .each do |answer| %>
+            <div class="ml-4 mt-2">
+              <strong>Answer Text: </strong><%= answer.answer_text %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>

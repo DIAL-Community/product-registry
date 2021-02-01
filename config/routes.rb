@@ -255,6 +255,7 @@ Rails.application.routes.draw do
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
   get 'playbook_duplicates', to: 'playbooks#duplicates'
+  get 'playbook_page_duplicates', to: 'playbook_pages#duplicates'
   get 'candidate_product_duplicates', to: 'candidate_products#duplicates'
 
   post '/froala_image/upload' => 'froala_images#upload'
