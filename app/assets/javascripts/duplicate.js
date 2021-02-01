@@ -128,6 +128,10 @@ var playbooksDuplicateCheck = function() {
   duplicateCheck("playbook_name", "/playbook_duplicates.json");
 }
 
+var playbookPagesDuplicateCheck = function() {
+  duplicateCheck("playbook_page_name", "/playbook_page_duplicates.json");
+}
+
 var playsDuplicateCheck = function() {
   duplicateCheck("play_name", "/play_duplicates.json");
 }
@@ -180,6 +184,8 @@ $(document).on('category_indicators#edit:loaded', categoryIndicatorDuplicateChec
 $(document).on('category_indicators#new:loaded', categoryIndicatorDuplicateCheck);
 $(document).on('playbooks#edit:loaded', playbooksDuplicateCheck);
 $(document).on('playbooks#new:loaded', playbooksDuplicateCheck);
+$(document).on('playbook_pages#edit:loaded', playbookPagesDuplicateCheck);
+$(document).on('playbook_pages#new:loaded', playbookPagesDuplicateCheck);
 $(document).on('plays#edit:loaded', playsDuplicateCheck);
 $(document).on('plays#new:loaded', playsDuplicateCheck);
 $(document).on('tasks#edit:loaded', tasksDuplicateCheck);

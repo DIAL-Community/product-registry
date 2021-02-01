@@ -39,17 +39,17 @@ class PlaybookPagesController < ApplicationController
     @page = PlaybookPage.new
     @page_contents = PageContent.new
     @page_contents.editor_type = "simple"
-    if params[:playbook_id]
+    if params[:playbook_id].present?
       @playbook = Playbook.find_by(slug: params[:playbook_id])
       @page.playbook = @playbook
       @pages = PlaybookPage.where(playbook_id: @playbook.id)
-      
+
       @phases = @playbook.phases.map do |phase|
         phase["name"]
       end
       @pages = PlaybookPage.where(playbook_id: @playbook.id)
     end
-    authorize Playbook, :mod_allowed?
+    authorize(Playbook, :mod_allowed?)
   end
 
   # GET /playbook_pages/1/edit
@@ -61,21 +61,43 @@ class PlaybookPagesController < ApplicationController
       end
       @pages = PlaybookPage.where(playbook_id: @playbook.id)
     end
-    authorize Playbook, :mod_allowed?
+    authorize(Playbook, :mod_allowed?)
   end
 
   # POST /playbook_pages
   # POST /playbook_pages.json
   def create
     @page = PlaybookPage.new(playbook_page_params)
-    if !playbook_page_params[:question_text].nil?
+    authorize(Playbook, :mod_allowed?)
+
+    unless params[:question_text].nil?
       question = PlaybookQuestion.new
-      question.question_text = playbook_page_params[:question_text]
-      question.save!
-      @page.playbook_questions_id = question.id
+      question.question_text = params[:question_text]
+      question.locale = I18n.locale
+
+      if params[:answer_texts].present?
+        answers = []
+        params[:answer_texts].keys.each do |answer_text_key|
+          next if answer_text_key.empty? || params[:answer_texts][answer_text_key].empty?
+
+          if answer_text_key.scan(/\D/).empty?
+            # Numbers only, so this is an id of the answer text.
+            answer = PlaybookAnswer.find(answer_text_key.to_i)
+          else
+            # Contains text, we need to create new answer
+            answer = PlaybookAnswer.new
+          end
+          answer.answer_text = params[:answer_texts][answer_text_key]
+          answer.action = params[:mapped_actions][answer_text_key]
+          answer.locale = I18n.locale
+
+          answers << answer
+        end
+        question.playbook_answers = answers
+      end
+
+      @page.playbook_question = question
     end
-    authorize Playbook, :mod_allowed?
-    @page.slug = slug_em(@page.name)
 
     if playbook_page_params[:playbook_id]
       @playbook = Playbook.find(playbook_page_params[:playbook_id])
@@ -101,23 +123,42 @@ class PlaybookPagesController < ApplicationController
   # PATCH/PUT /playbook_pages/1
   # PATCH/PUT /playbook_pages/1.json
   def update
-    authorize Playbook, :mod_allowed?
-    
+    authorize(Playbook, :mod_allowed?)
 
     if @page.playbook_id
       @playbook = Playbook.find(@page.playbook_id)
     end
 
-    if !playbook_page_params[:question_text].nil?
-      question = @page.playbook_questions_id.nil? ? PlaybookQuestion.new : PlaybookQuestion.find(@page.playbook_questions_id)
-      question.question_text = playbook_page_params[:question_text]
-      question.save!
-      @page.playbook_questions_id = question.id
+    unless params[:question_text].nil?
+      question = @page.playbook_question
+      question.question_text = params[:question_text]
+      question.locale = I18n.locale
+
+      if params[:answer_texts].present?
+        answers = []
+        params[:answer_texts].keys.each do |answer_text_key|
+          next if answer_text_key.empty? || params[:answer_texts][answer_text_key].empty?
+
+          if answer_text_key.scan(/\D/).empty?
+            # Numbers only, so this is an id of the answer text.
+            answer = PlaybookAnswer.find(answer_text_key.to_i)
+          else
+            # Contains text, we need to create new answer
+            answer = PlaybookAnswer.new
+          end
+          answer.answer_text = params[:answer_texts][answer_text_key]
+          answer.action = params[:mapped_actions][answer_text_key]
+          answer.locale = I18n.locale
+
+          answers << answer
+        end
+        question.playbook_answers = answers
+      end
     end
 
-    if !playbook_page_params[:content_html].nil?
+    unless playbook_page_params[:content_html].nil?
       @page_contents = PageContent.find_by(playbook_page_id: @page.id)
-      if !@page_contents.nil? 
+      unless @page_contents.nil?
         @page_contents.html = playbook_page_params[:content_html]
         @page_contents.css = playbook_page_params[:content_css]
         @page_contents.save!
@@ -184,11 +225,11 @@ class PlaybookPagesController < ApplicationController
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
       if current_slug != original_slug
-        @page = PlaybookPage.where(slug: current_slug).to_a                       
+        @page = PlaybookPage.where(slug: current_slug).to_a
       end
     end
-    authorize Activity, :view_allowed?
-    render json: @page, only: [:name]
+    authorize(Playbook, :view_allowed?)
+    render(json: @page, only: [:name])
   end
 
   def upload_design_images
@@ -328,26 +369,22 @@ class PlaybookPagesController < ApplicationController
     if @page_contents.nil?
       @page_contents = PageContent.new
     end
-
-    if !@page.playbook_questions_id.nil?
-      @question = PlaybookQuestion.find(@page.playbook_questions_id)
-      @answers = PlaybookAnswer.find_by(playbook_questions_id: @page.playbook_questions_id)
-    end
   end
 
   # Only allow a list of trusted parameters through.
   def playbook_page_params
     params.require(:playbook_page)
-      .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :playbook_id, :parent_page_id, :content_html, :content_css,
-            :editor_type, :resources => [:name, :description, :url])
-      .tap do |attr|
-        if params[:reslug].present?
-          attr[:slug] = slug_em(attr[:name])
-          if params[:duplicate].present?
-            first_duplicate = PlaybookPage.slug_starts_with(attr[:slug]).order(slug: :desc).first
-            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+          .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :playbook_id,
+                  :parent_page_id, :content_html, :content_css,
+                  :editor_type, resources: [:name, :description, :url])
+          .tap do |attr|
+            if params[:reslug].present?
+              attr[:slug] = slug_em(attr[:name])
+              if params[:duplicate].present?
+                first_duplicate = PlaybookPage.slug_starts_with(attr[:slug]).order(slug: :desc).first
+                attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+              end
+            end
           end
-        end
-      end
   end
 end
