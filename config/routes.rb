@@ -48,8 +48,6 @@ Rails.application.routes.draw do
       member do
         get 'copy_page'
         get 'edit_content'
-        get 'view_design'
-        get 'show_design'
         get 'load_design'
         post 'save_design'
         patch 'save_design'
@@ -257,6 +255,7 @@ Rails.application.routes.draw do
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
   get 'playbook_duplicates', to: 'playbooks#duplicates'
+  get 'playbook_page_duplicates', to: 'playbook_pages#duplicates'
   get 'candidate_product_duplicates', to: 'candidate_products#duplicates'
 
   post '/froala_image/upload' => 'froala_images#upload'

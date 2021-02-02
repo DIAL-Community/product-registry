@@ -86,6 +86,7 @@
       
       <div class="card-footer border-0">
         <div class="float-right mb-0">
+        <%= link_to t('view.general.back'), playbooks_path, :class => "card-link" %>
           <% if user_signed_in? && policy(Playbook).mod_allowed? %>
             <%= link_to t('view.general.edit'), edit_playbook_path(@playbook), class: "card-link" %>
           <% end %>

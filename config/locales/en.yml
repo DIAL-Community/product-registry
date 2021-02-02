@@ -384,6 +384,7 @@ en:
         source_dial: "Digital Impact Alliance Open Source Center"
         types: "Types: "
         source_unicef: "Unicef"
+        source_dpga: "Digital Public Goods Alliance"
         source_digital_square: "Digital Square"
         footer_bb_candidate: "Candidate for "
         footer_bb: " building block"
@@ -661,6 +662,7 @@ en:
         phase: Phase
         order: Order
         media: Media
+        mapped-action: Mapped Action
         resources: Resources
         media-prompt: If you would like to add a video to this activity, enter the URL
         description: Description

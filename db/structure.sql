@@ -1563,10 +1563,10 @@ ALTER SEQUENCE public.page_contents_id_seq OWNED BY public.page_contents.id;
 
 CREATE TABLE public.playbook_answers (
     id bigint NOT NULL,
-    playbook_questions_id bigint,
     answer_text character varying NOT NULL,
     action character varying NOT NULL,
-    object_id integer
+    locale character varying DEFAULT 'en'::character varying NOT NULL,
+    playbook_question_id bigint
 );
 
 
@@ -1665,7 +1665,9 @@ ALTER SEQUENCE public.playbook_pages_id_seq OWNED BY public.playbook_pages.id;
 
 CREATE TABLE public.playbook_questions (
     id bigint NOT NULL,
-    question_text character varying NOT NULL
+    question_text character varying NOT NULL,
+    locale character varying DEFAULT 'en'::character varying NOT NULL,
+    playbook_page_id bigint
 );
 
 
@@ -4872,10 +4874,10 @@ CREATE INDEX index_page_contents_on_playbook_page_id ON public.page_contents USI
 
 
 --
--- Name: index_playbook_answers_on_playbook_questions_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_playbook_answers_on_playbook_question_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_playbook_answers_on_playbook_questions_id ON public.playbook_answers USING btree (playbook_questions_id);
+CREATE INDEX index_playbook_answers_on_playbook_question_id ON public.playbook_answers USING btree (playbook_question_id);
 
 
 --
@@ -4904,6 +4906,13 @@ CREATE INDEX index_playbook_pages_on_playbook_id ON public.playbook_pages USING 
 --
 
 CREATE INDEX index_playbook_pages_on_playbook_questions_id ON public.playbook_pages USING btree (playbook_questions_id);
+
+
+--
+-- Name: index_playbook_questions_on_playbook_page_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_playbook_questions_on_playbook_page_id ON public.playbook_questions USING btree (playbook_page_id);
 
 
 --
@@ -5687,14 +5696,6 @@ ALTER TABLE ONLY public.category_indicator_descriptions
 
 
 --
--- Name: playbook_answers fk_rails_67580b7df5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_answers
-    ADD CONSTRAINT fk_rails_67580b7df5 FOREIGN KEY (playbook_questions_id) REFERENCES public.playbook_questions(id);
-
-
---
 -- Name: commontator_subscriptions fk_rails_68cc24d064; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6430,6 +6431,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201125162851'),
 ('20201211182046'),
 ('20201214204504'),
-('20201221140408');
+('20201221140408'),
+('20210119164809'),
+('20210119164830');
 
 

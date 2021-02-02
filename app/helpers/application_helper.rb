@@ -20,9 +20,8 @@ module ApplicationHelper
   end
 
   def hide_sidenav
-    current_page?('/about/cookies') || current_page?('/map_projects_osm') || current_page?('/map_osm') || current_page?('/map_aggregators_osm') ||
-      (params[:controller] == 'playbooks' && params[:action] == 'show_design') ||
-      (params[:controller] == 'playbooks' && params[:action] == 'view_design') ||
+    current_page?('/about/cookies') || current_page?('/map_projects_osm') ||
+      current_page?('/map_osm') || current_page?('/map_aggregators_osm') ||
       (params[:controller] == 'playbook_pages' && params[:action] == 'edit_content') ||
       current_page?('/admin/users/statistics') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
@@ -49,10 +48,7 @@ module ApplicationHelper
   def build_breadcrumbs(params)
     breadcrumbs = []
 
-    if params[:controller].downcase == 'candidate_organizations' &&
-       !policy(CandidateOrganization).view_allowed?
-      breadcrumbs << { path: 'organizations', label: t('model.organization').titlecase.pluralize }
-    elsif params[:controller].downcase == 'use_case_steps'
+    if params[:controller].downcase == 'use_case_steps'
       breadcrumbs << { path: 'use_cases', label: t('model.use-case').titlecase.pluralize }
       if params[:use_case_id].present?
         uc_step_path = "use_cases/#{params[:use_case_id]}"
@@ -81,11 +77,7 @@ module ApplicationHelper
         playbook_path = "playbooks/#{params[:playbook_id]}"
         playbook_name = Playbook.find_by(slug: params[:playbook_id]).name
         breadcrumbs << { path: playbook_path, label: playbook_name }
-        if params[:playbook_page_id].present?
-          playbook_page_path = "#{breadcrumbs[-1][:path]}/activities/#{params[:activity_id]}"
-          page_name = PlaybookPage.find_by(slug: params[:playbook_page_id]).name
-          breadcrumbs << { path: playbook_page_path, label: page_name }
-        end
+        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/playbook_pages", label: '' }
       end
     else
       breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_21_140408) do
+ActiveRecord::Schema.define(version: 2021_01_19_164830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_140408) do
     t.string "name", null: false
     t.string "website", null: false
     t.string "repository", null: false
+    t.string "submitter_email", null: false
     t.boolean "rejected"
     t.datetime "rejected_date"
     t.bigint "rejected_by_id"
@@ -367,11 +368,11 @@ ActiveRecord::Schema.define(version: 2020_12_21_140408) do
   end
 
   create_table "playbook_answers", force: :cascade do |t|
-    t.bigint "playbook_questions_id"
     t.string "answer_text", null: false
     t.string "action", null: false
-    t.integer "object_id"
-    t.index ["playbook_questions_id"], name: "index_playbook_answers_on_playbook_questions_id"
+    t.string "locale", default: "en", null: false
+    t.bigint "playbook_question_id"
+    t.index ["playbook_question_id"], name: "index_playbook_answers_on_playbook_question_id"
   end
 
   create_table "playbook_descriptions", force: :cascade do |t|
@@ -400,6 +401,9 @@ ActiveRecord::Schema.define(version: 2020_12_21_140408) do
 
   create_table "playbook_questions", force: :cascade do |t|
     t.string "question_text", null: false
+    t.string "locale", default: "en", null: false
+    t.bigint "playbook_page_id"
+    t.index ["playbook_page_id"], name: "index_playbook_questions_on_playbook_page_id"
   end
 
   create_table "playbooks", force: :cascade do |t|
@@ -854,7 +858,6 @@ ActiveRecord::Schema.define(version: 2020_12_21_140408) do
   add_foreign_key "organizations_states", "organizations"
   add_foreign_key "organizations_states", "regions"
   add_foreign_key "page_contents", "playbook_pages"
-  add_foreign_key "playbook_answers", "playbook_questions", column: "playbook_questions_id"
   add_foreign_key "playbook_descriptions", "playbooks"
   add_foreign_key "playbook_pages", "playbook_pages", column: "parent_page_id"
   add_foreign_key "playbook_pages", "playbook_questions", column: "playbook_questions_id"

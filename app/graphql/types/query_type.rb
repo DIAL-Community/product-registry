@@ -13,26 +13,7 @@ module Types
     end
 
     def playbook(slug:)
-      playbook = Playbook.find_by(slug: slug)
-      playbook.playbook_pages.each do |page|
-        child_pages = PlaybookPage.where(parent_page_id: page)
-                                  .order(:page_order)
-        next if child_pages.empty?
-
-        page.child_pages = []
-        child_pages.each do |child_page|
-          page.child_pages << child_page
-          grandchild_pages = PlaybookPage.where(parent_page_id: child_page)
-                                         .order(:page_order)
-          next if grandchild_pages.empty?
-
-          child_page.child_pages = []
-          grandchild_pages.each do |grandchild_page|
-            child_page.child_pages << grandchild_page
-          end
-        end
-      end
-      playbook
+      Playbook.find_by(slug: slug)
     end
 
     field :search_playbook, [Types::PlaybookSearchPageType], null: false do
@@ -71,10 +52,11 @@ module Types
 
     field :page_contents, Types::PageContentType, null: false do
       argument :playbook_page_id, ID, required: true
+      argument :locale, String, required: false, default_value: 'en'
     end
 
-    def page_contents(playbook_page_id:)
-      PageContent.find_by(playbook_page_id: playbook_page_id)
+    def page_contents(playbook_page_id:, locale:)
+      PageContent.find_by(playbook_page_id: playbook_page_id, locale: locale[0, 2])
     end
 
     field :me, Types::UserType, null: false

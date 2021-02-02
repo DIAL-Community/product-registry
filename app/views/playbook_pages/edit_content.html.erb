@@ -2,11 +2,37 @@
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,700,700italic&subset=latin,vietnamese,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek' rel='stylesheet' type='text/css'>
 
 <%= form_with(model: @page_contents, url: save_design_playbook_playbook_page_path, local: true, html: { id: 'page-form' }) do |form| %>
+
+
+<div id="loading-overlay" class="hidden"></div>
+<div id="loading-indicator" class="hidden">
+  <div id="loading-spinner" class="spinner-border spinner-border text-center" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
 <div id='<%= !@page_contents["name"].nil? && @page_contents["name"].gsub(" ", "-") %>'>
-  <fieldset class="form-group form-check">
-    <input type="checkbox" class="form-check-input" id="editor_type" name="editor_type">
-    <label class="form-check-label" for="editor-type"><%= t('view.playbook-page.form.editor-type') %></label>
-  </fieldset>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 mt-3 float-left">
+      <fieldset class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="editor_type" name="editor_type">
+        <label class="form-check-label" for="editor-type"><%= t('view.playbook-page.form.editor-type') %></label>
+      </fieldset>
+    </div>
+    <div class="col-xs-12 col-md-6 mt-2">
+      <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+          <input type="radio" name="language" id="lang-en" value="en" autocomplete="off" checked> English
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="language" id="lang-fr" value="fr" autocomplete="off"> France
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="language" id="lang-de" value="de" autocomplete="off"> Deutsch
+        </label>
+      </div>
+    </div>
+  </div>
 
   <input type="hidden" id="page_content" name="page_content" />
   <div id="simple-editor">
@@ -19,8 +45,8 @@
   </div>
 
   <fieldset class="float-right mt-4">
-    <%= form.submit t('view.general.submit'), :class => "btn btn-primary", :id => "submit-btn" %>
-    <%= button_tag t('view.general.back'), :class => "btn btn-outline-secondary", type: "submit", name: "cancel", value: true %>
+    <%= form.submit t('view.general.submit'), class: "btn btn-primary", id: "submit-btn" %>
+    <%= button_tag t('view.general.back'), class: "btn btn-outline-secondary", type: "submit", name: "cancel", value: true %>
   </fieldset>
 
 </div>
@@ -49,7 +75,7 @@
   var grapesEditor;
 
   $(document).ready(function() {
-    initializeEditors();
+    initializeEditors('en');
 
     simpleEditor = new FroalaEditor('#simple-editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
@@ -124,11 +150,42 @@
     $("#page-builder").toggleClass('hidden')
   })
 
-  function initializeEditors() {
+  $("input[name=language]", '#page-form').on('change', switchLanguage);
+  
+  function switchLanguage() {
+    console.log("Switching the editor language!");
+    const langValue = $("input[name=language]:checked", '#page-form').val();
+
+    if (grapesEditor) {
+      $("#loading-overlay").show();
+      $("#loading-indicator").show();
+
+      const urlStore = `<%= save_design_playbook_playbook_page_path(@playbook, @page) %>?language=${langValue}`;
+      const urlLoad = `<%= load_design_playbook_playbook_page_path(@playbook, @page) %>?language=${langValue}`;
+
+      grapesEditor.StorageManager
+                  .get('remote')
+                  .set({ urlLoad: urlLoad, urlStore: urlStore });
+
+      grapesEditor.load(function() {
+        if (!$("#editor_type").is(':checked')) {
+          const html = grapesEditor.getHtml();
+          const css = grapesEditor.getCss();
+          const content = "<style>" + css + "</style>" + html
+          simpleEditor.html.set(content);
+        }
+      
+        $("#loading-overlay").fadeOut();
+        $("#loading-indicator").fadeOut();
+      });
+    }
+  }
+
+  function initializeEditors(language) {
     if (typeof toastr === 'undefined') {
-      setTimeout(initializeEditors, 500);
+      setTimeout(() => initializeEditors(language), 1000);
     } else {
-      grapesEditor = initGrapes();
+      grapesEditor = initGrapes(language);
     }
   }
 </script>

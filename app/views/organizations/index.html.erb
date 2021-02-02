@@ -4,11 +4,16 @@
 <div class="row">
   <div class="col-12">
     <div class="float-right">
-      <% if user_signed_in? && policy(Organization).create_allowed? %>
-        <%= link_to t('view.general.create'), new_organization_path, :class => 'small mr-1' %>
-        <span class="small mr-1">&nbsp;|</span>
-        <%= link_to t('view.organization.index.view-audit').titlecase, audits_path(type: "Organization"), :class => 'small mr-1' %>
-        <span class="small mr-1">&nbsp;|</span>
+      <% if user_signed_in? %>
+        <% if policy(Organization).create_allowed? %>
+          <%= link_to t('view.general.create'), new_organization_path, :class => 'small mr-1' %>
+          <span class="small mr-1">&nbsp;|</span>
+          <%= link_to t('view.organization.index.view-audit').titlecase, audits_path(type: "Organization"), :class => 'small mr-1' %>
+          <span class="small mr-1">&nbsp;|</span>
+        <% elsif policy(CandidateOrganization).create_allowed? %>
+          <%= link_to t('view.general.create'), new_candidate_organization_path, :class => 'small mr-1' %>
+          <span class="small mr-1">&nbsp;|</span>
+        <% end %>
       <% end %>
       <% if !user_signed_in? %>
         <%= link_to t('view.general.create'), new_candidate_organization_path, :class => 'small mr-1' %>
