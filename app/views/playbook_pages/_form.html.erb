@@ -80,7 +80,7 @@
                                            if page.slug == playbook_page.slug
                                              ["View: current page content.", 'view::current_page']
                                            else
-                                             ["Navigate to: #{page.name}", page.slug]
+                                             ["Navigate to: #{page.name}", "view::#{page.id}::#{page.slug}"]
                                            end
                                          end
                 if playbook_page.slug.nil?

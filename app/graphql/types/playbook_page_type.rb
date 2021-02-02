@@ -8,10 +8,10 @@ module Types
     field :page_order, Integer, null: true
     field :parent_page_id, Integer, null: true
     field :resources, GraphQL::Types::JSON, null: false
-    field :playbook_questions_id, Integer, null: true
     field :media_url, String, null: true
 
     field :child_pages, [Types::PlaybookPageType], null: true
     field :page_contents, [Types::PageContentType], null: true
+    field :playbook_question, Types::PlaybookQuestionType, null: true
   end
 end
