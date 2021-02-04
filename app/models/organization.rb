@@ -71,7 +71,7 @@ class Organization < ApplicationRecord
   end
 
   def self.to_csv
-    attributes = %w{id name slug when_endorsed website is_endorser is_mni countries offices}
+    attributes = %w{id name slug when_endorsed website is_endorser is_mni countries offices sectors}
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -84,7 +84,11 @@ class Organization < ApplicationRecord
                    .map(&:city)
                    .join('; ')
 
-        csv << [o.id, o.name, o.slug, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries, offices]
+        sectors = o.sectors
+                   .map(&:name)
+                   .join('; ')
+
+        csv << [o.id, o.name, o.slug, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries, offices, sectors]
       end
     end
   end
