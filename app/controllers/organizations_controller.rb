@@ -219,7 +219,7 @@ class OrganizationsController < ApplicationController
   end
 
   def export_data
-    @organizations = Organization.where(id: filter_organizations).eager_load(:countries, :offices, :products)
+    @organizations = Organization.where(id: filter_organizations).eager_load(:countries, :offices, :products, :sectors)
     authorize(@organizations, :view_allowed?)
     respond_to do |format|
       format.csv do
