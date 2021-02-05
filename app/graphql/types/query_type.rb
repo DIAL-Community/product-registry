@@ -13,7 +13,26 @@ module Types
     end
 
     def playbook(slug:)
-      Playbook.find_by(slug: slug)
+      playbook = Playbook.find_by(slug: slug)
+      playbook.playbook_pages.each do |page|
+        child_pages = PlaybookPage.where(parent_page_id: page)
+                                  .order(:page_order)
+        next if child_pages.empty?
+
+        page.child_pages = []
+        child_pages.each do |child_page|
+          page.child_pages << child_page
+          grandchild_pages = PlaybookPage.where(parent_page_id: child_page)
+                                         .order(:page_order)
+          next if grandchild_pages.empty?
+
+          child_page.child_pages = []
+          grandchild_pages.each do |grandchild_page|
+            child_page.child_pages << grandchild_page
+          end
+        end
+      end
+      playbook
     end
 
     field :search_playbook, [Types::PlaybookSearchPageType], null: false do
