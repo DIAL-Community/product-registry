@@ -44,6 +44,9 @@ Rails.application.routes.draw do
   resources :playbooks do
     get 'count', on: :collection
     post 'upload_design_images', on: :collection
+    member do
+      post 'convert_pages'
+    end
     resources :playbook_pages do
       member do
         get 'copy_page'
