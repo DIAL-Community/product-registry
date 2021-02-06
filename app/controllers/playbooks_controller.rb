@@ -1,3 +1,7 @@
+require 'combine_pdf'
+require 'pdfkit'
+require 'tempfile'
+
 class PlaybooksController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_playbook, only: [:show, :edit, :update, :destroy, :create_pdf, :show_pdf]
@@ -169,7 +173,42 @@ class PlaybooksController < ApplicationController
     end
     authorize Playbook, :view_allowed?
     render json: @playbook, only: [:name]
-    
+  end
+
+  def convert_pages
+    unless params[:page_ids].present?
+      format.json { render json: {}, status: :unprocessable_entity }
+    end
+
+    base_filename = ''
+    combined_pdfs = CombinePDF.new
+
+    params[:page_ids].each do |page_id|
+      base_filename += "#{page_id}-"
+
+      page_content = PageContent.find_by(playbook_page_id: page_id, locale: "en")
+      pdf_data = PDFKit.new(page_content.html, page_size: 'Letter')
+      if page_content.editor_type != "simple"
+        pdf_data.stylesheets = page_content.css
+      end
+
+      temporary = Tempfile.new(Time.now.strftime('%s'))
+      pdf_data.to_file(temporary.path)
+
+      combined_pdfs << CombinePDF.load(temporary.path)
+    end
+
+    temporary = Tempfile.new(Time.now.strftime('%s'))
+    combined_pdfs.save(temporary.path)
+
+    json = {}
+    json["filename"] = "Page-#{base_filename}-exported.pdf"
+    json["content_type"] = "application/pdf"
+    json["data"] = Base64.strict_encode64(File.read(temporary.path))
+
+    respond_to do |format|
+      format.json { render json: json }
+    end
   end
 
   private
