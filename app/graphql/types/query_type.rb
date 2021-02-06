@@ -1,3 +1,6 @@
+require 'combine_pdf'
+require 'pdfkit'
+require 'tempfile'
 module Types
   class QueryType < Types::BaseObject
     include ActionView::Helpers::TextHelper
@@ -67,6 +70,40 @@ module Types
         end
       end
       matched_child_pages
+    end
+
+    field :export_page_content, Types::ExportedPdfType, null: false do
+      argument :page_ids, [Int], required: true
+      argument :locale, String, required: false, default_value: 'en'
+    end
+
+    def export_page_content(page_ids:, locale:)
+      base_filename = ''
+      combined_pdfs = CombinePDF.new
+      page_ids.each do |page_id|
+        base_filename += "#{page_id}-"
+
+        page_content = PageContent.find_by(playbook_page_id: page_id, locale: "en")
+        pdf_data = PDFKit.new(page_content.html, page_size: 'Letter')
+        if page_content.editor_type != "simple"
+          pdf_data.stylesheets = page_content.css
+        end
+
+        temporary = Tempfile.new(Time.now.strftime('%s'))
+        pdf_data.to_file(temporary.path)
+
+        combined_pdfs << CombinePDF.load(temporary.path)
+      end
+
+      temporary = Tempfile.new(Time.now.strftime('%s'))
+      combined_pdfs.save(temporary.path)
+
+      returned_data = {}
+
+      returned_data[:filename] = "Page-#{base_filename}-exported.pdf"
+      returned_data[:data] = Base64.strict_encode64(File.read(temporary.path))
+      returned_data[:locale] = locale
+      returned_data
     end
 
     field :page_contents, Types::PageContentType, null: false do
