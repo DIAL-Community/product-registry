@@ -5,6 +5,6 @@ class LogoUploadMailer < ApplicationMailer
     
     @name = params[:name]
     @type = params[:type]
-    mail(from:"notifier@registry.dial.community", to: ["nribeka@digitalimpactalliance.org"], subject: 'New Logo Received!')
+    mail(from:"notifier@solutions.dial.community", to: ["nribeka@digitalimpactalliance.org"], subject: 'New Logo Received!')
   end
 end

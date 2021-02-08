@@ -755,7 +755,7 @@ module Modules
         admin_users.each do |user|
           cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
                 " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
-                " -F from='Registry <backups@registry.dial.community>'"\
+                " -F from='Registry <backups@solutions.dial.community>'"\
                 " -F to=#{user.email}"\
                 " -F subject='Sync task - add product'"\
                 " -F html='#{email_body}'"
@@ -794,7 +794,7 @@ module Modules
     def export_products(source)
       #session = ActionDispatch::Integration::Session.new(Rails.application)
       #session.get "/productlist?source="+source
-      server_uri = URI.parse("https://registry.dial.community/productlist?source="+source)
+      server_uri = URI.parse("https://solutions.dial.community/productlist?source="+source)
       
       response = Net::HTTP.get(server_uri)
       prod_list = JSON.parse(response)
