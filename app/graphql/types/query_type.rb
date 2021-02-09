@@ -84,6 +84,8 @@ module Types
         base_filename += "#{page_id}-"
 
         page_content = PageContent.find_by(playbook_page_id: page_id, locale: "en")
+        next if page_content.nil? || page_content.html.nil?
+
         pdf_data = PDFKit.new(page_content.html, page_size: 'Letter')
         if page_content.editor_type != "simple"
           pdf_data.stylesheets = page_content.css
