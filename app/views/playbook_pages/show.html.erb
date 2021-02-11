@@ -128,8 +128,12 @@
       const frView = $('.fr-view', parsedDom);
       const frViewStyle = $('.fr-view-style', parsedDom);
 
-      $(".fr-view").replaceWith(frView);
-      $(".fr-view-style").replaceWith(frViewStyle);
+      // Might need to flash some message telling there's no data available in different language.
+
+      if (frView.html() && frViewStyle.html()) {
+        $(".fr-view").html(frView);
+        $(".fr-view-style").html(frViewStyle);
+      }
     });
   }
 </script>
