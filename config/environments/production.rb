@@ -53,7 +53,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: 'registry.dial.community', port: 80 }
+  config.action_mailer.default_url_options = { host: 'solutions.dial.community', port: 80 }
 
   config.action_mailer.delivery_method = :mailgun
 

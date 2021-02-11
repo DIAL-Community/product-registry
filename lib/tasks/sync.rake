@@ -123,7 +123,7 @@ namespace :sync do
     users.each do |user|
       cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
             " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
-            " -F from='Registry <backups@registry.dial.community>'"\
+            " -F from='Registry <backups@solutions.dial.community>'"\
             " -F to=#{user.email}"\
             " -F subject='Sync task - delete product'"\
             " -F html='#{msg_string}'"
