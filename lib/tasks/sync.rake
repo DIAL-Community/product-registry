@@ -356,20 +356,20 @@ namespace :sync do
       end
     end
 
-    structure_uri = URI.parse("https://qa.whomaps.pulilab.com/api/projects/structure/")
+    structure_uri = URI.parse("https://digitalatlas.who.int/api/projects/structure/")
     structure_response = Net::HTTP.get(structure_uri)
     structure_data = JSON.parse(structure_response)
     products_data = structure_data["technology_platforms"]
 
-    projects_uri = URI.parse("https://qa.whomaps.pulilab.com/api/search/?page=1&type=list&page_size=500")
+    projects_uri = URI.parse("https://digitalatlas.who.int/api/search/?page=1&type=list&page_size=500")
     projects_response = Net::HTTP.get(projects_uri)
     dha_data = JSON.parse(projects_response)
 
-    country_uri = URI.parse("https://qa.whomaps.pulilab.com/api/landing-country/")
+    country_uri = URI.parse("https://digitalatlas.who.int/api/landing-country/")
     country_response = Net::HTTP.get(country_uri)
     country_data = JSON.parse(country_response)
 
-    org_uri = URI.parse("https://qa.whomaps.pulilab.com/api/organisations/")
+    org_uri = URI.parse("https://digitalatlas.who.int/api/organisations/")
     org_response = Net::HTTP.get(org_uri)
     org_data = JSON.parse(org_response)
 
@@ -386,6 +386,7 @@ namespace :sync do
       end
 
       country_id = project["country"]
+      next if country_id.nil?
       country_name = country_data.select {|country| country["id"] == country_id }[0]["name"]
       country = Country.find_by(name: country_name)
       if !country.nil?
