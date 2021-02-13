@@ -19,7 +19,7 @@ class AdminMailer < ApplicationMailer
                    'Approval from an admin user is *NOT* required.'
     end
     admin_users.each do |admin|
-      mail(from: 'notifier@registry.dial.community',
+      mail(from: 'notifier@solutions.dial.community',
            to: [admin.email],
            subject: email_subject,
            body: email_body)
@@ -27,10 +27,10 @@ class AdminMailer < ApplicationMailer
   end
 
   def notify_product_owner_approval
-    mail(from: 'notifier@registry.dial.community',
+    mail(from: 'notifier@solutions.dial.community',
          to: [params[:user_email]],
          subject: 'Product Owner Approval',
-         body: 'Your account have been approved in the DIAL product registry (https://registry.dial.community).'\
+         body: 'Your account have been approved in the DIAL Catalog (https://solutions.dial.community).'\
                'You may now log in to the system.')
   end
 end

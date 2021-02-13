@@ -8,3 +8,15 @@
 <div class="fr-view">
   <%= @page_contents.html.html_safe %>
 </div>
+
+<script type="text/javascript">
+  function disableOnHashLink() {
+    $("a").each(function() {
+      const href = $(this).attr("href");
+      if (href && href.startsWith("#")) {
+        $(this).attr("data-turbolinks", false);
+      }
+    })
+  }
+  $(document).on("turbolinks:load", disableOnHashLink);
+</script>
