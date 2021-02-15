@@ -4,6 +4,28 @@ include Modules::Slugger
 include Modules::Sync
 
 namespace :sync do
+  desc 'Sync uploaded images with local environment.'
+  task :uploaded_images, [:path] => :environment do |_, _|
+    directories = ["organizations", "products"]
+    directories.each do |directory|
+      cmd = " rsync -avP root@134.209.41.212:/root/product-registry/public/assets/#{directory}/ " \
+            " public/assets/#{directory}/ "
+      Open3.popen3(cmd) do |_stdin, stdout, stderr, wait_thr|
+        while (line = stderr.gets)
+          puts "stderr: #{line}"
+        end
+        while (line = stdout.gets)
+          puts "stdout: #{line}"
+        end
+        exit_status = wait_thr.value
+        unless exit_status.success?
+          abort("Sync failed for #{cmd}.")
+        end
+        puts "#{directory.titlecase} synced."
+      end
+    end
+  end
+
   desc 'Sync the database with the public goods lists.'
   task :public_goods, [:path] => :environment do |_, params|
     puts 'Pulling data from digital public good ...'
