@@ -99,11 +99,17 @@ class UsersController < ApplicationController
     end
 
     user_hash[:receive_backup] = false
-    if (user_params[:receive_backup]) && (user_hash[:role] == "admin")
-      user_hash[:receive_backup] = user_params[:receive_backup]
+    user_hash[:receive_admin_emails] = false
+    if user_hash[:roles].include?(User.user_roles[:admin])
+      if user_params[:receive_backup].present?
+        user_hash[:receive_backup] = user_params[:receive_backup]
+      end
+      if user_params[:receive_admin_emails].present?
+        user_hash[:receive_admin_emails] = user_params[:receive_admin_emails]
+      end
     end
 
-    if (user_params[:is_approved] && @user.confirmed_at.nil?)
+    if user_params[:is_approved].present? && @user.confirmed_at.nil?
       user_hash[:confirmed_at] = Time.now.to_s
       # If this user registered to be a product owner and was just approved, send an email to them
       send_notification(@user.email)
@@ -160,23 +166,24 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-      @user.is_approved = @user.confirmed_at.nil? ? false : true
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+    @user.is_approved = @user.confirmed_at.nil? ? false : true
+  end
 
-    def user_params
-      params.require(:user)
-            .permit(:email, :is_approved, :confirmed_at, :password, :password_confirmation, :receive_backup)
-    end
+  def user_params
+    params.require(:user)
+          .permit(:email, :is_approved, :confirmed_at, :password, :password_confirmation,
+                  :receive_backup, :receive_admin_emails)
+  end
 
-    def send_notification(user_email)
-      AdminMailer
-        .with(user_email: user_email)
-        .notify_product_owner_approval
-        .deliver_later
-    end
+  def send_notification(user_email)
+    AdminMailer
+      .with(user_email: user_email)
+      .notify_product_owner_approval
+      .deliver_later
+  end
 end
