@@ -3081,7 +3081,8 @@ CREATE TABLE public.users (
     roles public.user_role[] DEFAULT '{}'::public.user_role[],
     authentication_token text,
     authentication_token_created_at timestamp without time zone,
-    user_products bigint[] DEFAULT '{}'::bigint[]
+    user_products bigint[] DEFAULT '{}'::bigint[],
+    receive_admin_emails boolean DEFAULT false
 );
 
 
@@ -6433,6 +6434,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201214204504'),
 ('20201221140408'),
 ('20210119164809'),
-('20210119164830');
+('20210119164830'),
+('20210212145950');
 
 

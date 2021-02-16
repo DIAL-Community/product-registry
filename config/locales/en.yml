@@ -726,6 +726,7 @@ en:
         mni: MNI User
       form:
         db-backup: This user will receive DB backups.
+        admin-emails: This user will receive admin emails (new logo, user registration).
         email: Email
         manual-approval: Manually approve this user.
         minimum-length: '%{number} characters minimum.'
@@ -741,6 +742,7 @@ en:
         approved: Approved
         'no': 'No'
         receive-backup: Receive DB Backup
+        receive-admin-emails: Receive Admin Emails
         reset-password: Reset Password
         'yes': 'Yes'
     workflow:

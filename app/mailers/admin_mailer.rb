@@ -1,6 +1,6 @@
 class AdminMailer < ApplicationMailer
   def notify_product_owner_request
-    admin_users = User.where(receive_backup: true)
+    admin_users = User.where(receive_admin_emails: true)
     user_hash = params[:user]
 
     email_subject = 'User Sign Up Request'
