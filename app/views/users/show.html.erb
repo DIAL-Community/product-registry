@@ -20,11 +20,16 @@
     </p>
     <% if @user.roles.include?(User.user_roles[:admin]) %>
       <p class="card-subtitle text-muted mt-3" >
-        <strong><%= t('view.user.show.receive-backup') %>: </strong><%= @user.receive_backup ? t('view.user.show.yes') : t('view.user.show.no') %>
+        <strong><%= t('view.user.show.receive-backup') %>: </strong>
+        <%= @user.receive_backup ? t('view.user.show.yes') : t('view.user.show.no') %>
+      </p>
+      <p class="card-subtitle text-muted mt-3" >
+        <strong><%= t('view.user.show.receive-admin-emails') %>: </strong>
+        <%= @user.receive_admin_emails ? t('view.user.show.yes') : t('view.user.show.no') %>
       </p>
     <% end %>
     <p class="card-subtitle mt-3"> 
-      <%= link_to t('view.user.show.reset-password'), edit_user_registration_path, :class => 'btn btn-secondary text-white' %>
+      <%= link_to t('view.user.show.reset-password'), edit_user_registration_path, class: 'btn btn-secondary text-white' %>
     </p>
     <div class="float-right" >
       <%= link_to t('view.general.back'), users_path, :class => "card-link" %>

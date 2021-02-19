@@ -58,13 +58,6 @@ function triggerPageEvents() {
 
     });
   });
-
-  
-  $('.header-link-button').on('click',function(e){
-    e.stopImmediatePropagation();
-    link_path = $(this).attr('id').split('-')
-    Turbolinks.visit(link_path[1])
-  });
   
   $('.accordion').accordion({
     heightStyle: "content",

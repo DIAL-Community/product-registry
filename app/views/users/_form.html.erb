@@ -22,12 +22,18 @@
   </fieldset>
 
   <% if user.roles.include?(User.user_roles[:admin]) %>
-  <fieldset>
-    <%= form.check_box :receive_backup, { id: 'receive-backup' }, true, false %>
-    <label class="form-label-group mt-2" for="receive_backup">
-      <%= t('view.user.form.db-backup')%>
-    </label>
-  </fieldset>
+    <fieldset>
+      <%= form.check_box :receive_backup, { id: 'receive-backup' }, true, false %>
+      <label class="form-label-group mt-2" for="receive-backup">
+        <%= t('view.user.form.db-backup')%>
+      </label>
+    </fieldset>
+    <fieldset>
+      <%= form.check_box :receive_admin_emails, { id: 'receive-admin-emails' }, true, false %>
+      <label class="form-label-group mt-2" for="receive-admin-emails">
+        <%= t('view.user.form.admin-emails')%>
+      </label>
+    </fieldset>
   <% end %>
 
   <div id="user-product-selector" class="hidden">
