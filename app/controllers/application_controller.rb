@@ -48,13 +48,22 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
-    if accept_language
-      accept_language.scan(/[a-z]{2}(?=;)/).first
-      if I18n.available_locales.index(accept_language[0..1].to_sym)
-        I18n.locale = accept_language[0..1].to_sym
+    if session[:locale].nil?
+      accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
+      if accept_language
+        accept_language.scan(/[a-z]{2}(?=;)/).first
+        if I18n.available_locales.index(accept_language[0..1].to_sym)
+          I18n.locale = accept_language[0..1].to_sym
+        end
       end
+      session[:locale] = I18n.locale
     end
+  end
+
+  def update_locale
+    session[:locale] = params[:id]
+    I18n.locale = params[:id]
+    redirect_back fallback_location: root_path
   end
 
   def set_portal
