@@ -240,5 +240,11 @@ namespace :data do
     prod_list = JSON.parse(response)
     html_out = prod_to_html(prod_list)
     File.write("export/products.html", html_out)
+
+    server_uri = URI.parse("https://solutions.dial.community/projects.json?without_paging=true")  
+    response = Net::HTTP.get(server_uri)
+    prod_list = JSON.parse(response)
+    html_out = proj_to_html(prod_list)
+    File.write("export/projects.html", html_out)
   end
 end

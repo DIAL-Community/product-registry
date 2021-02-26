@@ -509,6 +509,9 @@ en:
       documentation: Help
       view-selection: Views
       covid-resources: COVID-19 Resources
+      german: Deutsch
+      english: English
+      french: Française
     filternav:
       framework: Digital Investment Framework
       registry: Development Project Registry

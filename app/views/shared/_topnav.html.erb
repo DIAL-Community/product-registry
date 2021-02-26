@@ -16,6 +16,15 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="text-small text-white language-switcher">
+            <% if I18n.locale.to_s == "en" %>
+              <div class="mr-3 inline selected-language"><%= t('view.header.english') %></div>
+              <%= link_to t('view.header.german'), controller: :application, action: :update_locale, id: 'de' %>
+            <% else %>
+              <%= link_to t('view.header.english'), controller: :application, action: :update_locale, id: 'en' %>
+              <div class="ml-3 inline selected-language"><%= t('view.header.german') %></div>
+            <% end %>
+          </div>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown mt-2">
               <strong><%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'nav-link covid-item' %></strong>
@@ -42,6 +51,7 @@
 </div>
 
 <script type="text/javascript">
+  console.log('Locale: <%= I18n.locale %>')
   var collapseLeftNav = function() {
     $('#navbarCollapse').collapse('hide');
   }

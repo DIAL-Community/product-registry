@@ -115,7 +115,23 @@ module Modules
         puts "PRODUCT: " + prod["name"]
         html_output += "<h2>"+prod["name"]+"</h2>"
         prod["product_descriptions"] && prod["product_descriptions"].each do |prod_desc|
-          html_output += prod_desc["description"]
+          if prod_desc["locale"] == "en"
+            html_output += prod_desc["description"]
+          end
+        end
+      end
+      html_output
+    end
+
+    def proj_to_html(proj_list)
+      html_output = "<h1>Projects</h1>"
+      proj_list.each do |proj|
+        puts "PROJECT: " + proj["name"]
+        html_output += "<h2>"+proj["name"]+"</h2>"
+        proj["project_descriptions"] && proj["project_descriptions"].each do |proj_desc|
+          if proj_desc["locale"] == "en"
+            html_output += proj_desc["description"]
+          end
         end
       end
       html_output
