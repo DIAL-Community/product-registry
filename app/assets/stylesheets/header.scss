@@ -74,6 +74,33 @@
     }
 }
 
+.language-switcher {
+  position: absolute;
+  top: 10px;
+  right: 105px;
+  background-color:#000043; 
+}
+
+.language-switcher a {
+  color: #fff;
+}
+
+.language-switcher:hover {
+  cursor: pointer;
+}
+
+.language-switcher a:hover {
+  color: #fbab18;
+}
+
+.selected-language {
+  color: #fbab18;
+}
+
+.selected-language:hover {
+  cursor: default;
+}
+
 .avatar-circle {
     display: inline-block;
     width: 32px;

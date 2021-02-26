@@ -151,6 +151,8 @@ Rails.application.routes.draw do
     get 'export_data', on: :collection
   end
 
+  get :update_locale, controller:"application"
+
   # Start of external API routes
   get 'api/v1/organizations/:id', to: 'organizations#unique_search'
   get 'api/v1/organizations', to: 'organizations#simple_search'

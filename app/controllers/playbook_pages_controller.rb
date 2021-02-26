@@ -210,6 +210,10 @@ class PlaybookPagesController < ApplicationController
       new_contents.save!
     end
 
+    new_question = @page.playbook_question.dup
+    new_question.playbook_page = @new_page
+    new_question.save
+
     respond_to do |format|
       format.html do
         redirect_to playbook_path(@playbook),
