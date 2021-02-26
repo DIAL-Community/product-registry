@@ -16,10 +16,11 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_registration_parameters, if: :devise_controller?
   before_action :check_password_expiry
-  before_action :set_locale
   before_action :set_default_identifier
   before_action :set_portal
   before_action :set_org_session
+
+  around_action :set_locale
 
   after_action :store_action
 
@@ -47,7 +48,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_locale
+  def set_locale(&action)
     if session[:locale].nil?
       accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
       if accept_language
@@ -56,13 +57,21 @@ class ApplicationController < ActionController::Base
           I18n.locale = accept_language[0..1].to_sym
         end
       end
-      session[:locale] = I18n.locale
+      session[:locale] = I18n.locale.to_s
     end
+    I18n.with_locale(session[:locale], &action)
   end
 
   def update_locale
-    session[:locale] = params[:id]
-    I18n.locale = params[:id]
+    if params[:id] == 'en'
+      I18n.locale = :en
+      I18n.default_locale = :en
+      session[:locale] = "en"
+    elsif params[:id] == 'de'
+      I18n.locale = :de
+      I18n.default_locale = :de
+      session[:locale] = "de"
+    end
     redirect_back fallback_location: root_path
   end
 
