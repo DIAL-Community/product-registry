@@ -56,7 +56,9 @@ module Modules
         puts "USE CASE: " + use_case["name"]
         html_output += "<h2>"+use_case["name"]+"</h2>"
         use_case["use_case_descriptions"].each do |uc_desc|
-          html_output += uc_desc["description"]
+          if uc_desc.locale == 'en'
+            html_output += uc_desc["description"]
+          end
         end
         use_case_steps = use_case["use_case_steps"]
         if use_case_steps.count
@@ -66,7 +68,9 @@ module Modules
           html_output += "<h4>"+uc_step["name"]+"</h4>"
           step_descriptions = uc_step["use_case_step_descriptions"]
           step_descriptions.each do |step_desc|
-            html_output += step_desc["description"]
+            if step_desc.locale == 'en'
+              html_output += step_desc["description"]
+            end
           end
         end
       end
@@ -79,7 +83,9 @@ module Modules
         puts "WORKFLOW: " + workflow["name"]
         html_output += "<h2>"+workflow["name"]+"</h2>"
         workflow["workflow_descriptions"] && workflow["workflow_descriptions"].each do |wf_desc|
-          html_output += wf_desc["description"]
+          if wf_desc.locale == 'en'
+            html_output += wf_desc["description"]
+          end
         end
       end
       html_output
@@ -91,7 +97,9 @@ module Modules
         puts "BUILDING BLOCK: " + bb["name"]
         html_output += "<h2>"+bb["name"]+"</h2>"
         bb["building_block_descriptions"] && bb["building_block_descriptions"].each do |bb_desc|
-          html_output += bb_desc["description"]
+          if bb_desc.locale == 'en'
+            html_output += bb_desc["description"]
+          end
         end
       end
       html_output
@@ -103,7 +111,9 @@ module Modules
         puts "ORGANIZATION: " + org["name"]
         html_output += "<h2>"+org["name"]+"</h2>"
         org["organization_descriptions"] && org["organization_descriptions"].each do |org_desc|
-          html_output += org_desc["description"]
+          if org_desc.locale == 'en'
+            html_output += org_desc["description"]
+          end
         end
       end
       html_output
