@@ -56,7 +56,7 @@ module Modules
         puts "USE CASE: " + use_case["name"]
         html_output += "<h2>"+use_case["name"]+"</h2>"
         use_case["use_case_descriptions"].each do |uc_desc|
-          if uc_desc.locale == 'en'
+          if uc_desc["locale"] == 'en'
             html_output += uc_desc["description"]
           end
         end
@@ -68,7 +68,7 @@ module Modules
           html_output += "<h4>"+uc_step["name"]+"</h4>"
           step_descriptions = uc_step["use_case_step_descriptions"]
           step_descriptions.each do |step_desc|
-            if step_desc.locale == 'en'
+            if step_desc["locale"] == 'en'
               html_output += step_desc["description"]
             end
           end
@@ -83,7 +83,7 @@ module Modules
         puts "WORKFLOW: " + workflow["name"]
         html_output += "<h2>"+workflow["name"]+"</h2>"
         workflow["workflow_descriptions"] && workflow["workflow_descriptions"].each do |wf_desc|
-          if wf_desc.locale == 'en'
+          if wf_desc["locale"] == 'en'
             html_output += wf_desc["description"]
           end
         end
@@ -97,7 +97,7 @@ module Modules
         puts "BUILDING BLOCK: " + bb["name"]
         html_output += "<h2>"+bb["name"]+"</h2>"
         bb["building_block_descriptions"] && bb["building_block_descriptions"].each do |bb_desc|
-          if bb_desc.locale == 'en'
+          if bb_desc["locale"] == 'en'
             html_output += bb_desc["description"]
           end
         end
@@ -111,7 +111,7 @@ module Modules
         puts "ORGANIZATION: " + org["name"]
         html_output += "<h2>"+org["name"]+"</h2>"
         org["organization_descriptions"] && org["organization_descriptions"].each do |org_desc|
-          if org_desc.locale == 'en'
+          if org_desc["locale"] == 'en'
             html_output += org_desc["description"]
           end
         end
