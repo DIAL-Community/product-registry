@@ -6,5 +6,6 @@ module Types
     field :overview, String, null: false
     field :audience, String, null: false
     field :outcomes, String, null: false
+    field :cover, String, null: false
   end
 end

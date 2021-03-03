@@ -27,6 +27,14 @@
 <div class="card mt-2">
   
     <div class="card-body py-2 px-3">
+      <div id="<%= @playbook.slug %>-cover" class="wysiwyg-viewer">
+        <%= @description.cover.html_safe %>
+      </div>
+    </div>
+    <div class="card-header border-0">
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.overview') %>:</div>
+    </div>
+    <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer">
         <%= @description.overview.html_safe %>
       </div>

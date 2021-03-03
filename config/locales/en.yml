@@ -171,7 +171,7 @@ en:
         request-elevation: We noticed that you made changes to a building block but you were not able to set the maturity level of it.
                            You might be able to do that by requesting role elevation by clicking %{href}.
       index:
-        bb-product: "Example software: "
+        bb-product: "Example product: "
         bb-product-popover:
           one: Example of Existing Software
           other: Example of Existing Softwares
@@ -632,6 +632,7 @@ en:
         overview: Overview
         audience: Audience
         outcomes: Outcomes
+        cover: Cover
         phases: Phases
         name: Name
         description: Description
@@ -642,6 +643,7 @@ en:
         overview: Overview
         audience: Audience
         outcomes: Outcomes
+        cover: Cover
         phases: Phases
         name: Name
         description: Description

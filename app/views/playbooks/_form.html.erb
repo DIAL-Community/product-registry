@@ -23,6 +23,13 @@
   </fieldset>
 
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
+    <%= t('view.playbook.form.cover') %>
+  </div>
+
+  <input type="hidden" id="playbook_cover" name="playbook[playbook_cover]" />
+  <div id="cover_editor"> </div>
+
+  <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.overview') %>
   </div>
 
@@ -82,6 +89,7 @@
   var overviewEditor;
   var audienceEditor;
   var outcomesEditor;
+  var coverEditor;
   $(document).ready(function() {
     overviewEditor = new FroalaEditor('#overview_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
@@ -122,6 +130,16 @@
                                                                                .html_safe %>");
     });
 
+    coverEditor = new FroalaEditor('#cover_editor', {
+      key: "<%= ENV['FROALA_KEY'] %>",
+      attribution: false,
+      language: "<%= I18n.locale %>",
+      imageUploadURL: '/froala_image/upload',
+      imageUploadMethod: 'POST'
+    }, function() {
+      coverEditor.html.set("<%= @description.cover.nil? ? "" : @description.cover.squish.gsub("\"","\\\"").html_safe %>")
+    });
+
     audienceEditor = new FroalaEditor('#audience_editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
@@ -152,5 +170,8 @@
 
     var outcomesHtml = outcomesEditor.html.get()
     $("#playbook_outcomes").val(outcomesHtml)
+
+    var coverHtml = coverEditor.html.get()
+    $("#playbook_cover").val(coverHtml)
   });
 </script>
