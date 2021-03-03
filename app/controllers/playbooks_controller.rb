@@ -79,6 +79,7 @@ class PlaybooksController < ApplicationController
         playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
         playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
         playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
+        playbook_params[:playbook_cover].present? && @playbook_desc.cover = playbook_params[:playbook_cover]
         @playbook_desc.save
 
         if params[:logo].present?
@@ -106,7 +107,7 @@ class PlaybooksController < ApplicationController
   # PATCH/PUT /playbooks/1.json
   def update
     authorize @playbook, :mod_allowed?
-    if playbook_params[:playbook_overview].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present?
+    if playbook_params[:playbook_overview].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present? || playbook_params[:playbook_cover].present?
       @playbook_desc = PlaybookDescription.where(playbook_id: @playbook.id,
                                                               locale: I18n.locale)
                                                         .first || PlaybookDescription.new
@@ -115,6 +116,7 @@ class PlaybooksController < ApplicationController
       playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
       playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
       playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
+      playbook_params[:playbook_cover].present? && @playbook_desc.cover = playbook_params[:playbook_cover]
       @playbook_desc.save
     end
 
@@ -251,7 +253,7 @@ class PlaybooksController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_params
     params.require(:playbook)
-          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :maturity, :phases => [:name, :description])
+          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :playbook_cover, :logo, :maturity, :phases => [:name, :description])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

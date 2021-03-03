@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_02_210015) do
+ActiveRecord::Schema.define(version: 2021_03_03_151833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -387,6 +387,7 @@ ActiveRecord::Schema.define(version: 2021_03_02_210015) do
     t.string "overview", default: "", null: false
     t.string "audience", default: "", null: false
     t.string "outcomes", default: "", null: false
+    t.string "cover"
     t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
   end
 
@@ -419,11 +420,6 @@ ActiveRecord::Schema.define(version: 2021_03_02_210015) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "maturity", default: "Beta"
-    t.string "design_css"
-    t.string "design_html"
-    t.string "design_components"
-    t.string "design_styles"
-    t.string "design_assets"
   end
 
   create_table "portal_views", force: :cascade do |t|
