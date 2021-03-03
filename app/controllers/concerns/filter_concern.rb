@@ -133,10 +133,15 @@ module FilterConcern
 
     if filter_set
       ids = filter_and_intersect_arrays([all_filters["use_cases"], sdg_uc_ids, uc_workflows])
-      UseCase.where(id: ids).order(:slug)
+      @use_cases = UseCase.where(id: ids).order(:slug)
     else
-      UseCase.order(:slug)
+      @use_cases = UseCase.order(:slug)
     end
+
+    if !params[:beta].present? || params[:beta].to_s.downcase == 'false'
+      @use_cases = @use_cases.where(':tag = use_cases.maturity', tag: 'MATURE')
+    end
+    @use_cases
   end
 
   def filter_sdgs(all_filters=nil, filter_set=nil, project_product_ids = nil, org_ids = nil, org_products = nil, products = nil)

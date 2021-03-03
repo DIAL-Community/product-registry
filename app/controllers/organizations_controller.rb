@@ -686,6 +686,8 @@ class OrganizationsController < ApplicationController
 
       @organization_description = OrganizationDescription.where(organization_id: @organization, locale: I18n.locale)
                                                          .first
+      @organization_description ||= OrganizationDescription.where(organization_id: @organization, locale: I18n.default_locale)
+                                                         .first
       if @organization_description.nil?
         @organization_description = OrganizationDescription.new
       end

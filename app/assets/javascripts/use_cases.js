@@ -29,8 +29,8 @@ const useCaseIndexReady = function() {
   }
 
   const filterMatureWithAnimation = function() {
-    const checked = $('#mature-only').prop("checked");
-    const url = `${window.location.pathname}?mature=${checked}`;
+    const checked = $('#show-beta').prop("checked");
+    const url = `${window.location.pathname}?beta=${checked}`;
     
     $('#use-case-list > div').addClass('existing-use-case');
     animateCss('.existing-use-case', 'fadeOut faster', removeElements);
@@ -41,7 +41,7 @@ const useCaseIndexReady = function() {
     });
   }
 
-  $('#mature-only').change(filterMatureWithAnimation);
+  $('#show-beta').change(filterMatureWithAnimation);
 }
 
 // Attach all of them to the browser, page, and turbolinks event.

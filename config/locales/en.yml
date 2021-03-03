@@ -379,6 +379,7 @@ en:
         covid-19-related: "This product can be used for COVID-19 response"
         multiple: "has multiple repositories. Information about each is displayed below."
         status: Status
+        endorsers: Endorsers
         source: "Source: "
         sources: "Sources: "
         source_dial: "Digital Impact Alliance Open Source Center"
@@ -703,7 +704,7 @@ en:
           Able to be improved through digital technology 
         description: Each Use Case model describes primary actors, key steps involved in achieving a specified business objective, descriptions of the WorkFlows and ICT Building Blocks involved in each step, and mappings to SDG Targets. The list of Use Case models is not exhaustive and more will be added in future releases. 
         maturity: Maturity
-        mature_only: Show only Mature Use Cases
+        show_beta: Show Beta (non-Validated) Use Cases
         is_beta: This Use Case has not been validated
         is_mature: This Use Case has been validated
       show:

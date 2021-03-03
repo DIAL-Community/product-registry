@@ -527,7 +527,7 @@ class ProjectsController < ApplicationController
     @project_description = ProjectDescription.where(project_id: @project, locale: I18n.locale).first
 
     if @project_description.nil?
-      @project_description = ProjectDescription.where(project_id: @project, locale: "en").first
+      @project_description = ProjectDescription.where(project_id: @project, locale: I18n.default_locale).first
     end
 
     if @project_description.nil?

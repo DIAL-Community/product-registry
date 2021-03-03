@@ -65,11 +65,9 @@ class ApplicationController < ActionController::Base
   def update_locale
     if params[:id] == 'en'
       I18n.locale = :en
-      I18n.default_locale = :en
       session[:locale] = "en"
     elsif params[:id] == 'de'
       I18n.locale = :de
-      I18n.default_locale = :de
       session[:locale] = "de"
     end
     redirect_back fallback_location: root_path
