@@ -221,10 +221,6 @@ class UseCasesController < ApplicationController
 
     @use_cases = filter_use_cases.order(:name)
 
-    if params[:mature].present? && params[:mature].to_s.downcase == 'true'
-      @use_cases = @use_cases.where(':tag = use_cases.maturity', tag: 'MATURE')
-    end
-
     if params[:search]
       @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
@@ -408,6 +404,7 @@ class UseCasesController < ApplicationController
       end
       @sector_name = Sector.find(@use_case.sector_id).name
       @uc_desc = UseCaseDescription.where(use_case_id: @use_case, locale: I18n.locale).first
+      @uc_desc ||= UseCaseDescription.where(use_case_id: @use_case, locale: I18n.default_locale).first
       if @uc_desc.nil?
         @uc_desc = UseCaseDescription.new
       end

@@ -26,3 +26,11 @@
 
   }
 }
+
+.endorser-list {
+  position: absolute;
+  // have some space from the right and top
+  left: 0.5rem;
+  bottom: 7rem;
+  cursor: pointer;
+}

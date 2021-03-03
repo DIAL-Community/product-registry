@@ -3,9 +3,6 @@ require('csv')
 class Product < ApplicationRecord
   include Auditable
 
-  VETTED = "Vetted"
-  NOT_VETTED = "Not Vetted"
-
   attr_accessor :product_description
 
   has_many :product_descriptions
@@ -36,6 +33,8 @@ class Product < ApplicationRecord
                                      dependent: :delete_all,
                                      after_add: :association_add,
                                      before_remove: :association_remove
+
+  has_and_belongs_to_many :endorsers, join_table: :products_endorsers
 
   has_many :product_sustainable_development_goals, dependent: :delete_all,
                                                    after_add: :association_add, before_remove: :association_remove

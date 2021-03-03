@@ -429,6 +429,7 @@ class BuildingBlocksController < ApplicationController
         @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
       end
       @bb_desc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
+      @bb_desc ||= BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.default_locale).first
       if !@bb_desc
         @bb_desc = BuildingBlockDescription.new
       end
