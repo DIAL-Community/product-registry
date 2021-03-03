@@ -70,7 +70,8 @@ module Modules
     def sync_public_product(json_data)
       if !json_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
         puts "SYNCING " + json_data.to_s
-        unicef_origin = Origin.find_by(slug: 'unicef')
+        dpga_origin = Origin.find_by(slug: 'dpga')
+        dpga_endorser = Endorser.find_by(slug: 'dpga')
         name_aliases = [json_data['name']]
         if !json_data['aliases'].nil?
           name_aliases += json_data['aliases']
@@ -106,9 +107,10 @@ module Modules
         # Assign what's left in the alias array as aliases.
         existing_product.aliases.concat(name_aliases.reject { |x| x == existing_product.name }).uniq!
 
-        # Set the origin to be 'unicef'
-        if !existing_product.origins.exists?(id: unicef_origin.id)
-          existing_product.origins.push(unicef_origin)
+        # Set the origin to be 'DPGA'
+
+        if !dpga_origin.nil? && !existing_product.origins.exists?(id: dpga_origin.id)
+          existing_product.origins.push(dpga_origin)
         end
 
         sdgs = json_data['SDGs']
@@ -150,7 +152,9 @@ module Modules
         existing_product.publicgoods_data["stage"] = json_data["stage"]
 
         if json_data["stage"] == "DPG"
-          existing_product.status = Product::VETTED
+          if !existing_product.endorsers.include?(dpga_endorser)
+            existing_product.endorsers << dpga_endorser
+          end
         end
 
         existing_product.save
@@ -165,6 +169,7 @@ module Modules
 
     def sync_digisquare_product(digi_product, digisquare_maturity)
       digisquare_origin = Origin.find_by(slug: 'digital_square')
+      dsq_endorser = Endorser.find_by(slug: 'dsq')
 
       name_aliases = [digi_product['name']]
       digi_product['aliases'] && digi_product['aliases'].each do |name_alias|
@@ -227,6 +232,10 @@ module Modules
             end
           end
         end
+      end
+
+      if !existing_product.endorsers.include?(dsq_endorser)
+        existing_product.endorsers << dsq_endorser
       end
 
       existing_product.save
@@ -414,6 +423,17 @@ module Modules
         new_project.project_url = english_project[25]
       end
       new_project.save!
+
+      # Assign implementing organization
+      implementer_org = Organization.name_contains(english_project[6])
+
+      if !implementer_org.empty? && !new_project.organizations.include?(implementer_org[0])
+        proj_org = ProjectsOrganization.new
+        proj_org.org_type = 'implementer'
+        proj_org.project_id = new_project.id
+        proj_org.organization_id = implementer_org[0].id
+        proj_org.save!
+      end
 
       # Assign to sectors
       english_sectors.each do |sector_id|

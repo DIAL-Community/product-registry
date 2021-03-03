@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_12_145950) do
+ActiveRecord::Schema.define(version: 2021_03_03_151833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -230,6 +230,12 @@ ActiveRecord::Schema.define(version: 2021_02_12_145950) do
     t.index ["region_id"], name: "index_districts_on_region_id"
   end
 
+  create_table "endorsers", force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "name", null: false
+    t.string "description"
+  end
+
   create_table "froala_images", force: :cascade do |t|
     t.string "picture"
     t.datetime "created_at", null: false
@@ -381,6 +387,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_145950) do
     t.string "overview", default: "", null: false
     t.string "audience", default: "", null: false
     t.string "outcomes", default: "", null: false
+    t.string "cover"
     t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
   end
 
@@ -413,11 +420,6 @@ ActiveRecord::Schema.define(version: 2021_02_12_145950) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "maturity", default: "Beta"
-    t.string "design_css"
-    t.string "design_html"
-    t.string "design_components"
-    t.string "design_styles"
-    t.string "design_assets"
   end
 
   create_table "portal_views", force: :cascade do |t|
@@ -503,6 +505,13 @@ ActiveRecord::Schema.define(version: 2021_02_12_145950) do
 
 # Could not dump table "products" because of following StandardError
 #   Unknown type 'product_type_save' for column 'product_type'
+
+  create_table "products_endorsers", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "endorser_id", null: false
+    t.index ["endorser_id"], name: "index_products_endorsers_on_endorser_id"
+    t.index ["product_id"], name: "index_products_endorsers_on_product_id"
+  end
 
   create_table "products_origins", id: false, force: :cascade do |t|
     t.bigint "product_id", null: false
@@ -879,6 +888,8 @@ ActiveRecord::Schema.define(version: 2021_02_12_145950) do
   add_foreign_key "product_sustainable_development_goals", "products", name: "products_sdgs_product_fk"
   add_foreign_key "product_sustainable_development_goals", "sustainable_development_goals", name: "products_sdgs_sdg_fk"
   add_foreign_key "product_versions", "products"
+  add_foreign_key "products_endorsers", "endorsers"
+  add_foreign_key "products_endorsers", "products"
   add_foreign_key "products_origins", "origins", name: "products_origins_origin_fk"
   add_foreign_key "products_origins", "products", name: "products_origins_product_fk"
   add_foreign_key "project_descriptions", "projects"

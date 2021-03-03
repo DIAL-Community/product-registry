@@ -28,24 +28,22 @@ namespace :sync do
 
   desc 'Sync the database with the public goods lists.'
   task :public_goods, [:path] => :environment do |_, params|
-    puts 'Pulling data from digital public good ...'
+    puts 'Pulling data from digital public goods repository ...'
 
-    Dir.entries(params[:path]).select { |item| item.include? '.json' }.each do |entry|
-      entry_data = File.read(File.join(params[:path], entry))
+    dpg_uri = URI.parse("https://api.digitalpublicgoods.net/dpgs/")
+    dpg_response = Net::HTTP.get(dpg_uri)
+    dpg_data = JSON.parse(dpg_response)
+    dpg_data.each do |entry|
 
-      begin
-        json_data = JSON.parse(entry_data)
-      rescue JSON::ParserError
-        puts "Skipping unparseable json file: #{entry}"
-        next
-      end
+      sync_public_product entry
+    end
 
-      if !json_data.key?('type') && !json_data.key?('name')
-        puts "Skipping unrecognized json file: #{entry}"
-        next
-      end
+    dpg_uri = URI.parse("https://api.digitalpublicgoods.net/nominees/")
+    dpg_response = Net::HTTP.get(dpg_uri)
+    dpg_data = JSON.parse(dpg_response)
+    dpg_data.each do |entry|
 
-      sync_public_product json_data
+      sync_public_product entry
     end
     puts 'Digital public good data synced ...'
     send_notification
@@ -383,7 +381,7 @@ namespace :sync do
     structure_data = JSON.parse(structure_response)
     products_data = structure_data["technology_platforms"]
 
-    projects_uri = URI.parse("https://digitalatlas.who.int/api/search/?page=1&type=list&page_size=500")
+    projects_uri = URI.parse("https://digitalatlas.who.int/api/search/?page=1&type=list&page_size=1000")
     projects_response = Net::HTTP.get(projects_uri)
     dha_data = JSON.parse(projects_response)
 

@@ -220,7 +220,7 @@ namespace :data do
     server_uri = URI.parse("https://solutions.dial.community/workflows.json")  
     response = Net::HTTP.get(server_uri)
     workflow_list = JSON.parse(response)
-    html_out = wf_to_html(use_case_list)
+    html_out = wf_to_html(workflow_list)
     File.write("export/workflows.html", html_out)
 
     server_uri = URI.parse("https://solutions.dial.community/building_blocks.json")  

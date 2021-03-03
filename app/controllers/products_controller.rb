@@ -832,6 +832,8 @@ class ProductsController < ApplicationController
       end
       @product_description = ProductDescription.where(product_id: @product, locale: I18n.locale)
                                                .first
+      @product_description ||= ProductDescription.where(product_id: @product, locale: I18n.default_locale)
+                                               .first
       if @product_description.nil?
         @product_description = ProductDescription.new
       end

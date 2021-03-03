@@ -1,0 +1,10 @@
+one:
+  name: DPGA
+  slug: dpga
+  description: Endorsed by DPGA
+
+two:
+  name: DSQ
+  slug: dsq
+  description: Endorsed by DSQ
+  

@@ -331,6 +331,7 @@ class WorkflowsController < ApplicationController
         @workflow = Workflow.find_by(id: params[:id]) or not_found
       end
       @wf_desc = WorkflowDescription.where(workflow_id: @workflow, locale: I18n.locale).first
+      @wf_desc ||= WorkflowDescription.where(workflow_id: @workflow, locale: I18n.default_locale).first
       if !@wf_desc
         @wf_desc = WorkflowDescription.new
       end

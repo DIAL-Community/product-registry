@@ -1,6 +1,6 @@
 class Playbook < ApplicationRecord
   include Auditable
-  attr_accessor :playbook_overview, :playbook_audience, :playbook_outcomes
+  attr_accessor :playbook_overview, :playbook_audience, :playbook_outcomes, :playbook_cover
 
   has_many :playbook_descriptions, dependent: :destroy
   has_many :playbook_pages, -> { order(page_order: :asc).where(parent_page_id: nil) }, dependent: :destroy
