@@ -119,3 +119,13 @@ if Origin.where(slug: 'manually_entered').count.zero?
   Origin.create(name: 'Manually Entered', description: 'Project information are manually entered by user.',
                 slug: 'manually_entered')
 end
+
+if Endorser.where(slug: 'dpga').count.zero?
+  Endorser.create(name: 'Digital Public Goods Alliance', description: 'This product has been screened as a Digital Public Good by the Digital Public Goods Alliance.',
+                slug: 'dpga')
+end
+
+if Endorser.where(slug: 'dsq').count.zero?
+  Endorser.create(name: 'Digital Square', description: 'This product has been screened as a Global Good by Digital Square.',
+                slug: 'dsq')
+end

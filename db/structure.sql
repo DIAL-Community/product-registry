@@ -1013,6 +1013,37 @@ ALTER SEQUENCE public.districts_id_seq OWNED BY public.districts.id;
 
 
 --
+-- Name: endorsers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.endorsers (
+    id bigint NOT NULL,
+    slug character varying NOT NULL,
+    name character varying NOT NULL,
+    description character varying
+);
+
+
+--
+-- Name: endorsers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.endorsers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: endorsers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.endorsers_id_seq OWNED BY public.endorsers.id;
+
+
+--
 -- Name: froala_images; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1599,7 +1630,8 @@ CREATE TABLE public.playbook_descriptions (
     locale character varying NOT NULL,
     overview character varying DEFAULT ''::character varying NOT NULL,
     audience character varying DEFAULT ''::character varying NOT NULL,
-    outcomes character varying DEFAULT ''::character varying NOT NULL
+    outcomes character varying DEFAULT ''::character varying NOT NULL,
+    cover character varying
 );
 
 
@@ -1701,12 +1733,7 @@ CREATE TABLE public.playbooks (
     phases jsonb DEFAULT '[]'::jsonb NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    maturity character varying DEFAULT 'Beta'::character varying,
-    design_css character varying,
-    design_html character varying,
-    design_components character varying,
-    design_styles character varying,
-    design_assets character varying
+    maturity character varying DEFAULT 'Beta'::character varying
 );
 
 
@@ -2124,10 +2151,39 @@ CREATE TABLE public.products (
     est_invested integer,
     maturity_score integer,
     product_type public.product_type_save DEFAULT 'product'::public.product_type_save,
-    status character varying,
     publicgoods_data jsonb DEFAULT '{}'::jsonb NOT NULL,
     language_data jsonb DEFAULT '{}'::jsonb NOT NULL
 );
+
+
+--
+-- Name: products_endorsers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.products_endorsers (
+    id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    endorser_id bigint NOT NULL
+);
+
+
+--
+-- Name: products_endorsers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.products_endorsers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: products_endorsers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.products_endorsers_id_seq OWNED BY public.products_endorsers.id;
 
 
 --
@@ -3377,6 +3433,13 @@ ALTER TABLE ONLY public.districts ALTER COLUMN id SET DEFAULT nextval('public.di
 
 
 --
+-- Name: endorsers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.endorsers ALTER COLUMN id SET DEFAULT nextval('public.endorsers_id_seq'::regclass);
+
+
+--
 -- Name: froala_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3605,6 +3668,13 @@ ALTER TABLE ONLY public.product_versions ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: products_endorsers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products_endorsers ALTER COLUMN id SET DEFAULT nextval('public.products_endorsers_id_seq'::regclass);
 
 
 --
@@ -3979,6 +4049,14 @@ ALTER TABLE ONLY public.districts
 
 
 --
+-- Name: endorsers endorsers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.endorsers
+    ADD CONSTRAINT endorsers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: froala_images froala_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4232,6 +4310,14 @@ ALTER TABLE ONLY public.product_sustainable_development_goals
 
 ALTER TABLE ONLY public.product_versions
     ADD CONSTRAINT product_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: products_endorsers products_endorsers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products_endorsers
+    ADD CONSTRAINT products_endorsers_pkey PRIMARY KEY (id);
 
 
 --
@@ -4977,6 +5063,20 @@ CREATE INDEX index_product_sectors_on_sector_id_and_product_id ON public.product
 --
 
 CREATE INDEX index_product_versions_on_product_id ON public.product_versions USING btree (product_id);
+
+
+--
+-- Name: index_products_endorsers_on_endorser_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_endorsers_on_endorser_id ON public.products_endorsers USING btree (endorser_id);
+
+
+--
+-- Name: index_products_endorsers_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_endorsers_on_product_id ON public.products_endorsers USING btree (product_id);
 
 
 --
@@ -5801,6 +5901,14 @@ ALTER TABLE ONLY public.commontator_comments
 
 
 --
+-- Name: products_endorsers fk_rails_9ebc436657; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products_endorsers
+    ADD CONSTRAINT fk_rails_9ebc436657 FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
 -- Name: aggregator_capabilities fk_rails_9fcd7b6d41; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5814,6 +5922,14 @@ ALTER TABLE ONLY public.aggregator_capabilities
 
 ALTER TABLE ONLY public.organizations_countries
     ADD CONSTRAINT fk_rails_a044fbacef FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: products_endorsers fk_rails_a70896ae9e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products_endorsers
+    ADD CONSTRAINT fk_rails_a70896ae9e FOREIGN KEY (endorser_id) REFERENCES public.endorsers(id);
 
 
 --
@@ -6435,6 +6551,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201221140408'),
 ('20210119164809'),
 ('20210119164830'),
-('20210212145950');
+('20210212145950'),
+('20210302210015'),
+('20210303151833');
 
 

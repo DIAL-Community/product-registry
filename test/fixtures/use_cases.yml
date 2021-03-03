@@ -4,7 +4,7 @@ one:
   name: UseCase1
   slug: usecase1
   description: Desc1
-  maturity: BETA
+  maturity: MATURE
   sector: one
   sdg_targets: one
 
@@ -12,6 +12,6 @@ two:
   name: UseCase2
   slug: usecase2
   description: Desc2
-  maturity: BETA
+  maturity: MATURE
   sector: two
   sdg_targets: two

@@ -108,7 +108,8 @@ module Modules
         existing_product.aliases.concat(name_aliases.reject { |x| x == existing_product.name }).uniq!
 
         # Set the origin to be 'DPGA'
-        if !existing_product.origins.exists?(id: dpga_origin.id)
+
+        if !dpga_origin.nil? && !existing_product.origins.exists?(id: dpga_origin.id)
           existing_product.origins.push(dpga_origin)
         end
 
