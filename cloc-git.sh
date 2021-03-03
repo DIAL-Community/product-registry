@@ -2,5 +2,5 @@
 rm -rf temp-linecount-repo &&
   git clone --depth 1 "$1" temp-linecount-repo &&
   printf "('temp-linecount-repo' will be deleted automatically)\n\n\n" &&
-  cloc --exclude-ext=yml,json,yaml,xml --csv --out=repodata.csv temp-linecount-repo &&
+  cloc --exclude-ext=yml,json,yaml,xml,sql,dump --csv --out=repodata.csv temp-linecount-repo &&
   rm -rf temp-linecount-repo

@@ -60,7 +60,7 @@ module Modules
         end
 
         existing_product.save
-        
+
         if is_new
           update_product_description(existing_product, json_data['description'])
         end
@@ -93,7 +93,6 @@ module Modules
           slug = slug_em name_alias
           existing_product = Product.first_duplicate(name_alias, slug)
           # Check to see if both just have the same alias. In this case, it's not a duplicate 
-          
         end
 
         if existing_product.nil?
@@ -175,7 +174,7 @@ module Modules
       digi_product['aliases'] && digi_product['aliases'].each do |name_alias|
         name_aliases.push(name_alias)
       end
-      
+
       existing_product = nil
       is_new = false
       name_aliases.each do |name_alias|
@@ -251,7 +250,7 @@ module Modules
       product['aliases'] && product['aliases'].each do |name_alias|
         name_aliases.push(name_alias)
       end
-      
+
       sync_product = nil
       is_new = false
       name_aliases.each do |name_alias|
@@ -741,29 +740,29 @@ module Modules
       # We can't process Gitlab repos currently, so ignore those
       return if product.repository.include?("gitlab")
       return if product.repository.include?("AsTeR")
-      
+
       puts "Processing: #{product.repository}"
-      command = "./cloc-git.sh "+product.repository
+      command = "./cloc-git.sh #{product.repository}"
       stdout, = Open3.capture3(command)
 
       return if stdout.blank?
-     
+
       code_data = CSV.parse(File.read("./repodata.csv"), headers: true)
       code_data.each do |code_row|
-        if code_row['language'] == "SUM"
-          puts "NUM LINES: " + code_row['code']
-          product.code_lines = code_row['code'].to_i
-          
-          # COCOMO Calculation is Effort = A * (Lines of Code/1000)^B
-          # A and B are based on project complexity. We are using simple, where A=2.4 and B=1.05
-          total_klines = (code_row['code'].to_i)/1000
-          effort = 2.4 * total_klines**1.05
+        next unless code_row['language'] == 'SUM'
 
-          product.cocomo = effort.round.to_s
-          puts "EFFORT: " + effort.round.to_s
-          if product.save!
-            puts "Product COCOMO data saved."
-          end
+        puts "Number of lines : #{code_row['code']}"
+        product.code_lines = code_row['code'].to_i
+
+        # COCOMO Calculation is Effort = A * (Lines of Code/1000)^B
+        # A and B are based on project complexity. We are using simple, where A=2.4 and B=1.05
+        total_klines = code_row['code'].to_i / 1000
+        effort = 2.4 * total_klines**1.05
+
+        product.cocomo = effort.round.to_s
+        puts "Product effort: #{effort.round}."
+        if product.save!
+          puts "Product #{product.name} COCOMO data saved."
         end
       end
     end
@@ -815,7 +814,7 @@ module Modules
       #session = ActionDispatch::Integration::Session.new(Rails.application)
       #session.get "/productlist?source="+source
       server_uri = URI.parse("https://solutions.dial.community/productlist?source="+source)
-      
+
       response = Net::HTTP.get(server_uri)
       prod_list = JSON.parse(response)
       prod_list.each do |prod|
