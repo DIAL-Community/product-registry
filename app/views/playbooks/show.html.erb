@@ -28,7 +28,7 @@
   
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-cover" class="wysiwyg-viewer">
-        <%= @description.cover.html_safe %>
+        <%= !@description.cover.nil? && @description.cover.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
@@ -36,7 +36,7 @@
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer">
-        <%= @description.overview.html_safe %>
+        <%= !@description.overview.nil? && @description.overview.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
@@ -44,7 +44,7 @@
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
-      <%= @description.audience.html_safe %>
+      <%= !@description.audience.nil? && @description.audience.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
@@ -52,8 +52,12 @@
     </div>
     <div class="card-body py-2 px-3">
       <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
-      <%= @description.outcomes.html_safe %>
+      <%= !@description.outcomes.nil? && @description.outcomes.html_safe %>
       </div>
+    </div>
+    <div class="card-header border-0">
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.pdf-url') %>:&nbsp;</div>
+        <a class="text-muted" href="<%= @playbook.pdf_url %>" target="_blank"><%= @playbook.pdf_url %></a>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
