@@ -420,6 +420,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_151833) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "maturity", default: "Beta"
+    t.string "pdf_url"
   end
 
   create_table "portal_views", force: :cascade do |t|

@@ -49,6 +49,12 @@
 
   <input type="hidden" id="playbook_outcomes" name="playbook[playbook_outcomes]" />
   <div id="outcomes_editor"> </div>
+
+  <fieldset class="form-label-group mt-2">
+    <%= form.text_field :pdf_url, id: :pdf_url,
+                        class: "form-control", placeholder: t('view.playbook.form.pdf-url') %>
+    <%= form.label :pdf_url, t('view.playbook.form.pdf-url') %>
+  </fieldset>
   
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
     <%= t('view.playbook.form.phases') %>
@@ -95,6 +101,7 @@
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
       language: "<%= I18n.locale %>",
+      fontSize: ['8', '9', '10', '11', '12', '14', '15', '16', '18', '20', '24', '30', '36', '48', '60', '72', '96'],
       fontFamily: {
         "Roboto,sans-serif": 'Roboto',
         "Arial": 'Arial',

@@ -146,5 +146,14 @@ module Modules
       end
       html_output
     end
+
+    def sector_to_html(sector_list)
+      html_output = "<h1>Sector</h1>"
+      sector_list.each do |sector|
+        puts "SECTOR: " + sector["name"]
+        html_output += "<h2>"+sector["name"]+"</h2>"
+      end
+      html_output
+    end
   end
 end

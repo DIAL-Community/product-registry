@@ -1,5 +1,7 @@
 require 'modules/slugger'
 require 'modules/sync'
+require 'faraday'
+
 include Modules::Slugger
 include Modules::Sync
 
@@ -54,7 +56,7 @@ namespace :sync do
   task :unicef_goods, [:path] => :environment do |_, params|
     puts 'Pulling data from digital public good ...'
 
-    Dir.entries(params[:path]).select { |item| item.include? '.json' }.each do |entry|
+    Dir.entries(params[:path]).select { |item| item.include?('.json') }.each do |entry|
       entry_data = File.read(File.join(params[:path], entry))
 
       begin
@@ -106,7 +108,7 @@ namespace :sync do
 
     unicef_origin = Origin.find_by(slug: 'unicef')
     unicef_list = []
-    Dir.entries(params[:path]).select { |item| item.include? '.json' }.each do |entry|
+    Dir.entries(params[:path]).select { |item| item.include?('.json') }.each do |entry|
       entry_data = File.read(File.join(params[:path], entry))
 
       begin
@@ -138,7 +140,8 @@ namespace :sync do
       end
     end
     # Send email to admin to remove this product
-    msg_string = "Products no longer in the Unicef list. Please remove from catalog. <br />#{removed_products.join('<br />')}"
+    msg_string = "Products no longer in the Unicef list. Please remove from catalog. <br />"\
+                 "#{removed_products.join('<br />')}"
     users = User.where(receive_backup: true)
     users.each do |user|
       cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
@@ -151,56 +154,236 @@ namespace :sync do
     end
   end
 
-  task :purge_blacklisted_products, [:path] => :environment do |_, params|
+  task :purge_blacklisted_products, [:path] => :environment do |_, _params|
     puts 'Removing products in the blacklist...'
     blacklist = YAML.load_file('config/product_blacklist.yml')
-        blacklist.each do |blacklist_item|
-          blacklist_product = Product.where(name: blacklist_item['item']).first
-          if !blacklist_product.nil?
-            puts "Deleting "+blacklist_product.name
-            blacklist_product.organizations.each do |org|
-              org_products = OrganizationsProduct.where(organization_id: org.id)
-              if org_products.count == 1 && org.is_endorser != true && org.is_mni != true
-                puts "Deleting ORG: " +org.name
-                org.destroy
-              elsif org_products.count > 1
-                curr_org_product = org_products.where(product_id: blacklist_product.id).first
-                if !curr_org_product.nil?
-                  puts "DELETING ORG PRODUCT RELATIONSHIP: " + curr_org_product.inspect
-                  results = ActiveRecord::Base.connection.execute("delete from organizations_products where product_id="+blacklist_product.id.to_s)
-                  #deleted_org_prod = OrganizationsProduct.where(product_id: blacklist_product.id).destroy_all
-                end
-              end
-              
-            end
-            blacklist_product.organizations.delete_all
-            blacklist_product.product_versions.each do |version|
-              puts "Deleting "+version.version
-              version.destroy
-            end
-            blacklist_product.product_descriptions.each do |description|
-              description.destroy
-            end
-            #blacklist_product.sustainable_development_goals.each do |prod_sdg|
-            #  puts "Deleting "+prod_sdg.number.to_s
-            #  prod_sdg.destroy
-            #end
-            blacklist_product.destroy
+    blacklist.each do |blacklist_item|
+      blacklist_product = Product.where(name: blacklist_item['item']).first
+      next if blacklist_product.nil?
+
+      puts "Deleting product: #{blacklist_product.name}!"
+      blacklist_product.organizations.each do |organization|
+        org_products = OrganizationsProduct.where(organization_id: organization.id)
+        if org_products.count == 1 && organization.is_endorser != true && organization.is_mni != true
+          puts "Deleting organization: #{organization.name}." if organization.destroy
+        elsif org_products.count > 1
+          curr_org_product = org_products.where(product_id: blacklist_product.id).first
+          if !curr_org_product.nil?
+            puts "Deleting org product relationship: #{curr_org_product.inspect}."
+            delete_statement = "delete from organizations_products where product_id=#{blacklist_product.id}"
+            results = ActiveRecord::Base.connection.execute(delete_statement)
           end
         end
+      end
+      blacklist_product.organizations.delete_all
+      blacklist_product.product_versions.each do |version|
+        puts "Deleting version: #{version.version}." if version.destroy
+      end
+      blacklist_product.product_descriptions.each do |description|
+        puts "Deleting description: #{description.id}." if description.destroy
+      end
+      puts "Product: #{blacklist_product.name} deleted." if blacklist_product.destroy
+    end
+  end
+
+  task :update_banned_products, [:path] => :environment do |_, _params|
+    puts 'Updating products in the blacklist...'
+
+    banned_product_setting = Setting.find_by(slug: 'banned_product_list')
+    if banned_product_setting.nil?
+      banned_product_setting = Setting.new
+      banned_product_setting.name = 'Banned Product List'
+      banned_product_setting.slug = 'banned_product_list'
+      banned_product_setting.description = 'List of banned product. Generated by nightly task.'
+    end
+
+    ban_config = YAML.load_file('config/ban_config.yml')
+    line_of_code = ban_config['product']['line-of-code']
+    undefined_website = ban_config['product']['website-undefined'].to_s == 'true'
+    invalid_website = ban_config['product']['website-invalid'].to_s == 'true'
+
+    banned_products = []
+    Product.all.each do |product|
+      if !line_of_code.nil? && !product.code_lines.nil? && product.code_lines < line_of_code
+        puts "Banning #{product.name} due to low line of codes."
+        banned_products << product.slug
+        next
+      end
+
+      if product.website.nil?
+        if undefined_website
+          puts "Banning #{product.name} due to empty website."
+          banned_products << product.slug
+        else
+          puts "Skipping #{product.name}. Undefined website configuration is false."
+        end
+        next
+      end
+
+      if product.website.index('github.com') && invalid_website
+        puts "Banning #{product.name} due to invalid website."
+        banned_products << product.slug
+        next
+      end
+
+      begin
+        uri = URI.parse("https://#{product.website}")
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+        response = http.head(uri.request_uri)
+        if response.code == '200'
+          puts "Website for #{product.name} is up and valid."
+        end
+      rescue
+        # Try connecting on the non SSL
+        begin
+          uri = URI.parse("http://#{product.website}")
+          http = Net::HTTP.new(uri.host, uri.port)
+
+          response = http.head(uri.request_uri)
+          if response.code == '200'
+            puts "Website for #{product.name} is up, but it is not using SSL."
+          end
+        rescue => e
+          puts "Unable to check website for product: #{product.name}."
+          puts "Error message for #{product.website}: #{e}."
+          if invalid_website
+            banned_products << product.slug
+            next
+          end
+        end
+      end
+    end
+    banned_product_setting.value = banned_products.join(', ')
+
+    if banned_product_setting.save!
+      puts "Banned product list updated."
+    end
+  end
+
+  def extract_description(response_body)
+    parsed_response = Nokogiri::HTML(response_body.to_s)
+
+    description = nil
+    if description.nil? || description.blank?
+      meta_description = parsed_response.at_css('meta[@name="description"]')
+      unless meta_description.nil?
+        description = meta_description.attr('content')
+      end
+    end
+
+    if description.nil? || description.blank?
+      twitter_description = parsed_response.at_css('meta[@name="twitter:description"]')
+      unless twitter_description.nil?
+        description = twitter_description.attr('content')
+      end
+    end
+
+    if description.nil? || description.blank?
+      og_description = parsed_response.at_css('meta[@property="og:description"]')
+      unless og_description.nil?
+        description = og_description.attr('content')
+      end
+    end
+
+    if description.nil? || description.blank?
+      long_paragraphs = parsed_response.search('//p[string-length() >= 120]')
+      unless long_paragraphs.empty?
+        description = long_paragraphs.first.attr('content')
+      end
+    end
+    description
+  end
+
+  task :fetch_website_data, [:path] => :environment do |_, _params|
+    puts 'Updating organization and product description data ...'
+
+    without_description_clause = " COALESCE(TRIM(od.description), '') = '' "
+    Product.left_joins(:product_descriptions)
+           .where(without_description_clause)
+           .each do |product|
+      next if product.website.nil? || product.website.empty?
+
+      begin
+        puts "(Product) Opening connection to: #{product.website}."
+        uri = URI.parse("https://#{product.website}")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request)
+      rescue
+        begin
+          uri = URI.parse("http://#{product.website}")
+          http = Net::HTTP.new(uri.host, uri.port)
+          request = Net::HTTP::Get.new(uri.request_uri)
+          response = http.request(request)
+        rescue
+          puts "Unable to retrieve meta information. Message: #{e}."
+        end
+      end
+      description = extract_description(response.body)
+      next if description.nil?
+
+      product_description = ProductDescription.new
+      product_description.product_id = product.id
+      product_description.locale = I18n.locale
+      product_description.description = description.strip
+      if product_description.save!
+        puts "Setting description for: #{product.name} => #{description}"
+      end
+    end
+
+    without_description_clause = " COALESCE(TRIM(od.description), '') = '' "
+    Organization.left_joins(:organization_descriptions)
+                .where(without_description_clause)
+                .each do |organization|
+      next if organization.website.nil? || organization.website.empty?
+
+      begin
+        puts "(Organization) Opening connection to: #{organization.website}."
+        uri = URI.parse("https://#{organization.website}")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request)
+      rescue
+        begin
+          uri = URI.parse("http://#{organization.website}")
+          http = Net::HTTP.new(uri.host, uri.port)
+          request = Net::HTTP::Get.new(uri.request_uri)
+          response = http.request(request)
+        rescue
+          puts "Unable to retrieve meta information. Message: #{e}."
+        end
+      end
+      description = extract_description(response.body)
+      next if description.nil?
+
+      organization_description = OrganizationDescription.new
+      organization_description.organization_id = organization.id
+      organization_description.locale = I18n.locale
+      organization_description.description = description.strip
+      if organization_description.save!
+        puts "Setting description for: #{organization.name} => #{description}"
+      end
+    end
   end
 
   desc 'Sync the database with the public goods lists.'
-  task :export_public_goods, [:path] => :environment do |_, params|
+  task :export_public_goods, [:path] => :environment do |_, _params|
     puts 'Exporting OSC and Digital Square global goods ...'
 
     export_products('dial_osc')
     export_products('digital_square')
-  
   end
 
   desc 'Create parent-child links for products that have multiple repos'
-  task :link_products, [:path] => :environment do |_, params|
+  task :link_products, [:path] => :environment do |_, _params|
     product_list = YAML.load_file("config/product_parent_child.yml")
     product_list.each do |curr_product|
       parent_product = curr_product["parent"].first
@@ -209,9 +392,9 @@ namespace :sync do
         curr_product["children"].each do |child_product|
           child_prod = Product.where(name: child_product["name"]).first
           if !child_prod.nil?
-            puts "Adding "+child_prod.name+" as child to "+parent_prod.name
-            child_prod.is_child=true
-            child_prod.parent_product_id=parent_prod.id
+            puts "Adding #{child_prod.name} as child to #{parent_prod.name}."
+            child_prod.is_child = true
+            child_prod.parent_product_id = parent_prod.id
             child_prod.save
           end
         end
@@ -225,28 +408,26 @@ namespace :sync do
     export_products('dial_osc')
     export_products('digital_square')
 
-    Dir.entries('./export').select { |item| item.include? '.json' }.each do |entry|
+    Dir.entries('./export').select { |item| item.include?('.json') }.each do |entry|
       product_file = entry
-        puts entry
-        
-        curr_prod = Product.where(slug: entry.chomp('.json').gsub("-","_")).first
-        if curr_prod.nil? 
-          alias_name = entry.chomp('.json').gsub("-", " ").downcase
-          puts "ALIAS: " + alias_name
-          curr_prod = Product.find_by("? = ANY(LOWER(aliases::text)::text[])", alias_name)
-        end
-        curr_prod['aliases'] && curr_prod['aliases'].each do |prod_alias|
-          alias_file = prod_alias.downcase.gsub(" ","-")+".json"
-          if File.exist?(params[:path]+"/"+alias_file)
-            product_file = alias_file
-          end
-        end
-      if File.exist?(params[:path]+"/"+product_file)
-        FileUtils.cp_r("./export/"+entry, params[:path]+"/"+product_file)
-      else
-        puts "NEW PRODUCT: " + product_file
-        FileUtils.cp_r("./export/"+entry, params[:path]+"/"+product_file)
+
+      curr_prod = Product.where(slug: entry.chomp('.json').gsub("-", "_")).first
+      if curr_prod.nil?
+        alias_name = entry.chomp('.json').gsub("-", " ").downcase
+        puts "Alias: #{alias_name}"
+        curr_prod = Product.find_by("? = ANY(LOWER(aliases::text)::text[])", alias_name)
       end
+      curr_prod['aliases'] && curr_prod['aliases'].each do |prod_alias|
+        alias_file = "#{prod_alias.downcase.gsub(' ', '-')}.json"
+        if File.exist?("#{params[:path]}/#{alias_file}")
+          product_file = alias_file
+        end
+      end
+
+      if !File.exist?("#{params[:path]}/#{product_file}")
+        puts "New product: #{product_file}."
+      end
+      FileUtils.cp_r("./export/#{entry}", "#{params[:path]}/#{product_file}")
     end
   end
 
@@ -309,13 +490,13 @@ namespace :sync do
   task :sync_giz_projects, [] => :environment do
     # First, set all existing sector origins to DIAL
     dial_origin = Origin.find_by(name: 'DIAL OSC')
-    Sector.where('origin_id is null').update_all origin_id: dial_origin.id
+    Sector.where('origin_id is null').update_all(origin_id: dial_origin.id)
 
     giz_origin = Origin.find_by(name: 'GIZ')
     if giz_origin.nil?
       giz_origin = Origin.new
       giz_origin.name = 'GIZ'
-      giz_origin.slug = slug_em giz_origin.name
+      giz_origin.slug = slug_em(giz_origin.name)
       giz_origin.description = 'Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH'
 
       if giz_origin.save
@@ -329,7 +510,7 @@ namespace :sync do
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.path)
-    request.set_form_data({"email" => ENV['TOOLKIT_EMAIL'], "password" => ENV['TOOLKIT_PASSWORD']})
+    request.set_form_data({ "email" => ENV['TOOLKIT_EMAIL'], "password" => ENV['TOOLKIT_PASSWORD'] })
 
     response = http.request(request)
     cookies = response.header['Set-Cookie']
@@ -343,7 +524,7 @@ namespace :sync do
     request = Net::HTTP::Get.new(uri.path)
     request['Cookie'] = cookies
     english_response = http.request(request)
-    
+
     english_csv = CSV.parse(english_response.body, headers: true)
 
     uri = URI('https://digitalportfolio.toolkit-digitalisierung.de/projects/export/')
@@ -353,14 +534,13 @@ namespace :sync do
     request = Net::HTTP::Get.new(uri.path)
     request['Cookie'] = cookies
     german_response = http.request(request)
-    
+
     german_csv = CSV.parse(german_response.body, headers: true)
 
     english_csv.each_with_index do |english_project, index|
       german_project = german_csv[index]
       sync_giz_project(english_project, german_project, giz_origin)
     end
- 
   end
 
   task :sync_digital_health_atlas_data, [] => :environment do
@@ -368,7 +548,7 @@ namespace :sync do
     if dha_origin.nil?
       dha_origin = Origin.new
       dha_origin.name = 'Digital Health Atlas'
-      dha_origin.slug = slug_em dha_origin.name
+      dha_origin.slug = slug_em(dha_origin.name)
       dha_origin.description = 'Digital Health Atlas Website'
 
       if dha_origin.save
@@ -397,17 +577,17 @@ namespace :sync do
       project_name = project["name"]
 
       existing_project = Project.find_by(name: project_name, origin_id: dha_origin.id)
-      
+
       if existing_project.nil?
         existing_project = Project.new
         existing_project.name = project_name
-        existing_project.slug = slug_em existing_project.name
+        existing_project.slug = slug_em(existing_project.name)
         existing_project.origin = dha_origin
       end
 
       country_id = project["country"]
       next if country_id.nil?
-      country_name = country_data.select {|country| country["id"] == country_id }[0]["name"]
+      country_name = country_data.select { |country| country["id"] == country_id }[0]["name"]
       country = Country.find_by(name: country_name)
       if !country.nil?
         if !existing_project.countries.include?(country)
@@ -439,13 +619,13 @@ namespace :sync do
         end
       end
 
-      description = "<p>"+project["implementation_overview"]+"</p>"
+      description = "<p>#{project['implementation_overview']}</p>"
 
       sector = Sector.find_by(name: "Health")
       if !existing_project.sectors.include?(sector)
         existing_project.sectors << sector
       end
-  
+
       project_description = ProjectDescription.find_by(project_id: existing_project.id, locale: I18n.locale)
       if project_description.nil?
         project_description = ProjectDescription.new
@@ -459,10 +639,10 @@ namespace :sync do
       end
 
       project["platforms"].each do |platform|
-        product = products_data.select {|product| product["id"] == platform["id"] }[0]
+        product = products_data.select { |p| p["id"] == platform["id"] }[0]
         next if product.nil?
-        product_name = product["name"] 
-        slug = slug_em product_name
+        product_name = product["name"]
+        slug = slug_em(product_name)
         product = Product.first_duplicate(product_name, slug)
         if !product.nil?
           if !existing_project.products.include?(product)
@@ -471,18 +651,18 @@ namespace :sync do
         end
       end
 
-      project_url = "https://digitalhealthatlas.org/"+I18n.locale.to_s+"/-/projects/"+project["id"].to_s+"/published"
+      project_url = "https://digitalhealthatlas.org/#{I18n.locale}/-/projects/#{project['id']}/published"
       existing_project.project_url = project_url
 
       if existing_project.save!
         puts "Project #{existing_project.name} saved!"
       end
-      
+
       org_id = project["organisation"]
-      org_name = org_data.select {|org| org["id"] == org_id }[0]["name"]
+      org_name = org_data.select { |org| org["id"] == org_id }[0]["name"]
       org = Organization.name_contains(org_name)
-      
-      if !org.empty? && !existing_project.organizations.include?(org[0])  
+
+      if !org.empty? && !existing_project.organizations.include?(org[0])
         proj_org = ProjectsOrganization.new
         proj_org.org_type = 'owner'
         proj_org.project_id = existing_project.id
@@ -491,7 +671,7 @@ namespace :sync do
       end
 
       project["donors"] && project["donors"].each do |donor|
-        donor_name = org_data.select {|org| org["id"] == donor }[0]["name"]
+        donor_name = org_data.select { |org| org["id"] == donor }[0]["name"]
         donor_org = Organization.name_contains(donor_name)
 
         if !donor_org.empty? && !existing_project.organizations.include?(donor_org[0])

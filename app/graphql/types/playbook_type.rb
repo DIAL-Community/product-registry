@@ -8,6 +8,7 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :maturity, String, null: true
     field :image_file, String, null: true
+    field :pdf_url, String, null: true
 
     field :playbook_pages, [Types::PlaybookPageType], null: true
     field :playbook_descriptions, [Types::PlaybookDescriptionType], null: true

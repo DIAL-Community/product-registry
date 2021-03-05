@@ -633,6 +633,7 @@ en:
         audience: Audience
         outcomes: Outcomes
         cover: Cover
+        pdf-url: Link for PDF document
         phases: Phases
         name: Name
         description: Description
@@ -644,6 +645,7 @@ en:
         audience: Audience
         outcomes: Outcomes
         cover: Cover
+        pdf-url: Link for PDF document
         phases: Phases
         name: Name
         description: Description
@@ -657,6 +659,7 @@ en:
         question: Question
         resources: Resources
         other-info: Other Information
+        has-children: This page has child pages. Please delete any child pages before deleting this page.
       form:
         name: Name
         contents: Contents

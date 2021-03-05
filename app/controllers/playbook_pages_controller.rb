@@ -32,6 +32,7 @@ class PlaybookPagesController < ApplicationController
     if params[:playbook_id]
       @playbook = Playbook.find_by(slug: params[:playbook_id])
     end
+    @child_pages = PlaybookPage.where(parent_page_id: @page.id)
   end
 
   # GET /playbook_pages/new

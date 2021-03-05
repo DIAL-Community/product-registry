@@ -10,7 +10,7 @@
 <div class="row">
   <div class="col-12">
     <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-      <%= link_to  t('view.general.delete-with-model', model: t('model.playbook-page').titlecase), @page,
+      <%= link_to t('view.general.delete-with-model', model: t('model.playbook-page').titlecase), @page, disabled: @child_pages.length > 0,
                   method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.playbook-page')) },
                   class: 'btn btn-outline-secondary float-left' %>
 
@@ -136,4 +136,10 @@
       }
     });
   }
+
+  $('a[disabled]').click(function(e){
+    alert("<%= t('view.playbook-page.index.has-children') %>")
+    e.stopImmediatePropagation()
+    e.preventDefault()
+  });
 </script>
