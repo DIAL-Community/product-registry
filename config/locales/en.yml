@@ -659,6 +659,7 @@ en:
         question: Question
         resources: Resources
         other-info: Other Information
+        has-children: This page has child pages. Please delete any child pages before deleting this page.
       form:
         name: Name
         contents: Contents
