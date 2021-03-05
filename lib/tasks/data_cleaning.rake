@@ -246,5 +246,12 @@ namespace :data do
     prod_list = JSON.parse(response)
     html_out = proj_to_html(prod_list)
     File.write("export/projects.html", html_out)
+
+    server_uri = URI.parse("https://solutions.dial.community/sectors.json?without_paging=true")  
+    response = Net::HTTP.get(server_uri)
+    prod_list = JSON.parse(response)
+    html_out = sector_to_html(prod_list)
+    File.write("export/sectors.html", html_out)
   end
+
 end
