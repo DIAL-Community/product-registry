@@ -103,18 +103,18 @@
             <%= render 'shared/sidenav' %>
           <% end %>
           <%= yield %>
-          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+          <%= render 'cookies_eu/consent_banner', link: about_learnmore_path, target: '_blank' %>
         </div>
       <% elsif hide_sidenav %>
         <div id="content" class="container-fluid" role="main">
           <%= yield %>
-          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+          <%= render 'cookies_eu/consent_banner', link: about_learnmore_path, target: '_blank' %>
         </div>
       <% elsif display_breadcrumb %>
         <div id="content" class="container" role="main">
           <%= render '/shared/breadcrumb' %>
           <%= yield %>
-          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+          <%= render 'cookies_eu/consent_banner', link: about_learnmore_path, target: '_blank' %>
         </div>
       <% else %>
         <div id="content" class="container-fluid" role="main">
@@ -132,7 +132,7 @@
               </div>
             </div>
           </div>
-          <%= render 'cookies_eu/consent_banner', link: about_cookies_path, target: '_blank' %>
+          <%= render 'cookies_eu/consent_banner', link: about_learnmore_path, target: '_blank' %>
         </div>
       <% end %>
     <% end %>
