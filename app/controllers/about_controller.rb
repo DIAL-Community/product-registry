@@ -1,5 +1,5 @@
 class AboutController < ApplicationController
-  def cookies
+  def learnmore
   end
 
   def index

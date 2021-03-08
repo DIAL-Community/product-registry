@@ -73,7 +73,7 @@ Rails.application.routes.draw do
   end
 
   get 'deploys/index'
-  get 'about/cookies'
+  get 'about/learnmore'
   get 'about', to: 'about#index'
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
