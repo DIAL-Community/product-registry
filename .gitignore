@@ -37,7 +37,7 @@ public/assets/organizations/fixer*
 public/assets/.sprockets*
 public/assets/building_blocks/*
 public/assets/use_cases/*
-public/assets/origins/*
+
 public/assets/sdgs/*
 public/assets/sdg_targets/*
 public/assets/**/*.gz
