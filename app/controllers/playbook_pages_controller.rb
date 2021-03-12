@@ -294,7 +294,7 @@ class PlaybookPagesController < ApplicationController
       end
     end
 
-    if params.has_key?(:page_content)
+    if params.key?(:page_content)
       @page_contents.html = params['page_content']
       @page_contents.css = ""
       @page_contents.editor_type = "simple"

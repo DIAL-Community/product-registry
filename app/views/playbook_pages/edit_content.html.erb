@@ -77,6 +77,35 @@
   $(document).ready(function() {
     initializeEditors('en');
 
+    FroalaEditor.DefineIcon('save',{
+      NAME: 'save',
+      template: 'font_awesome_5'
+    });
+    FroalaEditor.RegisterCommand('save', {
+      title: 'Save',
+      focus: false,
+      undo: false,
+      refreshAfterCallback: false,
+      callback: function () {
+        if (!simpleEditor) {
+          // Do nothing if the Froala is undefined.
+          return;
+        }
+
+        jQuery.post(
+          url = '<%= save_design_playbook_playbook_page_path(@playbook, @page) %>',
+          data = {
+            language: $("input[name=language]:checked", '#page-form').val(),
+            page_content: simpleEditor.html.get()
+          },
+          success = function(result) {
+            console.log('Simple editor changes saved!', result);
+          },
+          dataType = 'json'
+        );
+      }
+    });
+
     simpleEditor = new FroalaEditor('#simple-editor', {
       key: "<%= ENV['FROALA_KEY'] %>",
       attribution: false,
@@ -95,6 +124,36 @@
             var config = { subtree: true, attributes: true, childList: true, characterData: true };
             mutationObserver.observe(target, config);
           }
+        }
+      },
+      toolbarButtons: {
+        'moreText': {
+          'buttons': [
+            'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript',
+            'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass',
+            'inlineStyle', 'clearFormatting'
+          ]
+        },
+        'moreParagraph': {
+          'buttons': [
+            'alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify',
+            'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight',
+            'outdent', 'indent', 'quote'
+          ]
+        },
+        'moreRich': {
+          'buttons': [
+            'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons',
+            'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR'
+          ]
+        },
+        'moreMisc': {
+          'buttons': [
+            'undo', 'redo', 'save', 'fullscreen', 'print', 'getPDF', 'spellChecker',
+            'selectAll', 'html', 'help'
+          ],
+          'align': 'right',
+          'buttonsVisible': 3
         }
       },
       fontSize: ['8', '9', '10', '11', '12', '14', '15', '16', '18', '20', '24', '30', '36', '48', '60', '72', '96'],
