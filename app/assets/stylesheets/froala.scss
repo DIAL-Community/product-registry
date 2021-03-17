@@ -1,7 +1,27 @@
 @import "froala_editor.min";
 @import "froala_style.min";
 @import 'plugins/image_manager.min.css';
-@import 'plugins/image.min.css'; 
+@import 'plugins/image.min.css';
+@import 'plugins/code_view.min.css';
 @import 'plugins/colors.min.css';
 @import 'plugins/table.min.css';
 @import 'plugins/video.min.css';
+
+
+.default-padded-cell {
+  td {
+    padding: 0.75rem;
+  }
+}
+
+.md-padded-cell {
+  td {
+    padding: 1rem;
+  }
+}
+
+.xl-padded-cell {
+  td {
+    padding: 1.25rem;
+  }
+}
