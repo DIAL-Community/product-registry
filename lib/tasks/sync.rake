@@ -752,7 +752,7 @@ namespace :sync do
                 'health_focus_areas': mm_row[6] == 'yes' ? [{'id': 20}] : []
               }}
       headers = {
-          'Authorization'=>'Bearer 6bafdafbdd9a944a6587a615fe8c070c6845f18a',
+          'Authorization'=>"Bearer ENV['DHA_TOKEN']",
           'Content-Type' =>'application/json'
       }
 
