@@ -88,6 +88,8 @@ Rails.application.routes.draw do
     get '/users/password', to: 'devise/passwords#new'
   end
 
+  post '/authenticate/credentials', to: 'authentication#sign_in'
+
   root to: redirect(path: '/products')
 
   resources :covid, only: [:index]
