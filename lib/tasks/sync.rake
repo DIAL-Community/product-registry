@@ -696,4 +696,73 @@ namespace :sync do
       end
     end
   end
+
+  task :import_dha_projects, [] => :environment do
+    
+    structure_uri = URI.parse("https://qa.whomaps.pulilab.com/api/projects/structure/")
+    structure_response = Net::HTTP.get(structure_uri)
+    structure_data = JSON.parse(structure_response)
+    products_data = structure_data["technology_platforms"]
+
+    country_uri = URI.parse("https://qa.whomaps.pulilab.com/api/landing-country/")
+    country_response = Net::HTTP.get(country_uri)
+    country_data = JSON.parse(country_response)
+
+    org_uri = URI.parse("https://qa.whomaps.pulilab.com/api/organisations/")
+    org_response = Net::HTTP.get(org_uri)
+    org_data = JSON.parse(org_response)
+
+    project_url = URI.parse("https://qa.whomaps.pulilab.com/api/projects/external/publish/")
+
+
+    mm_csv = CSV.parse(File.read("export/MMData.csv"), headers: true)
+    mm_csv.each do |mm_row|
+      # Find the country
+      mm_country = country_data.find {|country| country['name'].include? mm_row[0]}['id']
+
+      # Find the org
+      if !mm_row[4].nil?
+        mm_org = org_data.find {|org| org['name'].downcase.delete(' ')==mm_row[4].downcase.delete(' ')}
+        if !mm_org.nil?
+          mm_org_id = mm_org['id']
+          mm_org_name = mm_org['name']
+        end
+      end
+
+      # Find products
+      mm_platforms = JSON.parse('[]');
+      if !mm_row[2].nil?
+        mm_products = mm_row[2].split(',')
+        mm_products.each do |mm_product|
+          curr_prod = products_data.find {|prod| prod['name'].downcase.delete(' ')==mm_product.downcase.delete(' ')}
+          if !curr_prod.nil?
+            mm_platforms << { 'id': curr_prod['id'] }
+          end
+        end
+      end
+
+      params = {'project':{'name': 'Map & Match - ' + mm_row[1], 
+                'organization':mm_org_name,
+                'country': mm_country,
+                'contact_name':mm_row[9],
+                'contact_email': mm_row[10],
+                'implementation_overview': mm_row[3],
+                'platforms': mm_platforms,
+                'start_date': mm_row[12],
+                'health_focus_areas': mm_row[6] == 'yes' ? [{'id': 20}] : []
+              }}
+      headers = {
+          'Authorization'=>'Bearer 6bafdafbdd9a944a6587a615fe8c070c6845f18a',
+          'Content-Type' =>'application/json'
+      }
+
+      puts "PARAMS: " + params.to_json.to_s
+
+      http = Net::HTTP.new(project_url.host, project_url.port)
+      response = http.post(project_url.path, params.to_json, headers)
+
+      puts "RESPONSE: " + response.to_s
+    end
+
+  end
 end

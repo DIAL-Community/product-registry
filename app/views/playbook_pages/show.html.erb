@@ -5,6 +5,9 @@
 [data-component-marker="popover-content"] {
   display: none;
 }
+[data-component-marker="alternative-content"] {
+  display: none;
+}
 </style>
 
 <div class="row">
@@ -142,4 +145,17 @@
     e.stopImmediatePropagation()
     e.preventDefault()
   });
+
+  function toggleReveal() {
+    $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").click(function() {
+      $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").hide();
+      $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").show();
+    });
+    $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").click(function() {
+      $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").show();
+      $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").hide();
+    });
+  }
+  
+  $(document).on("turbolinks:load", toggleReveal);
 </script>
