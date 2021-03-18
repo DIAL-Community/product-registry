@@ -169,7 +169,7 @@ class PlaybookPagesController < ApplicationController
     respond_to do |format|
       if @page.update(playbook_page_params)
         format.html do
-          redirect_to playbook_path(@playbook),
+          redirect_to playbook_playbook_page_path(@playbook, @page),
                       notice: t('messages.model.updated', model: t('model.playbook-page').to_s.humanize)
         end
         format.json { render :show, status: :ok, location: @page }
@@ -312,7 +312,7 @@ class PlaybookPagesController < ApplicationController
     respond_to do |format|
       if @page_contents.save!
         format.html do
-          redirect_to playbook_path(@playbook),
+          redirect_to playbook_playbook_page_path(@playbook, @page),
                       notice: t('messages.model.created', model: t('model.playbook-page').to_s.humanize)
         end
         format.json { render json: { design: 'Saved successfully.' }, status: :ok }
