@@ -148,12 +148,12 @@
 
   function toggleReveal() {
     $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").click(function() {
-      $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").hide();
-      $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").show();
+      $(this).hide();
+      $(this).parent().find("[data-component-marker='initial-content']").show();
     });
     $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").click(function() {
-      $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").show();
-      $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").hide();
+      $(this).hide();
+      $(this).parent().find("[data-component-marker='alternative-content']").show();
     });
   }
   
