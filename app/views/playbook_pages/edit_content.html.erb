@@ -228,7 +228,6 @@
   $("input[name=language]", '#page-form').on('change', switchLanguage);
   
   function switchLanguage() {
-    console.log("Switching the editor language!");
     const langValue = $("input[name=language]:checked", '#page-form').val();
 
     if (grapesEditor) {
