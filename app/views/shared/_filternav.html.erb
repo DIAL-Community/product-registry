@@ -53,14 +53,12 @@
 <script type="text/javascript">
   $('.content-toggler').click(function(e) {
     const hideLeftFilter = function() {
-      console.log('Hiding left filter!');
       $('#left-filter').attr('style', 'display: none !important;');
       $('#right-content').attr('style', 'display: block !important;');
       animateCss('#right-content', 'fadeIn faster');
     }
 
     if ($('#left-filter').is(':visible')) {
-      console.log('Left filter is visible');
       animateCss('#left-filter', 'slideOutLeft faster', hideLeftFilter);
     }
   });

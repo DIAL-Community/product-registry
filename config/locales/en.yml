@@ -640,6 +640,7 @@ en:
         no-page: We couldn't find any pages for this playbook.
         create-pdf: Create PDF
         creating-pdf: Creating PDF
+        share: Share this Resource
       form:
         overview: Overview
         audience: Audience
@@ -658,6 +659,7 @@ en:
         media: Media
         question: Question
         resources: Resources
+        slug: Slug
         other-info: Other Information
         has-children: This page has child pages. Please delete any child pages before deleting this page.
       form:

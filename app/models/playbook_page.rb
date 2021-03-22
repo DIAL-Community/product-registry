@@ -9,7 +9,4 @@ class PlaybookPage < ApplicationRecord
 
   scope :slug_starts_with, ->(slug) { where("LOWER(playbook_pages.slug) like LOWER(?)", "#{slug}%\\_") }
 
-  def to_param
-    slug
-  end
 end
