@@ -45,6 +45,10 @@
       </div>
     </div>
     <div class="card-text text-muted mt-2 mb-2">
+      <%= t('view.playbook-page.index.slug') %>: 
+    </div>
+    <p class="ml-4"><%= @page.slug %></p>
+    <div class="card-text text-muted mt-2 mb-2">
       <%= t('view.playbook-page.index.contents') %>: 
     </div>
     <div class="card-body py-2 px-3">
@@ -123,7 +127,6 @@
   $("input[name=language]").on('change', switchLanguage);
   
   function switchLanguage() {
-    console.log("Switching the editor language!");
     const langValue = $("input[name=language]:checked").val();
 
     $.get(`${window.location.pathname}?language=${langValue}`, function (data) {
