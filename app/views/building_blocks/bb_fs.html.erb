@@ -1,0 +1,34 @@
+<style>
+.carousel .carousel-indicators li {
+  background-color: #fff;
+  background-color: rgba(70, 70, 70, 0.25);
+}
+
+.carousel .carousel-indicators .active {
+  background-color: #444;
+}
+</style>
+
+
+
+<div id="current-list">
+  <div id="building-block-list" class="row ml-2 mr-2">
+    <%= render partial: "building_block_fs", collection: @building_blocks, as: :building_block %>
+  </div>
+</div>
+
+
+<script>
+
+  $(document).on('turbolinks:load', function(){
+     $('.carousel').carousel({
+        interval: 2000
+     });
+  });
+  $(".bb-show-hide").on('click', function(e) {
+    e.preventDefault()
+    $("#bb-more").toggleClass('hidden')
+    $("#bb-show-more").toggleClass('hidden')
+    $("#bb-show-less").toggleClass('hidden')
+  })
+</script>

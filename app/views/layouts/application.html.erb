@@ -73,7 +73,7 @@
 
     </script>
   </head>
-<% if controller.action_name == 'map_fs'%>
+<% if controller.action_name == 'map_fs' || controller.action_name == 'bb_fs' %>
   <body id="main-body"
         data-controller="<%= controller.controller_name %>"
         data-action="<%= controller.action_name %>"
