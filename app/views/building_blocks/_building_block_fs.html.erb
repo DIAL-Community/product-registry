@@ -1,0 +1,39 @@
+<style>
+a {
+    text-decoration: none;
+    color: #212529;
+}
+
+a:hover {
+  text-decoration:none;
+  cursor:pointer;
+  color: #212529;
+}
+
+.card-header a:hover {
+    color:white;
+    text-decoration:none;
+    cursor:pointer;
+}
+</style>
+
+<div class="col-lg-3 col-md-4 d-flex mt-2">
+    <div class="card w-100 index-card">
+      <div class="card-header text-white truncate-parent" style="background-color:#0031ee;">
+        <%= link_to building_block.name, building_block, class: 'truncate-text', target: :_blank,
+            'title' => building_block.name %>
+      </div>
+      <div class="card-body">
+      <%= link_to(building_block, target: :_blank) do %>
+      <div class="model-logo">
+          <%= image_tag(building_block.image_file,
+                        alt: t('alt.el-logo', el: building_block.name).humanize,
+                        class: 'card-img-top align-middle') %>
+      </div>
+      </div>
+      <div class="card-footer" style="background-color:#eaeaea;">
+        <%= simple_format(@bb_desc.select {|bb| bb[:name].downcase == building_block.name.downcase }.first[:desc]) %>
+      </div>
+      <% end %>
+    </div>
+</div>
