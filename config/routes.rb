@@ -279,4 +279,6 @@ Rails.application.routes.draw do
   get 'map_fs', :to => 'organizations#map_fs'
   get 'map_aggregators_osm', to: 'organizations#map_aggregators_osm'
   get 'map_projects_osm', to: 'projects#map_projects_osm'
+
+  get 'bb_fs', :to => 'building_blocks#bb_fs'
 end
