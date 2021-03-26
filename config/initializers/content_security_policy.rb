@@ -1,3 +1,3 @@
 Rails.application.config.content_security_policy do |policy|
-  policy.frame_ancestors :self, 'toolkit-digitalisierung.de', 'govstack.global'
+  policy.frame_ancestors :self, 'toolkit-digitalisierung.de', 'govstack.global','govstack.wpengine.com','govstack-website.blee.ch'
 end
