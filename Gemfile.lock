@@ -191,7 +191,7 @@ GEM
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.2.2)
-    kramdown (2.3.0)
+    kramdown (2.3.1)
       rexml
     licensee (9.14.1)
       dotenv (~> 2.0)
@@ -517,7 +517,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   jwt
-  kramdown
+  kramdown (~> 2.3.1)
   licensee
   listen (>= 3.0.5, < 4.0)
   mailgun-ruby
