@@ -9,6 +9,14 @@ module Types
     field :export_page_contents, resolver: Queries::ExportPageContentsQuery
 
     field :products, resolver: Queries::ProductsQuery
+    field :building_blocks, resolver: Queries::BuildingBlocksQuery
+
+    field :sectors, resolver: Queries::SectorsQuery
+    field :use_cases, resolver: Queries::UseCasesQuery
+    field :countries, resolver: Queries::CountriesQuery
+    field :tags, resolver: Queries::TagsQuery
+
+    field :wizard, resolver: Queries::WizardQuery
 
     field :me, resolver: Queries::MeQuery
   end
