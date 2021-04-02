@@ -14,6 +14,17 @@
     - name: Avni Server
   children:
     - name: Avni Client
+- name: Awareness SMS
+  parent:
+    - name: Awareness SMS
+  children:
+    -name: Awareness Website
+    -name: Bot Starter Kit
+    -name: Emergency Relief Package Tracker
+    -name: Heroes Bot
+    -name: Housing Vacancy Bot
+    -name: Internal Dashboard
+    -name: Surveillance Forms
 - name: Child Growth Monitor
   parent:
     - name: Child Growth Monitor
