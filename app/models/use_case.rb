@@ -31,6 +31,14 @@ class UseCase < ApplicationRecord
     end
   end
 
+  def image_url
+    if File.exist?(File.join('public', 'assets', 'use_cases', "#{slug}.png"))
+      ENV['BASE_URL']+"/assets/use_cases/#{slug}.png"
+    else
+      ENV['BASE_URL']+'/assets/use_cases/use_case_placeholder.png'
+    end
+  end
+
   # overridden
   def to_param
     slug
