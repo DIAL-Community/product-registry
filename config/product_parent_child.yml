@@ -75,6 +75,11 @@
     - name: Mifos Android
     - name: Mifos Mobile
     - name: Mifos Web App
+- name: Open Foris Collect
+   parent:
+    - name: Open Foris Collect
+   children: 
+    - name: Open Foris Collect Mobile
 - name: OpenRefine
   parent:
     - name: OpenRefine
