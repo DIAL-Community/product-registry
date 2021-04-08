@@ -36,7 +36,7 @@ gem 'Dhalang', github: "conradsp/Dhalang", branch: "master"
 
 gem 'licensee'
 
-gem 'kramdown'
+gem 'kramdown', '~> 2.3.1'
 
 gem 'recaptcha'
 

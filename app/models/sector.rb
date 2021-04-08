@@ -5,6 +5,7 @@ class Sector < ApplicationRecord
 
   has_many :product_sectors
   has_many :products, through: :product_sectors
+  has_and_belongs_to_many :projects, join_table: :projects_sectors
 
   has_many :use_cases, dependent: :restrict_with_error
   belongs_to :origin
