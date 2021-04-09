@@ -10,7 +10,7 @@ module Types
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
-    field :image_url, String, null: true
+    field :image_file, String, null: true
     field :maturity, String, null: true
 
     field :use_case_descriptions, [Types::UseCaseDescriptionType], null: true

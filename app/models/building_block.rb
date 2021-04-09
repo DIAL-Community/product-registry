@@ -31,14 +31,6 @@ class BuildingBlock < ApplicationRecord
     end
   end
 
-  def image_url
-    if File.exist?(File.join('public', 'assets', 'building_blocks', "#{slug}.png"))
-      ENV['BASE_URL']+"/assets/building_blocks/#{slug}.png"
-    else
-      ENV['BASE_URL']+'/assets/building_blocks/bb_placeholder.png'
-    end
-  end
-
   # overridden
   def to_param
     slug
