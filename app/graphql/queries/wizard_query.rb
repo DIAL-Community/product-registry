@@ -74,7 +74,13 @@ module Queries
 
     def filter_matching_projects(sectorProjects, countryProjects, tagProjects)
 
-      sectorTagProjects = (sectorProjects + tagProjects).uniq
+      sectorTagProjects = []
+      if !sectorProjects.nil? 
+        sectorTagProjects = sectorProjects
+      end
+      if !tagProjects.nil?
+        sectorTagProjects = (sectorTagProjects + tagProjects).uniq
+      end
       if sectorTagProjects.length > 5
         # Find projects that match both sector and tag
         combinedProjects = sectorProjects & tagProjects
@@ -83,7 +89,7 @@ module Queries
         end
       end
 
-      if sectorTagProjects.length > 10
+      if sectorTagProjects.length > 10 && !countryProjects.nil?
         # Since we have several projects, try filtering by country
         combinedProjects = sectorTagProjects & countryProjects
         if combinedProjects.length > 0
