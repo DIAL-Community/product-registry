@@ -1,6 +1,5 @@
 module Queries
   class MeQuery < Queries::BaseQuery
-
     type Types::UserType, null: false
 
     def resolve

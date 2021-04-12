@@ -19,7 +19,7 @@ class Mutations::CreatePage < Mutations::BaseMutation
       # Successful creation, return the created object with no errors
       {
         playbook_page: playbook_page,
-        errors: [],
+        errors: []
       }
     else
       # Failed save, return the errors to the client
