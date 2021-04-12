@@ -1,17 +1,17 @@
 module Types
-  class OrganizationDescriptionType < Types::BaseObject
+  class WorkflowDescriptionType < Types::BaseObject
     field :id, ID, null: false
-    field :organization_id, Integer, null: true
+    field :use_case_id, Integer, null: true
     field :locale, String, null: false
     field :description, String, null: false
   end
 
-  class OrganizationType < Types::BaseObject
+  class WorkflowType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
     field :image_file, String, null: false
 
-    field :organization_descriptions, [Types::OrganizationDescriptionType], null: true
+    field :workflow_descriptions, [Types::WorkflowDescriptionType], null: true
   end
 end

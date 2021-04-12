@@ -5,8 +5,8 @@ module Mutations
     input_object_class Types::BaseInputObject
     object_class Types::BaseObject
 
-    protected 
-    
+    protected
+
     def authorize_user
       return true if context[:current_user].present?
 

@@ -85,7 +85,7 @@ module Queries
   class ExportPageContentsQuery < Queries::BaseQuery
     argument :page_ids, [Int], required: true
     argument :locale, String, required: false, default_value: 'en'
-    
+
     type Types::ExportedPdfType, null: false 
 
     def resolve(page_ids:, locale:)
