@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class ProductQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::ProductType, null: false
+
+    def resolve(slug:)
+      product = Product.find_by(slug: slug)
+    end
+  end
+
   class SearchProductsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

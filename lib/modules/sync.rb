@@ -1,3 +1,4 @@
+require 'resolv-replace'
 require 'modules/slugger'
 include Modules::Slugger
 

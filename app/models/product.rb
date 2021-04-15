@@ -79,6 +79,17 @@ class Product < ApplicationRecord
     end
   end
 
+  def owner
+    owner = User.where("?=ANY(user_products)", id)
+    if !owner.empty?
+      return owner.first.id
+    end
+  end
+
+  def currProjects(numProjects)
+    projects.limit(numProjects[:first])
+  end
+
   # overridden
   def to_param
     slug

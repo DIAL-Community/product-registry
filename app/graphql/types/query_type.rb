@@ -7,6 +7,7 @@ module Types
     field :export_page_contents, resolver: Queries::ExportPageContentsQuery
 
     field :products, resolver: Queries::ProductsQuery
+    field :product, resolver: Queries::ProductQuery
     field :search_products, resolver: Queries::SearchProductsQuery
 
     field :projects, resolver: Queries::ProjectsQuery
