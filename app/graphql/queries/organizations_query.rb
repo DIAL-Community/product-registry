@@ -25,7 +25,7 @@ module Queries
       unless search.blank?
         organizations = organizations.name_contains(search)
       end
-      organizations
+      organizations.distinct
     end
   end
 end

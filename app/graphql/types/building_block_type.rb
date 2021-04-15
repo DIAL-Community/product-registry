@@ -14,5 +14,7 @@ module Types
     field :maturity, String, null: true
 
     field :building_block_descriptions, [Types::BuildingBlockDescriptionType], null: true
+    field :workflows, [Types::WorkflowType], null: true
+    field :products, [Types::ProductType], null: true
   end
 end

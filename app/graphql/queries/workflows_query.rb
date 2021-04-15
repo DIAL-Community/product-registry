@@ -26,12 +26,33 @@ module Queries
         workflows = workflows.name_contains(search)
       end
 
-      filtered_use_cases = use_cases.reject { |x| x.nil? || x.empty? }
-      unless filtered_use_cases.empty?
-        workflows = workflows.joins(:use_case_steps)
-                             .where(use_case_steps: { use_case_id: filtered_use_cases })
+      filtered = false
+      use_case_ids = []
+      filtered_sdgs = sdgs.reject { |x| x.nil? || x.empty? }
+      unless filtered_sdgs.empty?
+        filtered = true
+        sdg_numbers = SustainableDevelopmentGoal.where(id: filtered_sdgs)
+                                                .select(:number)
+        sdg_use_cases = UseCase.joins(:sdg_targets)
+                               .where(sdg_targets: { sdg_number: sdg_numbers })
+        use_case_ids.concat(sdg_use_cases.ids)
       end
-      workflows
+
+      filtered_use_cases = use_cases.reject { |x| x.nil? || x.empty? }
+      unless filtered
+        filtered = !filtered_use_cases.empty?
+      end
+
+      filtered_use_cases = use_case_ids.concat(filtered_use_cases)
+      if filtered
+        if filtered_use_cases.empty?
+          return []
+        else
+          workflows = workflows.joins(:use_case_steps)
+                               .where(use_case_steps: { use_case_id: filtered_use_cases })
+        end
+      end
+      workflows.distinct
     end
   end
 end

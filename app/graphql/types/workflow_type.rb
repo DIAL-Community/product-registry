@@ -13,5 +13,7 @@ module Types
     field :image_file, String, null: false
 
     field :workflow_descriptions, [Types::WorkflowDescriptionType], null: true
+    field :use_case_steps, [Types::UseCaseStepType], null: true
+    field :building_blocks, [Types::BuildingBlockType], null: true
   end
 end
