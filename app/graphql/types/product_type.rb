@@ -26,6 +26,14 @@ module Types
     field :code_lines, Integer, null: true
     field :cocomo, Integer, null: true
 
+    field :is_launchable, Boolean, null: true
+    field :product_type, String, null: false
+
+    field :license, String, null: true
+    field :maturity_score, Integer, null: true
+
+    field :tags, [String], null: true
+
     field :product_descriptions, [Types::ProductDescriptionType], null: true
     field :origins, [Types::OriginType], null: true
     field :endorsers, [Types::EndorserType], null: true

@@ -32,8 +32,7 @@ module Queries
 
       filtered_origins = origins.reject { |x| x.nil? || x.empty? }
       unless filtered_origins.empty?
-        projects = projects.joins(:origins)
-                           .where(origins: { id: filtered_origins })
+        projects = projects.where(origin_id: filtered_origins)
       end
 
       filtered_sectors = sectors.reject { |x| x.nil? || x.empty? }
@@ -53,7 +52,13 @@ module Queries
         projects = projects.joins(:organizations)
                            .where(organizations: { id: filtered_organizations })
       end
-      projects
+
+      filtered_sdgs = sdgs.reject { |x| x.nil? || x.empty? }
+      unless filtered_sdgs.empty?
+        projects = projects.joins(:sustainable_development_goals)
+                           .where(sustainable_development_goals: { id: filtered_sdgs })
+      end
+      projects.distinct
     end
   end
 end

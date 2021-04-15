@@ -14,5 +14,8 @@ module Types
     field :maturity, String, null: true
 
     field :use_case_descriptions, [Types::UseCaseDescriptionType], null: true
+    field :use_case_steps, [Types::UseCaseStepType], null: true
+
+    field :sdg_targets, [Types::SustainableDevelopmentGoalTargetType], null: false
   end
 end
