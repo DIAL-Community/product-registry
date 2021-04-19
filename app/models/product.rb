@@ -1,7 +1,9 @@
 require('csv')
+require 'modules/maturity_sync'
 
 class Product < ApplicationRecord
   include Auditable
+  include Modules::MaturitySync
 
   attr_accessor :product_description
 
@@ -88,6 +90,24 @@ class Product < ApplicationRecord
 
   def currProjects(numProjects)
     projects.limit(numProjects[:first])
+  end
+
+  def child_products
+    child_products = Product.where(parent_product_id: id)
+    child_products
+  end
+
+  def maturity_scores
+    maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+    if !maturity_rubric.nil?
+      maturity_scores = calculate_maturity_scores(id, maturity_rubric.id)[:rubric_scores].first
+    else
+      maturity_scores = calculate_maturity_scores(id, nil)[:rubric_scores].first
+    end
+    if !maturity_scores.nil?
+      maturity_scores = maturity_scores[:category_scores]
+    end
+    maturity_scores
   end
 
   # overridden
