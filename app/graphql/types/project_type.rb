@@ -13,5 +13,8 @@ module Types
 
     field :project_descriptions, [Types::ProjectDescriptionType], null: true
     field :origin, Types::OriginType, null: true
+
+    field :organizations, [Types::OrganizationType], null: true
+    field :products, [Types::ProductType], null: true
   end
 end
