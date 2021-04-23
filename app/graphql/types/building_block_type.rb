@@ -10,9 +10,11 @@ module Types
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
-    field :image_url, String, null: true
+    field :image_file, String, null: true
     field :maturity, String, null: true
 
     field :building_block_descriptions, [Types::BuildingBlockDescriptionType], null: true
+    field :workflows, [Types::WorkflowType], null: true
+    field :products, [Types::ProductType], null: true
   end
 end

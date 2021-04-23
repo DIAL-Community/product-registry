@@ -640,7 +640,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_151833) do
     t.string "locale", default: "en"
     t.index ["origin_id"], name: "index_sectors_on_origin_id"
     t.index ["parent_sector_id"], name: "index_sectors_on_parent_sector_id"
-    t.index ["slug", "origin_id", "parent_sector_id"], name: "index_sectors_on_slug_and_origin_id_and_parent_sector_id", unique: true
+    t.index ["slug", "origin_id", "parent_sector_id", "locale"], name: "index_sector_slug_unique", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|

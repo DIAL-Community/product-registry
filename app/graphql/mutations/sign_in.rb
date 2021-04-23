@@ -14,7 +14,7 @@ module Mutations
       if user.present?
         if user.valid_password?(args[:password])
           context[:current_user] = user
-          
+
           user.regenerate_authentication_token
           token = user.authentication_token #crypt.encrypt_and_sign("user-id:#{ user.id }")
           { user: user, token: token }
