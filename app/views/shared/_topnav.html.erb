@@ -27,7 +27,18 @@
           </div>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown mt-2">
-              <strong><%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'nav-link covid-item' %></strong>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <strong><%= t('view.header.resources') %></strong>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'dropdown-item' %>
+                <a target="_blank" rel="noreferrer noopener"
+                  href="https://resources.dial.community"
+                  class="dropdown-item">
+                  <%= t('view.header.dial-resources') %>
+                </a>
+              </div>
             </li>
             <% if user_signed_in? %>
               <% if (policy(current_user).index?) %>

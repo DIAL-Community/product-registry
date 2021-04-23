@@ -325,6 +325,12 @@ class OrganizationsController < ApplicationController
       end
     end
 
+    if organization_params[:is_endorser].present? && organization_params[:is_endorser] == "1"
+      if organization_params[:when_endorsed] == ""
+        @organization.when_endorsed = Date.today
+      end
+    end
+
     if params[:logo].present?
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       begin
