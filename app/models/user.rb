@@ -10,6 +10,8 @@ class User < ApplicationRecord
   validates :password, confirmation: true, on: :create
   validates :password_confirmation, presence: true, on: :create
   validates :password_confirmation, presence: true, on: :update, if: :password_changed?
+  validates :username, presence: true, on: :create
+  validates :username, uniqueness: true, on: :create
 
   # Custom function validation
   validate :validate_organization, :validate_product

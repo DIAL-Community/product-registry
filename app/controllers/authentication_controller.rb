@@ -8,7 +8,7 @@ class AuthenticationController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: { email: @user.email, 'can_edit': can_edit } }
+      format.json { render json: { email: @user.email, username: @user.username, 'can_edit': can_edit } }
     end
   end
 end
