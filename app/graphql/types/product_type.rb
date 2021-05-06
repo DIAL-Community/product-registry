@@ -25,6 +25,7 @@ module Types
     field :owner, String, null: true
     field :code_lines, Integer, null: true
     field :cocomo, Integer, null: true
+    field :discourse_id, Integer, null: true
 
     field :is_launchable, Boolean, null: true
     field :product_type, String, null: false
