@@ -259,6 +259,7 @@ en:
         title: Title
     devise:
       email: Email
+      username: Username
       password: Password
       password-confirmation: Password confirmation
       organization-required: Organization information is required when signing up as organization editor.

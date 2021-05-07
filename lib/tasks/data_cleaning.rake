@@ -1,5 +1,7 @@
 require 'modules/update_desc'
+require 'modules/discourse'
 include Modules::UpdateDesc
+include Modules::Discourse
 
 namespace :data do
   desc 'Data related rake tasks.'
@@ -252,6 +254,39 @@ namespace :data do
     prod_list = JSON.parse(response)
     html_out = sector_to_html(prod_list)
     File.write("export/sectors.html", html_out)
+  end
+
+  task :add_discourse_topics => :environment do
+    #products = Product.where('id in (select product_id from products_endorsers)')
+    #products.each do |product|
+    #  if product.discourse_id.nil?
+    #    topic_id = create_discourse_topic(product, 'Products')
+    #    puts "Topic: " + topic_id.to_s
+    #    product.discourse_id = topic_id
+    #    product.save
+    #  end
+    #end
+    
+    #building_blocks = BuildingBlock.all
+    #building_blocs.each do |bb|
+    bb = BuildingBlock.all.first
+      if bb.discourse_id.nil?
+        topic_id = create_discourse_topic(bb, 'Building Blocks')
+        puts "Topic: " + topic_id.to_s
+        bb.discourse_id = topic_id
+        bb.save
+      end
+    #end
+  end
+
+  task :add_usernames => :environment do
+    users = User.all
+    users.each do |user| 
+      if user.username.nil?
+        user.username = user.email.split('@').first
+        user.save
+      end
+    end
   end
 
 end

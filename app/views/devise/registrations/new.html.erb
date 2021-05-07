@@ -13,6 +13,12 @@
   </fieldset>
 
   <fieldset class="form-label-group">
+    <%= f.text_field :username, autofocus: true, autocomplete: "username",
+        class: "form-control", placeholder: t('view.devise.username') %>
+    <%= f.label :username, t('view.devise.username') %>
+  </fieldset>
+
+  <fieldset class="form-label-group">
     <%= f.password_field :password, autocomplete: "new-password",
         class: "form-control", placeholder: t('view.devise.password') %>
     <%= f.label :password, t('view.devise.password') %>

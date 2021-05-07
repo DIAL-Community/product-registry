@@ -488,6 +488,9 @@ class ProductsController < ApplicationController
       @product.set_image_changed(params[:logo].original_filename)
     end
 
+    # Create a Discourse topic for this product
+    topic_id = create_discourse_topic(@product, 'Products')
+
     respond_to do |format|
       if !@product.errors.any? && @product.save!
 

@@ -3,11 +3,13 @@
 require 'modules/slugger'
 require 'modules/constants'
 require 'modules/maturity_sync'
+require 'modules/discourse'
 
 class ApplicationController < ActionController::Base
   include Modules::Slugger
   include Modules::Constants
   include Modules::MaturitySync
+  include Modules::Discourse
   include Pundit
   include FilterConcern
   protect_from_forgery prepend: true
@@ -536,7 +538,7 @@ class ApplicationController < ActionController::Base
   def configure_registration_parameters
     logger.info 'Configuring custom registration parameters.'
     devise_parameter_sanitizer.permit(:sign_up) do |user_params|
-      user_params.permit(:email, :password, :password_confirmation, :organization_id, :role, product_id: [])
+      user_params.permit(:email, :username, :password, :password_confirmation, :organization_id, :role, product_id: [])
     end
   end
 

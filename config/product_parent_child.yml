@@ -18,13 +18,13 @@
   parent:
     - name: Awareness SMS
   children:
-    -name: Awareness Website
-    -name: Bot Starter Kit
-    -name: Emergency Relief Package Tracker
-    -name: Heroes Bot
-    -name: Housing Vacancy Bot
-    -name: Internal Dashboard
-    -name: Surveillance Forms
+    - name: Awareness Website
+    - name: Bot Starter Kit
+    - name: Emergency Relief Package Tracker
+    - name: Heroes Bot
+    - name: Housing Vacancy Bot
+    - name: Internal Dashboard
+    - name: Surveillance Forms
 - name: Child Growth Monitor
   parent:
     - name: Child Growth Monitor
@@ -77,9 +77,9 @@
     - name: Mifos Mobile
     - name: Mifos Web App
 - name: Open Foris Collect
-   parent:
+  parent:
     - name: Open Foris Collect
-   children: 
+  children: 
     - name: Open Foris Collect Mobile
 - name: OpenRefine
   parent:
