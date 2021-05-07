@@ -16,5 +16,6 @@ module Types
 
     field :organizations, [Types::OrganizationType], null: true
     field :products, [Types::ProductType], null: true
+    field :countries, [Types::CountryType], null: true
   end
 end

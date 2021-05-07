@@ -6,6 +6,15 @@ module Types
     field :description, String, null: false
   end
 
+  class OfficeType < Types::BaseObject
+    field :id, ID, null: false
+    field :name, String, null: false
+    field :latitude, String, null: false
+    field :longitude, String, null: false
+    field :city, String, null: false
+    field :organization_id, Integer, null: false
+  end
+
   class OrganizationType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
@@ -18,5 +27,8 @@ module Types
 
     field :organization_descriptions, [Types::OrganizationDescriptionType], null: true
     field :sectors, [Types::SectorType], null: true
+    field :countries, [Types::CountryType], null: true
+    field :offices, [Types::OfficeType], null: true
+    field :projects, [Types::ProjectType], null: false
   end
 end
