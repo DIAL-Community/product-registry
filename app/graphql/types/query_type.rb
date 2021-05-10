@@ -1,5 +1,7 @@
 module Types
   class QueryType < Types::BaseObject
+    field :counts, resolver: Queries::CountsQuery
+    
     field :playbooks, resolver: Queries::PlaybooksQuery
     field :playbook, resolver: Queries::PlaybookQuery
     field :search_playbook, resolver: Queries::SearchPlaybookQuery
