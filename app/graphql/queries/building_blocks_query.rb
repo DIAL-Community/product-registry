@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class BuildingBlockQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::BuildingBlockType, null: false
+
+    def resolve(slug:)
+      BuildingBlock.find_by(slug: slug)
+    end
+  end
+
   class SearchBuildingBlocksQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

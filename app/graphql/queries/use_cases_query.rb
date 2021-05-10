@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class UseCaseQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::UseCaseType, null: false
+
+    def resolve(slug:)
+      UseCase.find_by(slug: slug)
+    end
+  end
+
   class SearchUseCasesQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

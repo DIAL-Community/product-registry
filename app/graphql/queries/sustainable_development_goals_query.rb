@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class SustainableDevelopmentGoalQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::SustainableDevelopmentGoalType, null: false
+
+    def resolve(slug:)
+      SustainableDevelopmentGoal.find_by(slug: slug)
+    end
+  end
+
   class SearchSustainableDevelopmentGoalsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

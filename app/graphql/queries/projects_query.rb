@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class ProjectQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::ProjectType, null: false
+
+    def resolve(slug:)
+      Project.find_by(slug: slug)
+    end
+  end
+
   class SearchProjectsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

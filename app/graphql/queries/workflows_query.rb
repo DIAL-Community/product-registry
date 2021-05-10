@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class WorkflowQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::WorkflowType, null: false
+
+    def resolve(slug:)
+      Workflow.find_by(slug: slug)
+    end
+  end
+
   class SearchWorkflowsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 
