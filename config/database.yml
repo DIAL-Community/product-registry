@@ -54,3 +54,14 @@ production:
   database: <%= ENV["DATABASE_NAME"] %>
   username: <%= ENV["DATABASE_USER"] %>
   password: <%= ENV["DATABASE_PASSWORD"] %>
+
+sync-production:
+  <<: *default
+  timeout: 5000
+  host: <%= ENV["PROD_DATABASE_HOST"] %>
+  port: <%= ENV["PROD_DATABASE_PORT"] %>
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV["PROD_DATABASE_NAME"] %>
+  username: <%= ENV["PROD_DATABASE_USER"] %>
+  password: <%= ENV["PROD_DATABASE_PASSWORD"] %>
