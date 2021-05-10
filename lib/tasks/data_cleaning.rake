@@ -257,25 +257,25 @@ namespace :data do
   end
 
   task :add_discourse_topics => :environment do
-    #products = Product.where('id in (select product_id from products_endorsers)')
-    #products.each do |product|
-    #  if product.discourse_id.nil?
-    #    topic_id = create_discourse_topic(product, 'Products')
-    #    puts "Topic: " + topic_id.to_s
-    #    product.discourse_id = topic_id
-    #    product.save
-    #  end
-    #end
+    products = Product.where('id in (select product_id from products_endorsers)')
+    products.each do |product|
+      if product.discourse_id.nil?
+        topic_id = create_discourse_topic(product, 'Products')
+        puts "Topic: " + topic_id.to_s
+        product.discourse_id = topic_id
+        product.save
+      end
+    end
     
     #building_blocks = BuildingBlock.all
     #building_blocs.each do |bb|
-    bb = BuildingBlock.all.first
-      if bb.discourse_id.nil?
-        topic_id = create_discourse_topic(bb, 'Building Blocks')
-        puts "Topic: " + topic_id.to_s
-        bb.discourse_id = topic_id
-        bb.save
-      end
+    #bb = BuildingBlock.all.first
+    #  if bb.discourse_id.nil?
+    #    topic_id = create_discourse_topic(bb, 'Building Blocks')
+    #    puts "Topic: " + topic_id.to_s
+    #    bb.discourse_id = topic_id
+    #    bb.save
+    #  end
     #end
   end
 
