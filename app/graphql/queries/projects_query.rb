@@ -34,7 +34,7 @@ module Queries
     type Types::ProjectType.connection_type, null: false
 
     def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:)
-      projects = Project.order(:name)
+      projects = Project.order(:name).eager_load(:countries)
       if !search.nil? && !search.to_s.strip.empty?
         projects = projects.name_contains(search)
       end
