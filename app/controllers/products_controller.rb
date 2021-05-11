@@ -11,6 +11,7 @@ class ProductsController < ApplicationController
   def unique_search
     record = Product.eager_load(:organizations,
                                   :products_origins, :origins,
+                                  :sectors, :sectors,
                                   :product_sustainable_development_goals, :sustainable_development_goals,
                                   :product_building_blocks, :building_blocks)
                     .find_by(slug: params[:id])
@@ -70,6 +71,7 @@ class ProductsController < ApplicationController
 
     results['results'] = products.eager_load(:organizations,
                                              :products_origins, :origins,
+                                             :sectors, :sectors,
                                              :product_sustainable_development_goals, :sustainable_development_goals,
                                              :product_building_blocks, :building_blocks)
                                  .paginate(page: current_page, per_page: default_page_size)
@@ -179,6 +181,7 @@ class ProductsController < ApplicationController
 
     results['results'] = products.eager_load(:organizations,
                                              :products_origins, :origins,
+                                             :sectors, :sectors,
                                              :product_sustainable_development_goals, :sustainable_development_goals,
                                              :product_building_blocks, :building_blocks)
                                  .paginate(page: current_page, per_page: default_page_size)

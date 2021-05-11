@@ -175,6 +175,7 @@ class Product < ApplicationRecord
       except: [:id, :statistics, :license_analysis, :default_url, :publicgoods_data, :status, :created_at, :updated_at],
       include: {
         organizations: { only: [:name] },
+        sectors: { only: [:name] },
         origins: { only: [:name] },
         building_blocks: { only: [:name] },
         sustainable_development_goals: { only: [:number, :name] }
