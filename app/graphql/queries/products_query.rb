@@ -4,7 +4,7 @@ module Queries
     type [Types::ProductType], null: false
 
     def resolve(search:)
-      products = Product.order(:name)
+      products = Product.where(parent_product_id: nil).order(:name)
       unless search.blank?
         products = products.name_contains(search)
       end
@@ -41,7 +41,7 @@ module Queries
 
     def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:,
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:)
-      products = Product.order(:name)
+      products = Product.where(parent_product_id: nil).order(:name)
       if !search.nil? && !search.to_s.strip.empty?
         products = products.name_contains(search)
       end

@@ -5,10 +5,12 @@
   - item: Archive
   - item: CropPlanning
   - item: 2019-nCoV Data Repository by Johns Hopkins CSSE
+  - item: 2020PoliceBrutality
   - item: 5Calls Frontend
   - item: 5Calls iOS
   - item: ACCEDA
   - item: Accessibility-cloud
+  - item: ActivityInfo Python
   - item: Adopt a Drain
   - item: Alex Atom Linter
   - item: Alex Sublime Linter
@@ -19,6 +21,7 @@
   - item: Bias Correct
   - item: Blockly
   - item: Bob Emploi
+  - item: Cactus
   - item: Carbon Inferno
   - item: Census API
   - item: CGMBLEKit
@@ -43,6 +46,7 @@
   - item: Find Training
   - item: FoodCoops
   - item: forrmhub
+  - item: GCompris
   - item: Geolambda
   - item: Global Power Plant Data-Base
   - item: Heat Seek WebApp
@@ -97,6 +101,7 @@
   - item: PlayTime
   - item: Power BI React
   - item: Project Catalog Management Tool
+  - item: Project Sidewalk
   - item: Quill-NLP-Tools-and-Datasets
   - item: Rah-e-maa
   - item: Raster Vision

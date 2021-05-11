@@ -27,10 +27,12 @@ module Queries
     argument :search, String, required: false, default_value: ''
     argument :sectors, [String], required: false, default_value: []
     argument :countries, [String], required: false, default_value: []
+    argument :aggregator_only, Boolean, required: false, default_value: false
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:)
+    def resolve(search:, sectors:, countries:, aggregator_only:)
       organizations = Organization.order(:name)
+                                  .eager_load(:countries, :offices)
       unless search.blank?
         organizations = organizations.name_contains(search)
       end
@@ -46,6 +48,11 @@ module Queries
         organizations = organizations.joins(:countries)
                                      .where(countries: { id: filtered_countries })
       end
+
+      if aggregator_only
+        organizations = organizations.where(is_mni: true)
+      end
+
       organizations.distinct
     end
   end
