@@ -122,7 +122,7 @@ module Modules
           end
         end
 
-        sectors = json_data['sectors']
+        sectors = json_data["sectors"]
         if !sectors.nil? && !sectors.empty?
           sectors.each do |sector|
             sector_obj = Sector.find_by(name: sector)
@@ -163,7 +163,7 @@ module Modules
 
         existing_product.save
 
-        update_product_description(existing_product, json_data['description'])
+        update_product_description(existing_product, json_data["description"])
       end
     end
 
@@ -582,7 +582,7 @@ module Modules
                                               .first || ProductDescription.new
       product_description.product_id = existing_product.id
       product_description.locale = I18n.locale
-      if product_description.description.nil?
+      if product_description.description.nil? || product_description.description == ''
         if !sync_description.nil?
           product_description.description = sync_description
         else
