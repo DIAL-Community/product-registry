@@ -143,7 +143,7 @@ var loadFilters = function() {
       Object.keys(urlParams).map(function(urlParam) {
         clearFilterCount(urlParam)
         if (urlParam == 'use_cases' || urlParam == 'workflows' || urlParam == 'building_blocks' || urlParam === 'tags' ||
-            urlParam == 'sdgs' || urlParam == 'products' || urlParam == 'years' || urlParam == 'origins') {
+            urlParam == 'sdgs' || urlParam == 'products' || urlParam == 'years' || urlParam == 'origins' || urlParam == 'project_origins') {
           paramValues = urlParams[urlParam].split('--')
           paramValues.map(function(paramValue) {
             paramValueLabel = paramValue.split('-')
