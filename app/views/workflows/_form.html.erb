@@ -1,7 +1,13 @@
 <%= form_with(model: workflow, local: true, html: { id: 'workflow-form' },
-              url: request.query_parameters.nil? ?
-                workflow_path(workflow) :
-                workflow_path(workflow, request.query_parameters)) do |form| %>
+                url: workflow.new_record? ?
+                  (
+                    request.query_parameters.nil? ?
+                      workflows_path :
+                      workflows_path(request.query_parameters)
+                  ) :
+                  request.query_parameters.nil? ?
+                    workflow_path(workflow) :
+                    workflow_path(workflow, request.query_parameters)) do |form| %>
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :workflow_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>

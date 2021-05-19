@@ -1,5 +1,13 @@
   <%= form_with(model: project, local: true, html: { id: 'project-form' },
-                url: request.query_parameters.nil? ? project_path(project) : project_path(project, request.query_parameters)) do |form| %>
+                url: project.new_record? ?
+                  (
+                    request.query_parameters.nil? ?
+                      projects_path :
+                      projects_path(request.query_parameters)
+                  ) :
+                  request.query_parameters.nil? ?
+                    project_path(project) :
+                    project_path(project, request.query_parameters)) do |form| %>
 
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :project_name, class: "form-control", placeholder: t('view.general.name') %>
