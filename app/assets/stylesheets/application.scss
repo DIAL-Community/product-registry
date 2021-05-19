@@ -47,10 +47,11 @@ html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: arial, sans-serif;
 }
 
 body {
-  padding-top: 102px;
+  padding-top: 66px;
 }
 
 p.text-success, p.text-error {
@@ -62,15 +63,6 @@ p.text-success, p.text-error {
   :first-child {
     height: 84px !important;
   }
-}
-
-a {
-  /* color: #000043; */
-  color: #fbab18;
-}
-
-a:hover {
-  color: #000043
 }
 
 h5 {
@@ -549,4 +541,31 @@ h6 {
   top: 0;
   margin-left: .1rem;
   margin-right: .1rem;
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.text-dial-blue-darkest {
+  color: #000043;
+}
+
+.bg-dial-gray-light {
+  background-color: #f5f6fa;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }

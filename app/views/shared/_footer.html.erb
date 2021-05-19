@@ -1,86 +1,158 @@
 <div id="footer" role="contentinfo">
 <% if session[:portal]["slug"] == "default" %>
-  <div class="sponsors description pb-0">
-    <a href="https://digitalimpactalliance.org">The Digital Impact Alliance</a>
-    <%= t('view.footer.tag-line') %>
-  </div>
-  <ul class="icons sponsors mb-0">
-    <li><%= image_tag "unf-logo.png", :alt => "United Nations Foundation", :height => 50 %></li>
-    <li><%= image_tag "bill-n-melinda-logo.png", :alt => "Bill and Melinda Gates Foundation", :height => 50 %></li>
-    <li><%= image_tag "sweden-logo.png", :alt => "Swedish International Development Cooperation Agency", :height => 50 %></li>
-    <li><%= image_tag "dfid-logo.png", :alt => "Department for International Development", :height => 50 %></li>
-  </ul>
-  <div class="sponsors description pt-1 pb-0">
-    <%= t('view.footer.sponsor-line') %>
-  </div>
-  <ul class="icons sponsors">
-    <li><%= image_tag "giz-logo.png", :alt => "Deutsche Gesellschaft für Internationale Zusammenarbeit", :height => 90 %></li>
-    <li><%= image_tag "bmz-logo.png", :alt => "Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung", :height => 90 %></li>
-  </ul>
-  <ul class="copyright">
-    <li>
-      <a target="_blank" rel="noreferrer noopener"
-         href="https://digitalimpactalliance.org/contact-us/ict4sdg/"
-         style="text-decoration:none;">
-         <i class="fas fa-envelope"></i>
-         <%= t('view.footer.ict4sdg-updates') %>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://forum.osc.dial.community"
-          style="text-decoration:none;">
-         <i class="fab fa-forumbee"></i>
-         <%= t('view.footer.osc-forum') %>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener"
-         href="https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry"
-          style="text-decoration:none;">
-         <i class="fas fa-share-alt"></i>
-         <%= t('view.footer.gitlab') %>
-      </a>
-    </li>
-  </ul>
-  <ul class="copyright">
-    <li><%= t('view.footer.dial-social-media') %>
-    <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://twitter.com/DIAL_Community"
-         class="fab fa-twitter" style="text-decoration:none;"
-         aria-label="Twitter">
-         <span class="d-md-none d-inline-block">Twitter</span>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://facebook.com/DigitalImpactAlliance"
-         class="fab fa-facebook" style="text-decoration:none;"
-         aria-label="Facebook">
-         <span class="d-md-none d-inline-block">Facebook</span>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://www.instagram.com/dial_community"
-         class="fab fa-instagram" style="text-decoration:none;"
-         aria-label="Instagram">
-         <span class="d-md-none d-inline-block">Instagram</span>
-      </a>
-    </li>
-  </ul>
-  <ul class="copyright">
-    <li>
-      <%= t('view.footer.icons-provided') %>
-    </li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://fontawesome.com/">
-        <%= t('view.footer.fa-icons') %>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener" href="https://www.globalgoals.org/">
-        <%= t('view.footer.sdg-icons') %>
-      </a>
-    </li>
-  </ul>
+  <footer class='mt-4'>
+    <div class='relative footer-container text-base'>
+      <div class='px-4 2xl:px-24 py-4 2xl:pb-8 d-flex flex-row flex-wrap justify-content-center'>
+        <div class='max-w-prose sm:w-full flex-auto sm:mx-auto 2xl:mx-0 lg:my-auto md:text-center 2xl:text-left'>
+          <%= t('view.footer.tag-line') %>
+        </div>
+        <div class='flex-grow d-flex flex-row flex-wrap'>
+          <div class='relative p-2 lg:my-auto'>
+            <%= image_tag 'unf-logo.png', :width => 246, :height => 59,
+              :alt=>'The United Nations Foundation Logo'
+            %>
+          </div>
+          <div class='relative p-2 m-auto'>
+            <%= image_tag 'bill-n-melinda-logo.png', :width => 244, :height => 50,
+              :alt=>'The Bill & Melinda Gates Foundation'
+            %>
+          </div>
+          <div class='relative p-2 m-auto'>
+            <%= image_tag 'sweden-logo.png', :width => 62, :height => 60,
+              :alt=>'The Swedish International Development Cooperation Agency Logo'
+            %>
+          </div>
+          <div class='h-20 w-24 relative p-2 m-auto'>
+            <%= image_tag 'dfid-logo.png', :width => 60, :height => 60,
+              :alt=>'The Foreign, Commonwealth & Development Office Logo'
+            %>
+          </div>
+        </div>
+      </div>
+      <div class='2xl:px-24 my-3 xl:my-0'>
+        <div class='border border-t-0 border-dial-gray' />
+      </div>
+      <div class='px-4 2xl:px-24 lg:pt-4 2xl:pb-4 d-flex flex-row flex-wrap justify-content-center'>
+        <div class='max-w-prose lg:max-w-2/4 2xl:max-w-prose flex-auto my-auto md:text-center 2xl:text-left'>
+          <%= t('view.footer.sponsor-line') %>
+        </div>
+        <div class='h-auto w-72 relative p-2 my-auto'>
+          <%= image_tag 'giz-logo.png', :width=>174, :height=>97,
+            :alt=>'The German Corporation for International Cooperation GmbH Logo'
+          %>
+        </div>
+        <div class='h-auto w-72 relative p-2 my-auto'>
+          <%= image_tag 'bmz-logo.png', :width=>128, :height=>59,
+            :alt=>'The Federal Ministry for Economic Cooperation and Development Logo'
+          %>
+        </div>
+      </div>
+    </div>
+    <div class='relative footer-bottom text-base px-4'>
+      <div class='px-4 py-4 lg:px-10 2xl:pt-12 2xl:pb-8 2xl:px-24 d-flex flex-row flex-wrap mx-auto'>
+        <div class='py-2 px-3 mr-4 mt-4 rounded bg-dial-gray-light'>
+          <a
+            href='https://digitalimpactalliance.org/contact-us/ict4sdg/'
+            target='_blank' rel='noreferrer'
+            class='border-b-2 border-transparent hover:border-dial-teal-light'
+          >
+            <span class='fas fa-envelope'></span>
+            <%= t('view.footer.sign-up') %>
+          </a>
+        </div>
+        <div class='py-2 px-3 mr-4 mt-4 rounded bg-dial-gray-light'>
+          <a
+            href='https://forum.osc.dial.community/'
+            target='_blank' rel='noreferrer'
+            class='border-b-2 border-transparent hover:border-dial-teal-light'
+          >
+            <i class="fab fa-forumbee"></i>
+            <%= t('view.footer.osc-forum') %>
+          </a>
+        </div>
+        <div class='py-2 px-3 mr-4 mt-4 rounded bg-dial-gray-light'>
+          <a
+            href='https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry'
+            target='_blank' rel='noreferrer'
+            class='border-b-2 border-transparent hover:border-dial-teal-light'
+          >
+            <i class="fas fa-share-alt"></i>
+            <%= t('view.footer.gitlab') %>
+          </a>
+        </div>
+        <div class='flex-grow mt-4 d-flex flex-row'>
+          <div class='py-2 px-0 lg:px-2 rounded flex-grow text-right'>
+            <%= t('view.footer.dial-social-media') %>
+          </div>
+          <div class='p-2 rounded bg-dial-gray-light mx-2'>
+            <a
+              class='border-b-2 border-transparent hover:border-dial-teal-light fab fa-facebook'
+              href='https://facebook.com/DigitalImpactAlliance' target='_blank' rel='noreferrer'
+            >
+            </a>
+          </div>
+          <div class='p-2 rounded bg-dial-gray-light'>
+            <a
+              href='https://twitter.com/DIAL_Community' target='_blank' rel='noreferrer'
+              class='border-b-2 border-transparent hover:border-dial-teal-light fab fa-twitter'
+            >
+            </a>
+          </div>
+          <div class='p-2 rounded bg-dial-gray-light mx-2'>
+            <a
+              href='https://www.instagram.com/dial_community' target='_blank' rel='noreferrer'
+              class='border-b-2 border-transparent hover:border-dial-teal-light fab fa-instagram'
+            >
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class='2xl:px-24'>
+        <div class='border border-t-0 border-dial-gray-light' />
+      </div>
+      <div class='px-4 py-4 pb-8 lg:px-10 2xl:px-24 2xl:pt-8 2xl:pb-12 d-flex flex-row flex-wrap m-auto'>
+        <div class='w-full d-flex flex-row flex-wrap leading-none text-base'>
+          <div class='py-2 px-0 2xl:px-2 mr-4'>
+          © <%= Time.now.year %><%= t('view.footer.organization-name') %>
+          </div>
+          <div class='py-2 px-3 rounded bg-dial-gray-light mr-4 '>
+            <a
+              href='https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry'
+              target='_blank' rel='noreferrer'
+              class='border-b-2 border-transparent hover:border-dial-teal-light'
+            >
+              <%= t('view.footer.privacy-policy') %>
+            </a>
+          </div>
+          <div class='py-2 px-3 rounded bg-dial-gray-light mr-4'>
+            <a
+              href='https://gitlab.com/dial/osc/eng/t4d-online-catalog/product-registry'
+              target='_blank' rel='noreferrer'
+              class='border-b-2 border-transparent hover:border-dial-teal-light'
+            >
+              <%= t('view.footer.report-issue') %>
+            </a>
+          </div>
+          <div class='py-2 px-0 2xl:px-2 flex-auto xl:text-left 2xl:text-right'>
+            <span>Icons provided unmodified by </span>
+            <a
+              class='border-b-2 border-transparent hover:border-dial-teal-light'
+              href='https://fontawesome.com/' target='_blank' rel='noreferrer'
+            >
+              FontAwesome
+            </a>
+            <span> and </span>
+            <a
+              class='border-b-2 border-transparent hover:border-dial-teal-light'
+              href='https://www.globalgoals.org/' target='_blank' rel='noreferrer'
+            >
+              The Global Goals for Sustainable Development
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 <% else %> 
   <div id="footer-content" class="wysiwyg-viewer custom-footer">
   </div>
@@ -94,20 +166,6 @@
     </li>
   </ul>
 <% end %>
-  <ul class="copyright">
-    <li>© <%= Time.now.year %> Digital Impact Alliance</li>
-    <li>
-      <a target="_blank" rel="noreferrer noopener"
-         href="https://solutions.dial.community/privacy">
-        <%= t('view.footer.privacy-policy') %>
-      </a>
-    </li>
-    <li>
-      <%= link_to t('view.header.feedback'),
-                'mailto:catalog-support@dial.community',
-                target: '_blank' %>
-    </li>
-  </ul>
 </footer>
 
 <script>

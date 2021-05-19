@@ -4,7 +4,7 @@ class StylesheetsController < ApplicationController
 
   def show
     @stylesheet = Stylesheet.find_by(portal: params[:id])
-    @stylesheet_contents = "#header { background-color: " + @stylesheet.background_color + "; }\n#footer { background-color: " + @stylesheet.background_color + "; }"
+    @stylesheet_contents = ""
 
     render css: @stylesheet_contents, content_type: 'text/css'
   end
