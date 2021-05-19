@@ -1,61 +1,78 @@
 <div id="header-outer" role="navigation" aria-labelledby="app-title" data-turbolinks-permanent>
   <div id="header-widget">
-    <nav id="header" class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container-fluid">
-        <h1 id="app-title" class="sr-only"><%= t('view.title') %></h1>
-        <% if session[:portal]["slug"] == "default" %>
-          <a class="header-logo-nav" href="/products">
-            <%= image_tag "logo-dial-300w.png", alt: "DIAL Logo", sizes: '(max-width: 400px) 250px, 300px',
-                          srcset: {'logo-dial-250w.png': '250w', 'logo-dial-300w.png': '300w' } %>
+    <nav id="header" class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="d-flex flex-wrap justify-content-between flex-1">
+          <a class="header-logo-nav pt-1 px-2" href="/products">
+            <div class='text-dial-blue-darkest text-xs'>
+              <%= t('view.subtitle') %>
+            </div>
+            <div class='font-weight-bold text-base text-dial-blue-darkest'>
+              <span class='block'>
+                <%= t('view.title') %>
+              </span>
+            </div>
           </a>
-        <% else %>
-          <%= image_tag "/assets/portal_views/"+session[:portal]["slug"]+".png", :alt => "DIAL Logo", :height => "86px" %>
-        <% end %>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <div class="text-small text-white language-switcher">
-            <% if I18n.locale.to_s == "en" %>
-              <div class="mr-3 inline selected-language"><%= t('view.header.english') %></div>
-              <%= link_to t('view.header.german'), controller: :application, action: :update_locale, id: 'de' %>
-            <% else %>
-              <%= link_to t('view.header.english'), controller: :application, action: :update_locale, id: 'en' %>
-              <div class="ml-3 inline selected-language"><%= t('view.header.german') %></div>
-            <% end %>
-          </div>
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown mt-2">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <strong><%= t('view.header.resources') %></strong>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'dropdown-item' %>
-                <a target="_blank" rel="noreferrer noopener"
-                  href="https://resources.dial.community"
-                  class="dropdown-item">
-                  <%= t('view.header.dial-resources') %>
+        <nav>
+          <div class="collapse navbar-collapse d-flex items-center justify-between" id="navbarCollapse">
+            <ul class="navbar-nav text-base text-dial-blue-darkest">
+              <li class="nav-item dropdown mt-2 px-2">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <%= t('view.header.resources') %>
                 </a>
-              </div>
-            </li>
-            <% if user_signed_in? %>
-              <% if (policy(current_user).index?) %>
-                <%= render '/shared/menu/admin' %>
-              <% elsif (policy(current_user).mni?) %>
-                <%= render '/shared/menu/mni' %>
-              <% elsif (policy(current_user).ict4sdg?) %>
-                <%= render '/shared/menu/ict4sdg' %>
-              <% elsif (policy(current_user).principle?) %>
-                <%= render '/shared/menu/principle' %>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  <%= link_to t('view.header.covid-resources'),covid_index_path, :class => 'dropdown-item' %>
+                  <a target="_blank" rel="noreferrer noopener"
+                    href="https://resources.dial.community"
+                    class="dropdown-item">
+                    <%= t('view.header.dial-resources') %>
+                  </a>
+                </div>
+              </li>
+              <li class="nav-item mt-2 px-2">
+                <a class="nav-link" href="/about" id="navbarDropdown">
+                  <%= t('view.header.about') %>
+                </a>
+              </li>
+              <% if user_signed_in? %>
+                <% if (policy(current_user).index?) %>
+                  <%= render '/shared/menu/admin' %>
+                <% elsif (policy(current_user).mni?) %>
+                  <%= render '/shared/menu/mni' %>
+                <% elsif (policy(current_user).ict4sdg?) %>
+                  <%= render '/shared/menu/ict4sdg' %>
+                <% elsif (policy(current_user).principle?) %>
+                  <%= render '/shared/menu/principle' %>
+                <% end %>
+                <%= render '/shared/menu/authenticated' %>
+              <% else %>
+                <%= render '/shared/menu/unauthenticated' %>
               <% end %>
-              <%= render '/shared/menu/authenticated' %>
-            <% else %>
-              <%= render '/shared/menu/unauthenticated' %>
-            <% end %>
-          </ul>
-        </div>
+              <li class="nav-item mt-2 px-2">
+                <a target="_blank" rel="noreferrer noopener"
+                  href="https://docs.osc.dial.community/projects/product-registry/en/latest/"
+                  class="nav-link">
+                  <%= t('view.header.help') %>
+                </a>
+              </li>
+              <li class="nav-item mt-2 border-right"></li>
+              <li class="nav-item dropdown px-2">
+                <a class="nav-link dropdown-toggle mt-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <%= t('view.header.select-language') %>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  <%= link_to t('view.header.english'), controller: :application, action: :update_locale, id: 'en' %>
+                  <%= link_to t('view.header.german'), controller: :application, action: :update_locale, id: 'de' %>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
     </nav>
   </div>
