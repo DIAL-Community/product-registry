@@ -2,7 +2,15 @@
               multipart: true,
               local: true,
               html: { id: 'product-form' },
-              url: request.query_parameters.nil? ? product_path(product) : product_path(product, request.query_parameters)) do |form| %>
+              url: product.new_record? ?
+                (
+                  request.query_parameters.nil? ?
+                    products_path :
+                    products_path(request.query_parameters)
+                ) :
+                request.query_parameters.nil? ?
+                  product_path(product) :
+                  product_path(product, request.query_parameters)) do |form| %>
 
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :product_name,

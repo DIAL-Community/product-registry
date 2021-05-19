@@ -1,5 +1,11 @@
-  <%= form_with(model: organization, multipart: true, local: true, html: { id: 'organization-form' },
-                url: request.query_parameters.nil? ?
+<%= form_with(model: organization, multipart: true, local: true, html: { id: 'organization-form' },
+              url: organization.new_record? ?
+                (
+                  request.query_parameters.nil? ?
+                    organizations_path :
+                    organizations_path(request.query_parameters)
+                ) :
+                request.query_parameters.nil? ?
                   organization_path(organization) :
                   organization_path(organization, request.query_parameters)) do |form| %>
 
