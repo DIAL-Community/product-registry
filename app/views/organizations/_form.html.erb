@@ -1,4 +1,7 @@
-  <%= form_with(model: organization, multipart: true, local: true, html: { id: 'organization-form' }) do |form| %>
+  <%= form_with(model: organization, multipart: true, local: true, html: { id: 'organization-form' },
+                url: request.query_parameters.nil? ?
+                  organization_path(organization) :
+                  organization_path(organization, request.query_parameters)) do |form| %>
 
     <fieldset class="form-label-group mt-2">
       <%= form.text_field :name, id: :organization_name,

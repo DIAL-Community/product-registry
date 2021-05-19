@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'redis-rails'
+gem 'simple_token_authentication', '~> 1.0'
 
 gem 'bootstrap'
 gem 'jquery-rails'

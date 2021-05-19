@@ -1,4 +1,8 @@
-  <%= form_with(model: product, multipart: true, local: true, html: { id: 'product-form' }) do |form| %>
+<%= form_with(model: product, 
+              multipart: true,
+              local: true,
+              html: { id: 'product-form' },
+              url: request.query_parameters.nil? ? product_path(product) : product_path(product, request.query_parameters)) do |form| %>
 
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :product_name,

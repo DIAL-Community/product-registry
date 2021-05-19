@@ -6,6 +6,8 @@ class OrganizationsController < ApplicationController
   include FilterConcern
   include Modules::Geocode
 
+  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_current_user, only: [:edit, :update, :destroy]

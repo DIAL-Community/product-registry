@@ -214,48 +214,48 @@ namespace :data do
 
   end
 
-  task :descriptions_to_html => :environment do
+  task :descriptions_to_json => :environment do
     server_uri = URI.parse("https://solutions.dial.community/use_cases.json")
     response = Net::HTTP.get(server_uri)
     use_case_list = JSON.parse(response)
-    html_out = uc_to_html(use_case_list)
-    File.write("export/use_cases.html", html_out)
+    json_out = uc_to_json(use_case_list)
+    File.write("export/use_cases.html", json_out)
 
     server_uri = URI.parse("https://solutions.dial.community/workflows.json")  
     response = Net::HTTP.get(server_uri)
     workflow_list = JSON.parse(response)
-    html_out = wf_to_html(workflow_list)
-    File.write("export/workflows.html", html_out)
+    json_out = wf_to_json(workflow_list)
+    File.write("export/workflows.html", json_out)
 
     server_uri = URI.parse("https://solutions.dial.community/building_blocks.json")  
     response = Net::HTTP.get(server_uri)
     bb_list = JSON.parse(response)
-    html_out = bb_to_html(bb_list)
-    File.write("export/building_blocks.html", html_out)
+    json_out = bb_to_json(bb_list)
+    File.write("export/building_blocks.html", json_out)
 
     server_uri = URI.parse("https://solutions.dial.community/organizations.json?without_paging=true")  
     response = Net::HTTP.get(server_uri)
     org_list = JSON.parse(response)
-    html_out = org_to_html(org_list)
-    File.write("export/organizations.html", html_out)
+    json_out = org_to_json(org_list)
+    File.write("export/organizations.html", json_out)
 
     server_uri = URI.parse("https://solutions.dial.community/products.json?without_paging=true")  
     response = Net::HTTP.get(server_uri)
     prod_list = JSON.parse(response)
-    html_out = prod_to_html(prod_list)
-    File.write("export/products.html", html_out)
+    json_out = prod_to_json(prod_list)
+    File.write("export/products.json", json_out)
 
     server_uri = URI.parse("https://solutions.dial.community/projects.json?without_paging=true")  
     response = Net::HTTP.get(server_uri)
     prod_list = JSON.parse(response)
-    html_out = proj_to_html(prod_list)
-    File.write("export/projects.html", html_out)
+    json_out = proj_to_json(prod_list)
+    File.write("export/projects.html", json_out)
 
     server_uri = URI.parse("https://solutions.dial.community/sectors.json?without_paging=true")  
     response = Net::HTTP.get(server_uri)
     prod_list = JSON.parse(response)
-    html_out = sector_to_html(prod_list)
-    File.write("export/sectors.html", html_out)
+    json_out = sector_to_json(prod_list)
+    File.write("export/sectors.html", json_out)
   end
 
   task :add_discourse_topics => :environment do

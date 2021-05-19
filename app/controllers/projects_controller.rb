@@ -1,5 +1,8 @@
 class ProjectsController < ApplicationController
   include FilterConcern
+
+  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
