@@ -50,8 +50,8 @@ module Modules
       end
     end
 
-    def uc_to_html(use_case_list)
-      html_output = "<h1>Use Cases</h1>"
+    def uc_to_json(use_case_list)
+      uc_json = {}
       use_case_list.each do |use_case|
         puts "USE CASE: " + use_case["name"]
         html_output += "<h2>"+use_case["name"]+"</h2>"
@@ -119,18 +119,17 @@ module Modules
       html_output
     end
 
-    def prod_to_html(prod_list)
-      html_output = "<h1>Products</h1>"
+    def prod_to_json(prod_list)
+      prod_json = {}
       prod_list.each do |prod|
         puts "PRODUCT: " + prod["name"]
-        html_output += "<h2>"+prod["name"]+"</h2>"
         prod["product_descriptions"] && prod["product_descriptions"].each do |prod_desc|
           if prod_desc["locale"] == "en"
-            html_output += prod_desc["description"]
+            prod_json[prod['name']] = prod_desc["description"]
           end
         end
       end
-      html_output
+      prod_json
     end
 
     def proj_to_html(proj_list)

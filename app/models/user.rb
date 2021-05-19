@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  acts_as_token_authenticatable
+
   enum user_role: { admin: 'admin', ict4sdg: 'ict4sdg', principle: 'principle',
                     user: 'user', org_user: 'org_user', org_product_user: 'org_product_user',
                     product_user: 'product_user', mni: 'mni', content_writer: 'content_writer',
@@ -18,8 +20,6 @@ class User < ApplicationRecord
 
   attr_accessor :is_approved
   acts_as_commontator
-
-  has_secure_token :authentication_token
 
   def set_default_role
     self.roles = [:user]

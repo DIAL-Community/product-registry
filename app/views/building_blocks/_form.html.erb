@@ -1,4 +1,7 @@
-<%= form_with(model: building_block, multipart: true, local: true, html: { id: 'bb-form' }) do |form| %>
+<%= form_with(model: building_block, multipart: true, local: true, html: { id: 'bb-form' },
+              url: request.query_parameters.nil? ?
+                building_block_path(building_block) :
+                building_block_path(building_block, request.query_parameters)) do |form| %>
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
@@ -122,7 +125,7 @@
       imageUploadURL: '/froala_image/upload',
       imageUploadMethod: 'POST'
     }, function() {
-      descEditor.html.set("<%= !@bb_desc.description.nil? ? "" : @bb_desc.description.squish.gsub("\"","\\\"").html_safe %>")
+      descEditor.html.set("<%= @bb_desc.description.nil? ? "" : @bb_desc.description.squish.gsub("\"","\\\"").html_safe %>")
     });
   });
 

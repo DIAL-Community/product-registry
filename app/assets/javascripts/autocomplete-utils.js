@@ -28,14 +28,19 @@ function addElement(baseElementId, inputElementName, value, label) {
 }
 
 // Create autocomplete configuration for searches.
-function autoComplete(source, callback) {
+function autoComplete(remoteUrl, callback) {
+  var urlParams = new URLSearchParams(window.location.search);
+  var autoCompleteParams = {}
+  for(var key of urlParams.keys()) {
+    autoCompleteParams[key] = urlParams.get(key)
+  }
   return {
     minLength: 2,
     source: function(request, response) {
+      autoCompleteParams.search = request.search
       $.getJSON(
-        source, {
-          search: request.term
-        },
+        remoteUrl,
+        autoCompleteParams,
         function(responses) {
           response($.map(responses, function(response) {
             return {
