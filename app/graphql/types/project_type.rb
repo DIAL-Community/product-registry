@@ -5,7 +5,7 @@ module Types
     field :locale, String, null: false
     field :description, String, null: false
   end
-  
+
   class ProjectType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
@@ -17,5 +17,6 @@ module Types
     field :organizations, [Types::OrganizationType], null: true
     field :products, [Types::ProductType], null: true
     field :countries, [Types::CountryType], null: true
+    field :sectors, [Types::SectorType], null: true
   end
 end
