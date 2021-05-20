@@ -54,105 +54,107 @@ module Modules
       uc_json = {}
       use_case_list.each do |use_case|
         puts "USE CASE: " + use_case["name"]
-        html_output += "<h2>"+use_case["name"]+"</h2>"
+        uc_json[use_case["name"]] = {}
         use_case["use_case_descriptions"].each do |uc_desc|
           if uc_desc["locale"] == 'en'
-            html_output += uc_desc["description"]
+            uc_json[use_case["name"]]["description"] = uc_desc["description"]
           end
         end
         use_case_steps = use_case["use_case_steps"]
         if use_case_steps.count
-          html_output += "<h3>Use Case Steps</h3>"
+          uc_json[use_case["name"]]["steps"] = {}
         end
         use_case_steps.each do |uc_step|
-          html_output += "<h4>"+uc_step["name"]+"</h4>"
+          uc_json[use_case["name"]]["steps"][uc_step["name"]] = {}
           step_descriptions = uc_step["use_case_step_descriptions"]
           step_descriptions.each do |step_desc|
             if step_desc["locale"] == 'en'
-              html_output += step_desc["description"]
+              uc_json[use_case["name"]]["steps"][uc_step["name"]]["description"] = step_desc["description"]
             end
           end
         end
       end
-      html_output
+      uc_json
     end
 
-    def wf_to_html(workflow_list)
-      html_output = "<h1>Workflows</h1>"
+    def wf_to_json(workflow_list)
+      wf_json = {}
       workflow_list.each do |workflow|
         puts "WORKFLOW: " + workflow["name"]
-        html_output += "<h2>"+workflow["name"]+"</h2>"
+        wf_json[workflow["name"]] = {}
         workflow["workflow_descriptions"] && workflow["workflow_descriptions"].each do |wf_desc|
           if wf_desc["locale"] == 'en'
-            html_output += wf_desc["description"]
+            wf_json[workflow["name"]]["description"] =  wf_desc["description"]
           end
         end
       end
-      html_output
+      wf_json
     end
 
-    def bb_to_html(bb_list)
-      html_output = "<h1>Building Blocks</h1>"
+    def bb_to_json(bb_list)
+      bb_json = {}
       bb_list.each do |bb|
         puts "BUILDING BLOCK: " + bb["name"]
-        html_output += "<h2>"+bb["name"]+"</h2>"
+        bb_json[bb["name"]] = {}
         bb["building_block_descriptions"] && bb["building_block_descriptions"].each do |bb_desc|
           if bb_desc["locale"] == 'en'
-            html_output += bb_desc["description"]
+            bb_json[bb["name"]]["description"] = bb_desc["description"]
           end
         end
       end
-      html_output
+      bb_json
     end
 
-    def org_to_html(org_list)
-      html_output = "<h1>Organizations</h1>"
+    def org_to_json(org_list)
+      org_json = {}
       org_list.each do |org|
         puts "ORGANIZATION: " + org["name"]
-        html_output += "<h2>"+org["name"]+"</h2>"
+        org_json[org["name"]] = {}
         org["organization_descriptions"] && org["organization_descriptions"].each do |org_desc|
           if org_desc["locale"] == 'en'
-            html_output += org_desc["description"]
+            org_json[org["name"]]["description"] = org_desc["description"]
           end
         end
       end
-      html_output
+      org_json
     end
 
     def prod_to_json(prod_list)
       prod_json = {}
       prod_list.each do |prod|
         puts "PRODUCT: " + prod["name"]
+        prod_json[prod["name"]] = {}
         prod["product_descriptions"] && prod["product_descriptions"].each do |prod_desc|
           if prod_desc["locale"] == "en"
-            prod_json[prod['name']] = prod_desc["description"]
+            prod_json[prod['name']]["description"] = prod_desc["description"]
           end
         end
       end
       prod_json
     end
 
-    def proj_to_html(proj_list)
-      html_output = "<h1>Projects</h1>"
+    def proj_to_json(proj_list)
+      proj_json = {}
       proj_list.each do |proj|
         puts "PROJECT: " + proj["name"]
-        html_output += "<h2>"+proj["name"]+"</h2>"
+        proj_json[proj["name"]] = {}
         proj["project_descriptions"] && proj["project_descriptions"].each do |proj_desc|
           if proj_desc["locale"] == "en"
-            html_output += proj_desc["description"]
+            proj_json[proj['name']]["description"] = proj_desc["description"]
           end
         end
       end
-      html_output
+      proj_json
     end
 
-    def sector_to_html(sector_list)
-      html_output = "<h1>Sector</h1>"
+    def sector_to_json(sector_list)
+      sector_json = {}
+      sector_json["sectors"] = {}
       sector_list.each do |sector|
         puts "SECTOR: " + sector["name"]
-        html_output += "<h2>"+sector["name"]+"</h2>"
+        sector_json["sectors"][sector["name"]] = sector["name"]
       end
-      html_output
+      sector_json
     end
   end
 end
