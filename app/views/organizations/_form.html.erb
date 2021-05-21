@@ -7,7 +7,7 @@
                   :
                   request.query_parameters.nil? ?
                     organization_path(organization) :
-                    organization_path(organization, request.query_parameters))
+                    organization_path(organization, request.query_parameters)
 %>
 <%= form_with(model: organization, multipart: true, local: true, html: { id: 'organization-form' },
               url: "#{base_path}#{entity_path}") do |form| %>
