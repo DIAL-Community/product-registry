@@ -40,6 +40,8 @@
     </a>
     <%= link_to t('view.header.feedback'), 'mailto:catalog-support@dial.community',
                 target: '_blank', class: 'dropdown-item' %>
-    <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+    <% unless Rails.env.production? %>
+      <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+    <% end %>
   </div>
 </li>
