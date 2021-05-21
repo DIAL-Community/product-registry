@@ -9,6 +9,7 @@ module Types
     field :name, String, null: false
     field :image_url, String, null: false
     field :link, String, null: false
+    field :description, String, null: true
   end
 
   class WizardType < Types::BaseObject
