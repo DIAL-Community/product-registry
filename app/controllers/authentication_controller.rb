@@ -1,8 +1,7 @@
 class AuthenticationController < Devise::SessionsController
+  acts_as_token_authentication_handler_for User, only: [:fetch_token, :invalidate_token]
   prepend_before_action :allow_params_authentication!, only: :sign_in_ux
   skip_before_action :verify_authenticity_token, only: [:sign_in_ux]
-
-  acts_as_token_authentication_handler_for User
 
   def sign_in_ux
     user = User.find_by(email: params['user']['email'])
@@ -24,27 +23,47 @@ class AuthenticationController < Devise::SessionsController
       resource = warden.authenticate!(scope: :user)
       sign_in(resource, user, { session_store: true })
       can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
-    end
-
-    respond_to do |format|
-      format.json do
-        render(
-          json: {
-            userEmail: user.email,
-            userName: user.username,
-            canEdit: can_edit,
-            userToken: resource.authentication_token
-          },
-          status: :ok
-        )
+      respond_to do |format|
+        if user.update(authentication_token: Devise.friendly_token)
+          format.json do
+            render(
+              json: {
+                userEmail: user.email,
+                userName: user.username,
+                canEdit: can_edit,
+                userToken: user.authentication_token
+              },
+              status: :ok
+            )
+          end
+        else
+          format.json do
+            render(
+              json: {},
+              status: :unauthorized
+            )
+          end
+        end
       end
     end
   end
 
   def fetch_token
-    user = User.find_by(email: params['user']['email'])
+    user = User.find_by(email: request.headers["X-User-Email"])
     respond_to do |format|
-      format.json { render(json: { auth_token: user.authentication_token }) }
+      format.json { render(json: { userToken: user.authentication_token }) }
+    end
+  end
+
+  def invalidate_token
+    user = User.find_by(email: request.headers["X-User-Email"])
+    user.authentication_token = Devise.friendly_token
+    respond_to do |format|
+      if user.save!
+        format.json { render(json: { userToken: nil }, status: :ok) }
+      else
+        format.json { render(json: {}, status: :unprocessable_entity) }
+      end
     end
   end
 end

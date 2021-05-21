@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     get '/users/password', to: 'devise/passwords#new'
     post '/authenticate/credentials', to: 'authentication#sign_in_ux'
     get '/authenticate/token', to: 'authentication#fetch_token'
+    delete '/auth/invalidate', to: 'authentication#invalidate_token'
   end
 
   root to: redirect(path: '/products')
