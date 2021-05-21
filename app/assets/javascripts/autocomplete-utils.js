@@ -33,7 +33,7 @@ function autoComplete(source, callback) {
     minLength: 2,
     source: function(request, response) {
       $.getJSON(
-        source, {
+        `${basePath}${source}`, {
           search: request.term
         },
         function(responses) {
@@ -157,7 +157,7 @@ function sdgTargetCustomAutoComplete(source, callback) {
     maxShowItems: 8,
     source: function(request, response) {
       $.getJSON(
-        source, {
+        `${basePath}${source}`, {
           search: request.term
         },
         function(responses) {

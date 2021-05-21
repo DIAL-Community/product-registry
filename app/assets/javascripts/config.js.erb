@@ -1,4 +1,6 @@
-var esri_api;
+var esriApi;
+var basePath;
 document.addEventListener('turbolinks:load', function() {
-  esri_api = "<%= Rails.configuration.geocode["esri"]["suggest_uri"] %>";
+  esriApi = "<%= Rails.configuration.geocode["esri"]["suggest_uri"] %>";
+  basePath = "<%= Rails.env.production? ? '/admin' : '' %>"
 });

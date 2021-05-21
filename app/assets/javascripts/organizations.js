@@ -44,7 +44,7 @@ function sectorCustomAutoComplete(source, callback) {
     maxShowItems: 8,
     source: function(request, response) {
       $.getJSON(
-        source, {
+        `${basePath}${source}`, {
           search: request.term
         },
         function(responses) {
@@ -98,13 +98,13 @@ function addOffice(label, officeId, magicKey, citiId) {
 
 function sourceHandle(request, response) {
   $.getJSON(
-    "/cities.json?without_paging=true", {
+    `${basePath}/cities.json?without_paging=true`, {
       search: request.term
     },
     function(cities) {
       if (cities.length <= 0) {
         $.getJSON(
-          esri_api, {
+          esriApi, {
             f: 'json',
             category: 'City',
             maxSuggestions: 10,

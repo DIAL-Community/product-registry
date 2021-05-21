@@ -30,7 +30,7 @@ function duplicateCheck(trigerInputId, duplicateCheckUrl) {
     }
 
     $.getJSON(
-      duplicateCheckUrl, {
+      `${basePath}${duplicateCheckUrl}`, {
         current: current,
         original: original
       },

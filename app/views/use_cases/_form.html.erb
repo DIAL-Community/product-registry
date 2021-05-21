@@ -1,13 +1,16 @@
-<%= form_with(model: use_case, local: true, html: { id: 'use-case-form' },
-                url: use_case.new_record? ?
-                  (
-                    request.query_parameters.nil? ?
-                      use_cases_path :
-                      use_cases_path(request.query_parameters)
-                  ) :
+<%
+  base_path = Rails.env.production? ? '/admin' : ''
+  entity_path = use_case.new_record? ?
+                  request.query_parameters.nil? ?
+                    use_cases_path :
+                    use_cases_path(request.query_parameters)
+                  :
                   request.query_parameters.nil? ?
                     use_case_path(use_case) :
-                    use_case_path(use_case, request.query_parameters)) do |form| %>
+                    use_case_path(use_case, request.query_parameters)
+%>
+<%= form_with(model: use_case, local: true, html: { id: 'use-case-form' },
+              url: "#{base_path}#{entity_path}") do |form| %>
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :use_case_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>

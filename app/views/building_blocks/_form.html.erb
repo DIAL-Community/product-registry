@@ -1,13 +1,16 @@
-<%= form_with(model: building_block, multipart: true, local: true, html: { id: 'bb-form' },
-              url: building_block.new_record? ?
-                (
+<%
+  base_path = Rails.env.production? ? '/admin' : ''
+  entity_path = building_block.new_record? ?
                   request.query_parameters.nil? ?
                     building_blocks_path :
                     building_blocks_path(request.query_parameters)
-                ) :
-                request.query_parameters.nil? ?
-                  building_block_path(building_block) :
-                  building_block_path(building_block, request.query_parameters)) do |form| %>
+                  :
+                  request.query_parameters.nil? ?
+                    building_block_path(building_block) :
+                    building_block_path(building_block, request.query_parameters)
+%>
+<%= form_with(model: building_block, multipart: true, local: true, html: { id: 'bb-form' },
+              url: "#{base_path}#{entity_path}") do |form| %>
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :name, id: :building_block_name, :class => 'form-control', :placeholder => t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
