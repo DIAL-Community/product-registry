@@ -17,7 +17,7 @@ module Queries
     type Types::ProductType, null: false
 
     def resolve(slug:)
-      product = Product.find_by(slug: slug)
+      Product.find_by(slug: slug)
     end
   end
 
@@ -68,12 +68,6 @@ module Queries
       unless filtered_sectors.empty?
         products = products.joins(:sectors)
                            .where(sectors: { id: filtered_sectors })
-      end
-
-      filtered_countries = countries.reject { |x| x.nil? || x.empty? }
-      unless filtered_countries.empty?
-        products = products.joins(:countries)
-                           .where(countries: { id: filtered_countries })
       end
 
       filtered_organizations = organizations.reject { |x| x.nil? || x.empty? }
