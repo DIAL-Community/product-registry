@@ -248,7 +248,7 @@ class ProjectsController < ApplicationController
   end
 
   def export_data
-    @projects = Project.where(id: filter_projects).eager_load(:organizations, :products)
+    @projects = Project.where(id: filter_projects).eager_load(:organizations, :products, :countries, :sectors)
     authorize(@projects, :view_allowed?)
     respond_to do |format|
       format.csv do

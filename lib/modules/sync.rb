@@ -419,6 +419,8 @@ module Modules
       new_project.name = english_project[0].force_encoding('UTF-8')
       new_project.slug = slug_em(english_project[0])
       new_project.origin_id = giz_origin.id
+      new_project.start_date = Date.strptime(english_project[11], '%m/%d/%Y')
+      new_project.end_date = Date.strptime(english_project[12], '%m/%d/%Y')
       if !english_project[25].nil?
         new_project.project_url = english_project[25]
       end
