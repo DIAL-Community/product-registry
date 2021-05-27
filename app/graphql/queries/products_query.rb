@@ -97,6 +97,10 @@ module Queries
         products = products.where(is_launchable: product_deployable)
       end
 
+      if with_maturity
+        products = products.where('maturity_score is not null')
+      end
+
       if !product_types.include?('product_and_dataset') && !product_types.empty?
         unless product_types.include?('product') && product_types.include?('dataset')
           products = products.where(product_type: product_types)
@@ -138,7 +142,11 @@ module Queries
         building_block_ids.concat(workflow_building_blocks.ids)
       end
 
-      building_block_ids.concat(building_blocks.reject { |x| x.nil? || x.empty? })
+      filtered_bbs = building_blocks.reject { |x| x.nil? || x.empty? }
+      if !filtered_bbs.empty?
+        filtered = true
+      end
+      building_block_ids.concat(filtered_bbs.map(&:to_i))
       [filtered, building_block_ids]
     end
   end
