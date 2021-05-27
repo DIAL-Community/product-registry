@@ -44,7 +44,18 @@ module Queries
         projects = projects.where(origin_id: filtered_origins)
       end
 
-      filtered_sectors = sectors.reject { |x| x.nil? || x.empty? }
+      filtered_sectors = []
+      user_sectors = sectors.reject { |x| x.nil? || x.empty? }
+      unless user_sectors.empty?
+        filtered_sectors = user_sectors.clone
+      end
+      user_sectors.each do |user_sector|
+        curr_sector = Sector.find(user_sector)
+        if curr_sector.parent_sector_id.nil?
+          child_sectors = Sector.where(parent_sector_id: curr_sector.id)
+          filtered_sectors = filtered_sectors + child_sectors.map(&:id)
+        end
+      end
       unless filtered_sectors.empty?
         projects = projects.joins(:sectors)
                            .where(sectors: { id: filtered_sectors })

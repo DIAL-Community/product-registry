@@ -5,7 +5,7 @@ module Queries
     type [Types::SectorType], null: false
 
     def resolve(search:, locale:)
-      sectors = Sector.where(is_displayable: true, locale: locale, parent_sector_id: nil).order(:name)
+      sectors = Sector.where(is_displayable: true, locale: locale).order(:name)
       unless search.blank?
         sectors = sectors.name_contains(search)
       end

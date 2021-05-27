@@ -317,6 +317,13 @@ class ProjectsController < ApplicationController
       end
     end
 
+    if params[:selected_sectors].present?
+      params[:selected_sectors].keys.each do |sector_id|
+        sector = Sector.find(sector_id)
+        @project.sectors.push(sector) unless country.nil?
+      end
+    end
+
     if params[:selected_products].present?
       params[:selected_products].keys.each do |product_id|
         product = Product.find(product_id)
@@ -415,6 +422,15 @@ class ProjectsController < ApplicationController
         countries.add(country) unless country.nil?
       end
       @project.countries = countries.to_a
+    end
+
+    if params[:selected_sectors].present?
+      sectors = Set.new
+      params[:selected_sectors].keys.each do |sector_id|
+        sector = Sector.find(sector_id)
+        sectors.add(sector) unless sector.nil?
+      end
+      @project.sectors = sectors.to_a
     end
 
     if params[:selected_products].present?

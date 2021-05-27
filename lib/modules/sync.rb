@@ -411,8 +411,9 @@ module Modules
 
     def sync_giz_project(english_project, german_project, giz_origin)
       # Create sector if it does not exist
-      english_sectors = create_or_update_sector(english_project[19], english_project[20], "en", giz_origin)
-      german_sectors = create_or_update_sector(german_project[19], german_project[20], "de", giz_origin)
+      english_sectors = get_sector(english_project[19], english_project[20], "en")
+      #german_sectors = get_sector(german_project[19], german_project[20], "de")
+      german_sectors = []
 
       # Create new project or update existing project
       new_project = Project.where(name: english_project[0]).first || Project.new
@@ -434,6 +435,9 @@ module Modules
         proj_org.organization_id = implementer_org[0].id
         proj_org.save!
       end
+
+      # Clear sectors
+      new_project.sectors = []
 
       # Assign to sectors
       english_sectors.each do |sector_id|
@@ -518,45 +522,43 @@ module Modules
       new_project.save!
     end
 
-    def create_or_update_sector(sector_name, subsectors, locale, giz_origin)
+    def get_sector(sector_name, subsectors, locale)
+      sector_map = File.read('utils/sector_map.json')
+      sector_json = JSON.parse(sector_map)
+
       sector_array = []
       if !sector_name.nil?
         sector_name = sector_name.strip
         sector_slug = slug_em sector_name
-        existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
+        existing_sector = Sector.where('slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', '%'+sector_slug+'%',locale).first
         if existing_sector.nil?
-          new_sector = Sector.new
-          new_sector.name = sector_name
-          new_sector.slug = sector_slug
-          new_sector.origin_id = giz_origin.id
-          new_sector.is_displayable = true
-          new_sector.locale = locale
-          new_sector.save!
-          puts "Sector Created: " + sector_name
-
-          existing_sector = Sector.find_by(slug: sector_slug, origin_id: giz_origin.id)
+          if !sector_json[sector_slug].nil?
+            existing_sector = Sector.where('slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', '%'+sector_json[sector_slug]+'%',locale).first
+            if !existing_sector.nil?
+              sector_array << existing_sector.id
+            end
+          else 
+            puts "Add sector to map: " + sector_slug
+          end
+        else
+          sector_array << existing_sector.id
         end
-
-        sector_array << existing_sector.id
 
         if !subsectors.nil? 
           subsector_array = subsectors.split(',')
           subsector_array.each do |subsector|
             subsector = subsector.strip
-            subsector_slug = slug_em subsector
-            existing_subsector = Sector.find_by(slug: subsector_slug, parent_sector_id: existing_sector.id, origin_id: giz_origin.id)
+            subsector_slug = slug_em(subsector,64)
+            existing_subsector = Sector.where('slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', '%'+subsector_slug+'%', existing_sector.id, locale).first
             if existing_subsector.nil?
-              new_sector = Sector.new
-              new_sector.name = sector_name + ": " + subsector
-              new_sector.slug = subsector_slug
-              new_sector.origin_id = giz_origin.id
-              new_sector.is_displayable = true
-              new_sector.locale = locale
-              new_sector.parent_sector_id = existing_sector.id
-              new_sector.save!
-              puts "Sub-Sector Created: " + subsector
-
-              sector_array << new_sector.id
+              if !sector_json[subsector_slug].nil?
+                existing_subsector = Sector.where('slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', '%'+sector_json[subsector_slug]+'%', existing_sector.id, locale).first
+                if !existing_sector.nil?
+                  sector_array << existing_sector.id
+                end
+              else
+                puts "Add sector to map: " + subsector_slug
+              end
             else
               sector_array << existing_subsector.id
             end
