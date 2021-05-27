@@ -110,7 +110,7 @@ class Project < ApplicationRecord
   end
 
   def self.to_csv
-    attributes = %w{id name slug origin organizations products}
+    attributes = %w{id name slug origin start_date end_date tags project_descriptions sectors countries organizations products}
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -123,7 +123,19 @@ class Project < ApplicationRecord
                     .map(&:name)
                     .join('; ')
 
-        csv << [p.id, p.name, p.slug, p.origin.name, organizations, products]
+        project_descriptions = p.project_descriptions
+                    .map(&:description)
+                    .join('; ')
+
+        countries = p.countries
+                    .map(&:name)
+                    .join('; ')
+
+        sectors = p.sectors
+                    .map(&:name)
+                    .join('; ')
+
+        csv << [p.id, p.name, p.slug, p.origin.name, p.start_date, p.end_date, p.tags, project_descriptions, sectors, countries, organizations, products]
       end
     end
   end
