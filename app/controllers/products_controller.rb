@@ -494,7 +494,7 @@ class ProductsController < ApplicationController
     end
 
     # Create a Discourse topic for this product
-    topic_id = create_discourse_topic(@product, 'Products')
+    # topic_id = create_discourse_topic(@product, 'Products')
 
     respond_to do |format|
       if !@product.errors.any? && @product.save!

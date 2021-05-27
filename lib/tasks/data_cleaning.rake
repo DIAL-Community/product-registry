@@ -1,6 +1,7 @@
 require 'modules/update_desc'
 require 'modules/discourse'
 require 'modules/connection_switch'
+require 'csv'
 include Modules::UpdateDesc
 include Modules::Discourse
 include Modules::ConnectionSwitch
@@ -302,6 +303,132 @@ namespace :data do
         user.save
       end
     end
+  end
+
+  task :update_sectors => :environment do 
+    # Set all current sectors to is_displayable = false
+    Sector.all.update_all(is_displayable: false)
+
+    dial_origin = Origin.where(slug: 'dial_osc').first
+    sector_list = CSV.parse(File.read("./utils/sectors.csv"), headers: true)
+    sector_list.each do |sector|
+      if sector['Sub Sector'].nil?
+        puts "Parent Sector: " + sector["Parent Sector"].strip
+        # Check to see if this sector exists
+        curr_sector = Sector.where("name = ?", sector["Parent Sector"].strip).first
+        if curr_sector.nil? 
+          puts "Create Parent sector"
+          curr_sector = Sector.new
+          curr_sector.name = sector["Parent Sector"].strip
+          curr_sector.slug = slug_em(curr_sector.name)
+          curr_sector.is_displayable = true
+          curr_sector.origin_id = dial_origin.id
+          curr_sector.locale = 'en'
+          curr_sector.save
+        else
+          puts "Parent Sector already exists"
+          # set displayable to true and clear parent_sector_id and save
+          curr_sector.is_displayable = true
+          curr_sector.parent_sector_id = nil
+          curr_sector.save
+        end
+      else
+        puts "Sub Sector: " + sector["Sub Sector"].strip
+        # Look up parent sector ID
+        parent_sector = Sector.where("name = ?", sector["Parent Sector"].strip).first
+        if !parent_sector.nil?
+          curr_sector = Sector.where("name = ?", sector["Parent Sector"].strip + ': ' + sector["Sub Sector"].strip).first
+          if curr_sector.nil? 
+            puts "Create Sub sector"
+            curr_sector = Sector.new
+            curr_sector.name = sector["Parent Sector"].strip + ': ' + sector["Sub Sector"].strip
+            curr_sector.slug = slug_em(curr_sector.name, 64)
+            curr_sector.parent_sector_id = parent_sector.id
+            curr_sector.is_displayable = true
+            curr_sector.origin_id = dial_origin.id
+            curr_sector.locale = 'en'
+            curr_sector.save
+          else
+            puts "Sub Sector already exists - assign to parent"
+            curr_sector.name = sector["Parent Sector"].strip + ': ' + sector["Sub Sector"].strip
+            curr_sector.slug = slug_em(curr_sector.name, 64)
+            curr_sector.is_displayable = true
+            curr_sector.parent_sector_id = parent_sector.id
+            curr_sector.origin_id = dial_origin.id
+            curr_sector.save
+          end
+        else
+          puts "COULD NOT FIND PARENT SECTOR"
+        end
+      end
+    end
+  end
+
+  task :remap_products => :environment do 
+    # Now remap products, use cases, and organizations
+    # Project remapping will happen in project sync
+    sector_map = File.read('utils/sector_map.json')
+    sector_json = JSON.parse(sector_map)
+
+    Product.all.each do |prod|
+      new_sectors = []
+      prod.sectors.each do |sector|
+        if sector_json[sector[:slug]]
+          puts "New Sector: " + sector_json[sector[:slug]]
+          new_sector = Sector.find_by(slug: sector_json[sector[:slug]])
+          if !new_sector.nil? 
+            if !new_sectors.include? new_sector
+              new_sectors << new_sector
+            end
+          else
+            if sector.is_displayable
+              new_sectors << sector
+            end
+          end
+        end
+      end
+      # Clear sectors
+      prod.sectors = new_sectors
+      prod.save
+    end
+
+    Organization.all.each do |org|
+      new_sectors = []
+      org.sectors.each do |sector|
+        if sector_json[sector[:slug]]
+          puts "New Sector: " + sector_json[sector[:slug]]
+          new_sector = Sector.find_by(slug: sector_json[sector[:slug]])
+          if !new_sector.nil? 
+            if !new_sectors.include? new_sector
+              new_sectors << new_sector
+            end
+          else
+            if sector.is_displayable
+              new_sectors << sector
+            end
+          end
+        end
+      end
+      # Clear sectors
+      org.sectors = new_sectors
+      org.save
+    end   
+    
+    UseCase.all.each do |use_case|
+      uc_sector = Sector.find(use_case.sector_id)
+      if sector_json[uc_sector[:slug]]
+        puts "New Sector: " + sector_json[uc_sector[:slug]]
+        new_sector = Sector.find_by(slug: sector_json[uc_sector[:slug]])
+        if !new_sector.nil? 
+          use_case.sector_id = new_sector.id
+        else
+          if uc_sector.is_displayable
+            use_case.sector_id = uc_sector.id
+          end
+        end
+      end
+      use_case.save
+    end   
   end
 
 end

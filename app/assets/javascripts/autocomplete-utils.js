@@ -116,7 +116,7 @@ var organizationAutoCompleteReady = function() {
 }
 
 var sectorAutoCompleteReady = function() {
-  var sectorAutoComplete = autoComplete("/sectors.json?without_paging=true", addSector)
+  var sectorAutoComplete = autoComplete("/sectors.json?display_only=true&without_paging=true", addSector)
   $("#base-selected-sectors").hide();
   $("#sector-search").autocomplete(sectorAutoComplete);
 }
