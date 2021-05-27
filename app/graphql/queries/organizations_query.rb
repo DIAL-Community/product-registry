@@ -27,10 +27,11 @@ module Queries
     argument :search, String, required: false, default_value: ''
     argument :sectors, [String], required: false, default_value: []
     argument :countries, [String], required: false, default_value: []
+    argument :years, [Int], required: false, default_value: []
     argument :aggregator_only, Boolean, required: false, default_value: false
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, aggregator_only:)
+    def resolve(search:, sectors:, countries:, years:, aggregator_only:)
       organizations = Organization.order(:name)
                                   .eager_load(:countries, :offices)
       unless search.blank?
@@ -47,6 +48,10 @@ module Queries
       unless filtered_countries.empty?
         organizations = organizations.joins(:countries)
                                      .where(countries: { id: filtered_countries })
+      end
+
+      unless years.empty?
+        organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
       end
 
       if aggregator_only
