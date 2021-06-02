@@ -1,0 +1,17 @@
+FROM nginx:1.19 as nginx-prod
+
+# install certbot
+RUN apt update && \
+    apt install -y python3 python3-dev libffi6 libffi-dev libssl-dev curl build-essential procps cron && \
+    curl -L 'https://bootstrap.pypa.io/get-pip.py' | python3 && \
+    pip install -U cffi certbot certbot-nginx && \
+    apt remove --purge -y python3-dev build-essential libffi-dev libssl-dev curl && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# add entrypoint
+RUN mkdir /t4d
+WORKDIR /t4d
+ADD docker-entrypoint-nginx.sh .
+
