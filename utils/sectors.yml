@@ -42,6 +42,7 @@ sectors:
   - name: Education and Social Development-Religious Engagement
   - name: Education and Social Development-Food
   - name: Education and Social Development-Research
+  - name: Education and Social Develpment-eLearning
   - name: State and Democracy (Good Governance)
   - name: State and Democracy (Good Governance)-Democracy and the rule of law
   - name: State and Democracy (Good Governance)-Public finance and administration
@@ -91,7 +92,7 @@ sectors:
   - name: Health
   - name: Health-Nutrition
   - name: Health-Hunger 
-  - name: Health-Midwifery and maternal
+  - name: Health-Midwifery and Neo-natal
   - name: Health-Hygiene
   - name: Health-Food
   - name: Health-Gender 

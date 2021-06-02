@@ -125,19 +125,15 @@ module Modules
         sectors = json_data["sectors"]
         if !sectors.nil? && !sectors.empty?
           sectors.each do |sector|
+            get_sector(sector, nil, 'en')
             sector_obj = Sector.find_by(name: sector)
-            if sector_obj.nil?
-              # Create the sector
-              puts "Creating Sector: " + sector
-              sector_obj = Sector.new
-              sector_obj.name = sector
-              sector_obj.slug = slug_em(sector)
-              sector_obj.save!
-            end
+
             # Check to see if the sector exists already
-            if !existing_product.sectors.include?(sector_obj)
+            if !sector_obj.nil? && !existing_product.sectors.include?(sector_obj)
               puts "Adding sector " + sector_obj.name + " to product"
               existing_product.sectors << sector_obj
+            else
+              puts "COULD NOT FIND SECTOR: " + sector
             end
           end
         end
