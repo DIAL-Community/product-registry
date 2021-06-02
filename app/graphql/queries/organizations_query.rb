@@ -35,7 +35,10 @@ module Queries
       organizations = Organization.order(:name)
                                   .eager_load(:countries, :offices)
       unless search.blank?
-        organizations = organizations.name_contains(search)
+        name_orgs = organizations.name_contains(search)
+        desc_orgs = organizations.joins(:organization_descriptions)
+                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+        organizations = organizations.where(id: (name_orgs + desc_orgs).uniq)
       end
 
       filtered_sectors = []

@@ -36,7 +36,10 @@ module Queries
     def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:)
       projects = Project.order(:name).eager_load(:countries)
       if !search.nil? && !search.to_s.strip.empty?
-        projects = projects.name_contains(search)
+        name_projects = projects.name_contains(search)
+        desc_projects = projects.joins(:project_descriptions)
+                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+        projects = projects.where(id: (name_projects + desc_projects).uniq)
       end
 
       filtered_origins = origins.reject { |x| x.nil? || x.empty? }

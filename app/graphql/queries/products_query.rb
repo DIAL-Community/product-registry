@@ -43,7 +43,10 @@ module Queries
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:)
       products = Product.where(parent_product_id: nil).order(:name)
       if !search.nil? && !search.to_s.strip.empty?
-        products = products.name_contains(search)
+        name_products = products.name_contains(search)
+        desc_products = products.joins(:product_descriptions)
+                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+        products = products.where(id: (name_products + desc_products).uniq)
       end
 
       filtered, filtered_building_blocks = filter_building_blocks(sdgs, use_cases, workflows, building_blocks)

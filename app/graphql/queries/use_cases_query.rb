@@ -32,7 +32,10 @@ module Queries
     def resolve(search:, sdgs:, show_beta:)
       use_cases = UseCase.order(:name)
       unless search.blank?
-        use_cases = use_cases.name_contains(search)
+        name_ucs = use_cases.name_contains(search)
+        desc_ucs = use_cases.joins(:use_case_descriptions)
+                                .where("LOWER(use_case_descriptions.description) like LOWER(?)", "%#{search}%")
+        use_cases = use_cases.where(id: (name_ucs + desc_ucs).uniq)
       end
 
       filtered_sdgs = sdgs.reject { |x| x.nil? || x.empty? }
