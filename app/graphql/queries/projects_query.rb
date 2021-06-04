@@ -30,10 +30,11 @@ module Queries
     argument :countries, [String], required: false, default_value: []
     argument :organizations, [String], required: false, default_value: []
     argument :sdgs, [String], required: false, default_value: []
+    argument :tags, [String], required: false, default_value: []
 
     type Types::ProjectType.connection_type, null: false
 
-    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:)
+    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:)
       projects = Project.order(:name).eager_load(:countries)
       if !search.nil? && !search.to_s.strip.empty?
         projects = projects.name_contains(search)
@@ -78,6 +79,12 @@ module Queries
         projects = projects.joins(:sustainable_development_goals)
                            .where(sustainable_development_goals: { id: filtered_sdgs })
       end
+
+      filtered_tags = tags.reject { |x| x.nil? || x.blank? }
+      unless filtered_tags.empty?
+        projects = projects.where("tags @> '{#{tags.join(',')}}'::varchar[]")
+      end
+
       projects.distinct
     end
   end

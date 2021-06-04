@@ -1,13 +1,20 @@
 module Queries
   class OrganizationsQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
+    argument :aggregator_only, Boolean, required: false, default_value: false
+
     type [Types::OrganizationType], null: false
 
-    def resolve(search:)
+    def resolve(search:, aggregator_only:)
       organizations = Organization.order(:name)
       unless search.blank?
         organizations = organizations.name_contains(search)
       end
+
+      if aggregator_only
+        organizations = organizations.where(is_mni: true)
+      end
+
       organizations
     end
   end
@@ -29,11 +36,27 @@ module Queries
     argument :countries, [String], required: false, default_value: []
     argument :years, [Int], required: false, default_value: []
     argument :aggregator_only, Boolean, required: false, default_value: false
+    argument :endorser_only, Boolean, required: false, default_value: false
+    argument :aggregators, [String], required: false, default_value: []
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, years:, aggregator_only:)
+    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, aggregators:)
       organizations = Organization.order(:name)
                                   .eager_load(:countries, :offices)
+
+      if aggregator_only
+        organizations = organizations.where(is_mni: true)
+      end
+
+      if endorser_only
+        organizations = organizations.where(is_endorser: true)
+      end
+
+      filtered_aggregators = aggregators.reject { |x| x.nil? || x.empty? }
+      unless filtered_aggregators.empty?
+        organizations = organizations.where(id: filtered_aggregators)
+      end
+
       unless search.blank?
         organizations = organizations.name_contains(search)
       end
@@ -47,7 +70,7 @@ module Queries
         curr_sector = Sector.find(user_sector)
         if curr_sector.parent_sector_id.nil?
           child_sectors = Sector.where(parent_sector_id: curr_sector.id)
-          filtered_sectors = filtered_sectors + child_sectors.map(&:id)
+          filtered_sectors += child_sectors.map(&:id)
         end
       end
       unless filtered_sectors.empty?
@@ -63,10 +86,6 @@ module Queries
 
       unless years.empty?
         organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
-      end
-
-      if aggregator_only
-        organizations = organizations.where(is_mni: true)
       end
 
       organizations.distinct
