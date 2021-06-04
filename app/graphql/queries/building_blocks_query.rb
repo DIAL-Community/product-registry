@@ -35,7 +35,10 @@ module Queries
     def resolve(search:, sdgs:, use_cases:, workflows:, show_mature:)
       building_blocks = BuildingBlock.order(:name)
       unless search.blank?
-        building_blocks = building_blocks.name_contains(search)
+        name_bbs = building_blocks.name_contains(search)
+        desc_bbs = building_blocks.joins(:building_block_descriptions)
+                                .where("LOWER(building_block_descriptions.description) like LOWER(?)", "%#{search}%")
+        building_blocks = building_blocks.where(id: (name_bbs + desc_bbs).uniq)
       end
 
       filtered = false
