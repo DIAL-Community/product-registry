@@ -99,8 +99,9 @@
     - name: OSM Analytics
 - name: Open Data Kit
   parent:
-    - name: ODK Aggregate
+    - name: ODK
   children: 
+    - name: ODK Aggregate
     - name: ODK Briefcase 
     - name: ODK Build
     - name: ODK Collect
