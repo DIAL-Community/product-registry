@@ -37,6 +37,11 @@ module Types
     field :organization, resolver: Queries::OrganizationQuery
     field :search_organizations, resolver: Queries::SearchOrganizationsQuery
 
+    field :capabilities, resolver: Queries::CapabilitiesQuery
+    field :operator_services, resolver: Queries::OperatorServicesQuery
+    field :capability_only, resolver: Queries::CapabilityOnlyQuery
+    field :operator_service_only, resolver: Queries::OperatorServiceOnlyQuery
+
     field :sdgs, resolver: Queries::SustainableDevelopmentGoalsQuery
     field :sdg, resolver: Queries::SustainableDevelopmentGoalQuery
     field :search_sdgs, resolver: Queries::SearchSustainableDevelopmentGoalsQuery

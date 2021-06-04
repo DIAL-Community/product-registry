@@ -14,4 +14,8 @@ class AggregatorCapability < ActiveRecord::Base
       end
     end
   end
+
+  def operator_service_id
+    operator_services_id
+  end
 end
