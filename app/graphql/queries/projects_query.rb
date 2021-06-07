@@ -29,12 +29,13 @@ module Queries
     argument :sectors, [String], required: false, default_value: []
     argument :countries, [String], required: false, default_value: []
     argument :organizations, [String], required: false, default_value: []
+    argument :products, [String], required: false, default_value: []
     argument :sdgs, [String], required: false, default_value: []
     argument :tags, [String], required: false, default_value: []
 
     type Types::ProjectType.connection_type, null: false
 
-    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:)
+    def resolve(search:, origins:, sectors:, countries:, organizations:, products:, sdgs:, tags:)
       projects = Project.order(:name).eager_load(:countries)
       if !search.nil? && !search.to_s.strip.empty?
         name_projects = projects.name_contains(search)
@@ -75,6 +76,13 @@ module Queries
       unless filtered_organizations.empty?
         projects = projects.joins(:organizations)
                            .where(organizations: { id: filtered_organizations })
+      end
+
+      puts "PRODUCTS: " + products.to_s
+      filtered_products = products.reject { |x| x.nil? || x.empty? }
+      unless filtered_products.empty?
+        projects = projects.joins(:products)
+                           .where(products: { id: filtered_products })
       end
 
       filtered_sdgs = sdgs.reject { |x| x.nil? || x.empty? }
