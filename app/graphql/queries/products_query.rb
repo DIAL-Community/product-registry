@@ -67,6 +67,14 @@ module Queries
                            .where(origins: { id: filtered_origins })
       end
 
+      filtered_countries = countries.reject { |x| x.nil? || x.empty? }
+      unless filtered_countries.empty?
+        projects = Project.joins(:countries)
+                           .where(countries: { id: filtered_countries })
+        products = products.joins(:projects)
+                           .where(projects: { id: projects })
+      end
+
       filtered_sectors = []
       user_sectors = sectors.reject { |x| x.nil? || x.empty? }
       unless user_sectors.empty?
