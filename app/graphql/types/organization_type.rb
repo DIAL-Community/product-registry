@@ -22,6 +22,7 @@ module Types
     field :image_file, String, null: false
     field :website, String, null: true
 
+    field :is_mni, Boolean, null: true
     field :is_endorser, Boolean, null: true
     field :when_endorsed, GraphQL::Types::ISO8601Date, null: true
 

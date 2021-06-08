@@ -78,7 +78,6 @@ module Queries
                            .where(organizations: { id: filtered_organizations })
       end
 
-      puts "PRODUCTS: " + products.to_s
       filtered_products = products.reject { |x| x.nil? || x.empty? }
       unless filtered_products.empty?
         projects = projects.joins(:products)
