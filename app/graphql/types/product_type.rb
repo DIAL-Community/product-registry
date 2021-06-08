@@ -18,6 +18,7 @@ module Types
     field :slug, String, null: false
     field :image_file, String, null: false
     field :website, String, null: true
+    field :tags, GraphQL::Types::JSON, null: true
     field :repository, String, null: true
     field :license, String, null: true
     field :statistics, GraphQL::Types::JSON, null: true

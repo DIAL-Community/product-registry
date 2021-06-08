@@ -10,6 +10,7 @@ module Types
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
+    field :tags, GraphQL::Types::JSON, null: true
 
     field :project_descriptions, [Types::ProjectDescriptionType], null: true
     field :origin, Types::OriginType, null: true
