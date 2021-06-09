@@ -17,7 +17,20 @@ module Queries
     type Types::UseCaseType, null: false
 
     def resolve(slug:)
-      UseCase.find_by(slug: slug)
+      use_case = UseCase.find_by(slug: slug)
+
+      workflows = []
+      use_case.use_case_steps.each do |use_case_step|
+        workflows |= use_case_step.workflows
+      end
+      use_case.workflows = workflows.sort_by { |w| w.name.downcase }
+
+      building_blocks = []
+      workflows.each do |workflow|
+        building_blocks |= workflow.building_blocks
+      end
+      use_case.building_blocks = building_blocks.sort_by { |b| b.name.downcase }
+      use_case
     end
   end
 
@@ -34,7 +47,7 @@ module Queries
       unless search.blank?
         name_ucs = use_cases.name_contains(search)
         desc_ucs = use_cases.joins(:use_case_descriptions)
-                                .where("LOWER(use_case_descriptions.description) like LOWER(?)", "%#{search}%")
+                            .where("LOWER(use_case_descriptions.description) like LOWER(?)", "%#{search}%")
         use_cases = use_cases.where(id: (name_ucs + desc_ucs).uniq)
       end
 
@@ -51,6 +64,33 @@ module Queries
       end
 
       use_cases.distinct
+    end
+  end
+
+  class UseCaseStepsQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type [Types::UseCaseStepType], null: false
+
+    def resolve(slug:)
+      use_case = UseCase.find_by(slug: slug)
+      UseCaseStep.where(use_case_id: use_case.id).order(step_number: :asc)
+    end
+  end
+
+  class UseCaseStepQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::UseCaseStepType, null: false
+
+    def resolve(slug:)
+      use_case_step = UseCaseStep.find_by(slug: slug)
+
+      building_blocks = []
+      use_case_step.workflows.each do |workflow|
+        building_blocks |= workflow.building_blocks
+      end
+      use_case_step.building_blocks = building_blocks.sort_by { |b| b.name.downcase }
+
+      use_case_step
     end
   end
 end
