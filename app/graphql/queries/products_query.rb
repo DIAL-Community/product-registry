@@ -30,6 +30,7 @@ module Queries
     argument :countries, [String], required: false, default_value: []
     argument :organizations, [String], required: false, default_value: []
     argument :sdgs, [String], required: false, default_value: []
+    argument :tags, [String], required: false, default_value: []
     argument :use_cases, [String], required: false, default_value: []
     argument :workflows, [String], required: false, default_value: []
     argument :building_blocks, [String], required: false, default_value: []
@@ -39,7 +40,7 @@ module Queries
 
     type Types::ProductType.connection_type, null: false
 
-    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:,
+    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:, 
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:)
       products = Product.where(parent_product_id: nil).order(:name)
       if !search.nil? && !search.to_s.strip.empty?
@@ -65,6 +66,12 @@ module Queries
       unless filtered_origins.empty?
         products = products.joins(:origins)
                            .where(origins: { id: filtered_origins })
+      end
+
+      filtered_tags = tags.reject { |x| x.nil? || x.blank? }
+      puts "FILTERED TAGS: " + filtered_tags.to_s
+      unless filtered_tags.empty?
+        products = products.where("tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or tags @> '{#{filtered_tags.join(',')}}'::varchar[]")
       end
 
       filtered_countries = countries.reject { |x| x.nil? || x.empty? }

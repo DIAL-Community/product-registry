@@ -92,7 +92,7 @@ module Queries
 
       filtered_tags = tags.reject { |x| x.nil? || x.blank? }
       unless filtered_tags.empty?
-        projects = projects.where("tags @> '{#{tags.join(',')}}'::varchar[]")
+        projects = projects.where("tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or tags @> '{#{filtered_tags.join(',')}}'::varchar[]")
       end
 
       projects.distinct
