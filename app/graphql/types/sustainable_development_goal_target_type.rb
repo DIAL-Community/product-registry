@@ -8,5 +8,6 @@ module Types
     field :image_file, String, null: true
 
     field :use_cases, [Types::UseCaseType], null: true
+    field :sustainable_development_goal, Types::SustainableDevelopmentGoalType, null: false
   end
 end
