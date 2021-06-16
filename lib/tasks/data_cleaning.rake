@@ -1,10 +1,12 @@
 require 'modules/update_desc'
 require 'modules/discourse'
 require 'modules/connection_switch'
+require 'modules/data_cleaning'
 require 'csv'
 include Modules::UpdateDesc
 include Modules::Discourse
 include Modules::ConnectionSwitch
+include Modules::DataCleaning
 
 namespace :data do
   desc 'Data related rake tasks.'
@@ -431,4 +433,37 @@ namespace :data do
     end   
   end
 
+  task :map_project_sectors => :environment do 
+    project_list = CSV.parse(File.read("./utils/project_sectors.csv"), headers: true)
+    project_list.each do |project|
+      curr_project = Project.find_by(name: project["Project Name"])
+      if !curr_project.nil?
+        all_sectors = GetSectors(project, nil)
+        all_sectors.each do |curr_sector|   
+          if !curr_project.sectors.include?(curr_sector)
+            puts "Assiging Sector: " + curr_sector.inspect
+            curr_project.sectors << curr_sector
+          end
+        end
+        curr_project.save
+      end
+    end
+  end
+
+  task :map_product_sectors => :environment do 
+    product_list = CSV.parse(File.read("./utils/product_sectors.csv"), headers: true)
+    product_list.each do |product|
+      curr_product = Product.find_by(slug: product["slug"])
+      if !curr_product.nil?
+        all_sectors = GetSectors(nil, product)
+        all_sectors.each do |curr_sector|   
+          if !curr_product.sectors.include?(curr_sector)
+            puts "Assiging Sector: " + curr_sector.inspect
+            curr_product.sectors << curr_sector
+          end
+        end
+        curr_product.save
+      end
+    end
+  end
 end
