@@ -1,0 +1,343 @@
+{
+   "sectors": [
+      {
+         "name": "Environnement et climat"
+      },
+      {
+         "name": "Environnement et climat-Gestion des ressources naturelles"
+      },
+      {
+         "name": "Environnement et climat-Environnement et politique"
+      },
+      {
+         "name": "Environnement et climat-Eau"
+      },
+      {
+         "name": "Environnement et climat-Climat"
+      },
+      {
+         "name": "Environnement et climat-Gestion environnementale dans l’industrie et les villes"
+      },
+      {
+         "name": "Environnement et climat-Déchets et assainissement"
+      },
+      {
+         "name": "Environnement et climat-Conflits liés aux ressources naturelles"
+      },
+      {
+         "name": "Environnement et climat-Ressources régionales"
+      },
+      {
+         "name": "Agriculture et développement rural"
+      },
+      {
+         "name": "Agriculture et développement rural-Production agricole et utilisation des ressources"
+      },
+      {
+         "name": "Agriculture et développement rural-Gestion des ressources naturelles"
+      },
+      {
+         "name": "Agriculture et développement rural-Politique agricole et alimentation"
+      },
+      {
+         "name": "Agriculture et développement rural-Développement régional"
+      },
+      {
+         "name": "Agriculture et développement rural-Commerce agricole"
+      },
+      {
+         "name": "Agriculture et développement rural-Économie"
+      },
+      {
+         "name": "Agriculture et développement rural-Normes"
+      },
+      {
+         "name": "Agriculture et développement rural-Moyens de subsistance"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Paix et sécurité"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Aide humanitaire et gestion des catastrophes"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Asile et migration"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Santé"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Développement urbain et décentralisation"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Production agricole et utilisation des ressources"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Désarmement"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Extrémisme violent"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Violence fondée sur le genre"
+      },
+      {
+         "name": "Sécurité, paix, reconstruction-Démobilisation et réintégration"
+      },
+      {
+         "name": "Éducation et développement social"
+      },
+      {
+         "name": "Éducation et développement social-Éducation et jeunesse"
+      },
+      {
+         "name": "Éducation et développement social-Santé"
+      },
+      {
+         "name": "Éducation et développement social-Genre"
+      },
+      {
+         "name": "Éducation et développement social-Sécurité sociale"
+      },
+      {
+         "name": "Éducation et développement social-Protection sociale"
+      },
+      {
+         "name": "Éducation et développement social-Société civile"
+      },
+      {
+         "name": "Éducation et développement social-Éducation"
+      },
+      {
+         "name": "Éducation et développement social-Jeunesse"
+      },
+      {
+         "name": "Éducation et développement social-Population mondiale"
+      },
+      {
+         "name": "Éducation et développement social-Engagement religieux"
+      },
+      {
+         "name": "Éducation et développement social-Alimentation"
+      },
+      {
+         "name": "Éducation et développement social-Recherche"
+      },
+      {
+        "name": "Éducation et développement social-eLearning"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Démocratie et État de droit"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Finances et administration publique"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Médias et communication"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Genre"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Développement urbain et décentralisation"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Liberté d’expression et accès à l’information"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Anticorruption"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Médias équitables et responsables"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Justice"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Stabilité"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Transparence et imputabilité"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Transition"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-États fragiles"
+      },
+      {
+         "name": "État et démocratie (bonne gouvernance)-Résolution de conflits"
+      },
+      {
+         "name": "Infrastructure durable"
+      },
+      {
+         "name": "Infrastructure durable-Énergie"
+      },
+      {
+         "name": "Infrastructure durable-Eau"
+      },
+      {
+         "name": "Infrastructure durable-Infrastructure TIC"
+      },
+      {
+         "name": "Infrastructure durable-Transports et infrastructures"
+      },
+      {
+         "name": "Infrastructure durable-Environnements bâtis"
+      },
+      {
+         "name": "Travail et emploi"
+      },
+      {
+         "name": "Travail et emploi-Développement de systèmes financiers"
+      },
+      {
+         "name": "Travail et emploi-Formation professionnelle et marché du travail"
+      },
+      {
+         "name": "Travail et emploi-Politique économie et commerce"
+      },
+      {
+         "name": "Travail et emploi-Développement du secteur privé"
+      },
+      {
+         "name": "Travail et emploi-Développement régional"
+      },
+      {
+         "name": "Travail et emploi-Gestion des ressources naturelles"
+      },
+      {
+         "name": "Travail et emploi-Main-d’œuvre"
+      },
+      {
+         "name": "Travail et emploi-Formation et emploi"
+      },
+      {
+         "name": "Économie et finances"
+      },
+      {
+         "name": "Économie et finances-Finances"
+      },
+      {
+         "name": "Économie et finances-Politique économique et commerce"
+      },
+      {
+         "name": "Économie et finances-Assurances"
+      },
+      {
+         "name": "Économie et finances-Paiements"
+      },
+      {
+         "name": "Numérique, données et technologie"
+      },
+      {
+         "name": "Numérique, données et technologie-Big data"
+      },
+      {
+         "name": "Numérique, données et technologie-Création de plateformes"
+      },
+      {
+         "name": "Numérique, données et technologie-Recueil des données"
+      },
+      {
+         "name": "Numérique, données et technologie-Gestion et politique des données"
+      },
+      {
+         "name": "Numérique, données et technologie-Sécurité des données"
+      },
+      {
+         "name": "Numérique, données et technologie-Intelligence artificielle"
+      },
+      {
+         "name": "Numérique, données et technologie-Développement des capacités"
+      },
+      {
+         "name": "Numérique, données et technologie-Infrastructure TIC"
+      },
+      {
+         "name": "Numérique, données et technologie-Communication"
+      },
+      {
+         "name": "Numérique, données et technologie-Surveillance"
+      },
+      {
+         "name": "Santé"
+      },
+      {
+         "name": "Santé-Nutrition"
+      },
+      {
+         "name": "Santé-Faim"
+      },
+      {
+         "name": "Santé-Sages-femmes et soins maternels"
+      },
+      {
+         "name": "Santé-Hygiène"
+      },
+      {
+         "name": "Santé-Alimentation"
+      },
+      {
+         "name": "Santé-Genre"
+      },
+      {
+         "name": "Santé-Maladies infectieuses"
+      },
+      {
+         "name": "Santé-Soins aux enfants"
+      },
+      {
+         "name": "Santé-Planning familial"
+      },
+      {
+         "name": "Santé-Éducation à la santé"
+      },
+      {
+         "name": "Engagement du secteur privé"
+      },
+      {
+         "name": "Engagement du secteur privé-Défense des intérêts des entreprises"
+      },
+      {
+         "name": "Engagement du secteur privé-Partenariats avec les entreprises"
+      },
+      {
+         "name": "Engagement du secteur privé-Gestion des entreprises et des affaires"
+      },
+      {
+         "name": "Engagement du secteur privé-Écosystèmes d’entreprise"
+      },
+      {
+         "name": "Développement durable"
+      },
+      {
+         "name": "Développement durable-Impact du développement"
+      },
+      {
+         "name": "Développement durable-Villes durables"
+      },
+      {
+         "name": "Autre"
+      },
+      {
+         "name": "Autre-Divertissement"
+      },
+      {
+         "name": "Autre-Voyages et hôtellerie"
+      },
+      {
+         "name": "Autre-Centres d’excellence"
+      },
+      {
+         "name": "Autre-Chaîne d’approvisionnement et logistique"
+      }
+   ]
+}

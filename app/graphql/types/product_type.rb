@@ -45,7 +45,9 @@ module Types
     end
     field :building_blocks, [Types::BuildingBlockType], null: true
     field :sustainable_development_goals, [Types::SustainableDevelopmentGoalType], null: true
-    field :sectors, [Types::SectorType], null: true
+    field :sectorsWithLocale, [Types::SectorType], null: true do
+      argument :locale, String, required: false
+    end
     field :child_products, [Types::ProductType], null: true
     field :interoperates_with, [Types::ProductType], null: true
     field :includes, [Types::ProductType], null: true

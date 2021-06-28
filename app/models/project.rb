@@ -27,6 +27,10 @@ class Project < ApplicationRecord
     slug
   end
 
+  def sectorsWithLocale(locale)
+    sectors.where('locale = ?', locale[:locale])
+  end
+
   def image_file
     if File.exist?(File.join('public','assets','products',"#{slug}.png"))
       return "/assets/projects/#{slug}.png"

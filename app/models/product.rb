@@ -92,6 +92,10 @@ class Product < ApplicationRecord
     projects.limit(numProjects[:first])
   end
 
+  def sectorsWithLocale(locale)
+    sectors.where('locale = ?', locale[:locale])
+  end
+
   def child_products
     child_products = Product.where(parent_product_id: id)
     child_products

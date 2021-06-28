@@ -70,6 +70,10 @@ class Organization < ApplicationRecord
     slug
   end
 
+  def sectorsWithLocale(locale)
+    sectors.where('locale = ?', locale[:locale])
+  end
+  
   def self.to_csv
     attributes = %w{id name slug when_endorsed website is_endorser is_mni countries offices sectors}
 
