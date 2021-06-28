@@ -1,0 +1,343 @@
+{
+   "sectors": [
+      {
+         "name": "Umwelt und Klima"
+      },
+      {
+         "name": "Umwelt und Klima - Management natürlicher Ressourcen"
+      },
+      {
+         "name": "Umwelt und Klima - Umwelt und Politik"
+      },
+      {
+         "name": "Umwelt und Klima - Wasser"
+      },
+      {
+         "name": "Umwelt und Klima - Klima"
+      },
+      {
+         "name": "Umwelt und Klima - Umweltmanagement in der Industrie und in Städten"
+      },
+      {
+         "name": "Umwelt und Klima - Abfall und sanitäre Versorgung"
+      },
+      {
+         "name": "Umwelt und Klima - Konflikte um natürliche Ressourcen"
+      },
+      {
+         "name": "Umwelt und Klima - Regionale Ressourcen"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Landwirtschaftliche Produktion und Nutzung von Ressourcen"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Management natürlicher Ressourcen"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Landwirtschaftspolitik und Lebensmittel"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Regionale Entwicklung"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Agrarhandel"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Wirtschaft"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Standards"
+      },
+      {
+         "name": "Landwirtschaft und ländliche Entwicklung - Lebensunterhalt"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Frieden und Sicherheit"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Humanitäre Hilfe und Katastrophenmanagement"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Flucht und Migration"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Gesundheit"
+      },
+      {
+         "name": "Security, Peace, Reconstruction - Städtische Entwicklung und Dezentralisierung"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Landwirtschaftliche Erzeugung und Nutzung von Ressourcen"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Abrüstung"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Gewalttätiger Extremismus"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Geschlechtsspezifische Gewalt"
+      },
+      {
+         "name": "Sicherheit, Frieden, Wiederaufbau - Demobilisierung und Reintegration"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Bildung und Jugend"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Gesundheit"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Geschlecht"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Soziale Sicherheit"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Sozialer Schutz"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Zivilgesellschaft"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Bildung"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Jugend"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Weltbevölkerung"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Religiöses Engagement"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Lebensmittel"
+      },
+      {
+         "name": "Bildung und soziale Entwicklung - Forschung"
+      },
+      {
+        "name": "Bildung und soziale Entwicklung - eLearning"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung)"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Demokratie und Herrschaft des Rechts"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Öffentliche Finanzen und Verwaltung"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Medien und Kommunikation"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Geschlechtergleichheit"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Städtische Entwicklung und Dezentralisierung"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Redefreiheit und Zugang zu Informationen"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Anti-Korruption"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Faire und verantwortungsvolle Medien"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Gerechtigkeit"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Stabilität"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Transparenz und Rechenschaft"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Übergang"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Instabile Staaten"
+      },
+      {
+         "name": "Staat und Demokratie (gute Regierungsführung) - Konfliktlösung"
+      },
+      {
+         "name": "Nachhaltige Infrastruktur"
+      },
+      {
+         "name": "Nachhaltige Infrastruktur - Energie"
+      },
+      {
+         "name": "Nachhaltige Infrastruktur - Wasser"
+      },
+      {
+         "name": "Nachhaltige Infrastruktur - ICT-Infrastruktur"
+      },
+      {
+         "name": "Nachhaltige Infrastruktur - Transport und Infrastruktur"
+      },
+      {
+         "name": "Nachhaltige Infrastruktur - Bebaute Umwelt"
+      },
+      {
+         "name": "Arbeit und Beschäftigung"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Entwicklung von Finanzsystemen"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Berufsausbildung und Arbeitsmarkt"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Wirtschaftspolitik und Handel"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Privatwirtschaftliche Entwicklung"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Regionale Entwicklung"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Verwaltung natürlicher Ressourcen"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Beschäftigte"
+      },
+      {
+         "name": "Arbeit und Beschäftigung - Schulung und Beschäftigung"
+      },
+      {
+         "name": "Wirtschaft und Finanzen"
+      },
+      {
+         "name": "Wirtschaft und Finanzen - Finanzen"
+      },
+      {
+         "name": "Wirtschaft und Finanzen - Wirtschaftspolitik und Handel"
+      },
+      {
+         "name": "Wirtschaft und Finanzen - Versicherungen"
+      },
+      {
+         "name": "Wirtschaft und Finanzen - Zahlungen"
+      },
+      {
+         "name": "Digitales, Daten und Technologie"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Big Data"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Plattformerstellung"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Datenerfassung"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Datenverwaltung und -politik"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Datensicherheit"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Künstliche Intelligenz"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Kapazitätsentwicklung"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - ICT-Infrastruktur"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Kommunikation"
+      },
+      {
+         "name": "Digitales, Daten und Technologie - Überwachung"
+      },
+      {
+         "name": "Gesundheit"
+      },
+      {
+         "name": "Gesundheit - Ernährung"
+      },
+      {
+         "name": "Gesundheit - Hunger"
+      },
+      {
+         "name": "Gesundheit - Geburtshilfe und Mutterschaft"
+      },
+      {
+         "name": "Gesundheit - Hygiene"
+      },
+      {
+         "name": "Gesundheit - Lebensmittel"
+      },
+      {
+         "name": "Gesundheit - Geschlechtergleichheit"
+      },
+      {
+         "name": "Gesundheit - Infektionskrankheiten"
+      },
+      {
+         "name": "Gesundheit - Kinderbetreuung"
+      },
+      {
+         "name": "Gesundheit - Familienplanung"
+      },
+      {
+         "name": "Gesundheit - Gesundheitserziehung"
+      },
+      {
+         "name": "Privatwirtschaftliches Engagement"
+      },
+      {
+         "name": "Privatwirtschaftliches Engagement - Interessenvertretung"
+      },
+      {
+         "name": "Privatwirtschaftliches Engagement - Unternehmenspartnerschaften"
+      },
+      {
+         "name": "Privatwirtschaftliches Engagement - Unternehmens- und Geschäftspartnerschaften"
+      },
+      {
+         "name": "Privatwirtschaftliches Engagement - Wirtschaftliches Ökosystem"
+      },
+      {
+         "name": "Nachhaltige Entwicklung"
+      },
+      {
+         "name": "Nachhaltige Entwicklung - Entwicklungseffekt"
+      },
+      {
+         "name": "Nachhaltige Entwicklung - Nachhaltige Städte"
+      },
+      {
+         "name": "Sonstiges"
+      },
+      {
+         "name": "Sonstiges - Unterhaltung"
+      },
+      {
+         "name": "Sonstiges - Tourismus und Gastronomie"
+      },
+      {
+         "name": "Sonstiges - Exzellenzzentren"
+      },
+      {
+         "name": "Sonstiges - Lieferkette und Logistik"
+      }
+   ]
+}

@@ -18,6 +18,8 @@ module Types
     field :organizations, [Types::OrganizationType], null: true
     field :products, [Types::ProductType], null: true
     field :countries, [Types::CountryType], null: true
-    field :sectors, [Types::SectorType], null: true
+    field :sectorsWithLocale, [Types::SectorType], null: true do
+      argument :locale, String, required: false
+    end
   end
 end

@@ -38,9 +38,10 @@ module Queries
     argument :aggregator_only, Boolean, required: false, default_value: false
     argument :endorser_only, Boolean, required: false, default_value: false
     argument :aggregators, [String], required: false, default_value: []
+    argument :locale, String, required: false, default_value: 'en'
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, aggregators:)
+    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, aggregators:, locale: )
       organizations = Organization.order(:name)
                                   .eager_load(:countries, :offices)
 
