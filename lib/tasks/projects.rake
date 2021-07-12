@@ -299,7 +299,10 @@ namespace :projects do
 
           country = Country.find_by(name: mm_proj["country"])
           if !country.nil?
-            curr_proj.countries << country
+            existing_country = ProjectsCountry.find_by(project: curr_proj, country: country)
+            if existing_country.nil?
+              curr_proj.countries << country
+            end
           end
           curr_proj.save
           mm_proj["funder"] && mm_proj["funder"].split(',').each do |funder|
