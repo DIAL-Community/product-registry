@@ -259,6 +259,117 @@ namespace :projects do
     end
   end
 
+  desc 'Read Digital Square Map & Match data'
+  task :import_map_match, [:map_match_file] => :environment do |_, params|
+    dsq_origin = Origin.find_by(name: 'Digital Square')
+    sector_list = Sector.where("slug = 'health' and is_displayable is true")
+
+    mm_data = CSV.parse(File.read(params[:map_match_file]), headers: true,
+                             liberal_parsing: { double_quote_outside_quote: true })
+    missing_product_list = []
+    mm_data.each do |mm_proj|
+      if !mm_proj["software"].nil?
+        product_list = mm_proj["software"].split(',')
+        prod_list = []
+        product_list.each do |prod|
+          product = Product.first_duplicate(prod.split('(')[0].strip, nil)
+          if !product.nil?
+            prod_list << product
+          else 
+            missing_product_list << prod.split('(')[0].strip
+          end
+        end
+        if !prod_list.empty?
+          proj_name = mm_proj["country"] + " " + mm_proj["tool"]
+          curr_proj = Project.find_by(name: proj_name)
+          if curr_proj.nil?
+            curr_proj = Project.new
+            curr_proj.origin = dsq_origin
+            curr_proj.name = proj_name
+            curr_proj.slug = slug_em(proj_name)
+          else
+            puts "Project exists: " + proj_name
+            puts "New Description: " + mm_proj["tool_description"]
+          end
+          curr_proj.tags = ['COVID-19']
+
+          # TODO: Look at dha_broad and add this to sectors?? Create a map?
+          curr_proj.sectors = sector_list
+          curr_proj.products = prod_list.uniq
+
+          country = Country.find_by(name: mm_proj["country"])
+          if !country.nil?
+            curr_proj.countries << country
+          end
+          curr_proj.save
+          mm_proj["funder"] && mm_proj["funder"].split(',').each do |funder|
+            funder_org = Organization.first_duplicate(funder.strip, slug_em(funder.strip) )
+            if funder_org.nil?
+              puts "Can't find Org: " + funder
+            else
+              existing_org = ProjectsOrganization.find_by(project: curr_proj, organization: funder_org)
+              if existing_org.nil?
+                proj_org = ProjectsOrganization.new
+                proj_org.project = curr_proj
+                proj_org.organization = funder_org
+                proj_org.org_type = 'funder'
+                proj_org.save
+              end
+            end
+          end
+          mm_proj["implementer"] && mm_proj["implementer"].split(',').each do |implementer|
+            impl_org = Organization.first_duplicate(implementer.strip, slug_em(implementer.strip) )
+            if !impl_org.nil?
+              existing_org = ProjectsOrganization.find_by(project: curr_proj, organization: impl_org)
+              if existing_org.nil?
+                proj_org = ProjectsOrganization.new
+                proj_org.project = curr_proj
+                proj_org.organization = impl_org
+                proj_org.org_type = 'implementer'
+                proj_org.save
+              end
+            end
+          end
+          ['en','de','fr'].each do |locale|
+            project_desc = ProjectDescription.find_by(project: curr_proj, locale: locale)
+            if project_desc.nil?
+              project_desc = ProjectDescription.new
+            end
+            project_desc.project = curr_proj
+            project_desc.locale = locale
+
+            if !mm_proj["tool_description"].nil?
+              project_desc.description = mm_proj["tool_description"]
+              # Put the contact information in the description as well
+              if !mm_proj["dha_contact_ph1"].nil?
+                project_desc.description += "<br /><strong>Contact Information</strong><p>"+mm_proj["dha_contact_ph1"]+"</p>"
+              end
+              if !mm_proj["dha_contact_email"].nil?
+                project_desc.description += "<br /><strong>Contact Information</strong><p>"
+                !mm_proj["dha_contact_firstname"].nil? && project_desc.description += mm_proj["dha_contact_firstname"]
+                !mm_proj["dha_contact_surname"].nil? && project_desc.description += mm_proj["dha_contact_surname"]
+                project_desc.description += "<br />"
+                !mm_proj["dha_contact_org"].nil? && project_desc.description += mm_proj["dha_contact_org"]
+                project_desc.description += "<br />"
+                !mm_proj["dha_contact_email"].nil? && project_desc.description += mm_proj["dha_contact_email"]
+                project_desc.description += "</p>"
+              end
+
+              # Link to the use case steps in the description
+              if !mm_proj["covid_use_cases"].nil?
+                project_desc.description += "<br /><strong>Use Cases: </strong><p>"+mm_proj["covid_use_cases"]+"</p>"
+              end
+            else
+              project_desc.description = "No project description"
+            end
+            project_desc.save
+          end
+        end
+      end
+    end
+    puts "Missing products: " + missing_product_list.uniq.inspect
+  end
+
   desc 'Read data from WHO categorization spreadsheet (Digital Square)'
   task :sync_who_categories => :environment do |_, params|
 

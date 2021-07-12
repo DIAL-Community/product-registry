@@ -598,6 +598,7 @@ namespace :data do
     de_data = File.read('utils/product_desc.de.json')
     de_desc = JSON.parse(de_data)
     Product.all.each do |product|
+      eng_desc = ProductDescription.find_by(project_id: project.id, locale: 'en')
       if !de_desc[product.name].nil?
         prod_desc = ProductDescription.find_by(product_id: product.id, locale: 'de')
         if prod_desc.nil?
@@ -610,15 +611,25 @@ namespace :data do
           prod_desc.description = de_desc[product.name]['description']
           prod_desc.save
         else
-          puts "No description found for " + product.name
+          prod_desc.description = eng_desc.description
+          prod_desc.save
         end
+      end
+
+      prod_desc = ProductDescription.find_by(product_id: product.id, locale: 'fr')
+      if prod_desc.nil?
+        prod_desc = ProductDescription.new
+        prod_desc.product_id = product.id
+        prod_desc.locale = 'fr'
+        prod_desc.description = eng_desc.description
+        prod_desc.save
       end
     end
 
     Project.all.each do |project|
+      eng_desc = ProjectDescription.find_by(project_id: project.id, locale: 'en')
       proj_desc = ProjectDescription.find_by(project_id: project.id, locale: 'de')
       if proj_desc.nil?
-        eng_desc = ProjectDescription.find_by(project_id: project.id, locale: 'en')
         if !eng_desc.nil?
           proj_desc = ProjectDescription.new
           proj_desc.project_id = project.id
@@ -627,16 +638,38 @@ namespace :data do
           proj_desc.save
         end
       end
+
+      proj_desc = ProjectDescription.find_by(project_id: project.id, locale: 'fr')
+      if proj_desc.nil?
+        if !eng_desc.nil?
+          proj_desc = ProjectDescription.new
+          proj_desc.project_id = project.id
+          proj_desc.locale = 'fr'
+          proj_desc.description = eng_desc.description
+          proj_desc.save
+        end
+      end
     end
 
     Organization.all.each do |org|
+      eng_desc = OrganizationDescription.find_by(organization_id: org.id, locale: 'en')
       org_desc = OrganizationDescription.find_by(organization_id: org.id, locale: 'de')
       if org_desc.nil?
-        eng_desc = OrganizationDescription.find_by(organization_id: org.id, locale: 'en')
         if !eng_desc.nil?
           org_desc = OrganizationDescription.new
           org_desc.organization_id = org.id
           org_desc.locale = 'de'
+          org_desc.description = eng_desc.description
+          org_desc.save
+        end
+      end
+
+      org_desc = OrganizationDescription.find_by(organization_id: org.id, locale: 'fr')
+      if org_desc.nil?
+        if !eng_desc.nil?
+          org_desc = OrganizationDescription.new
+          org_desc.organization_id = org.id
+          org_desc.locale = 'fr'
           org_desc.description = eng_desc.description
           org_desc.save
         end
