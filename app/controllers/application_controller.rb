@@ -51,6 +51,14 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale(&action)
+    if params[:locale].present?
+      accept_language = params[:locale]
+      if I18n.available_locales.index(accept_language[0..1].to_sym)
+        I18n.locale = accept_language[0..1].to_sym
+      end
+      session[:locale] = I18n.locale.to_s
+    end
+
     if session[:locale].nil?
       accept_language = request.env['HTTP_ACCEPT_LANGUAGE']
       if accept_language
@@ -61,6 +69,8 @@ class ApplicationController < ActionController::Base
       end
       session[:locale] = I18n.locale.to_s
     end
+
+    logger.info("Setting locale to '#{session[:locale]}.'")
     I18n.with_locale(session[:locale], &action)
   end
 
