@@ -69,6 +69,10 @@ class Organization < ApplicationRecord
   def to_param
     slug
   end
+  
+  def self.first_duplicate(name, slug)
+    find_by("name = ? OR slug = ? OR ? = ANY(aliases)", name, slug, name)
+  end
 
   def sectorsWithLocale(locale)
     sectors.where('locale = ?', locale[:locale])
