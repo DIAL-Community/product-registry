@@ -740,7 +740,7 @@ class OrganizationsController < ApplicationController
         "magicKey" => magic_key,
         "token" => auth_token,
         "f" => "json",
-        "forStorage" => "true"
+        "forStorage" => "false"
       }
     })
 
@@ -748,6 +748,7 @@ class OrganizationsController < ApplicationController
     response = Net::HTTP.post_form(uri, {})
 
     location_data = JSON.parse(response.body)
+    puts "LOCATION DATA: " + location_data.to_s
     location_name = location_data["candidates"][0]["address"]
     location_slug = slug_em(location_name)
     location_x = location_data["candidates"][0]["location"]["x"]
