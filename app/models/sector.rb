@@ -36,6 +36,11 @@ class Sector < ApplicationRecord
     sector_list    
   end
 
+  def sub_sectors
+    subsectors = Sector.where(parent_sector_id: id)
+    subsectors
+  end
+
   def to_param  # overridden
     slug
   end

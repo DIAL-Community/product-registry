@@ -7,5 +7,6 @@ module Types
     field :origin_id, Integer, null: true
     field :is_displayable, Boolean, null: true
     field :locale, String, null: true
+    field :sub_sectors, [Types::SectorType], null: true
   end
 end

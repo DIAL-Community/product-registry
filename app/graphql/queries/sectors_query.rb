@@ -13,6 +13,16 @@ module Queries
     end
   end
 
+  class SectorsWithSubsQuery < Queries::BaseQuery
+    argument :locale, String, required: false, default_value: 'en'
+    type [Types::SectorType], null: false
+
+    def resolve(locale:)
+      sectors = Sector.where(parent_sector_id: nil, is_displayable: true, locale: locale).order(:name)
+      sectors
+    end
+  end
+
   class SearchSectorsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

@@ -3,6 +3,8 @@ module Queries
   class WizardQuery < Queries::BaseQuery
     argument :phase, String, required: true
     argument :sector, String, required: false
+    argument :subsector, String, required: false
+    argument :sdg, String, required: false
     argument :buildingBlocks, [String], required: false
     argument :tags, [String], required: false
     argument :country, String, required: false
@@ -10,7 +12,7 @@ module Queries
 
     type Types::WizardType, null: false
 
-    def resolve(phase:, sector:, buildingBlocks:, tags:, country:, mobileServices:)
+    def resolve(phase:, sector:, subsector:, sdg:, buildingBlocks:, tags:, country:, mobileServices:)
       wizard = {}
       principles = {}
 
@@ -21,16 +23,29 @@ module Queries
 
       wizard['digital_principles'] = DigitalPrinciple.where(slug: principles[phase])
 
-      currSector = Sector.find_by(name: sector)
+      sector_name = sector
+      if !subsector.nil? && subsector != ''
+        sector_name += ":" + subsector
+      end
+      currSector = Sector.find_by(name: sector_name)
+      currSDG = SustainableDevelopmentGoal.find_by(name: sdg)
       country = Country.find_by(name: country)
       
+      sectorUseCases = []
+      sdgUseCases = []
+
       if phase == 'Ideation' || phase == 'Implementation'
         if !currSector.nil?
           sectorProjects = ProjectsSector.where(sector_id: currSector.id).map(&:project_id)
           sectorProducts = ProductSector.where(sector_id: currSector.id).map(&:product_id)
-          useCases = UseCase.where(sector_id: currSector.id)
-          wizard['use_cases'] = UseCase.where(sector_id: currSector.id)
+          sectorUseCases = UseCase.where(sector_id: currSector.id)
         end
+        if !currSDG.nil?
+          currTargets = SdgTarget.where(sdg_number: currSDG.number)
+          puts "CURR TARGETS: " + currTargets.ids.to_s
+          sdgUseCases = UseCase.where("id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))", currTargets.ids)
+        end
+        wizard['use_cases'] = (sectorUseCases + sdgUseCases).uniq
 
         if !country.nil?
           countryProjects = ProjectsCountry.where(country_id: country.id).map(&:project_id)
@@ -98,7 +113,7 @@ module Queries
       if sectorTagProjects.length > 5
         # Find projects that match both sector and tag
         combinedProjects = sectorProjects & tagProjects
-        if combinedProjects.length > 0
+        if combinedProjects && combinedProjects.length > 0
           sectorTagProjects = combinedProjects
         end
       end
@@ -109,8 +124,6 @@ module Queries
         if combinedProjects.length > 0
           sectorTagProjects = combinedProjects
         end
-      elsif sectorTagProjects.length == 0 && !countryProjects.nil?
-        sectorTagProjects = countryProjects
       end
 
       project_list = Project.where(id: sectorTagProjects)
