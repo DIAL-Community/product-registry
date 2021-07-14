@@ -65,8 +65,8 @@
                 <%= t('view.header.select-language') %>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <%= link_to t('view.header.english'), controller: :application, action: :update_locale, id: 'en' %>
-                <%= link_to t('view.header.german'), controller: :application, action: :update_locale, id: 'de' %>
+                <%= link_to t('view.header.english'), update_locale_path(id: 'en'), class:'dropdown-item' %>
+                <%= link_to t('view.header.german'), update_locale_path(id: 'de'), class:'dropdown-item' %>
               </div>
             </li>
           </ul>
