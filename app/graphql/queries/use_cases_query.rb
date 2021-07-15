@@ -1,10 +1,15 @@
 module Queries
   class UseCasesQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
+    argument :mature, Boolean, required: false, default_value: false
     type [Types::UseCaseType], null: false
 
-    def resolve(search:)
-      use_cases = UseCase.order(:name)
+    def resolve(search:, mature: )
+      if mature
+        use_cases = UseCase.where(maturity: 'MATURE').order(:name)
+      else
+        use_cases = UseCase.order(:name)
+      end
       unless search.blank?
         use_cases = use_cases.name_contains(search)
       end

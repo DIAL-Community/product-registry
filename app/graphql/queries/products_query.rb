@@ -53,7 +53,7 @@ module Queries
       filtered, filtered_building_blocks = filter_building_blocks(sdgs, use_cases, workflows, building_blocks)
       if filtered
         if filtered_building_blocks.empty?
-          # Filte is active, but all the filters are resulting in empty building block array.
+          # Filter is active, but all the filters are resulting in empty building block array.
           # All bb is filtered out, return no product.
           return []
         else
@@ -69,7 +69,6 @@ module Queries
       end
 
       filtered_tags = tags.reject { |x| x.nil? || x.blank? }
-      puts "FILTERED TAGS: " + filtered_tags.to_s
       unless filtered_tags.empty?
         products = products.where("tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or tags @> '{#{filtered_tags.join(',')}}'::varchar[]")
       end
