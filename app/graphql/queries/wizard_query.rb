@@ -1,7 +1,6 @@
 module Queries
 
   class WizardQuery < Queries::BaseQuery
-    argument :phase, String, required: true
     argument :sector, String, required: false
     argument :subsector, String, required: false
     argument :sdg, String, required: false
@@ -12,16 +11,11 @@ module Queries
 
     type Types::WizardType, null: false
 
-    def resolve(phase:, sector:, subsector:, sdg:, buildingBlocks:, tags:, country:, mobileServices:)
+    def resolve(sector:, subsector:, sdg:, buildingBlocks:, tags:, country:, mobileServices:)
       wizard = {}
       principles = {}
 
-      principles['Ideation'] = ['understand_existing_ecosystem', 'design_with_the_user', 'reuse_and_improve']
-      principles['Planning'] = ['design_with_the_user', 'design_for_scale', 'be_collaborative']
-      principles['Implementation'] = ['be_data_driven', 'use_open_standards', 'address_privacy_security']
-      principles['Evaluation'] = ['be_data_driven', 'be_collaborative', 'understand_existing_ecosystem']
-
-      wizard['digital_principles'] = DigitalPrinciple.where(slug: principles[phase])
+      wizard['digital_principles'] = DigitalPrinciple.all
 
       sector_name = sector
       if !subsector.nil? && subsector != ''
@@ -34,66 +28,56 @@ module Queries
       sectorUseCases = []
       sdgUseCases = []
 
-      if phase == 'Ideation' || phase == 'Implementation'
-        if !currSector.nil?
-          sectorProjects = ProjectsSector.where(sector_id: currSector.id).map(&:project_id)
-          sectorProducts = ProductSector.where(sector_id: currSector.id).map(&:product_id)
-          sectorUseCases = UseCase.where(sector_id: currSector.id)
+      if !currSector.nil?
+        sector_ids = [currSector.id]
+        if currSector.parent_sector_id.nil?
+          (sector_ids << Sector.where(parent_sector_id: currSector.id).map(&:id)).flatten!
         end
-        if !currSDG.nil?
-          currTargets = SdgTarget.where(sdg_number: currSDG.number)
-          puts "CURR TARGETS: " + currTargets.ids.to_s
-          sdgUseCases = UseCase.where("id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))", currTargets.ids)
-        end
-        wizard['use_cases'] = (sectorUseCases + sdgUseCases).uniq
+        sectorProjects = ProjectsSector.where(sector_id: sector_ids).map(&:project_id)
+        sectorProducts = ProductSector.where(sector_id: sector_ids).map(&:product_id)
+        sectorUseCases = UseCase.where(sector_id: sector_ids)
+      end
+      if !currSDG.nil?
+        currTargets = SdgTarget.where(sdg_number: currSDG.number)
+        sdgUseCases = UseCase.where("id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))", currTargets.ids)
+      end
+      wizard['use_cases'] = (sectorUseCases + sdgUseCases).uniq
 
-        if !country.nil?
-          countryProjects = ProjectsCountry.where(country_id: country.id).map(&:project_id)
-        end
+      if !country.nil?
+        countryProjects = ProjectsCountry.where(country_id: country.id).map(&:project_id)
+      end
 
-        if !tags.nil?
-          tagProjects = []
-          tags.each do |tag|
-            tagProjects += Project.where(':tag = ANY(projects.tags)', tag: tag).map(&:id)
-          end
-        end
-
-        project_list = filter_matching_projects(sectorProjects, countryProjects, tagProjects)
-
-        if phase == 'Ideation'
-          wizard['projects'] = project_list
+      if !tags.nil?
+        tagProjects = []
+        tags.each do |tag|
+          tagProjects += Project.where(':tag = ANY(projects.tags)', tag: tag).map(&:id)
         end
       end
 
-      if phase == 'Planning'
-        wizard['building_blocks'] = BuildingBlock.where(name: buildingBlocks)
-        # Build list of resources manually
-        wizard['resources'] = Resource.where(phase: phase)
-      end
+      project_list = filter_matching_projects(sectorProjects, countryProjects, tagProjects)
 
-      if phase == 'Implementation'
-        bbs = BuildingBlock.where(name: buildingBlocks)
-        productBB = ProductBuildingBlock.where(building_block_id: bbs).map(&:product_id)
-        productProject = ProjectsProduct.where(project_id: project_list).map(&:product_id)
-        if !tags.nil?
-          tagProducts = []
-          tags.each do |tag|
-            tagProducts += Product.where('LOWER(:tag) = ANY(LOWER(products.tags::text)::text[])', tag: tag).map(&:id)
-          end
-        end
+      wizard['projects'] = project_list
 
-        product_list = filter_matching_products(productBB, productProject, sectorProducts, tagProducts)
+      wizard['building_blocks'] = BuildingBlock.where(name: buildingBlocks)
+      # Build list of resources manually
+      wizard['resources'] = Resource.all
 
-        wizard['products'] = product_list
-        if !mobileServices.empty?
-          aggregators = AggregatorCapability.where('country_id = ? AND service IN (?)', country.id, mobileServices).map(&:aggregator_id)
-          wizard['organizations'] = Organization.where(id: aggregators)
+      bbs = BuildingBlock.where(name: buildingBlocks)
+      productBB = ProductBuildingBlock.where(building_block_id: bbs).map(&:product_id)
+      productProject = ProjectsProduct.where(project_id: project_list).map(&:product_id)
+      if !tags.nil?
+        tagProducts = []
+        tags.each do |tag|
+          tagProducts += Product.where('LOWER(:tag) = ANY(LOWER(products.tags::text)::text[])', tag: tag).map(&:id)
         end
       end
 
-      if phase == 'Evaluation'
-        # Build list of resources manually
-        wizard['resources'] = Resource.where(phase: phase)
+      product_list = filter_matching_products(productBB, productProject, sectorProducts, tagProducts)
+
+      wizard['products'] = product_list
+      if !mobileServices.empty? && !country.nil?
+        aggregators = AggregatorCapability.where('country_id = ? AND service IN (?)', country.id, mobileServices).map(&:aggregator_id)
+        wizard['organizations'] = Organization.where(id: aggregators)
       end
 
       wizard
@@ -145,7 +129,7 @@ module Queries
       if sectorTagProducts.length > 5
         # Find projects that match both sector and tag
         combinedProducts = productSector & productTag
-        if combinedProducts.length > 0
+        if combinedProducts && combinedProducts.length > 0
           sectorTagProducts = combinedProducts
         end
       end
@@ -153,7 +137,7 @@ module Queries
       if sectorTagProducts.length > 10 && !productBB.nil?
         # Since we have several products, try filtering by BB
         combinedProducts = sectorTagProducts & productBB
-        if combinedProducts.length > 0
+        if combinedProducts && combinedProducts.length > 0
           sectorTagProducts = combinedProducts
         end
       elsif sectorTagProducts.length == 0 && !productBB.nil?
@@ -163,7 +147,7 @@ module Queries
       if sectorTagProducts.length > 10 && !productProject.nil?
         # Since we have several products, try filtering by project
         combinedProducts = sectorTagProducts & productProject
-        if combinedProducts.length > 0
+        if combinedProducts && combinedProducts.length > 0
           sectorTagProducts = combinedProducts
         end
       elsif sectorTagProducts.length == 0 && !productProject.nil?

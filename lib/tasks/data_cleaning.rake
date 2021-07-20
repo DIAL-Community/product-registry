@@ -103,10 +103,11 @@ namespace :data do
     principle_data = File.read('utils/digital_principles.json')
     json_principles = JSON.parse(principle_data)
     json_principles.each do |curr_principle|
-      principle = DigitalPrinciple.new
+      principle = DigitalPrinciple.where(name: curr_principle["name"]).first || DigitalPrinciple.new
       principle.name = curr_principle["name"]
       principle.slug = curr_principle["slug"]
       principle.url = curr_principle["url"]
+      principle.phase = curr_principle["phase"]
       principle.save
 
       desc = PrincipleDescription.new
