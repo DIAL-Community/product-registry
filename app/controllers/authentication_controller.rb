@@ -85,6 +85,10 @@ class AuthenticationController < Devise::SessionsController
     {
       userEmail: user.email,
       userName: user.username,
+      own: {
+        products: user.products.any? ? user.product_ids : [],
+        organization: user.organization_id
+      },
       canEdit: can_edit,
       userToken: user.authentication_token
     }

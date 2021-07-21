@@ -847,6 +847,8 @@ ActiveRecord::Schema.define(version: 2021_07_19_194336) do
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "candidate_products", "users", column: "approved_by_id"
   add_foreign_key "candidate_products", "users", column: "rejected_by_id"
+  add_foreign_key "candidate_roles", "organizations"
+  add_foreign_key "candidate_roles", "products"
   add_foreign_key "candidate_roles", "users", column: "approved_by_id"
   add_foreign_key "candidate_roles", "users", column: "rejected_by_id"
   add_foreign_key "category_indicator_descriptions", "category_indicators"

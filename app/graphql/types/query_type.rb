@@ -8,6 +8,9 @@ module Types
     field :page_contents, resolver: Queries::PageContentsQuery
     field :export_page_contents, resolver: Queries::ExportPageContentsQuery
 
+    field :candidate_roles, resolver: Queries::CandidateRolesQuery
+    field :candidate_role, resolver: Queries::CandidateRoleQuery
+
     field :products, resolver: Queries::ProductsQuery
     field :product, resolver: Queries::ProductQuery
     field :search_products, resolver: Queries::SearchProductsQuery
