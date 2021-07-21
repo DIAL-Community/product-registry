@@ -1,6 +1,13 @@
 class CandidateRolesController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:index, :create]
+  skip_before_action :verify_authenticity_token, if: :json_request
+
   before_action :set_candidate_role, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
+
+  def json_request
+    request.format.json?
+  end
 
   def approve
     set_candidate_role
@@ -15,6 +22,15 @@ class CandidateRolesController < ApplicationController
     end
 
     user.roles += @candidate_role.roles
+
+    unless @candidate_role.organization_id.nil?
+      user.organization_id = @candidate_role.organization_id
+    end
+
+    unless @candidate_role.product_id.nil?
+      product = Product.find_by(id: @candidate_role.product_id)
+      user.products << product unless product.nil?
+    end
 
     respond_to do |format|
       # Don't re-approve approved candidate.
@@ -70,6 +86,12 @@ class CandidateRolesController < ApplicationController
   # GET /candidate_roles/1.json
   def show
     authorize(@candidate_role, :view_allowed?)
+    unless @candidate_role.product_id.nil?
+      @product = Product.find(@candidate_role.product_id)
+    end
+    unless @candidate_role.organization_id.nil?
+      @organization = Organization.find(@candidate_role.organization_id)
+    end
   end
 
   # GET /candidate_roles/new
@@ -91,7 +113,6 @@ class CandidateRolesController < ApplicationController
   def create
     session[:return_to] ||= request.referer
     @candidate_role = CandidateRole.new(candidate_role_params)
-    authorize(@candidate_role, :create_allowed?)
 
     if params[:selected_roles].present?
       params[:selected_roles].each do |selected_role|
@@ -99,18 +120,30 @@ class CandidateRolesController < ApplicationController
       end
     end
 
+    unless @candidate_role.product_id.nil?
+      @candidate_role[:roles] << User.user_roles[:product_user]
+    end
+
+    unless @candidate_role.organization_id.nil?
+      @candidate_role[:roles] << User.user_roles[:org_user]
+    end
+
     respond_to do |format|
       if @candidate_role.save
         session.delete(:request_elevated_role)
+        AdminMailer
+          .with(user: candidate_role_params)
+          .notify_ux_ownership_request
+          .deliver_later
         if policy(@candidate_role).view_allowed?
           format.html { redirect_to @candidate_role, notice: 'Candidate role was successfully created.' }
-          format.json { render :show, status: :created, location: @candidate_role }
         else
           format.html { redirect_to products_path, notice: 'Elevated role request submitted.' }
         end
+        format.json { render(json: { message: 'Candidate role was successfully created.' }, status: :created) }
       else
         format.html { render :new }
-        format.json { render json: @candidate_role.errors, status: :unprocessable_entity }
+        format.json { render(json: { message: 'Unable to process request.' }, status: :unprocessable_entity) }
       end
     end
   end
@@ -157,6 +190,6 @@ class CandidateRolesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def candidate_role_params
-    params.require(:candidate_role).permit(:email, :roles, :description)
+    params.require(:candidate_role).permit(:email, :description, :product_id, :organization_id)
   end
 end

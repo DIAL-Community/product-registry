@@ -301,7 +301,7 @@ namespace :sync do
   task :fetch_website_data, [:path] => :environment do |_, _params|
     puts 'Updating organization and product description data ...'
 
-    without_description_clause = " COALESCE(TRIM(od.description), '') = '' "
+    without_description_clause = " COALESCE(SUBSTRING(product_descriptions.description, '\S(?:.*\S)*'), '') = '' "
     Product.left_joins(:product_descriptions)
            .where(without_description_clause)
            .each do |product|
@@ -321,10 +321,12 @@ namespace :sync do
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
           response = http.request(request)
-        rescue
-          puts "Unable to retrieve meta information. Message: #{e}."
+        rescue => e_retry
+          puts "Unable to retrieve meta information. Message: #{e_retry}."
         end
       end
+      next if response.nil?
+
       description = extract_description(response.body)
       next if description.nil?
 
@@ -337,7 +339,7 @@ namespace :sync do
       end
     end
 
-    without_description_clause = " COALESCE(TRIM(od.description), '') = '' "
+    without_description_clause = " COALESCE(SUBSTRING(organization_descriptions.description, '\S(?:.*\S)*'), '') = '' "
     Organization.left_joins(:organization_descriptions)
                 .where(without_description_clause)
                 .each do |organization|
@@ -357,10 +359,12 @@ namespace :sync do
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
           response = http.request(request)
-        rescue
-          puts "Unable to retrieve meta information. Message: #{e}."
+        rescue => e_retry
+          puts "Unable to retrieve meta information. Message: #{e_retry}."
         end
       end
+      next if response.nil?
+
       description = extract_description(response.body)
       next if description.nil?
 
@@ -369,7 +373,7 @@ namespace :sync do
       organization_description.locale = I18n.locale
       organization_description.description = description.strip
       if organization_description.save!
-        puts "Setting description for: #{organization.name} => #{description}"
+        puts "Setting description for: #{organization.name} => #{organization_description.description}"
       end
     end
   end

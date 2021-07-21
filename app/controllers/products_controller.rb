@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: [:index, :new, :create, :edit, :update, :destroy]
 
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]

@@ -1,4 +1,6 @@
 class RegistrySchema < GraphQL::Schema
+  max_depth(5)
+
   mutation(Types::MutationType)
   query(Types::QueryType)
 

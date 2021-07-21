@@ -235,6 +235,8 @@ en:
         request-reason: Request reason
         request-roles: Requested roles
         request-status: Request status
+        request-product: 'Requested Product'
+        request-organization: 'Requested Organization'
       show:
         request-elevation: We noticed that you tried to add organization(s) or product(s) beyond the purview of your role.
                            You might be able to request role elevation by clicking %{href}.
