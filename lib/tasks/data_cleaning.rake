@@ -599,7 +599,7 @@ namespace :data do
     de_data = File.read('utils/product_desc.de.json')
     de_desc = JSON.parse(de_data)
     Product.all.each do |product|
-      eng_desc = ProductDescription.find_by(project_id: project.id, locale: 'en')
+      eng_desc = ProductDescription.find_by(product_id: product.id, locale: 'en')
       if !de_desc[product.name].nil?
         prod_desc = ProductDescription.find_by(product_id: product.id, locale: 'de')
         if prod_desc.nil?
@@ -612,13 +612,15 @@ namespace :data do
           prod_desc.description = de_desc[product.name]['description']
           prod_desc.save
         else
-          prod_desc.description = eng_desc.description
-          prod_desc.save
+          if !eng_desc.nil?
+            prod_desc.description = eng_desc.description
+            prod_desc.save
+          end
         end
       end
 
       prod_desc = ProductDescription.find_by(product_id: product.id, locale: 'fr')
-      if prod_desc.nil?
+      if prod_desc.nil? && !eng_desc.nil?
         prod_desc = ProductDescription.new
         prod_desc.product_id = product.id
         prod_desc.locale = 'fr'
