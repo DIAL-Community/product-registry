@@ -29,6 +29,14 @@
         <%= @candidate_role.approved_date.strftime('%m/%d/%Y - %H:%M') %>
       <% end %>
     </div>
+    <div>
+      <span class="text-muted"><%= t('view.candidate-role.index.request-product') %></span>:
+      <%= @candidate_role.product_id.nil? ? '-' : "#{@candidate_role.product_id} - #{@product.name}" %>
+    </div>
+    <div>
+      <span class="text-muted"><%= t('view.candidate-role.index.request-organization') %></span>:
+      <%= @candidate_role.organization_id.nil? ? '-' : "#{@candidate_role.organization_id} - #{@organization.name}" %>
+    </div>
     <div class="text-muted">
       <span class="text-muted"><%= t('view.candidate-role.index.request-reason') %></span>:
     </div>

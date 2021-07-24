@@ -69,7 +69,15 @@ class Organization < ApplicationRecord
   def to_param
     slug
   end
+  
+  def self.first_duplicate(name, slug)
+    find_by("name = ? OR slug = ? OR ? = ANY(aliases)", name, slug, name)
+  end
 
+  def sectorsWithLocale(locale)
+    sectors.where('locale = ?', locale[:locale])
+  end
+  
   def self.to_csv
     attributes = %w{id name slug when_endorsed website is_endorser is_mni countries offices sectors}
 

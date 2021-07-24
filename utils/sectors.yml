@@ -1,0 +1,114 @@
+sectors:
+  - name: Environment and Climate
+  - name: Environment and Climate_Management of natural resources
+  - name: Environment and Climate_Environment and policy
+  - name: Environment and Climate_Water
+  - name: Environment and Climate_Climate
+  - name: Environment and Climate_Environmental management in industry and cities
+  - name: Environment and Climate_Waste and Sanitation
+  - name: Environment and Climate_Natural resource conflicts
+  - name: Environment and Climate_Regional resources 
+  - name: Agriculture and Rural Development
+  - name: Agriculture and Rural Development_Agricultural Production and Use of Resources
+  - name: Agriculture and Rural Development_Management of natural resources
+  - name: Agriculture and Rural Development_Agricultural Policy and Food
+  - name: Agriculture and Rural Development_Regional Development
+  - name: Agriculture and Rural Development_Agricultural Trade
+  - name: Agriculture and Rural Development_Economy
+  - name: Agriculture and Rural Development_Standards
+  - name: Agriculture and Rural Development_Livelihoods
+  - name: Security, Peace, Reconstruction
+  - name: Security, Peace, Reconstruction_Peace and Security
+  - name: Security, Peace, Reconstruction_Humanitarian Aid and Disaster Management
+  - name: Security, Peace, Reconstruction_Refuge and migration
+  - name: Security, Peace, Reconstruction_Health
+  - name: Security, Peace, Reconstruction_Urban Development and Decentralization
+  - name: Security, Peace, Reconstruction_Agricultural Production and Use of Resource
+  - name: Security, Peace, Reconstruction_Disarmament
+  - name: Security, Peace, Reconstruction_Violent extremism
+  - name: Security, Peace, Reconstruction_Gender Based Violence
+  - name: Security, Peace, Reconstruction_Demobilization and Reintegration
+  - name: Education and Social Development
+  - name: Education and Social Development_Education and Youth
+  - name: Education and Social Development_Health
+  - name: Education and Social Development_Gender
+  - name: Education and Social Development_Social Security
+  - name: Education and Social Development_Social Protection
+  - name: Education and Social Development_Civil Society 
+  - name: Education and Social Development_Education
+  - name: Education and Social Development_Youth
+  - name: Education and Social Development_World population
+  - name: Education and Social Development_Religious Engagement
+  - name: Education and Social Development_Food
+  - name: Education and Social Development_Research
+  - name: Education and Social Development_eLearning
+  - name: State and Democracy (Good Governance)
+  - name: State and Democracy (Good Governance)_Democracy and the rule of law
+  - name: State and Democracy (Good Governance)_Public finance and administration
+  - name: State and Democracy (Good Governance)_Media and communication
+  - name: State and Democracy (Good Governance)_Gender
+  - name: State and Democracy (Good Governance)_Urban development and decentralization
+  - name: State and Democracy (Good Governance)_Freedom of speech and access to information
+  - name: State and Democracy (Good Governance)_Anti-corruption
+  - name: State and Democracy (Good Governance)_Fair and responsible media
+  - name: State and Democracy (Good Governance)_Justice
+  - name: State and Democracy (Good Governance)_Stability 
+  - name: State and Democracy (Good Governance)_Transparency and accountability 
+  - name: State and Democracy (Good Governance)_Transition
+  - name: State and Democracy (Good Governance)_Fragile States
+  - name: State and Democracy (Good Governance)_Conflict Resolution
+  - name: Sustainable Infrastructure
+  - name: Sustainable Infrastructure_Energy
+  - name: Sustainable Infrastructure_Water
+  - name: Sustainable Infrastructure_ICT Infrastructure
+  - name: Sustainable Infrastructure_Transport and infrastructure 
+  - name: Sustainable Infrastructure_Built environments
+  - name: Work and Employment
+  - name: Work and Employment_Development of financial systems
+  - name: Work and Employment_Vocational Training and labor market
+  - name: Work and Employment_Economic Policy and Trade
+  - name: Work and Employment_Private sector development
+  - name: Work and Employment_Regional development
+  - name: Work and Employment_Management of natural resources
+  - name: Work and Employment_Workforce
+  - name: Work and Employment_Training and employment
+  - name: Economics and Finance
+  - name: Economics and Finance_Finance
+  - name: Economics and Finance_Economic Policy and Trade
+  - name: Economics and Finance_Insurance
+  - name: Economics and Finance_Payments
+  - name: Digital, Data, and Technology
+  - name: Digital, Data, and Technology_Big data
+  - name: Digital, Data, and Technology_Platform Creation
+  - name: Digital, Data, and Technology_Data Collection
+  - name: Digital, Data, and Technology_Data Management and Policy
+  - name: Digital, Data, and Technology_Data Security
+  - name: Digital, Data, and Technology_Artificial Intelligence
+  - name: Digital, Data, and Technology_Capacity Development 
+  - name: Digital, Data, and Technology_ICT Infrastructure
+  - name: Digital, Data, and Technology_Communication
+  - name: Digital, Data, and Technology_Surveillance 
+  - name: Health
+  - name: Health_Nutrition
+  - name: Health_Hunger 
+  - name: Health_Midwifery and Neo-natal
+  - name: Health_Hygiene
+  - name: Health_Food
+  - name: Health_Gender 
+  - name: Health_Infectious Disease
+  - name: Health_Childcare
+  - name: Health_Family planning
+  - name: Health_Health Education
+  - name: Private Sector Engagement
+  - name: Private Sector Engagement_Business Advocacy 
+  - name: Private Sector Engagement_Corporate Partnerships
+  - name: Private Sector Engagement_Corporate and Business Management
+  - name: Private Sector Engagement_Enterprise Ecosystems
+  - name: Sustainable Development 
+  - name: Sustainable Development_Development impact
+  - name: Sustainable Development_Sustainable cities 
+  - name: Other
+  - name: Other_Entertainment
+  - name: Other_Travel and Hospitality
+  - name: Other_Centers for excellence
+  - name: Other_Supply chain and logistics

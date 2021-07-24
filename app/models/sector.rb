@@ -25,8 +25,8 @@ class Sector < ApplicationRecord
     if origin.nil?
       origin = Origin.find_by(name:Setting.find_by(slug: 'default_sector_list').value)
     end
-    sector_list = Sector.where(origin_id: origin.id, parent_sector_id: nil, locale: I18n.locale).order(:name).as_json
-    child_sectors = Sector.where("origin_id = ? and locale = ? and parent_sector_id is not null", origin.id, I18n.locale)
+    sector_list = Sector.where(origin_id: origin.id, parent_sector_id: nil, locale: I18n.locale, is_displayable: true).order(:name).as_json
+    child_sectors = Sector.where("origin_id = ? and locale = ? and is_displayable=true and parent_sector_id is not null", origin.id, I18n.locale)
     child_sectors.each do |child_sector|
       insert_index = sector_list.index { |sector| sector["id"] == child_sector.parent_sector_id } || -1
 
@@ -34,6 +34,11 @@ class Sector < ApplicationRecord
     end
 
     sector_list    
+  end
+
+  def sub_sectors
+    subsectors = Sector.where(parent_sector_id: id)
+    subsectors
   end
 
   def to_param  # overridden

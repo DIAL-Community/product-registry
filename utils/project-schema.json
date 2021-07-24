@@ -1,6 +1,8 @@
 {
   "definitions": {},
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "DIAL Catalog Project Metaschema: JSON Schema",
+  "title": "DIAL Projects",
   "type": "object",
   "required": [
     "name",
@@ -9,7 +11,6 @@
     "start_date",
     "end_date",
     "sectors",
-    "budget",
     "countries"
   ],
   "properties": {
@@ -23,16 +24,25 @@
     },
     "start_date": {
       "type": "string",
+      "format": "date",
       "title": "The start date of the project in ISO format."
     },
     "end_date": {
       "type": "string",
+      "format": "date",
       "title": "The end date of the project in ISO format."
     },
     "origin": {
       "type": "string",
       "description": "List of origin of the project information.",
-      "enum": ["Digital Health Atlas", "DIAL OSC", "UNICEF", "Digital Square"]
+      "enum": [
+        "Digital Health Atlas", 
+        "DIAL OSC", 
+        "Digital Public Goods Alliance", 
+        "Digital Square", 
+        "Digital Government Platform Tracker",
+        "GIZ"
+      ]
     },
     "products": {
       "type": "array",
@@ -46,83 +56,29 @@
       "items": {
         "type": "string",
         "enum": [
-          "Advocacy",
-          "Agriculture",
-          "Anti-corruption",
-          "Big Data",
-          "Business Advocacy",
-          "Capacity Development",
-          "Centers of Excellence",
-          "Civil society",
-          "Climate",
-          "Communication",
-          "Conflict Resolution",
-          "Consulting",
-          "Corporate Partnerships",
-          "Corporation and Business Management",
-          "Data Collection",
-          "Data Management & Policy",
-          "Data Security",
-          "Demobilization & Reintegration",
-          "Democracy",
-          "Development Impact",
-          "Digital Development",
-          "Digital/Data/Tech",
-          "Disarmament",
-          "Economics/Finance",
-          "Education",
-          "Emergency Response",
-          "Employment",
-          "Energy",
-          "Engineering",
-          "Enterprise Ecosystems",
-          "Entertainment",
-          "Environment",
-          "Fair & Responsible Media",
-          "Female Genital Mutilation",
-          "Food",
-          "Fragile States",
-          "Gender and Minority Groups",
-          "Governance",
+          "Environment and Climate",
+          "Agriculture and Rural Development",
+          "Security, Peace, Reconstruction",
+          "Education and Social Development",
+          "State and Democracy (Good Governance)",
+          "Sustainable Infrastructure",
+          "Work and Employment",
+          "Economics and Finance",
+          "Digital, Data, and Technology",
           "Health",
-          "Humanitarian",
-          "Hunger",
-          "Infrastructure",
-          "Justice",
-          "Livelihoods",
-          "Logistics",
-          "Management",
-          "Media",
-          "Membership Associations",
-          "Midwifery",
-          "Natural Resource Conflicts",
-          "NGO",
-          "Nutrition",
-          "Peace",
-          "Platform creation",
-          "Religious Engagement",
-          "Research",
-          "Resource Management",
-          "Security",
-          "Stability",
-          "Supply Chain Solutions",
-          "Sustainability",
-          "Sustainable Cities",
-          "Training & Employment",
-          "Transition",
-          "Transparency & Accountability",
-          "Travel and Hospitality",
-          "Violent Extremism",
-          "Water and Sanitation",
-          "Workforce",
-          "World Population",
-          "Youth"
+          "Private Sector Engagement",
+          "Sustainable Development",
+          "Other"
         ]
       }
     },
     "budget": {
       "type": "integer",
       "title": "The budget of the project."
+    },
+    "project_url": {
+      "type": "string",
+      "title": "A link to a URL/webpage for this project"
     },
     "countries": {
       "type": "array",
@@ -350,6 +306,7 @@
           },
           "contact_email": {
             "type": "string",
+            "format": "email",
             "description": "Email for contact individual in the organization"
           }
         }

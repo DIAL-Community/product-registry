@@ -18,6 +18,7 @@ module Types
     field :slug, String, null: false
     field :image_file, String, null: false
     field :website, String, null: true
+    field :tags, GraphQL::Types::JSON, null: true
     field :repository, String, null: true
     field :license, String, null: true
     field :statistics, GraphQL::Types::JSON, null: true
@@ -44,7 +45,9 @@ module Types
     end
     field :building_blocks, [Types::BuildingBlockType], null: true
     field :sustainable_development_goals, [Types::SustainableDevelopmentGoalType], null: true
-    field :sectors, [Types::SectorType], null: true
+    field :sectorsWithLocale, [Types::SectorType], null: true do
+      argument :locale, String, required: false
+    end
     field :child_products, [Types::ProductType], null: true
     field :interoperates_with, [Types::ProductType], null: true
     field :includes, [Types::ProductType], null: true

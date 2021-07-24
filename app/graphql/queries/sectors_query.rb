@@ -5,10 +5,20 @@ module Queries
     type [Types::SectorType], null: false
 
     def resolve(search:, locale:)
-      sectors = Sector.where(is_displayable: true, locale: locale, parent_sector_id: nil).order(:name)
+      sectors = Sector.where(is_displayable: true, locale: locale).order(:name)
       unless search.blank?
         sectors = sectors.name_contains(search)
       end
+      sectors
+    end
+  end
+
+  class SectorsWithSubsQuery < Queries::BaseQuery
+    argument :locale, String, required: false, default_value: 'en'
+    type [Types::SectorType], null: false
+
+    def resolve(locale:)
+      sectors = Sector.where(parent_sector_id: nil, is_displayable: true, locale: locale).order(:name)
       sectors
     end
   end

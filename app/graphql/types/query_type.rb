@@ -8,6 +8,9 @@ module Types
     field :page_contents, resolver: Queries::PageContentsQuery
     field :export_page_contents, resolver: Queries::ExportPageContentsQuery
 
+    field :candidate_roles, resolver: Queries::CandidateRolesQuery
+    field :candidate_role, resolver: Queries::CandidateRoleQuery
+
     field :products, resolver: Queries::ProductsQuery
     field :product, resolver: Queries::ProductQuery
     field :search_products, resolver: Queries::SearchProductsQuery
@@ -21,6 +24,7 @@ module Types
     field :search_building_blocks, resolver: Queries::SearchBuildingBlocksQuery
 
     field :sectors, resolver: Queries::SectorsQuery
+    field :sectorsWithSubs, resolver: Queries::SectorsWithSubsQuery
     field :search_sectors, resolver: Queries::SearchSectorsQuery
 
     field :origins, resolver: Queries::OriginsQuery
@@ -30,12 +34,20 @@ module Types
     field :use_case, resolver: Queries::UseCaseQuery
     field :search_use_cases, resolver: Queries::SearchUseCasesQuery
 
+    field :use_case_steps, resolver: Queries::UseCaseStepsQuery
+    field :use_case_step, resolver: Queries::UseCaseStepQuery
+
     field :countries, resolver: Queries::CountriesQuery
     field :search_countries, resolver: Queries::SearchCountriesQuery
 
     field :organizations, resolver: Queries::OrganizationsQuery
     field :organization, resolver: Queries::OrganizationQuery
     field :search_organizations, resolver: Queries::SearchOrganizationsQuery
+
+    field :capabilities, resolver: Queries::CapabilitiesQuery
+    field :operator_services, resolver: Queries::OperatorServicesQuery
+    field :capability_only, resolver: Queries::CapabilityOnlyQuery
+    field :operator_service_only, resolver: Queries::OperatorServiceOnlyQuery
 
     field :sdgs, resolver: Queries::SustainableDevelopmentGoalsQuery
     field :sdg, resolver: Queries::SustainableDevelopmentGoalQuery

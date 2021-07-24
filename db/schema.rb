@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_20_200744) do
+ActiveRecord::Schema.define(version: 2021_07_19_194336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -216,6 +216,7 @@ ActiveRecord::Schema.define(version: 2021_04_20_200744) do
     t.string "name", null: false
     t.string "slug", null: false
     t.string "url", null: false
+    t.string "phase"
   end
 
   create_table "districts", force: :cascade do |t|
@@ -603,6 +604,15 @@ ActiveRecord::Schema.define(version: 2021_04_20_200744) do
     t.index ["country_id"], name: "index_regions_on_country_id"
   end
 
+  create_table "resources", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "phase", null: false
+    t.string "image_url"
+    t.string "link"
+    t.string "description"
+  end
+
   create_table "rubric_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -837,6 +847,8 @@ ActiveRecord::Schema.define(version: 2021_04_20_200744) do
   add_foreign_key "candidate_organizations", "users", column: "rejected_by_id"
   add_foreign_key "candidate_products", "users", column: "approved_by_id"
   add_foreign_key "candidate_products", "users", column: "rejected_by_id"
+  add_foreign_key "candidate_roles", "organizations"
+  add_foreign_key "candidate_roles", "products"
   add_foreign_key "candidate_roles", "users", column: "approved_by_id"
   add_foreign_key "candidate_roles", "users", column: "rejected_by_id"
   add_foreign_key "category_indicator_descriptions", "category_indicators"

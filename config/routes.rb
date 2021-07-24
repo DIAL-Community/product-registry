@@ -86,9 +86,11 @@ Rails.application.routes.draw do
   devise_scope :user do
     get '/users', to: 'registrations#new'
     get '/users/password', to: 'devise/passwords#new'
+    post '/authenticate/credentials', to: 'authentication#sign_in_ux'
+    post '/authenticate/signup', to: 'authentication#sign_up_ux'
+    get '/authenticate/token', to: 'authentication#fetch_token'
+    delete '/auth/invalidate', to: 'authentication#invalidate_token'
   end
-
-  post '/authenticate/credentials', to: 'authentication#sign_in'
 
   root to: redirect(path: '/products')
 

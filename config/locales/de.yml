@@ -1,619 +1,1029 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 de:
+  commontator:
+    comment:
+      actions:
+        reply: Antworten
+      status:
+        created_at: am %{created_at}.
+        updated_at: Modifiziert am %{updated_at}.
+      require_login: Sie müssen sich anmelden, um Kommentare zu sehen / zu verfassen.
+  time:
+    formats:
+      commontator: '%m/%d/%Y %H:%M %p'
   errors:
     messages:
-      extension_whitelist_error: 'Dieses Bildformat wird nicht unterstützt. Bitte laden Sie ein JPG, JPEG, PNG oder GIF hoch.'
+      extension_whitelist_error: >-
+        Dieses Bildformat wird nicht unterstützt. Bitte laden Sie ein jpg, jpeg,
+        png oder gif hoch.
   messages:
     model:
       created: '%{model} wurde erfolgreich erstellt.'
       deleted: '%{model} wurde erfolgreich gelöscht.'
       delete-failed: '%{model} konnte nicht gelöscht werden.'
       updated: '%{model} wurde erfolgreich aktualisiert.'
+      copied: '%{model} wurde erfolgreich kopiert.'
   pundit:
-    mod_allowed?: Die Operation ist nicht erlaubt.
-    view_allowed?: Sie dürfen diese Seite nicht anzeigen.
+    mod_allowed?: Der Vorgang ist nicht erlaubt.
+    view_allowed?: Sie sind nicht berechtigt, diese Seite zu sehen.
+  alt:
+    el-icon: '%{el} Symbol.'
+    el-logo: '%{el} Logo.'
+  aria:
+    contact-us: Kontaktieren Sie uns per E-Mail
+    contribute-code: Code in gitlab beisteuern
+    forum: Mitgliedschaft in unserem Forum
   model:
-    building-block: IKT-Baustein
-    candidate-organization: Kandidatenorganisation
+    activity: Aktivität
+    building-block: Baustein
+    candidate-organization: Unternehmenskandidat
+    candidate-product: Produktkandidat
+    candidate-role: Kandidatenrolle
+    category-indicator: Kategorieanzeige
+    city: Stadt
     contact: Kontakt
     country: Land
-    deploys: bereitstellen
+    deploys: einsetzen
+    digital-principle: Digitaler Grundsatz
     glossary: Glossar
     location: Standort
+    maturity-rubric: Reiferubrik
     office: Büro
-    organization: Organisation
-    portal-view: Portalansicht
+    organization: Unternehmen
+    playbook: Playbook
+    playbook-page: Playbook-Seite
+    play: Spielen
+    portal-view: Portal anzeigen
     product: Produkt
-    product-suite: Produktsuite
+    product-suite: Produkt-Suite
     product-version: Produktversion
     project: Projekt
+    region: Region
+    rubric-category: Reifekategorie
     sector: Sektor
-    setting: Rahmen
-    tag: Etikett
+    setting: Einstellung
+    tag: Tag
+    task-tracker: Aufgaben-Tracker
+    task: Aufgabe
     use-case: Anwendungsfall
-    use-case-step: Anwendungsfallschritt
+    use-case-step: Schritt in Anwendungsfall
     user: Benutzer
-    workflow: Arbeitsablauf
-    sdg: sdg
-    sustainable-development-goal: Ziel für nachhaltigen Entwicklung
-    sdg_target: Ziel-SDG
-    operator_services: Betreiberdienste
+    user-event: Benutzer-Event
+    workflow: Workflow
+    sdg: SDG
+    sustainable-development-goal: nachhaltiges Entwicklungsziel
+    sdg_target: Vorgabe für SDG
+    operator_services: Bediener-Dienstleistungen
   view:
+    title: Catalog of Digital Solutions
+    subtitle: Digital Impact Alliance
     about:
-      sdg_title: "SDG Digital Investment Framework"
-      sdg_subtitle: "Ein gesamtstaatlicher Ansatz zur Koordinierung von Investitionen in digitale Technologien zur Erreichung der SDGs"
-      enter_catalog: "Entdecken Sie den Katalog"
-      return_catalog: "Kehren Sie zum Katalog zurück"
-      explanation1: "Trotz erheblicher Investitionen haben wir keine echte Skalierung in Softwareplattformen gesehen und wir haben keine koordinierten Investitionen in Produkte gesehen, die zur Erfüllung der SDGs entwickelt wurden. Digitale Investitionen und Implementierungen werden meistens nach Sektoren isoliert, was zu einer erheblichen Fragmentierung und Doppelarbeit führt."
-      explanation2: "Diese Fragmentierung macht es für Regierungen schwierig zu verstehen, wo gemeinsame Produkte verwendet werden könnten, und ermöglicht einen gesamtstaatlichen Ansatz für Investitionen in digitale Infrastrukturen, die wiederverwendbare digitale Dienste in großem Maßstab mit einer höheren Kapitalrendite bereitstellen können."
-      explanation3: "Dieses Online-Tool führt vier miteinander verbundene Ebenen ein und bietet einen schrittweisen Prozess, mit dem Unternehmen beginnen können, die Unternehmensarchitektur zu planen und den Fortschritt in Richtung der SDGs zu beschleunigen."
-      sdgs: "Zielen für nachhaltigen Entwicklung"
-      use_cases: "Anwendungsfälle"
-      bbs: "IKT-Bausteine"
-      products: "Produkte"
-      ict_bbs: "IKT-Bausteine"
-      workflows: "Arbeitsabläufe"
-      read_more: "Weiterlesen"
-      watch_video: "Schau das Video"
-      launch: "Starten Sie die App"
-      close: "Schließen"
-      intro: "Intro"
-      overview: "Überblick"
-      policy_partners: "Politische Entscheidungsträger und Implementierungspartner"
-      ministers_specialists: "IKT-Minister und technische Spezialisten"
-      donors: "Spender"
-      donors_text1: "Spender können dieses Tool verwenden, um Investitionen mit anderen Spendern zu koordinieren. Mithilfe der Linse des SDG-Ziels kann ein Spender zu einem vorrangigen SDG-Ziel navigieren, um zu sehen, welche Anwendungsfälle, Workflows und IKT-Bausteinkarten das Fortschreiten dieses Ziels unterstützen. Das Verständnis dieser Verbände bildet die Grundlage für die Geber, um die Überschneidungen mit anderen Gebern zu erkennen, die andere SDG-Ziele unterstützen. Das Tool zeigt, dass eine Handvoll Arbeitsabläufe und Bausteine ​​eine Vielzahl von SDG-Zielen und entsprechenden Anwendungsfällen liefern können."
-      donors_link: "Entdecken Sie die SDG-Ziele"
-      policy_makers: "Politische Entscheidungsträger"
-      policy_text1: "Politische Entscheidungsträger auf jeder Ebene können dieses Tool verwenden, um die verschiedenen Anwendungsfälle zu untersuchen, an deren Implementierung sie interessiert sind, um verschiedene Entwicklungsergebnisse zu erzielen. In jedem Anwendungsfall wird hervorgehoben, welche Workflows und IKT-Bausteine ​​erforderlich sind, um den digitalen Aspekt des Anwendungsfalls zu unterstützen. Die Identifizierung der generischen IKT-Bausteine ​​unterstützt die sektor- und ministerienübergreifende Koordinierung, um einen ganzheitlichen Regierungsansatz zu verfolgen und digitale Investitionen zu tätigen."
-      policy_link: "Entdecken Sie die Anwendungsfälle"
-      ict_ministers: "Technologie- und IKT-Minister"
-      ict_text1: "Technologieminister können dieses Tool verwenden, um Systeme und Anwendungen, die derzeit im Land bereitgestellt werden, den IKT-Bausteinen zuzuordnen, um zu verstehen, welche anderen Anwendungsfälle mit ihrer aktuellen Technologie unterstützt werden könnten. Durch die Zuordnung von Systemen zu den IKT-Bausteinen kann auch besser verstanden werden, welche Lücken derzeit bestehen oder welche Konsolidierungsmöglichkeiten bestehen."
-      ict_link: "Entdecken Sie die IKT-Bausteine"
-      specialists: "Technologiespezialisten"
-      specialists_text1: "Technologiespezialisten können dieses Tool verwenden, um Angebote und Interoperabilitäts-Hooks zu integrieren und so die End-to-End-Anforderungen von Regierungsprogrammen zu erfüllen. Entdecken Sie auch vorhandene Produkte, die die Anwendungsfälle und Arbeitsabläufe für bestimmte programmatische Anforderungen erfüllen können, und geben Sie Einblicke in die Fragen zum Erstellen oder Kaufen für die Projektimplementierung."
-      specialists_link: "Entdecken Sie die Produkte"
-      implementers: "Implementierungspartner"
-      implementers_text1: "Implementierungspartner können mit diesem Tool ermitteln, welche IKT-Bausteine ​​und -Produkte verschiedene erforderliche Workflows oder Geschäftsprozesse liefern, um Entwicklungsprogramme oder verschiedene digitale Initiativen bereitzustellen."
-      implementers_link: "Entdecken Sie die Arbeitsabläufe"
-      sdg_desc: "Die SDGs umfassen 17 Ziele und 169 Ziele, die globale Prioritäten für Investitionen darstellen, um eine nachhaltige Entwicklung zu erreichen."
-      use_case_desc: "Ein Anwendungsfall definiert die Schritte, die eine Person oder ein System ausführen wird, um ein Geschäftsziel zu erreichen."
-      workflow_desc: "Ein Arbeitsabläufe ist ein allgemeiner Geschäftsprozess, der auf SDG-Anwendungsfälle in mehreren Sektoren angewendet werden kann."
-      bb_desc: "Ein IKT-Baustein ist eine unternehmensfähige, wiederverwendbare Softwarekomponente, die Schlüsselfunktionen bereitstellt, um generische Arbeitsabläufe über mehrere Sektoren hinweg zu ermöglichen."
-      product_desc: "Ein Produkt ist ein spezifisches Technologieangebot, mit dem ein oder mehrere Bausteine ​​implementiert werden können."
-      contact: "Kontaktiere uns"
-      contact_text: "Weitere Informationen erhalten Sie vom ICT4SDG-Team der Digital Impact Alliance"
-      itu: "Dieser Rahmen wurde in Zusammenarbeit mit der International Telecommunications Union (ITU) entwickelt."
+      active_users: Aktive Nutzer in den letzten 24 Stunden
+      help: >-
+        Informationen zur Nutzung des Katalogs finden Sie auf unserer
+        Dokumentationsseite
+      help_link: hier
+      sdg_title: Digitaler Investitionsrahmen für SDG
+      sdg_subtitle: >-
+        Ein Whole-of-Government-Ansatz zur Koordinierung von Investitionen in
+        digitale Technologien, um die Ziele für nachhaltige Entwicklung zu
+        erreichen
+      enter_catalog: Erkunden Sie den Katalog
+      return_catalog: Zurück zum Katalog
+      explanation1: >-
+        Trotz bedeutsamer Investitionen haben wir keine entsprechenden
+        Auswirkungen auf Software-Plattformen und keine koordinierten
+        Investitionen in Produkte festgestellt, die entwickelt wurden, um Ziele
+        für nachhaltige Entwicklung zu erfüllen. Digitale Investitionen und
+        Implementierungen werden meistens nach Sektoren aufgeteilt, was zu einer
+        erheblichen Fragmentierung und Verdopplung der Anstrengungen führt.
+      explanation2: >-
+        Aufgrund dieser Fragmentierung ist es für Regierungen schwierig, zu
+        erkennen, wann gebräuchliche Produkte verwendet werden könnten, was für
+        einen Whole-of-Government-Ansatz bei der Investition in digitale
+        Infrastruktur spricht. Hierbei können wiederverwendbare digitale Dienste
+        in angemessenem Umfang mit höherer Anlagenrendite entwickelt werden.
+      explanation3: >-
+        Dieses Online-Tool stellt fünf miteinander verknüpfte Schichten vor und
+        bietet einen schrittweisen Prozess, der es Unternehmen ermöglicht, mit
+        der Planung ihrer Unternehmensarchitektur zu beginnen und die
+        Fortschritte hin zu Zielen für nachhaltige Entwicklung zu beschleunigen.
+      sdgs: Ziele für nachhaltige Entwicklung
+      use_cases: Anwendungsfälle
+      bbs: Bausteine
+      products: Produkte
+      ict_bbs: ICT-Bausteine
+      workflows: Workflows
+      read_more: Erfahren Sie mehr
+      watch_video: Video anschauen
+      launch: App einführen
+      close: Schließen
+      intro: Intro
+      overview: Übersicht
+      policy_partners: Politische Entscheidungsträger und Durchführungspartner
+      ministers_specialists: ICT-Minister und technische Experten
+      donors: Spender
+      donors_text1: >-
+        Spender können dieses Tool nutzen, um Investitionen mit anderen Spendern
+        zu koordinieren. Im Hinblick auf eine Vorgabe für Ziele für nachhaltige
+        Entwicklung (Akronym: SDG) kann ein Spender zu einem prioritären Ziel
+        für nachhaltige Entwicklung navigieren und sehen, welche
+        Anwendungsfälle, Workflows und ICT-Bausteine die Fortschritte bei diesem
+        Ziel unterstützen können.  Das Verständnis dieser Zusammenhänge stellt
+        die Grundlage für Spender dar, um festzustellen, welche Schnittmengen
+        mit anderen Spendern bei der Unterstützung weiterer Ziele für
+        nachhaltige Entwicklung bestehen. Das Tool zeigt, dass wenige Workflows
+        und Bausteine vielfältige Zielvorgaben für SDG und entsprechende
+        Anwendungsfälle präsentieren können.
+      donors_link: Vorgaben für SDGs entdecken
+      policy_makers: Politische Entscheidungsträger
+      policy_text1: >-
+        Politische Entscheidungsträger können dieses Tool auf jeder Ebene
+        nutzen, um die verschiedenen Anwendungsfälle zu untersuchen, die sie
+        gerne implementieren würden, um verschiedene Entwicklungsergebnisse zu
+        erzielen. Bei allen Anwendungsfällen wird aufgezeigt, welche Workflows
+        und ICT-Bausteine notwendig sind, um den digitalen Aspekt des
+        Anwendungsfalls zu unterstützen. Die Identifizierung der allgemeinen
+        ICT-Bausteine unterstützt die sektor- und ministeriumsübergreifende
+        Koordination und ermöglicht einen Whole-of-Government-Ansatz bei der
+        digitalen Investition.
+      policy_link: Anwendungsfälle entdecken
+      ict_ministers: Technologie- und ICT-Minister
+      ict_text1: >-
+        Technologieminister können dieses Tool nutzen, um Systeme und
+        Anwendungen den derzeit im Land eingesetzten ICT-Bausteinen zuzuordnen,
+        um zu erkennen, welche weiteren Anwendungsfälle mit der aktuellen
+        Technologie unterstützt werden könnten. Die Zuordnung von Systemen zu
+        den ICT-Bausteinen kann außerdem für ein besseres Verständnis der
+        aktuell bestehenden Lücken oder Möglichkeiten der Konsolidierung sorgen.
+      ict_link: ICT-Bausteine entdecken
+      specialists: Technologie-Experten
+      specialists_text1: >-
+        Technologie-Experten können dieses Tool nutzen, um bei der Integration
+        von Angeboten und Interoperabilitäts-Hooks zu unterstützen und so die
+        durchgängigen Anforderungen von Regierungsprogrammen zu erfüllen.
+        Darüber stehen bereits existierende Produkte zur Verfügung, welche für
+        Anwendungsfälle und Workflows für spezifische programmatische
+        Anforderungen geeignet sind, was Erkenntnisse für die Frage „bauen oder
+        kaufen“ bei der Projektimplementierung liefert.
+      specialists_link: Produkte entdecken
+      implementers: Durchführungspartner
+      implementers_text1: >-
+        Durchführungspartner können dieses Tool nutzen, um zu erkennen, welche
+        ICT-Bausteine und Produkte für die verschiedenen Workflows oder
+        Geschäftsprozesse notwendig sind, um Entwicklungsprogramme oder
+        verschiedene digitale Initiativen zu fördern.
+      implementers_link: Workflows entdecken
+      sdg_desc: >-
+        Die Ziele für nachhaltige Entwicklung umfassen 17 Ziele und 169
+        Zielvorgaben, welche für die globalen Prioritäten bei Investitionen
+        stehen, um nachhaltige Entwicklung zu erreichen.
+      use_case_desc: >-
+        Ein Anwendungsfall legt die Schritte fest, welche eine Person oder ein
+        System unternimmt, um ein geschäftliches Ziel zu erreichen.
+      workflow_desc: >-
+        Ein Workflow ist ein allgemeiner Geschäftsprozess, der quer durch
+        verschiedene Sektoren auf SDG-Anwendungsfälle angewendet werden kann.
+      bb_desc: >-
+        Ein ICT-Baustein ist eine unternehmensfähige wiederverwendbare
+        Software-Komponente, welche eine wichtige Funktionalität bietet, um quer
+        durch verschiedene Sektoren allgemeine Workflows zu ermöglichen.
+      product_desc: >-
+        Ein Produkt ist ein konkretes Technologieangebot, das entwickelt wurde,
+        um einen oder mehrere Bausteine zu implementieren.
+      contact: Kontaktieren Sie uns
+      contact_text: >-
+        Für weitere Informationen kontaktieren Sie bitte das Digital Impact
+        Alliance ICT 4SDG Team
+      itu: >-
+        Dieser Rahmen wurde in Zusammenarbeit mit der International
+        Telecommunications Union (ITU) entwickelt
     audit:
-      audit-log: "Änderungen angemeldet für"
-      username: "Nutzername"
-      action: "Aktion"
-      changes: "Änderungen"
+      audit-log: 'Änderungen protokolliert für '
+      username: Benutzername
+      action: Maßnahme
+      changes: Änderungen
     building-block:
+      form:
+        all-maturity: Gesamter Reifegrad
+        maturity-level: Reifegrad
       show:
-        short-description: kurze Beschreibung
-        full-description: Gesamte Beschreibung
+        short-description: Kurzbeschreibung
+        full-description: Ausführliche Beschreibung
         other-names: Andere Namen
-        key-functionalities: Wichtige digitale Funktionen
-        example-of-use: Anwendungsbeispiele in verschiedenen Branchen
-        no-data: Wir konnten keine Bausteine ​​für diesen Anwendungsfall finden.
+        key-functionalities: Zentrale digitale Funktionalitäten
+        example-of-use: Beispiele für die Anwendung in verschiedenen Sektoren
+        no-data: Wir konnten keine Bausteine für diesen Anwendungsfall finden.
+        request-elevation: >-
+          Wir haben festgestellt, dass Sie einen Baustein verändert haben, aber
+          keinen Reifegrad hierfür festlegen konnten.
+
+          Sie könnten dazu in der Lage sein, wenn Sie eine Rollenerweiterung
+          beantragen, indem Sie auf %{href}klicken.
       index:
-        bb-product: "Beispielsoftware:"
+        bb-product: 'Beispielprodukt: '
         bb-product-popover:
-          one: Beispiel für vorhandene Software
-          other: Beispiel für vorhandene Software
-
-        bb-workflow: "Beispielarbeitsablauf:"
+          one: Beispiel bestehender Software
+          other: Beispiel bestehender Softwares
+        bb-workflow: 'Beispiel für Workflow: '
         bb-workflow-popover:
-          one: Zuordnung zu zugeordneten Arbeitsabläuf
-          other: Zuordnung zu zugeordneten Arbeitsabläufen
+          one: Zuordnung zu zugehörigem Workflow
+          other: Zuordnung zu zugehörigen Workflows
+        definition: >-
+          Bausteine sind unternehmensfähige wiederverwendbare
+          Software-Komponenten, welche eine wichtige Funktionalität bieten, um
+          quer durch verschiedene Sektoren allgemeine Workflows zu ermöglichen.
+        export-json: Export (json)
+        export-csv: Export (csv)
+        characteristics: >
+          Wiederverwendbare Software-Komponenten  
 
-        definition: "Bausteine ​​sind unternehmensfähige, wiederverwendbare Softwarekomponenten, die Schlüsselfunktionen bereitstellen und generische Arbeitsabläufe über mehrere Sektoren hinweg ermöglichen."
-        characteristics: |
-          Wiederverwendbare Softwarekomponenten
-          Kann Open Source, kommerzielles Standardprodukt oder frei verfügbar mit offenem Zugriff auf Daten sein
-          Erleichtert einen oder mehrere allgemeine Arbeitsabläufe
-          Anwendbar auf mehrere Anwendungsfälle in mehreren Sektoren
-          Interoperabel mit anderen IKT-Bausteinen
-          Entwickelt für Skalierbarkeit und Erweiterbarkeit
+          Kann open source, commercial off-the-shelf (COTS) oder frei verfügbar
+          mit offenem Zugriff auf Daten sein  
+
+          Ermöglicht einen oder mehrere allgemeine Workflows  
+
+          Anwendbar auf zahlreiche Anwendungsfälle quer durch verschiedene
+          Sektoren  
+
+          Interoperabilität mit anderen ICT-Bausteinen  
+
+          Auf Skalierbarkeit und Erweiterbarkeit ausgelegt  
+
           Standardbasiert
-        description: "Jede IKT-Bausteinseite enthält eine Beschreibung, wichtige digitale Funktionen, branchenspezifische Beispiele, Beispielsoftwareprodukte und Zuordnungen zu Arbeitsabläufen, die in diesem Framework definiert sind. Die Liste der IKT-Bausteine, beispielhaften Softwareprodukte und Zuordnungen ist nicht vollständig und wird in zukünftigen Versionen hinzugefügt. Bitte beachten Sie, dass die Beispiele für Softwareprodukte nur zur Veranschaulichung dienen. Weitere Zuordnungen und Rankings bestehender Produkte auf der Grundlage von Reife, Nachhaltigkeit und Anwendbarkeit auf die IKT-Bausteine ​​werden im Laufe der Zeit behandelt." 
+        description: >-
+          Jede ICT-Bausteinseite enthält eine Beschreibung, zentrale digitale
+          Funktionalitäten, sektorspezifische Beispiele, Beispiele für
+          Software-Produkte sowie Zuordnungen zu in diesem Rahmen definierten
+          Workflows. Die Auflistung der ICT-Bausteine, exemplarischen
+          Software-Produkte und Zuordnungen ist nicht erschöpfend und wird bei
+          zukünftigen Versionen weiter ergänzt. Bitte beachten Sie, dass die
+          Beispiele für Software-Produkte nur der Veranschaulichung dienen.
+          Weitere Zuordnungen sowie Einstufungen bestehender Produkte, basierend
+          auf Produktreife, Nachhaltigkeit und Anwendbarkeit für ICT-Bausteine,
+          erfolgen nach und nach.
+        maturity: Produktreife
+        mature_only: Ausschließlich ausgereifte Bausteine anzeigen
+        is_beta: Die Spezifikationen für diesen Baustein wurden nicht validiert
+        is_mature: Die Spezifikationen für diesen Baustein wurden validiert
+        view-audit: Auditprotokoll anzeigen
     candidate-organization:
       form:
-        created: Vielen Dank für Ihre Einreichung. Wir werden Ihre Einreichung sorgfältig prüfen. Die genehmigte Einreichung wird in der Organisationsliste verfügbar.
+        created: >-
+          Vielen Dank für Ihre Einsendung. Wir werden Ihre Einsendung sorgfältig
+          prüfen. Genehmigte Einreichungen sind auf der Unternehmensliste
+          zugänglich.
       index:
         approve: Genehmigen
-        no-data: "Wir konnten keine Kandidatenorganisation in der Datenbank finden."
+        no-data: Wir konnten keinen Unternehmenskandidaten in der Datenbank finden.
         reject: Ablehnen
         status: Status
         status-approved: Genehmigt
-        status-new: Neue Einreichung
+        status-new: Neue Einsendung
         status-rejected: Abgelehnt
-        website: Webseite
+        website: Website
+    candidate-product:
+      form:
+        created: >-
+          Vielen Dank für Ihre Einsendung. Wir werden Ihre Einsendung sorgfältig
+          prüfen.
+
+          Genehmigte Einreichungen sind auf der Unternehmensliste zugänglich.
+      index:
+        approve: Genehmigen
+        no-data: Wir konnten keinen Produktkandidaten in der Datenbank finden.
+        reject: Ablehnen
+        status: Status
+        status-approved: Genehmigt
+        status-new: Neue Einsendung
+        status-rejected: Abgelehnt
+        submitter-email: E-Mail-Adresse des Einsenders
+        website: Website
+    candidate-role:
+      form:
+        description: Weshalb möchten Sie Ihre Rolle erweitern lassen? Bitte hier erläutern.
+      index:
+        approve: Genehmigen
+        approved: Genehmigt
+        new: Neue Anfrage
+        reject: Ablehnen
+        rejected: Abgelehnt
+        request-reason: Anforderungsgrund
+        request-roles: Angeforderte Rollen
+        request-status: Anforderungsstatus
+      show:
+        request-elevation: >-
+          Wir haben festgestellt, dass Sie versucht haben, Organisationen oder
+          Produkte außerhalb des Geltungsbereichs Ihrer Rolle hinzuzufügen.
+
+          Sie können eine Rollenerweiterung beantragen, indem Sie auf
+          %{href}klicken.
+    category-indicator:
+      form:
+        weight: Bedeutung des Indikators
+        indicator-type: Art des Indikators
+        source-indicator: Name des Indikators an der Quelle
+        data-source: Woher wir diesen Indikator beziehen
+    country:
+      show:
+        other-names: Andere Namen
+    rubric-category:
+      form:
+        description: Beschreibung der Kategorie
+        weight: Bedeutung der Kategorie
+      index:
+        category-heading: Indikatoren in dieser Kategorie
+        no-data: Wir konnten keinen Indikator für diese Kategorie finden.
     contact:
       form:
-        email: Email
-        title: Berufsbezeichnung
+        email: E-Mail
+        title: Titel
     devise:
-      email: Email
-      password: Passwort
-      password-confirmation: Passwort Bestätigung
-      organization-required: "Organisationsinformationen sind erforderlich, wenn Sie sich als Organisationseditor anmelden."
-      organization-nomatch: "Die Website der Organisation stimmt nicht mit Ihrer E-Mail-Adresse überein."
-      organization-tooltip: "Bewerben Sie sich als Eigentümer der Organisation, damit Sie die Organisationsinformationen aktualisieren können."
-      product-tooltip: "Optional als Product Owner bewerben. Sie müssen von unserem Teammitglied überprüft werden, um dies zu tun."
-      select-org: Wählen Sie Ihre Organisation aus.
-      select-prod: Wählen Sie Ihr Produkt.
-      have-account: "Schon Konto?"
-      no-account: "Noch keinen Konto?"
-      sign-up: Anmelden
-      log-in: Anmeldung
-      forget-password: "Passwort vergessen?"
-      no-confirmation: "Sie haben keine Bestätigungsanweisungen erhalten?"
-      no-unlock: "Sie haben keine Anweisungen zum Entsperren erhalten?"
+      email: E-Mail
+      username: Benutzername
+      password: Kennwort
+      password-confirmation: Kennwortbestätigung
+      organization-required: >-
+        Unternehmensinformationen sind bei der Anmeldung als Unternehmenseditor
+        erforderlich.
+      organization-nomatch: Die Unternehmens-Website stimmt nicht mit Ihrer E-Mail-Adresse überein.
+      organization-tooltip: >-
+        Bewerben Sie sich als Verantwortlicher für das Unternehmen, um
+        Unternehmensinformationen aktualisieren zu können.
+      product-tooltip: >-
+        Optional bewerben Sie sich als Produktverantwortlicher. Sie müssen
+        hierfür von unserem Teammitglied verifiziert werden.
+      select-org: Wählen Sie Ihr Unternehmen aus.
+      select-prod: Wählen Sie Ihr Produkt aus.
+      have-account: Verfügen Sie bereits über ein Konto?
+      no-account: Sie verfügen noch über kein Konto?
+      sign-up: Registrieren
+      log-in: Anmelden
+      forget-password: Kennwort vergessen?
+      no-confirmation: Haben Sie keine Anweisungen für die Bestätigung erhalten?
+      no-unlock: Haben Sie keine Anweisungen für die Freischaltung erhalten?
+      accept-terms: >-
+        Indem Sie hier klicken, akzeptieren Sie die Nutzungsbedingungen dieser
+        Website
+      terms-popup: Bitte die Geschäftsbedingungen akzeptieren
+    feedback:
+      info-text: Wir hätten gerne Feedback von Ihnen
     location:
       form:
         other-names: Andere Namen
       index:
-        no-data: Wir konnten keinen Speicherort in der Datenbank finden.
+        no-data: Wir konnten keinen Standort in der Datenbank finden.
+    maturity-rubric:
+      index:
+        add-category: Kategorie hinzufügen
+      form:
+        description: Beschreibung der Reiferubrik
+    notification:
+      favorite-save-notification: Wir haben dies zu Ihren Favoriten hinzugefügt!
+      favorite-remove-notification: Wir haben dies von Ihren Favoriten entfernt
     organization:
       form:
-        endorser: Indossar
+        endorser: Förderer
         aggregator: Aggregator
         other-names: Andere Namen
-        website: Webseite
-        when-endorsed: Wenn gebilligt
-        description-placeholder: Beschreibung der Organisation finden Sie hier.
+        website: Website
+        when-endorsed: Wann gefördert
+        description-placeholder: Hier Beschreibung des Unternehmens.
       index:
-        endorsers: Indossaren
+        export-json: Export (json)
+        export-csv: Export (csv)
+        endorsers: Förderer
         aggregators: Aggregatoren
         description: Beschreibung
-        endorsed-date: Befürwortet am
+        endorsed-date: Gefördert am
         export: Exportieren
         export-option: Exportieren mit Kontaktinformationen
-        filter: filtern
+        filter: Filter
         year: Jahr
-        view-audit: Überwachungsprotokoll anzeigen
+        view-audit: Auditprotokoll anzeigen
       map:
-        aggregators: Aggregator- und Operator-Abdeckungskarte
-        title: Karte der Endorser digitaler Prinzipien
+        aggregators: Abdeckungskarte Aggregator &amp; Bediener
+        title: Karte der Förderer digitaler Grundsätze
         all-aggregators: Alle Aggregatoren
-        all-operators: Alle Betreiber
+        all-operators: Alle Bediener
         all-services: Alle Dienstleistungen
         all-sectors: Alle Sektoren
         all-years: Alle Jahre
       show:
-        other-offices: Andere Büros
+        other-offices: Weitere Büros
         current: Aktuell
         unknown: Unbekannt
-        with-org: Mit Organisation
+        with-org: Mit Unternehmen
+        owner: >-
+          Wenn Sie zu diesem Unternehmen gehören, können Sie die
+          Unternehmensinformationen aktualisieren. Weitere Informationen finden
     portal:
-      index: 
-        landing-page: Zielseite
+      index:
+        landing-page: Landing-Page
         background-color: Hintergrundfarbe
-        page-footer: Fußzeile
-        header-logo: Header-Logo
+        page-footer: Fußzeile der Seite
+        header-logo: Überschrift Logo
       form:
-        about-page: Stellen Sie Inhalte für die Hauptzielseite bereit
-        background-color: Geben Sie eine Hintergrundfarbe im rrggbb-Format ein
-        page-footer: Stellen Sie Inhalte für die Fußzeile der Website bereit
-        header-logo: "Laden Sie eine Datei hoch, die als Haupt-Header-Logo verwendet werden soll"
-        subdomain: Subdomain
+        about-page: Inhalt für die Haupt-Landing-Page angeben
+        background-color: Hintergrundfarbe im rrggbb-Format eingeben
+        page-footer: Inhalt für die Fußzeile der Seite angeben
+        header-logo: Eine Datei zur Verwendung als Hauptüberschriftslogo hochladen
+        subdomain: Sub-Domain
     product:
       form:
         complete-assessment: Bewertung als abgeschlossen markieren.
         default-url: Standard-URL
-        digisquare-maturity: Digital Square Produktreife
+        digisquare-maturity: Digital Square Maturity
+        product-maturity: Produktreife-Score
         high: hoch
-        included-products: Enthaltene Produkte
+        included-products: Eingeschlossene Produkte
         interoperable-products: Interoperable Produkte
-        is-launchable: "Überprüfen Sie, ob das Produkt automatisch gestartet werden kann."
+        is-launchable: Prüfen, ob Produkt automatisch eingeführt werden kann.
+        is-vetted: Prüfen, ob Produkt ein Vetted Digital Public Good ist
         low: niedrig
         medium: mittel
-        osc-maturity: OSC-Reife
+        osc-maturity: OSC-Produktreife
         other-names: Andere Namen
-        description-placeholder: Geben Sie hier die Produktbeschreibung ein
+        description-placeholder: Hier Produktbeschreibung eingeben
         repository: Code-Repository
-        start-assessment: Beginnen Sie mit der Bewertung dieses Produkts.
-        website: Webseite
-        est-hosting: Geschätzte Hosting-Kosten
-        est-invested: Geschätztes investiertes Geld
+        submitter-email: Ihre E-Mail-Adresse
+        start-assessment: Beginn der Produktbewertung.
+        website: Website
+        est-hosting: Geschätzte Hostingkosten
+        est-invested: Geschätzte Investitionssumme
+        beta: Beta
+        validated: Validiert
+        self-reported: Selbstberichtet
+        bb-mapping: Angeben, ob Zuordnung Beta oder Validiert ist
+        sdg-mapping: Angeben, ob Zuordnung Selbstberichtet oder Validiert ist
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        toggle-favorite: Hinzufügen zu/entfernen von Liste der bevorzugten Produkte
         description: Beschreibung
-        filter: Filtern
-        has-maturity: "Hat die Reife?"
-        product-graph: Produktdiagramm
-        is_endorsed: "Wird von einem Endorser verwendet / gewartet"
-        is_deployable: "Dieses Produkt kann mit einem Klick bereitgestellt werden"
-        multiple: "verfügt über mehrere Repositorys. Informationen zu jedem werden unten angezeigt."
-        source: "Quelle:"
-        sources: "Quellen:"
-        source_dial: "Digital Impact Alliance Open Source Center"
-        source_unicef: "UNICEF"
-        source_digital_square: "Digital Square"
-        footer_bb_candidate: "Kandidat für"
-        footer_bb: "IKT-Baustein"
-        footer_interop: "Kompatibel mit"
-        footer_sdg: "Erfüllt SDG"
-        footer_maturity_score: "Gesamtprozentsatz der erfüllten Kriterien (1-10)"
-        footer_maturity_ds: "Digital Square globale Modellwerte für gute Reife (1-10)"
-        footer_maturity_osc: "DIAL Open Source Center-Reifegradmodell Gesamtpunktzahl"
-        footer_osc_score: "Gesamtprozentsatz der erfüllten Kriterien (1-10)"
-        footer_popover_bb: "Kandidat für die folgenden IKT-Bausteine"
-        footer_popover_sdg: "Erfüllt die folgenden SDGs"
-        footer_popover_interop: "Dieses Produkt ist kompatibel mit"
-        footer_popover_maturity: "Produktreifebewertungen"
-        definition: "Ein Produkt ist eine Softwarelösung, die einen oder mehrere IKT-Bausteine ​​erfüllen kann"
-        footer_help: "Die Fußzeile der Produktkarte enthält 3 Zeilen. Bewegen Sie den Mauszeiger über ein Symbol, um weitere Informationen zu den angezeigten Daten zu erhalten. Die ersten beiden Zeilen können Informationen darüber enthalten, welche Ziele für die nachhaltige Entwicklung dieses Produkt anspricht, für welche Bausteine ​​die Produkte in Frage kommen, Informationen zur Produktreife, gemessen vom Open Source Center oder Digital Square von DIAL, und mit welchen anderen Produkten dieses Produkt zusammenarbeitet. Die untere Zeile enthält immer Informationen zu Datenquellen für dieses Produkt. Derzeit erhalten wir Produktdaten aus dem DIAL Open Source Center, Digital Square und der Liste der globalen Warenkandidaten von Unicef."
+        dataset: Dataset
+        filter: Filter
+        has-maturity: Produktreife erreicht?
+        product-graph: Produktgrafik
+        is_endorsed: Von Förderer verwendet/gepflegt
+        is_deployable: Dieses Produkt kann mit einem Klick eingesetzt werden
+        is_vetted: >-
+          Dieses Produkt wird von der Digital Public Goods Alliance als Digital
+          Public Good geführt
+        covid-19-related: Dieses Produkt kann als Reaktion auf COVID-19 verwendet werden
+        multiple: >-
+          verfügt über mehrere Repositories. Die jeweiligen Informationen sind
+          nachstehend aufgeführt.
+        status: Status
+        endorsers: Förderer
+        source: 'Quelle: '
+        sources: 'Quellen: '
+        source_dial: Digital Impact Alliance Open Source Center
+        types: 'Typen: '
+        source_unicef: Unicef
+        source_dpga: Digital Public Goods Alliance
+        source_digital_square: Digital Square
+        footer_bb_candidate: 'Kandidat für '
+        footer_bb: ' Baustein'
+        footer_interop: 'Kompatibel mit '
+        footer_sdg: 'Erfüllt Ziele für nachhaltige Entwicklung '
+        footer_maturity_score: 'Reife-Score: '
+        footer_maturity_ds: Digital Square Global Good Maturity Model Scores (1-10)
+        footer_maturity_osc: DIAL Open Source Center Maturity Model Overall Score
+        footer_osc_score: Gesamtprozentsatz der erfüllten Kriterien (1-10)
+        footer_popover_bb: Kandidat für folgende Bausteine
+        footer_popover_sdg: Erfüllt die folgenden Ziele für nachhaltige Entwicklung
+        footer_popover_interop: Dieses Produkt ist kompatibel mit
+        footer_popover_maturity: Bewertungen der Produktreife
+        definition: >-
+          Ein Produkt ist eine Softwarelösung, die einem oder mehreren
+          Bausteinen gerecht wird
+        footer_help: >-
+          Die Fußzeile der Produktkarte enthält 3 Reihen. Fahren Sie mit dem
+          Cursor über ein Symbol, um mehr Informationen über die dargestellten
+          Daten zu erhalten. Die ersten beiden Reihen können Informationen
+          darüber enthalten, welche nachhaltigen Entwicklungsziele dieses
+          Produkt unterstützt, für welche Bausteine die Produkte geeignet sind,
+          wie der Produktreife-Score ist, der vom DIAL Open Source Center oder
+          von Digital Square erfasst wird, und welche Interoperabilität mit
+          anderen Produkten besteht. Die letzte Zeile enthält stets
+          Informationen über Datenquellen zu diesem Produkt - derzeit fragen wir
+          Daten vom DIAL Open Source Center, von Digital Square und der Global
+          Goods Kandidatenliste von Unicef ab.
+        covid_only: Ausschließlich COVID-19.
       launch:
-        auto-launch: Starten Sie automatisch eine Instanz dieses Produkts
+        auto-launch: Automatische Einführung einer Produktinstanz
       show:
-        auto-launch: Automatischer Start
-        not-auto-launch: Dieses Produkt ist nicht für den automatischen Start konfiguriert
-        no-digisquare-eval: Dieses Produkt wurde nicht mit dem Reifegradmodell von Digital Square bewertet.
-        no-include-product: Wir haben keine Informationen zur Zusammensetzung für dieses Produkt.
-        no-interrop-product: Wir haben keine Interoperationsinformationen für dieses Produkt.
-        no-osc-eval: Dieses Produkt wurde nicht mit dem OSC-Reifegradmodell bewertet.
+        auto-launch: Automatische Einführung
+        not-auto-launch: Dieses Produkt ist nicht für die automatische Einführung konfiguriert
+        overall-maturity-score: Gesamter Reife-Score
+        overall-score: Gesamter Score
+        no-maturity: Wir haben keine Reifeinformationen zu diesem Produkt
+        no-include-product: Wir haben keine Einbeziehungsinformationen zu diesem Produkt.
+        no-interrop-product: Wir haben keine Interoperabilitätsinformationen zu diesem Produkt.
+        no-osc-eval: Dieses Produkt wurde nicht mit dem OSC-Produktreifemodell bewertet.
         active-version: Aktuelle Version
         license: Lizenz
         license-unknown: Unbekannt
+        repository-info: Repository-Informationen
         statistics: Statistiken
-        star: Sterne
-        watcher: Beobachter zählen
-        fork: Gabelzahl
+        star: Stars
+        watcher: Anzahl der Zuschauer
+        fork: Anzahl der Abspaltungen
         current-version: Aktuelle Version
         created: Erstellt
         last-updated: Letzte Aktualisierung
-        open-pr: Pull-Anfragen öffnen
-        merged-pr: Zusammengeführte Pull-Anforderungen
-        no-version-data: Keine Daten verfügbar
+        open-pr: Offene Pull-Anfragen
+        merged-pr: Kombinierte Pull-Anfragen
+        no-version-data: Daten nicht verfügbar
         very-active: Sehr aktives Repository
         not-very-active: Nicht sehr aktives Repository
         inactive: Inaktives Repository
-        na: N/A
+        na: k. A.
         cost-data: Kostendaten für dieses Produkt
-        no-cost-data: Wir haben keine Kosteninformationen für dieses Produkt
-        code-lines: Zeilen von Code
-        est-effort: Geschätzter Aufwand (Personenmonate)
-        est-hosting: Geschätzte Hosting-Kosten (monatlich)
-        est-invested: Geschätztes investiertes Geld
-        cocomo: Der geschätzte Aufwand wird nach der COCOMO-Methode berechnet. 
+        no-cost-data: Wir haben keine Kosteninformationen zu diesem Produkt
+        code-lines: Codezeilen
+        est-effort: Geschätzter Aufwand (Person/Monate)
+        est-hosting: Geschätzte Hostingkosten (monatlich)
+        est-invested: Geschätzte Investitionssumme
+        cocomo: Der geschätzte Aufwand wird mit der COCOMO-Methode berechnet.
         classifications: Produktklassifizierungen
         classification-source: Quelle
+        owner: >-
+          Wenn Sie der Verantwortliche für dieses Produkt sind, können Sie diese
+          Produktinformationen aktualisieren. Weitere Informationen finden
     product-suite:
       index:
-        no-data: Wir konnten keine Produktsuite in der Datenbank finden.
+        no-data: Wir konnten keinen Produkt-Suite in der Datenbank finden.
     project:
+      form:
+        org-owner-tooltip: >-
+          Als Unternehmensverantwortlicher sind Sie nur befugt, Ihr Unternehmen
+          zu einem Projekt hinzuzufügen/davon zu entfernen.
+        product-owner-tooltip: >-
+          Als Produktverantwortlicher sind Sie nur befugt, Ihre eigenen Produkte
+          zu einem Projekt hinzuzufügen/davon zu entfernen.
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        toggle-favorite: Hinzufügen zu/entfernen von Liste der bevorzugten Projekte
         budget: Budget
         description: Beschreibung
-        end-date: Endtermin
+        end-date: Enddatum
         no-project: Wir konnten kein Projekt in der Datenbank finden.
         start-date: Anfangsdatum
         dates: Termine
         source: Quelle
       show:
         origin: Ursprung
+        project-url: Projekt-URL
       map:
         projects: Karte der Projekte
         all-projects: Alle Projekte
-        covid-response: COVID-19-Antwort
+        all-sectors: Alle Sektoren
+        all-tags: Alle Tags
+        covid-response: COVID-19-Reaktion
     sector:
       index:
         no-data: Wir konnten keinen Sektor in der Datenbank finden.
+        parent: Übergeordneter Sektor
+        origin: Ursprung
+      form:
+        origin: Ursprung
+        parent: Übergeordneter Sektor
     setting:
       index:
-        no-data: Derzeit sind keine Einstellungen in der Datenbank definiert
+        no-data: Derzeit keine Einstellungen in der Datenbank festgelegt
     footer:
-      privacy-policy: Datenschutz-Bestimmungen
-      tag-line: "ist eine Partnerschaft zwischen einigen der aktivsten Champions der digitalen Entwicklung der Welt. Wir sind dankbar für die Unterstützung unserer Gründungspartner."
-      icons-provided: "Von unveränderten Symbolen bereitgestellte Symbole"
-      fa-icons: "FontAwesome"
-      sdg-icons: "Die globalen Ziele für nachhaltige Entwicklung"
-      dial-social-media: "Folgen Sie DIAL in den sozialen Medien"
-      gitlab: "Sehen Sie sich dieses Projekt auf Gitlab an"
-      osc-forum: "Diskutieren Sie im Open Source Center Forum"
-      ict4sdg-updates: "Melden Sie sich für Updates zum Digital Investment Framework an"
-      powered-by-dial: Angetrieben von DIAL
+      privacy-policy: Datenschutzrichtlinie
+      report-issue: Ein Problem melden
+      tag-line: >-
+        Die Digital Impact Alliance ist ein Zusammenschluss von Akteuren, die zu
+        den weltweit aktivsten digitalen Entwicklern gehören. Wir sind dankbar
+        für die Unterstützung unserer Gründungspartner.
+      sponsor-line: >-
+        Wir danken außerdem für die direkte Unterstützung für diesen Catalog of
+        Digital Solutions durch die folgenden Partner:
+      icons-provided: 'Verfügbare Icons unverändert durch '
+      fa-icons: FontAwesome
+      sdg-icons: Die weltweiten Ziele für nachhaltige Entwicklung
+      dial-social-media: DIAL auf Social Media folgen
+      gitlab: Dieses Projekt in GitLab anzeigen
+      osc-forum: Diskussion im Open Source Center Forum
+      sign-up: >-
+        Registrieren Sie sich, um Neuigkeiten zum digitalen Investitionsrahmen
+        zu erhalten
+      powered-by-dial: Powered by DIAL
+      organization-name: Digital Impact Alliance
     header:
+      about: Über uns
       active-portal: Aktiv
-      admin-data: Verwaltungsdaten
-      principle-data: Grundsätze Daten
-      mni-data: MNI-Daten
-      ict4sdg-data: ICT4SDG-Daten
-      deploys: Bereitstellungen
-      digital-principles: Digitale Prinzipien
+      admin-data: Admin-Menü
+      elevate-role: Erweiterte Rolle anfordern
+      principle-data: Grundsatzdaten
+      mni-data: MNI Data
+      ict4sdg-data: ICT4SDG Data
+      deploys: Nutzt
+      digital-principles: Digitale Grundsätze
       feedback: Ein Problem melden
-      login: Anmeldung
-      logout: Ausloggen
-      product-registry: Produktregistrierung
+      login: Einloggen
+      logout: Abmelden
+      help: Hilfe
+      product-registry: Produktverzeichnis
       profile: Profileinstellungen
-      sign-up: Anmelden
+      sign-up: Registrieren
+      sign-up-login: Registrieren oder Anmelden
       documentation: Hilfe
-      view-selection: Ansichten
+      view-selection: Aufrufe
+      resources: Ressourcen
       covid-resources: COVID-19-Ressourcen
+      dial-resources: DIAL-Ressourcenportal
+      select-language: Sprache wählen
       german: Deutsch
       english: English
       french: Française
     filternav:
-      framework: Rahmen für digitale Investitionen
-      registry: Entwicklungsprojektregister
+      framework: Digitaler Investitionsrahmen
+      registry: Entwicklungsprojektverzeichnis
       sdgs: SDGs
       use_cases: Anwendungsfälle
-      workflows: Arbeitsabläufe
-      building_blocks: IKT-Bausteine
+      workflows: Workflows
+      building_blocks: Bausteine
       products: Produkte
       geographies: Geografien
+      countries: Länder
       locations: Standorte
       sectors: Sektoren
-      orgs: Organisationen
-      organizations: Organisationen
+      orgs: Unternehmen
+      organizations: Unternehmen
       projects: Projekte
-      view-projects: Demnächst.
-      map: Kartenansichten
-      endorser-map: Endorser-Karte anzeigen
-      aggregator-map: Aggregator-Map anzeigen
-      project-map: Projektübersicht anzeigen
-      clear: Alles löschen
-      with-maturity: Produkt mit Reifegradbewertung
-      is-launchable: Das Produkt kann bereitgestellt und gestartet werden
-      top-nav: Top Navigation
-      filter-nav: Filter Navigation
-      user-role: Zugehörige Rollen
+      playbooks: Playbooks
+      plays: Spiele
+      tags: Tags
+      years: Jahre
+      aggregators: Aggregatoren
+      operators: Bediener
+      services: Dienstleistungen
+      view-projects: Kommt in Kürze.
+      map: Kartenansicht
+      endorser-map: Karte der Förderer
+      endorser-map-with-osm: Karte der Förderer
+      aggregator-map: Aggregatorkarte
+      aggregator-map-with-osm: Aggregatorkarte
+      project-map: Projektkarte
+      project-map-with-osm: Projektkarte
+      map-filtering: Filtern in Karte
+      clear: Alle entfernen
+      with-maturity: Produkt mit Reifebewertung
+      is-launchable: Produkt kann eingesetzt und eingeführt werden
+      top-nav: Top-Navigationen
+      filter-nav: Filter-Navigationen
+      user-role: Verbundene Rollen
       title:
-        building-block: Nach Baustein filtern
-        country: Nach Land filtern
-        origin: Nach Produktherkunft filtern
-        product: Nach Produkt filtern
-        project: Nach Projekt filtern
-        sdg: Nach SDG filtern
-        sector: Nach Sektor filtern
-        use-case: Nach Anwendungsfall filtern
-        workflow: Nach Arbeitsablauf filtern
-        year: Nach empfohlenem Jahr filtern
+        building-block: Filtern nach Baustein
+        country: Filtern nach Land
+        origin: Filtern nach Produktursprung
+        project-origin: Filtern nach Projektursprung
+        type: Filtern nach Produkttyp
+        product: Filtern nach Produkt
+        project: Filtern nach Projekt
+        sdg: Filtern nach SDG
+        sector: Filtern nach Sektor
+        use-case: Filtern nach Anwendungsfall
+        workflow: Filtern nach Workflow
+        year: Filtern nach Förderjahr
     active-filter:
       building_blocks:
-        one: IKT-Baustein
-        other: IKT-Bausteine
-
+        one: Baustein
+        other: Bausteine
       countries:
         one: Land
         other: Länder
-
-      endorsers: Organisationen unterstützen
-      aggregators: Mobilfunknetzaggregatoren
-      multi-filter: 'und %{count} andere %{model}'
+      endorsers: Förderorganisationen
+      aggregators: Mobilfunk-Aggregatoren
+      multi-filter: und %{count} weitere %{model}
       organizations:
-        one: Organisation
-        other: Organisationen
-
+        one: Unternehmen
+        other: Unternehmen
       origins:
         one: Produktquelle
         other: Produktquellen
-
+      project_origins:
+        one: Projektquelle
+        other: Projektquellen
+      product-type: Produkttyp
       products:
         one: Produkt
         other: Produkte
-
       projects:
         one: Projekt
         other: Projekte
-
       sdgs:
         one: SDG
         other: SDGs
-
       sectors:
         one: Sektor
         other: Sektoren
-
       tags:
-        one: Etikett
-        other: Etiketten
-
-      title: 'Filtern nach %{model}'
+        one: Tag
+        other: Tags
+      title: Filtern nach %{model}
       use_cases:
         one: Anwendungsfall
         other: Anwendungsfälle
-
       workflows:
-        one: Arbeitsablauf
-        other: Arbeitsabläufe
-
-      with-maturity: Produkt mit Reifegradbewertung
-      is-launchable: Das Produkt kann bereitgestellt und gestartet werden
+        one: Workflow
+        other: Workflows
+      with-maturity: Produkt mit Reifebewertung
+      is-launchable: Produkt kann eingesetzt und eingeführt werden
       years:
-        one: Jahr gebilligt
-        other: Jahre gebilligt
-
-      share-link: Einen Link teilen
-      share-link-tooltip: "Klicken Sie hier, um eine URL zu erstellen, die freigegeben werden kann, um die aktuelle Seite einschließlich der Filter anzuzeigen"
+        one: Förderungsjahr
+        other: Förderungsjahre
+      share-link: Link teilen
+      share-link-tooltip: >-
+        Klicken Sie hier, um eine URL zu erstellen, die geteilt werden kann, um
+        die aktuelle Seite einschließlich Filter anzuzeigen.
+      save-link: Suche speichern
+      save-link-tooltip: Klicken Sie hier, um die URL einschließlich Filter zu speichern.
     breadcrumb:
-      home: Startseite
+      home: Home
     sdg:
       index:
-        no-data: "Wir konnten kein Ziel für eine nachhaltige Entwicklung finden, das dem Suchbegriff entspricht."
-        sdg-number: Nummer
+        no-data: >-
+          Wir konnten kein nachhaltiges Entwicklungsziel finden, das mit dem
+          Suchbegriff übereinstimmt.
+        sdg-number: Anzahl
         view-targets: Ziele anzeigen
         sdg-target-popover:
-          one: Ziel-SDG
-          other: SDG-Ziele
-
-        definition: "Die SDGs umfassen 17 Ziele und 169 Ziele, die globale Prioritäten für Investitionen darstellen, um eine nachhaltige Entwicklung zu erreichen. Die SDGs wurden 2015 von der Generalversammlung der Vereinten Nationen festgelegt und sollen bis zum Jahr 2030 erreicht werden."
+          one: Vorgabe für SDG
+          other: Vorgaben für SDG
+        definition: >-
+          Die Ziele für nachhaltige Entwicklung umfassen 17 Ziele und 169
+          Zielvorgaben, welche für die globalen Prioritäten bei Investitionen
+          stehen, um nachhaltige Entwicklung zu erreichen. Die Ziele für
+          nachhaltige Entwicklung (SDG) wurden von der Generalversammlung der
+          Vereinten Nationen im Jahr 2015 aufgestellt und sollen bis 2030
+          erfüllt sein.
       show:
         target: Ziel
+    playbook:
+      index:
+        overview: Übersicht
+        audience: Zielgruppe
+        outcomes: Ergebnisse
+        cover: Cover
+        pdf-url: Link zu PDF-Dokument
+        phases: Phasen
+        name: Name
+        description: Beschreibung
+        no-page: Wir konnten keine Seiten zu diesem Playbook finden.
+        create-pdf: PDF erstellen
+        creating-pdf: PDF wird erstellt
+        share: Diese Ressource teilen
+      form:
+        overview: Übersicht
+        audience: Zielgruppe
+        outcomes: Ergebnisse
+        cover: Cover
+        pdf-url: Link zu PDF-Dokument
+        phases: Phasen
+        name: Name
+        description: Beschreibung
+    playbook-page:
+      index:
+        contents: Inhalt
+        edit-content: Inhalt bearbeiten
+        phase: Phase
+        order: Auftrag
+        media: Medien
+        question: Frage
+        resources: Ressourcen
+        slug: Slug
+        other-info: Sonstige Angaben
+        has-children: >-
+          Diese Seite hat untergeordnete Seiten. Bitte löschen Sie vor der
+          Löschung dieser Seite alle untergeordneten Seiten.
+      form:
+        name: Name
+        contents: Inhalt
+        editor-type: Page Builder Editor verwenden
+        question: Frage
+        question-text: Fragentext
+        answer-text: Antworttext
+        add-answer: Antwort hinzufügen
+        phase: Phase
+        order: Auftrag
+        media: Medien
+        mapped-action: Zugeordnete Aktion
+        resources: Ressourcen
+        media-prompt: >-
+          Wenn Sie ein Video zu dieser Aktivität hinzufügen möchten, geben Sie
+          die URL ein
+        description: Beschreibung
+        url: URL
+        parent: Übergeordnete Seite
+        other-info: Sonstige Angaben
+        page-contents: Seiteninhalt
+        html: HTML
+        css: CSS
     use-case:
       form:
-        assigned-sdg-targets: Zugewiesene SDG-Ziele
-        search-sdg-targets: Suchen und Zuweisen von SDG-Zielen
-        is-mature: Ist reif
+        all-maturity: Gesamter Reifegrad
+        assigned-sdg-targets: Zugewiesene Vorgaben für SDG
+        maturity-level: Reifegrad
+        search-sdg-targets: Vorgaben für SDG suchen und zuweisen
+        steps-header-description: Titelbeschreibung der Schritte
+        is-mature: Hat Produktreife
       index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        toggle-favorite: Hinzufügen zu/entfernen von Liste der bevorzugten Anwendungsfälle
         no-data: Wir konnten keinen Anwendungsfall in der Datenbank finden.
         sdg-target-popover:
-          one: Ziel-SDG
-          other: SDG-Ziele
-
+          one: Vorgabe für SDG
+          other: Vorgaben für SDG
         workflow-popover:
-          one: Zugeordneter Arbeitsablauf
-          other: Zugeordnete Arbeitsabläufe
+          one: Zugeordneter Workflow
+          other: Zugeordnete Workflows
+        definition: >-
+          Ein Anwendungsfall stellt die Schritte dar, die eine Person oder ein
+          System unternimmt, um ein geschäftliches Ziel zu erreichen.
+        characteristics: >
+          Nutzerorientierte Beschreibung der Schritte oder Nutzer-Journey
+          erforderlich, um ein Ergebnis zu erzielen  
 
-        definition: "Ein Anwendungsfall sind die Schritte, die eine Person oder ein System ausführen wird, um ein Geschäftsziel zu erreichen."
-        characteristics: |
-          Benutzerzentrierte Beschreibung der Schritte oder Benutzerreisen, die erforderlich sind, um ein Ergebnis zu erzielen
-          Identifiziert ein oder mehrere SDG-Ziele als Geschäftsziel
-          Beschreibt die allgemeinen Arbeitsabläufe und Geschäftsprozesse, die in jedem Schritt des Anwendungsfalls enthalten sind
-          Typisch branchenspezifisch
-          Kann durch digitale Technologie verbessert werden
-        description: "Jedes Anwendungsfallmodell beschreibt Hauptakteure, wichtige Schritte zur Erreichung eines bestimmten Geschäftsziels, Beschreibungen der in jedem Schritt beteiligten Arbeitsabläufe und IKT-Bausteine ​​sowie Zuordnungen zu SDG-Zielen. Die Liste der Anwendungsfallmodelle ist nicht vollständig und wird in zukünftigen Versionen hinzugefügt." 
-        maturity: Reife
+          Legt ein oder mehrere Vorgaben für SDGs als geschäftliches Ziel fest  
+
+          Beschreibt die allgemeinen Workflows und Geschäftsprozesse, die zu
+          jedem Schritt des Anwendungsfalls gehören  
+
+          Üblicherweise sektorspezifisch  
+
+          Kann mithilfe digitaler Technik verbessert werden
+        description: >-
+          Jedes Modell eines Anwendungsfalls beschreibt die primären Akteure,
+          die zentralen Schritte für das Erreichen des festgelegten
+          geschäftlichen Ziels, enthält Beschreibungen des Workflows und der
+          ICT-Bausteine für jeden Schritt und die Zuordnungen zu den Vorgaben
+          für Ziele für nachhaltige Entwicklung. Die Liste der
+          Anwendungsfallmodelle ist nicht erschöpfend und wird bei zukünftigen
+          Versionen weiter ergänzt.
+        maturity: Produktreife
+        show_beta: Beta- (nicht validierte) Anwendungsfälle anzeigen
+        is_beta: Dieser Anwendungsfall wurde nicht validiert
+        is_mature: Dieser Anwendungsfall wurde validiert
       show:
         description: Beschreibung
-        steps: Schritte für diesen Anwendungsfall umfassen
-        sdg-targets: SDG-Ziele
-        no-sdg-targets: Wir haben keine SDG-Zielinformationen für diesen Anwendungsfall.
-        use-case-steps: Anwendungsfallschritte
+        steps: Zu den Schritten für diesen Anwendungsfall zählen
+        sdg-targets: Vorgaben für SDG
+        no-sdg-targets: >-
+          Wir haben keine Informationen zu Vorgaben für SDG für diesen
+          Anwendungsfall.
+        use-case-steps: Schritte in Anwendungsfall
+        request-elevation: >-
+          Wir haben festgestellt, dass Sie einen Anwendungsfall verändert haben,
+          aber keinen Reifegrad hierfür festlegen konnten.
+
+          Sie könnten dazu in der Lage sein, wenn Sie eine Rollenerweiterung
+          beantragen, indem Sie auf %{href}klicken.
     user:
       role:
         admin: Administrator
-        ict4sdg: ICT4SDG-Benutzer
-        principle: Prinzip-Benutzer
-        user: Einfacher Benutzer
-        org_user: Organisationsbenutzer
-        org_product_user: Organisation- & Produktbenutzer
-        product_user: Produktbenutzer
-        mni: MNI Benutzer
+        all-roles: Alle Rollen
+        content_editor: Content Editor
+        content_writer: Content Writer
+        ict4sdg: ICT 4 SDG-Nutzer
+        principle: Hauptnutzer
+        user: Einfacher Nutzer
+        org_user: Unternehmensnutzer
+        org_product_user: Unternehmens- &amp; Produktnutzer
+        product_user: Produktnutzer
+        mni: MNI-Nutzer
       form:
-        db-backup: Dieser Benutzer erhält Datenbanksicherungen.
-        email: Email
-        manual-approval: Genehmigen Sie diesen Benutzer manuell.
-        minimum-length: 'Mindestens %{number} Zeichen.'
-        password: Passwort
-        password-confirmation: Passwort Bestätigung
+        db-backup: Dieser Nutzer wird DB-Backups erhalten.
+        admin-emails: >-
+          Dieser Nutzer wird Admin-E-Mails erhalten (neues Logo,
+          Nutzerregistrierung).
+        email: E-Mail
+        manual-approval: Diesen Nutzer manuell genehmigen.
+        minimum-length: '%{number} Zeichen mindestens.'
+        password: Kennwort
+        password-confirmation: Kennwortbestätigung
         role: Rolle
       index:
-        no-data: "Wir konnten keine Benutzer finden, die mit dem Suchbegriff übereinstimmen."
+        no-data: >-
+          Wir konnten keine Nutzer finden, die mit dem Suchbegriff
+          übereinstimmen.
         account-status: Kontostatus
         approved: Genehmigt
-        not-approved: Braucht Genehmigung
+        not-approved: Genehmigungspflichtig
       show:
         approved: Genehmigt
-        'no': 'Nein'
-        receive-backup: Datenbanksicherung erhalten
-        reset-password: Passwort zurücksetzen
-        'yes': 'Ja'
+        'no': Nein
+        receive-backup: DB-Backup erhalten
+        receive-admin-emails: Admin-E-Mails erhalten
+        reset-password: Kennwort zurücksetzen
+        'yes': Ja
     workflow:
       form:
         category: Kategorie
         description: Beschreibung
         other-names: Andere Namen
       index:
-        no-data: "Wir konnten keinen Arbeitsablauf finden, der mit dem Suchbegriff übereinstimmt."
+        export-json: Export (json)
+        export-csv: Export (csv)
+        no-data: >-
+          Wir konnten keinen Workflow finden, der mit dem Suchbegriff
+          übereinstimmt.
         use-case-popover:
           one: Zugeordneter Anwendungsfall
           other: Zugeordnete Anwendungsfälle
-
         building-block-popover:
           one: Zugeordneter Baustein
           other: Zugeordnete Bausteine
+        definition: >-
+          Ein allgemeiner geschäftlicher Prozess, der quer durch verschiedene
+          Sektoren einen Beitrag zu SDG-Anwendungsfällen leistet und als eine
+          Reihe von Unternehmenskompetenzen entwickelt werden kann.
+        characteristics: >
+          Allgemeine geschäftliche Prozesse, die verwendet werden, damit ein
+          Unternehmen seine gesamten Funktionen ausführen kann  
 
-        definition: "Ein allgemeiner Geschäftsprozess, der branchenübergreifend zu SDG-Anwendungsfällen beiträgt und als eine Reihe von Organisationsfunktionen entwickelt werden kann."  
-        characteristics: |
-          Gemeinsame Geschäftsprozesse, mit denen ein Unternehmen seine Gesamtfunktion erfüllen kann
-          Anwendbar auf mehrere Anwendungsfälle in verschiedenen Sektoren
-          Angetrieben von einem oder mehreren IKT-Bausteinen
-        description: "Jeder Arbeitsabläuf enthält eine Beschreibung, branchenspezifische Beispiele und Zuordnungen zu Anwendungsfällen, die in diesem Framework definiert sind. Die Liste der Arbeitsabläufe ist nicht vollständig und wird in zukünftigen Versionen hinzugefügt." 
+          Anwendbar auf zahlreiche Anwendungsfälle in verschiedenen Sektoren 
+
+          Unterstützt durch einen oder mehrere ICT-Bausteine
+        description: >-
+          Jeder Workflow enthält eine Beschreibung, sektorspezifische Beispiele
+          und Zuordnungen zu Anwendungsfällen, die in diesem Rahmenwerk
+          festgelegt sind. Die Liste der Workflows ist nicht erschöpfend und
+          wird bei zukünftigen Versionen weiter ergänzt.
       show:
-        full-description: Gesamte Beschreibung
-        mapping: Beispielzuordnungen von Arbeitsabläufen zum Anwendungsfall
+        full-description: Ausführliche Beschreibung
+        mapping: Beispiele für Zuordnungen von Workflows zu Anwendungsfällen
         other-names: Andere Namen
-        short-description: Kurze Beschreibung
+        short-description: Kurzbeschreibung
     general:
-      action: Aktion
+      add-favorite: Zu Favoriten hinzufügen
+      remove-favorite: Aus Favoriten entfernen
+      action: Maßnahme
       add: Hinzufügen
       back: Zurück
-      back-with-dest: "Zurück zu %{dest}"
-      create: Erstelle neu
+      back-with-dest: Zurück zu %{dest}
+      comment: Kommentar
+      copy-with-model: '%{model} kopieren'
+      copy-confirmation: Möchten Sie diese %{model}wirklich kopieren?
+      create: Neu erstellen
       delete: Löschen
-      delete-with-model: "Löschen Sie %{model}"
-      delete-confirmation: "Sind Sie sicher, dass Sie diese %{model} entfernen möchten?"
-      description: Description
-      duplicates: 'Ein oder mehrere %{model} mit ähnlichem Namen sind bereits vorhanden.'
+      delete-with-model: '%{model} löschen'
+      delete-confirmation: Möchten Sie diese %{model}wirklich entfernen?
+      description: Beschreibung
+      duplicates: Eine oder mehrere %{model}mit ähnlichem Namen existieren bereits.
       edit: Bearbeiten
       error:
         one: Das Formular enthält einen Fehler.
         other: Das Formular enthält Fehler.
-
+      this-link: dieser Link
       logo: Logo
+      is-mature: Hat Produktreife
       name: Name
-      not-available: 'Wir haben keine %{multi}-Informationen für diese %{model}.'
-      search: Suche
-      search-placeholder: 'Suchen Sie nach %{model}'
+      not-available: Wir haben keine %{multi}Informationen zu dieser %{model}.
+      search: Suchen
+      search-placeholder: Suche nach %{model}
       show: Anzeigen
-      submit: Einreichen
+      submit: Senden
       title:
-        create: 'Erstellen Sie %{model}'
+        create: '%{model} erstellen'
         edit: '%{model} bearbeiten'
-      value: Zeitwert
+      value: Wert
       view: Ansicht
-      definitions: "Klicken Sie hier, um weitere Begriffe und Definitionen anzuzeigen"
-      map-legend: "Klicken Sie hier, um Informationen zum Lesen der Produktkarten zu erhalten"
-      characteristics: Eigenschaften
-      description: Beschreibung
-      show-use-case: "Was ist ein Anwendungsfall?"
-      show-sdg: "Was ist ein Ziel für nachhaltige Entwicklung?"
-      show-workflow: "Was ist ein Arbeitsablauf?"
-      show-bb: "Was ist ein IKT-Baustein?"
-      show-product: So lesen Sie die Produktkarten
+      votes: Stimmen
+      definitions: Klicken, um weitere Begriffe und Definitionen zu sehen
+      map-legend: Klicken für Informationen dazu, wie die Produktkarte zu lesen ist
+      characteristics: Merkmale
+      show-use-case: Was ist ein Anwendungsfall?
+      show-sdg: Was ist ein nachhaltiges Entwicklungsziel?
+      show-workflow: Was ist ein Workflow?
+      show-bb: Was ist ein Baustein?
+      show-product: Wie Produktkarten zu lesen sind
       show-less: Schließen
     multi-select:
       assigned:
-        label: 'Suchen und zuweisen %{model} ...'
-        title: 'Zugewiesenes %{model}'
+        label: '%{model} suchen und zuweisen...'
+        title: '%{model} wurde zugewiesen'
     portal-view:
-      top-nav: Top Navigation
-      filter-nav: Filter Navigation
-      user-role: Benutzer-Rolle
-      product-origin: Produktherkunft
-      org-type: Organisationstyp
-      subdomain: Subdomain
+      top-nav: Top-Navigation
+      filter-nav: Filter-Navigation
+      user-role: Nutzerrolle
+      product-origin: Produktursprung
+      org-type: Unternehmenstyp
+      subdomain: Sub-Domain
     use-case-step:
       show:
         other-steps: Schritte im Anwendungsfall
         no-data: Wir konnten keine Schritte für diesen Anwendungsfall finden.
       form:
         use-case: Anwendungsfall
-        step-number: Schrittnummer
+        step-number: Schritt Nummer
   will_paginate:
-    previous_label: "&#8592; Bisherige"
-    next_label: "Nächster &#8594;"
-    page_gap: "&hellip;"
+    previous_label: ← Vorherige
+    next_label: Weitere →
+    page_gap: …

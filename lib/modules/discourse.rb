@@ -19,7 +19,6 @@ module Modules
       request.body = { 'category' => category, 'tags' => [objType,object.slug, 'products'],'title' => 'Discussion on '+object.name, 'raw' => 'This forum is for open discussion on [' + object.name + '](https://solutions.dial.community/products/' + object.slug + ')' }.to_json
 
       response = http.request(request)
-      puts response.body.to_s
       response_json = JSON.parse(response.body)
       topic_id = response_json["topic_id"]
       return topic_id

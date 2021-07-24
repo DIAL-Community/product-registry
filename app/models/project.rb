@@ -23,6 +23,14 @@ class Project < ApplicationRecord
 
   scope :name_contains, ->(name) { where('LOWER(projects.name) like LOWER(?)', "%#{name}%") }
 
+  def to_param
+    slug
+  end
+
+  def sectorsWithLocale(locale)
+    sectors.where('locale = ?', locale[:locale])
+  end
+
   def image_file
     if File.exist?(File.join('public','assets','products',"#{slug}.png"))
       return "/assets/projects/#{slug}.png"

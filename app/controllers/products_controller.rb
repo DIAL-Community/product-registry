@@ -3,6 +3,8 @@ class ProductsController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
+  acts_as_token_authentication_handler_for User, only: [:index, :new, :create, :edit, :update, :destroy]
+
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
@@ -492,7 +494,7 @@ class ProductsController < ApplicationController
     end
 
     # Create a Discourse topic for this product
-    topic_id = create_discourse_topic(@product, 'Products')
+    # topic_id = create_discourse_topic(@product, 'Products')
 
     respond_to do |format|
       if !@product.errors.any? && @product.save!

@@ -129,3 +129,18 @@ if Endorser.where(slug: 'dsq').count.zero?
   Endorser.create(name: 'Digital Square', description: 'This product has been screened as a Global Good by Digital Square.',
                 slug: 'dsq')
 end
+
+if Resource.where(slug: 'd4d_handbook').count.zero?
+  Resource.create(name: 'D4D Handbook', slug: 'd4d_handbook', phase: 'Planning', image_url: 'https://solutions.dial.community//assets/playbooks/pictures/608/PLAYBOOK_FOR_CATALOG.png',
+      description: 'Comprehensive guide for implementing a D4D program', link: 'https://resources.dial.community/resources/md4d_handbook')
+end
+
+if Resource.where(slug: 'procurement_guide').count.zero?
+  Resource.create(name: 'DIAL Procurement Guide', slug: 'procurement_guide', phase: 'Planning', image_url: 'https://procurement-digitalimpactalliance.org/wp-content/uploads/2020/11/fotografierende-xqc7hdlmpgk-unsplash.jpg',
+      description: 'Guidance on best practices for Procurement', link: 'https://procurement-digitalimpactalliance.org')
+end
+
+if Resource.where(slug: 'roi_toolkit').count.zero?
+  Resource.create(name: 'Valuing Impact Toolkit', slug: 'roi_toolkit', phase: 'Evaluation', image_url: 'https://solutions.dial.community/assets/playbooks/pictures/773/Screen_Shot_2021-05-20_at_12.52.30_PM.png',
+      description: 'Tools for measuring Project Impact', link: 'https://resources.dial.community/resources/valuing_impact_toolkit')
+end

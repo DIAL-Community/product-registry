@@ -114,3 +114,31 @@ products:
     SDGs: [3]
     license: BSD-3-Clause
     repositoryURL: https://github.com/jembi/hearth
+  - name: OpenBoxes
+    description: OpenBoxes is an open-source supply chain management system used to manage supplies and medications for healthcare facilities and disaster relief efforts. This ensures that health workers have the right quantities at the right time to save lives. Beyond supply chain management, OpenBoxes has diversified its functionality to include the ability to track cold chain items. This includes icons that flag an item as cold chain and the ability to indicate temperature requirements and create bin locations, which are pivotal features in the effective delivery of COVID-19 vaccines.
+    website: https://openboxes.com
+    organizations: [{"name":"OpenBoxes","website":"openboxes.com","org_type":"owner"}]
+    SDGs: [3]
+    license: Eclipse-1.0
+    repositoryURL: https://github.com/openboxes/openboxes
+  - name: Tamanu
+    description: Tamanu is a patient-level electronic medical record system for desktop and mobile. It allows health workers to track individual patients, providing clinical support and supporting consistent, long-term management of patient conditions.
+    website: https://tamanu.io
+    organizations: [{"name":"Tamanu","website":"tamanu.io","org_type":"owner"}]
+    SDGs: [3]
+    license: OS-LMIC
+    repositoryURL: https://github.com/beyondessential/tamanu-open
+  - name: SanteIMS
+    description: SanteSuite Immunization Management System (IMS) is a highly scalable, modern platform for managing mass immunizations at state, province or country scale. It is interoperable with nearly a dozen global data exchange standards and currently provides coverage to nearly 100M patients around the world.
+    website: https://santesuite.com
+    organizations: [{"name":"SanteSuite, Inc","website":"santesuite.com","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/santedb/openiz
+  - name: SanteMPI
+    description: Sante Master Patient Index (MPI) is a robust national scale patient matching solution with robust privacy and security controls and probabalistic matching. MPI technology enables linking of patient records from distributed systems into a single virtual patient record and is the cornerstone of regional health records architectures.
+    website: https://santesuite.com
+    organizations: [{"name":"SanteSuite, Inc","website":"santesuite.com","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/santedb/client-registry

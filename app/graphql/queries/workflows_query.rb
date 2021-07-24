@@ -32,7 +32,10 @@ module Queries
     def resolve(search:, sdgs:, use_cases:)
       workflows = Workflow.order(:name)
       unless search.blank?
-        workflows = workflows.name_contains(search)
+        name_workflow = workflows.name_contains(search)
+        desc_workflow = workflows.joins(:workflow_descriptions)
+                                .where("LOWER(workflow_descriptions.description) like LOWER(?)", "%#{search}%")
+        workflows = workflows.where(id: (name_workflow + desc_workflow).uniq)
       end
 
       filtered = false

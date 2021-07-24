@@ -86,6 +86,11 @@
     - name: OpenRefine
   children:
     - name: Reconcile CVS
+- name: OpenBCI
+  parent:
+    - name: OpenBCI
+  children:
+    - name: OpenBCI GUI
 - name: Open Street Map
   parent:
     - name: HOTOSM Tasking Manager
@@ -99,8 +104,9 @@
     - name: OSM Analytics
 - name: Open Data Kit
   parent:
-    - name: ODK Aggregate
+    - name: ODK
   children: 
+    - name: ODK Aggregate
     - name: ODK Briefcase 
     - name: ODK Build
     - name: ODK Collect
@@ -129,6 +135,11 @@
     - name: PublicLab
   children: 
     - name: PublicLab Plots2
+- name: Rainforest Connection
+  parent:
+    - name: Rainforest Connection
+  children:
+    - name: Rainforest Connection Guardian
 - name: Scratch
   parent:
     - name: Scratch
@@ -143,6 +154,11 @@
     - name: Spatio-Temporal Asset Catalog Browser
   children:
     - name: Spatio-Temporal Asset Catalog Specifications
+- name: StopCovid
+  parent:
+    - name: StopCovid Android
+  children: 
+    - name: StopCovid iOS
 - name: Sugar
   parent: 
     - name: Sugar

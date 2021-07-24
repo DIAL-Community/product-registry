@@ -22,11 +22,14 @@ module Types
     field :image_file, String, null: false
     field :website, String, null: true
 
+    field :is_mni, Boolean, null: true
     field :is_endorser, Boolean, null: true
     field :when_endorsed, GraphQL::Types::ISO8601Date, null: true
 
     field :organization_descriptions, [Types::OrganizationDescriptionType], null: true
-    field :sectors, [Types::SectorType], null: true
+    field :sectorsWithLocale, [Types::SectorType], null: true do
+      argument :locale, String, required: false
+    end
     field :countries, [Types::CountryType], null: true
     field :offices, [Types::OfficeType], null: true
     field :projects, [Types::ProjectType], null: false

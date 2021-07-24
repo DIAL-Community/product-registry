@@ -17,7 +17,7 @@ module Queries
     type Types::ProductType, null: false
 
     def resolve(slug:)
-      product = Product.find_by(slug: slug)
+      Product.find_by(slug: slug)
     end
   end
 
@@ -30,6 +30,7 @@ module Queries
     argument :countries, [String], required: false, default_value: []
     argument :organizations, [String], required: false, default_value: []
     argument :sdgs, [String], required: false, default_value: []
+    argument :tags, [String], required: false, default_value: []
     argument :use_cases, [String], required: false, default_value: []
     argument :workflows, [String], required: false, default_value: []
     argument :building_blocks, [String], required: false, default_value: []
@@ -39,17 +40,20 @@ module Queries
 
     type Types::ProductType.connection_type, null: false
 
-    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:,
+    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:, 
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:)
       products = Product.where(parent_product_id: nil).order(:name)
       if !search.nil? && !search.to_s.strip.empty?
-        products = products.name_contains(search)
+        name_products = products.name_contains(search)
+        desc_products = products.joins(:product_descriptions)
+                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+        products = products.where(id: (name_products + desc_products).uniq)
       end
 
       filtered, filtered_building_blocks = filter_building_blocks(sdgs, use_cases, workflows, building_blocks)
       if filtered
         if filtered_building_blocks.empty?
-          # Filte is active, but all the filters are resulting in empty building block array.
+          # Filter is active, but all the filters are resulting in empty building block array.
           # All bb is filtered out, return no product.
           return []
         else
@@ -64,16 +68,34 @@ module Queries
                            .where(origins: { id: filtered_origins })
       end
 
-      filtered_sectors = sectors.reject { |x| x.nil? || x.empty? }
-      unless filtered_sectors.empty?
-        products = products.joins(:sectors)
-                           .where(sectors: { id: filtered_sectors })
+      filtered_tags = tags.reject { |x| x.nil? || x.blank? }
+      unless filtered_tags.empty?
+        products = products.where("tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or tags @> '{#{filtered_tags.join(',')}}'::varchar[]")
       end
 
       filtered_countries = countries.reject { |x| x.nil? || x.empty? }
       unless filtered_countries.empty?
-        products = products.joins(:countries)
+        projects = Project.joins(:countries)
                            .where(countries: { id: filtered_countries })
+        products = products.joins(:projects)
+                           .where(projects: { id: projects })
+      end
+
+      filtered_sectors = []
+      user_sectors = sectors.reject { |x| x.nil? || x.empty? }
+      unless user_sectors.empty?
+        filtered_sectors = user_sectors.clone
+      end
+      user_sectors.each do |user_sector|
+        curr_sector = Sector.find(user_sector)
+        if curr_sector.parent_sector_id.nil?
+          child_sectors = Sector.where(parent_sector_id: curr_sector.id)
+          filtered_sectors = filtered_sectors + child_sectors.map(&:id)
+        end
+      end
+      unless filtered_sectors.empty?
+        products = products.joins(:sectors)
+                           .where(sectors: { id: filtered_sectors })
       end
 
       filtered_organizations = organizations.reject { |x| x.nil? || x.empty? }
@@ -90,6 +112,10 @@ module Queries
 
       if product_deployable
         products = products.where(is_launchable: product_deployable)
+      end
+
+      if with_maturity
+        products = products.where('maturity_score is not null')
       end
 
       if !product_types.include?('product_and_dataset') && !product_types.empty?
@@ -133,7 +159,11 @@ module Queries
         building_block_ids.concat(workflow_building_blocks.ids)
       end
 
-      building_block_ids.concat(building_blocks.reject { |x| x.nil? || x.empty? })
+      filtered_bbs = building_blocks.reject { |x| x.nil? || x.empty? }
+      if !filtered_bbs.empty?
+        filtered = true
+      end
+      building_block_ids.concat(filtered_bbs.map(&:to_i))
       [filtered, building_block_ids]
     end
   end

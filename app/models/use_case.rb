@@ -22,6 +22,9 @@ class UseCase < ApplicationRecord
 
   attr_accessor :uc_desc
   attr_accessor :ucs_header
+  attr_accessor :building_blocks
+  attr_accessor :workflows
+
 
   def image_file
     if File.exist?(File.join('public', 'assets', 'use_cases', "#{slug}.png"))

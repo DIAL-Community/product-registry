@@ -29,14 +29,19 @@ module Queries
     argument :sectors, [String], required: false, default_value: []
     argument :countries, [String], required: false, default_value: []
     argument :organizations, [String], required: false, default_value: []
+    argument :products, [String], required: false, default_value: []
     argument :sdgs, [String], required: false, default_value: []
+    argument :tags, [String], required: false, default_value: []
 
     type Types::ProjectType.connection_type, null: false
 
-    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:)
+    def resolve(search:, origins:, sectors:, countries:, organizations:, products:, sdgs:, tags:)
       projects = Project.order(:name).eager_load(:countries)
       if !search.nil? && !search.to_s.strip.empty?
-        projects = projects.name_contains(search)
+        name_projects = projects.name_contains(search)
+        desc_projects = projects.joins(:project_descriptions)
+                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+        projects = projects.where(id: (name_projects + desc_projects).uniq)
       end
 
       filtered_origins = origins.reject { |x| x.nil? || x.empty? }
@@ -44,7 +49,18 @@ module Queries
         projects = projects.where(origin_id: filtered_origins)
       end
 
-      filtered_sectors = sectors.reject { |x| x.nil? || x.empty? }
+      filtered_sectors = []
+      user_sectors = sectors.reject { |x| x.nil? || x.empty? }
+      unless user_sectors.empty?
+        filtered_sectors = user_sectors.clone
+      end
+      user_sectors.each do |user_sector|
+        curr_sector = Sector.find(user_sector)
+        if curr_sector.parent_sector_id.nil?
+          child_sectors = Sector.where(parent_sector_id: curr_sector.id)
+          filtered_sectors = filtered_sectors + child_sectors.map(&:id)
+        end
+      end
       unless filtered_sectors.empty?
         projects = projects.joins(:sectors)
                            .where(sectors: { id: filtered_sectors })
@@ -62,11 +78,23 @@ module Queries
                            .where(organizations: { id: filtered_organizations })
       end
 
+      filtered_products = products.reject { |x| x.nil? || x.empty? }
+      unless filtered_products.empty?
+        projects = projects.joins(:products)
+                           .where(products: { id: filtered_products })
+      end
+
       filtered_sdgs = sdgs.reject { |x| x.nil? || x.empty? }
       unless filtered_sdgs.empty?
         projects = projects.joins(:sustainable_development_goals)
                            .where(sustainable_development_goals: { id: filtered_sdgs })
       end
+
+      filtered_tags = tags.reject { |x| x.nil? || x.blank? }
+      unless filtered_tags.empty?
+        projects = projects.where("tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or tags @> '{#{filtered_tags.join(',')}}'::varchar[]")
+      end
+
       projects.distinct
     end
   end

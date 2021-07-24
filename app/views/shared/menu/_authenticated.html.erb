@@ -1,10 +1,8 @@
 <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle-avatar" data-toggle="dropdown" href="#" role="button">
-    <div class="avatar-circle">
-      <span class="initials">
-        <%= current_user.email[0].upcase %>
-      </span>
-    </div>
+  <a class="nav-link dropdown-toggle mt-2 header-user" data-toggle="dropdown" href="#" role="button">
+    <span class='p-2'>
+      <small><%= current_user.username.upcase %></small>
+    </span>
   </a>
   <div class="dropdown-menu dropdown-menu-right">
     <%= link_to t('view.header.about'), about_path, :class => 'dropdown-item' %>
@@ -42,6 +40,8 @@
     </a>
     <%= link_to t('view.header.feedback'), 'mailto:catalog-support@dial.community',
                 target: '_blank', class: 'dropdown-item' %>
-    <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+    <% unless Rails.env.production? %>
+      <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+    <% end %>
   </div>
 </li>

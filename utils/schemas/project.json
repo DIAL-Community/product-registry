@@ -1,0 +1,210 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dial-data-import",
+  "$comment": "DIAL Catalog - Project Data JSON Schema",
+  "title": "DIAL Catalog - Project Data JSON Schema",
+  "type": "object",
+  "required": [
+    "name",
+    "description",
+    "organizations"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the project. Full name, no initialisms, no acronyms."
+    },
+    "aliases": {
+      "type": "array",
+      "description": "Abbreviations, initialisms, or alternate names for the project, where relevant.",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the project"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website for the project where more information can be found about the project itself."
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date",
+      "description": "End date of the project. N/A if the project is still ongoing."
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date of the project."
+    },
+    "tags": {
+      "type": "array",
+      "description": "Applicable classification for the project. Tag will be used for filtering projects.",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "SDGs": {
+      "type": "array",
+      "description": "List of Sustainable Development Goals that this project addresses.",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["SDGNumber"],
+        "properties": {
+          "SDGNumber": {
+            "type": "number",
+            "description": "Number of the Sustainable Development Goal",
+            "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+          },
+          "evidenceText": {
+            "type": "string",
+            "description": "Evidence of SDG relevance in text form."
+          },
+          "evidenceURL": {
+            "type": "string",
+            "description": "Evidence of SDG relevance in the form of a link."
+          }
+        }
+      }
+    },
+    "countries": {
+      "type": "array",
+      "description": "List of countries where this project is happening / happened.",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["United States of America", "Kenya", "Indonesia"]
+      }
+    },
+    "sectors": {
+      "type": "array",
+      "description": "List of sectors applicable to this project.",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "Advocacy",
+          "Agriculture",
+          "Anti-corruption",
+          "Big Data",
+          "Business Advocacy",
+          "Capacity Development",
+          "Centers of Excellence",
+          "Civil society",
+          "Climate",
+          "Communication",
+          "Conflict Resolution",
+          "Consulting",
+          "Corporate Partnerships",
+          "Corporation and Business Management",
+          "Data Collection",
+          "Data Management & Policy",
+          "Data Security",
+          "Demobilization & Reintegration",
+          "Democracy",
+          "Development Impact",
+          "Digital Development",
+          "Digital/Data/Tech",
+          "Disarmament",
+          "Economics/Finance",
+          "Education",
+          "Emergency Response",
+          "Employment",
+          "Energy",
+          "Engineering",
+          "Enterprise Ecosystems",
+          "Entertainment",
+          "Environment",
+          "Fair & Responsible Media",
+          "Female Genital Mutilation",
+          "Food",
+          "Fragile States",
+          "Gender and Minority Groups",
+          "Governance",
+          "Health",
+          "Humanitarian",
+          "Hunger",
+          "Infrastructure",
+          "Justice",
+          "Livelihoods",
+          "Logistics",
+          "Management",
+          "Media",
+          "Membership Associations",
+          "Midwifery",
+          "Natural Resource Conflicts",
+          "NGO",
+          "Nutrition",
+          "Peace",
+          "Platform creation",
+          "Religious Engagement",
+          "Research",
+          "Resource Management",
+          "Security",
+          "Social Protection",
+          "Stability",
+          "Supply Chain Solutions",
+          "Sustainability",
+          "Sustainable Cities",
+          "Training & Employment",
+          "Transition",
+          "Transparency & Accountability",
+          "Travel and Hospitality",
+          "Violent Extremism",
+          "Water and Sanitation",
+          "Workforce",
+          "World Population",
+          "Youth"
+        ]
+      }
+    },
+    "type": {
+      "type": "array",
+      "description": "List of categories under which this project falls into: content, data, software, standards.",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["content", "data", "software", "standard", "aimodel"]
+      }
+    },
+    "organizations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["name", "org_type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the organization"
+          },
+          "website": {
+            "type": "string",
+            "description": "Website of the organization"
+          },
+          "contact_name": {
+            "type": "string",
+            "description": "Name of contact individual in the organization"
+          },
+          "contact_email": {
+            "type": "string",
+            "description": "Email for contact individual in the organization"
+          },
+          "org_type": {
+            "type": "string",
+            "enum": ["owner", "maintainer", "funder", "implementer"]
+          }
+        }
+      }
+    }
+  }
+}

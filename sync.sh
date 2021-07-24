@@ -19,4 +19,4 @@ rake sync:update_license_data
 rake sync:update_statistics_data
 rake sync:update_language_data
 rake maturity_sync:sync_data['/maturity-rubric']
-
+rake sync:fetch_website_data

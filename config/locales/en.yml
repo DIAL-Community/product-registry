@@ -104,6 +104,7 @@ en:
     operator_services: Operator Services
   view:
     title: Catalog of Digital Solutions
+    subtitle: Digital Impact Alliance
     about:
       active_users: Active users in the past 24 hours
       help: For information on how to use the catalog, reference our documentation site
@@ -234,6 +235,8 @@ en:
         request-reason: Request reason
         request-roles: Requested roles
         request-status: Request status
+        request-product: 'Requested Product'
+        request-organization: 'Requested Organization'
       show:
         request-elevation: We noticed that you tried to add organization(s) or product(s) beyond the purview of your role.
                            You might be able to request role elevation by clicking %{href}.
@@ -482,7 +485,8 @@ en:
         no-data: No settings currently defined in the database
     footer:
       privacy-policy: Privacy policy
-      tag-line: "is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
+      report-issue: Report an Issue
+      tag-line: "The Digital Impact Alliance is a partnership amongst some of the world’s most active digital development champions. We are grateful for the support of our Founding Partners."
       sponsor-line: "We are also thankful for direct support for this Catalog of Digital Solutions provided by the following partners:"
       icons-provided: "Icons provided unmodified by "
       fa-icons: "FontAwesome"
@@ -490,12 +494,13 @@ en:
       dial-social-media: "Follow DIAL on social media"
       gitlab: "View this project on Gitlab"
       osc-forum: "Discuss on the Open Source Center Forum"
-      ict4sdg-updates: "Sign up for updates on the Digital Investment Framework"
+      sign-up: "Sign up for updates on the Digital Investment Framework"
       powered-by-dial: Powered by DIAL
+      organization-name: Digital Impact Alliance
     header:
       about: About
       active-portal: Active
-      admin-data: Admin Data
+      admin-data: Admin Menu
       elevate-role: Request Elevated Role
       principle-data: Principles Data
       mni-data: MNI Data
@@ -505,14 +510,17 @@ en:
       feedback: Report an Issue
       login: Login
       logout: Logout
+      help: Help
       product-registry: Product Registry
       profile: Profile Settings
       sign-up: Sign Up
+      sign-up-login: Sign Up or Log In
       documentation: Help
       view-selection: Views
       resources: Resources
       covid-resources: COVID-19 Resources
       dial-resources: DIAL Resources Portal
+      select-language: Select Language
       german: Deutsch
       english: English
       french: Française
