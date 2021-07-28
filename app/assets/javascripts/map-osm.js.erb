@@ -179,7 +179,7 @@ const loadOrganizationTiles = function () {
   $(document).trigger('#map-osm:loaded');
 
   const countries = {};
-  $.getJSON('/countries.json?without_paging=true', function (countryObjects) {
+  $.getJSON('/admin/countries.json?without_paging=true', function (countryObjects) {
     countryObjects.forEach(function(country) {
       countries[country.name] = {
         country_code: country.code,
@@ -190,7 +190,7 @@ const loadOrganizationTiles = function () {
     });
   });
 
-  $.getJSON('/organizations.json?without_paging=true', function (organizationObjects) {
+  $.getJSON('/admin/organizations.json?without_paging=true', function (organizationObjects) {
     const organizationsCoordinates = {};
     organizationObjects.forEach(function (organizationObject) {
       const organizationFeature = {
@@ -327,7 +327,7 @@ const loadOrganizationTiles = function () {
   }
 
   $.getJSON(
-    '/sectors.json?display_only=true&without_paging=true',
+    '/admin/sectors.json?display_only=true&without_paging=true',
     function(sectors) {
       sectors.forEach(function(sector) {
         const option = new Option(sector.name, sector.id);
