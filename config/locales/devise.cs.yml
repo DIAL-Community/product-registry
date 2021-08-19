@@ -1,0 +1,66 @@
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+cs:
+  devise:
+    confirmations:
+      confirmed: "Vaše e-mailová adresa byla úspěšně potvrzena."
+      send_instructions: "Během několika minut obdržíte e-mail s pokyny, jak potvrdit svou e-mailovou adresu."
+      send_paranoid_instructions: "Pokud vaše e-mailová adresa existuje v naší databázi, obdržíte během několika minut e-mail s pokyny k potvrzení vaší e-mailové adresy."
+    failure:
+      already_authenticated: "Jste již přihlášeni."
+      inactive: "Váš účet ještě není aktivován."
+      invalid: "Neplatné %{authentication_keys} nebo heslo."
+      locked: "Váš účet je zablokován."
+      last_attempt: "Než bude váš účet zablokován, máte ještě jeden pokus."
+      not_found_in_database: "Neplatné %{authentication_keys} nebo heslo."
+      timeout: "Vaše relace vypršela. Chcete-li pokračovat, přihlaste se znovu."
+      unauthenticated: "Před pokračováním se musíte přihlásit nebo zaregistrovat."
+      unconfirmed: "Před pokračováním musíte potvrdit svou e-mailovou adresu."
+    mailer:
+      confirmation_instructions:
+        subject: "Pokyny pro potvrzení"
+      reset_password_instructions:
+        subject: "Reset password instructions"
+      unlock_instructions:
+        subject: "Pokyny k odemknutí"
+      email_changed:
+        subject: "E-mail změněn"
+      password_change:
+        subject: "Heslo změněno"
+    omniauth_callbacks:
+      failure: "Nelze vás ověřit z důvodu%{kind}  \"%{reason}\"."
+      success: "Úspěšně ověřeno z účtu %{kind}."
+    passwords:
+      no_token: "Na tuto stránku se nedostanete, aniž byste přišli z e-mailu s obnovením hesla. Pokud přicházíte z e-mailu pro reset hesla, ujistěte se, že jste použili celou uvedenou adresu URL."
+      send_instructions: "Během několika minut obdržíte e-mail s pokyny k obnovení hesla."
+      send_paranoid_instructions: "Pokud vaše e-mailová adresa existuje v naší databázi, obdržíte během několika minut na svou e-mailovou adresu odkaz pro obnovení hesla."
+      updated: "Vaše heslo bylo úspěšně změněno. Nyní jste přihlášeni."
+      updated_not_active: "Vaše heslo bylo úspěšně změněno."
+    registrations:
+      destroyed: "Nashle! Váš účet byl úspěšně zrušen. Doufáme, že se brzy opět uvidíme."
+      signed_up: "Vítejte! Úspěšně jste se zaregistrovali."
+      signed_up_but_inactive: "Úspěšně jste se zaregistrovali. Nemohli jsme vás však přihlásit, protože váš účet ještě není aktivován."
+      signed_up_but_locked: "Úspěšně jste se zaregistrovali. Nemohli jsme vás však přihlásit, protože váš účet je uzamčen."
+      signed_up_but_unconfirmed: "Na vaši e-mailovou adresu byla odeslána zpráva s potvrzovacím odkazem. Postupujte prosím podle tohoto odkazu a aktivujte svůj účet."
+      update_needs_confirmation: "Úspěšně jste aktualizovali svůj účet, ale potřebujeme ověřit vaši novou e-mailovou adresu. Zkontrolujte prosím svůj e-mail a následováním potvrzovacího odkazu potvrďte svou novou e-mailovou adresu."
+      updated: "Váš účet byl úspěšně aktualizován."
+    sessions:
+      signed_in: "Úspěšně přihlášeno."
+      signed_out: "Úspěšně odhlášeno."
+      already_signed_out: "Úspěšně odhlášeno."
+    unlocks:
+      send_instructions: "Během několika minut obdržíte e-mail s pokyny k odemknutí účtu."
+      send_paranoid_instructions: "Pokud váš účet existuje, obdržíte během několika minut e-mail s pokyny k jeho odblokování."
+      unlocked: "Váš účet byl úspěšně odblokován. Pro pokračování se prosím přihlaste."
+  errors:
+    messages:
+      already_confirmed: "byl již potvrzen, zkuste se přihlásit"
+      confirmation_period_expired: "musí být potvrzena do %{period} , požádejte o novou."
+      expired: "vypršela platnost, požádejte o novou."
+      not_found: "byly zaslány pokyny pro obnovení, pokud existuje účet s touto e-mailovou adresou."
+      not_locked: "nebyl uzamčen"
+      not_saved:
+        one: "1 chyba znemožnila %{resource}  uložení:"
+        few: "%{count} chyby znemožnily %{resource}uložení:"
+        many: "%{count} chyb znemožnilo %{resource} uložení:"
+        other: " %{count}chyb znemožnilo %{resource}  uložení:"
