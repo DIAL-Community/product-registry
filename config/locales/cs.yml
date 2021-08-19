@@ -1,0 +1,891 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+cs:
+  commontator: 
+    comment:
+      actions:
+        reply: Odpovědět
+      status: 
+        created_at: "na %{created_at}."
+        updated_at: "Upraveno dne  %{updated_at}."
+      require_login: "Před zobrazením / odesláním komentáře se musíte přihlásit."
+  time: 
+    formats: 
+      commontator: "%m/%d/%Y %H:%M %p"
+  errors:
+    messages:
+      extension_whitelist_error: 'Tento formát obrázku není podporován. Nahrajte prosím jpg, jpeg, png nebo gif.'
+  messages:
+    model:
+      created: '%{model} byl úspěšně vytvořen.'
+      deleted: '%{model} byl úspěšně odstraněn.'
+      delete-failed: 'Nelze smazat %{model}.'
+      updated: '%{model}  byl úspěšně aktualizován.'
+      copied: '%{model}  byl úspěšně zkopírován.'
+  pundit:
+    mod_allowed?: Operace není povolena.
+    view_allowed?: Nemáte povoleno zobrazit tuto stránku.
+  alt:
+    el-icon: '%{el} icon.'
+    el-logo: '%{el} logo.'
+  aria:
+    contact-us: Kontaktujte nás e-mailem
+    contribute-code: Přispívejte do kódu v gitlabu
+    forum: Připojte se k našemu fóru
+  model:
+    activity: aktivita
+    building-block: stavební prvek
+    candidate-organization: navrhovaná organizace
+    candidate-product: navrhovaný produkt
+    candidate-role: Role uchazeče
+    category-indicator: ukazatel kategorie
+    city: město
+    contact: kontakt
+    country: země
+    deploys: nasazení
+    digital-principle: Digitální principy
+    glossary: slovník
+    location: lokalita
+    maturity-rubric: rubrika vyspělosti
+    office: kancelář
+    organization: organizace
+    playbook: příručka
+    playbook-page: stránka příručky
+    play: spustit
+    portal-view: zobrazení portálu
+    product: produkt
+    product-suite: sada produktů
+    product-version: verze produktu
+    project: projekt
+    region: region
+    rubric-category: kategorie vyspělosti
+    sector: sektor
+    setting: nastavení
+    tag: značka
+    task-tracker: sledovač úkolů
+    task: úloha
+    use-case: případ použití
+    use-case-step: krok případu použití
+    user: uživatel
+    user-event: uživatelská událost
+    workflow: pracovní postup
+    sdg: sdg
+    sustainable-development-goal: cíl udržitelného rozvoje
+    sdg_target: SDG cíl
+    operator_services: Služby operátora
+  view:
+    title: Katalog digitálních řešení
+    about:
+      active_users: Aktivní uživatelé posledních 24 hodin
+      help: Informace o používání katalogu naleznete na našich stránkách s dokumentací.
+      help_link: zde
+      sdg_title: "SDG Digital Investment Framework"
+      sdg_subtitle: "Celovládní přístup ke koordinaci investic do digitálních technologií pro dosažení cílů udržitelného rozvoje"
+      enter_catalog: "Procházet katalog"
+      return_catalog: "Zpět do katalogu"
+      explanation1: "Navzdory značným investicím jsme nebyli svědky skutečného rozšíření softwarových platforem a nebyli jsme svědky koordinovaných investic do produktů určených k plnění cílů udržitelného rozvoje. Digitální investice a implementace jsou nejčastěji oddělené podle odvětví, což vede ke značné roztříštěnosti a zdvojování úsilí."
+      explanation2: "Tato roztříštěnost ztěžuje vládám pochopení toho, kde by se mohly využívat společné produkty, což umožňuje celovládní přístup k investicím do digitální infrastruktury, která může poskytovat opakovaně použitelné digitální služby ve velkém měřítku s vyšší návratností investic."
+      explanation3: "Tento online nástroj představuje čtyři vzájemně propojené vrstvy - poskytuje postup, který organizacím umožní začít plánovat podnikovou architekturu a urychlit pokrok při plnění cílů udržitelného rozvoje."
+      sdgs: "Cíle udržitelného rozvoje"
+      use_cases: "Příklady použití"
+      bbs: "Stavební bloky"
+      products: "Produkty"
+      ict_bbs: "Stavební prvky ICT"
+      workflows: "Pracovní postupy"
+      read_more: "Další informace"
+      watch_video: "Prohlédněte si video"
+      launch: "Spustit aplikaci"
+      close: "Zavřít"
+      intro: "Intro"
+      overview: "Přehled"
+      policy_partners: "Tvůrci politik a prováděcí partneři"
+      ministers_specialists: "Ministři a techničtí specialisté v oblasti ICT"
+      donors: "Dárci"
+      donors_text1: "Dárci mohou tento nástroj využít ke koordinaci investic s ostatními dárci. Pomocí cíle SDG může dárce přejít na prioritní cíl SDG a zjistit, jaké případy použití, pracovní postupy a stavební prvky ICT podporují pokrok v plnění tohoto cíle. Pochopení těchto asociací vytváří základ pro to, aby dárci viděli překryv s ostatními dárci, kteří podporují jiné cíle SDG. Nástroj ukazuje, že hrstka pracovních toků a stavebních bloků může přinést širokou škálu cílů SDG a odpovídajících případů užití."
+      donors_link: "Prozkoumat cíle SDG"
+      policy_makers: "Tvůrci politik"
+      policy_text1: "Tvůrci politik na jakékoli úrovni mohou tento nástroj využít k prozkoumání různých případů použití, které mají zájem realizovat k dosažení různých výsledků rozvoje. U každého případu užití bude zdůrazněno, jaké pracovní postupy a stavební prvky ICT jsou potřebné k podpoře digitálního aspektu daného případu užití. Identifikace obecných stavebních bloků ICT podporuje koordinaci napříč sektory a ministerstvy, aby bylo možné zaujmout celostátní přístup, k realizaci svých digitálních investic."
+      policy_link: "Procházet případy užití"
+      ict_ministers: "Ministři pro technologie a ICT"
+      ict_text1: "Ministři pro technologie mohou tento nástroj použít k mapování systémů a aplikací, které jsou v současné době v zemi zavedeny, s ICT Building Blocks, aby pochopili, jaké další případy použití by mohly být podporovány pomocí jejich současných technologií. Mapování systémů podle ICT Building Blocks může také umožnit lepší pochopení toho, jaké nedostatky v současné době existují nebo jaké jsou příležitosti ke konsolidaci."
+      ict_link: "Prozkoumejte stavební kameny ICT"
+      specialists: "Technologičtí specialisté"
+      specialists_text1: "Technologičtí specialisté mohou tento nástroj využít k integraci nabídek a hooks interoperability, aby řešili komplexní potřeby vládních programů. Také objeví existující produkty, které mohou splňovat případy použití a pracovní postupy pro konkrétní programové potřeby, a poskytnou tak náhled na otázky \"vytvořit nebo koupit\" pro realizaci projektu."
+      specialists_link: "Prozkoumat produkty"
+      implementers: "Implementační partneři"
+      implementers_text1: "Implementační partneři mohou pomocí tohoto nástroje zjistit, jaké stavební kameny a produkty ICT poskytují různé potřebné pracovní postupy nebo obchodní procesy pro realizaci vývojových programů nebo různých digitálních iniciativ."
+      implementers_link: "Prozkoumat pracovní postupy"
+      sdg_desc: "Cíle udržitelného rozvoje zahrnují 17 cílů a 169 úkolů, které představují globální investiční priority pro dosažení udržitelného rozvoje."
+      use_case_desc: "Případ užití definuje kroky, které jednotlivec nebo systém provede, aby dosáhl obchodního cíle."
+      workflow_desc: "WorkFlow je obecný obchodní proces, který lze aplikovat na případy užití SDG v rámci více sektorů."
+      bb_desc: "Stavební blok ICT je opakovaně použitelná softwarová komponenta připravená k použití v podniku, která poskytuje klíčové funkce pro usnadnění obecných pracovních postupů v různých odvětvích."
+      product_desc: "Produkt je konkrétní technologická nabídka, která je určena k implementaci jednoho nebo více stavebních bloků."
+      contact: "Kontaktujte nás"
+      contact_text: "Pro více informací kontaktujte tým Digital Impact Alliance ICT4SDG."
+      itu: "Tento rámec byl vytvořen ve spolupráci s Mezinárodní telekomunikační unií (ITU)."
+    audit:
+      audit-log: "Zaznamenané změny pro "
+      username: "Uživatelské jméno"
+      action: "Akce"
+      changes: "Změny"
+    building-block:
+      form:
+        all-maturity: Všechny úrovně vyspělosti
+        maturity-level: Úroveň vyspělosti
+      show:
+        short-description: Krátký popis
+        full-description: Úplný popis
+        other-names: Další názvy
+        key-functionalities: Klíčové digitální funkce
+        example-of-use: Příklady použití v různých sektorech
+        no-data: Pro tento případ použití jsme nenašli žádné stavební prvky.
+        request-elevation: "Všimli jsme si, že jste provedli změny stavebního bloku, ale nemohli jste nastavit jeho úroveň vyspělosti. Možná to budete moci udělat tak, že požádáte o zvýšení role kliknutím na %{href} ."
+      index:
+        bb-product: "Příklad produktu: "
+        bb-product-popover:
+          one: Příklad existujícího softwaru
+          few: Příklady existujících softwarů
+          many: Příklady existujících softwarů
+          other: Příklady existujících softwarů
+        bb-workflow: "Příklad workflow: "
+        bb-workflow-popover:
+          one: Mapování na přidružený pracovní postup
+          few: Mapování na přidružené pracovní postupy
+          many: Mapování na přidružené pracovní postupy
+          other: Mapování na přidružené pracovní postupy
+        definition: "Stavební bloky jsou opakovaně použitelné softwarové komponenty připravené k použití v podniku, které poskytují klíčové funkce usnadňující generické WorkFlow napříč různými odvětvími."
+        export-json: Export (json)
+        export-csv: Export (csv)
+        characteristics: |
+          Opakovaně použitelné softwarové komponenty 
+          Mohou být open-source, komerční nebo volně dostupné s otevřeným přístupem k datům. 
+          Usnadňuje jeden nebo více obecných pracovních postupů (WorkFlows) 
+          použitelný pro více případů užití v různých odvětvích 
+          Interoperabilní s dalšími stavebními prvky ICT. 
+          navržen pro škálovatelnost a rozšiřitelnost 
+          Na základě standardů
+        description: "Každá stránka bloku ICT obsahuje popis, klíčové digitální funkce, příklady specifické pro dané odvětví, příklady softwarových produktů a přiřazení k pracovním tokům definovaným v tomto rámci. Seznam stavebních bloků ICT, vzorových softwarových produktů a mapování není vyčerpávající a další budou přidány v budoucích verzích. Upozorňujeme, že příklady softwarových produktů jsou pouze ilustrativní. Další mapování a řazení stávajících produktů na základě vyspělosti, udržitelnosti a použitelnosti pro ICT Building Blocks bude řešeno v průběhu času."
+        maturity: Vyspělost 
+        mature_only: Zobrazit pouze vyspělé stavební bloky
+        is_beta: Specifikace tohoto stavebního bloku nebyly ověřeny.
+        is_mature: Specifikace tohoto stavebního bloku byly ověřeny.
+        view-audit: Zobrazit protokol auditu
+    candidate-organization:
+      form:
+        created: Děkujeme za vaše podání. Vaše podání pečlivě posoudíme. Schválené podání bude k dispozici v seznamu organizací.
+      index:
+        approve: Schválit
+        no-data: "V databázi jsme nenašli žádnou kandidující organizaci."
+        reject: Odmítnout
+        status: Stav
+        status-approved: Schváleno
+        status-new: Nové podání
+        status-rejected: Odmítnuto
+        website: Webová stránka
+    candidate-product:
+      form:
+        created: Děkujeme za vaše podání. Váš příspěvek pečlivě posoudíme. Schválený návrh bude k dispozici v seznamu organizací.
+      index:
+        approve: Schválit
+        no-data: V databázi jsme nenašli žádný kandidátský produkt.
+        reject: Odmítnout
+        status: Stav
+        status-approved: Schváleno
+        status-new: Nové podání
+        status-rejected: Odmítnuto
+        submitter-email: E-mail podavatele
+        website: Webová stránka
+    candidate-role:
+      form:
+        description: "Proč byste chtěli povýšit svou roli? Zde prosím vysvětlete."
+      index:
+        approve: Schválit
+        approved: Schváleno
+        new: Nový požadavek
+        reject: Odmítnout
+        rejected: Odmítnuto
+        request-reason: Důvod požadavku
+        request-roles: Požadované role
+        request-status: Stav požadavku
+      show:
+        request-elevation: "Všimli jsme si, že jste se pokusili přidat organizaci(e) nebo produkt(y) nad rámec své role. Možná budete moci požádat o povýšení role kliknutím na %{href}."
+    category-indicator:
+      form:
+        weight: Váha indikátoru
+        indicator-type: Typ indikátoru
+        source-indicator: Název indikátoru u zdroje
+        data-source: Kde získáme tento indikátor
+    country:
+      show:
+        other-names: Další názvy
+    rubric-category:
+      form:
+        description: Popis kategorie
+        weight: Váha kategorie
+      index:
+        category-heading: Indikátory v této kategorii
+        no-data: Pro tuto kategorii se nám nepodařilo najít žádný ukazatel.
+    contact:
+      form:
+        email: E-mail
+        title: Název
+    devise:
+      email: E-mail
+      username: Uživatelské jméno
+      password: Heslo
+      password-confirmation: Potvrzení hesla
+      organization-required: Informace o organizaci jsou vyžadovány při registraci jako editor organizace.
+      organization-nomatch: "Webové stránky organizace neodpovídají vaší e-mailové adrese."
+      organization-tooltip: "Přihlaste se jako vlastník organizace, což vám umožní aktualizovat informace o organizaci."
+      product-tooltip: "Případně se přihlaste jako vlastník produktu. K tomu je třeba, aby vás ověřil člen našeho týmu."
+      select-org: Vyberte svou organizaci.
+      select-prod: Vyberte svůj produkt.
+      have-account: "Máte již účet?"
+      no-account: "Ještě nemáte účet?"
+      sign-up: Zaregistrovat se
+      log-in: Přihlásit se
+      forget-password: "Zapomněli jste heslo?"
+      no-confirmation: "Neobdrželi jste potvrzovací pokyny?"
+      no-unlock: "Neobdrželi jste pokyny k odemknutí?"
+      accept-terms: Kliknutím zde souhlasím s podmínkami používání této webové stránky.
+      terms-popup: Přijměte prosím podmínky
+    feedback:
+      info-text: Rádi bychom slyšeli vaši zpětnou vazbu
+    location:
+      form:
+        other-names: Další názvy
+      index:
+        no-data: V databázi se nám nepodařilo najít žádné místo.
+    maturity-rubric:
+      index:
+        add-category: Přidat kategorii
+      form:
+        description: Popis Rubriky vyspělosti
+    notification:
+      favorite-save-notification: Přidali jsme ho do oblíbených!
+      favorite-remove-notification: Odstranili jsme ho z vašich oblíbených položek
+    organization:
+      form:
+        endorser: Podporovatel
+        aggregator: Agregátor
+        other-names: Další názvy
+        website: Webová stránka
+        when-endorsed: Když je schválen
+        description-placeholder: Popis organizace zde.
+      index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        endorsers: Schvalovatelé
+        aggregators: Agregátoři
+        description: Popis
+        endorsed-date: Schváleno na
+        export: Export
+        export-option: Export s kontakty
+        filter: Filtr
+        year: Rok
+        view-audit: Zobrazit protokol auditu
+      map:
+        aggregators: Mapa pokrytí agregátorů a operátorů
+        title: Mapa podporovatelů digitálních principů
+        all-aggregators: Všichni agregátoři
+        all-operators: Všichni provozovatelé
+        all-services: Všechny služby
+        all-sectors: Všechna odvětví
+        all-years: Všechny roky
+      show:
+        other-offices: Jiné kanceláře
+        current: Aktuální
+        unknown: Neznámý
+        with-org: S organizací
+        owner: "Pokud jste součástí této organizace, můžete aktualizovat informace o organizaci. Zjistěte další informace" 
+    portal:
+      index: 
+        landing-page: Vstupní stránka
+        background-color: Barva pozadí
+        page-footer: Zápatí stránky
+        header-logo: Logo v záhlaví
+      form:
+        about-page: Poskytnutí obsahu pro hlavní vstupní stránku
+        background-color: Zadejte barvu pozadí ve formátu rrggbb
+        page-footer: Poskytněte obsah pro zápatí webu
+        header-logo: "Nahrajte soubor, který chcete použít jako hlavní logo záhlaví"
+        subdomain: Subdoména
+    product:
+      form:
+        complete-assessment: Označte hodnocení jako dokončené.
+        default-url: Výchozí url
+        digisquare-maturity: Vyspělost Digital Square
+        product-maturity: Skóre vyspělosti produktu
+        high: vysoký
+        included-products: Zahrnuté produkty
+        interoperable-products: Vzájemně spolupracující produkty
+        is-launchable: "Zaškrtnutím označíte, že je produkt automaticky spustitelný."
+        is-vetted: "Zaškrtněte, zda se jedná o prověřený digitální veřejný statek."
+        low: nízký
+        medium: střední
+        osc-maturity: Vyspělost OSC
+        other-names: Další názvy
+        description-placeholder: Zde zadejte popis produktu
+        repository: Úložiště kódu
+        submitter-email: Váš e-mail
+        start-assessment: Začněte hodnotit tento produkt.
+        website: Webová strana
+        est-hosting: Odhadované náklady na hosting
+        est-invested: Odhad investovaných peněz
+        beta: Beta
+        validated: Ověřeno
+        self-reported: Vlastní zpráva
+        bb-mapping: "Uveďte, zda se jedná o mapování Beta nebo Ověřené."
+        sdg-mapping: "Uveďte, zda se jedná o vlastní nebo ověřené mapování."
+      index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        toggle-favorite: Přidat do / odebrat ze seznamu oblíbených produktů
+        description: Popis
+        dataset: Datová sada
+        filter: Filtr
+        has-maturity: "Má vyspělost?"
+        product-graph: Graf produktu
+        is_endorsed: "Používáno/udržováno schvalovatelem"
+        is_deployable: "Tento produkt lze nasadit jedním kliknutím"
+        is_vetted: "Tento produkt byl prověřen jako digitální veřejný statek od Digital Public Goods Alliance."
+        covid-19-related: "Tento produkt lze použít pro reakci na COVID-19"
+        multiple: "má více úložišť. Informace o každém z nich jsou zobrazeny níže."
+        status: Stav
+        endorsers: Schvalovatelé
+        source: "Zdroj:"
+        sources: "Zdroje:"
+        source_dial: "Centrum otevřeného softwaru Digital Impact Alliance"
+        types: "Typy:"
+        source_unicef: "Unicef"
+        source_dpga: "Digital Public Goods Alliance"
+        source_digital_square: "Digital Square"
+        footer_bb_candidate: "Kandidát na "
+        footer_bb: " stavební blok"
+        footer_interop: "Kompatibilní s "
+        footer_sdg: "Splňuje cíl SDG"
+        footer_maturity_score: "Skóre vyspělosti:"
+        footer_maturity_ds: "Digital Square Global Good Maturity Model Skóre (1-10)"
+        footer_maturity_osc: "Celkové skóre modelu vyspělosti DIAL Open Source Center"
+        footer_osc_score: "Celkové procento splněných kritérií (1-10)"
+        footer_popover_bb: "Kandidát na následující stavební bloky"
+        footer_popover_sdg: "Splňuje následující cíle udržitelného rozvoje"
+        footer_popover_interop: "Tento produkt je kompatibilní s"
+        footer_popover_maturity: "Hodnocení vyspělosti produktu"
+        definition: "Produkt je softwarové řešení, které může splňovat jeden nebo více stavebních bloků."
+        footer_help: "Zápatí karty produktu obsahuje 3 řádky. Najetím na libovolnou ikonu získáte další informace o zobrazených údajích. První dva řádky mohou obsahovat informace o tom, jaké cíle udržitelného rozvoje tento produkt řeší, pro které stavební bloky jsou produkty kandidátem, informace o vyspělosti produktu podle měření DIAL's Open Source Center nebo Digital Square a s jakými dalšími produkty tento produkt spolupracuje. Spodní řádek bude vždy obsahovat informace o zdrojích dat pro tento produkt - v současné době získáváme data o produktech z DIAL Open Source Center, Digital Square a seznamu kandidátů na globální statky organizace Unicef."
+        covid_only: Pouze pro COVID-19.
+      launch:
+        auto-launch: Automatické spuštění instance tohoto produktu
+      show:
+        auto-launch: Automatické spuštění
+        not-auto-launch: Tento produkt není nakonfigurován pro automatické spuštění.
+        overall-maturity-score: Celkové skóre vyspělosti
+        overall-score: Celkové skóre
+        no-maturity: Pro tento produkt nemáme žádné informace o vyspělosti.
+        no-include-product: K tomuto produktu nemáme žádné informace.
+        no-interrop-product: Pro tento produkt nemáme žádné informace o vzájemné spolupráci.
+        no-osc-eval: Tento produkt nebyl hodnocen podle modelu vyspělosti OSC.
+        active-version: Aktuální verze
+        license: Licence
+        license-unknown: Neznámá
+        repository-info: Info o úložišti
+        statistics: Statistika
+        star: Hvězdiček
+        watcher: Počet hlídacích spouštěčů
+        fork: Počet forks
+        current-version: Aktuální verze
+        created: Vytvořeno
+        last-updated: Poslední aktualizace
+        open-pr: Otevřené žádosti /Pull Requests/
+        merged-pr: Sloučené Pull Requests
+        no-version-data: Data nejsou k dispozici
+        very-active: Velmi aktivní úložiště
+        not-very-active: Nepříliš aktivní úložiště
+        inactive: Neaktivní úložiště
+        na: NEPOUŽITELNÉ
+        cost-data: Údaje o nákladech na tento produkt
+        no-cost-data: Pro tento produkt nemáme žádné informace o nákladech.
+        code-lines: Řádky kódu
+        est-effort: Odhadované úsilí (v osoboměsících)
+        est-hosting: Odhadované náklady na hosting (měsíčně)
+        est-invested: Odhad investovaných peněz
+        cocomo: Odhadované úsilí se vypočítá pomocí metody COCOMO. 
+        classifications: Klasifikace produktů
+        classification-source: Zdroj
+        owner: "Pokud jste vlastníkem tohoto produktu, můžete tyto informace o produktu aktualizovat. Vyhledejte další informace" 
+    product-suite:
+      index:
+        no-data: V databázi jsme nenašli žádnou sadu produktů.
+    project:
+      form:
+        org-owner-tooltip: Jako vlastník organizace můžete přidávat/odebírat z projektu pouze svou organizaci.
+        product-owner-tooltip: Jako vlastník produktu můžete z projektu přidávat/odebírat pouze své vlastní produkty.
+      index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        toggle-favorite: Přidat do / odebrat ze seznamu oblíbených projektů
+        budget: Rozpočet
+        description: Popis
+        end-date: Datum ukončení
+        no-project: V databázi jsme nenašli žádný projekt.
+        start-date: Počáteční datum
+        dates: Termíny
+        source: Zdroj
+      show:
+        origin: Původ
+        project-url: URL projektu
+      map:
+        projects: Mapa projektů
+        all-projects: Všechny projekty
+        all-sectors: Všechny sektory
+        all-tags: Všechny štítky
+        covid-response: COVID-19 Reakce
+    sector:
+      index:
+        no-data: V databázi jsme nenašli žádný sektor.
+        parent: Nadřazený sektor
+        origin: Původ
+      form:
+        origin: Původ
+        parent: Nadřazený sektor
+    setting:
+      index:
+        no-data: V databázi není aktuálně definováno žádné nastavení
+    footer:
+      privacy-policy: Zásady ochrany osobních údajů
+      tag-line: "je partnerstvím některých nejaktivnějších světových šampionů v oblasti digitálního rozvoje. Jsme vděční za podporu našich zakládajících partnerů."
+      sponsor-line: "Děkujeme také za přímou podporu tohoto Katalogu digitálních řešení, kterou nám poskytli následující partneři:"
+      icons-provided: "Ikony poskytnuté v nezměněné podobě "
+      fa-icons: "FontAwesome"
+      sdg-icons: "Globální cíle udržitelného rozvoje"
+      dial-social-media: "Sledujte DIAL na sociálních sítích"
+      gitlab: "Zobrazit tento projekt na Gitlabu"
+      osc-forum: "Diskutujte na fóru Centra pro otevřený software"
+      ict4sdg-updates: "Přihlaste se k odběru novinek o Rámci pro digitální investice"
+      powered-by-dial: Běží na DIAL
+    header:
+      about: O nás
+      active-portal: Aktivní
+      admin-data: Data správce
+      elevate-role: Žádost o povýšení role
+      principle-data: Zásady Dat
+      mni-data: MNI Data
+      ict4sdg-data: ICT4SDG Data
+      deploys: Nasazuje
+      digital-principles: Digitální principy
+      feedback: Nahlásit problém
+      login: Přihlášení
+      logout: Odhlášení
+      product-registry: Registr produktů
+      profile: Nastavení profilu
+      sign-up: Zaregistrovat se
+      documentation: Nápověda
+      view-selection: Zobrazení
+      resources: Zdroje
+      covid-resources: COVID-19 Zdroje
+      dial-resources: Portál zdrojů DIAL
+      german: Němčina
+      english: Angličtina
+      french: Francouzština
+    filternav:
+      framework: Rámec digitálních investic
+      registry: Registr vývojových projektů
+      sdgs: SDG
+      use_cases: Případy užití
+      workflows: Pracovní postupy
+      building_blocks: Stavební bloky
+      products: Produkty
+      geographies: Zeměpisné oblasti
+      countries: Země
+      locations: Lokality
+      sectors: Sektory
+      orgs: Organizace
+      organizations: Organizace
+      projects: Projekty
+      playbooks: Příručky
+      plays: Hraje
+      tags: Značky
+      years: Roky
+      aggregators: Agregátoři
+      operators: Operátoři
+      services: Služby
+      view-projects: Již brzy.
+      map: Zobrazení mapy
+      endorser-map: Mapa podporovatelů
+      endorser-map-with-osm: Mapa schvalovatelů
+      aggregator-map: Mapa agregátorů
+      aggregator-map-with-osm: Mapa agregátorů
+      project-map: Mapa projektů
+      project-map-with-osm: Mapa projektů
+      map-filtering: Filtrování mapy
+      clear: Vymazat vše
+      with-maturity: Produkt s hodnocením vyspělosti
+      is-launchable: Produkt lze nasadit a spustit
+      top-nav: Horní navigace
+      filter-nav: Navigace pomocí filtru
+      user-role: Přidružené role
+      title:
+        building-block: Filtrovat podle stavebního bloku
+        country: Filtrovat podle země
+        origin: Filtrovat podle původu produktu
+        project-origin: Filtrovat podle původu projektu
+        type: Filtrovat podle typu produktu
+        product: Filtrovat podle produktu
+        project: Filtrovat podle projektu
+        sdg: Filtrovat podle SDG
+        sector: Filtr podle odvětví
+        use-case: Filtrovat podle případu užití
+        workflow: Filtrování podle workflow
+        year: Filtrovat podle roku schválení
+    active-filter:
+      building_blocks:
+        one: Stavební blok
+        few: Stavební bloky
+        many: Stavební bloky
+        other: Stavební bloky
+      countries:
+        one: Země
+        few: Země
+        many: Země
+        other: Země
+      endorsers: Schvalující organizace
+      aggregators: Agregátoři mobilních sítí
+      multi-filter: 'a %{count} dalších %{model}'
+      organizations:
+        one: Organizace
+        few: Organizace
+        many: Organizace
+        other: Organizace
+      origins:
+        one: Zdroj produktů
+        few: Zdroje produktů
+        many: Zdroje produktů
+        other: Zdroje produktů
+      project_origins:
+        one: Zdroj projektů
+        few: Zdroje projektů
+        many: Zdroje projektů
+        other: Zdroje projektů
+      product-type: Typ produktu
+      products:
+        one: Produkt
+        few: Produkty
+        many: Produktů
+        other: Produkty
+      projects:
+        one: Projekt
+        few: Projekty
+        many: Projektů
+        other: Projekty
+      sdgs:
+        one: SDG
+        few: SDG
+        many: SDG
+        other: SDG
+      sectors:
+        one: Sektor
+        few: Sektory
+        many: Sektorů
+        other: Sektory
+      tags:
+        one: Značka
+        few: Značky
+        many: Značek
+        other: značky
+      title: 'Filtrování podle %{model}'
+      use_cases:
+        one: Případ užití
+        few: Případy užití
+        many: Případů užití
+        other: Případy užití
+      workflows:
+        one: Pracovní postup
+        few: Pracovní postupy
+        many: Pracovních postupů
+        other: Pracovní postupy
+      with-maturity: Produkt s hodnocením vyspělosti
+      is-launchable: Produkt lze nasadit a spustit
+      years:
+        one: Rok schválení
+        few: Rok schválení
+        many: Rok schválení
+        other: Rok schválení
+      share-link: Sdílet odkaz
+      share-link-tooltip: "Kliknutím zde vytvoříte adresu URL, kterou lze sdílet a která zobrazí aktuální stránku včetně filtrů."
+      save-link: Uložit hledání
+      save-link-tooltip: Kliknutím sem uložíte adresu URL včetně filtrů.
+    breadcrumb:
+      home: Úvodní stránka
+    sdg:
+      index:
+        no-data: "Nepodařilo se nám najít cíl udržitelného rozvoje, který by odpovídal hledané frázi."
+        sdg-number: Číslo
+        view-targets: Zobrazit cíle
+        sdg-target-popover:
+          one: SDG Cíl
+          few: SDG Cíle
+          many: SDG Cíle
+          other: SDG Cíle
+        definition: "Cíle udržitelného rozvoje zahrnují 17 cílů a 169 úkolů, které představují globální investiční priority pro dosažení udržitelného rozvoje. Cíle udržitelného rozvoje byly stanoveny v roce 2015 Valným shromážděním OSN a mají být splněny do roku 2030."
+      show:
+        target: Cíl
+    playbook:
+      index:
+        overview: Přehled
+        audience: Publikum
+        outcomes: Výstupy
+        cover: Pokrytí
+        pdf-url: Odkaz na dokument PDF
+        phases: Fáze
+        name: Název
+        description: Popis
+        no-page: K této příručce jsme nenašli žádné stránky.
+        create-pdf: Vytvořit PDF
+        creating-pdf: Vytváření PDF
+        share: Sdílet tento zdroj
+      form:
+        overview: Přehled
+        audience: Publikum
+        outcomes: Výstupy
+        cover: obálka
+        pdf-url: Odkaz na PDF dokument
+        phases: Fáze
+        name: Název
+        description: Popis
+    playbook-page:
+      index:
+        contents: Obsah
+        edit-content: Upravit obsah
+        phase: Fáze
+        order: Řazení
+        media: Média
+        question: Otázka
+        resources: Zdroje
+        slug: Slug
+        other-info: Další informace
+        has-children: Tato stránka má podřízené stránky. Před odstraněním této stránky odstraňte všechny podřízené stránky.
+      form:
+        name: Název
+        contents: Obsah
+        editor-type: Použití editoru nástroje Page Builder
+        question: Otázka
+        question-text: Text otázky
+        answer-text: Text odpovědi
+        add-answer: Pidat odpověď
+        phase: Fáze
+        order: Řazení
+        media: Média
+        mapped-action: Mapovaná akce
+        resources: Prostředky
+        media-prompt: "Chcete-li k této aktivitě přidat video, zadejte adresu URL."
+        description: Popis
+        url: URL
+        parent: Nadřazená stránka
+        other-info: Další informace
+        page-contents: Obsah stránek
+        html: HTML
+        css: CSS
+    use-case:
+      form:
+        all-maturity: Všechny úrovně vyspělosti
+        assigned-sdg-targets: Přidělené cíle udržitelného rozvoje
+        maturity-level: Úroveň vyspělosti
+        search-sdg-targets: Vyhledat a přiřadit cíle SDG
+        steps-header-description: Popis záhlaví kroků
+        is-mature: Je vyspělý
+      index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        toggle-favorite: Přidat do / odebrat ze seznamu oblíbených případů užití
+        no-data: V databázi jsme nenašli žádný případ užití.
+        sdg-target-popover:
+          one: SDG Cíl
+          few: SDG Cíle
+          many: SDG Cíle
+          other: SDG Cíle
+        workflow-popover:
+          one: Mapovaný pracovní postup
+          few: Mapované pracovní postupy
+          many: Mapovaných pracovních postupů
+          other: Mapované pracovní postupy
+        definition: "Případ užití představuje kroky, které jednotlivec nebo systém provede za účelem dosažení obchodního cíle."
+        characteristics: |
+          Uživatelsky orientovaný popis kroků nebo uživatelských cest potřebných k dosažení výsledku. 
+          identifikuje jeden nebo více cílů udržitelného rozvoje jako svůj obchodní cíl 
+          popisuje obecné pracovní postupy a obchodní procesy zapojené do jednotlivých kroků případu užití 
+          Obvykle specifické pro dané odvětví 
+          Lze je zlepšit pomocí digitálních technologií 
+        description: "Každý model případu užití popisuje primární aktéry, klíčové kroky spojené s dosažením určitého obchodního cíle, popisy pracovních postupů a stavebních bloků ICT zapojených do každého kroku a přiřazení k cílům SDG. Seznam modelů Use Case není vyčerpávající a v dalších verzích budou přidány další." 
+        maturity: Vyspělost
+        show_beta: Zobrazit beta (neověřené) případy použití
+        is_beta: Tento případ užití nebyl ověřen
+        is_mature: Tento případ užití byl ověřen
+      show:
+        description: Popis
+        steps: Kroky pro tento případ použití zahrnují
+        sdg-targets: SDG Cíle
+        no-sdg-targets: Pro tento případ použití nemáme žádné informace o cíli SDG.
+        use-case-steps: Kroky případu užití
+        request-elevation: "Všimli jsme si, že jste provedli změny v případu užití, ale nepodařilo se vám nastavit jeho úroveň zralosti. Možná to budete moci udělat tak, že požádáte o zvýšení role kliknutím na %{href}."
+    user:
+      role:
+        admin: Administrátor
+        all-roles: Všechny role
+        content_editor: Editor obsahu
+        content_writer: Tvůrce obsahu
+        ict4sdg: ICT 4 SDG uživatel
+        principle: Hlavní uživatel
+        user: Základní uživatel
+        org_user: Uživatel organizace
+        org_product_user: Uživatel organizace a produktu
+        product_user: Uživatel produktu
+        mni: MNI Uživatel
+      form:
+        db-backup: Tento uživatel bude dostávat zálohy DB.
+        admin-emails: "Tento uživatel bude dostávat e-maily od správce (nové logo, registrace uživatele)."
+        email: E-mail
+        manual-approval: Ruční schválení tohoto uživatele.
+        minimum-length: 'nejméně %{number} znaků.'
+        password: Heslo
+        password-confirmation: Potvrzení hesla
+        role: Role
+      index:
+        no-data: Nenašli jsme uživatele odpovídající hledané frázi.
+        account-status: Stav účtu
+        approved: Schváleno
+        not-approved: Vyžaduje schválení
+      show:
+        approved: Schváleno
+        'no': 'Ne'
+        receive-backup: Získání zálohy DB
+        receive-admin-emails: Dostávat e-maily od správce
+        reset-password: Obnovit heslo
+        'yes': 'Ano'
+    workflow:
+      form:
+        category: Kategorie
+        description: Popis
+        other-names: Další názvy
+      index:
+        export-json: Export (json)
+        export-csv: Export (csv)
+        no-data: Nepodařilo se nám najít pracovní postup odpovídající hledané frázi.
+        use-case-popover:
+          one: Zmapovaný případ užití
+          few: Zmapované případy užití
+          many: Zmapované případy užití
+          other: Zmapované případy užití
+        building-block-popover:
+          one: Zmapovaný stavební blok
+          few: Zmapované stavební bloky
+          many: Zmapované stavební bloky
+          other: Zmapované stavební bloky
+        definition: "Obecný obchodní proces, který přispívá k naplňování cílů udržitelného rozvoje v různých odvětvích a může být vyvinut jako soubor organizačních schopností."  
+        characteristics: |
+          Běžný obchodní proces, který pomáhá organizaci plnit její celkové funkce. 
+          Použitelné pro více případů použití v různých odvětvích 
+          Využívá jeden nebo více stavebních prvků ICT 
+        description: "Každý WorkFlow obsahuje popis, příklady pro konkrétní odvětví a přiřazení k případům užití definovaným v tomto rámci. Seznam WorkFlow není úplný a v dalších verzích budou přidány další." 
+      show:
+        full-description: Plný popis
+        mapping: Ukázkové mapování pracovních postupů na případy použití
+        other-names: Další názvy
+        short-description: Krátký popis
+    general:
+      add-favorite: Přidat k oblíbeným
+      remove-favorite: Odebrat z oblíbených
+      action: Akce
+      add: Přidat
+      back: Zpět
+      back-with-dest: "Zpět na %{dest}"
+      comment: Komentář
+      copy-with-model: "Kopírovat %{model}"
+      copy-confirmation: "Opravdu chcete zkopírovat %{model}?"
+      create: Vytvořit nový
+      delete: Smazat
+      delete-with-model: "Smazat %{model}"
+      delete-confirmation: "Opravdu chcete odstranit %{model}?"
+      description: Popis
+      duplicates: 'Jeden nebo více %{model} s podobným názvem již existuje.'
+      edit: Upravit
+      error:
+        one: Formulář obsahuje chybu
+        few: Formulář obsahuje chyby
+        many: Formulář obsahuje chyby
+        other: Formulář obsahuje chyby
+      this-link: tento odkaz
+      logo: Logo
+      is-mature: Je vyspělý
+      name: Název
+      not-available: 'Nemáme k tomuto %{model}žádné %{multi} informace.'
+      search: Hledat
+      search-placeholder: 'Hledat %{model}'
+      show: Zobrazit
+      submit: Odeslat
+      title:
+        create: 'Vytvořit%{model}'
+        edit: 'Upravit %{model}'
+      value: Hodnota
+      view: Zobrazit
+      votes: Hlasy
+      definitions: Kliknutím zobrazíte další pojmy a definice
+      map-legend: "Kliknutím získáte informace o tom, jak číst karty produktů"
+      characteristics: Charakteristika
+      show-use-case: "Co je případ užití?"
+      show-sdg: "Co je to cíl udržitelného rozvoje?"
+      show-workflow: "Co je pracovní postup?"
+      show-bb: "Co je to stavební blok?"
+      show-product: Jak číst karty produktů
+      show-less: Zavřít
+    multi-select:
+      assigned:
+        label: 'Vyhledat a přiřadit %{model} ...'
+        title: 'Přiřazeno %{model}'
+    portal-view:
+      top-nav: horní navigace
+      filter-nav: navigace pomocí filtru
+      user-role: uživatelská role
+      product-origin: původ produktu
+      org-type: typ organizace
+      subdomain: Subdoména
+    use-case-step:
+      show:
+        other-steps: Kroky v případu užití
+        no-data: Pro tento případ použití jsme nenašli žádné kroky.
+      form:
+        use-case: Případy užití
+        step-number: Číslo kroku
+  will_paginate:
+    previous_label: "&#8592; Předchozí"
+    next_label: "Další &#8594;"
+    page_gap: "&hellip;"
