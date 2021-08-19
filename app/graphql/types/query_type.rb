@@ -1,7 +1,7 @@
 module Types
   class QueryType < Types::BaseObject
     field :counts, resolver: Queries::CountsQuery
-    
+
     field :playbooks, resolver: Queries::PlaybooksQuery
     field :playbook, resolver: Queries::PlaybookQuery
     field :search_playbook, resolver: Queries::SearchPlaybookQuery
@@ -60,6 +60,14 @@ module Types
     field :workflows, resolver: Queries::WorkflowsQuery
     field :workflow, resolver: Queries::WorkflowQuery
     field :search_workflows, resolver: Queries::SearchWorkflowsQuery
+
+    field :candidate_products, resolver: Queries::CandidateProductsQuery
+    field :candidate_product, resolver: Queries::CandidateProductQuery
+    field :search_candidate_products, resolver: Queries::SearchCandidateProductsQuery
+
+    field :candidate_organizations, resolver: Queries::CandidateOrganizationsQuery
+    field :candidate_organization, resolver: Queries::CandidateOrganizationQuery
+    field :search_candidate_organizations, resolver: Queries::SearchCandidateOrganizationsQuery
 
     field :me, resolver: Queries::MeQuery
   end

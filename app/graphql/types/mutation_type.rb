@@ -1,7 +1,6 @@
 module Types
   class MutationType < Types::BaseObject
-    field :create_page, mutation: Mutations::CreatePage
-    field :register_user, mutation: Mutations::RegisterUser
-    field :sign_in, mutation: Mutations::SignIn
+    field :create_candidate_product, mutation: Mutations::CreateCandidateProduct
+    field :create_candidate_organization, mutation: Mutations::CreateCandidateOrganization
   end
 end
