@@ -167,6 +167,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def export_data
+    @user = User.all
+    authorize(@user, :show?)
+    respond_to do |format|
+      format.csv do
+        render csv: @user, filename: 'exported-users'
+      end
+      format.json do
+        render json: @user.to_json(User.serialization_options)
+      end
+    end
+  end
+
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user

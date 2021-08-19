@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   scope '/admin' do
     resources :users do
       get 'statistics', on: :collection
+      get 'export_data', on: :collection
     end
   end
 

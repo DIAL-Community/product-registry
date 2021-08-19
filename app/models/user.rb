@@ -1,3 +1,5 @@
+require('csv')
+
 class User < ApplicationRecord
   acts_as_token_authenticatable
 
@@ -23,6 +25,25 @@ class User < ApplicationRecord
 
   def set_default_role
     self.roles = [:user]
+  end
+
+  def self.serialization_options
+    {
+      except: [:created_at, :updated_at]
+    }
+  end
+  
+  def self.to_csv
+    attributes = %w{id email role organization_id}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |p|
+        
+        csv << [p.id, p.email, p.role, p.organization_id]
+      end
+    end
   end
 
   def after_database_authentication
