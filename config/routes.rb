@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   scope '/admin' do
     resources :users do
       get 'statistics', on: :collection
+      get 'export_data', on: :collection
     end
   end
 
@@ -90,6 +91,9 @@ Rails.application.routes.draw do
     post '/authenticate/signup', to: 'authentication#sign_up_ux'
     get '/authenticate/token', to: 'authentication#fetch_token'
     delete '/auth/invalidate', to: 'authentication#invalidate_token'
+    post '/auth/reset-password', to: 'authentication#reset_password'
+    post '/auth/apply-reset-token', to: 'authentication#apply_reset_token'
+    post '/auth/validate-reset-token', to: 'authentication#validate_reset_token'
   end
 
   root to: redirect(path: '/products')

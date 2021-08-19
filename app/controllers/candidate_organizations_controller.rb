@@ -1,6 +1,13 @@
 class CandidateOrganizationsController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:approve, :reject]
+  skip_before_action :verify_authenticity_token, if: :json_request
+
   before_action :set_candidate_organization, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
+
+  def json_request
+    request.format.json?
+  end
 
   # GET /candidate_organizations
   # GET /candidate_organizations.json
@@ -136,10 +143,10 @@ class CandidateOrganizationsController < ApplicationController
          organization.save && @candidate_organization.update(rejected: false, approved_date: Time.now,
                                                              approved_by_id: current_user.id)
         format.html { redirect_to organization_url(organization), notice: 'Candidate promoted to organization.' }
-        format.json { render :show, status: :created, location: @organization }
+        format.json { render(json: { message: 'Candidate approved.' }, status: :ok) }
       else
         format.html { redirect_to candidate_organizations_url, flash: { error: 'Unable to approve candidate.' } }
-        format.json { head :no_content }
+        format.json { render(json: { message: 'Candidate approval failed.' }, status: :bad_request) }
       end
     end
   end
@@ -152,10 +159,11 @@ class CandidateOrganizationsController < ApplicationController
       if @candidate_organization.rejected.nil? &&
          @candidate_organization.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
         format.html { redirect_to candidate_organizations_url, notice: 'Candidate rejected.' }
+        format.json { render(json: { message: 'Candidate declined.' }, status: :ok) }
       else
         format.html { redirect_to candidate_organizations_url, flash: { error: 'Unable to reject candidate.' } }
+        format.json { render(json: { message: 'Declining candidate failed' }, status: :bad_request) }
       end
-      format.json { head :no_content }
     end
   end
 

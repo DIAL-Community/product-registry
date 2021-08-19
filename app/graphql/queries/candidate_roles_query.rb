@@ -37,7 +37,6 @@ module Queries
         candidate_roles = candidate_roles.where(email: email)
       end
       candidate_role = candidate_roles.first
-      puts "Candidate Role: #{candidate_role.inspect}."
       candidate_role
     end
   end
