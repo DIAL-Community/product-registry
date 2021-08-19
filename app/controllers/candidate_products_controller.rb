@@ -1,6 +1,13 @@
 class CandidateProductsController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:approve, :reject]
+  skip_before_action :verify_authenticity_token, if: :json_request
+
   before_action :set_candidate_product, only: [:show, :edit, :update, :destroy, :duplicate, :approve, :reject]
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
+
+  def json_request
+    request.format.json?
+  end
 
   def approve
     set_candidate_product
@@ -23,11 +30,11 @@ class CandidateProductsController < ApplicationController
       if (@candidate_product.rejected.nil? || @candidate_product.rejected) &&
         product.save && @candidate_product.update(rejected: false, approved_date: Time.now,
                                                   approved_by_id: current_user.id)
-        format.html { redirect_to product_url(product), notice: 'Candidate promoted to product.' }
-        format.json { render :show, status: :created, location: @product }
+        format.html { redirect_to(product_url(product), notice: 'Candidate promoted to product.') }
+        format.json { render(json: { message: 'Candidate product approved.' }, status: :ok) }
       else
-        format.html { redirect_to candidate_products_url, flash: { error: 'Unable to approve candidate.' } }
-        format.json { head :no_content }
+        format.html { redirect_to(candidate_products_url, flash: { error: 'Unable to approve candidate.' }) }
+        format.json { render(json: { message: 'Candidate approval failed.' }, status: :bad_request) }
       end
     end
   end
@@ -39,11 +46,12 @@ class CandidateProductsController < ApplicationController
       # Can only approve new submission.
       if @candidate_product.rejected.nil? &&
          @candidate_product.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
-        format.html { redirect_to candidate_products_url, notice: 'Candidate rejected.' }
+        format.html { redirect_to(candidate_products_url, notice: 'Candidate declined.') }
+        format.json { render(json: { message: 'Candidate product declined.' }, status: :ok) }
       else
-        format.html { redirect_to candidate_products_url, flash: { error: 'Unable to reject candidate.' } }
+        format.html { redirect_to(candidate_products_url, flash: { error: 'Unable to reject candidate.' }) }
+        format.json { render(json: { message: 'Declining candidate failed.' }, status: :bad_request) }
       end
-      format.json { head :no_content }
     end
   end
 
