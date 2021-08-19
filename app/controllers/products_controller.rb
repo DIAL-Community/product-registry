@@ -850,7 +850,10 @@ class ProductsController < ApplicationController
         @child_descriptions = ProductDescription.where(product_id: @child_products)
       end
 
-      @owner = User.where("?=ANY(user_products)", @product.id)
+      @owner = []
+      if @product&.id
+        @owner = User.where("?=ANY(user_products)", @product.id)
+      end
     end
 
     def set_current_user
