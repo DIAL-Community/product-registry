@@ -478,6 +478,9 @@ class ProjectsController < ApplicationController
     end
 
     if project_params[:project_description].present?
+      if @project_description.locale != I18n.locale.to_s
+        @project_description = ProjectDescription.new
+      end
       @project_description.project_id = @project.id
       @project_description.locale = I18n.locale
       @project_description.description = project_params[:project_description]

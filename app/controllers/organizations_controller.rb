@@ -475,6 +475,9 @@ class OrganizationsController < ApplicationController
     end
 
     if organization_params[:organization_description].present?
+      if @organization_description.locale != I18n.locale.to_s
+        @organization_description = OrganizationDescription.new
+      end
       @organization_description.organization_id = @organization.id
       @organization_description.locale = I18n.locale
       @organization_description.description = organization_params[:organization_description]

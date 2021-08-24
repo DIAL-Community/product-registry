@@ -349,6 +349,9 @@ class UseCasesController < ApplicationController
     @use_case.sdg_targets = sdg_targets.to_a
 
     if use_case_params[:uc_desc].present?
+      if @uc_desc.locale != I18n.locale.to_s
+        @uc_desc = UseCaseDescription.new
+      end
       @uc_desc.use_case_id = @use_case.id
       @uc_desc.locale = I18n.locale
       @uc_desc.description = use_case_params[:uc_desc]

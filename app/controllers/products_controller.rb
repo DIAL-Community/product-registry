@@ -705,6 +705,9 @@ class ProductsController < ApplicationController
     end
 
     if product_params[:product_description].present?
+      if @product_description.locale != I18n.locale.to_s
+        @product_description = ProductDescription.new
+      end
       @product_description.product_id = @product.id
       @product_description.locale = I18n.locale
       @product_description.description = product_params[:product_description]
