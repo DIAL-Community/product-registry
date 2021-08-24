@@ -25,7 +25,7 @@ module Queries
       use_case = UseCase.find_by(slug: slug)
 
       workflows = []
-      if use_case&.use_case_steps && !use_case.use_case_step.empty?
+      if use_case.use_case_steps && !use_case.use_case_steps.empty?
         use_case.use_case_steps.each do |use_case_step|
           workflows |= use_case_step.workflows
         end
