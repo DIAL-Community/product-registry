@@ -181,6 +181,9 @@ class UseCaseStepsController < ApplicationController
   # PATCH/PUT /use_case_steps/1.json
   def update
     if use_case_step_params[:ucs_desc]
+      if @ucs_desc.locale != I18n.locale.to_s
+        @ucs_desc = UseCaseStepDescription.new
+      end
       @ucs_desc.use_case_step_id = @use_case_step.id
       @ucs_desc.locale = I18n.locale
       @ucs_desc.description = use_case_step_params[:ucs_desc]

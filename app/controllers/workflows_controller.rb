@@ -281,6 +281,9 @@ class WorkflowsController < ApplicationController
     @workflow.building_blocks = building_blocks.to_a
 
     if workflow_params[:wf_desc].present?
+      if @wf_desc.locale != I18n.locale.to_s
+        @wf_desc = WorkflowDescription.new
+      end
       @wf_desc.workflow_id = @workflow.id
       @wf_desc.locale = I18n.locale
       @wf_desc.description = workflow_params[:wf_desc]

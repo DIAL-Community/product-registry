@@ -368,6 +368,9 @@ class BuildingBlocksController < ApplicationController
     end
 
     if building_block_params[:bb_desc].present?
+      if @bb_desc.locale != I18n.locale.to_s
+        @bb_desc = BuildingBlockDescription.new
+      end
       @bb_desc.building_block_id = @building_block.id
       @bb_desc.locale = I18n.locale
       @bb_desc.description = building_block_params[:bb_desc]
