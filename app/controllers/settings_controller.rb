@@ -2,6 +2,8 @@
 
 # Setting page where user can set the owning organization.
 class SettingsController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  
   before_action :authenticate_user!
   before_action :set_setting, only: [:edit, :update, :show]
 

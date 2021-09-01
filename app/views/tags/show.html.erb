@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
@@ -7,16 +8,16 @@
       <%= "#{t('model.tag').to_s.titlecase}: #{@tag.name}" %>
     </div>
     <div id="tag-viewer" class="wysiwyg-viewer">
-      <%= @tag.tag_descriptions
+      <%= @tag.tag_descriptions.select { |desc| desc.locale == I18n.locale.to_s }.first && @tag.tag_descriptions
             .select { |desc| desc.locale == I18n.locale.to_s }
             .first
             .description
             .html_safe %>
     </div>
     <p class="float-right mb-0" >
-      <%= link_to t('view.general.back'), tags_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), base_path + tags_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@tag).mod_allowed? %>
-        <%= link_to t('view.general.edit'), edit_tag_path(@tag), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), base_path + edit_tag_path(@tag), :class => "card-link" %>
       <% end %>
     </p>
   </div>

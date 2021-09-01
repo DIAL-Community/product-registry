@@ -1,5 +1,5 @@
 class CandidateOrganizationsController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:approve, :reject]
+  acts_as_token_authentication_handler_for User, only: [:index, :show, :edit, :new, :create, :update, :destroy, :approve, :reject]
   skip_before_action :verify_authenticity_token, if: :json_request
 
   before_action :set_candidate_organization, only: [:show, :edit, :update, :destroy]

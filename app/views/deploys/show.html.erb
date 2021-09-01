@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p id="notice"><%= notice %></p>
 <div class="card">
   <div class="card-header bg-secondary text-white">
@@ -13,7 +14,7 @@
           <p><%= message.to_s.force_encoding("UTF-8") %></p>
         <% end %>
       </div>
-      <div><%= link_to 'Show all messages', deploy_show_messages_path(@deploy), :class => 'btn btn-secondary', target: :_blank %></div>
+      <div><%= link_to 'Show all messages', base_path + deploy_show_messages_path(@deploy), :class => 'btn btn-secondary', target: :_blank %></div>
     </p>
     <p class="float-right mb-0" >
       <%= link_to t('view.general.back'), deploys_path, :class => "card-link" %>
@@ -24,7 +25,7 @@
   </div>
   <div class="card-body">
     <% if @deploy.status == "RUNNING" %>
-      <%= form_tag(deploy_add_ssh_user_path(@deploy), id: "ssh-user-form", class: "form") do %>
+      <%= form_tag(base_path + deploy_add_ssh_user_path(@deploy), id: "ssh-user-form", class: "form") do %>
         <%= text_field_tag :pub_key, params[:pub_key], placeholder: "Enter your SSH public key ...", :class => "form-control" %>
         <div>
           <%= submit_tag "Create SSH User", :class => "btn btn-secondary" %>

@@ -77,7 +77,7 @@ Rails.application.routes.draw do
   get 'about', to: 'about#index'
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
-  scope '/admin' do
+  scope '/devise' do
     resources :users do
       get 'statistics', on: :collection
       get 'export_data', on: :collection
@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   end
 
   devise_scope :user do
-    get '/users', to: 'registrations#new'
+    get '/users', to: 'users#index'
     get '/users/password', to: 'devise/passwords#new'
     post '/authenticate/credentials', to: 'authentication#sign_in_ux'
     post '/authenticate/signup', to: 'authentication#sign_up_ux'

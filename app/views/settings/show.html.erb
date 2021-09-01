@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
@@ -12,9 +13,9 @@
     </div>
     <%= @setting.description %>
     <div class="float-right" >
-      <%= link_to t('view.general.back'), settings_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), base_path + settings_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@setting).mod_allowed? %>
-        <%= link_to t('view.general.edit'), edit_setting_path(@setting), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), base_path + edit_setting_path(@setting), :class => "card-link" %>
       <% end %>
     </div>
   </div>

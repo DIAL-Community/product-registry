@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <table class="table">
   <thead class="thead-light">
     <tr>
@@ -28,9 +29,9 @@
           <td class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
               <div class="dropdown-menu dropdown-menu-right">
-              <%= link_to 'View', deploy_path(deploy.id), :class =>"dropdown-item"  %>
+              <%= link_to 'View', base_path + deploy_path(deploy.id), :class =>"dropdown-item"  %>
               <div class="dropdown-divider"></div>
-              <%= link_to 'Delete', deploy_path(deploy.id), method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
+              <%= link_to 'Delete', base_path + deploy_path(deploy.id), method: :delete, data: { confirm: 'Are you sure?' }, :class =>"dropdown-item"  %>
               </div>
           </td>
         </tr>

@@ -1,4 +1,5 @@
-<%= form_with(model: tag, local: true, html: { id: 'tag-form' }) do |form| %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: tag, local: true, html: { id: 'tag-form' }, url: base_path + tag_path) do |form| %>
 
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :tag_name, class: "form-control", placeholder: t('view.general.name') %>

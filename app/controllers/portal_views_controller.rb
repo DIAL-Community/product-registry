@@ -1,4 +1,6 @@
 class PortalViewsController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_portal_view, only: [:show, :edit, :update, :destroy]
 

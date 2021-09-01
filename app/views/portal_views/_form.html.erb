@@ -1,4 +1,5 @@
-<%= form_with(model: portal_view, multipart: true, local: true, html: { id: 'portal-form' }) do |form| %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: portal_view, multipart: true, local: true, html: { id: 'portal-form' }, url: base_path + portal_view_path) do |form| %>
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :portal_view_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
