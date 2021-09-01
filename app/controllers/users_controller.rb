@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  
   before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 

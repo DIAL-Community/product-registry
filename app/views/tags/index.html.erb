@@ -1,10 +1,11 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
   <div class="col-12">
     <% if user_signed_in? && policy(Tag).mod_allowed? %>
-      <%= link_to(new_tag_path, class: 'btn btn-outline-secondary float-left') do %>
+      <%= link_to(base_path + new_tag_path, class: 'btn btn-outline-secondary float-left') do %>
         <span class="d-none d-md-block">
           <%= "#{t('view.general.create')} #{t('model.tag').to_s.titlecase}" %>
         </span>
@@ -14,7 +15,7 @@
       <% end %>
     <% end %>
     <div class="form-group float-right mb-0">
-      <%= form_tag(tags_path, method: "get", id: "search-form", class: "form-inline") do %>
+      <%= form_tag(base_path + tags_path, method: "get", id: "search-form", class: "form-inline") do %>
         <%= text_field_tag :search, params[:search], class: "form-control",
             placeholder: t('view.general.search-placeholder', model: t('model.tag').to_s.pluralize) %>
         <div class="input-group-append">

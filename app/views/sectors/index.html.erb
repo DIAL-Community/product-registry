@@ -1,8 +1,9 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
 <% if user_signed_in? && policy(Sector).mod_allowed? %>
-  <%= link_to new_sector_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
+  <%= link_to base_path + new_sector_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
     <span class="d-none d-md-block"><%= t('view.general.create') %></span>
     <span class="d-block d-md-none">
       <i class="fa fa-plus fa-sm" aria-hidden="true"></i>
@@ -61,11 +62,11 @@
                <%= t('view.general.action') %>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <%= link_to t('view.general.view'), sector, :class =>"dropdown-item" %>
+              <%= link_to t('view.general.view'), base_path + sector_path(sector), :class =>"dropdown-item" %>
               <% if user_signed_in? && policy(sector).mod_allowed? %>
-                <%= link_to t('view.general.edit'), edit_sector_path(sector), :class =>"dropdown-item" %>
+                <%= link_to t('view.general.edit'), base_path + edit_sector_path(sector), :class =>"dropdown-item" %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), sector, method: :delete,
+                <%= link_to t('view.general.delete'), base_path + sector_path(sector), method: :delete,
                             data: { confirm: t('view.general.delete-confirmation', model: t('model.sector')) },
                             class: "dropdown-item" %>
               <% end %>

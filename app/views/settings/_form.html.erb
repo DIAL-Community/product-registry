@@ -1,4 +1,5 @@
-<%= form_with(model: setting, local: true) do |form| %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: setting, local: true, url: base_path + setting_path) do |form| %>
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :setting_name, class: "form-control",
                                  placeholder: t('view.general.name'), disabled: !policy(setting).permitted_attributes.include?(:name) %>

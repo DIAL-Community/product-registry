@@ -26,6 +26,17 @@ class ApplicationController < ActionController::Base
 
   after_action :store_action
 
+  def default_url_options
+    if !request.query_parameters['user_token'].nil?
+      {
+        'user_email': request.query_parameters['user_email'],
+        'user_token': request.query_parameters['user_token']
+      }
+    else 
+      {}
+    end
+  end
+
   def not_found
     raise ActionController::RoutingError, 'Not Found'
   end

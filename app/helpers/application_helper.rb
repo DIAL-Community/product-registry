@@ -45,7 +45,7 @@ module ApplicationHelper
     "viewform?entry.1077775768=#{request.original_url}"
   end
 
-  def build_breadcrumbs(params)
+  def build_breadcrumbs(params, query_parameters)
     breadcrumbs = []
 
     if params[:controller].downcase == 'use_case_steps'
@@ -56,7 +56,7 @@ module ApplicationHelper
         breadcrumbs << { path: uc_step_path, label: uc_step_name }
       end
     elsif params[:controller].downcase == 'users'
-      breadcrumbs << { path: 'admin/users', label: t('model.user').titlecase.pluralize }
+      breadcrumbs << { path: 'users', label: t('model.user').titlecase.pluralize }
     elsif params[:controller].downcase == 'rubric_categories' || params[:controller].downcase == 'category_indicators'
       breadcrumbs << { path: 'maturity_rubrics', label: t('model.maturity-rubric').titlecase.pluralize }
       if params[:maturity_rubric_id].present?
@@ -91,14 +91,23 @@ module ApplicationHelper
     end
 
     unless object_record.nil?
-      if breadcrumbs[-1][:path] == 'admin/users' || breadcrumbs[-1][:path] == 'candidate_roles'
+      if breadcrumbs[-1][:path] == 'users' || breadcrumbs[-1][:path] == 'candidate_roles'
         id_label = object_record.email
       else
         id_label = object_record.name
       end
     end
 
+    if !query_parameters['user_token'].nil?
+      breadcrumb_query_param = "?user_email="+query_parameters['user_email']+"&user_token="+query_parameters['user_token']
+    end
     breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/#{params[:id]}", label: id_label }
+    if !query_parameters['user_token'].nil?
+      breadcrumb_query_param = "?user_email="+query_parameters['user_email']+"&user_token="+query_parameters['user_token']
+      breadcrumbs.each do |crumb|
+        crumb[:path] && crumb[:path] += breadcrumb_query_param
+      end
+    end
     breadcrumbs
   end
 

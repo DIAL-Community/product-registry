@@ -1,8 +1,9 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
 <% if user_signed_in? %>
-  <%= link_to new_candidate_organization_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
+  <%= link_to base_path + new_candidate_organization_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
     <span class="d-none d-md-block"><%= t('view.general.create') %></span>
     <span class="d-block d-md-none">
       <i class="fa fa-plus fa-sm" aria-hidden="true"></i>
@@ -65,28 +66,28 @@
               <%= t('view.general.action') %>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <%= link_to t('view.general.view'), candidate_organization, :class =>"dropdown-item"  %>
+              <%= link_to t('view.general.view'), base_path + candidate_organization_path(candidate_organization), :class =>"dropdown-item"  %>
               <% if user_signed_in? && policy(candidate_organization).mod_allowed? %>
                 <% if candidate_organization.rejected.nil? || candidate_organization.rejected %>
-                  <%= link_to t('view.general.edit'), edit_candidate_organization_path(candidate_organization), :class =>"dropdown-item"  %>
+                  <%= link_to t('view.general.edit'), base_path + edit_candidate_organization_path(candidate_organization), :class =>"dropdown-item"  %>
                 <% end %>
                 <div class="dropdown-divider"></div>
                 <% if candidate_organization.rejected.nil? %>
                   <%= link_to t('view.candidate-organization.index.approve'),
-                              approve_candidate_organization_path(candidate_organization),
+                              base_path + approve_candidate_organization_path(candidate_organization),
                               method: :post, :class =>"dropdown-item"  %>
                   <%= link_to t('view.candidate-organization.index.reject'),
-                              reject_candidate_organization_path(candidate_organization),
+                              base_path + reject_candidate_organization_path(candidate_organization),
                               method: :post, :class =>"dropdown-item"  %>
                   <div class="dropdown-divider"></div>
                 <% end %>
                 <% if candidate_organization.rejected %>
                   <%= link_to t('view.candidate-organization.index.approve'),
-                              approve_candidate_organization_path(candidate_organization),
+                              base_path + approve_candidate_organization_path(candidate_organization),
                               method: :post, :class =>"dropdown-item"  %>
                   <div class="dropdown-divider"></div>
                 <% end %>
-                <%= link_to t('view.general.delete'), candidate_organization, method: :delete,
+                <%= link_to t('view.general.delete'), base_path + candidate_organization_path(candidate_organization), method: :delete,
                             data: { confirm: t('view.general.delete-confirmation', model: t('model.candidate-organization')) },
                             class: "dropdown-item" %>
               <% end %>
