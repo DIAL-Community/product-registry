@@ -8,12 +8,12 @@
   <div class="dropdown-menu dropdown-menu-right">
     <%= link_to t('view.header.about'), about_path, :class => 'dropdown-item' %>
     <div class="dropdown-divider"></div>
-    <%= link_to t('view.header.profile'), edit_user_registration_path, :class => 'dropdown-item' %>
+    <%= link_to t('view.header.profile'), base_path + edit_user_registration_path, :class => 'dropdown-item' %>
     <% if !current_user.nil? && !current_user.roles.include?(User.user_roles[:admin]) %>
-      <%= link_to t('view.header.elevate-role'), new_candidate_role_path, class: 'dropdown-item' %>
+      <%= link_to t('view.header.elevate-role'), base_path + new_candidate_role_path, class: 'dropdown-item' %>
     <% end %>
     <% if (policy(current_user).index?) %>   
-      <%= link_to t('model.setting').to_s.pluralize.titlecase, settings_path, :class => 'dropdown-item' %>
+      <%= link_to t('model.setting').to_s.pluralize.titlecase, base_path + settings_path, :class => 'dropdown-item' %>
     <% end %>
     <% if !available_portals.nil? && available_portals.length > 0 %>
       <div class="dropdown-submenu">
@@ -41,8 +41,7 @@
     </a>
     <%= link_to t('view.header.feedback'), 'mailto:catalog-support@dial.community',
                 target: '_blank', class: 'dropdown-item' %>
-    <% unless Rails.env.production? %>
-      <%= link_to t('view.header.logout'), base_path + destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
-    <% end %>
+    
+    <%= link_to t('view.header.logout'), base_path + destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
   </div>
 </li>
