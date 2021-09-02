@@ -12,15 +12,15 @@ function initGrapes(language) {
       componentFirst: true
     },
     assetManager: {
-      upload: '<%= upload_design_images_playbooks_path %>',
+      upload: '<%= upload_design_images_handbooks_path %>',
     },
     storageManager: {
       type: 'remote',
       stepsBeforeSave: 4,
       autosave: true,
       autoload: true,
-      urlStore: `<%= save_design_playbook_playbook_page_path(@playbook, @page) %>?language=${language}`,
-      urlLoad: `<%= load_design_playbook_playbook_page_path(@playbook, @page) %>?language=${language}`,
+      urlStore: `<%= save_design_handbook_handbook_page_path(@handbook, @page) %>?language=${language}`,
+      urlLoad: `<%= load_design_handbook_handbook_page_path(@handbook, @page) %>?language=${language}`,
       params: { authenticity_token: '<%= form_authenticity_token %>' },
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
     },
@@ -101,7 +101,7 @@ function initGrapes(language) {
     </div>
     `,
     category: 'Basic',
-    content: `<%= render("/playbook_pages/designer/single_hexagon.html").html_safe %>`,
+    content: `<%= render("/handbook_pages/designer/single_hexagon.html").html_safe %>`,
   });
 
   blockManager.add('multi-hexagon-block', {
@@ -112,7 +112,7 @@ function initGrapes(language) {
     </div>
     `,
     category: 'Basic',
-    content: `<%= render("/playbook_pages/designer/multi_hexagon.html").html_safe %>`,
+    content: `<%= render("/handbook_pages/designer/multi_hexagon.html").html_safe %>`,
   });
   */
 

@@ -4,15 +4,15 @@
 
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-      <%= link_to(base_path + new_playbook_path, class: 'btn btn-outline-primary float-left') do %>
-        <%= "#{t('view.general.create')} #{t('model.playbook').to_s.titlecase}" %>
+    <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+      <%= link_to(base_path + new_handbook_path, class: 'btn btn-outline-primary float-left') do %>
+        <%= "#{t('view.general.create')} #{t('model.handbook').to_s.titlecase}" %>
       <% end %>
     <% end %>
     <div class="form-group float-right mb-0">
-      <%= form_tag(playbooks_path, method: "get", id: "search-form", class: "form-inline") do %>
+      <%= form_tag(handbooks_path, method: "get", id: "search-form", class: "form-inline") do %>
         <%= text_field_tag :search, params[:search], class: "form-control",
-            placeholder: t('view.general.search-placeholder', model: t('model.playbook').to_s.pluralize) %>
+            placeholder: t('view.general.search-placeholder', model: t('model.handbook').to_s.pluralize) %>
         <div class="input-group-append">
           <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
         </div>
@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div id="playbook-list" data-current-page="1" class="row">
-  <%= render @playbooks %>
+<div id="handbook-list" data-current-page="1" class="row">
+  <%= render @handbooks %>
 </div>
 

@@ -11,61 +11,61 @@
 <div class="row">
   <div class="col-12">
     <div id='create-pdf', class='btn btn-outline-primary float-right mb-2')>
-      <%= "#{t('view.playbook.index.create-pdf')}" %>
+      <%= "#{t('view.handbook.index.create-pdf')}" %>
     </div>
   </div>
   <div id="loading-spinner" class="col-12 text-muted">
     <div class="spinner-border spinner-border-sm float-right mb-2" role="status">
-      <span class="sr-only"><%= "#{t('view.playbook.index.creating-pdf')}" %>...</span>
+      <span class="sr-only"><%= "#{t('view.handbook.index.creating-pdf')}" %>...</span>
     </div>
-    <div class="float-right mb-2"><%= "#{t('view.playbook.index.creating-pdf')}" %>...</div>
+    <div class="float-right mb-2"><%= "#{t('view.handbook.index.creating-pdf')}" %>...</div>
   </div>
 </div>
 
-<%= render 'shared/playbooknav', playbook: @playbook %>
+<%= render 'shared/handbooknav', handbook: @handbook %>
 
-<div id="show-playbook">
+<div id="show-handbook">
 <div class="card mt-2">
   
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-cover" class="wysiwyg-viewer">
+      <div id="<%= @handbook.slug %>-cover" class="wysiwyg-viewer">
         <%= !@description.cover.nil? && @description.cover.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.overview') %>:</div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook.index.overview') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-overview" class="wysiwyg-viewer">
+      <div id="<%= @handbook.slug %>-overview" class="wysiwyg-viewer">
         <%= !@description.overview.nil? && @description.overview.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.audience') %>:</div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook.index.audience') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-audience" class="wysiwyg-viewer">
+      <div id="<%= @handbook.slug %>-audience" class="wysiwyg-viewer">
       <%= !@description.audience.nil? && @description.audience.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.outcomes') %>:</div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook.index.outcomes') %>:</div>
     </div>
     <div class="card-body py-2 px-3">
-      <div id="<%= @playbook.slug %>-outcomes" class="wysiwyg-viewer">
+      <div id="<%= @handbook.slug %>-outcomes" class="wysiwyg-viewer">
       <%= !@description.outcomes.nil? && @description.outcomes.html_safe %>
       </div>
     </div>
     <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.pdf-url') %>:&nbsp;</div>
-        <a class="text-muted" href="<%= @playbook.pdf_url %>" target="_blank"><%= @playbook.pdf_url %></a>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook.index.pdf-url') %>:&nbsp;</div>
+        <a class="text-muted" href="<%= @handbook.pdf_url %>" target="_blank"><%= @handbook.pdf_url %></a>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook.index.phases') %>:</div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook.index.phases') %>:</div>
       </div>
       <div class="card-body p-0">
-        <% @playbook.phases.each do |phase| %>
+        <% @handbook.phases.each do |phase| %>
           <div class="ml-5 mt-2 mb-3">
           <strong><%= phase["name"] %>: </strong><%= phase["description"] %>
           </div>
@@ -74,10 +74,10 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('model.playbook-page').pluralize.titlecase %></div>
-        <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+        <div class="float-left mb-0 font-weight-bold"><%= t('model.handbook-page').pluralize.titlecase %></div>
+        <% if user_signed_in? && policy(Handbook).mod_allowed? %>
           <%= link_to t('view.general.add'),
-                      base_path + new_playbook_playbook_page_path(@playbook),
+                      base_path + new_handbook_handbook_page_path(@handbook),
                       class: "card-link float-right", style: "color: #fbab18 !important" %>
         <% end %>
       </div>
@@ -90,7 +90,7 @@
             <% end %>
           <% else %>
             <div class="alert alert-light mb-0" role="alert">
-              <%= t('view.playbook.index.no-page') %>
+              <%= t('view.handbook.index.no-page') %>
             </div>
           <% end %>
         </div>
@@ -99,9 +99,9 @@
       
       <div class="card-footer border-0">
         <div class="float-right mb-0">
-        <%= link_to t('view.general.back'), base_path + playbooks_path, :class => "card-link" %>
-          <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-            <%= link_to t('view.general.edit'), base_path + edit_playbook_path(@playbook), class: "card-link" %>
+        <%= link_to t('view.general.back'), base_path + handbooks_path, :class => "card-link" %>
+          <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+            <%= link_to t('view.general.edit'), base_path + edit_handbook_path(@handbook), class: "card-link" %>
           <% end %>
         </div>
       </div>
@@ -114,7 +114,7 @@
     $("#loading-spinner").hide()
 
     $("#create-pdf").click(function () {
-      url = "/playbooks/<%= @playbook.slug %>/create_pdf"
+      url = "/handbooks/<%= @handbook.slug %>/create_pdf"
       fetch(url, {
         method: 'GET',
         headers: {
@@ -124,7 +124,7 @@
       .then(response => response.blob())
       .then(response => {
           $("#loading-spinner").hide()
-          filename = "<%= @playbook.slug %>.pdf"
+          filename = "<%= @handbook.slug %>.pdf"
           const blob = new Blob([response], {type: 'application/pdf'});
           const downloadUrl = URL.createObjectURL(blob);
           const a = document.createElement("a");

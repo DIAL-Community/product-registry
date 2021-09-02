@@ -1,7 +1,8 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <div class="col-lg-5ths col-md-4 w-100 mt-2">
   <div class="card index-card small">
     <div class="card-header bg-secondary text-white truncate-parent">
-      <%= link_to playbook.name, playbook, class: 'truncate-text',
+      <%= link_to playbook.name, base_path + playbook_path(playbook), class: 'truncate-text',
         'title' => playbook.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
     </div>
     <div class="playbook-logo-frame ml-2 mt-2">

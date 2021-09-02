@@ -1,0 +1,11 @@
+<% if @handbook.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <%= t('view.general.error', count: @handbook.errors.count) %>
+    </div>
+  </div>
+<% end %>
+<div class="border rounded bg-secondary text-white p-3">
+  <%= t('view.general.title.create', model: t('model.handbook')) %>
+</div>
+<%= render 'form', handbook: @handbook %>

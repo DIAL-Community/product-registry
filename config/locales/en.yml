@@ -78,6 +78,8 @@ en:
     maturity-rubric: maturity rubric
     office: office
     organization: organization
+    handbook: handbook
+    handbook-page: handbook page
     playbook: playbook
     playbook-page: playbook page
     play: play
@@ -539,6 +541,7 @@ en:
       orgs: Organizations
       organizations: Organizations
       projects: Projects
+      handbooks: Handbooks
       playbooks: Playbooks
       plays: Plays
       tags: Tags
@@ -638,6 +641,62 @@ en:
         definition: The SDGs comprise 17 goals and 169 targets representing global priorities for investment in order to achieve sustainable development. The SDGs were set in 2015 by the United Nations General Assembly and intended to be achieved by the year 2030.
       show:
         target: Target
+    handbook:
+      index:
+        overview: Overview
+        audience: Audience
+        outcomes: Outcomes
+        cover: Cover
+        pdf-url: Link for PDF document
+        phases: Phases
+        name: Name
+        description: Description
+        no-page: We couldn't find any pages for this handbook.
+        create-pdf: Create PDF
+        creating-pdf: Creating PDF
+        share: Share this Resource
+      form:
+        overview: Overview
+        audience: Audience
+        outcomes: Outcomes
+        cover: Cover
+        pdf-url: Link for PDF document
+        phases: Phases
+        name: Name
+        description: Description
+    handbook-page:
+      index:
+        contents: Contents
+        edit-content: Edit Content
+        phase: Phase
+        order: Order
+        media: Media
+        question: Question
+        resources: Resources
+        slug: Slug
+        other-info: Other Information
+        has-children: This page has child pages. Please delete any child pages before deleting this page.
+      form:
+        name: Name
+        contents: Contents
+        editor-type: Use Page Builder Editor
+        question: Question
+        question-text: Question text
+        answer-text: Answer text
+        add-answer: Add Answer
+        phase: Phase
+        order: Order
+        media: Media
+        mapped-action: Mapped Action
+        resources: Resources
+        media-prompt: If you would like to add a video to this activity, enter the URL
+        description: Description
+        url: URL
+        parent: Parent Page
+        other-info: Other Information
+        page-contents: Page Contents
+        html: HTML
+        css: CSS
     playbook:
       index:
         overview: Overview

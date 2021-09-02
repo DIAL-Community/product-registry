@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle mt-2 header-user" data-toggle="dropdown" href="#" role="button">
     <span class='p-2'>
@@ -41,7 +42,7 @@
     <%= link_to t('view.header.feedback'), 'mailto:catalog-support@dial.community',
                 target: '_blank', class: 'dropdown-item' %>
     <% unless Rails.env.production? %>
-      <%= link_to t('view.header.logout'), destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
+      <%= link_to t('view.header.logout'), base_path + destroy_user_session_path, method: :delete, :class => 'dropdown-item' %>
     <% end %>
   </div>
 </li>

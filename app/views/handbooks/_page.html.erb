@@ -11,18 +11,18 @@
   <div class="card-body p-3">
     <div class="border">
       <div id='<%= "p_#{page.id}_viewer" %>' style="height: 300px; overflow-y: hidden;" class="ml-3 mt-2">
-        <%= render 'page_content', page_contents: @page_contents, playbook: @playbook %>
+        <%= render 'page_content', page_contents: @page_contents, handbook: @handbook %>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="float-right mb-0 p-2">
-            <%= link_to t('view.general.view'), base_path + playbook_playbook_page_path(@playbook, page),
+            <%= link_to t('view.general.view'), base_path + handbook_handbook_page_path(@handbook, page),
                         class: "card-link" %>
-            <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-              <%= link_to t('view.general.edit'), base_path + edit_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
+            <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+              <%= link_to t('view.general.edit'), base_path + edit_handbook_handbook_page_path(@handbook, page), class: "card-link" %>
             <% end %>
-            <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-              <%= link_to t('view.playbook-page.index.edit-content'), base_path + edit_content_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
+            <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+              <%= link_to t('view.handbook-page.index.edit-content'), base_path + edit_content_handbook_handbook_page_path(@handbook, page), class: "card-link" %>
             <% end %>
           </div>
         </div>
@@ -40,8 +40,8 @@
 
 <script>
 $("#<%= "p_#{page.id}_collapse" %>").on("show.bs.collapse", function(){
-  <% @page_contents = PageContent.find_by(playbook_page_id: page.id, locale: I18n.locale) %>
-  $("#<%= "p_#{page.id}_viewer" %>").html("<%= j(render partial: 'page_content', page_contents: @page_contents, playbook: @playbook) %>");
+  <% @page_contents = PageContent.find_by(handbook_page_id: page.id, locale: I18n.locale) %>
+  $("#<%= "p_#{page.id}_viewer" %>").html("<%= j(render partial: 'page_content', page_contents: @page_contents, handbook: @handbook) %>");
   $('[data-toggle="popover"]').popover();
 })
 </script>

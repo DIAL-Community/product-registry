@@ -22,7 +22,7 @@ module ApplicationHelper
   def hide_sidenav
     current_page?('/about/cookies') || current_page?('/map_projects_osm') ||
       current_page?('/map_osm') || current_page?('/map_aggregators_osm') ||
-      (params[:controller] == 'playbook_pages' && params[:action] == 'edit_content') ||
+      (params[:controller] == 'handbook_pages' && params[:action] == 'edit_content') ||
       current_page?('/admin/users/statistics') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
@@ -71,13 +71,13 @@ module ApplicationHelper
       else
         breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/rubric_categories", label: '' }
       end
-    elsif params[:controller].downcase == 'playbook_pages'
-      if params[:playbook_id].present?
-        breadcrumbs << { path: 'playbooks', label: t('model.playbook').titlecase.pluralize }
-        playbook_path = "playbooks/#{params[:playbook_id]}"
-        playbook_name = Playbook.find_by(slug: params[:playbook_id]).name
-        breadcrumbs << { path: playbook_path, label: playbook_name }
-        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/playbook_pages", label: '' }
+    elsif params[:controller].downcase == 'handbook_pages'
+      if params[:handbook_id].present?
+        breadcrumbs << { path: 'handbooks', label: t('model.handbook').titlecase.pluralize }
+        handbook_path = "handbooks/#{params[:handbook_id]}"
+        handbook_name = Handbook.find_by(slug: params[:handbook_id]).name
+        breadcrumbs << { path: handbook_path, label: handbook_name }
+        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/handbook_pages", label: '' }
       end
     else
       breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }

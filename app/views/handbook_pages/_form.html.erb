@@ -1,26 +1,27 @@
-<%= form_with(model: playbook_page, local: true, html: { id: 'page-form' }) do |form| %>
-  <%= form.hidden_field :playbook_id, id: :playbook_id %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: handbook_page, local: true, html: { id: 'page-form' }, url: base_path + handbook_page_path)) do |form| %>
+  <%= form.hidden_field :handbook_id, id: :handbook_id %>
 
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :playbook_page_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.text_field :name, id: :handbook_page_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
   <div class="mt-2">
-    <input id="original_name" type="hidden" value="<%= playbook_page.name %>" />
+    <input id="original_name" type="hidden" value="<%= handbook_page.name %>" />
     <div id="duplicate-warning" class="alert alert-warning">
       <%= t('view.general.duplicates', model: t('model.product')) %>
     </div>
   </div>
 
   <fieldset class="form-group mb-1">
-    <strong class="text-muted inline"><%= form.label :phase, t('view.playbook-page.form.phase') %></strong>
+    <strong class="text-muted inline"><%= form.label :phase, t('view.handbook-page.form.phase') %></strong>
     <%= form.collection_select :phase, @phases, :to_s, :to_s, { include_blank: false }, { class: "form-control inline" } %>
   </fieldset>
 
   <fieldset class="form-group mb-0">
     <strong class="text-muted inline">
-      <%= form.label :parent_page_id, t('view.playbook-page.form.parent').to_s.titlecase,
+      <%= form.label :parent_page_id, t('view.handbook-page.form.parent').to_s.titlecase,
                      class: 'text-muted mt-2' %>
     </strong>
     <% options = options_from_collection_for_select(@pages.nil? ? [] : @pages, "id", "name", @page.parent_page_id) %>
@@ -29,35 +30,35 @@
 
   <fieldset class="form-label-group">
     <%= form.number_field :page_order, id: :page_order, class: "form-control",
-                          placeholder: t('view.playbook-page.form.order') %>
-    <%= form.label :name, t('view.playbook-page.form.order') %>
+                          placeholder: t('view.handbook-page.form.order') %>
+    <%= form.label :name, t('view.handbook-page.form.order') %>
   </fieldset>
 
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook-page.form.page-contents') %>
+    <%= t('view.handbook-page.form.page-contents') %>
   </div>
   <div id="activity-resources">
     <% @page.page_contents.each do |contents| %>
       <%= form.text_area :content_html, id: :content_html, class: "form-control", value: contents.html %>
-      <%= form.label :content_html, t('view.playbook-page.form.html') %>
+      <%= form.label :content_html, t('view.handbook-page.form.html') %>
       <%= form.text_area :content_css, id: :content_css, class: "form-control", value: contents.css %>
-      <%= form.label :content_css, t('view.playbook-page.form.css') %>
+      <%= form.label :content_css, t('view.handbook-page.form.css') %>
     <% end %>
   </div>
 
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook-page.form.question') %>
+    <%= t('view.handbook-page.form.question') %>
   </div>
   <div id="activity-question">
     <fieldset class="form-label-group">
-      <% question_text = playbook_page.playbook_question.question_text unless playbook_page.playbook_question.nil? %>
+      <% question_text = handbook_page.handbook_question.question_text unless handbook_page.handbook_question.nil? %>
       <%= text_field_tag name='question_text', value=question_text,
                           id: :question_text, class: "form-control",
-                          placeholder: t('view.playbook-page.form.question-text') %>
-      <%= form.label :question_text, t('view.playbook-page.form.question-text') %>
+                          placeholder: t('view.handbook-page.form.question-text') %>
+      <%= form.label :question_text, t('view.handbook-page.form.question-text') %>
     </fieldset>
     <button id="add-answer" class="btn btn-secondary text-white mb-3">
-      <%= t('view.playbook-page.form.add-answer') %>
+      <%= t('view.handbook-page.form.add-answer') %>
     </button>
     <div id='answer-list'>
       <div class="card">
@@ -68,22 +69,22 @@
                 <%= text_field_tag name='answer_texts[new_id_0]', value=nil,
                                    options = {
                                      id: :answer_text, class: "form-control",
-                                     placeholder: t('view.playbook-page.form.question-text')
+                                     placeholder: t('view.handbook-page.form.question-text')
                                    } %>
-                <%= label_tag :answer_text, t('view.playbook-page.form.answer-text') %>
+                <%= label_tag :answer_text, t('view.handbook-page.form.answer-text') %>
               </fieldset>
             </div>
             <div class="col-12 col-md-6">
               <%
-                selections = PlaybookPage.where(playbook: playbook_page.playbook)
+                selections = HandbookPage.where(handbook: handbook_page.handbook)
                                          .map do |page|
-                                           if page.slug == playbook_page.slug
+                                           if page.slug == handbook_page.slug
                                              ["View: current page content.", 'view::current_page']
                                            else
                                              ["Navigate to: #{page.name}", "view::#{page.id}::#{page.slug}"]
                                            end
                                          end
-                if playbook_page.slug.nil?
+                if handbook_page.slug.nil?
                   selections << ["View: current page content.", 'view::current_page']
                 end
               %>
@@ -104,22 +105,22 @@
   </div>
 
   <div class="bg-secondary text-white border rounded p-3 mt-4 mb-0">
-    <%= t('view.playbook-page.form.other-info') %>
+    <%= t('view.handbook-page.form.other-info') %>
   </div>
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook-page.form.media') %>
+    <%= t('view.handbook-page.form.media') %>
   </div>
   <div id="activity-media">
     <fieldset class="form-label-group">
       <%= form.text_field :media_url, id: :media_url, class: "form-control",
-                          placeholder: t('view.playbook-page.form.media-prompt') %>
-      <%= form.label :media_url, t('view.playbook-page.form.media-prompt') %>
+                          placeholder: t('view.handbook-page.form.media-prompt') %>
+      <%= form.label :media_url, t('view.handbook-page.form.media-prompt') %>
     </fieldset>
   </div>
 
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook-page.form.resources') %>
-    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+    <%= t('view.handbook-page.form.resources') %>
+    <% if user_signed_in? && policy(Handbook).mod_allowed? %>
       <a href="#" class="card-link float-right" id="add-resource" style="color: #fbab18 !important">
         <%= t('view.general.add') %>
       </a>
@@ -168,9 +169,9 @@
     }
   }
 
-  <% unless playbook_page.playbook_question.nil? %>
-    <% playbook_page.playbook_question
-                    .playbook_answers
+  <% unless handbook_page.handbook_question.nil? %>
+    <% handbook_page.handbook_question
+                    .handbook_answers
                     .sort_by {|answer| answer.answer_text }
                     .reverse
                     .each do |answer| %>

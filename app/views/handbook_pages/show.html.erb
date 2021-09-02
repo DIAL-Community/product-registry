@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
@@ -12,12 +13,12 @@
 
 <div class="row">
   <div class="col-12">
-    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-      <%= link_to t('view.general.delete-with-model', model: t('model.playbook-page').titlecase), @page, disabled: @child_pages.length > 0,
-                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.playbook-page')) },
+    <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+      <%= link_to t('view.general.delete-with-model', model: t('model.handbook-page').titlecase), base_path + handbook_handbook_page_path(@page), disabled: @child_pages.length > 0,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.handbook-page')) },
                   class: 'btn btn-outline-secondary float-left' %>
 
-      <%= link_to  t('view.general.copy-with-model', model: t('model.playbook-page').titlecase), copy_page_playbook_playbook_page_path(@playbook, @page), data: { confirm: t('view.general.copy-confirmation', model: t('model.playbook-page')) },
+      <%= link_to  t('view.general.copy-with-model', model: t('model.handbook-page').titlecase), base_path + copy_page_handbook_handbook_page_path(@handbook, @page), data: { confirm: t('view.general.copy-confirmation', model: t('model.handbook-page')) },
                   class: 'btn btn-outline-secondary float-left ml-2' %>
     <% end %>
   </div>
@@ -45,11 +46,11 @@
       </div>
     </div>
     <div class="card-text text-muted mt-2 mb-2">
-      <%= t('view.playbook-page.index.slug') %>: 
+      <%= t('view.handbook-page.index.slug') %>: 
     </div>
     <p class="ml-4"><%= @page.slug %></p>
     <div class="card-text text-muted mt-2 mb-2">
-      <%= t('view.playbook-page.index.contents') %>: 
+      <%= t('view.handbook-page.index.contents') %>: 
     </div>
     <div class="card-body py-2 px-3">
       <% if @page_contents.editor_type == "simple" %>
@@ -57,27 +58,27 @@
         <%= !@page_contents.html.nil? && @page_contents.html.html_safe %>
         </div>
       <% elsif @page_contents.editor_type == "builder" %>
-        <%= render 'shared/static_design', playbook: @playbook, page_contents: @page_contents %>
+        <%= render 'shared/static_design', handbook: @handbook, page_contents: @page_contents %>
       <% end %>
     </div>
     <div class="card-text text-muted mt-2 mb-2">
-      <%= t('view.playbook-page.index.phase') %>: 
+      <%= t('view.handbook-page.index.phase') %>: 
     </div>
     <p class="ml-4"><%= @page.phase %></p>
     <div class="card-text text-muted mt-2 mb-2">
-      <%= t('view.playbook-page.index.order') %>: <%= @page.page_order %>
+      <%= t('view.handbook-page.index.order') %>: <%= @page.page_order %>
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.question') %>:</div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook-page.index.question') %>:</div>
       </div>
       <div class="card-body p-2">
-        <% if !@page.playbook_question.nil? %>
+        <% if !@page.handbook_question.nil? %>
           <div class="ml-4 mt-2">
-            <strong>Question Text: </strong><%= @page.playbook_question.question_text %>
+            <strong>Question Text: </strong><%= @page.handbook_question.question_text %>
           </div>
-          <% @page.playbook_question
-                  .playbook_answers
+          <% @page.handbook_question
+                  .handbook_answers
                   .sort_by {|answer| answer.answer_text }
                   .each do |answer| %>
             <div class="ml-4 mt-2">
@@ -89,10 +90,10 @@
     </div>
     <div class="card mt-2">
       <div class="card-header border-0">
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.other-info') %></div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook-page.index.other-info') %></div>
       </div>
       <div class="card-body p-2 ml-4">
-        <div class="font-weight-bold"><%= t('view.playbook-page.index.resources') %>:</div>
+        <div class="font-weight-bold"><%= t('view.handbook-page.index.resources') %>:</div>
         <% @page.resources.each do |resource| %>
           <div class="ml-4 mt-2">
             <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
@@ -101,7 +102,7 @@
             <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
           </div>
         <% end %>
-        <div class="float-left mb-0 font-weight-bold"><%= t('view.playbook-page.index.media') %>:</div>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook-page.index.media') %>:</div>
         <% if !@page.media_url.nil? && !@page.media_url.empty? && !@page.media_url.equals('') %>
           <div class="ml-4 mt-2">
           <iframe src="<%= @page.media_url %>" width=800 height=450 allowfullscreen></iframe>
@@ -112,10 +113,10 @@
     </div>
     <div class="card-footer border-0">
       <div class="float-right mb-0">
-        <%= link_to t('view.general.back'), playbook_path(@playbook), :class => "card-link" %>
-        <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-          <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
-          <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, @page), class: "card-link" %>
+        <%= link_to t('view.general.back'), base_path + handbook_path(@handbook), :class => "card-link" %>
+        <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+          <%= link_to t('view.general.edit'), base_path + edit_handbook_handbook_page_path(@handbook, @page), class: "card-link" %>
+          <%= link_to t('view.handbook-page.index.edit-content'), base_path + edit_content_handbook_handbook_page_path(@handbook, @page), class: "card-link" %>
         <% end %>
       </div>
     </div>
@@ -144,17 +145,17 @@
   }
 
   $('a[disabled]').click(function(e){
-    alert("<%= t('view.playbook-page.index.has-children') %>")
+    alert("<%= t('view.handbook-page.index.has-children') %>")
     e.stopImmediatePropagation()
     e.preventDefault()
   });
 
   function toggleReveal() {
-    $("[data-component-marker='playbook-reveal'] > [data-component-marker='alternative-content']").click(function() {
+    $("[data-component-marker='handbook-reveal'] > [data-component-marker='alternative-content']").click(function() {
       $(this).hide();
       $(this).parent().find("[data-component-marker='initial-content']").show();
     });
-    $("[data-component-marker='playbook-reveal'] > [data-component-marker='initial-content']").click(function() {
+    $("[data-component-marker='handbook-reveal'] > [data-component-marker='initial-content']").click(function() {
       $(this).hide();
       $(this).parent().find("[data-component-marker='alternative-content']").show();
     });
