@@ -49,6 +49,8 @@ de:
     maturity-rubric: Reiferubrik
     office: Büro
     organization: Unternehmen
+    handbook: Handbook
+    handbook-page: Handbook-Seite
     playbook: Playbook
     playbook-page: Playbook-Seite
     play: Spielen
@@ -657,6 +659,7 @@ de:
       organizations: Unternehmen
       projects: Projekte
       playbooks: Playbooks
+      handbooks: Handbooks
       plays: Spiele
       tags: Tags
       years: Jahre
@@ -765,6 +768,66 @@ de:
           erfüllt sein.
       show:
         target: Ziel
+    handbook:
+      index:
+        overview: Übersicht
+        audience: Zielgruppe
+        outcomes: Ergebnisse
+        cover: Cover
+        pdf-url: Link zu PDF-Dokument
+        phases: Phasen
+        name: Name
+        description: Beschreibung
+        no-page: Wir konnten keine Seiten zu diesem Handbook finden.
+        create-pdf: PDF erstellen
+        creating-pdf: PDF wird erstellt
+        share: Diese Ressource teilen
+      form:
+        overview: Übersicht
+        audience: Zielgruppe
+        outcomes: Ergebnisse
+        cover: Cover
+        pdf-url: Link zu PDF-Dokument
+        phases: Phasen
+        name: Name
+        description: Beschreibung
+    handbook-page:
+      index:
+        contents: Inhalt
+        edit-content: Inhalt bearbeiten
+        phase: Phase
+        order: Auftrag
+        media: Medien
+        question: Frage
+        resources: Ressourcen
+        slug: Slug
+        other-info: Sonstige Angaben
+        has-children: >-
+          Diese Seite hat untergeordnete Seiten. Bitte löschen Sie vor der
+          Löschung dieser Seite alle untergeordneten Seiten.
+      form:
+        name: Name
+        contents: Inhalt
+        editor-type: Page Builder Editor verwenden
+        question: Frage
+        question-text: Fragentext
+        answer-text: Antworttext
+        add-answer: Antwort hinzufügen
+        phase: Phase
+        order: Auftrag
+        media: Medien
+        mapped-action: Zugeordnete Aktion
+        resources: Ressourcen
+        media-prompt: >-
+          Wenn Sie ein Video zu dieser Aktivität hinzufügen möchten, geben Sie
+          die URL ein
+        description: Beschreibung
+        url: URL
+        parent: Übergeordnete Seite
+        other-info: Sonstige Angaben
+        page-contents: Seiteninhalt
+        html: HTML
+        css: CSS
     playbook:
       index:
         overview: Übersicht

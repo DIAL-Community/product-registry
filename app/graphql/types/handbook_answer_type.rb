@@ -1,5 +1,5 @@
 module Types
-  class PlaybookAnswerType < Types::BaseObject
+  class HandbookAnswerType < Types::BaseObject
     field :id, ID, null: false
     field :answer_text, String, null: false
     field :locale, String, null: false

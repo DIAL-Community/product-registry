@@ -1,7 +1,7 @@
 module Types
-  class PlaybookPageType < Types::BaseObject
+  class HandbookPageType < Types::BaseObject
     field :id, ID, null: false
-    field :playbook_id, Integer, null: false
+    field :handbook_id, Integer, null: false
     field :name, String, null: false
     field :slug, String, null: false
     field :phase, String, null: true
@@ -10,8 +10,8 @@ module Types
     field :resources, GraphQL::Types::JSON, null: false
     field :media_url, String, null: true
 
-    field :child_pages, [Types::PlaybookPageType], null: true
+    field :child_pages, [Types::HandbookPageType], null: true
     field :page_contents, [Types::PageContentType], null: true
-    field :playbook_question, Types::PlaybookQuestionType, null: true
+    field :handbook_question, Types::HandbookQuestionType, null: true
   end
 end

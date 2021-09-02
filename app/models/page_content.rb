@@ -1,3 +1,3 @@
 class PageContent < ApplicationRecord
-  belongs_to :playbook_page
+  belongs_to :handbook_page
 end

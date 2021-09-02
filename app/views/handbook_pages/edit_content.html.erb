@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,700,700italic&subset=latin,vietnamese,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek' rel='stylesheet' type='text/css'>
 
-<%= form_with(model: @page_contents, url: save_design_playbook_playbook_page_path, local: true, html: { id: 'page-form' }) do |form| %>
+<%= form_with(model: @page_contents, url: save_design_handbook_handbook_page_path, local: true, html: { id: 'page-form' }) do |form| %>
 
 
 <div id="loading-overlay" class="hidden"></div>
@@ -16,7 +16,7 @@
     <div class="col-xs-12 col-md-6 mt-3 float-left">
       <fieldset class="form-group form-check">
         <input type="checkbox" class="form-check-input" id="editor_type" name="editor_type">
-        <label class="form-check-label" for="editor-type"><%= t('view.playbook-page.form.editor-type') %></label>
+        <label class="form-check-label" for="editor-type"><%= t('view.handbook-page.form.editor-type') %></label>
       </fieldset>
     </div>
     <div class="col-xs-12 col-md-6 mt-2">
@@ -39,7 +39,7 @@
   </div>
 
   <div id="page-builder" class="hidden">
-    <%= render('/playbook_pages/designer/grapes_style.css') %>
+    <%= render('/handbook_pages/designer/grapes_style.css') %>
 
     <div id="gjs" style="height:0px; overflow:hidden"></div>
   </div>
@@ -68,7 +68,7 @@
 <script src="https://nribeka.gitlab.io/js/grapesjs-custom-button.min.js"></script>
 <script src="https://nribeka.gitlab.io/js/grapesjs-custom-reveal.min.js"></script>
 <script type="text/javascript" defer>
-  <%= render('/playbook_pages/designer/show_design.js') %>
+  <%= render('/handbook_pages/designer/show_design.js') %>
 </script>
 
 <script defer>
@@ -94,7 +94,7 @@
         }
 
         jQuery.post(
-          url = '<%= save_design_playbook_playbook_page_path(@playbook, @page) %>',
+          url = '<%= save_design_handbook_handbook_page_path(@handbook, @page) %>',
           data = {
             language: $("input[name=language]:checked", '#page-form').val(),
             page_content: simpleEditor.html.get()
@@ -117,7 +117,7 @@
           if (target) {
             var mutationObserver = new MutationObserver(function(mutationList) {
               mutationList.forEach(function(mutation) {
-                var popover = mutation.target.parentNode.closest("div[data-component-marker='playbook-popover']");
+                var popover = mutation.target.parentNode.closest("div[data-component-marker='handbook-popover']");
                 var content = mutation.target.parentNode.closest("div[data-component-marker='popover-content']");
                 popover.setAttribute('data-content', content.innerHTML);
               });
@@ -234,8 +234,8 @@
       $("#loading-overlay").show();
       $("#loading-indicator").show();
 
-      const urlStore = `<%= save_design_playbook_playbook_page_path(@playbook, @page) %>?language=${langValue}`;
-      const urlLoad = `<%= load_design_playbook_playbook_page_path(@playbook, @page) %>?language=${langValue}`;
+      const urlStore = `<%= save_design_handbook_handbook_page_path(@handbook, @page) %>?language=${langValue}`;
+      const urlLoad = `<%= load_design_handbook_handbook_page_path(@handbook, @page) %>?language=${langValue}`;
 
       grapesEditor.StorageManager
                   .get('remote')

@@ -1,0 +1,9 @@
+<% if @page_contents %>
+  <% if @page_contents.editor_type == "simple" %>
+    <div class="fr-view">
+      <%= @page_contents.html.html_safe %>
+    </div>
+  <% else %>
+    <%= render 'shared/static_design', handbook: @handbook, page_contents: @page_contents %>
+  <% end %>
+<% end %>

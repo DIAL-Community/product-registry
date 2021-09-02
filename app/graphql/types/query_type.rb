@@ -2,9 +2,9 @@ module Types
   class QueryType < Types::BaseObject
     field :counts, resolver: Queries::CountsQuery
 
-    field :playbooks, resolver: Queries::PlaybooksQuery
-    field :playbook, resolver: Queries::PlaybookQuery
-    field :search_playbook, resolver: Queries::SearchPlaybookQuery
+    field :handbooks, resolver: Queries::HandbooksQuery
+    field :handbook, resolver: Queries::HandbookQuery
+    field :search_handbook, resolver: Queries::SearchHandbookQuery
     field :page_contents, resolver: Queries::PageContentsQuery
     field :export_page_contents, resolver: Queries::ExportPageContentsQuery
 

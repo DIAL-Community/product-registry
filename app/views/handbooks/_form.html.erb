@@ -1,14 +1,14 @@
 <% base_path = Rails.env.production? ? '/admin/' : '' %>
-<%= form_with(model: playbook,  multipart: true, local: true, html: { id: 'playbook-form' }, url: base_path + playbook_path) do |form| %>
+<%= form_with(model: handbook,  multipart: true, local: true, html: { id: 'handbook-form' }, url: base_path + handbook_path) do |form| %>
   <fieldset class="form-label-group">
-    <%= form.text_field :name, id: :playbook_name, class: "form-control", placeholder: t('view.general.name') %>
+    <%= form.text_field :name, id: :handbook_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>
   </fieldset>
 
   <div class="mt-2"></div>
-  <input id="original_name" type="hidden" value="<%= playbook.name %>" />
+  <input id="original_name" type="hidden" value="<%= handbook.name %>" />
   <div id="duplicate-warning" class="alert alert-warning">
-    <%= t('view.general.duplicates', model: t('model.playbook')) %>
+    <%= t('view.general.duplicates', model: t('model.handbook')) %>
   </div>
   
   <fieldset class="custom-file mt-2">
@@ -24,47 +24,47 @@
   </fieldset>
 
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook.form.cover') %>
+    <%= t('view.handbook.form.cover') %>
   </div>
 
-  <input type="hidden" id="playbook_cover" name="playbook[playbook_cover]" />
+  <input type="hidden" id="handbook_cover" name="handbook[handbook_cover]" />
   <div id="cover_editor"> </div>
 
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook.form.overview') %>
+    <%= t('view.handbook.form.overview') %>
   </div>
 
-  <input type="hidden" id="playbook_overview" name="playbook[playbook_overview]" />
+  <input type="hidden" id="handbook_overview" name="handbook[handbook_overview]" />
   <div id="overview_editor"> </div>
   
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook.form.audience') %>
+    <%= t('view.handbook.form.audience') %>
   </div>
 
-  <input type="hidden" id="playbook_audience" name="playbook[playbook_audience]" />
+  <input type="hidden" id="handbook_audience" name="handbook[handbook_audience]" />
   <div id="audience_editor"> </div>
   
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook.form.outcomes') %>
+    <%= t('view.handbook.form.outcomes') %>
   </div>
 
-  <input type="hidden" id="playbook_outcomes" name="playbook[playbook_outcomes]" />
+  <input type="hidden" id="handbook_outcomes" name="handbook[handbook_outcomes]" />
   <div id="outcomes_editor"> </div>
 
   <fieldset class="form-label-group mt-2">
     <%= form.text_field :pdf_url, id: :pdf_url,
-                        class: "form-control", placeholder: t('view.playbook.form.pdf-url') %>
-    <%= form.label :pdf_url, t('view.playbook.form.pdf-url') %>
+                        class: "form-control", placeholder: t('view.handbook.form.pdf-url') %>
+    <%= form.label :pdf_url, t('view.handbook.form.pdf-url') %>
   </fieldset>
   
   <div class="bg-secondary text-white border rounded p-3 mt-2 mb-0">
-    <%= t('view.playbook.form.phases') %>
-    <% if user_signed_in? && policy(Playbook).mod_allowed? %>
+    <%= t('view.handbook.form.phases') %>
+    <% if user_signed_in? && policy(Handbook).mod_allowed? %>
       <a href="#" class="card-link float-right" id="add-phase" style="color: #fbab18 !important"><%= t('view.general.add') %></a>
     <% end %>
   </div>
-  <div id="playbook-phases">
-    <% @playbook.phases.each do |phase| %>
+  <div id="handbook-phases">
+    <% @handbook.phases.each do |phase| %>
       <%= render :partial => 'phase', :object => phase %>
     <% end %>
   </div>
@@ -78,7 +78,7 @@
 <script>
   $('#add-phase').click(function(e) {
     e.preventDefault();
-    $("#playbook-phases").append("<%= escape_javascript render(partial: 'phase', object: {}) %>")
+    $("#handbook-phases").append("<%= escape_javascript render(partial: 'phase', object: {}) %>")
   });
 
   $('.remove-phase').click(function(e) {
@@ -87,7 +87,7 @@
     $("#"+removeId).remove();
   });
 
-  var form = document.querySelector('#playbook-form');
+  var form = document.querySelector('#handbook-form');
   form.onsubmit = function(e) {
     
     $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
@@ -118,7 +118,7 @@
           if (target) {
             var mutationObserver = new MutationObserver(function(mutationList) {
               mutationList.forEach(function(mutation) {
-                var popover = mutation.target.parentNode.closest("div[data-component-marker='playbook-popover']");
+                var popover = mutation.target.parentNode.closest("div[data-component-marker='handbook-popover']");
                 var content = mutation.target.parentNode.closest("div[data-component-marker='popover-content']");
                 popover.setAttribute('data-content', content.innerHTML);
               });
@@ -171,15 +171,15 @@
 
   $("#submit-btn").on('click', function(e) {
     var overviewHtml = overviewEditor.html.get()
-    $("#playbook_overview").val(overviewHtml)
+    $("#handbook_overview").val(overviewHtml)
 
     var audienceHtml = audienceEditor.html.get()
-    $("#playbook_audience").val(audienceHtml)
+    $("#handbook_audience").val(audienceHtml)
 
     var outcomesHtml = outcomesEditor.html.get()
-    $("#playbook_outcomes").val(outcomesHtml)
+    $("#handbook_outcomes").val(outcomesHtml)
 
     var coverHtml = coverEditor.html.get()
-    $("#playbook_cover").val(coverHtml)
+    $("#handbook_cover").val(coverHtml)
   });
 </script>
