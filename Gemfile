@@ -133,3 +133,6 @@ gem 'jwt'
 gem 'mailgun-ruby'
 
 gem 'graphiql-rails', group: :development
+
+# Throttling, blocking, etc.
+gem "rack-attack"
