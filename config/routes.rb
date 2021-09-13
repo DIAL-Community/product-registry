@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'errors/not_found'
+  get 'errors/server_error'
   if Rails.env.development?
     mount(GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql")
   end
@@ -290,4 +292,8 @@ Rails.application.routes.draw do
   get 'map_projects_osm', to: 'projects#map_projects_osm'
 
   get 'bb_fs', :to => 'building_blocks#bb_fs'
+
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#server_error", via: :all
+  match "/422", to: "errors#server_error", via: :all
 end
