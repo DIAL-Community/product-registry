@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'errors/not_found'
+  get 'errors/server_error'
   if Rails.env.development?
     mount(GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql")
   end
@@ -10,6 +12,8 @@ Rails.application.routes.draw do
   mount Commontator::Engine => '/commontator'
 
   resources :task_trackers
+
+  post '/entities/process-file', to: 'entities#process_file'
 
   resources :candidate_products do
     member do
@@ -40,14 +44,17 @@ Rails.application.routes.draw do
   resources :tasks, only: [:index, :update, :create, :destroy]
   resources :activities, only: [:index, :update, :create, :destroy]
 
-  resources :playbook_pages, only: [:index, :update, :create, :destroy]
-  resources :playbooks do
+  
+  resources :playbooks
+
+  resources :handbook_pages, only: [:index, :update, :create, :destroy]
+  resources :handbooks do
     get 'count', on: :collection
     post 'upload_design_images', on: :collection
     member do
       post 'convert_pages'
     end
-    resources :playbook_pages do
+    resources :handbook_pages do
       member do
         get 'copy_page'
         get 'edit_content'
@@ -77,7 +84,7 @@ Rails.application.routes.draw do
   get 'about', to: 'about#index'
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions' }
-  scope '/admin' do
+  scope '/devise' do
     resources :users do
       get 'statistics', on: :collection
       get 'export_data', on: :collection
@@ -85,7 +92,7 @@ Rails.application.routes.draw do
   end
 
   devise_scope :user do
-    get '/users', to: 'registrations#new'
+    get '/users', to: 'users#index'
     get '/users/password', to: 'devise/passwords#new'
     post '/authenticate/credentials', to: 'authentication#sign_in_ux'
     post '/authenticate/signup', to: 'authentication#sign_up_ux'
@@ -267,8 +274,8 @@ Rails.application.routes.draw do
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
   get 'tag_duplicates', to: 'tags#duplicates'
   get 'category_indicator_duplicates', to: 'category_indicators#duplicates'
-  get 'playbook_duplicates', to: 'playbooks#duplicates'
-  get 'playbook_page_duplicates', to: 'playbook_pages#duplicates'
+  get 'handbook_duplicates', to: 'handbooks#duplicates'
+  get 'handbook_page_duplicates', to: 'handbook_pages#duplicates'
   get 'candidate_product_duplicates', to: 'candidate_products#duplicates'
 
   post '/froala_image/upload' => 'froala_images#upload'
@@ -287,4 +294,8 @@ Rails.application.routes.draw do
   get 'map_projects_osm', to: 'projects#map_projects_osm'
 
   get 'bb_fs', :to => 'building_blocks#bb_fs'
+
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#server_error", via: :all
+  match "/422", to: "errors#server_error", via: :all
 end

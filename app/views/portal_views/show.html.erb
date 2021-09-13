@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
@@ -14,9 +15,9 @@
       <%= @portal_view.subdomain %> 
     </div>
     <div class="float-right" >
-      <%= link_to t('view.general.back'), portal_views_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), base_path + portal_views_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@portal_view).mod_allowed? %>
-        <%= link_to t('view.general.edit'), edit_portal_view_path(@portal_view), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), base_path + edit_portal_view_path(@portal_view), :class => "card-link" %>
       <% end %>
     </div>
   </div>

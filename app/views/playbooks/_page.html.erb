@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <div id='<%= "p_#{page.id}_header" %>' class="card-header card-btn"
         data-toggle="collapse" data-target='#<%= "p_#{page.id}_collapse" %>'>
   <div class="mb-0 float-left font-weight-bold ">
@@ -15,13 +16,13 @@
       <div class="row">
         <div class="col-12">
           <div class="float-right mb-0 p-2">
-            <%= link_to t('view.general.view'), playbook_playbook_page_path(@playbook, page),
+            <%= link_to t('view.general.view'), base_path + playbook_playbook_page_path(@playbook, page),
                         class: "card-link" %>
             <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-              <%= link_to t('view.general.edit'), edit_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
+              <%= link_to t('view.general.edit'), base_path + edit_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
             <% end %>
             <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-              <%= link_to t('view.playbook-page.index.edit-content'), edit_content_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
+              <%= link_to t('view.playbook-page.index.edit-content'), base_path + edit_content_playbook_playbook_page_path(@playbook, page), class: "card-link" %>
             <% end %>
           </div>
         </div>

@@ -1,4 +1,5 @@
-<%= form_with(model: playbook,  multipart: true, local: true, html: { id: 'playbook-form' }) do |form| %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: playbook,  multipart: true, local: true, html: { id: 'playbook-form' }, url: base_path + playbook_path) do |form| %>
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :playbook_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>

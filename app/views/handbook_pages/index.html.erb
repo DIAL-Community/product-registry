@@ -1,0 +1,27 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+      <%= link_to(base_path + new_activity_path, class: 'btn btn-outline-primary float-left') do %>
+        <%= "#{t('view.general.create')} #{t('model.activity').to_s.titlecase}" %>
+      <% end %>
+    <% end %>
+    <div class="form-group float-right mb-0">
+      <%= form_tag(activities_path, method: "get", id: "search-form", class: "form-inline") do %>
+        <%= text_field_tag :search, params[:search], class: "form-control",
+            placeholder: t('view.general.search-placeholder', model: t('model.activity').to_s.pluralize) %>
+        <div class="input-group-append">
+          <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div id="activity-list" data-current-page="1">
+  <%= render @activities %>
+</div>
+

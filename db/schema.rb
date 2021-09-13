@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_19_194336) do
+ActiveRecord::Schema.define(version: 2021_09_01_203528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,6 +252,56 @@ ActiveRecord::Schema.define(version: 2021_07_19_194336) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "handbook_answers", force: :cascade do |t|
+    t.string "answer_text", null: false
+    t.string "action", null: false
+    t.string "locale", default: "en", null: false
+    t.bigint "handbook_question_id"
+    t.index ["handbook_question_id"], name: "index_handbook_answers_on_handbook_question_id"
+  end
+
+  create_table "handbook_descriptions", force: :cascade do |t|
+    t.bigint "handbook_id"
+    t.string "locale", null: false
+    t.string "overview", default: "", null: false
+    t.string "audience", default: "", null: false
+    t.string "outcomes", default: "", null: false
+    t.string "cover"
+    t.index ["handbook_id"], name: "index_handbook_descriptions_on_handbook_id"
+  end
+
+  create_table "handbook_pages", force: :cascade do |t|
+    t.bigint "handbook_id", null: false
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "phase"
+    t.integer "page_order"
+    t.bigint "parent_page_id"
+    t.bigint "handbook_questions_id"
+    t.jsonb "resources", default: [], null: false
+    t.string "media_url"
+    t.index ["handbook_id"], name: "index_handbook_pages_on_handbook_id"
+    t.index ["handbook_questions_id"], name: "index_handbook_pages_on_handbook_questions_id"
+    t.index ["parent_page_id"], name: "index_handbook_pages_on_parent_page_id"
+  end
+
+  create_table "handbook_questions", force: :cascade do |t|
+    t.string "question_text", null: false
+    t.string "locale", default: "en", null: false
+    t.bigint "handbook_page_id"
+    t.index ["handbook_page_id"], name: "index_handbook_questions_on_handbook_page_id"
+  end
+
+  create_table "handbooks", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.jsonb "phases", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "maturity", default: "Beta"
+    t.string "pdf_url"
+  end
+
 # Could not dump table "locations" because of following StandardError
 #   Unknown type 'location_type' for column 'location_type'
 
@@ -363,7 +413,7 @@ ActiveRecord::Schema.define(version: 2021_07_19_194336) do
   end
 
   create_table "page_contents", force: :cascade do |t|
-    t.bigint "playbook_page_id"
+    t.bigint "handbook_page_id"
     t.string "locale", null: false
     t.string "html", null: false
     t.string "css", null: false
@@ -371,57 +421,7 @@ ActiveRecord::Schema.define(version: 2021_07_19_194336) do
     t.string "assets"
     t.string "styles"
     t.string "editor_type"
-    t.index ["playbook_page_id"], name: "index_page_contents_on_playbook_page_id"
-  end
-
-  create_table "playbook_answers", force: :cascade do |t|
-    t.string "answer_text", null: false
-    t.string "action", null: false
-    t.string "locale", default: "en", null: false
-    t.bigint "playbook_question_id"
-    t.index ["playbook_question_id"], name: "index_playbook_answers_on_playbook_question_id"
-  end
-
-  create_table "playbook_descriptions", force: :cascade do |t|
-    t.bigint "playbook_id"
-    t.string "locale", null: false
-    t.string "overview", default: "", null: false
-    t.string "audience", default: "", null: false
-    t.string "outcomes", default: "", null: false
-    t.string "cover"
-    t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
-  end
-
-  create_table "playbook_pages", force: :cascade do |t|
-    t.bigint "playbook_id", null: false
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.string "phase"
-    t.integer "page_order"
-    t.bigint "parent_page_id"
-    t.bigint "playbook_questions_id"
-    t.jsonb "resources", default: [], null: false
-    t.string "media_url"
-    t.index ["parent_page_id"], name: "index_playbook_pages_on_parent_page_id"
-    t.index ["playbook_id"], name: "index_playbook_pages_on_playbook_id"
-    t.index ["playbook_questions_id"], name: "index_playbook_pages_on_playbook_questions_id"
-  end
-
-  create_table "playbook_questions", force: :cascade do |t|
-    t.string "question_text", null: false
-    t.string "locale", default: "en", null: false
-    t.bigint "playbook_page_id"
-    t.index ["playbook_page_id"], name: "index_playbook_questions_on_playbook_page_id"
-  end
-
-  create_table "playbooks", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.jsonb "phases", default: [], null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "maturity", default: "Beta"
-    t.string "pdf_url"
+    t.index ["handbook_page_id"], name: "index_page_contents_on_handbook_page_id"
   end
 
   create_table "portal_views", force: :cascade do |t|
@@ -860,6 +860,10 @@ ActiveRecord::Schema.define(version: 2021_07_19_194336) do
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
   add_foreign_key "districts", "regions"
+  add_foreign_key "handbook_descriptions", "handbooks"
+  add_foreign_key "handbook_pages", "handbook_pages", column: "parent_page_id"
+  add_foreign_key "handbook_pages", "handbook_questions", column: "handbook_questions_id"
+  add_foreign_key "handbook_pages", "handbooks"
   add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
   add_foreign_key "offices", "countries"
   add_foreign_key "offices", "organizations"
@@ -879,11 +883,7 @@ ActiveRecord::Schema.define(version: 2021_07_19_194336) do
   add_foreign_key "organizations_sectors", "sectors", name: "organizations_sectors_sector_fk"
   add_foreign_key "organizations_states", "organizations"
   add_foreign_key "organizations_states", "regions"
-  add_foreign_key "page_contents", "playbook_pages"
-  add_foreign_key "playbook_descriptions", "playbooks"
-  add_foreign_key "playbook_pages", "playbook_pages", column: "parent_page_id"
-  add_foreign_key "playbook_pages", "playbook_questions", column: "playbook_questions_id"
-  add_foreign_key "playbook_pages", "playbooks"
+  add_foreign_key "page_contents", "handbook_pages"
   add_foreign_key "principle_descriptions", "digital_principles"
   add_foreign_key "product_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "product_building_blocks", "products", name: "products_building_blocks_product_fk"

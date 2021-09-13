@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <div class="card">
@@ -12,9 +13,9 @@
     <p>
     <%= "#{t('view.sector.index.origin')}: #{@sector.origin.name}" unless @sector.origin.nil? %>
     <div class="float-right" >
-      <%= link_to t('view.general.back'), sectors_path, :class => "card-link" %>
+      <%= link_to t('view.general.back'), base_path + sectors_path, :class => "card-link" %>
       <% if user_signed_in? && policy(@sector).mod_allowed? %>
-        <%= link_to t('view.general.edit'), edit_sector_path(@sector), :class => "card-link" %>
+        <%= link_to t('view.general.edit'), base_path + edit_sector_path(@sector), :class => "card-link" %>
       <% end %>
     </div>
   </div>

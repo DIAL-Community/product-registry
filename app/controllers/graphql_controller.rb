@@ -4,6 +4,15 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
 
+  # before_action :block_unknown_remote_addresses
+  def block_unknown_remote_addresses
+    allowed_addresses = ENV['ALLOWED_REMOTE_ADDRESSES'].to_s.split(',').collect(&:strip)
+    logger.info("GraphQL request coming from: #{request.remote_ip}")
+    unless allowed_addresses.include?(request.remote_ip)
+      render(json: { message: 'Operation not authorized.' }, status: :unauthorized)
+    end
+  end
+
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]

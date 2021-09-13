@@ -22,7 +22,7 @@ module ApplicationHelper
   def hide_sidenav
     current_page?('/about/cookies') || current_page?('/map_projects_osm') ||
       current_page?('/map_osm') || current_page?('/map_aggregators_osm') ||
-      (params[:controller] == 'playbook_pages' && params[:action] == 'edit_content') ||
+      (params[:controller] == 'handbook_pages' && params[:action] == 'edit_content') ||
       current_page?('/admin/users/statistics') ||
       DEVISE_CONTROLLERS.include?(params[:controller]) ||
       (ADMIN_NAV_CONTROLLERS.include?(params[:controller]) && params[:action] == 'index')
@@ -45,7 +45,7 @@ module ApplicationHelper
     "viewform?entry.1077775768=#{request.original_url}"
   end
 
-  def build_breadcrumbs(params)
+  def build_breadcrumbs(params, query_parameters)
     breadcrumbs = []
 
     if params[:controller].downcase == 'use_case_steps'
@@ -56,7 +56,7 @@ module ApplicationHelper
         breadcrumbs << { path: uc_step_path, label: uc_step_name }
       end
     elsif params[:controller].downcase == 'users'
-      breadcrumbs << { path: 'admin/users', label: t('model.user').titlecase.pluralize }
+      breadcrumbs << { path: 'users', label: t('model.user').titlecase.pluralize }
     elsif params[:controller].downcase == 'rubric_categories' || params[:controller].downcase == 'category_indicators'
       breadcrumbs << { path: 'maturity_rubrics', label: t('model.maturity-rubric').titlecase.pluralize }
       if params[:maturity_rubric_id].present?
@@ -71,13 +71,13 @@ module ApplicationHelper
       else
         breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/rubric_categories", label: '' }
       end
-    elsif params[:controller].downcase == 'playbook_pages'
-      if params[:playbook_id].present?
-        breadcrumbs << { path: 'playbooks', label: t('model.playbook').titlecase.pluralize }
-        playbook_path = "playbooks/#{params[:playbook_id]}"
-        playbook_name = Playbook.find_by(slug: params[:playbook_id]).name
-        breadcrumbs << { path: playbook_path, label: playbook_name }
-        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/playbook_pages", label: '' }
+    elsif params[:controller].downcase == 'handbook_pages'
+      if params[:handbook_id].present?
+        breadcrumbs << { path: 'handbooks', label: t('model.handbook').titlecase.pluralize }
+        handbook_path = "handbooks/#{params[:handbook_id]}"
+        handbook_name = Handbook.find_by(slug: params[:handbook_id]).name
+        breadcrumbs << { path: handbook_path, label: handbook_name }
+        breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/handbook_pages", label: '' }
       end
     else
       breadcrumbs << { path: params[:controller].downcase, label: params[:controller].titlecase }
@@ -91,14 +91,23 @@ module ApplicationHelper
     end
 
     unless object_record.nil?
-      if breadcrumbs[-1][:path] == 'admin/users' || breadcrumbs[-1][:path] == 'candidate_roles'
+      if breadcrumbs[-1][:path] == 'users' || breadcrumbs[-1][:path] == 'candidate_roles'
         id_label = object_record.email
       else
         id_label = object_record.name
       end
     end
 
+    if !query_parameters['user_token'].nil?
+      breadcrumb_query_param = "?user_email="+query_parameters['user_email']+"&user_token="+query_parameters['user_token']
+    end
     breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/#{params[:id]}", label: id_label }
+    if !query_parameters['user_token'].nil?
+      breadcrumb_query_param = "?user_email="+query_parameters['user_email']+"&user_token="+query_parameters['user_token']
+      breadcrumbs.each do |crumb|
+        crumb[:path] && crumb[:path] += breadcrumb_query_param
+      end
+    end
     breadcrumbs
   end
 

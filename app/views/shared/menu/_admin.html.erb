@@ -1,29 +1,29 @@
-
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle mt-2 px-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
      aria-haspopup="true" aria-expanded="false">
     <%= t('view.header.admin-data') %>
   </a>
   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-    <%= link_to t('model.city').to_s.pluralize.titlecase, cities_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.contact').to_s.pluralize.titlecase, contacts_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.country').to_s.pluralize.titlecase, countries_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.project').to_s.pluralize.titlecase, projects_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.sector').to_s.pluralize.titlecase, sectors_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.tag').to_s.pluralize.titlecase, tags_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.user').to_s.pluralize.titlecase, users_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.user-event').to_s.pluralize.titlecase, statistics_users_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.city').to_s.pluralize.titlecase, base_path + cities_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.contact').to_s.pluralize.titlecase, base_path + contacts_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.country').to_s.pluralize.titlecase, base_path + countries_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.project').to_s.pluralize.titlecase, base_path + projects_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.sector').to_s.pluralize.titlecase, base_path + sectors_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.tag').to_s.pluralize.titlecase, base_path + tags_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.user').to_s.pluralize.titlecase, base_path + users_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.user-event').to_s.pluralize.titlecase, base_path + statistics_users_path, :class => 'dropdown-item' %>
     <div class="dropdown-divider"></div>
-    <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, candidate_organizations_path, class: 'dropdown-item' %>
-    <%= link_to t('model.candidate-product').to_s.pluralize.titlecase, candidate_products_path, class: 'dropdown-item' %>
-    <%= link_to t('model.candidate-role').to_s.pluralize.titlecase, candidate_roles_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.candidate-organization').to_s.pluralize.titlecase, base_path + candidate_organizations_path, class: 'dropdown-item' %>
+    <%= link_to t('model.candidate-product').to_s.pluralize.titlecase, base_path + candidate_products_path, class: 'dropdown-item' %>
+    <%= link_to t('model.candidate-role').to_s.pluralize.titlecase, base_path + candidate_roles_path, :class => 'dropdown-item' %>
     <% if (policy(current_user).mni?) %>
-      <%= link_to t('model.operator_services').to_s.pluralize.titlecase, operator_services_path, :class => 'dropdown-item' %>
+      <%= link_to t('model.operator_services').to_s.pluralize.titlecase, base_path + operator_services_path, :class => 'dropdown-item' %>
     <% end %>
-    <%= link_to t('model.product-suite').to_s.pluralize.titlecase, product_suites_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.product-suite').to_s.pluralize.titlecase, base_path + product_suites_path, :class => 'dropdown-item' %>
     <div class="dropdown-divider"></div>
-    <%= link_to t('model.deploys').to_s.pluralize.titlecase, deploys_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.portal-view').to_s.pluralize.titlecase, portal_views_path, :class => 'dropdown-item' %>
-    <%= link_to t('model.maturity-rubric').to_s.pluralize.titlecase, maturity_rubrics_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.deploys').to_s.pluralize.titlecase, base_path + deploys_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.portal-view').to_s.pluralize.titlecase, base_path + portal_views_path, :class => 'dropdown-item' %>
+    <%= link_to t('model.maturity-rubric').to_s.pluralize.titlecase, base_path + maturity_rubrics_path, :class => 'dropdown-item' %>
   </div>
 </li>

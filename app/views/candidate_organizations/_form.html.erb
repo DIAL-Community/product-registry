@@ -1,4 +1,5 @@
-<%= form_with(model: candidate_organization, local: true) do |form| %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: candidate_organization, local: true, url: base_path + candidate_organization_path) do |form| %>
 
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :candidate_organization_name,

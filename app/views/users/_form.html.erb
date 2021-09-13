@@ -1,4 +1,5 @@
-<%= form_with(model: user, local: true) do |form| %>
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%= form_with(model: user, local: true, url: base_path + user_path) do |form| %>
   <fieldset class="form-label-group">
     <%= form.text_field :email, id: :user_email, :class => "form-control", :placeholder => "Name" %>
     <%= form.label :email %>

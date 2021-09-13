@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
@@ -5,7 +6,7 @@
   <div class="col-8 mb-2">
     <% if user_signed_in? && policy(@candidate_product).mod_allowed? %>
       <%= link_to t('view.general.delete-with-model', model: t('model.candidate-product').titlecase),
-                  @candidate_product, method: :delete,
+                  candidate_product_path(@candidate_product), method: :delete,
                   data: { confirm: t('view.general.delete-confirmation', model: t('model.candidate-product')) },
                   class: 'btn btn-outline-secondary float-left ml-1' %>
     <% end %>
@@ -41,8 +42,8 @@
   </div>
   <p class="float-right mb-0 mr-2" >
     <% if user_signed_in? && policy(@candidate_product).mod_allowed? %>
-      <%= link_to t('view.general.back'), candidate_products_path, class: "card-link" %>
-      <%= link_to t('view.general.edit'), edit_candidate_product_path(@candidate_product), class: "card-link" %>
+      <%= link_to t('view.general.back'), base_path + candidate_products_path, class: "card-link" %>
+      <%= link_to t('view.general.edit'), base_path + edit_candidate_product_path(@candidate_product), class: "card-link" %>
     <% end %>
   </p>
 </div>

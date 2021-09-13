@@ -1,0 +1,21 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<div class="col-lg-5ths col-md-4 w-100 mt-2">
+  <div class="card index-card small">
+    <div class="card-header bg-secondary text-white truncate-parent">
+      <%= link_to handbook.name, base_path + handbook_path(handbook), class: 'truncate-text',
+        'title' => handbook.name, 'data-toggle' => 'tooltip', 'data-placement' => 'top' %>
+    </div>
+    <div class="handbook-logo-frame ml-2 mt-2">
+      <%= link_to(handbook) do %>
+        <div class="text-muted float-left"><%= t('model.handbook').to_s.titlecase.pluralize %></div>
+        <br>
+        <%= image_tag(handbook.image_file, class: 'project-logo align-middle', skip_pipeline: true) %>
+      <% end %>
+    </div>
+    <div class="card-footer footer-padding">
+      <div class="footer-row">
+        <%= t('view.handbook.index.share') %>:
+      </div>
+    </div>
+  </div>
+</div>

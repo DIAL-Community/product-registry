@@ -1,7 +1,8 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 <% if user_signed_in? && policy(Setting).mod_allowed? %>
-  <%= link_to new_setting_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
+  <%= link_to base_path + new_setting_path, class: 'btn btn-outline-secondary float-left ml-1' do %>
     <span class="d-none d-md-block"><%= t('view.general.create') %></span>
     <span class="d-block d-md-none">
       <i class="fa fa-plus fa-sm" aria-hidden="true"></i>
@@ -50,9 +51,9 @@
                <%= t('view.general.action') %>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <%= link_to t('view.general.view'), setting, :class =>"dropdown-item" %>
+              <%= link_to t('view.general.view'), base_path + setting_path(setting), :class =>"dropdown-item" %>
               <% if user_signed_in? && policy(setting).mod_allowed? %>
-                <%= link_to t('view.general.edit'), edit_setting_path(setting), :class =>"dropdown-item" %>
+                <%= link_to t('view.general.edit'), base_path + edit_setting_path(setting), :class =>"dropdown-item" %>
               <% end %>
             </div>
           </td>

@@ -144,3 +144,8 @@ if Resource.where(slug: 'roi_toolkit').count.zero?
   Resource.create(name: 'Valuing Impact Toolkit', slug: 'roi_toolkit', phase: 'Evaluation', image_url: 'https://solutions.dial.community/assets/playbooks/pictures/773/Screen_Shot_2021-05-20_at_12.52.30_PM.png',
       description: 'Tools for measuring Project Impact', link: 'https://resources.dial.community/resources/valuing_impact_toolkit')
 end
+
+Dir[Rails.root.join('db/seeds/*.rb')].sort.each do |file|
+  puts "Processing #{file.split('/').last}."
+  require file
+end

@@ -1,10 +1,11 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
   <div class="col-12">
     <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-      <%= link_to(new_playbook_path, class: 'btn btn-outline-primary float-left') do %>
+      <%= link_to(base_path + new_playbook_path, class: 'btn btn-outline-primary float-left') do %>
         <%= "#{t('view.general.create')} #{t('model.playbook').to_s.titlecase}" %>
       <% end %>
     <% end %>

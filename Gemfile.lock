@@ -274,6 +274,8 @@ GEM
     racc (1.5.2)
     racc (1.5.2-java)
     rack (2.2.3)
+    rack-attack (6.5.0)
+      rack (>= 1.0, < 3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-test (1.1.0)
@@ -442,8 +444,6 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2021.1)
-      tzinfo (>= 1.0.0)
     uber (0.1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -520,6 +520,7 @@ DEPENDENCIES
   poltergeist
   puma (~> 4.3.3)
   pundit
+  rack-attack
   rack-cors
   rails (~> 5.2.4)
   rails-controller-testing

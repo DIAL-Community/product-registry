@@ -78,6 +78,8 @@ cs:
     maturity-rubric: rubrika vyspělosti
     office: kancelář
     organization: organizace
+    handbook: příručka
+    handbook-page: stránka příručky
     playbook: příručka
     playbook-page: stránka příručky
     play: spustit
@@ -533,6 +535,7 @@ cs:
       organizations: Organizace
       projects: Projekty
       playbooks: Příručky
+      handbooks: Příručky
       plays: Hraje
       tags: Značky
       years: Roky
@@ -659,6 +662,62 @@ cs:
         definition: "Cíle udržitelného rozvoje zahrnují 17 cílů a 169 úkolů, které představují globální investiční priority pro dosažení udržitelného rozvoje. Cíle udržitelného rozvoje byly stanoveny v roce 2015 Valným shromážděním OSN a mají být splněny do roku 2030."
       show:
         target: Cíl
+    handbook:
+      index:
+        overview: Přehled
+        audience: Publikum
+        outcomes: Výstupy
+        cover: Pokrytí
+        pdf-url: Odkaz na dokument PDF
+        phases: Fáze
+        name: Název
+        description: Popis
+        no-page: K této příručce jsme nenašli žádné stránky.
+        create-pdf: Vytvořit PDF
+        creating-pdf: Vytváření PDF
+        share: Sdílet tento zdroj
+      form:
+        overview: Přehled
+        audience: Publikum
+        outcomes: Výstupy
+        cover: obálka
+        pdf-url: Odkaz na PDF dokument
+        phases: Fáze
+        name: Název
+        description: Popis
+    handbook-page:
+      index:
+        contents: Obsah
+        edit-content: Upravit obsah
+        phase: Fáze
+        order: Řazení
+        media: Média
+        question: Otázka
+        resources: Zdroje
+        slug: Slug
+        other-info: Další informace
+        has-children: Tato stránka má podřízené stránky. Před odstraněním této stránky odstraňte všechny podřízené stránky.
+      form:
+        name: Název
+        contents: Obsah
+        editor-type: Použití editoru nástroje Page Builder
+        question: Otázka
+        question-text: Text otázky
+        answer-text: Text odpovědi
+        add-answer: Pidat odpověď
+        phase: Fáze
+        order: Řazení
+        media: Média
+        mapped-action: Mapovaná akce
+        resources: Prostředky
+        media-prompt: "Chcete-li k této aktivitě přidat video, zadejte adresu URL."
+        description: Popis
+        url: URL
+        parent: Nadřazená stránka
+        other-info: Další informace
+        page-contents: Obsah stránek
+        html: HTML
+        css: CSS
     playbook:
       index:
         overview: Přehled

@@ -49,6 +49,8 @@ fr:
     maturity-rubric: échelle de maturité
     office: bureau
     organization: organisation
+    handbook: manuel
+    handbook-page: page du manuel
     playbook: manuel
     playbook-page: page du manuel
     play: lire
@@ -662,6 +664,7 @@ fr:
       orgs: Organisations
       organizations: Organisations
       projects: Projets
+      handbooks: Manuels
       playbooks: Manuels
       plays: Manuels
       tags: Balises
@@ -769,6 +772,66 @@ fr:
           générale des Nations unies et visent à être atteints d’ici à 2030.
       show:
         target: Cible
+    handbook:
+      index:
+        overview: Présentation
+        audience: Audience
+        outcomes: Résultats
+        cover: Couverture
+        pdf-url: Lien du document PDF
+        phases: Phases
+        name: Nom
+        description: Description
+        no-page: Nous n’avons pas trouvé de pages pour ce manuel.
+        create-pdf: Créer PDF
+        creating-pdf: Création du PDF
+        share: Partager cette ressource
+      form:
+        overview: Présentation
+        audience: Audience
+        outcomes: Résultats
+        cover: Couverture
+        pdf-url: Lien du document PDF
+        phases: Phases
+        name: Nom
+        description: Description
+    handbook-page:
+      index:
+        contents: Contenu
+        edit-content: Modifier le contenu
+        phase: Phase
+        order: Ordre
+        media: Média
+        question: Question
+        resources: Ressources
+        slug: Slug
+        other-info: Autres informations
+        has-children: >-
+          Cette page contient des pages subordonnées. Veuillez supprimer toute
+          page subordonnée avant de supprimer cette page.
+      form:
+        name: Nom
+        contents: Contenu
+        editor-type: Utiliser l’éditeur de pages
+        question: Question
+        question-text: Texte de la question
+        answer-text: Texte de la réponse
+        add-answer: Ajouter réponse
+        phase: Phase
+        order: Ordre
+        media: Média
+        mapped-action: Action cartographiée
+        resources: Ressources
+        media-prompt: >-
+          Si vous souhaitez ajouter une vidéo à cette activité, veuillez saisir
+          l’URL
+        description: Description
+        url: URL
+        parent: Page principale
+        other-info: Autres informations
+        page-contents: Contenu de la page
+        html: HTML
+        css: CSS
     playbook:
       index:
         overview: Présentation

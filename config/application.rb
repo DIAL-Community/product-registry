@@ -21,5 +21,7 @@ module Registry
     # -- all .rb files in that directory are automatically loaded.
     config.geocode = config_for(:esri)
     config.settings = config_for(:settings)
+
+    config.exceptions_app = routes
   end
 end

@@ -6,7 +6,7 @@
         <%= t('view.breadcrumb.home') %>
       </a>
     </li>
-    <% breadcrumbs = build_breadcrumbs(params) %>
+    <% breadcrumbs = build_breadcrumbs(params, request.query_parameters) %>
     <% breadcrumbs.each_with_index do |breadcrumb, index| %>
       <% next if breadcrumb[:label].nil? || breadcrumb[:label].blank? %>
       <% if index == breadcrumbs.count - 1 %>

@@ -1,0 +1,3 @@
+$('#handbook-list').append('<%= j render(@handbooks) %>');
+$('handbook-list > div:not(.existing-handbook)').addClass('to-be-animated');
+$(document).trigger("infinite-scroll");

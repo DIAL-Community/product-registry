@@ -1,0 +1,165 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<p class="text-success"><%= flash[:notice] %></p>
+<p class="text-danger"><%= flash[:error] %></p>
+
+<style>
+[data-component-marker="popover-content"] {
+  display: none;
+}
+[data-component-marker="alternative-content"] {
+  display: none;
+}
+</style>
+
+<div class="row">
+  <div class="col-12">
+    <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+      <%= link_to t('view.general.delete-with-model', model: t('model.handbook-page').titlecase), base_path + handbook_handbook_page_path(@page), disabled: @child_pages.length > 0,
+                  method: :delete, data: { confirm: t('view.general.delete-confirmation', model: t('model.handbook-page')) },
+                  class: 'btn btn-outline-secondary float-left' %>
+
+      <%= link_to  t('view.general.copy-with-model', model: t('model.handbook-page').titlecase), base_path + copy_page_handbook_handbook_page_path(@handbook, @page), data: { confirm: t('view.general.copy-confirmation', model: t('model.handbook-page')) },
+                  class: 'btn btn-outline-secondary float-left ml-2' %>
+    <% end %>
+  </div>
+</div>
+
+<div id="show-page">
+<div class="card mt-2">
+  <div class="card-header bg-light border-0 font-weight-bold">
+    <%= "#{@page.name}" %>
+  </div>
+  <div class="card-body py-2 px-3">
+    <div class="row">
+      <div class="col-12 mt-2">
+        <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input type="radio" name="language" id="lang-en" value="en" autocomplete="off" checked> English
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="language" id="lang-fr" value="fr" autocomplete="off"> France
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="language" id="lang-de" value="de" autocomplete="off"> Deutsch
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="card-text text-muted mt-2 mb-2">
+      <%= t('view.handbook-page.index.slug') %>: 
+    </div>
+    <p class="ml-4"><%= @page.slug %></p>
+    <div class="card-text text-muted mt-2 mb-2">
+      <%= t('view.handbook-page.index.contents') %>: 
+    </div>
+    <div class="card-body py-2 px-3">
+      <% if @page_contents.editor_type == "simple" %>
+        <div class="fr-view">
+        <%= !@page_contents.html.nil? && @page_contents.html.html_safe %>
+        </div>
+      <% elsif @page_contents.editor_type == "builder" %>
+        <%= render 'shared/static_design', handbook: @handbook, page_contents: @page_contents %>
+      <% end %>
+    </div>
+    <div class="card-text text-muted mt-2 mb-2">
+      <%= t('view.handbook-page.index.phase') %>: 
+    </div>
+    <p class="ml-4"><%= @page.phase %></p>
+    <div class="card-text text-muted mt-2 mb-2">
+      <%= t('view.handbook-page.index.order') %>: <%= @page.page_order %>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook-page.index.question') %>:</div>
+      </div>
+      <div class="card-body p-2">
+        <% if !@page.handbook_question.nil? %>
+          <div class="ml-4 mt-2">
+            <strong>Question Text: </strong><%= @page.handbook_question.question_text %>
+          </div>
+          <% @page.handbook_question
+                  .handbook_answers
+                  .sort_by {|answer| answer.answer_text }
+                  .each do |answer| %>
+            <div class="ml-4 mt-2">
+              <strong>Answer Text: </strong><%= answer.answer_text %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header border-0">
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook-page.index.other-info') %></div>
+      </div>
+      <div class="card-body p-2 ml-4">
+        <div class="font-weight-bold"><%= t('view.handbook-page.index.resources') %>:</div>
+        <% @page.resources.each do |resource| %>
+          <div class="ml-4 mt-2">
+            <strong><%= resource["name"] %>: </strong><%= resource["description"] %>
+            </div>
+            <div class="ml-5 mb-3">
+            <a href="<%= resource["url"] %>"><%= resource["url"] %></a>
+          </div>
+        <% end %>
+        <div class="float-left mb-0 font-weight-bold"><%= t('view.handbook-page.index.media') %>:</div>
+        <% if !@page.media_url.nil? && !@page.media_url.empty? && !@page.media_url.equals('') %>
+          <div class="ml-4 mt-2">
+          <iframe src="<%= @page.media_url %>" width=800 height=450 allowfullscreen></iframe>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    </div>
+    <div class="card-footer border-0">
+      <div class="float-right mb-0">
+        <%= link_to t('view.general.back'), base_path + handbook_path(@handbook), :class => "card-link" %>
+        <% if user_signed_in? && policy(Handbook).mod_allowed? %>
+          <%= link_to t('view.general.edit'), base_path + edit_handbook_handbook_page_path(@handbook, @page), class: "card-link" %>
+          <%= link_to t('view.handbook-page.index.edit-content'), base_path + edit_content_handbook_handbook_page_path(@handbook, @page), class: "card-link" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" defer>
+
+  $("input[name=language]").on('change', switchLanguage);
+  
+  function switchLanguage() {
+    const langValue = $("input[name=language]:checked").val();
+
+    $.get(`${window.location.pathname}?language=${langValue}`, function (data) {
+      const parsedDom = $('<div>').append($.parseHTML(data));
+      const frView = $('.fr-view', parsedDom);
+      const frViewStyle = $('.fr-view-style', parsedDom);
+
+      // Might need to flash some message telling there's no data available in different language.
+
+      if (frView.html() && frViewStyle.html()) {
+        $(".fr-view").html(frView);
+        $(".fr-view-style").html(frViewStyle);
+      }
+    });
+  }
+
+  $('a[disabled]').click(function(e){
+    alert("<%= t('view.handbook-page.index.has-children') %>")
+    e.stopImmediatePropagation()
+    e.preventDefault()
+  });
+
+  function toggleReveal() {
+    $("[data-component-marker='handbook-reveal'] > [data-component-marker='alternative-content']").click(function() {
+      $(this).hide();
+      $(this).parent().find("[data-component-marker='initial-content']").show();
+    });
+    $("[data-component-marker='handbook-reveal'] > [data-component-marker='initial-content']").click(function() {
+      $(this).hide();
+      $(this).parent().find("[data-component-marker='alternative-content']").show();
+    });
+  }
+  
+  $(document).on("turbolinks:load", toggleReveal);
+</script>

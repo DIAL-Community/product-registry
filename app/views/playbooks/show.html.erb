@@ -1,3 +1,4 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
@@ -76,7 +77,7 @@
         <div class="float-left mb-0 font-weight-bold"><%= t('model.playbook-page').pluralize.titlecase %></div>
         <% if user_signed_in? && policy(Playbook).mod_allowed? %>
           <%= link_to t('view.general.add'),
-                      new_playbook_playbook_page_path(@playbook),
+                      base_path + new_playbook_playbook_page_path(@playbook),
                       class: "card-link float-right", style: "color: #fbab18 !important" %>
         <% end %>
       </div>
@@ -98,9 +99,9 @@
       
       <div class="card-footer border-0">
         <div class="float-right mb-0">
-        <%= link_to t('view.general.back'), playbooks_path, :class => "card-link" %>
+        <%= link_to t('view.general.back'), base_path + playbooks_path, :class => "card-link" %>
           <% if user_signed_in? && policy(Playbook).mod_allowed? %>
-            <%= link_to t('view.general.edit'), edit_playbook_path(@playbook), class: "card-link" %>
+            <%= link_to t('view.general.edit'), base_path + edit_playbook_path(@playbook), class: "card-link" %>
           <% end %>
         </div>
       </div>

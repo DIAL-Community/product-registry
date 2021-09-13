@@ -1,10 +1,11 @@
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <p class="text-success"><%= flash[:notice] %></p>
 <p class="text-danger"><%= flash[:error] %></p>
 
 <div class="row">
   <div class="col-12">
     <% if user_signed_in? && policy(MaturityRubric).mod_allowed? %>
-      <%= link_to(new_maturity_rubric_path, class: 'btn btn-outline-primary float-left') do %>
+      <%= link_to(base_path + new_maturity_rubric_path, class: 'btn btn-outline-primary float-left') do %>
         <span class="d-none d-md-block">
           <%= "#{t('view.general.create')} #{t('model.maturity-rubric').to_s.titlecase}" %>
         </span>

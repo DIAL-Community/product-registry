@@ -22,6 +22,7 @@ class Project < ApplicationRecord
   belongs_to :origin
 
   scope :name_contains, ->(name) { where('LOWER(projects.name) like LOWER(?)', "%#{name}%") }
+  scope :slug_starts_with, ->(slug) { where("LOWER(projects.slug) like LOWER(?)", "#{slug}%\\_") }
 
   def to_param
     slug
