@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   resources :task_trackers
 
+  post '/entities/process-file', to: 'entities#process_file'
+
   resources :candidate_products do
     member do
       post 'reject'
