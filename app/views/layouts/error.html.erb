@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DIAL Catalog of Digital Solutions</title>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="turbolinks-cache-control" content="no-cache">
+    <link href="<%= stylesheet_path(session[:portal]['slug']) %>" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+          integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="
+          crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"
+            integrity="sha256-oE03O+I6Pzff4fiMqwEGHbdfcW7a3GRRxlL+U49L5sA="
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>  
+    <style>
+      .rotate-north {
+        top: 65px;
+        left: 0.5em;
+      }
+      .ol-touch .rotate-north {
+        top: 80px;
+      }
+      <%= @stylesheet_contents %>
+    </style>
+    <% if Rails.env.production? || Rails.env.development? %>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.application.secrets.google_tracker %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '<%= Rails.application.secrets.google_tracker %>');
+      </script>
+    <% end %>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <script type="text/javascript">
+      var _paq = window._paq || [];
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="https://stats.dial.community/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', 7]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+      })();
+
+      var previousPageUrl = null;
+      $(document).on('turbolinks:load', function() {
+        if (previousPageUrl) {
+          _paq.push(['setReferrerUrl', previousPageUrl]);
+          _paq.push(['setCustomUrl', window.location.href]);
+          _paq.push(['setDocumentTitle', document.title]);
+          _paq.push(['trackPageView']);
+        }
+        previousPageUrl = window.location.href;
+      });
+
+    </script>
+  </head>
+  <body id="main-body"
+        data-controller="<%= controller.controller_name %>"
+        data-action="<%= controller.action_name %>">
+    <%= render '/shared/topnav' %>
+    <div id="content" class="container-fluid" role="main">
+      <%= yield %>
+      <%= render 'cookies_eu/consent_banner', link: about_learnmore_path, target: '_blank' %>
+    </div>
+    <%= render '/shared/notifier' %>
+    <%= render '/shared/feedback' %>
+    <%= render '/shared/footer' %>
+  </body>
+</html>
