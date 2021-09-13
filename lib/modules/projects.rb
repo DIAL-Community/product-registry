@@ -63,7 +63,7 @@ module Modules
       end
 
       country_search = "%"+country.gsub('-',' ').strip.downcase+"%"
-      curr_location = Location.find_by("LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])", country_search, country_search)
+      curr_location = Country.find_by("LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])", country_search, country_search)
       if curr_location.nil?
         puts "NO LOCATION: " + country
       end
