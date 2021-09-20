@@ -490,9 +490,8 @@ class OrganizationsController < ApplicationController
           @organization.update(organization_params)
         end
         format.html do
-          redirect_to @organization, flash: {
-            notice: t('messages.model.updated', model: t('model.organization').to_s.humanize)
-          }
+          redirect_to(organization_path(@organization, locale: session[:locale]),
+                     flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) })
         end
         format.json { render :show, status: :ok, location: @organization }
       else
