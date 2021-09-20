@@ -390,7 +390,7 @@ class BuildingBlocksController < ApplicationController
     respond_to do |format|
       if !@building_block.errors.any? && @building_block.update(building_block_params)
         format.html { redirect_to(building_block_path(@building_block, locale: session[:locale]),
-                                  flash: { notice: t('messages.model.updated', model: t('model.building-block').to_s.humanize) }})
+                                  flash: { notice: t('messages.model.updated', model: t('model.building-block').to_s.humanize) }}
         format.json { render :show, status: :ok, location: @building_block }
       else
         format.html { render :edit }
