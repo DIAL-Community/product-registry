@@ -490,8 +490,8 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.update!(project_params)
         format.html do
-          redirect_to @project,
-                      flash: { notice: t('messages.model.updated', model: t('model.project').to_s.humanize) }
+          redirect_to(project_path(@project, locale: session[:locale]),
+                      flash: { notice: t('messages.model.updated', model: t('model.project').to_s.humanize) })
         end
         format.json { render :show, status: :ok, project: @project }
       else

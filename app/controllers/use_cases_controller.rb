@@ -377,8 +377,8 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.update(use_case_params)
-        format.html { redirect_to @use_case,
-                      flash: { notice: t('messages.model.updated', model: t('model.use-case').to_s.humanize) }}
+        format.html { redirect_to use_case_path(@use_case, locale: session[:locale],
+                                  flash: { notice: t('messages.model.updated', model: t('model.use-case').to_s.humanize) })}
         format.json { render :show, status: :ok, location: @use_case }
       else
         format.html { render :edit }

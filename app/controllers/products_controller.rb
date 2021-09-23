@@ -715,15 +715,16 @@ class ProductsController < ApplicationController
     end
 
     respond_to do |format|
+      response.headers['Accept-Language'] = session[:locale]
       if @product.errors.none? && @product.update!(product_params)
         format.html do
-          redirect_to @product,
-                      flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) }
+          redirect_to(product_path(@product, locale: session[:locale]),
+                      flash: { notice: t('messages.model.updated', model: t('model.product').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @product }
+        format.json { render(:show, status: :ok, location: @product) }
       else
-        format.html { render :edit }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @product.errors, status: :unprocessable_entity) }
       end
     end
   end
