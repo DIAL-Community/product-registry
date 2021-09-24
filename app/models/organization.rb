@@ -79,7 +79,7 @@ class Organization < ApplicationRecord
   end
   
   def self.to_csv
-    attributes = %w{id name slug when_endorsed website is_endorser is_mni countries offices sectors}
+    attributes = %w{id name slug aliases when_endorsed website is_endorser is_mni countries offices sectors}
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
