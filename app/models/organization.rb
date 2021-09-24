@@ -96,7 +96,7 @@ class Organization < ApplicationRecord
                    .map(&:name)
                    .join('; ')
 
-        csv << [o.id, o.name, o.slug, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries, offices, sectors]
+        csv << [o.id, o.name, o.slug, o.aliases, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries, offices, sectors]
       end
     end
   end
