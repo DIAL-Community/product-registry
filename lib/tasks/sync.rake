@@ -103,6 +103,17 @@ namespace :sync do
     send_notification
   end
 
+  task :osc_digital_good_local, [] => :environment do
+    puts 'Starting pulling data from open source center ...'
+
+    osc_file = File.read('utils/digital_global_goods.json')
+    osc_data = JSON.parse(osc_file)
+    osc_data.each do |product|
+      sync_osc_product product
+    end
+    send_notification
+  end
+
   task :purge_removed_products, [:path] => :environment do |_, params|
     puts 'Pulling data from digital public good ...'
 
