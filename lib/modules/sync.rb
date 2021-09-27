@@ -789,7 +789,6 @@ module Modules
                 " -F to=#{user.email}"\
                 " -F subject='Sync task - add product'"\
                 " -F html='#{email_body}'"
-          puts cmd
           system cmd
         end
         @@product_list.clear
