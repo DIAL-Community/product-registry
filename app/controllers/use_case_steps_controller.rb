@@ -1,4 +1,6 @@
 class UseCaseStepsController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+  
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_use_case_step, only: [:show, :edit, :update, :destroy]
 
