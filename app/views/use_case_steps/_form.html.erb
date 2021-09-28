@@ -1,4 +1,16 @@
-<%= form_with(model: use_case_step, local: true, html: { id: 'use-case-step-form' }) do |form| %>
+<%
+  base_path = Rails.env.production? ? '/admin' : ''
+  entity_path = use_case_step.new_record? ?
+                  request.query_parameters.nil? ?
+                    use_case_steps_path :
+                    use_case_steps_path(request.query_parameters)
+                  :
+                  request.query_parameters.nil? ?
+                    use_case_step_path(use_case_step) :
+                    use_case_step_path(use_case_step, request.query_parameters)
+%>
+<%= form_with(model: use_case_step, local: true, html: { id: 'use-case-step-form' },
+              url: "#{base_path}#{entity_path}") do |form| %>
   <% if use_case_step.use_case_id.nil? %>
     <fieldset class="form-group">
       <%= form.label :use_case_id, t('view.use-case-step.form.use-case') %>
