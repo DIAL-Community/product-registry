@@ -212,7 +212,7 @@ class UseCaseStepsController < ApplicationController
 
     respond_to do |format|
       if @use_case_step.update(use_case_step_params)
-        format.html { redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step), notice: 'Use case step was successfully updated.' }
+        format.html { redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step, locale: session[:locale]), notice: 'Use case step was successfully updated.' }
         format.json { render :show, status: :ok, location: @use_case_step }
       else
         format.html { render :edit }
