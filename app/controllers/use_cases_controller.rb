@@ -17,15 +17,23 @@ class UseCasesController < ApplicationController
       return render(json: {}, status: :not_found)
     end
 
-    render(json: record.to_json(UseCase.serialization_options
-                                       .merge({
-                                         item_path: request.original_url,
-                                         include_relationships: true
-                                       })))
+    uri.fragment = uri.query = nil
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-use-cases')
+      end
+      format.json do
+        render(json: results.to_json(UseCase.serialization_options
+                                            .merge({
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
+      end
+    end
   end
 
   def simple_search
-    default_page_size = 20
+    page_size = 20
     use_cases = UseCase
 
     current_page = 1
@@ -37,18 +45,24 @@ class UseCasesController < ApplicationController
       use_cases = use_cases.name_contains(params[:search])
     end
 
-    use_cases = use_cases.paginate(page: current_page, per_page: default_page_size)
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = products.count
+      end
+    end
 
     results = {
       url: request.original_url,
       count: use_cases.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if use_cases.count > default_page_size * current_page
+    if use_cases.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -62,31 +76,43 @@ class UseCasesController < ApplicationController
 
     results['results'] = use_cases.eager_load(:sdg_targets, :sector, :use_case_descriptions,
                                               :use_case_steps, use_case_steps: :use_case_step_descriptions)
-                                  .paginate(page: current_page, per_page: default_page_size)
+                                  .paginate(page: current_page, per_page: page_size)
                                   .order(:slug)
 
     uri.fragment = uri.query = nil
-    render(json: results.to_json(UseCase.serialization_options
-                                        .merge({
-                                          collection_path: uri.to_s,
-                                          include_relationships: true
-                                        })))
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-use-cases')
+      end
+      format.json do
+        render(json: results.to_json(UseCase.serialization_options
+                                            .merge({
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
+      end
+    end
   end
 
   def complex_search
-    default_page_size = 20
-    use_cases = UseCase
+    page_size = 20
+    use_cases = UseCase.order(:slug)
 
     current_page = 1
     if params[:page].present? && params[:page].to_i > 0
       current_page = params[:page].to_i
     end
 
+    if params[:show_beta].to_s == 'false'
+      use_cases = use_cases.where(maturity: UseCase.entity_status_types[:MATURE])
+    end
+
     if params[:search].present?
       use_cases = use_cases.name_contains(params[:search])
     end
 
-    sdg_use_case_slugs = nil
+    sdg_use_case_slugs = []
+    # Allowing 'sdgs' or 'sustainable_development_goals' as param.
     if valid_array_parameter(params[:sdgs])
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs])
     end
@@ -94,64 +120,69 @@ class UseCasesController < ApplicationController
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sustainable_development_goals])
     end
 
-    building_block_product_slugs = nil
+    # Get building blocks from products param.
+    building_block_product_slugs = []
     if valid_array_parameter(params[:products])
       building_block_product_slugs = building_blocks_from_product_slugs(params[:products])
     end
 
-    building_block_slugs = nil
+    building_block_slugs = building_block_product_slugs
     if valid_array_parameter(params[:building_blocks])
-      building_block_slugs = params[:building_blocks] if building_block_product_slugs.nil?
-      building_block_slugs = building_block_product_slugs & params[:building_blocks] \
-        unless building_block_product_slugs.nil?
-    else
-      building_block_slugs = building_block_product_slugs
+      if building_block_slugs.nil? || building_block_slugs.empty?
+        building_block_slugs = params[:building_blocks]
+      else
+        building_block_slugs &= params[:building_blocks]
+      end
     end
+    workflow_building_block_slugs = workflows_from_building_block_slugs(building_block_slugs)
 
-    workflow_building_block_slugs = workflows_from_building_block_slugs(building_block_slugs) \
-      unless building_block_slugs.nil?
-
-    workflow_slugs = nil
+    workflow_slugs = workflow_building_block_slugs
     if valid_array_parameter(params[:workflows])
-      workflow_slugs = params[:workflows] if workflow_building_block_slugs.nil?
-      workflow_slugs = workflow_building_block_slugs & params[:workflows] \
-        unless workflow_building_block_slugs.nil?
-    else
-      workflow_slugs = workflow_building_block_slugs
+      if workflow_slugs.nil? || workflow_slugs.empty?
+        workflow_slugs = params[:workflows]
+      else
+        workflow_slugs &= params[:workflows]
+      end
     end
+    workflow_use_case_slugs = use_cases_from_workflow_slugs(workflow_slugs)
 
-    workflow_use_case_slugs = use_cases_from_workflow_slugs(workflow_slugs) \
-      unless workflow_slugs.nil?
-
-    use_case_slugs = nil
+    use_case_slugs = workflow_use_case_slugs
     if valid_array_parameter(params[:use_cases])
-      use_case_slugs = params[:use_cases] if workflow_use_case_slugs.nil?
-      use_case_slugs = workflow_use_case_slugs & params[:use_cases] \
-        unless workflow_use_case_slugs.nil?
-    else
-      use_case_slugs = workflow_use_case_slugs
+      if use_case_slugs.nil? || use_case_slugs.empty?
+        use_case_slugs = params[:use_cases]
+      else
+        use_case_slugs &= params[:use_cases]
+      end
     end
 
-    if use_case_slugs.nil?
+    if use_case_slugs.nil? || use_case_slugs.empty?
       use_case_slugs = sdg_use_case_slugs
-    elsif !sdg_use_case_slugs.nil?
+    elsif !sdg_use_case_slugs.nil? && !sdg_use_case_slugs.empty?
       use_case_slugs &= sdg_use_case_slugs
     end
 
     use_case_slugs = use_case_slugs.reject { |x| x.nil? || x.empty? }
-    use_cases = use_cases.where('slug in (?)', use_case_slugs) \
-      unless use_case_slugs.nil?
+    use_cases = use_cases.where('use_cases.slug in (?)', use_case_slugs) \
+      unless use_case_slugs.nil? || use_case_slugs.empty?
+
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = products.count
+      end
+    end
 
     results = {
       url: request.original_url,
       count: use_cases.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if use_cases.count > default_page_size * current_page
+    if use_cases.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -165,15 +196,22 @@ class UseCasesController < ApplicationController
 
     results['results'] = use_cases.eager_load(:sdg_targets, :sector, :use_case_descriptions,
                                               :use_case_steps, use_case_steps: :use_case_step_descriptions)
-                                  .paginate(page: current_page, per_page: default_page_size)
-                                  .order(:slug)
+                                  .paginate(page: current_page, per_page: page_size)
 
     uri.fragment = uri.query = nil
-    render(json: results.to_json(UseCase.serialization_options
-                                        .merge({
-                                          collection_path: uri.to_s,
-                                          include_relationships: true
-                                        })))
+
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-use-cases')
+      end
+      format.json do
+        render(json: results.to_json(UseCase.serialization_options
+                                            .merge({
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
+      end
+    end
   end
 
   def favorite_use_case

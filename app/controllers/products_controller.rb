@@ -5,7 +5,6 @@ class ProductsController < ApplicationController
 
   acts_as_token_authentication_handler_for User, only: [:index, :new, :create, :edit, :update, :destroy]
 
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
   before_action :set_current_user, only: [:edit, :update, :destroy]
@@ -29,7 +28,7 @@ class ProductsController < ApplicationController
   end
 
   def simple_search
-    default_page_size = 20
+    page_size = 20
     products = Product
 
     current_page = 1
@@ -48,18 +47,24 @@ class ProductsController < ApplicationController
         unless origins.empty?
     end
 
-    products = products.paginate(page: current_page, per_page: default_page_size)
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = products.count
+      end
+    end
 
     results = {
       url: request.original_url,
       count: products.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if products.count > default_page_size * current_page
+    if products.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -76,19 +81,26 @@ class ProductsController < ApplicationController
                                              :sectors, :sectors,
                                              :product_sustainable_development_goals, :sustainable_development_goals,
                                              :product_building_blocks, :building_blocks)
-                                 .paginate(page: current_page, per_page: default_page_size)
+                                 .paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
-    render(json: results.to_json(Product.serialization_options
-                                        .merge({
-                                          collection_path: uri.to_s,
-                                          include_relationships: true
-                                        })))
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-products')
+      end
+      format.json do
+        render(json: results.to_json(Product.serialization_options
+                                            .merge({
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
+      end
+    end
   end
 
   def complex_search
-    default_page_size = 20
+    page_size = 20
     products = Product
 
     current_page = 1
@@ -107,69 +119,78 @@ class ProductsController < ApplicationController
         unless origins.empty?
     end
 
-    sdg_use_case_slugs = nil
+    sdg_use_case_slugs = []
     if valid_array_parameter(params[:sdgs])
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs])
+      products = products.joins(:sustainable_development_goals)
+                         .where(sustainable_development_goals: { slug: params[:sdgs] })
     end
     if sdg_use_case_slugs.nil? && valid_array_parameter(params[:sustainable_development_goals])
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sustainable_development_goals])
+      products = products.joins(:sustainable_development_goals)
+                         .where(sustainable_development_goals: { slug: params[:sustainable_development_goals] })
     end
 
-    use_case_slugs = nil
+    use_case_slugs = sdg_use_case_slugs
     if valid_array_parameter(params[:use_cases])
-      use_case_slugs = params[:use_cases] if sdg_use_case_slugs.nil?
-      use_case_slugs = sdg_use_case_slugs & params[:use_cases] unless sdg_use_case_slugs.nil?
-    else
-      use_case_slugs = sdg_use_case_slugs
+      if use_case_slugs.nil? || use_case_slugs.empty?
+        use_case_slugs = params[:use_cases]
+      else
+        use_case_slugs &= params[:use_cases]
+      end
     end
-    use_case_workflow_slugs = workflows_from_use_case_slugs(use_case_slugs) \
-      unless use_case_slugs.nil?
+    use_case_workflow_slugs = workflows_from_use_case_slugs(use_case_slugs)
 
-    workflow_slugs = nil
+    workflow_slugs = use_case_workflow_slugs
     if valid_array_parameter(params[:workflows])
-      workflow_slugs = params[:workflows] if use_case_workflow_slugs.nil?
-      workflow_slugs = use_case_workflow_slugs & params[:workflows] unless use_case_workflow_slugs.nil?
-    else
-      workflow_slugs = use_case_workflow_slugs
+      if workflow_slugs.nil? || workflow_slugs.empty?
+        workflow_slugs = params[:workflows]
+      else
+        workflow_slugs &= params[:workflows]
+      end
     end
+    workflow_building_block_slugs = building_blocks_from_workflow_slugs(workflow_slugs)
 
-    workflow_building_block_slugs = building_blocks_from_workflow_slugs(workflow_slugs) \
-      unless workflow_slugs.nil?
-
-    building_block_slugs = nil
+    building_block_slugs = workflow_building_block_slugs
     if valid_array_parameter(params[:building_blocks])
-      building_block_slugs = params[:building_blocks] if workflow_building_block_slugs.nil?
-      building_block_slugs = workflow_building_block_slugs & params[:building_blocks] \
-        unless workflow_building_block_slugs.nil?
-    else
-      building_block_slugs = workflow_building_block_slugs
+      if building_block_slugs.nil? || building_block_slugs.empty?
+        building_block_slugs = params[:building_blocks]
+      else
+        building_block_slugs &= params[:building_blocks]
+      end
     end
+    building_block_product_slugs = products_from_building_block_slugs(building_block_slugs)
 
-    building_block_product_slugs = products_from_building_block_slugs(building_block_slugs) \
-      unless building_block_slugs.nil?
-
-    product_slugs = nil
+    product_slugs = building_block_product_slugs
     if valid_array_parameter(params[:products])
-      product_slugs = params[:products] if building_block_product_slugs.nil?
-      product_slugs = building_block_product_slugs & params[:products] \
-        unless building_block_product_slugs.nil?
-    else
-      product_slugs = building_block_product_slugs
+      if product_slugs.nil? || product_slugs.empty?
+        product_slugs = params[:products] \
+      else
+        product_slugs &= params[:products] \
+      end
     end
 
-    product_slugs = product_slugs.reject { |x| x.nil? || x.empty? }
-    products = products.where(slug: product_slugs) unless product_slugs.nil?
+    product_slugs = product_slugs.reject { |x| x.nil? || x.empty? } unless product_slugs.nil?
+    products = products.where(slug: product_slugs) unless product_slugs.nil? || product_slugs.empty?
+
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = products.count
+      end
+    end
 
     results = {
       url: request.original_url,
       count: products.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if products.count > default_page_size * current_page
+    if products.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -186,15 +207,22 @@ class ProductsController < ApplicationController
                                              :sectors, :sectors,
                                              :product_sustainable_development_goals, :sustainable_development_goals,
                                              :product_building_blocks, :building_blocks)
-                                 .paginate(page: current_page, per_page: default_page_size)
+                                 .paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
-    render(json: results.to_json(Product.serialization_options
-                                        .merge({
-                                          collection_path: uri.to_s,
-                                          include_relationships: true
-                                        })))
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-products')
+      end
+      format.json do
+        render(json: results.to_json(Product.serialization_options
+                                            .merge({
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
+      end
+    end
   end
 
   def map

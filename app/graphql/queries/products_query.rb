@@ -76,7 +76,7 @@ module Queries
       filtered_countries = countries.reject { |x| x.nil? || x.empty? }
       unless filtered_countries.empty?
         projects = Project.joins(:countries)
-                           .where(countries: { id: filtered_countries })
+                          .where(countries: { id: filtered_countries })
         products = products.joins(:projects)
                            .where(projects: { id: projects })
       end
@@ -90,7 +90,7 @@ module Queries
         curr_sector = Sector.find(user_sector)
         if curr_sector.parent_sector_id.nil?
           child_sectors = Sector.where(parent_sector_id: curr_sector.id)
-          filtered_sectors = filtered_sectors + child_sectors.map(&:id)
+          filtered_sectors += child_sectors.map(&:id)
         end
       end
       unless filtered_sectors.empty?

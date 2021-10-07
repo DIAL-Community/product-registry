@@ -16,8 +16,8 @@ class BuildingBlock < ApplicationRecord
 
   has_many :building_block_descriptions, dependent: :destroy
 
-  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%") }
-  scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%") }
+  scope :name_contains, -> (name) { where("LOWER(building_blocks.name) like LOWER(?)", "%#{name}%") }
+  scope :slug_starts_with, -> (slug) { where("LOWER(building_blocks.slug) like LOWER(?)", "#{slug}\\_%") }
 
   acts_as_commontable
 
