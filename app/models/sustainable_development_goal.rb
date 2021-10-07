@@ -4,7 +4,7 @@ class SustainableDevelopmentGoal < ApplicationRecord
 
   has_many :sdg_targets, :foreign_key => 'sdg_number', :primary_key => 'number'
 
-  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
+  scope :name_contains, -> (name) { where("LOWER(sustainable_development_goals.name) like LOWER(?)", "%#{name}%") }
 
   def image_file
     if File.exist?(File.join('public', 'assets', 'sdgs', "#{slug}.png"))

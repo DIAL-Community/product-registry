@@ -7,8 +7,8 @@ class Workflow < ApplicationRecord
 
   has_many :workflow_descriptions, dependent: :destroy
 
-  scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
-  scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
+  scope :name_contains, -> (name) { where("LOWER(workflows.name) like LOWER(?)", "%#{name}%")}
+  scope :slug_starts_with, -> (slug) { where("LOWER(workflows.slug) like LOWER(?)", "#{slug}\\_%")}
 
   attr_accessor :wf_desc
 
