@@ -15,6 +15,8 @@ module Types
     field :product, resolver: Queries::ProductQuery
     field :search_products, resolver: Queries::SearchProductsQuery
 
+    field :endorsers, resolver: Queries::EndorsersQuery
+
     field :projects, resolver: Queries::ProjectsQuery
     field :project, resolver: Queries::ProjectQuery
     field :search_projects, resolver: Queries::SearchProjectsQuery

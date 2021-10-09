@@ -35,12 +35,13 @@ module Queries
     argument :workflows, [String], required: false, default_value: []
     argument :building_blocks, [String], required: false, default_value: []
     argument :product_types, [String], required: false, default_value: []
+    argument :endorsers, [String], required: false, default_value: []
     argument :with_maturity, Boolean, required: false, default_value: false
     argument :product_deployable, Boolean, required: false, default_value: false
 
     type Types::ProductType.connection_type, null: false
 
-    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:, 
+    def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:, endorsers:,
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:)
       products = Product.where(parent_product_id: nil).order(:name)
       if !search.nil? && !search.to_s.strip.empty?
@@ -124,6 +125,12 @@ module Queries
         end
       end
 
+      filtered_endorsers = endorsers.reject { |x| x.nil? || x.empty? }
+      unless filtered_endorsers.empty?
+        products = products.joins(:endorsers)
+                           .where(endorsers: { id: filtered_endorsers })
+      end
+
       products.distinct
     end
 
@@ -165,6 +172,19 @@ module Queries
       end
       building_block_ids.concat(filtered_bbs.map(&:to_i))
       [filtered, building_block_ids]
+    end
+  end
+
+  class EndorsersQuery < Queries::BaseQuery
+    argument :search, String, required: false, default_value: ''
+    type [Types::ProductType], null: false
+
+    def resolve(search:)
+      endorsers = Endorser.order(:name)
+      unless search.blank?
+        endorsers = endorsers.name_contains(search)
+      end
+      endorsers
     end
   end
 end
