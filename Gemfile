@@ -136,3 +136,5 @@ gem 'graphiql-rails', group: :development
 
 # Throttling, blocking, etc.
 gem "rack-attack"
+
+gem "google-cloud-translate", "~> 3.2"
