@@ -440,7 +440,8 @@ namespace :projects do
     projects = Project.all
     projects.each do | project |
       project_desc = ProjectDescription.where(project_id: project, locale: 'en').first
-
+      next if project_desc.nil?
+      
       language = translate.detect project_desc.description
       if language.results[0].language == 'en'
         puts "Project desc is English"
