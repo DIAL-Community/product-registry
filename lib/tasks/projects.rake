@@ -1,6 +1,7 @@
 require "fileutils"
 require 'modules/projects'
 require 'modules/geocode'
+require 'google/cloud/translate/v2'
 
 include Modules::Projects
 
@@ -428,6 +429,52 @@ namespace :projects do
           puts "COULD NOT FIND PRODUCT: "+product.to_s
         end
       end
+    end
+  end
+
+  desc 'Use Google Cloud to update project translations'
+  task :translate_projects => :environment do |_, params|
+    
+    translate = Google::Cloud::Translate::V2.new(project_id: "molten-plate-329021", credentials: "./utils/translate-key-file.json")
+
+    projects = Project.all
+    projects.each do | project |
+      project_desc = ProjectDescription.where(project_id: project, locale: 'en').first
+
+      language = translate.detect project_desc.description
+      if language.results[0].language == 'en'
+        puts "Project desc is English"
+        german_desc = ProjectDescription.where(project_id: project, locale: 'de').first || ProjectDescription.new
+        german_desc.locale = 'de'
+        german_desc.project_id = project.id
+        de_translation = translate.translate project_desc.description, to: "de"
+        german_desc.description = de_translation
+        german_desc.save
+
+        french_desc = ProjectDescription.where(project_id: project, locale: 'fr').first || ProjectDescription.new
+        french_desc.locale = 'fr'
+        french_desc.project_id = project.id
+        fr_translation = translate.translate project_desc.description, to: "fr"
+        french_desc.description = fr_translation
+        french_desc.save
+      elsif language.results[0].language == 'de'
+        puts "Project desc is German"
+        english_desc = ProjectDescription.where(project_id: project, locale: 'en').first || ProjectDescription.new
+        english_desc.locale = 'en'
+        english_desc.project_id = project.id
+        en_translation = translate.translate project_desc.description, to: "en"
+        english_desc.description = en_translation
+        english_desc.save
+
+        french_desc = ProjectDescription.where(project_id: project, locale: 'fr').first || ProjectDescription.new
+        french_desc.locale = 'fr'
+        french_desc.project_id = project.id
+        fr_translation = translate.translate project_desc.description, to: "fr"
+        french_desc.description = fr_translation
+        french_desc.save
+      end
+      
+      puts "Updated project: " + project.name
     end
   end
 end
