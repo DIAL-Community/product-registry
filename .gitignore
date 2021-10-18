@@ -85,6 +85,7 @@ public/version.txt
 /coverage
 
 utils/GIZ_Projects.csv
+utils/translate-key-file.json
 
 setEnv.sh
 .env

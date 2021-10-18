@@ -74,11 +74,18 @@ class OrganizationsController < ApplicationController
                                       .order(:slug)
 
     uri.fragment = uri.query = nil
-    render(json: results.as_json(Organization.serialization_options
-                                             .merge({
-                                               collection_path: uri.to_s,
-                                               include_relationships: true
-                                             })))
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-organizations')
+      end
+      format.json do
+        render(json: results.to_json(Organization.serialization_options
+                                                 .merge({
+                                                   collection_path: uri.to_s,
+                                                   include_relationships: true
+                                                 })))
+      end
+    end
   end
 
   def complex_search
@@ -140,11 +147,18 @@ class OrganizationsController < ApplicationController
                                       .order(:slug)
 
     uri.fragment = uri.query = nil
-    render(json: results.to_json(Organization.serialization_options
-                                             .merge({
-                                               collection_path: uri.to_s,
-                                               include_relationships: true
-                                             })))
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-organizations')
+      end
+      format.json do
+        render(json: results.to_json(Organization.serialization_options
+                                                 .merge({
+                                                   collection_path: uri.to_s,
+                                                   include_relationships: true
+                                                 })))
+      end
+    end
   end
 
   # GET /organizations

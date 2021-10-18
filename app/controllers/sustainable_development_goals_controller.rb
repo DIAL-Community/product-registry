@@ -1,5 +1,6 @@
 class SustainableDevelopmentGoalsController < ApplicationController
   include FilterConcern
+  include ApiFilterConcern
 
   before_action :set_sustainable_development_goal, only: [:show, :edit]
 
@@ -19,30 +20,34 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
   def simple_search
     default_page_size = 20
-    sustainable_development_goals = SustainableDevelopmentGoal
+    sdgs = SustainableDevelopmentGoal.eager_load(:sdg_targets, sdg_targets: :use_cases)
 
     current_page = 1
     if params[:page].present? && params[:page].to_i > 0
       current_page = params[:page].to_i
     end
 
-    if params[:search].present?
-      sustainable_development_goals = sustainable_development_goals.name_contains(params[:search])
+    if valid_array_parameter(params[:sdgs])
+      sdgs = sdgs.where('sustainable_development_goals.slug in (?)', params[:sdgs])
     end
 
-    sustainable_development_goals = sustainable_development_goals.paginate(page: current_page,
-                                                                           per_page: default_page_size)
+    if params[:search].present?
+      sdg_name = sdgs.name_contains(params[:search])
+      sdg_desc = sdgs.where("LOWER(long_title) like LOWER(?)", "%#{params[:search]}%")
+      sdg_target = sdgs.joins(:sdg_targets).where("LOWER(sdg_targets.name) like LOWER(?)", "%#{params[:search]}%")
+      sdgs = sdgs.where(id: (sdg_name + sdg_desc + sdg_target).uniq)
+    end
 
     results = {
       url: request.original_url,
-      count: sustainable_development_goals.count,
+      count: sdgs.count,
       page_size: default_page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if sustainable_development_goals.count > default_page_size * current_page
+    if sdgs.count > default_page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -54,10 +59,8 @@ class SustainableDevelopmentGoalsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = sustainable_development_goals.eager_load(:sdg_targets, sdg_targets: :use_cases)
-                                                      .paginate(page: current_page,
-                                                                per_page: default_page_size)
-                                                      .order(:number)
+    results['results'] = sdgs.paginate(page: current_page, per_page: default_page_size)
+                             .order(:number)
 
     ## Should we do granular and control it using params like this?
     # relationship_options = {}
@@ -73,11 +76,19 @@ class SustainableDevelopmentGoalsController < ApplicationController
     #                                                          collection_path: uri.to_s
     #                                                        })))
     uri.fragment = uri.query = nil
-    render(json: results.to_json(SustainableDevelopmentGoal.serialization_options
-                                                           .merge({
-                                                             include_relationships: true,
-                                                             collection_path: uri.to_s
-                                                           })))
+
+    respond_to do |format|
+      format.csv do
+        render(csv: results.to_csv, filename: 'csv-sdgs')
+      end
+      format.json do
+        render(json: results.to_json(SustainableDevelopmentGoal.serialization_options
+                                                               .merge({
+                                                                 include_relationships: true,
+                                                                 collection_path: uri.to_s
+                                                               })))
+      end
+    end
   end
 
   # GET /sustainable_development_goals

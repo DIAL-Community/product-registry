@@ -196,6 +196,7 @@ Rails.application.routes.draw do
 
   get 'api/v1/sdgs/:id', to: 'sustainable_development_goals#unique_search'
   get 'api/v1/sdgs', to: 'sustainable_development_goals#simple_search'
+  post 'api/v1/sdgs', to: 'sustainable_development_goals#simple_search'
 
   get 'api/v1/sustainable_development_goals/:id', to: 'sustainable_development_goals#unique_search'
   get 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#simple_search'
