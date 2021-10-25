@@ -3,11 +3,36 @@ class ProductsController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:index, :new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: [:owner_search, :index, :new, :create, :edit, :update, :destroy]
 
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
   before_action :set_current_user, only: [:edit, :update, :destroy]
+
+  def owner_search
+    product = Product.find_by(slug: params[:product])
+    if product&.id
+      owner = User.find_by("?=ANY(user_products)", product.id)
+    end
+
+    verified_captcha = Recaptcha.verify_via_api_call(
+      params[:captcha],
+      {
+        secret_key: Rails.application.secrets.captcha_secret_key,
+        skip_remote_ip: true
+      }
+    )
+
+    respond_to do |format|
+      format.json do
+        if owner.nil? || !verified_captcha
+          render(json: { message: 'Unable to process the request.' }, status: :unprocessable_entity)
+        else
+          render(json: { owner: owner.as_json(only: :email) }, status: :ok)
+        end
+      end
+    end
+  end
 
   def unique_search
     record = Product.eager_load(:organizations,
