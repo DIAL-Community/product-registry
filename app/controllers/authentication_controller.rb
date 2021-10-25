@@ -143,7 +143,7 @@ class AuthenticationController < Devise::SessionsController
       userEmail: user.email,
       userName: user.username,
       own: {
-        products: user.user_products.any? ? user.user_products : [],
+        products: user.products.any? ? user.products.map(&:id) : [],
         organization: user.organization_id
       },
       canEdit: can_edit,

@@ -1,5 +1,5 @@
 class CandidateRolesController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :create]
+  acts_as_token_authentication_handler_for User, only: [:index, :create, :approve, :reject, :show]
   skip_before_action :verify_authenticity_token, if: :json_request
 
   before_action :set_candidate_role, only: [:show, :edit, :update, :destroy]

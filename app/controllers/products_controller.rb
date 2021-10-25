@@ -12,7 +12,7 @@ class ProductsController < ApplicationController
   def owner_search
     product = Product.find_by(slug: params[:product])
     if product&.id
-      owner = User.find_by("?=ANY(user_products)", product.id)
+      owner = User.joins(:products).find_by(products: { id: product.id })
     end
 
     verified_captcha = Recaptcha.verify_via_api_call(
@@ -907,10 +907,7 @@ class ProductsController < ApplicationController
         @child_descriptions = ProductDescription.where(product_id: @child_products)
       end
 
-      @owner = []
-      if @product&.id
-        @owner = User.where("?=ANY(user_products)", @product.id)
-      end
+      @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
     end
 
     def set_current_user
