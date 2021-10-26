@@ -7,14 +7,15 @@ module Mutations
     argument :organization_name, String, required: true
     argument :website, String, required: true
     argument :name, String, required: true
+    argument :description, String, required: true
     argument :email, String, required: true
     argument :title, String, required: true
     argument :captcha, String, required: true
 
     field :slug, String, null: true
 
-    def resolve(organization_name:, website:, name:, email:, title:, captcha:)
-      candidate_params = { name: organization_name, website: website }
+    def resolve(organization_name:, website:, description:, name:, email:, title:, captcha:)
+      candidate_params = { name: organization_name, website: website, description: description }
       candidate_params[:slug] = slug_em(candidate_params[:name])
 
       candidate_organizations = CandidateOrganization.where(slug: candidate_params[:slug])

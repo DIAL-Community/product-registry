@@ -82,9 +82,9 @@ class Product < ApplicationRecord
   end
 
   def owner
-    owner = User.where("?=ANY(user_products)", id)
-    if !owner.empty?
-      return owner.first.id
+    owner = User.joins(:products).where(products: { id: id })
+    unless owner.empty?
+      owner.first.id
     end
   end
 

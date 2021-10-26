@@ -4,6 +4,7 @@ module Types
     field :slug, String, null: false
     field :name, String, null: true
     field :website, String, null: true
+    field :description, String, null: true
 
     field :rejected, Boolean, null: true
   end

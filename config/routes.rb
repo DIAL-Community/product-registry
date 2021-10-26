@@ -186,6 +186,7 @@ Rails.application.routes.draw do
   get 'api/v1/products/:id', to: 'products#unique_search'
   get 'api/v1/products', to: 'products#simple_search'
   post 'api/v1/products', to: 'products#complex_search'
+  post 'api/v1/products/owners', to: 'products#owner_search'
 
   get 'api/v1/projects/:id', to: 'projects#unique_search'
   get 'api/v1/projects', to: 'projects#simple_search'

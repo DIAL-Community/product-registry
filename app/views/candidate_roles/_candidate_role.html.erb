@@ -1,4 +1,4 @@
-
+<% base_path = Rails.env.production? ? '/admin/' : '' %>
 <div class="card mt-2">
   <div class="card-body py-3 px-3">
     <div>
@@ -38,10 +38,10 @@
     </div>
     <p class="float-right mb-0">
       <% if user_signed_in? && policy(candidate_role).mod_allowed? %>
-        <%= link_to t('view.general.view'), candidate_role, class: "card-link" %>
+        <%= link_to t('view.general.view'), base_path + candidate_role_path(candidate_role), class: "card-link" %>
         <% if candidate_role.rejected.nil? %>
           <%= link_to t('view.candidate-role.index.approve'),
-                      approve_candidate_role_path(candidate_role),
+                      base_path + approve_candidate_role_path(candidate_role),
                       method: :post, class: "card-link"  %>
           <%= link_to t('view.candidate-role.index.reject'),
                       reject_candidate_role_path(candidate_role),
@@ -49,10 +49,10 @@
         <% end %>
         <% if candidate_role.rejected %>
           <%= link_to t('view.candidate-role.index.approve'),
-                      approve_candidate_role_path(candidate_role),
+                      base_path + approve_candidate_role_path(candidate_role),
                       method: :post, class: "card-link"  %>
         <% end %>
-        <%= link_to t('view.general.edit'), edit_candidate_role_path(candidate_role), class: "card-link" %>
+        <%= link_to t('view.general.edit'), base_path + edit_candidate_role_path(candidate_role), class: "card-link" %>
       <% end %>
     </p>
   </div>
