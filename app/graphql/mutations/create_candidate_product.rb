@@ -7,13 +7,14 @@ module Mutations
     argument :name, String, required: true
     argument :website, String, required: true
     argument :repository, String, required: true
+    argument :description, String, required: true
     argument :email, String, required: true
     argument :captcha, String, required: true
 
     field :slug, String, null: true
 
-    def resolve(name:, website:, repository:, email:, captcha:)
-      candidate_product_params = { name: name, website: website, repository: repository, submitter_email: email }
+    def resolve(name:, website:, repository:, description:, email:, captcha:)
+      candidate_product_params = { name: name, website: website, repository: repository, submitter_email: email, description: description }
       candidate_product_params[:slug] = slug_em(candidate_product_params[:name])
 
       candidate_products = CandidateProduct.where(slug: candidate_product_params[:slug])
