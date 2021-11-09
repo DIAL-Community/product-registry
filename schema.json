@@ -1,0 +1,7 @@
+{
+  "errors": [
+    {
+      "message": "Query has depth of 13, which exceeds max depth of 8"
+    }
+  ]
+}

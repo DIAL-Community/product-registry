@@ -4,7 +4,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, roles: [:admin])
+    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin])
     @product = products(:one)
   end
 
@@ -39,7 +39,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     updated_product = Product.find(@product.id)
     assert_equal updated_product.name, "Some New Name"
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
   end
 
   test "should create product" do
@@ -67,7 +67,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug,
                                                       website: @product.website },
                                            logo: uploaded_file }
-    assert_redirected_to product_url(@product)
+    assert_redirected_to product_url(@product, locale: 'en')
   end
 
   test 'should filter products' do
@@ -123,7 +123,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test 'Policy test: should follow product policy for user' do
     product = products(:one)
-    sign_in FactoryBot.create(:user, email: 'user@some-email.com', user_products: [product.id])
+    sign_in FactoryBot.create(:user, username: 'user', email: 'user@some-email.com', user_products: [product.id])
 
     get product_url(product)
     assert_response :success
@@ -155,7 +155,9 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal(1, assigns(:product).sectors.length)
 
-    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
+    sign_in(
+      FactoryBot.create(:user, username: 'nonadmin', email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
+    )
 
     patch(product_url(products(:two)), params: patch_params)
     get product_url(products(:two))
@@ -165,7 +167,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get product_url(@product)
     assert_response :success
@@ -189,7 +191,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     post(favorite_product_product_url(@product), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org')
 
     last_user = User.last
     assert_equal(last_user.saved_products.length, 0)
@@ -206,7 +208,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     post(unfavorite_product_product_url(@product), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', saved_products: [@product.id])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', saved_products: [@product.id])
 
     last_user = User.last
     assert_equal(last_user.saved_products.length, 1)
@@ -220,7 +222,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test 'product user allowed to edit own product' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['product_user'],
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org',
+                                     roles: [User.user_roles[:product_user]],
                                      user_products: [@product.id, products(:three).id])
 
     get edit_product_url(@product)
@@ -229,7 +232,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     patch product_url(@product), params: { product: { name: "Some New Name" } }
 
     updated_product = Product.find(@product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     assert_equal updated_product.name, "Some New Name"
 
     get edit_product_url(products(:three))
@@ -247,7 +250,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test 'content writer user should be able to create product' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['content_writer'])
 
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
 
@@ -326,7 +329,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(mapping_changes_audit['organizations'].length, 1)
 
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['content_writer'])
 
     other_building_block = building_blocks(:two)
     patch product_url(created_product), params: {
@@ -340,7 +343,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_product = Product.find(created_product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     assert_equal(updated_product.building_blocks.length, 2)
 
     created_audit = Audit.last
@@ -365,7 +368,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_product = Product.find(updated_product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     # Content writer users are not allowed to remove mapping, but allowed to add.
     assert_equal(updated_product.sectors.length, 2)
 
@@ -388,14 +391,14 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_product = Product.find(updated_product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     # Content writer users are not allowed to remove mapping
     assert_equal(updated_product.sectors.length, 2)
   end
 
   test 'content editor user should be able to remove mapping' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'content_editor@abba.org', roles: ['content_editor'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'content_editor@abba.org', roles: ['content_editor'])
 
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
 
@@ -464,7 +467,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_product = Product.find(created_product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     assert_equal(updated_product.building_blocks.length, 2)
 
     created_audit = Audit.last
@@ -489,7 +492,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_product = Product.find(updated_product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     # Content editor users are allowed to remove and add mapping.
     assert_equal(updated_product.sectors.length, 1)
 
@@ -513,7 +516,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_product = Product.find(updated_product.id)
-    assert_redirected_to product_url(updated_product)
+    assert_redirected_to product_url(updated_product, locale: 'en')
     # Content editor users are allowed to remove mapping
     assert_equal(updated_product.sectors.length, 1)
 
@@ -528,7 +531,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test 'opening product page should generate event record' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['content_writer'])
 
     number_of_user_events = UserEvent.count
     get product_url(@product)

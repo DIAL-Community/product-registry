@@ -20,7 +20,16 @@ class CandidateOrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create candidate_organization" do
     assert_difference('CandidateOrganization.count') do
-      post candidate_organizations_url, params: { candidate_organization: { name: @candidate_organization.name, slug: @candidate_organization.slug, website: @candidate_organization.website } }
+      post(
+        candidate_organizations_url,
+        params: {
+          candidate_organization: {
+            name: @candidate_organization.name,
+            slug: @candidate_organization.slug,
+            website: @candidate_organization.website
+          }
+        }
+      )
     end
 
     assert_redirected_to candidate_organization_url(CandidateOrganization.last)
@@ -37,7 +46,16 @@ class CandidateOrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update candidate_organization" do
-    patch candidate_organization_url(@candidate_organization), params: { candidate_organization: { name: @candidate_organization.name, slug: @candidate_organization.slug, website: @candidate_organization.website } }
+    patch(
+      candidate_organization_url(@candidate_organization),
+      params: {
+        candidate_organization: {
+          name: @candidate_organization.name,
+          slug: @candidate_organization.slug,
+          website: @candidate_organization.website
+        }
+      }
+    )
     assert_redirected_to candidate_organization_url(@candidate_organization)
   end
 

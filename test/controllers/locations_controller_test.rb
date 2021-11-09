@@ -14,14 +14,14 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get locations_url(:search=>"Location1")
+    get locations_url(search: "Location1")
     assert_equal(1, assigns(:locations).count)
 
     # Should not find location2, because it is a point location
-    get locations_url(:search=>"Location2")
+    get locations_url(search: "Location2")
     assert_equal(0, assigns(:locations).count)
 
-    get locations_url(:search=>"InvalidLocation")
+    get locations_url(search: "InvalidLocation")
     assert_equal(0, assigns(:locations).count)
   end
 
@@ -64,19 +64,19 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'admin', email: 'nonadmin@digitalimpactalliance.org')
 
     get location_url(@location)
     assert_response :success
-    
+
     get new_location_url
     assert_response :redirect
 
     get edit_location_url(@location)
-    assert_response :redirect    
+    assert_response :redirect
 
     patch location_url(@location), params: { location: { name: @location.name, slug: @location.slug } }
-    assert_response :redirect  
+    assert_response :redirect
 
     delete location_url(@location)
     assert_response :redirect

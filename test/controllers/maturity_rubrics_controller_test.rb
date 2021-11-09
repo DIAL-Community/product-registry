@@ -14,10 +14,10 @@ class MaturityRubricsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get maturity_rubrics_url(:search=>"Default Rubric")
+    get maturity_rubrics_url(search: "Default Rubric")
     assert_equal(1, assigns(:maturity_rubrics).count)
 
-    get maturity_rubrics_url(:search=>"InvalidRubric")
+    get maturity_rubrics_url(search: "InvalidRubric")
     assert_equal(0, assigns(:maturity_rubrics).count)
   end
 
@@ -63,19 +63,19 @@ class MaturityRubricsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get maturity_rubric_url(@rubric)
     assert_response :success
-    
+
     get new_maturity_rubric_url
     assert_response :redirect
 
     get edit_maturity_rubric_url(@rubric)
-    assert_response :redirect    
+    assert_response :redirect
 
     patch maturity_rubric_url(@rubric), params: { maturity_rubric: { name: @rubric.name, slug: @rubric.slug } }
-    assert_response :redirect  
+    assert_response :redirect
 
     delete maturity_rubric_url(@rubric)
     assert_response :redirect

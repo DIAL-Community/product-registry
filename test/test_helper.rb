@@ -13,6 +13,7 @@ class ActiveSupport::TestCase
   FactoryBot.define do
     factory :user do
       email { "usertest@digitalimpactalliance.org" }
+      username { 'some-default-username' }
       password { "password"} 
       password_confirmation { "password" }
       confirmed_at { Date.today }
