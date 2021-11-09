@@ -4,7 +4,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, roles: [:admin])
+    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin])
     @use_case = use_cases(:one)
     @sectors = Sector.order(:name)
   end
@@ -15,10 +15,10 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get use_cases_url(:search=>"UseCase1")
+    get use_cases_url(search: "UseCase1")
     assert_equal(1, assigns(:use_cases).count)
 
-    get use_cases_url(:search=>"InvalidUseCase")
+    get use_cases_url(search: "InvalidUseCase")
     assert_equal(0, assigns(:use_cases).count)
   end
 
@@ -50,7 +50,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   test "should update use_case" do
     patch use_case_url(@use_case), params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
                                                          sector_id: @use_case.sector_id, slug: @use_case.slug } }
-    assert_redirected_to use_case_url(@use_case)
+    assert_redirected_to use_case_url(@use_case, locale: 'en')
   end
 
   test "should destroy use_case" do
@@ -68,7 +68,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     use_case1 = assigns(:use_cases)[0]
     use_case2 = assigns(:use_cases)[1]
 
-    param = {'filter_name' => 'use_cases', 'filter_value' => use_case1.id, 'filter_label' => use_case1.name}
+    param = { 'filter_name' => 'use_cases', 'filter_value' => use_case1.id, 'filter_label' => use_case1.name }
     post "/add_filter", params: param
 
     # Filter is set, should only load 1
@@ -83,23 +83,25 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     # With additional filter, should now load 0
     get use_cases_url
     assert_equal(0, assigns(:use_cases).count)
-
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get use_case_url(@use_case)
     assert_response :success
-    
+
     get new_use_case_url
     assert_response :redirect
 
     get edit_use_case_url(@use_case)
-    assert_response :redirect    
+    assert_response :redirect
 
-    patch use_case_url(@use_case), params: { use_case: { description: @use_case.description, name: @use_case.name, slug: @use_case.slug } }
-    assert_response :redirect  
+    patch(
+      use_case_url(@use_case),
+      params: { use_case: { description: @use_case.description, name: @use_case.name, slug: @use_case.slug } }
+    )
+    assert_response :redirect
 
     delete use_case_url(@use_case)
     assert_response :redirect
@@ -110,7 +112,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     post(favorite_use_case_use_case_url(@use_case), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     last_user = User.last
     assert_equal(last_user.saved_use_cases.length, 0)
@@ -141,7 +143,9 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
 
   test 'content editor user should be able to remove mapping' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'content_editor@abba.org', roles: ['content_editor'])
+    sign_in(
+      FactoryBot.create(:user, username: 'content_editor', email: 'content_editor@abba.org', roles: ['content_editor'])
+    )
 
     assert_difference('UseCase.count') do
       post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
@@ -164,8 +168,8 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     # * Image changes (optional)
     assert_equal(created_audit.audit_changes.length, 1)
 
-    sdg_target = sdg_targets(:one)
-    other_target = sdg_targets(:two)
+    # sdg_target = sdg_targets(:one)
+    # other_target = sdg_targets(:two)
     uc_params = {
       use_case: {
         name: created_use_case.name,
@@ -173,11 +177,11 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
         description: "Updated desc"
       }
     }
-    
+
     patch use_case_url(created_use_case), params: uc_params
 
     updated_use_case = UseCase.find(created_use_case.id)
-    assert_redirected_to use_case_url(updated_use_case)
+    assert_redirected_to use_case_url(updated_use_case, locale: 'en')
 
     created_audit = Audit.last
     assert_equal(created_audit.action, 'UPDATED')
@@ -186,6 +190,5 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     # Audit will have 1 elements:
     # * Mapping changes (optional)
     assert_equal(created_audit.audit_changes.length, 1)
-
   end
 end

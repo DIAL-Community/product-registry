@@ -8,7 +8,7 @@
     <%= "#{t('model.product').to_s.humanize}: #{@product.name}" %>
   </div>
   <div class="card-body">
-    <% if @owner.empty? %>
+    <% if @owner.nil? %>
     <div class="alert alert-info my-2 text-center" role="alert">
       <%= t("view.product.show.owner") %>
       <a href="https://docs.osc.dial.community/projects/product-registry/en/latest/product_owner.html" target="_blank">

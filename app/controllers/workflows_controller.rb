@@ -315,8 +315,12 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       if @workflow.update(workflow_params)
-        format.html { redirect_to(workflow_path(@workflow, locale: session[:locale],
-                                  flash: { notice: t('messages.model.updated', model: t('model.workflow').to_s.humanize) }))}
+        format.html do
+          redirect_to(
+            workflow_path(@workflow, locale: session[:locale]),
+            flash: { notice: t('messages.model.updated', model: t('model.workflow').to_s.humanize) }
+          )
+        end
         format.json { render :show, status: :ok, location: @workflow }
       else
         format.html { render :edit }

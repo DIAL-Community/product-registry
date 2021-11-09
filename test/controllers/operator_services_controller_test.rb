@@ -15,10 +15,10 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get operator_services_url(:search=>"Operator")
+    get operator_services_url(search: "Operator")
     assert_equal(1, assigns(:operators).count)
 
-    get operator_services_url(:search=>"InvalidOrg")
+    get operator_services_url(search: "InvalidOrg")
     assert_equal(0, assigns(:operators).count)
   end
 
@@ -28,7 +28,7 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create operator service" do
-    # It should create 12 core services for this operator 
+    # It should create 12 core services for this operator
     assert_difference('OperatorService.count', 12) do
       post operator_services_url, params: { operator_service: { name: "NewOperator" },
                                             selected_countries: { @country.id => @country.id } }
@@ -38,12 +38,12 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show operator service" do
-    get operator_services_url(:id => @operator_service.name)
+    get operator_services_url(id: @operator_service.name)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_operator_service_url(:id => @operator_service.name)
+    get edit_operator_service_url(id: @operator_service.name)
     assert_response :success
   end
 
@@ -61,7 +61,7 @@ class OperatorServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: should reject all actions for regular user." do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get operator_service_url(@operator_service.name)
     assert_response :redirect

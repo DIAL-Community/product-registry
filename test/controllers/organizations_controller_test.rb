@@ -40,7 +40,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     updated_organization = Organization.find(@organization.id)
     assert_equal updated_organization.name, "Some New Name"
-    assert_redirected_to organization_url(updated_organization)
+    assert_redirected_to organization_url(updated_organization, locale: 'en')
   end
 
   test "should slug digits" do
@@ -130,7 +130,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
                                     slug: @organization.slug, website: @organization.website,
                                     when_endorsed: '11/16/2018' },
                     logo: uploaded_file }
-    assert_redirected_to organization_url(@organization)
+    assert_redirected_to organization_url(@organization, locale: 'en')
   end
 
   test "should destroy organization" do
@@ -278,7 +278,11 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'Policy test: should reject edit for organization user' do
     organization = organizations(:four)
-    sign_in FactoryBot.create(:user, email: 'user@fourth-organization.com', organization_id: organization.id)
+    sign_in(
+      FactoryBot.create(:user, username: 'user',
+                               email: 'user@fourth-organization.com',
+                               organization_id: organization.id)
+    )
 
     get organization_url(organization)
     assert_response :success
@@ -321,7 +325,9 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     # Should be able to edit the rest of the fields.
     assert_equal(1, assigns(:organization).countries.length)
 
-    sign_in FactoryBot.create(:user, email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
+    sign_in(
+      FactoryBot.create(:user, username: 'some-admin', email: 'some-admin@digitalimpactalliance.org', roles: [:admin])
+    )
 
     patch(organization_url(organization), params: patch_params)
     get organization_url(organization)
@@ -334,7 +340,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get organization_url(@organization)
     assert_response :success
@@ -357,7 +363,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'organization changes should be logged' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'admin@abba.org', roles: ['admin'])
+    sign_in FactoryBot.create(:user, username: 'admin', email: 'admin@abba.org', roles: ['admin'])
 
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
 
@@ -415,7 +421,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_organization = Organization.find(created_organization.id)
-    assert_redirected_to organization_url(updated_organization)
+    assert_redirected_to organization_url(updated_organization, locale: 'en')
     assert_equal(updated_organization.projects.length, 2)
 
     created_audit = Audit.last
@@ -440,7 +446,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_organization = Organization.find(updated_organization.id)
-    assert_redirected_to organization_url(updated_organization)
+    assert_redirected_to organization_url(updated_organization, locale: 'en')
     # Content editor users are allowed to remove and add mapping.
     assert_equal(updated_organization.sectors.length, 1)
 
@@ -464,7 +470,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_organization = Organization.find(updated_organization.id)
-    assert_redirected_to organization_url(updated_organization)
+    assert_redirected_to organization_url(updated_organization, locale: 'en')
     # Content editor users are allowed to remove mapping
     assert_equal(updated_organization.sectors.length, 1)
 
@@ -481,7 +487,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     patch organization_url(@organization), params: { organization: { name: "Some Name", is_mni: true } }
 
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['mni'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['mni'])
 
     get edit_organization_url(@organization)
     assert_response :success
@@ -489,7 +495,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     patch organization_url(@organization), params: { organization: { name: "Another Name" } }
 
     updated_organization = Organization.find(@organization.id)
-    assert_redirected_to organization_url(updated_organization)
+    assert_redirected_to organization_url(updated_organization, locale: 'en')
     assert_equal updated_organization.name, "Another Name"
 
     get edit_organization_url(organizations(:two))
@@ -506,7 +512,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     patch organization_url(@organization), params: { organization: { name: "Some Name", is_endorser: true } }
 
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['principle'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['principle'])
 
     get edit_organization_url(@organization)
     assert_response :success
@@ -514,7 +520,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     patch organization_url(@organization), params: { organization: { name: "Another Name" } }
 
     updated_organization = Organization.find(@organization.id)
-    assert_redirected_to organization_url(updated_organization)
+    assert_redirected_to organization_url(updated_organization, locale: 'en')
     assert_equal updated_organization.name, "Another Name"
 
     get edit_organization_url(organizations(:two))

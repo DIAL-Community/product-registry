@@ -1,5 +1,15 @@
-<% base_path = Rails.env.production? ? '/admin/' : '' %>
-<%= form_with(model: candidate_organization, local: true, url: base_path + candidate_organization_path) do |form| %>
+<%
+  base_path = Rails.env.production? ? '/admin' : ''
+  entity_path = candidate_organization.new_record? ?
+                  request.query_parameters.nil? ?
+                    candidate_organizations_path :
+                    candidate_organizations_path(request.query_parameters)
+                  :
+                  request.query_parameters.nil? ?
+                    candidate_organization_path(candidate_organization) :
+                    candidate_organization_path(candidate_organization, request.query_parameters)
+%>
+<%= form_with(model: candidate_organization, local: true, url: "#{base_path}#{entity_path}") do |form| %>
 
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :candidate_organization_name,

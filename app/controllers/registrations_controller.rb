@@ -19,13 +19,13 @@ class RegistrationsController < Devise::RegistrationsController
   private
 
   def check_captcha
-    unless verify_recaptcha secret_key: Rails.application.secrets.captcha_secret_key
+    unless verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key)
       configure_registration_parameters
-      self.resource = resource_class.new sign_up_params
+      self.resource = resource_class.new(sign_up_params)
       resource.validate
       set_minimum_password_length
 
-      respond_with_navigational(resource) { render :new }
+      respond_with_navigational(resource) { render(:new) }
     end
   end
 
