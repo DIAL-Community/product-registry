@@ -404,7 +404,7 @@ CREATE TABLE public.building_blocks (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    maturity public.entity_status_type NOT NULL,
+    maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL,
     discourse_id bigint
 );
 
@@ -489,6 +489,7 @@ CREATE TABLE public.candidate_products (
     name character varying NOT NULL,
     website character varying NOT NULL,
     repository character varying NOT NULL,
+    submitter_email character varying NOT NULL,
     rejected boolean,
     rejected_date timestamp without time zone,
     rejected_by_id bigint,
@@ -1259,7 +1260,8 @@ CREATE TABLE public.handbooks (
     phases jsonb DEFAULT '[]'::jsonb NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    maturity character varying DEFAULT 'Beta'::character varying
+    maturity character varying DEFAULT 'Beta'::character varying,
+    pdf_url character varying
 );
 
 
@@ -3080,7 +3082,7 @@ CREATE TABLE public.use_cases (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    maturity public.entity_status_type NOT NULL,
+    maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL,
     tags character varying[] DEFAULT '{}'::character varying[]
 );
 
