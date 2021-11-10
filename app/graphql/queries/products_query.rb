@@ -177,7 +177,7 @@ module Queries
 
   class EndorsersQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
-    type [Types::ProductType], null: false
+    type [Types::EndorserType], null: false
 
     def resolve(search:)
       endorsers = Endorser.order(:name)
