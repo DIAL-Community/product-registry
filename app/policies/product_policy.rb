@@ -25,7 +25,7 @@ class ProductPolicy < ApplicationPolicy
   def mod_allowed?
     return false if user.nil?
 
-    if @record.is_a?(Product) && user.products.include?(@record.id) &&
+    if @record.is_a?(Product) && user.user_products.include?(@record.id) &&
        user.roles.include?(User.user_roles[:product_user])
       return true
     end
@@ -45,7 +45,7 @@ class ProductPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:product_user]) &&
-      @record.is_a?(Product) && user.products.include?(@record.id)
+      @record.is_a?(Product) && user.user_products.include?(@record.id)
 
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:content_editor])
@@ -57,7 +57,7 @@ class ProductPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:product_user]) &&
-      @record.is_a?(Product) && user.products.include?(@record.id)
+      @record.is_a?(Product) && user.user_products.include?(@record.id)
 
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:content_editor]) ||

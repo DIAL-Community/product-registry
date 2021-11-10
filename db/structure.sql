@@ -404,7 +404,8 @@ CREATE TABLE public.building_blocks (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    maturity public.entity_status_type NOT NULL
+    maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL,
+    discourse_id bigint
 );
 
 
@@ -442,7 +443,8 @@ CREATE TABLE public.candidate_organizations (
     approved_date timestamp without time zone,
     approved_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    description character varying
 );
 
 
@@ -487,13 +489,15 @@ CREATE TABLE public.candidate_products (
     name character varying NOT NULL,
     website character varying NOT NULL,
     repository character varying NOT NULL,
+    submitter_email character varying NOT NULL,
     rejected boolean,
     rejected_date timestamp without time zone,
     rejected_by_id bigint,
     approved_date timestamp without time zone,
     approved_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    description character varying
 );
 
 
@@ -531,7 +535,9 @@ CREATE TABLE public.candidate_roles (
     approved_date timestamp without time zone,
     approved_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    product_id integer,
+    organization_id integer
 );
 
 
@@ -953,7 +959,8 @@ CREATE TABLE public.digital_principles (
     id bigint NOT NULL,
     name character varying NOT NULL,
     slug character varying NOT NULL,
-    url character varying NOT NULL
+    url character varying NOT NULL,
+    phase character varying
 );
 
 
@@ -1106,6 +1113,175 @@ CREATE SEQUENCE public.glossaries_id_seq
 --
 
 ALTER SEQUENCE public.glossaries_id_seq OWNED BY public.glossaries.id;
+
+
+--
+-- Name: handbook_answers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.handbook_answers (
+    id bigint NOT NULL,
+    answer_text character varying NOT NULL,
+    action character varying NOT NULL,
+    locale character varying DEFAULT 'en'::character varying NOT NULL,
+    handbook_question_id bigint
+);
+
+
+--
+-- Name: handbook_answers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.handbook_answers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: handbook_answers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.handbook_answers_id_seq OWNED BY public.handbook_answers.id;
+
+
+--
+-- Name: handbook_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.handbook_descriptions (
+    id bigint NOT NULL,
+    handbook_id bigint,
+    locale character varying NOT NULL,
+    overview character varying DEFAULT ''::character varying NOT NULL,
+    audience character varying DEFAULT ''::character varying NOT NULL,
+    outcomes character varying DEFAULT ''::character varying NOT NULL,
+    cover character varying
+);
+
+
+--
+-- Name: handbook_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.handbook_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: handbook_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.handbook_descriptions_id_seq OWNED BY public.handbook_descriptions.id;
+
+
+--
+-- Name: handbook_pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.handbook_pages (
+    id bigint NOT NULL,
+    handbook_id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    phase character varying,
+    page_order integer,
+    parent_page_id bigint,
+    handbook_questions_id bigint,
+    resources jsonb DEFAULT '[]'::jsonb NOT NULL,
+    media_url character varying
+);
+
+
+--
+-- Name: handbook_pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.handbook_pages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: handbook_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.handbook_pages_id_seq OWNED BY public.handbook_pages.id;
+
+
+--
+-- Name: handbook_questions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.handbook_questions (
+    id bigint NOT NULL,
+    question_text character varying NOT NULL,
+    locale character varying DEFAULT 'en'::character varying NOT NULL,
+    handbook_page_id bigint
+);
+
+
+--
+-- Name: handbook_questions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.handbook_questions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: handbook_questions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.handbook_questions_id_seq OWNED BY public.handbook_questions.id;
+
+
+--
+-- Name: handbooks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.handbooks (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    phases jsonb DEFAULT '[]'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    maturity character varying DEFAULT 'Beta'::character varying,
+    pdf_url character varying
+);
+
+
+--
+-- Name: handbooks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.handbooks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: handbooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.handbooks_id_seq OWNED BY public.handbooks.id;
 
 
 --
@@ -1558,7 +1734,7 @@ ALTER SEQUENCE public.origins_id_seq OWNED BY public.origins.id;
 
 CREATE TABLE public.page_contents (
     id bigint NOT NULL,
-    playbook_page_id bigint,
+    handbook_page_id bigint,
     locale character varying NOT NULL,
     html character varying NOT NULL,
     css character varying NOT NULL,
@@ -1586,174 +1762,6 @@ CREATE SEQUENCE public.page_contents_id_seq
 --
 
 ALTER SEQUENCE public.page_contents_id_seq OWNED BY public.page_contents.id;
-
-
---
--- Name: playbook_answers; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.playbook_answers (
-    id bigint NOT NULL,
-    answer_text character varying NOT NULL,
-    action character varying NOT NULL,
-    locale character varying DEFAULT 'en'::character varying NOT NULL,
-    playbook_question_id bigint
-);
-
-
---
--- Name: playbook_answers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.playbook_answers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: playbook_answers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.playbook_answers_id_seq OWNED BY public.playbook_answers.id;
-
-
---
--- Name: playbook_descriptions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.playbook_descriptions (
-    id bigint NOT NULL,
-    playbook_id bigint,
-    locale character varying NOT NULL,
-    overview character varying DEFAULT ''::character varying NOT NULL,
-    audience character varying DEFAULT ''::character varying NOT NULL,
-    outcomes character varying DEFAULT ''::character varying NOT NULL,
-    cover character varying
-);
-
-
---
--- Name: playbook_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.playbook_descriptions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: playbook_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.playbook_descriptions_id_seq OWNED BY public.playbook_descriptions.id;
-
-
---
--- Name: playbook_pages; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.playbook_pages (
-    id bigint NOT NULL,
-    playbook_id bigint NOT NULL,
-    name character varying NOT NULL,
-    slug character varying NOT NULL,
-    phase character varying,
-    page_order integer,
-    parent_page_id bigint,
-    playbook_questions_id bigint,
-    resources jsonb DEFAULT '[]'::jsonb NOT NULL,
-    media_url character varying
-);
-
-
---
--- Name: playbook_pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.playbook_pages_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: playbook_pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.playbook_pages_id_seq OWNED BY public.playbook_pages.id;
-
-
---
--- Name: playbook_questions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.playbook_questions (
-    id bigint NOT NULL,
-    question_text character varying NOT NULL,
-    locale character varying DEFAULT 'en'::character varying NOT NULL,
-    playbook_page_id bigint
-);
-
-
---
--- Name: playbook_questions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.playbook_questions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: playbook_questions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.playbook_questions_id_seq OWNED BY public.playbook_questions.id;
-
-
---
--- Name: playbooks; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.playbooks (
-    id bigint NOT NULL,
-    name character varying NOT NULL,
-    slug character varying NOT NULL,
-    phases jsonb DEFAULT '[]'::jsonb NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    maturity character varying DEFAULT 'Beta'::character varying
-);
-
-
---
--- Name: playbooks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.playbooks_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: playbooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.playbooks_id_seq OWNED BY public.playbooks.id;
 
 
 --
@@ -2152,7 +2160,8 @@ CREATE TABLE public.products (
     maturity_score integer,
     product_type public.product_type_save DEFAULT 'product'::public.product_type_save,
     publicgoods_data jsonb DEFAULT '{}'::jsonb NOT NULL,
-    language_data jsonb DEFAULT '{}'::jsonb NOT NULL
+    language_data jsonb DEFAULT '{}'::jsonb NOT NULL,
+    discourse_id bigint
 );
 
 
@@ -2453,6 +2462,40 @@ CREATE SEQUENCE public.regions_id_seq
 --
 
 ALTER SEQUENCE public.regions_id_seq OWNED BY public.regions.id;
+
+
+--
+-- Name: resources; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.resources (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    phase character varying NOT NULL,
+    image_url character varying,
+    link character varying,
+    description character varying
+);
+
+
+--
+-- Name: resources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.resources_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: resources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.resources_id_seq OWNED BY public.resources.id;
 
 
 --
@@ -3039,7 +3082,7 @@ CREATE TABLE public.use_cases (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    maturity public.entity_status_type NOT NULL,
+    maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL,
     tags character varying[] DEFAULT '{}'::character varying[]
 );
 
@@ -3138,7 +3181,8 @@ CREATE TABLE public.users (
     authentication_token text,
     authentication_token_created_at timestamp without time zone,
     user_products bigint[] DEFAULT '{}'::bigint[],
-    receive_admin_emails boolean DEFAULT false
+    receive_admin_emails boolean DEFAULT false,
+    username character varying
 );
 
 
@@ -3454,6 +3498,41 @@ ALTER TABLE ONLY public.glossaries ALTER COLUMN id SET DEFAULT nextval('public.g
 
 
 --
+-- Name: handbook_answers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_answers ALTER COLUMN id SET DEFAULT nextval('public.handbook_answers_id_seq'::regclass);
+
+
+--
+-- Name: handbook_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_descriptions ALTER COLUMN id SET DEFAULT nextval('public.handbook_descriptions_id_seq'::regclass);
+
+
+--
+-- Name: handbook_pages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_pages ALTER COLUMN id SET DEFAULT nextval('public.handbook_pages_id_seq'::regclass);
+
+
+--
+-- Name: handbook_questions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_questions ALTER COLUMN id SET DEFAULT nextval('public.handbook_questions_id_seq'::regclass);
+
+
+--
+-- Name: handbooks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbooks ALTER COLUMN id SET DEFAULT nextval('public.handbooks_id_seq'::regclass);
+
+
+--
 -- Name: locations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3549,41 +3628,6 @@ ALTER TABLE ONLY public.origins ALTER COLUMN id SET DEFAULT nextval('public.orig
 --
 
 ALTER TABLE ONLY public.page_contents ALTER COLUMN id SET DEFAULT nextval('public.page_contents_id_seq'::regclass);
-
-
---
--- Name: playbook_answers id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_answers ALTER COLUMN id SET DEFAULT nextval('public.playbook_answers_id_seq'::regclass);
-
-
---
--- Name: playbook_descriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_descriptions ALTER COLUMN id SET DEFAULT nextval('public.playbook_descriptions_id_seq'::regclass);
-
-
---
--- Name: playbook_pages id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_pages ALTER COLUMN id SET DEFAULT nextval('public.playbook_pages_id_seq'::regclass);
-
-
---
--- Name: playbook_questions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_questions ALTER COLUMN id SET DEFAULT nextval('public.playbook_questions_id_seq'::regclass);
-
-
---
--- Name: playbooks id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbooks ALTER COLUMN id SET DEFAULT nextval('public.playbooks_id_seq'::regclass);
 
 
 --
@@ -3717,6 +3761,13 @@ ALTER TABLE ONLY public.projects_locations ALTER COLUMN id SET DEFAULT nextval('
 --
 
 ALTER TABLE ONLY public.regions ALTER COLUMN id SET DEFAULT nextval('public.regions_id_seq'::regclass);
+
+
+--
+-- Name: resources id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.resources ALTER COLUMN id SET DEFAULT nextval('public.resources_id_seq'::regclass);
 
 
 --
@@ -4073,6 +4124,46 @@ ALTER TABLE ONLY public.glossaries
 
 
 --
+-- Name: handbook_answers handbook_answers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_answers
+    ADD CONSTRAINT handbook_answers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: handbook_descriptions handbook_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_descriptions
+    ADD CONSTRAINT handbook_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: handbook_pages handbook_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_pages
+    ADD CONSTRAINT handbook_pages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: handbook_questions handbook_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbook_questions
+    ADD CONSTRAINT handbook_questions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: handbooks handbooks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.handbooks
+    ADD CONSTRAINT handbooks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4182,46 +4273,6 @@ ALTER TABLE ONLY public.origins
 
 ALTER TABLE ONLY public.page_contents
     ADD CONSTRAINT page_contents_pkey PRIMARY KEY (id);
-
-
---
--- Name: playbook_answers playbook_answers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_answers
-    ADD CONSTRAINT playbook_answers_pkey PRIMARY KEY (id);
-
-
---
--- Name: playbook_descriptions playbook_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_descriptions
-    ADD CONSTRAINT playbook_descriptions_pkey PRIMARY KEY (id);
-
-
---
--- Name: playbook_pages playbook_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_pages
-    ADD CONSTRAINT playbook_pages_pkey PRIMARY KEY (id);
-
-
---
--- Name: playbook_questions playbook_questions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbook_questions
-    ADD CONSTRAINT playbook_questions_pkey PRIMARY KEY (id);
-
-
---
--- Name: playbooks playbooks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.playbooks
-    ADD CONSTRAINT playbooks_pkey PRIMARY KEY (id);
 
 
 --
@@ -4374,6 +4425,14 @@ ALTER TABLE ONLY public.projects
 
 ALTER TABLE ONLY public.regions
     ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: resources resources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.resources
+    ADD CONSTRAINT resources_pkey PRIMARY KEY (id);
 
 
 --
@@ -4601,6 +4660,13 @@ CREATE UNIQUE INDEX bbs_workflows ON public.workflows_building_blocks USING btre
 --
 
 CREATE UNIQUE INDEX block_prods ON public.product_building_blocks USING btree (building_block_id, product_id);
+
+
+--
+-- Name: candidate_roles_unique_fields; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX candidate_roles_unique_fields ON public.candidate_roles USING btree (email, roles, organization_id, product_id);
 
 
 --
@@ -4835,6 +4901,48 @@ CREATE INDEX index_districts_on_region_id ON public.districts USING btree (regio
 
 
 --
+-- Name: index_handbook_answers_on_handbook_question_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_handbook_answers_on_handbook_question_id ON public.handbook_answers USING btree (handbook_question_id);
+
+
+--
+-- Name: index_handbook_descriptions_on_handbook_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_handbook_descriptions_on_handbook_id ON public.handbook_descriptions USING btree (handbook_id);
+
+
+--
+-- Name: index_handbook_pages_on_handbook_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_handbook_pages_on_handbook_id ON public.handbook_pages USING btree (handbook_id);
+
+
+--
+-- Name: index_handbook_pages_on_handbook_questions_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_handbook_pages_on_handbook_questions_id ON public.handbook_pages USING btree (handbook_questions_id);
+
+
+--
+-- Name: index_handbook_pages_on_parent_page_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_handbook_pages_on_parent_page_id ON public.handbook_pages USING btree (parent_page_id);
+
+
+--
+-- Name: index_handbook_questions_on_handbook_page_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_handbook_questions_on_handbook_page_id ON public.handbook_questions USING btree (handbook_page_id);
+
+
+--
 -- Name: index_locations_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4954,52 +5062,10 @@ CREATE INDEX index_origins_on_organization_id ON public.origins USING btree (org
 
 
 --
--- Name: index_page_contents_on_playbook_page_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_page_contents_on_handbook_page_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_page_contents_on_playbook_page_id ON public.page_contents USING btree (playbook_page_id);
-
-
---
--- Name: index_playbook_answers_on_playbook_question_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_playbook_answers_on_playbook_question_id ON public.playbook_answers USING btree (playbook_question_id);
-
-
---
--- Name: index_playbook_descriptions_on_playbook_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_playbook_descriptions_on_playbook_id ON public.playbook_descriptions USING btree (playbook_id);
-
-
---
--- Name: index_playbook_pages_on_parent_page_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_playbook_pages_on_parent_page_id ON public.playbook_pages USING btree (parent_page_id);
-
-
---
--- Name: index_playbook_pages_on_playbook_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_playbook_pages_on_playbook_id ON public.playbook_pages USING btree (playbook_id);
-
-
---
--- Name: index_playbook_pages_on_playbook_questions_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_playbook_pages_on_playbook_questions_id ON public.playbook_pages USING btree (playbook_questions_id);
-
-
---
--- Name: index_playbook_questions_on_playbook_page_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_playbook_questions_on_playbook_page_id ON public.playbook_questions USING btree (playbook_page_id);
+CREATE INDEX index_page_contents_on_handbook_page_id ON public.page_contents USING btree (handbook_page_id);
 
 
 --
@@ -5573,11 +5639,11 @@ ALTER TABLE ONLY public.offices
 
 
 --
--- Name: playbook_descriptions fk_rails_08320ee34e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: handbook_descriptions fk_rails_08320ee34e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.playbook_descriptions
-    ADD CONSTRAINT fk_rails_08320ee34e FOREIGN KEY (playbook_id) REFERENCES public.playbooks(id);
+ALTER TABLE ONLY public.handbook_descriptions
+    ADD CONSTRAINT fk_rails_08320ee34e FOREIGN KEY (handbook_id) REFERENCES public.handbooks(id);
 
 
 --
@@ -5597,11 +5663,11 @@ ALTER TABLE ONLY public.sectors
 
 
 --
--- Name: playbook_pages fk_rails_0d854afcc1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: handbook_pages fk_rails_0d854afcc1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.playbook_pages
-    ADD CONSTRAINT fk_rails_0d854afcc1 FOREIGN KEY (playbook_id) REFERENCES public.playbooks(id);
+ALTER TABLE ONLY public.handbook_pages
+    ADD CONSTRAINT fk_rails_0d854afcc1 FOREIGN KEY (handbook_id) REFERENCES public.handbooks(id);
 
 
 --
@@ -5693,6 +5759,14 @@ ALTER TABLE ONLY public.sectors
 
 
 --
+-- Name: candidate_roles fk_rails_31a769978d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_roles
+    ADD CONSTRAINT fk_rails_31a769978d FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
 -- Name: organization_descriptions fk_rails_3a6b8edce9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5741,6 +5815,14 @@ ALTER TABLE ONLY public.rubric_categories
 
 
 --
+-- Name: candidate_roles fk_rails_4aa113bd52; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.candidate_roles
+    ADD CONSTRAINT fk_rails_4aa113bd52 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
 -- Name: commontator_comments fk_rails_558e599d00; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5773,11 +5855,11 @@ ALTER TABLE ONLY public.offices
 
 
 --
--- Name: playbook_pages fk_rails_6441d33616; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: handbook_pages fk_rails_6441d33616; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.playbook_pages
-    ADD CONSTRAINT fk_rails_6441d33616 FOREIGN KEY (playbook_questions_id) REFERENCES public.playbook_questions(id);
+ALTER TABLE ONLY public.handbook_pages
+    ADD CONSTRAINT fk_rails_6441d33616 FOREIGN KEY (handbook_questions_id) REFERENCES public.handbook_questions(id);
 
 
 --
@@ -6005,11 +6087,11 @@ ALTER TABLE ONLY public.operator_services
 
 
 --
--- Name: playbook_pages fk_rails_edc977f5e7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: handbook_pages fk_rails_edc977f5e7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.playbook_pages
-    ADD CONSTRAINT fk_rails_edc977f5e7 FOREIGN KEY (parent_page_id) REFERENCES public.playbook_pages(id);
+ALTER TABLE ONLY public.handbook_pages
+    ADD CONSTRAINT fk_rails_edc977f5e7 FOREIGN KEY (parent_page_id) REFERENCES public.handbook_pages(id);
 
 
 --
@@ -6033,7 +6115,7 @@ ALTER TABLE ONLY public.candidate_products
 --
 
 ALTER TABLE ONLY public.page_contents
-    ADD CONSTRAINT fk_rails_efc85b8fb4 FOREIGN KEY (playbook_page_id) REFERENCES public.playbook_pages(id);
+    ADD CONSTRAINT fk_rails_efc85b8fb4 FOREIGN KEY (handbook_page_id) REFERENCES public.handbook_pages(id);
 
 
 --
@@ -6553,6 +6635,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210119164830'),
 ('20210212145950'),
 ('20210302210015'),
-('20210303151833');
+('20210303151833'),
+('20210420200744'),
+('20210520172450'),
+('20210716133929'),
+('20210716134544'),
+('20210716203940'),
+('20210719194336'),
+('20210901203528'),
+('20211025214450');
 
 

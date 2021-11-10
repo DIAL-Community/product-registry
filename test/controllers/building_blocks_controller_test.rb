@@ -4,7 +4,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, roles: [:admin])
+    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin])
     @building_block = building_blocks(:one)
   end
 
@@ -14,10 +14,10 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get building_blocks_url(:search=>"BuildingBlock1")
+    get building_blocks_url(search: "BuildingBlock1")
     assert_equal(1, assigns(:building_blocks).count)
 
-    get building_blocks_url(:search=>"InvalidBB")
+    get building_blocks_url(search: "InvalidBB")
     assert_equal(0, assigns(:building_blocks).count)
   end
 
@@ -35,11 +35,11 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updating building_block without logo should not fail" do
-    patch building_block_url(@building_block), params: { building_block: {name: "Some New Name" } }
+    patch building_block_url(@building_block), params: { building_block: { name: "Some New Name" } }
 
     updated_building_block = BuildingBlock.find(@building_block.id)
     assert_equal updated_building_block.name, "Some New Name"
-    assert_redirected_to building_block_url(updated_building_block)
+    assert_redirected_to building_block_url(updated_building_block, locale: 'en')
   end
 
   test "should create building_block" do
@@ -64,8 +64,11 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
 
   test "should update building_block" do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
-    patch building_block_url(@building_block), params: { building_block: { name: @building_block.name, slug: @building_block.slug }, logo: uploaded_file }
-    assert_redirected_to building_block_url(@building_block)
+    patch(
+      building_block_url(@building_block),
+      params: { building_block: { name: @building_block.name, slug: @building_block.slug }, logo: uploaded_file }
+    )
+    assert_redirected_to building_block_url(@building_block, locale: 'en')
   end
 
   test "should destroy building_block" do
@@ -83,7 +86,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     bb1 = assigns(:building_blocks)[0]
     bb2 = assigns(:building_blocks)[1]
 
-    param = {'filter_name' => 'building_blocks', 'filter_value' => bb1.id, 'filter_label' => bb1.name}
+    param = { 'filter_name' => 'building_blocks', 'filter_value' => bb1.id, 'filter_label' => bb1.name }
     post "/add_filter", params: param
 
     # Filter is set, should only load 1
@@ -91,7 +94,11 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     assert_equal(1, assigns(:building_blocks).count)
 
     # Now add a workflow filter
-    param = {'filter_name' => 'workflows', 'filter_value' => bb2.workflows[0].id, 'filter_label' => bb2.workflows[0].name}
+    param = {
+      'filter_name' => 'workflows',
+      'filter_value' => bb2.workflows[0].id,
+      'filter_label' => bb2.workflows[0].name
+    }
     post "/add_filter", params: param
 
     # With additional filter, should now load 0
@@ -100,7 +107,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get building_block_url(@building_block)
     assert_response :success
@@ -109,10 +116,13 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
 
     get edit_building_block_url(@building_block)
-    assert_response :redirect    
+    assert_response :redirect
 
-    patch building_block_url(@building_block), params: { building_block: { name: @building_block.name, slug: @building_block.slug } }
-    assert_response :redirect  
+    patch(
+      building_block_url(@building_block),
+      params: { building_block: { name: @building_block.name, slug: @building_block.slug } }
+    )
+    assert_response :redirect
 
     delete building_block_url(@building_block)
     assert_response :redirect
@@ -153,7 +163,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     assert_equal(mapping_changes_audit['workflows'].length, 1)
 
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'nonadmin@abba.org', roles: ['content_writer'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['content_writer'])
 
     other_product = products(:two)
     patch building_block_url(created_building_block), params: {
@@ -167,7 +177,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_building_block = BuildingBlock.find(created_building_block.id)
-    assert_redirected_to building_block_url(updated_building_block)
+    assert_redirected_to building_block_url(updated_building_block, locale: 'en')
     assert_equal(updated_building_block.products.length, 2)
 
     created_audit = Audit.last
@@ -191,14 +201,14 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_building_block = BuildingBlock.find(updated_building_block.id)
-    assert_redirected_to building_block_url(updated_building_block)
+    assert_redirected_to building_block_url(updated_building_block, locale: 'en')
     # Content writer users are not allowed to remove mapping, but allowed to add.
     assert_equal(updated_building_block.products.length, 2)
   end
 
   test 'content editor user should be able to remove mapping' do
     delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, email: 'content_editor@abba.org', roles: ['content_editor'])
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'content_editor@abba.org', roles: ['content_editor'])
 
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
 
@@ -245,7 +255,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_building_block = BuildingBlock.find(created_building_block.id)
-    assert_redirected_to building_block_url(updated_building_block)
+    assert_redirected_to building_block_url(updated_building_block, locale: 'en')
     assert_equal(updated_building_block.products.length, 2)
 
     created_audit = Audit.last
@@ -270,7 +280,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_building_block = BuildingBlock.find(updated_building_block.id)
-    assert_redirected_to building_block_url(updated_building_block)
+    assert_redirected_to building_block_url(updated_building_block, locale: 'en')
     # Content editor users are allowed to remove and add mapping.
     assert_equal(updated_building_block.products.length, 1)
 
@@ -294,7 +304,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     }
 
     updated_building_block = BuildingBlock.find(updated_building_block.id)
-    assert_redirected_to building_block_url(updated_building_block)
+    assert_redirected_to building_block_url(updated_building_block, locale: 'en')
     # Content editor users are allowed to remove mapping
     assert_equal(updated_building_block.products.length, 1)
 

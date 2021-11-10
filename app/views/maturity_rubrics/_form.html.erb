@@ -1,8 +1,18 @@
-<% base_path = Rails.env.production? ? '/admin/' : '' %>
+<%
+  base_path = Rails.env.production? ? '/admin' : ''
+  entity_path = maturity_rubric.new_record? ?
+                  request.query_parameters.nil? ?
+                    maturity_rubrics_path :
+                    maturity_rubrics_path(request.query_parameters)
+                  :
+                  request.query_parameters.nil? ?
+                    maturity_rubric_path(maturity_rubric) :
+                    maturity_rubric_path(maturity_rubric, request.query_parameters)
+%>
 <% description = @maturity_rubric.maturity_rubric_descriptions
                                  .select { |desc| desc.locale == I18n.locale.to_s }
                                  .first %>
-<%= form_with(model: maturity_rubric, local: true, html: { id: 'maturity-rubric-form' }, url: base_path + maturity_rubric_path) do |form| %>
+<%= form_with(model: maturity_rubric, local: true, html: { id: 'maturity-rubric-form' }, url: "#{base_path}#{entity_path}") do |form| %>
   <fieldset class="form-label-group">
     <%= form.text_field :name, id: :maturity_rubric_name, class: "form-control", placeholder: t('view.general.name') %>
     <%= form.label :name, t('view.general.name') %>

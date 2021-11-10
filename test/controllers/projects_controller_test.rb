@@ -33,7 +33,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create project" do
     assert_difference('Project.count') do
-      post projects_url, params: { project: { name: @project.name, sectors: @project.sectors, slug: @project.slug, origin_id: @project.origin.id } }
+      post(
+        projects_url,
+        params: {
+          project: {
+            name: @project.name,
+            sectors: @project.sectors,
+            slug: @project.slug,
+            origin_id: @project.origin.id
+          }
+        }
+      )
     end
 
     assert_redirected_to project_url(Project.last)
@@ -41,7 +51,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test "should fail on project create with no origin" do
     @project.origin = nil
-    
     assert @project.invalid?
   end
 
@@ -51,8 +60,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update project" do
-    patch project_url(@project), params: { project: { name: @project.name, sectors: @project.sectors, slug: @project.slug } }
-    assert_redirected_to project_url(@project)
+    patch(
+      project_url(@project),
+      params: { project: { name: @project.name, sectors: @project.sectors, slug: @project.slug } }
+    )
+    assert_redirected_to project_url(@project, locale: 'en')
   end
 
   test "should destroy project" do
@@ -68,9 +80,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get projects_url
     assert_equal(2, assigns(:projects).count)
     project1 = assigns(:projects)[0]
-    project2 = assigns(:projects)[1]
+    # project2 = assigns(:projects)[1]
 
-    param = {'filter_name' => 'projects', 'filter_value' => project1.id, 'filter_label' => project1.name}
+    param = { 'filter_name' => 'projects', 'filter_value' => project1.id, 'filter_label' => project1.name }
     post "/add_filter", params: param
 
     # Filter is set, should only load 1
@@ -79,29 +91,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # TODO: Finish these tests once product and org filters are implemented for products
     # Now add a workflow filter
-    #param = {'filter_name' => 'workflows', 'filter_value' => use_case2.workflows[0].id, 'filter_label' => use_case2.workflows[0].name}
-    #post "/add_filter", params: param
+    # param = {
+    #   'filter_name' => 'workflows',
+    #   'filter_value' => use_case2.workflows[0].id,
+    #   'filter_label' => use_case2.workflows[0].name
+    # }
+    # post "/add_filter", params: param
 
     # With additional filter, should now load 0
-    #get use_cases_url
-    #assert_equal(0, assigns(:use_cases).count)
-
+    # get use_cases_url
+    # assert_equal(0, assigns(:use_cases).count)
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get project_url(@project)
     assert_response :success
-    
+
     get new_project_url
     assert_response :redirect
 
     get edit_project_url(@project)
-    assert_response :redirect    
+    assert_response :redirect
 
     patch project_url(@project), params: { project: { name: @project.name, slug: @project.slug } }
-    assert_response :redirect  
+    assert_response :redirect
 
     delete project_url(@project)
     assert_response :redirect
@@ -112,7 +127,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     post(favorite_project_project_url(@project), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     last_user = User.last
     assert_equal(last_user.saved_projects.length, 0)
@@ -129,7 +144,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     post(unfavorite_project_project_url(@project), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org', saved_projects: [@project.id])
+    sign_in FactoryBot.create(
+      :user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org', saved_projects: [@project.id]
+    )
 
     last_user = User.last
     assert_equal(last_user.saved_projects.length, 1)

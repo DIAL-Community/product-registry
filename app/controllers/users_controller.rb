@@ -182,12 +182,12 @@ class UsersController < ApplicationController
     end
   end
 
-
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
-    @user.is_approved = @user.confirmed_at.nil? ? false : true
+    @user.is_approved = !@user.confirmed_at.nil?
   end
 
   def user_params

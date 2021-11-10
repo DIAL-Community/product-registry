@@ -14,10 +14,10 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search test" do
-    get sectors_url(:search=>"Sector1")
+    get sectors_url(search: "Sector1")
     assert_equal(1, assigns(:sectors).count)
 
-    get sectors_url(:search=>"InvalidSector")
+    get sectors_url(search: "InvalidSector")
     assert_equal(0, assigns(:sectors).count)
   end
 
@@ -68,19 +68,19 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Policy tests: Should only allow get" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get sector_url(@sector)
     assert_response :success
-    
+
     get new_sector_url
     assert_response :redirect
 
     get edit_sector_url(@sector)
-    assert_response :redirect    
+    assert_response :redirect
 
     patch sector_url(@sector), params: { sector: { name: @sector.name, slug: @sector.slug } }
-    assert_response :redirect  
+    assert_response :redirect
 
     delete sector_url(@sector)
     assert_response :redirect

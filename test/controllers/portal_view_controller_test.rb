@@ -29,7 +29,7 @@ class PortalViewsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should switch portals when role is removed" do
-    sign_in FactoryBot.create(:user, email: 'nonadmin@digitalimpactalliance.org', role: :user)
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org', role: :user)
     get portal_view_url(@portal_view)
     assert_equal(session['portal']['slug'], "portal_2")
   end

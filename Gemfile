@@ -100,6 +100,7 @@ group :development, :test do
   gem 'teaspoon-mocha'
 
   gem 'factory_bot'
+  gem 'factory_bot_rails'
   gem 'rails-controller-testing'
 
   gem 'phantomjs', require: 'phantomjs/poltergeist'

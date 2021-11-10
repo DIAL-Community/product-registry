@@ -32,7 +32,7 @@ class User < ApplicationRecord
       except: [:created_at, :updated_at]
     }
   end
-  
+
   def self.to_csv
     attributes = %w{id email role organization_id}
 
@@ -40,14 +40,13 @@ class User < ApplicationRecord
       csv << attributes
 
       all.each do |p|
-        
         csv << [p.id, p.email, p.role, p.organization_id]
       end
     end
   end
 
   def after_database_authentication
-    if expired 
+    if expired
       self.expired = false
       self.expired_at = nil
       save(validate: false)

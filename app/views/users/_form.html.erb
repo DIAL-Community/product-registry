@@ -90,6 +90,10 @@
       <% end %>
     <% end %>
   <% end %>
+  <% @user.user_products.each do |product_id| %>
+    <% product = Product.find(product_id) %>
+    addProduct('<%= product.id %>', '<%= product.name %>');
+  <% end %>
 
   $('.remove-product').on('click', function() {
     $(this).closest('.badge').fadeOut(function() {
