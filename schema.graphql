@@ -633,7 +633,7 @@ type Query {
   capabilityOnly(search: String = ""): [Capability!]!
   countries(search: String = ""): [Country!]!
   counts: Count!
-  endorsers(search: String = ""): [Product!]!
+  endorsers(search: String = ""): [Endorser!]!
   exportPageContents(locale: String = "en", pageIds: [Int!]!): ExportedPdf!
   handbook(slug: String!): Handbook!
   handbooks: [Handbook!]!
