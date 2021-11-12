@@ -315,7 +315,7 @@ module Modules
       end
 
       sync_product.save
-      if is_new || !existing_product.manual_update
+      if is_new || !sync_product.manual_update
         description = product['description']
         if !description.nil? && !description.empty?
           update_product_description(sync_product, description)
