@@ -62,7 +62,7 @@ module Modules
 
         existing_product.save
 
-        if is_new
+        if is_new || !existing_product.manual_update
           update_product_description(existing_product, json_data['description'])
         end
       end
@@ -159,7 +159,9 @@ module Modules
 
         existing_product.save
 
-        update_product_description(existing_product, json_data["description"])
+        if !existing_product.manual_update
+          update_product_description(existing_product, json_data["description"])
+        end
       end
     end
 
@@ -235,7 +237,7 @@ module Modules
       end
 
       existing_product.save
-      if is_new
+      if is_new || !existing_product.manual_update
         update_product_description(existing_product, digi_product['description'])
       end
       puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
@@ -313,7 +315,7 @@ module Modules
       end
 
       sync_product.save
-      if is_new
+      if is_new || !existing_product.manual_update
         description = product['description']
         if !description.nil? && !description.empty?
           update_product_description(sync_product, description)
