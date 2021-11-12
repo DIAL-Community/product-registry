@@ -52,5 +52,6 @@ module Types
     field :interoperates_with, [Types::ProductType], null: true
     field :includes, [Types::ProductType], null: true
     field :maturity_scores, GraphQL::Types::JSON, null: true
+    field :manual_update, Boolean, null: false
   end
 end

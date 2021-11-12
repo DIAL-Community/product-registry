@@ -434,6 +434,7 @@ class ProductsController < ApplicationController
     authorize(Product, :create_allowed?)
     @product = Product.new(product_params)
     @product.set_current_user(current_user)
+    @product.manual_update = true
     @product_description = ProductDescription.new
     @product_description.set_current_user(current_user)
 
@@ -766,7 +767,7 @@ class ProductsController < ApplicationController
       @product_description.description = product_params[:product_description]
       @product_description.save
     end
-
+    @product.manual_update = true
     respond_to do |format|
       response.headers['Accept-Language'] = session[:locale]
       if @product.errors.none? && @product.update!(product_params)
