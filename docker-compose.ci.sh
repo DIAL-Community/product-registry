@@ -22,5 +22,5 @@ set -e
 cron
 
 rails test -e test
-rails teaspoon
-
+rails graphql:schema:dump
+rspec --pattern spec/graphql/**/*_spec.rb

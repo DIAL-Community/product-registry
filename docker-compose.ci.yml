@@ -27,6 +27,17 @@ services:
    - 3000:3000
   depends_on:
    - postgres
+ catalog-front:
+  build:
+    context: ../catalog-front/
+    target: prod
+  working_dir: /app
+  user: nextjs
+  stdin_open: true
+  restart: always
+  ports:
+    - 3002:3002
+  command: yarn test
  redis:
   image: redis
   command: "--requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}"
@@ -35,6 +46,6 @@ services:
   ports:
     - "${REDIS_PORT}:${REDIS_PORT}"
   expose:
-   - "${REDIS_PORT}"
+    - "${REDIS_PORT}"
   restart: always
  

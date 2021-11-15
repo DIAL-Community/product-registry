@@ -1765,6 +1765,236 @@ ALTER SEQUENCE public.page_contents_id_seq OWNED BY public.page_contents.id;
 
 
 --
+-- Name: play_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.play_descriptions (
+    id bigint NOT NULL,
+    play_id bigint,
+    locale character varying NOT NULL,
+    description character varying NOT NULL
+);
+
+
+--
+-- Name: play_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.play_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: play_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.play_descriptions_id_seq OWNED BY public.play_descriptions.id;
+
+
+--
+-- Name: play_tasks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.play_tasks (
+    id bigint NOT NULL,
+    play_id bigint,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    "order" integer NOT NULL,
+    resources jsonb DEFAULT '[]'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: play_tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.play_tasks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: play_tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.play_tasks_id_seq OWNED BY public.play_tasks.id;
+
+
+--
+-- Name: playbook_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.playbook_descriptions (
+    id bigint NOT NULL,
+    playbook_id bigint,
+    locale character varying NOT NULL,
+    overview character varying NOT NULL,
+    audience character varying NOT NULL,
+    outcomes character varying NOT NULL
+);
+
+
+--
+-- Name: playbook_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.playbook_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: playbook_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.playbook_descriptions_id_seq OWNED BY public.playbook_descriptions.id;
+
+
+--
+-- Name: playbook_plays; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.playbook_plays (
+    id bigint NOT NULL,
+    playbook_id bigint NOT NULL,
+    play_id bigint NOT NULL,
+    phase character varying,
+    "order" integer
+);
+
+
+--
+-- Name: playbook_plays_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.playbook_plays_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: playbook_plays_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.playbook_plays_id_seq OWNED BY public.playbook_plays.id;
+
+
+--
+-- Name: playbooks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.playbooks (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    phases jsonb DEFAULT '[]'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: playbooks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.playbooks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: playbooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.playbooks_id_seq OWNED BY public.playbooks.id;
+
+
+--
+-- Name: plays; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.plays (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    author character varying,
+    resources jsonb DEFAULT '[]'::jsonb NOT NULL,
+    version character varying DEFAULT '1.0'::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: plays_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.plays_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plays_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.plays_id_seq OWNED BY public.plays.id;
+
+
+--
+-- Name: plays_subplays; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.plays_subplays (
+    id bigint NOT NULL,
+    parent_play_id bigint NOT NULL,
+    child_play_id bigint NOT NULL,
+    "order" integer
+);
+
+
+--
+-- Name: plays_subplays_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.plays_subplays_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plays_subplays_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.plays_subplays_id_seq OWNED BY public.plays_subplays.id;
+
+
+--
 -- Name: portal_views; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2839,6 +3069,39 @@ ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
+-- Name: task_descriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.task_descriptions (
+    id bigint NOT NULL,
+    play_task_id bigint,
+    locale character varying NOT NULL,
+    description character varying NOT NULL,
+    prerequisites character varying DEFAULT ''::character varying NOT NULL,
+    outcomes character varying DEFAULT ''::character varying NOT NULL
+);
+
+
+--
+-- Name: task_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.task_descriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: task_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.task_descriptions_id_seq OWNED BY public.task_descriptions.id;
+
+
+--
 -- Name: task_tracker_descriptions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2901,6 +3164,66 @@ CREATE SEQUENCE public.task_trackers_id_seq
 --
 
 ALTER SEQUENCE public.task_trackers_id_seq OWNED BY public.task_trackers.id;
+
+
+--
+-- Name: tasks_organizations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tasks_organizations (
+    id bigint NOT NULL,
+    play_task_id bigint,
+    organization_id bigint NOT NULL
+);
+
+
+--
+-- Name: tasks_organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tasks_organizations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tasks_organizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tasks_organizations_id_seq OWNED BY public.tasks_organizations.id;
+
+
+--
+-- Name: tasks_products; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tasks_products (
+    id bigint NOT NULL,
+    play_task_id bigint,
+    product_id bigint NOT NULL
+);
+
+
+--
+-- Name: tasks_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tasks_products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tasks_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tasks_products_id_seq OWNED BY public.tasks_products.id;
 
 
 --
@@ -3631,6 +3954,55 @@ ALTER TABLE ONLY public.page_contents ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: play_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_descriptions ALTER COLUMN id SET DEFAULT nextval('public.play_descriptions_id_seq'::regclass);
+
+
+--
+-- Name: play_tasks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_tasks ALTER COLUMN id SET DEFAULT nextval('public.play_tasks_id_seq'::regclass);
+
+
+--
+-- Name: playbook_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_descriptions ALTER COLUMN id SET DEFAULT nextval('public.playbook_descriptions_id_seq'::regclass);
+
+
+--
+-- Name: playbook_plays id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_plays ALTER COLUMN id SET DEFAULT nextval('public.playbook_plays_id_seq'::regclass);
+
+
+--
+-- Name: playbooks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbooks ALTER COLUMN id SET DEFAULT nextval('public.playbooks_id_seq'::regclass);
+
+
+--
+-- Name: plays id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plays ALTER COLUMN id SET DEFAULT nextval('public.plays_id_seq'::regclass);
+
+
+--
+-- Name: plays_subplays id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plays_subplays ALTER COLUMN id SET DEFAULT nextval('public.plays_subplays_id_seq'::regclass);
+
+
+--
 -- Name: portal_views id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3841,6 +4213,13 @@ ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id
 
 
 --
+-- Name: task_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.task_descriptions ALTER COLUMN id SET DEFAULT nextval('public.task_descriptions_id_seq'::regclass);
+
+
+--
 -- Name: task_tracker_descriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3852,6 +4231,20 @@ ALTER TABLE ONLY public.task_tracker_descriptions ALTER COLUMN id SET DEFAULT ne
 --
 
 ALTER TABLE ONLY public.task_trackers ALTER COLUMN id SET DEFAULT nextval('public.task_trackers_id_seq'::regclass);
+
+
+--
+-- Name: tasks_organizations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_organizations ALTER COLUMN id SET DEFAULT nextval('public.tasks_organizations_id_seq'::regclass);
+
+
+--
+-- Name: tasks_products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_products ALTER COLUMN id SET DEFAULT nextval('public.tasks_products_id_seq'::regclass);
 
 
 --
@@ -4276,6 +4669,62 @@ ALTER TABLE ONLY public.page_contents
 
 
 --
+-- Name: play_descriptions play_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_descriptions
+    ADD CONSTRAINT play_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: play_tasks play_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_tasks
+    ADD CONSTRAINT play_tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: playbook_descriptions playbook_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_descriptions
+    ADD CONSTRAINT playbook_descriptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: playbook_plays playbook_plays_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_plays
+    ADD CONSTRAINT playbook_plays_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: playbooks playbooks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbooks
+    ADD CONSTRAINT playbooks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: plays plays_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plays
+    ADD CONSTRAINT plays_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: plays_subplays plays_subplays_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plays_subplays
+    ADD CONSTRAINT plays_subplays_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: portal_views portal_views_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4524,6 +4973,14 @@ ALTER TABLE ONLY public.tags
 
 
 --
+-- Name: task_descriptions task_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.task_descriptions
+    ADD CONSTRAINT task_descriptions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: task_tracker_descriptions task_tracker_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4537,6 +4994,22 @@ ALTER TABLE ONLY public.task_tracker_descriptions
 
 ALTER TABLE ONLY public.task_trackers
     ADD CONSTRAINT task_trackers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tasks_organizations tasks_organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_organizations
+    ADD CONSTRAINT tasks_organizations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tasks_products tasks_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_products
+    ADD CONSTRAINT tasks_products_pkey PRIMARY KEY (id);
 
 
 --
@@ -5069,6 +5542,41 @@ CREATE INDEX index_page_contents_on_handbook_page_id ON public.page_contents USI
 
 
 --
+-- Name: index_play_descriptions_on_play_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_play_descriptions_on_play_id ON public.play_descriptions USING btree (play_id);
+
+
+--
+-- Name: index_play_tasks_on_play_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_play_tasks_on_play_id ON public.play_tasks USING btree (play_id);
+
+
+--
+-- Name: index_playbook_descriptions_on_playbook_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_playbook_descriptions_on_playbook_id ON public.playbook_descriptions USING btree (playbook_id);
+
+
+--
+-- Name: index_playbook_plays_on_play_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_playbook_plays_on_play_id ON public.playbook_plays USING btree (play_id);
+
+
+--
+-- Name: index_playbook_plays_on_playbook_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_playbook_plays_on_playbook_id ON public.playbook_plays USING btree (playbook_id);
+
+
+--
 -- Name: index_principle_descriptions_on_digital_principle_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5265,10 +5773,31 @@ CREATE INDEX index_tag_descriptions_on_tag_id ON public.tag_descriptions USING b
 
 
 --
+-- Name: index_task_descriptions_on_play_task_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_task_descriptions_on_play_task_id ON public.task_descriptions USING btree (play_task_id);
+
+
+--
 -- Name: index_task_tracker_descriptions_on_task_tracker_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_task_tracker_descriptions_on_task_tracker_id ON public.task_tracker_descriptions USING btree (task_tracker_id);
+
+
+--
+-- Name: index_tasks_organizations_on_play_task_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tasks_organizations_on_play_task_id ON public.tasks_organizations USING btree (play_task_id);
+
+
+--
+-- Name: index_tasks_products_on_play_task_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tasks_products_on_play_task_id ON public.tasks_products USING btree (play_task_id);
 
 
 --
@@ -5405,10 +5934,24 @@ CREATE UNIQUE INDEX organizations_projects_idx ON public.projects_organizations 
 
 
 --
+-- Name: organizations_task_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX organizations_task_idx ON public.tasks_organizations USING btree (organization_id, play_task_id);
+
+
+--
 -- Name: origins_products_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX origins_products_idx ON public.products_origins USING btree (origin_id, product_id);
+
+
+--
+-- Name: play_rel_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX play_rel_index ON public.plays_subplays USING btree (parent_play_id, child_play_id);
 
 
 --
@@ -5458,6 +6001,13 @@ CREATE UNIQUE INDEX products_origins_idx ON public.products_origins USING btree 
 --
 
 CREATE UNIQUE INDEX products_projects_idx ON public.projects_products USING btree (product_id, project_id);
+
+
+--
+-- Name: products_tasks_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX products_tasks_idx ON public.tasks_products USING btree (product_id, play_task_id);
 
 
 --
@@ -5552,6 +6102,20 @@ CREATE UNIQUE INDEX sectors_projects_idx ON public.projects_sectors USING btree 
 
 
 --
+-- Name: task_organizations_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX task_organizations_idx ON public.tasks_organizations USING btree (play_task_id, organization_id);
+
+
+--
+-- Name: tasks_products_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX tasks_products_idx ON public.tasks_products USING btree (play_task_id, product_id);
+
+
+--
 -- Name: use_case_steps_products_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5615,6 +6179,14 @@ CREATE UNIQUE INDEX workflows_usecases ON public.workflows_use_cases USING btree
 
 
 --
+-- Name: plays_subplays child_play_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plays_subplays
+    ADD CONSTRAINT child_play_fk FOREIGN KEY (child_play_id) REFERENCES public.plays(id);
+
+
+--
 -- Name: districts fk_rails_002fc30497; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5631,6 +6203,14 @@ ALTER TABLE ONLY public.organizations_states
 
 
 --
+-- Name: task_descriptions fk_rails_0684d55f45; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.task_descriptions
+    ADD CONSTRAINT fk_rails_0684d55f45 FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+
+
+--
 -- Name: offices fk_rails_0722c0e4f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5644,6 +6224,14 @@ ALTER TABLE ONLY public.offices
 
 ALTER TABLE ONLY public.handbook_descriptions
     ADD CONSTRAINT fk_rails_08320ee34e FOREIGN KEY (handbook_id) REFERENCES public.handbooks(id);
+
+
+--
+-- Name: playbook_descriptions fk_rails_08320ee34e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_descriptions
+    ADD CONSTRAINT fk_rails_08320ee34e FOREIGN KEY (playbook_id) REFERENCES public.playbooks(id);
 
 
 --
@@ -5732,6 +6320,14 @@ ALTER TABLE ONLY public.deploys
 
 ALTER TABLE ONLY public.candidate_organizations
     ADD CONSTRAINT fk_rails_246998b230 FOREIGN KEY (rejected_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: play_descriptions fk_rails_26dd7253a6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_descriptions
+    ADD CONSTRAINT fk_rails_26dd7253a6 FOREIGN KEY (play_id) REFERENCES public.plays(id);
 
 
 --
@@ -5839,6 +6435,14 @@ ALTER TABLE ONLY public.operator_services
 
 
 --
+-- Name: tasks_products fk_rails_5d0fe9f0da; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_products
+    ADD CONSTRAINT fk_rails_5d0fe9f0da FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+
+
+--
 -- Name: organizations_countries fk_rails_61354fe2dd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5892,6 +6496,14 @@ ALTER TABLE ONLY public.commontator_subscriptions
 
 ALTER TABLE ONLY public.workflow_descriptions
     ADD CONSTRAINT fk_rails_69d7772842 FOREIGN KEY (workflow_id) REFERENCES public.workflows(id);
+
+
+--
+-- Name: playbook_plays fk_rails_6b205fb457; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_plays
+    ADD CONSTRAINT fk_rails_6b205fb457 FOREIGN KEY (playbook_id) REFERENCES public.playbooks(id);
 
 
 --
@@ -5983,11 +6595,27 @@ ALTER TABLE ONLY public.commontator_comments
 
 
 --
+-- Name: playbook_plays fk_rails_9d1a7ebfec; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playbook_plays
+    ADD CONSTRAINT fk_rails_9d1a7ebfec FOREIGN KEY (play_id) REFERENCES public.plays(id);
+
+
+--
 -- Name: products_endorsers fk_rails_9ebc436657; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.products_endorsers
     ADD CONSTRAINT fk_rails_9ebc436657 FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: play_tasks fk_rails_9fa08eb942; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_tasks
+    ADD CONSTRAINT fk_rails_9fa08eb942 FOREIGN KEY (play_id) REFERENCES public.plays(id);
 
 
 --
@@ -6135,6 +6763,14 @@ ALTER TABLE ONLY public.regions
 
 
 --
+-- Name: tasks_organizations fk_rails_f657a28a49; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_organizations
+    ADD CONSTRAINT fk_rails_f657a28a49 FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+
+
+--
 -- Name: product_product_relationships from_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6207,6 +6843,30 @@ ALTER TABLE ONLY public.organizations_sectors
 
 
 --
+-- Name: tasks_organizations organizations_tasks_org_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_organizations
+    ADD CONSTRAINT organizations_tasks_org_fk FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: tasks_organizations organizations_tasks_play_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_organizations
+    ADD CONSTRAINT organizations_tasks_play_fk FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+
+
+--
+-- Name: plays_subplays parent_play_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.plays_subplays
+    ADD CONSTRAINT parent_play_fk FOREIGN KEY (parent_play_id) REFERENCES public.plays(id);
+
+
+--
 -- Name: product_classifications product_classifications_classification_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6268,6 +6928,22 @@ ALTER TABLE ONLY public.product_sustainable_development_goals
 
 ALTER TABLE ONLY public.product_sustainable_development_goals
     ADD CONSTRAINT products_sdgs_sdg_fk FOREIGN KEY (sustainable_development_goal_id) REFERENCES public.sustainable_development_goals(id);
+
+
+--
+-- Name: tasks_products products_tasks_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_products
+    ADD CONSTRAINT products_tasks_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: tasks_products products_tasks_task_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tasks_products
+    ADD CONSTRAINT products_tasks_task_fk FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
 
 
 --
@@ -6643,6 +7319,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210716203940'),
 ('20210719194336'),
 ('20210901203528'),
+('20210915210109'),
 ('20211025214450');
 
 
