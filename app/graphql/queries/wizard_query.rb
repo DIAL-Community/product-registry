@@ -34,12 +34,15 @@ module Queries
           (sector_ids << Sector.where(parent_sector_id: currSector.id).map(&:id)).flatten!
         end
         sectorProjects = ProjectsSector.where(sector_id: sector_ids).map(&:project_id)
+        if sectorProjects.length == 0 && !currSector.parent_sector_id.nil?
+          sectorProjects = ProjectsSector.where(sector_id: currSector.parent_sector_id).map(&:project_id)
+        end
         sectorProducts = ProductSector.where(sector_id: sector_ids).map(&:product_id)
-        sectorUseCases = UseCase.where(sector_id: sector_ids)
+        sectorUseCases = UseCase.where(sector_id: sector_ids, maturity: "MATURE")
       end
       if !currSDG.nil?
         currTargets = SdgTarget.where(sdg_number: currSDG.number)
-        sdgUseCases = UseCase.where("id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?))", currTargets.ids)
+        sdgUseCases = UseCase.where("id in (select use_case_id from use_cases_sdg_targets where sdg_target_id in (?)) and maturity='MATURE'", currTargets.ids)
       end
       wizard['use_cases'] = (sectorUseCases + sdgUseCases).uniq
 
@@ -129,7 +132,7 @@ module Queries
       if sectorTagProducts.length > 5
         # Find projects that match both sector and tag
         combinedProducts = productSector & productTag
-        if combinedProducts && combinedProducts.length > 0
+        if combinedProducts && combinedProducts.length > 1
           sectorTagProducts = combinedProducts
         end
       end
@@ -137,7 +140,7 @@ module Queries
       if sectorTagProducts.length > 10 && !productBB.nil?
         # Since we have several products, try filtering by BB
         combinedProducts = sectorTagProducts & productBB
-        if combinedProducts && combinedProducts.length > 0
+        if combinedProducts && combinedProducts.length > 1
           sectorTagProducts = combinedProducts
         end
       elsif sectorTagProducts.length == 0 && !productBB.nil?
@@ -147,7 +150,7 @@ module Queries
       if sectorTagProducts.length > 10 && !productProject.nil?
         # Since we have several products, try filtering by project
         combinedProducts = sectorTagProducts & productProject
-        if combinedProducts && combinedProducts.length > 0
+        if combinedProducts && combinedProducts.length > 4
           sectorTagProducts = combinedProducts
         end
       elsif sectorTagProducts.length == 0 && !productProject.nil?
