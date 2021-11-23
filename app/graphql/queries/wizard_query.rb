@@ -38,6 +38,9 @@ module Queries
           sectorProjects = ProjectsSector.where(sector_id: currSector.parent_sector_id).map(&:project_id)
         end
         sectorProducts = ProductSector.where(sector_id: sector_ids).map(&:product_id)
+        if !currSector.parent_sector_id.nil?
+          sector_ids << currSector.parent_sector_id
+        end
         sectorUseCases = UseCase.where(sector_id: sector_ids, maturity: "MATURE")
       end
       if !currSDG.nil?
