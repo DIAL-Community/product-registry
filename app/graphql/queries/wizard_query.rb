@@ -132,7 +132,7 @@ module Queries
       if sectorTagProducts.length > 5
         # Find projects that match both sector and tag
         combinedProducts = productSector & productTag
-        if combinedProducts && combinedProducts.length > 1
+        if combinedProducts && combinedProducts.length > 2
           sectorTagProducts = combinedProducts
         end
       end
@@ -140,7 +140,7 @@ module Queries
       if sectorTagProducts.length > 10 && !productBB.nil?
         # Since we have several products, try filtering by BB
         combinedProducts = sectorTagProducts & productBB
-        if combinedProducts && combinedProducts.length > 1
+        if combinedProducts && combinedProducts.length > 2
           sectorTagProducts = combinedProducts
         end
       elsif sectorTagProducts.length == 0 && !productBB.nil?
