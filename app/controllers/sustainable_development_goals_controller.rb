@@ -79,7 +79,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-sdgs')
+        render(csv: results['results'].to_csv, filename: 'csv-sdgs')
       end
       format.json do
         render(json: results.to_json(SustainableDevelopmentGoal.serialization_options

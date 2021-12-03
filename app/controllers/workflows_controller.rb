@@ -65,7 +65,7 @@ class WorkflowsController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-workflows')
+        render(csv: results['results'].to_csv, filename: 'csv-workflows')
       end
       format.json do
         render(json: results.to_json(Workflow.serialization_options
@@ -148,7 +148,7 @@ class WorkflowsController < ApplicationController
       if params[:page_size].to_i > 0
         page_size = params[:page_size].to_i
       elsif params[:page_size].to_i < 0
-        page_size = products.count
+        page_size = workflows.count
       end
     end
 
@@ -182,7 +182,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-workflows')
+        render(csv: results['results'].to_csv, filename: 'csv-workflows')
       end
       format.json do
         render(json: results.to_json(Workflow.serialization_options
