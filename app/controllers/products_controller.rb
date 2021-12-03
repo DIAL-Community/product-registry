@@ -112,7 +112,7 @@ class ProductsController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-products')
+        render(csv: results['results'].to_csv, filename: 'csv-products')
       end
       format.json do
         render(json: results.to_json(Product.serialization_options
@@ -142,6 +142,36 @@ class ProductsController < ApplicationController
       products = products.joins(:origins)
                          .where(origins: { slug: origins }) \
         unless origins.empty?
+    end
+
+    if params[:tags].present?
+      filtered_tags = params[:tags].reject { |x| x.nil? || x.blank? }
+      unless filtered_tags.empty?
+        products = products.where(
+          " tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or "\
+          " tags @> '{#{filtered_tags.join(',')}}'::varchar[]"
+        )
+      end
+    end
+
+    if params[:sectors].present?
+      sectors = params[:sectors].reject { |x| x.nil? || x.empty? }
+
+      filtered_sectors = []
+      sectors.each do |sector|
+        current_sector = Sector.find_by(slug: sector)
+        unless current_sector.nil?
+          filtered_sectors << current_sector.id
+        end
+        if current_sector.parent_sector_id.nil?
+          child_sectors = Sector.where(parent_sector_id: current_sector.id)
+          filtered_sectors += child_sectors.map(&:id)
+        end
+      end
+      unless filtered_sectors.empty?
+        products = products.joins(:sectors)
+                           .where(sectors: { id: filtered_sectors })
+      end
     end
 
     sdg_use_case_slugs = []
@@ -238,7 +268,7 @@ class ProductsController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-products')
+        render(csv: results['results'].to_csv, filename: 'csv-products')
       end
       format.json do
         render(json: results.to_json(Product.serialization_options
