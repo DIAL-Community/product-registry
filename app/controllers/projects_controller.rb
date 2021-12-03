@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
   end
 
   def simple_search
-    default_page_size = 20
+    page_size = 20
     projects = Project
 
     current_page = 1
@@ -40,16 +40,24 @@ class ProjectsController < ApplicationController
         unless origins.empty?
     end
 
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = projects.count
+      end
+    end
+
     results = {
       url: request.original_url,
       count: projects.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if projects.count > default_page_size * current_page
+    if projects.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -63,13 +71,13 @@ class ProjectsController < ApplicationController
 
     results['results'] = projects.eager_load(:countries, :organizations, :origin, :products,
                                              :sustainable_development_goals, :sectors)
-                                 .paginate(page: current_page, per_page: default_page_size)
+                                 .paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-projects')
+        render(csv: results['results'].to_csv, filename: 'csv-projects')
       end
       format.json do
         render(json: results.to_json(Project.serialization_options
@@ -82,7 +90,7 @@ class ProjectsController < ApplicationController
   end
 
   def complex_search
-    default_page_size = 20
+    page_size = 20
     projects = Project
 
     current_page = 1
@@ -128,16 +136,24 @@ class ProjectsController < ApplicationController
         unless countries.empty?
     end
 
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = projects.count
+      end
+    end
+
     results = {
       url: request.original_url,
       count: projects.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if projects.count > default_page_size * current_page
+    if projects.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -151,13 +167,13 @@ class ProjectsController < ApplicationController
 
     results['results'] = projects.eager_load(:countries, :organizations, :products, :origin,
                                              :sustainable_development_goals, :sectors)
-                                 .paginate(page: current_page, per_page: default_page_size)
+                                 .paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-projects')
+        render(csv: results['results'].to_csv, filename: 'csv-projects')
       end
       format.json do
         render(json: results.to_json(Project.serialization_options

@@ -65,7 +65,7 @@ class BuildingBlocksController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-building-blocks')
+        render(csv: results['results'].to_csv, filename: 'csv-building-blocks')
       end
       format.json do
         render(json: results.to_json(BuildingBlock.serialization_options
@@ -150,7 +150,7 @@ class BuildingBlocksController < ApplicationController
       if params[:page_size].to_i > 0
         page_size = params[:page_size].to_i
       elsif params[:page_size].to_i < 0
-        page_size = products.count
+        page_size = building_blocks.count
       end
     end
 
@@ -183,7 +183,7 @@ class BuildingBlocksController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-building-blocks')
+        render(csv: results['results'].to_csv, filename: 'csv-building-blocks')
       end
       format.json do
         render(json: results.to_json(BuildingBlock.serialization_options
