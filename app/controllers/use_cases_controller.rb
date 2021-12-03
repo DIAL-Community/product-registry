@@ -20,7 +20,7 @@ class UseCasesController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-use-cases')
+        render(csv: results['results'].to_csv, filename: 'csv-use-cases')
       end
       format.json do
         render(json: results.to_json(UseCase.serialization_options
@@ -49,7 +49,7 @@ class UseCasesController < ApplicationController
       if params[:page_size].to_i > 0
         page_size = params[:page_size].to_i
       elsif params[:page_size].to_i < 0
-        page_size = products.count
+        page_size = use_cases.count
       end
     end
 
@@ -82,7 +82,7 @@ class UseCasesController < ApplicationController
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-use-cases')
+        render(csv: results['results'].to_csv, filename: 'csv-use-cases')
       end
       format.json do
         render(json: results.to_json(UseCase.serialization_options
@@ -103,7 +103,7 @@ class UseCasesController < ApplicationController
       current_page = params[:page].to_i
     end
 
-    if params[:show_beta].to_s == 'false'
+    if !params[:show_beta].present? || params[:show_beta].to_s == 'false'
       use_cases = use_cases.where(maturity: UseCase.entity_status_types[:MATURE])
     end
 
@@ -202,7 +202,7 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-use-cases')
+        render(csv: results['results'].to_csv, filename: 'csv-use-cases')
       end
       format.json do
         render(json: results.to_json(UseCase.serialization_options

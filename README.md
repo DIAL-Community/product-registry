@@ -9,11 +9,19 @@ or projects.
 
 The catalog supports the [SDG Digital Investment Framework](https://digitalimpactalliance.org/research/sdg-digital-investment-framework/) developed by DIAL and ITU.
 
+## Repositories
+
+Note that this repository contains the code for the back-end/API for the Catalog. The front-end
+code for the Catalog can be referenced at: 
+https://gitlab.com/dial/osc/eng/t4d-online-catalog/catalog-front/-/tree/development(https://gitlab.com/dial/osc/eng/t4d-online-catalog/catalog-front/-/tree/development)
+
 ## Documentation
 
 Complete documentation is available (including detailed installation and configuration
 instructions) at 
 [https://docs.osc.dial.community/projects/product-registry/en/latest/](https://docs.osc.dial.community/projects/product-registry/en/latest/ "DIAL Online Catalog Documentation")
+
+Please also reference the [Wiki page for the Catalog](https://solutions-catalog.atlassian.net/wiki/spaces/SOLUTIONS/overview?homepageId=33072), which contains information about upcoming feature development, releases, and additional documentation.
 
 ## Prerequisites
 

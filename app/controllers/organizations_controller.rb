@@ -36,7 +36,7 @@ class OrganizationsController < ApplicationController
   end
 
   def simple_search
-    default_page_size = 20
+    page_size = 20
     organizations = Organization
 
     current_page = 1
@@ -48,16 +48,24 @@ class OrganizationsController < ApplicationController
       organizations = organizations.name_contains(params[:search])
     end
 
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = organizations.count
+      end
+    end
+
     results = {
       url: request.original_url,
       count: organizations.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if organizations.count > default_page_size * current_page
+    if organizations.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -70,13 +78,13 @@ class OrganizationsController < ApplicationController
     end
 
     results['results'] = organizations.eager_load(:products, :countries, :sectors, :projects, :offices)
-                                      .paginate(page: current_page, per_page: default_page_size)
+                                      .paginate(page: current_page, per_page: page_size)
                                       .order(:slug)
 
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-organizations')
+        render(csv: results['results'].to_csv, filename: 'csv-organizations')
       end
       format.json do
         render(json: results.to_json(Organization.serialization_options
@@ -89,7 +97,7 @@ class OrganizationsController < ApplicationController
   end
 
   def complex_search
-    default_page_size = 20
+    page_size = 20
     organizations = Organization.order(:slug)
 
     current_page = 1
@@ -121,16 +129,24 @@ class OrganizationsController < ApplicationController
         unless years.empty?
     end
 
+    if params[:page_size].present?
+      if params[:page_size].to_i > 0
+        page_size = params[:page_size].to_i
+      elsif params[:page_size].to_i < 0
+        page_size = organizations.count
+      end
+    end
+
     results = {
       url: request.original_url,
       count: organizations.count,
-      page_size: default_page_size
+      page_size: page_size
     }
 
     uri = URI.parse(request.original_url)
     query = Rack::Utils.parse_query(uri.query)
 
-    if organizations.count > default_page_size * current_page
+    if organizations.count > page_size * current_page
       query["page"] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
@@ -143,13 +159,13 @@ class OrganizationsController < ApplicationController
     end
 
     results['results'] = organizations.eager_load(:products, :countries, :sectors, :projects, :offices)
-                                      .paginate(page: current_page, per_page: default_page_size)
+                                      .paginate(page: current_page, per_page: page_size)
                                       .order(:slug)
 
     uri.fragment = uri.query = nil
     respond_to do |format|
       format.csv do
-        render(csv: results.to_csv, filename: 'csv-organizations')
+        render(csv: results['results'].to_csv, filename: 'csv-organizations')
       end
       format.json do
         render(json: results.to_json(Organization.serialization_options
