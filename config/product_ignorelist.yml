@@ -142,4 +142,70 @@
   - item: World Cleanup Day
   - item: Zamba
   - item: ZEPRS
-  
+  # From parent - child relation yml file
+  - name: AskDarcel API
+  - name: Aster - Emergency Scoring
+  - name: Aster - Stream
+  - name: Avni Client  
+  - name: Awareness Website
+  - name: Bot Starter Kit
+  - name: Emergency Relief Package Tracker
+  - name: Heroes Bot
+  - name: Housing Vacancy Bot
+  - name: Internal Dashboard
+  - name: Surveillance Forms
+  - name: Child Growth Monitor Machine Learning
+  - name: CommCare Android
+  - name: CommCare Cloud
+  - name: Enketo Express
+  - name: HospitalRun Frontend
+  - name: HospitalRun Server Routes
+  - name: InteleHealth OpenMRS UI
+  - name: Formpack
+  - name: KoboCat
+  - name: Kobo API
+  - name: LibreHealth Toolkit
+  - name: Mapswipe Backend
+  - name: Mifos Community App
+  - name: Mifos Android
+  - name: Mifos Mobile
+  - name: Mifos Web App
+  - name: Open Foris Collect Mobile
+  - name: Reconcile CVS
+  - name: OpenBCI GUI
+  - name: Export Tool
+  - name: Learn OSM
+  - name: Nominatim
+  - name: Open Street Map iD
+  - name: Open Street Map Website
+  - name: osm2pgsql
+  - name: OSM Analytics
+  - name: ODK Aggregate
+  - name: ODK Briefcase 
+  - name: ODK Build
+  - name: ODK Collect
+  - name: ODK XLS Form Offline
+  - name: ODK-X Survey
+  - name: Open Food Facts iOS 
+  - name: Open Food Facts Server
+  - name: OpenMRS Android Client
+  - name: OpenMRS Core
+  - name: OpenMRS Concept Dictionary
+  - name: Oppia Machine Learning
+  - name: PublicLab Plots2
+  - name: Rainforest Connection Guardian
+  - name: Scratch Blocks
+  - name: Scratch GUI
+  - name: Scratch Junior
+  - name: Scratch VM
+  - name: Scratch Web
+  - name: Spatio-Temporal Asset Catalog Specifications
+  - name: StopCovid iOS
+  - name: Sugarizer
+  - name: Sugar - Turtle Art
+  - name: TideLine
+  - name: TidePool Blip
+  - name: TidePool Chrome Uploader
+  - name: TidePool Data Analytics
+  - name: TidePool Viz
+  - name: Ushahidi Platform Client
