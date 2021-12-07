@@ -933,10 +933,6 @@ class ProductsController < ApplicationController
       if @product_description.nil?
         @product_description = ProductDescription.new
       end
-      @child_products = Product.where(parent_product_id: @product)
-      if !@child_products.empty?
-        @child_descriptions = ProductDescription.where(product_id: @child_products)
-      end
 
       @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
     end

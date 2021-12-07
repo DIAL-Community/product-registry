@@ -29,13 +29,16 @@ namespace :sync do
   end
 
   desc 'Sync the database with the public goods lists.'
-  task :public_goods, [:path] => :environment do |_, params|
+  task :public_goods, [:path] => :environment do
     puts 'Pulling data from digital public goods repository ...'
+    ignore_list = YAML.load_file('config/product_ignorelist.yml')
 
     dpg_uri = URI.parse("https://api.digitalpublicgoods.net/dpgs/")
     dpg_response = Net::HTTP.get(dpg_uri)
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
+      update_repository_data(entry)
+      next if search_in_ignorelist(entry, ignore_list)
 
       sync_public_product entry
     end
@@ -44,6 +47,8 @@ namespace :sync do
     dpg_response = Net::HTTP.get(dpg_uri)
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
+      update_repository_data(entry)
+      next if search_in_ignorelist(entry, ignore_list)
 
       sync_public_product entry
     end
@@ -51,38 +56,16 @@ namespace :sync do
     send_notification
   end
 
-  # Note: this will be deprecated once all data has been brought into the common publicgoods repository
-  desc 'Sync the database with the public goods lists.'
-  task :unicef_goods, [:path] => :environment do |_, params|
-    puts 'Pulling data from digital public good ...'
-
-    Dir.entries(params[:path]).select { |item| item.include?('.json') }.each do |entry|
-      entry_data = File.read(File.join(params[:path], entry))
-
-      begin
-        json_data = JSON.parse(entry_data)
-      rescue JSON::ParserError
-        puts "Skipping unparseable json file: #{entry}"
-        next
-      end
-
-      if !json_data.key?('type') && !json_data.key?('name')
-        puts "Skipping unrecognized json file: #{entry}"
-        next
-      end
-
-      sync_unicef_product json_data
-    end
-    puts 'Digital public good data synced ...'
-    send_notification
-  end
-
   task :digi_square_digital_good, [:path] => :environment do
     puts 'Pulling Digital Square Global Goods ...'
+    ignore_list = YAML.load_file('config/product_ignorelist.yml')
 
     digisquare_maturity = JSON.load(File.open("config/digisquare_maturity_data.json"))
     digisquare_products = YAML.load_file('config/digisquare_global_goods.yml')
     digisquare_products['products'].each do |digi_product|
+      update_repository_data(digi_product)
+      next if search_in_ignorelist(digi_product, ignore_list)
+
       sync_digisquare_product(digi_product, digisquare_maturity)
     end
 
@@ -90,25 +73,16 @@ namespace :sync do
     send_notification
   end
 
-  task :osc_digital_good, [:path] => :environment do
-    puts 'Starting pulling data from open source center ...'
-
-    osc_location = 'https://www.osc.dial.community/digital_global_goods.json'
-    osc_uri = URI.parse(osc_location)
-    osc_response = Net::HTTP.get(osc_uri)
-    osc_data = JSON.parse(osc_response)
-    osc_data.each do |product|
-      sync_osc_product product
-    end
-    send_notification
-  end
-
   task :osc_digital_good_local, [] => :environment do
     puts 'Starting pulling data from open source center ...'
+    ignore_list = YAML.load_file('config/product_ignorelist.yml')
 
     osc_file = File.read('utils/digital_global_goods.json')
     osc_data = JSON.parse(osc_file)
     osc_data.each do |product|
+      update_repository_data(product)
+      next if search_in_ignorelist(product, ignore_list)
+
       sync_osc_product product
     end
     send_notification
@@ -397,21 +371,48 @@ namespace :sync do
     export_products('digital_square')
   end
 
-  desc 'Create parent-child links for products that have multiple repos'
-  task :link_products, [:path] => :environment do |_, _params|
+  desc 'Create product repositories using parent-child yml file.'
+  task :generate_repositories, [:path] => :environment do |_, _params|
+    Rails.logger.level = Logger::DEBUG
+
     product_list = YAML.load_file("config/product_parent_child.yml")
-    product_list.each do |curr_product|
-      parent_product = curr_product["parent"].first
-      parent_prod = Product.where(name: parent_product["name"]).first
-      if !parent_prod.nil?
-        curr_product["children"].each do |child_product|
-          child_prod = Product.where(name: child_product["name"]).first
-          if !child_prod.nil?
-            puts "Adding #{child_prod.name} as child to #{parent_prod.name}."
-            child_prod.is_child = true
-            child_prod.parent_product_id = parent_prod.id
-            child_prod.save
-          end
+    product_list.each do |product_entry|
+      parent_product_name = product_entry["parent"].first["name"]
+      parent_product = Product.where(name: parent_product_name).first
+      next if parent_product.nil?
+
+      repository_attrs = {
+        name: "#{parent_product.name} Repository",
+        absolute_url: 'N/A',
+        description: "Main code repository of #{parent_product.name}.",
+        main_repository: true
+      }
+
+      main_repository = ProductRepository.find_by(product_id: parent_product.id, name: repository_attrs[:name])
+      if main_repository.nil?
+        repository_attrs[:product] = parent_product
+        repository_attrs[:slug] = slug_em(repository_attrs[:name])
+        main_repository = ProductRepository.create!(repository_attrs)
+        puts "Created main repository for: #{main_repository.name}."
+      else
+        puts "Repository exists: #{main_repository.name}."
+      end
+
+      product_entry["children"].each do |child_product_entry|
+        repository_attrs = {
+          name: "#{child_product_entry['name']} Repository",
+          absolute_url: 'N/A',
+          description: "Code repository of #{child_product_entry['name']}.",
+          main_repository: false
+        }
+        secondary_repository = ProductRepository.find_by(product_id: parent_product.id, name: repository_attrs[:name])
+        if secondary_repository.nil?
+          repository_attrs[:product] = parent_product
+          repository_attrs[:slug] = slug_em(repository_attrs[:name])
+          secondary_repository = ProductRepository.create!(repository_attrs)
+          puts "    Created secondary repository for: #{secondary_repository.name}."
+        else
+          puts "    Repository exists: #{secondary_repository.name}."
         end
       end
     end
@@ -446,59 +447,35 @@ namespace :sync do
     end
   end
 
-  task :update_version_data, [] => :environment do
-    puts 'Starting to pull version data ...'
-
-    Product.all.each do |product|
-      sync_product_versions(product)
-    end
-  end
-
   task :update_license_data, [] => :environment do
     puts 'Starting to pull license data ...'
 
-    Product.all.each do |product|
-      sync_license_information(product)
+    ProductRepository.all.each do |product_repository|
+      sync_license_information(product_repository)
     end
   end
 
   task :update_statistics_data, [] => :environment do
     puts 'Starting to pull statistic data ...'
 
-    Product.all.each do |product|
-      sync_product_statistics(product)
-    end
-  end
-
-  task :update_locations_data, [] => :environment do
-    puts 'Starting to update location data ...'
-    countries = YAML.load_file('config/country_lookup.yml')
-
-    country_lookup = {}
-    countries['countries'].each do |country|
-      country_lookup[country['country_code']] = country['country_name']
-    end
-
-    access_token = authenticate_user
-
-    Location.where(location_type: 'point').each do |location|
-      clean_location_data(location, country_lookup, access_token)
+    ProductRepository.all.each do |product_repository|
+      sync_product_statistics(product_repository)
     end
   end
 
   task :update_tco_data, [] => :environment do
     puts 'Updating TCO data for products.'
 
-    Product.all.each do |product|
-      update_tco_data(product)
+    ProductRepository.all.each do |product_repository|
+      update_tco_data(product_repository)
     end
   end
 
   task :update_language_data, [] => :environment do
     puts 'Updating language data for products.'
 
-    Product.all.each do |product|
-      sync_product_languages(product)
+    ProductRepository.all.each do |product_repository|
+      sync_product_languages(product_repository)
     end
   end
 

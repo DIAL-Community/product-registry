@@ -9,7 +9,7 @@ class ProductPolicy < ApplicationPolicy
   def permitted_attributes
     if mod_allowed?
       [:name, :is_launchable, :website, :slug, :aliases, :tags, :default_url, :logo, :start_assessment,
-       :repository, :product_description, :is_child, :parent_product_id, :est_hosting, :est_invested]
+       :product_description]
     else
       []
     end

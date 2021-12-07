@@ -6,109 +6,42 @@ module Modules
   module Sync
     @@product_list = []
 
-    # Note: This will be deprecated once all data has been published to new publicgoods repository
-    def sync_unicef_product(json_data)
-      if !json_data['type'].detect { |element| element.downcase == 'software' }.nil?
-        unicef_origin = Origin.find_by(slug: 'unicef')
-        name_aliases = [json_data['name'], json_data['initialism']].reject { |x| x.nil? || x.empty? }
-
-        blacklist = YAML.load_file('config/product_blacklist.yml')
-        blacklist.each do |blacklist_item|
-          if json_data['name'] == blacklist_item['item']
-            puts "Skipping #{json_data['name']}"
-            return
-          end
-        end
-        existing_product = nil
-        is_new = false
-        name_aliases.each do |name_alias|
-          # Find by name, and then by aliases and then by slug.
-          break unless existing_product.nil?
-
-          slug = slug_em name_alias
-          existing_product = Product.first_duplicate(name_alias, slug)
-        end
-
-        website = cleanup_url(json_data['website'])
-        repository = cleanup_url(json_data['repo_main'])
-
-        if existing_product.nil?
-          existing_product = Product.new
-          existing_product.name = name_aliases.first
-          existing_product.slug = slug_em existing_product.name
-          @@product_list << existing_product.name
-          is_new = true
-        end
-
-        existing_product.website = website
-        existing_product.repository = repository
-
-        # Assign what's left in the alias array as aliases.
-        existing_product.aliases.concat(name_aliases.reject { |x| x == existing_product.name }).uniq!
-
-        # Set the origin to be 'unicef'
-        if !existing_product.origins.exists?(id: unicef_origin.id)
-          existing_product.origins.push(unicef_origin)
-        end
-
-        sdgs = json_data['SDGs']
-        if !sdgs.nil? && !sdgs.empty?
-          sdgs.each do |sdg|
-            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg)
-            assign_sdg_to_product(sdg_obj, existing_product,
-                                  ProductSustainableDevelopmentGoal.mapping_status_types[:SELF_REPORTED])
-          end
-        end
-
-        existing_product.save
-
-        if is_new || !existing_product.manual_update
-          update_product_description(existing_product, json_data['description'])
-        end
-      end
-    end
-
     def sync_public_product(json_data)
-      if !json_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
-        puts "SYNCING " + json_data.to_s
+      unless json_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
+        puts "Syncing #{json_data['name']}."
+
         dpga_origin = Origin.find_by(slug: 'dpga')
         dpga_endorser = Endorser.find_by(slug: 'dpga')
         name_aliases = [json_data['name']]
-        if !json_data['aliases'].nil?
+        unless json_data['aliases'].nil?
           name_aliases += json_data['aliases']
         end
 
-        blacklist = YAML.load_file('config/product_blacklist.yml')
-        blacklist.each do |blacklist_item|
-          if json_data['name'] == blacklist_item['item']
-            puts "Skipping #{json_data['name']}"
-            return
-          end
-        end
         existing_product = nil
-        is_new = false
         name_aliases.each do |name_alias|
           # Find by name, and then by aliases and then by slug.
           break unless existing_product.nil?
 
-          slug = slug_em name_alias
+          slug = slug_em(name_alias)
           existing_product = Product.first_duplicate(name_alias, slug)
           # Check to see if both just have the same alias. In this case, it's not a duplicate 
         end
 
         if existing_product.nil?
+          # Check to see if it is a child product (ie. it already has a repository)
+          product_repository = ProductRepository.find_by(slug: slug_em("#{json_data['name']} Repository"))
+          return unless product_repository.nil?
+
           existing_product = Product.new
           existing_product.name = name_aliases.first
-          existing_product.slug = slug_em existing_product.name
+          existing_product.slug = slug_em(existing_product.name)
           @@product_list << existing_product.name
-          is_new = true
         end
 
         # Assign what's left in the alias array as aliases.
         existing_product.aliases.concat(name_aliases.reject { |x| x == existing_product.name }).uniq!
 
         # Set the origin to be 'DPGA'
-
         if !dpga_origin.nil? && !existing_product.origins.exists?(id: dpga_origin.id)
           existing_product.origins.push(dpga_origin)
         end
@@ -133,7 +66,7 @@ module Modules
               puts "Adding sector " + sector_obj.name + " to product"
               existing_product.sectors << sector_obj
             else
-              puts "COULD NOT FIND SECTOR: " + sector
+              puts "Unable to find sector: " + sector
             end
           end
         end
@@ -148,18 +81,16 @@ module Modules
         existing_product.publicgoods_data["stage"] = json_data["stage"]
 
         if json_data["stage"] == "DPG"
-          if !existing_product.endorsers.include?(dpga_endorser)
+          unless existing_product.endorsers.include?(dpga_endorser)
             existing_product.endorsers << dpga_endorser
           end
         end
 
         existing_product.save
-
         update_attributes(json_data, existing_product)
-
         existing_product.save
 
-        if !existing_product.manual_update
+        unless existing_product.manual_update
           update_product_description(existing_product, json_data["description"])
         end
       end
@@ -170,7 +101,7 @@ module Modules
       dsq_endorser = Endorser.find_by(slug: 'dsq')
 
       name_aliases = [digi_product['name']]
-      digi_product['aliases'] && digi_product['aliases'].each do |name_alias|
+      digi_product['aliases']&.each do |name_alias|
         name_aliases.push(name_alias)
       end
 
@@ -180,21 +111,19 @@ module Modules
         # Find by name, and then by aliases and then by slug.
         break unless existing_product.nil?
 
-        slug = slug_em name_alias
+        slug = slug_em(name_alias)
         existing_product = Product.first_duplicate(name_alias, slug)
       end
 
       if existing_product.nil?
         existing_product = Product.new
-        candidate_slug = slug_em(digi_product['name'])
         existing_product.name = digi_product['name']
-        existing_product.slug = slug_em digi_product['name']
+        existing_product.slug = slug_em(digi_product['name'])
         @@product_list << existing_product.name
         is_new = true
       end
 
-      puts existing_product.origins.inspect
-      if !existing_product.origins.exists?(id: digisquare_origin.id)
+      unless existing_product.origins.exists?(id: digisquare_origin.id)
         existing_product.origins.push(digisquare_origin)
       end
 
@@ -215,7 +144,7 @@ module Modules
         if existing_product.name == ds_maturity["name"]
           # Get the legacy rubric
           maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-          if !maturity_rubric.nil?
+          unless maturity_rubric.nil?
             ds_maturity["maturity"].each do |key, value|
               # Find the correct category and indicator
               categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
@@ -232,7 +161,7 @@ module Modules
         end
       end
 
-      if !existing_product.endorsers.include?(dsq_endorser)
+      unless existing_product.endorsers.include?(dsq_endorser)
         existing_product.endorsers << dsq_endorser
       end
 
@@ -246,7 +175,7 @@ module Modules
     def sync_osc_product(product)
       puts "Syncing #{product['name']} ..."
       name_aliases = [product['name']]
-      product['aliases'] && product['aliases'].each do |name_alias|
+      product['aliases']&.each do |name_alias|
         name_aliases.push(name_alias)
       end
 
@@ -256,13 +185,13 @@ module Modules
         # Find by name, and then by aliases and then by slug.
         break unless sync_product.nil?
 
-        slug = slug_em name_alias
+        slug = slug_em(name_alias)
         sync_product = Product.first_duplicate(name_alias, slug)
       end
       if sync_product.nil?
         sync_product = Product.new
         sync_product.name = product['name']
-        sync_product.slug = slug_em product['name']
+        sync_product.slug = slug_em(product['name'])
         if sync_product.save
           puts "  Added new product: #{sync_product.name} -> #{sync_product.slug}"
         end
@@ -272,7 +201,7 @@ module Modules
       if sync_product.nil?
         sync_product = Product.new
         sync_product.name = name_aliases.first
-        sync_product.slug = slug_em existing_product.name
+        sync_product.slug = slug_em(existing_product.name)
         @@product_list << existing_product.name
         is_new = true
       end
@@ -290,17 +219,18 @@ module Modules
       end
 
       maturity = product['maturity']
-      if !maturity.nil?
+      unless maturity.nil?
         # Get the legacy rubric
         maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-        if !maturity_rubric.nil?
+        unless maturity_rubric.nil?
           maturity.each do |key, value|
             # Find the correct category and indicator
             categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
             category_indicator = CategoryIndicator.find_by(rubric_category: categories, slug: key)
             # Save the value in ProductIndicators
-            product_indicator = ProductIndicator.where(product_id: sync_product.id, category_indicator_id: category_indicator.id)
-                                                    .first || ProductIndicator.new
+            product_indicator = ProductIndicator.where(product_id: sync_product.id, 
+                                                       category_indicator_id: category_indicator.id)
+                                                .first || ProductIndicator.new
             product_indicator.product_id = sync_product.id
             product_indicator.category_indicator_id = category_indicator.id
             product_indicator.indicator_value = value
@@ -310,7 +240,7 @@ module Modules
       end
 
       osc_origin = Origin.find_by(slug: 'dial_osc')
-      if !sync_product.origins.exists?(id: osc_origin.id)
+      unless sync_product.origins.exists?(id: osc_origin.id)
         sync_product.origins.push(osc_origin)
       end
 
@@ -324,8 +254,9 @@ module Modules
     end
 
     def assign_sdg_to_product(sdg_obj, product_obj, mapping_status)
-      if !sdg_obj.nil? 
-        prod_sdg = ProductSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id, product_id: product_obj.id)
+      unless sdg_obj.nil? 
+        prod_sdg = ProductSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id,
+                                                           product_id: product_obj.id)
         if prod_sdg.empty?
           puts "Adding sdg #{sdg_obj.number} to product"
           new_prod_sdg = ProductSustainableDevelopmentGoal.new
@@ -346,6 +277,40 @@ module Modules
       end
     end
 
+    def search_in_ignorelist(json_data, ignore_list)
+      ignore_list.each do |ignored|
+        if json_data['name'] == ignored['item']
+          puts "Skipping #{json_data['name']}"
+          return "Skipped product data."
+        end
+      end
+    end
+
+    def update_repository_data(product_data)
+      product_repository = ProductRepository.find_by(slug: slug_em("#{product_data['name']} Repository"))
+      return if product_repository.nil?
+      return if product_repository.product.manual_update
+
+      license = product_data['license']
+      if !license.nil? && !license.empty?
+        puts "  Updating license for: #{product_repository.name} => #{license}."
+        if !license.is_a?(Array)
+          product_repository.license = license
+        else
+          product_repository.license = license.first['spdx']
+          product_repository.dpga_data["licenseURL"] = license.first['licenseURL']
+        end
+      end
+
+      repository = product_data['repositoryURL']
+      if !repository.nil? && !repository.empty?
+        puts "  Updating repository for: #{product_repository.name} => #{repository}."
+        product_repository.absolute_url = repository
+      end
+
+      product_repository.save!
+    end
+
     def update_attributes(product, sync_product)
       website = cleanup_url(product['website'])
       if !website.nil? && !website.empty?
@@ -353,36 +318,19 @@ module Modules
         sync_product.website = website
       end
 
-      license = product['license']
-      if !license.nil? && !license.empty?
-        puts "  Updating license: #{sync_product.license} => #{license}"
-        if !license.kind_of?(Array)
-          sync_product.license = license
-        else
-          sync_product.license = license.first['spdx']
-          sync_product.publicgoods_data["licenseURL"] = license.first['licenseURL']
-        end
-      end
-
-      repository = product['repositoryURL']
-      if !repository.nil? && !repository.empty?
-        puts "  Updating repository: #{sync_product.repository} => #{repository}"
-        sync_product.repository = repository
-      end
-
       organizations = product['organizations']
       if !organizations.nil? && !organizations.empty?
         organizations.each do |organization|
-          org_name = organization['name'].gsub('\'','')
-          org = Organization.where('lower(name) = lower(?)', org_name)[0]
+          org_name = organization['name'].gsub('\'', '')
+          org = Organization.where('lower(name) = lower(?) or slug = ?', org_name, slug_em(org_name))[0]
           if org.nil?
-            org = Organization.where("aliases @> ARRAY['"+org_name+"']::varchar[]").first
+            org = Organization.where("aliases @> ARRAY['" + org_name + "']::varchar[]").first
           end
           if org.nil?
             # Create a new organization and assign it as an owner
             org = Organization.new
             org.name = org_name
-            org.slug = slug_em(org_name,100)
+            org.slug = slug_em(org_name, 100)
             org.website = cleanup_url(organization['website'])
             org.save
             org_product = OrganizationsProduct.new
@@ -623,109 +571,12 @@ module Modules
       end
     end
 
-    def sync_product_versions(product)
-      if product.repository.blank?
-        return add_latest_product_version(product)
-      end
+    def sync_license_information(product_repository)
+      return if product_repository.absolute_url.blank?
 
-      puts "Processing: #{product.repository}"
+      puts "Processing: #{product_repository.absolute_url}"
       repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      if !(match = product.repository.match(repo_regex))
-        return add_latest_product_version(product)
-      end
-
-      _, owner, repo = match.captures
-
-      github_uri = URI.parse('https://api.github.com/graphql')
-      http = Net::HTTP.new(github_uri.host, github_uri.port)
-      http.use_ssl = true
-
-      request = Net::HTTP::Post.new(github_uri.path)
-      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
-      request.body = { 'query' => graph_ql_request_body(owner, repo, nil) }.to_json
-
-      response = http.request(request)
-
-      response_json = JSON.parse(response.body)
-      counter = ProductVersion.where(product_id: product.id).maximum(:version_order)
-      if counter.nil?
-        counter = 0
-      end
-
-      process_current_page(response_json, counter, product)
-      process_next_page(response_json, http, request, owner, repo, counter, product)
-
-      if product.save!
-        puts "Product versions saved: #{product.product_versions.size}."
-      end
-    end
-
-    def process_current_page(response_json, counter, product)
-      return unless response_json['data'].present? && response_json['data']['repository'].present?
-
-      releases_data = response_json['data']['repository']['releases']['edges']
-      if releases_data.empty? && product.product_versions.count.zero?
-        return add_latest_product_version(product)
-      end
-
-      puts "Processing releases: #{releases_data.count} releases."
-
-      releases_data.each do |release_data|
-        version_code = release_data['node']['tagName']
-        next if product.product_versions.exists?(version: version_code)
-
-        product_version = ProductVersion.new(version: version_code, version_order: counter += + 1)
-        product.product_versions << product_version
-      end
-    end
-
-    def process_next_page(response_json, http, request, owner, repo, counter, product)
-      return unless response_json['data'].present? && response_json['data']['repository'].present?
-
-      releases_info = response_json['data']['repository']['releases']
-      return unless releases_info['pageInfo'].present? && releases_info['pageInfo']['hasNextPage'].present?
-
-      offset = releases_info['pageInfo']['endCursor']
-      request.body = { 'query' => graph_ql_request_body(owner, repo, offset) }.to_json
-      response = http.request(request)
-
-      puts "Processing next page: #{owner}/#{repo} releases with offset: #{offset}."
-
-      response_json = JSON.parse(response.body)
-
-      process_current_page(response_json, counter, product)
-      process_next_page(response_json, http, request, owner, repo, counter, product)
-    end
-
-    def graph_ql_request_body(owner, repo, offset)
-      offset_clause = ') {'
-      unless offset.blank?
-        offset_clause = ', after:"' + offset + '") {'
-      end
-      '{'\
-      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
-      '    releases(first: 100' + offset_clause + ''\
-      '      totalCount'\
-      '      pageInfo {'\
-      '        endCursor'\
-      '        hasNextPage'\
-      '      }'\
-      '      edges {'\
-      '        node {'\
-      '          tagName'\
-      '        }'\
-      '      }'\
-      '    }'\
-      '  }'\
-      '}'
-    end
-
-    def sync_license_information(product)
-      return if product.repository.blank?
-
-      puts "Processing: #{product.repository}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product.repository.match(repo_regex))
+      return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
 
@@ -734,28 +585,28 @@ module Modules
 
       return if stdout.blank?
 
-      license_analysis = stdout
+      license_data = stdout
       license = stdout.lines.first.split(/\s+/)[1]
 
       if license != "NOASSERTION"
-        product.license_analysis = license_analysis
-        product.license = license
+        product_repository.license_data = license_data
+        product_repository.license = license
 
-        if product.save!
-          puts "Product license information saved: #{product.license}."
+        if product_repository.save!
+          puts "Repository license data for #{product_repository.name} saved."
         end
       end
     end
 
-    def update_tco_data(product)
-      return if product.repository.blank?
+    def update_tco_data(product_repository)
+      return if product_repository.absolute_url.blank?
 
       # We can't process Gitlab repos currently, so ignore those
-      return if product.repository.include?("gitlab")
-      return if product.repository.include?("AsTeR")
+      return if product_repository.absolute_url.include?("gitlab")
+      return if product_repository.absolute_url.include?("AsTeR")
 
-      puts "Processing: #{product.repository}"
-      command = "./cloc-git.sh #{product.repository}"
+      puts "Processing: #{product_repository.absolute_url}"
+      command = "./cloc-git.sh #{product_repository.absolute_url}"
       stdout, = Open3.capture3(command)
 
       return if stdout.blank?
@@ -765,17 +616,17 @@ module Modules
         next unless code_row['language'] == 'SUM'
 
         puts "Number of lines : #{code_row['code']}"
-        product.code_lines = code_row['code'].to_i
+        product_repository.code_lines = code_row['code'].to_i
 
         # COCOMO Calculation is Effort = A * (Lines of Code/1000)^B
         # A and B are based on project complexity. We are using simple, where A=2.4 and B=1.05
         total_klines = code_row['code'].to_i / 1000
         effort = 2.4 * total_klines**1.05
 
-        product.cocomo = effort.round.to_s
+        product_repository.cocomo = effort.round.to_s
         puts "Product effort: #{effort.round}."
-        if product.save!
-          puts "Product #{product.name} COCOMO data saved."
+        if product_repository.save!
+          puts "Product repository #{product_repository.name} COCOMO data saved."
         end
       end
     end
@@ -797,12 +648,12 @@ module Modules
       end
     end
 
-    def sync_product_statistics(product)
-      return if product.repository.blank?
+    def sync_product_statistics(product_repository)
+      return if product_repository.absolute_url.blank?
 
-      puts "Processing: #{product.repository}"
+      puts "Processing: #{product_repository.absolute_url}"
       repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product.repository.match(repo_regex))
+      return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
 
@@ -815,10 +666,10 @@ module Modules
       request.body = { 'query' => graph_ql_statistics(owner, repo) }.to_json
 
       response = http.request(request)
-      product.statistics = JSON.parse(response.body)
+      product_repository.statistical_data = JSON.parse(response.body)
 
-      if product.save!
-        puts "Product statistics saved: #{product.name}."
+      if product_repository.save!
+        puts "Repository statistical data for #{product_repository.name} saved."
       end
     end
 
@@ -896,77 +747,12 @@ module Modules
       '}'\
     end
 
-    def clean_location_data(location, country_lookup, access_token)
-      return if !location.country.nil? && !location.city.nil?
+    def sync_product_languages(product_repository)
+      return if product_repository.absolute_url.blank?
 
-      sleep 1
-
-      puts "Processing: #{location.name}."
-
-      uri = URI.parse(Rails.configuration.geocode['esri']['auth_uri'])
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-
-      uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['reverse_geocode_uri']}{?q*}")
-      reverse_geocode_uri = uri_template.expand(
-        'q': {
-          'location': "#{location.points[0].y}, #{location.points[0].x}",
-          'langCode': 'en',
-          'token': access_token,
-          'f': 'json'
-        }
-      )
-      uri = URI.parse(reverse_geocode_uri)
-      response = Net::HTTP.post_form(uri, {})
-      location_data = JSON.parse(response.body)
-
-      location.city = location_data['address']['City']
-      location.state = location_data['address']['Region']
-      location.country = country_lookup[location_data['address']['CountryCode']]
-
-      location.name = [location.city, location.state, location.country].reject(&:blank?).join(', ')
-
-      current_slug = slug_em(location.name)
-      if Location.where(slug: current_slug).count.positive?
-        duplicate_location = Location.slug_starts_with(current_slug).order(slug: :desc).first
-        duplicate_count = 1
-        if !duplicate_location.nil?
-          duplicate_count = duplicate_location.slug
-                                              .slice(/_dup\d+$/)
-                                              .delete('^0-9')
-                                              .to_i + 1
-        end
-        current_slug = "#{current_slug}_dup#{duplicate_count}"
-      end
-      location.slug = current_slug
-
-      if location.save
-        puts "Updating location with id: #{location.id} to: #{location.name}."
-      end
-    end
-
-    def authenticate_user
-      uri = URI.parse(Rails.configuration.geocode['esri']['auth_uri'])
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-
-      request = Net::HTTP::Post.new(uri.path)
-      data = { 'client_id' => Rails.configuration.geocode['esri']['client_id'],
-               'client_secret' => Rails.configuration.geocode['esri']['client_secret'],
-               'grant_type' => Rails.configuration.geocode['esri']['grant_type'] }
-      request.set_form_data(data)
-
-      response = http.request(request)
-      response_json = JSON.parse(response.body)
-      response_json['access_token']
-    end
-
-    def sync_product_languages(product)
-      return if product.repository.blank?
-
-      puts "Processing: #{product.repository}"
+      puts "Processing: #{product_repository.absolute_url}"
       repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product.repository.match(repo_regex))
+      return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
 
@@ -979,10 +765,10 @@ module Modules
       request.body = { 'query' => graph_ql_languages(owner, repo) }.to_json
 
       response = http.request(request)
-      product.language_data = JSON.parse(response.body)
+      product_repository.language_data = JSON.parse(response.body)
 
-      if product.save!
-        puts "Product language data saved for: #{product.name}."
+      if product_repository.save!
+        puts "Repository language data for '#{product_repository.name}' saved."
       end
     end
 
