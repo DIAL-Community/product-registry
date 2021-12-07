@@ -4,7 +4,7 @@ module Queries
     type [Types::ProductType], null: false
 
     def resolve(search:)
-      products = Product.where(parent_product_id: nil).order(:name)
+      products = Product.order(:name)
       unless search.blank?
         products = products.name_contains(search)
       end
@@ -43,7 +43,7 @@ module Queries
 
     def resolve(search:, origins:, sectors:, countries:, organizations:, sdgs:, tags:, endorsers:,
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:)
-      products = Product.where(parent_product_id: nil).order(:name)
+      products = Product.order(:name)
       if !search.nil? && !search.to_s.strip.empty?
         name_products = products.name_contains(search)
         desc_products = products.joins(:product_descriptions)
@@ -185,6 +185,25 @@ module Queries
         endorsers = endorsers.name_contains(search)
       end
       endorsers
+    end
+  end
+
+  class ProductRepositoriesQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type [Types::ProductRepositoryType], null: false
+
+    def resolve(slug:)
+      product = Product.find_by(slug: slug)
+      ProductRepository.where(product_id: product.id, deleted: false).order(main_repository: :desc, name: :asc)
+    end
+  end
+
+  class ProductRepositoryQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::ProductRepositoryType, null: false
+
+    def resolve(slug:)
+      ProductRepository.find_by(slug: slug)
     end
   end
 end

@@ -7,16 +7,26 @@ class Product < ApplicationRecord
 
   attr_accessor :product_description
 
-  has_many :product_descriptions
-  has_many :product_versions
-  has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products,
-                          after_add: :association_add, before_remove: :association_remove
-  has_many :product_classifications
-  has_many :classifications, through: :product_classifications
+  has_many :product_indicators, dependent: :delete_all
+  has_many :product_repositories, dependent: :delete_all
+  has_many :product_descriptions, dependent: :delete_all
+  has_many :product_versions, dependent: :delete_all
 
-  has_many :organizations_products, after_add: :association_add, before_remove: :association_remove
+  has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products,
+                                           dependent: :delete_all,
+                                           after_add: :association_add,
+                                           before_remove: :association_remove
+  has_many :product_classifications, dependent: :delete_all
+  has_many :classifications, through: :product_classifications,
+                             dependent: :delete_all
+
+  has_many :organizations_products, dependent: :delete_all,
+                                    after_add: :association_add,
+                                    before_remove: :association_remove
   has_many :organizations, through: :organizations_products,
-                           after_add: :association_add, before_remove: :association_remove
+                           dependent: :delete_all,
+                           after_add: :association_add,
+                           before_remove: :association_remove
 
   has_many :product_sectors, dependent: :delete_all,
                              after_add: :association_add, before_remove: :association_remove
@@ -24,11 +34,15 @@ class Product < ApplicationRecord
                      after_add: :association_add, before_remove: :association_remove
 
   has_many :product_building_blocks, dependent: :delete_all,
-                                     after_add: :association_add, before_remove: :association_remove
+                                     after_add: :association_add,
+                                     before_remove: :association_remove
   has_many :building_blocks, through: :product_building_blocks,
-                             after_add: :association_add, before_remove: :association_remove
+                             dependent: :delete_all,
+                             after_add: :association_add,
+                             before_remove: :association_remove
 
   has_and_belongs_to_many :origins, join_table: :products_origins,
+                                    dependent: :delete_all,
                                     after_add: :association_add, before_remove: :association_remove
 
   has_and_belongs_to_many :projects, join_table: :projects_products,
@@ -36,11 +50,13 @@ class Product < ApplicationRecord
                                      after_add: :association_add,
                                      before_remove: :association_remove
 
-  has_and_belongs_to_many :endorsers, join_table: :products_endorsers
+  has_and_belongs_to_many :endorsers, join_table: :products_endorsers,
+                                      dependent: :delete_all
 
   has_many :product_sustainable_development_goals, dependent: :delete_all,
                                                    after_add: :association_add, before_remove: :association_remove
   has_many :sustainable_development_goals, through: :product_sustainable_development_goals,
+                                           dependent: :delete_all,
                                            after_add: :association_add, before_remove: :association_remove
 
   has_many :include_relationships, -> { where(relationship_type: 'composed') },
@@ -53,9 +69,11 @@ class Product < ApplicationRecord
            foreign_key: :from_product_id, class_name: 'ProductProductRelationship',
            after_add: :association_add, before_remove: :association_remove
   has_many :interoperates_with, through: :interop_relationships, source: :to_product,
+                                dependent: :delete_all,
                                 after_add: :association_add, before_remove: :association_remove
 
   has_many :references, foreign_key: :to_product_id, class_name: 'ProductProductRelationship',
+                        dependent: :delete_all,
                         after_add: :association_add, before_remove: :association_remove
 
   validates :name, presence: true, length: { maximum: 300 }
@@ -88,17 +106,16 @@ class Product < ApplicationRecord
     end
   end
 
-  def currProjects(numProjects)
-    projects.limit(numProjects[:first])
+  def main_repository
+    product_repositories.find_by(main_repository: true)
   end
 
-  def sectorsWithLocale(locale)
+  def current_projects(num_projects)
+    projects.limit(num_projects[:first])
+  end
+
+  def sectors_with_locale(locale)
     sectors.where('locale = ?', locale[:locale])
-  end
-
-  def child_products
-    child_products = Product.where(parent_product_id: id)
-    child_products
   end
 
   def maturity_scores

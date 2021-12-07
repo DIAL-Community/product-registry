@@ -73,6 +73,7 @@
   parent:
     - name: Mifos
   children:
+    - name: Mifos Community App
     - name: Mifos Android
     - name: Mifos Mobile
     - name: Mifos Web App
@@ -122,8 +123,8 @@
   parent:
     - name: OpenMRS
   children: 
-    - name: Open MRS Android Client
-    - name: Open MRS Core
+    - name: OpenMRS Android Client
+    - name: OpenMRS Core
     - name: OpenMRS Concept Dictionary
 - name: Oppia
   parent:

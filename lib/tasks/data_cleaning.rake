@@ -263,7 +263,7 @@ namespace :data do
   end
 
   task :add_discourse_topics => :environment do
-    products = Product.where("id in (select product_id from products_endorsers) and parent_product_id is null")
+    products = Product.where("id in (select product_id from products_endorsers)")
     products.each do |product|
       if product.discourse_id.nil?
         topic_id = create_discourse_topic(product, 'Products')
