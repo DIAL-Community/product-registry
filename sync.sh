@@ -11,7 +11,6 @@ cd /maturity-rubric
 git pull
 
 cd /t4d
-rake sync:generate_repositories
 rake sync:public_goods
 rake sync:digi_square_digital_good
 rake sync:osc_digital_good_local
