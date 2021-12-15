@@ -1,0 +1,114 @@
+sectors:
+  - name: Mazingira na Tabia ya Nchi
+  - name: Mazingira na Tabia ya Nchi-Usimamizi wa maliasili
+  - name: Mazingira na Tabia ya Nchi-Mazingira na sera
+  - name: Mazingira na Tabia ya Nchi-Maji
+  - name: Mazingira na Tabia ya Nchi-abia ya Nchi
+  - name: Mazingira na Tabia ya Nchi-Usimamizi wa mazingira katika kiwanda na miji
+  - name: Mazingira na Tabia ya Nchi-Takataka na Usafi wa Mazingira
+  - name: Mazingira na Tabia ya Nchi-Migogoro ya maliasili
+  - name: Mazingira na Tabia ya Nchi-Rasilimali za eneo hilo 
+  - name: Kilimo na Maendeleo Vijijini
+  - name: Kilimo na Maendeleo Vijijini-Uzalishaji wa Kilimo na Kutumia Rasilimali
+  - name: Kilimo na Maendeleo Vijijini-Usimamizi wa maliasili
+  - name: Kilimo na Maendeleo Vijijini-Sera ya Kilimo na Chakula
+  - name: Kilimo na Maendeleo Vijijini-Maendeleo ya Mkoa
+  - name: Kilimo na Maendeleo Vijijini-Biashara ya Kilimo
+  - name: Kilimo na Maendeleo Vijijini-Uchumi
+  - name: Kilimo na Maendeleo Vijijini-Viwango
+  - name: Kilimo na Maendeleo Vijijini-Riziki
+  - name: Usalama, Amani, Ujenzi Mpya
+  - name: Usalama, Amani, Ujenzi Mpya-Amani na Usalama
+  - name: Usalama, Amani, Ujenzi Mpya-Msaada wa Kibinadamu na Usimamizi wa Maafa
+  - name: Usalama, Amani, Ujenzi Mpya-Amani na Usalama
+  - name: Usalama, Amani, Ujenzi Mpya-Afya
+  - name: Usalama, Amani, Ujenzi Mpya-Maendeleo ya Miji na Kugawanya Madaraka
+  - name: Usalama, Amani, Ujenzi Mpya- Uzalishaji wa Kilimo na Kutumia Rasilimali
+  - name: Usalama, Amani, Ujenzi Mpya-Upunguzaji wa silaha za vita
+  - name: Usalama, Amani, Ujenzi Mpya-Itikadi kali
+  - name: Usalama, Amani, Ujenzi Mpya-Ukatili wa Kijinsia
+  - name: Usalama, Amani, Ujenzi Mpya-Kuhusu askari kwenda kwao baada ya vita na Kuungana pamoja tena
+  - name: Elimu na Maendeleo ya Jamii
+  - name: Elimu na Maendeleo ya Jamii-Elimu na Vijana
+  - name: Elimu na Maendeleo ya Jamii-Afya
+  - name: Elimu na Maendeleo ya Jamii-Jinsia
+  - name: Elimu na Maendeleo ya Jamii-Usalama wa Kijamii
+  - name: Elimu na Maendeleo ya Jamii-Ulinzi wa Jamii
+  - name: Elimu na Maendeleo ya Jamii-Mashirika ya Kijamii 
+  - name: Elimu na Maendeleo ya Jamii-Elimu
+  - name: Elimu na Maendeleo ya Jamii-Vijana
+  - name: Elimu na Maendeleo ya Jamii-Idadi ya watu duniani
+  - name: Elimu na Maendeleo ya Jamii-Elimu
+  - name: Elimu na Maendeleo ya Jamii-Kujihusisha na Dini
+  - name: Elimu na Maendeleo ya Jamii-Chakula
+  - name: Elimu na Maendeleo ya Jamii-Utafiti
+  - name: Nchi na Demokrasia (Uongozi Bora)
+  - name: Nchi na Demokrasia (Uongozi Bora)-Demokrasia na utawala wa sheria
+  - name: Nchi na Demokrasia (Uongozi Bora)-Fedha za Umma na utawala
+  - name: Nchi na Demokrasia (Uongozi Bora)-Vyombo vya habari na mawasiliano
+  - name: Nchi na Demokrasia (Uongozi Bora)-Jinsia
+  - name: Nchi na Demokrasia (Uongozi Bora)-Maendeleo ya miji na Kugawanya Madaraka
+  - name: Nchi na Demokrasia (Uongozi Bora)-Uhuru wa kujieleza na kupata habari
+  - name: Nchi na Demokrasia (Uongozi Bora)-Kupambana na ufisadi
+  - name: Nchi na Demokrasia (Uongozi Bora)-Vyombo vya Habari vya Haki na vinavyowajibika
+  - name: Nchi na Demokrasia (Uongozi Bora)-Haki
+  - name: Nchi na Demokrasia (Uongozi Bora)-Utulivu 
+  - name: Nchi na Demokrasia (Uongozi Bora)-Uwazi na uwajibikaji 
+  - name: Nchi na Demokrasia (Uongozi Bora)-Mpito
+  - name: Nchi na Demokrasia (Uongozi Bora)-Mataifa Yaliyojaa Unyonge
+  - name: Nchi na Demokrasia (Uongozi Bora)-Utatuzi wa Migogoro
+  - name: Miundombinu Endelevu
+  - name: Miundombinu Endelevu-Nishati
+  - name: Miundombinu Endelevu-Maji
+  - name: Miundombinu Endelevu-Miundombinu ya TEHAMA
+  - name: Miundombinu Endelevu-Usafiri na miundombinu 
+  - name: Miundombinu Endelevu-Miundombinu Ililiyojengwa
+  - name: Kazi na Ajira
+  - name: Kazi na Ajira-Kutengeneza mifumo ya fedha
+  - name: Kazi na Ajira-Mafunzo ya Kiufundi na kazi ya kuajiriwa
+  - name: Kazi na Ajira-Sera ya Kiuchumi na Biashara
+  - name: Kazi na Ajira-Maendeleo ya sekta binafsi
+  - name: Kazi na Ajira-Maendeleo ya Mkoa
+  - name: Kazi na Ajira-Usimamizi wa maliasili
+  - name: Kazi na Ajira-Wafanyakazi
+  - name: Kazi na Ajira-Mafunzo na ajira
+  - name: Uchumi na Fedha
+  - name: Uchumi na Fedha-Fedha
+  - name: Uchumi na Fedha-Sera ya Uchumi na Biashara
+  - name: Uchumi na Fedha-Bima
+  - name: Uchumi na Fedha-Malipo
+  - name: Ya kidijitali, Data, na Teknolojia
+  - name: Ya kidijitali, Data, na Teknolojia-Data nyingi
+  - name: Ya kidijitali, Data, na Teknolojia-Kuunda Jukwaa
+  - name: Ya kidijitali, Data, na Teknolojia-Ukusanyaji wa Data
+  - name: Ya kidijitali, Data, na Teknolojia-Usimamizi na Sera
+  - name: Ya kidijitali, Data, na Teknolojia-Usalama wa Data
+  - name: Ya kidijitali, Data, na Teknolojia-Akili Bandia
+  - name: Ya kidijitali, Data, na Teknolojia-Ukuzaji wa uwezo 
+  - name: Ya kidijitali, Data, na Teknolojia-Miundombinu ya TEHAMA 
+  - name: Ya kidijitali, Data, na Teknolojia-Mawasiliano
+  - name: Ya kidijitali, Data, na Teknolojia-Ufuatiliaji 
+  - name: Afya
+  - name: Afya-Lishe
+  - name: Afya-Njaa 
+  - name: Afya-Wakunga na wajawazito
+  - name: Afya-Usafi
+  - name: Afya-Chakula
+  - name: Afya-Jinsia 
+  - name: Afya-Magonjwa ya Kuambukiza
+  - name: Afya-Utunzaji wa Watoto
+  - name: Afya-Kupanga uzazi
+  - name: Afya-Elimu ya Afya
+  - name: Kushirikiana na Sekta Binafsi
+  - name: Kushirikiana na Sekta Binafsi-Utetezi wa Biashara 
+  - name: Kushirikiana na Sekta Binafsi-Ushirikiano wa Biashara
+  - name: Kushirikiana na Sekta Binafsi-Usimamizi wa Shirika na Biashara
+  - name: Kushirikiana na Sekta Binafsi-Mifumo ya ikolojia ya Biashara
+  - name: Maendeleo Endelevu 
+  - name: Maendeleo Endelevu-Athari ya maendeleo
+  - name: Maendeleo Endelevu-Miji endelevu 
+  - name: Nyingine
+  - name: Nyingine-Burudani
+  - name: Nyingine-Usafiri na Ukaribishaji wageni
+  - name: Nyingine-Vituo vya ubora
+  - name: Nyingine-Ugavi na utaratibu wa ugavi na usafirishaji wa watu na vitu
