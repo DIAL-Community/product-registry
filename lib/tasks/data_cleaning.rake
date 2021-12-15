@@ -471,126 +471,89 @@ namespace :data do
   task :i18n_sectors => :environment do 
     dial_origin = Origin.where(slug: 'dial_osc').first
 
-    de_data = File.read('utils/sectors.de.json')
-    de_sectors = JSON.parse(de_data)
-    fr_data = File.read('utils/sectors.fr.json')
-    fr_sectors = JSON.parse(fr_data)
     sectors = YAML.load_file('utils/sectors.yml')
-    sectors['sectors'].each_with_index do |sector, i|
-      english_sector = Sector.find_by(name: sector['name'].gsub("_", ": "), locale: 'en')
-      puts "English: " + english_sector.name
-      german_name = de_sectors['sectors'][i]['name'].split('-')
-      german_parent = Sector.find_by(name: german_name[0].strip)
-      if german_parent.nil? 
-        german_sector = Sector.new
-        german_sector.slug = english_sector.slug
-        german_sector.name = de_sectors['sectors'][i]['name']
-        german_sector.locale = 'de'
-        german_sector.is_displayable = true
-        german_sector.origin = dial_origin
-        german_sector.save!
-      end
-      if !german_name[1].nil?
-        german_child = Sector.find_by(name: german_name[0].strip + ": " + german_name[1].strip, parent_sector_id: german_parent.id)
-        if german_child.nil?
-          german_sector = Sector.new
-          german_sector.slug = english_sector.slug
-          german_sector.name = german_name[0].strip + ": " + german_name[1].strip
-          german_sector.locale = 'de'
-          german_sector.is_displayable = true
-          german_sector.parent_sector_id = german_parent.id
-          german_sector.origin = dial_origin
-          german_sector.save!
+    ['es', 'pt', 'sw'].each do | locale |
+      new_sectors = YAML.load_file('utils/sectors.'+locale+'.yml')
+      sectors['sectors'].each_with_index do |sector, i|
+        english_sector = Sector.find_by(name: sector['name'].gsub("_", ": "), locale: 'en')
+        puts "English: " + english_sector.name
+        new_name = new_sectors['sectors'][i]['name'].split('-')
+        puts "ES NAME: " + new_name.to_s
+        new_parent = Sector.find_by(name: new_name[0].strip)
+        if new_parent.nil? 
+          new_sector = Sector.new
+          new_sector.slug = english_sector.slug
+          new_sector.name = new_sectors['sectors'][i]['name']
+          new_sector.locale = locale
+          new_sector.is_displayable = true
+          new_sector.origin = dial_origin
+          new_sector.save!
         end
-      end
-
-      french_name = fr_sectors['sectors'][i]['name'].split('-')
-      french_parent = Sector.find_by(name: french_name[0].strip)
-      if french_parent.nil? 
-        french_sector = Sector.new
-        french_sector.slug = english_sector.slug
-        french_sector.name = fr_sectors['sectors'][i]['name']
-        french_sector.locale = 'fr'
-        french_sector.is_displayable = true
-        french_sector.origin = dial_origin
-        french_sector.save
-      end
-      if !french_name[1].nil?
-        french_child = Sector.find_by(name: french_name[0].strip + ": " + french_name[1].strip, parent_sector_id: french_parent.id)
-        if french_child.nil?
-          french_sector = Sector.new
-          french_sector.slug = english_sector.slug
-          french_sector.name = french_name[0].strip + ": " + french_name[1].strip
-          french_sector.locale = 'fr'
-          french_sector.is_displayable = true
-          french_sector.parent_sector_id = french_parent.id
-          french_sector.origin = dial_origin
-          french_sector.save
+        if !new_name[1].nil?
+          new_child = Sector.find_by(name: new_name[0].strip + ": " + new_name[1].strip, parent_sector_id: new_parent.id)
+          if new_child.nil?
+            new_sector = Sector.new
+            new_sector.slug = english_sector.slug
+            new_sector.name = new_name[0].strip + ": " + new_name[1].strip
+            new_sector.locale = locale
+            new_sector.is_displayable = true
+            new_sector.parent_sector_id = new_parent.id
+            new_sector.origin = dial_origin
+            new_sector.save!
+          end
         end
       end
     end
 
     # Now map all products and projects to their German and French sectors
     ProductSector.all.each do |prod_sector|
-      sector = Sector.find_by(id: prod_sector.sector_id)
+      sector = Sector.find_by(id: prod_sector.sector_id, locale: 'en')
       product = Product.find_by(id: prod_sector.product_id)
 
       if !sector.nil?
-        german_sector = Sector.find_by(slug: sector.slug, locale: 'de')
-        french_sector = Sector.find_by(slug: sector.slug, locale: 'fr')
-      end
+        ['es', 'pt', 'sw'].each do |locale|
+          new_sector = Sector.find_by(slug: sector.slug, locale: locale)
 
-      if !product.nil? && !german_sector.nil? && !product.sectors.include?(german_sector)
-        puts "Assigning sector: " + german_sector.name
-        product.sectors << german_sector
-        product.save
-      end
-
-      if !product.nil? && !french_sector.nil? && !product.sectors.include?(french_sector)
-        product.sectors << french_sector
-        product.save
+          if !product.nil? && !new_sector.nil? && !product.sectors.include?(new_sector)
+            puts "Assigning sector: " + new_sector.name
+            product.sectors << new_sector
+            product.save
+          end
+        end
       end
     end
 
     ProjectsSector.all.each do |proj_sector|
-      sector = Sector.find_by(id: proj_sector.sector_id)
+      sector = Sector.find_by(id: proj_sector.sector_id, locale: 'en')
       project = Project.find_by(id: proj_sector.project_id)
 
       if !sector.nil?
-        german_sector = Sector.find_by(slug: sector.slug, locale: 'de')
-        french_sector = Sector.find_by(slug: sector.slug, locale: 'fr')
-      end
+        ['es', 'pt', 'sw'].each do |locale|
+          new_sector = Sector.find_by(slug: sector.slug, locale: locale)
 
-      if !project.nil? && !german_sector.nil? && !project.sectors.include?(german_sector)
-        puts "Assigning sector: " + german_sector.name
-        project.sectors << german_sector
-        project.save
-      end
-
-      if !project.nil? && !french_sector.nil? && !project.sectors.include?(french_sector)
-        project.sectors << french_sector
-        project.save
+          if !project.nil? && !new_sector.nil? && !project.sectors.include?(new_sector)
+            puts "Assigning sector: " + new_sector.name
+            project.sectors << new_sector
+            project.save
+          end
+        end
       end
     end
 
     OrganizationsSector.all.each do |org_sector|
-      sector = Sector.find_by(id: org_sector.sector_id)
+      sector = Sector.find_by(id: org_sector.sector_id, locale: 'en')
       org = Organization.find_by(id: org_sector.organization_id)
 
       if !sector.nil?
-        german_sector = Sector.find_by(slug: sector.slug, locale: 'de')
-        french_sector = Sector.find_by(slug: sector.slug, locale: 'fr')
-      end
+        ['es', 'pt', 'sw'].each do |locale|
+          new_sector = Sector.find_by(slug: sector.slug, locale: locale)
 
-      if !org.nil? && !german_sector.nil? && !org.sectors.include?(german_sector)
-        puts "Assigning sector: " + german_sector.name
-        org.sectors << german_sector
-        org.save
-      end
-
-      if !org.nil? && !french_sector.nil? && !org.sectors.include?(french_sector)
-        org.sectors << french_sector
-        org.save
+          if !org.nil? && !new_sector.nil? && !org.sectors.include?(new_sector)
+            puts "Assigning sector: " + new_sector.name
+            org.sectors << new_sector
+            org.save
+          end
+        end
       end
     end
   end

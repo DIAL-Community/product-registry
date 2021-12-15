@@ -1,0 +1,114 @@
+sectors:
+  - name: Ambiente e Clima
+  - name: Ambiente e Clima - Gestão de recursos naturais
+  - name: Ambiente e Clima - Ambiente e política
+  - name: Ambiente e Clima - Água
+  - name: Ambiente e Clima - Clima
+  - name: Ambiente e Clima - Gestão ambiental na indústria e cidades
+  - name: Ambiente e Clima - Resíduos e saneamento
+  - name: Ambiente e Clima - Conflitos de recursos naturais
+  - name: Ambiente e Clima - Recursos regionais 
+  - name: Agricultura e Desenvolvimento Rural
+  - name: Agricultura e Desenvolvimento Rural - Produção agrícola e utilização de recursos
+  - name: Agricultura e Desenvolvimento Rural - Gestão dos recursos naturais
+  - name: Agricultura e Desenvolvimento Rural - Política agrícola e bens alimentares
+  - name: Agricultura e Desenvolvimento Rural - Desenvolvimento regional
+  - name: Agricultura e Desenvolvimento Rural - Comércio agrícola
+  - name: Agricultura e Desenvolvimento Rural - Economia
+  - name: Agricultura e Desenvolvimento Rural - Normas
+  - name: Agricultura e Desenvolvimento Rural - Meios de subsistência
+  - name: Segurança, Paz, Reconstrução
+  - name: Segurança, Paz, Reconstrução - Paz e segurança
+  - name: Segurança, Paz, Reconstrução - Ajuda humanitária e gestão de catástrofes
+  - name: Segurança, Paz, Reconstrução - Refúgio e migração
+  - name: Segurança, Paz, Reconstrução - Saúde
+  - name: Segurança, Paz, Reconstrução - Desenvolvimento urbano e descentralização
+  - name: Segurança, Paz, Reconstrução - Produção agrícola e utilização de recursos
+  - name: Segurança, Paz, Reconstrução - Desarmamento
+  - name: Segurança, Paz, Reconstrução - Extremismo violento
+  - name: Segurança, Paz, Reconstrução - Violência baseada no género
+  - name: Segurança, Paz, Reconstrução - Desmobilização e reintegração
+  - name: Educação e Desenvolvimento Social
+  - name: Educação e Desenvolvimento Social - Educação e juventude
+  - name: Educação e Desenvolvimento Social - Saúde
+  - name: Educação e Desenvolvimento Social - Género
+  - name: Educação e Desenvolvimento Social - Segurança social
+  - name: Educação e Desenvolvimento Social - Proteção social
+  - name: Educação e Desenvolvimento Social - Sociedade civil 
+  - name: Educação e Desenvolvimento Social - Educação
+  - name: Educação e Desenvolvimento Social - Juventude
+  - name: Educação e Desenvolvimento Social - População mundial
+  - name: Educação e Desenvolvimento Social - Educação
+  - name: Educação e Desenvolvimento Social - Envolvimento religioso
+  - name: Educação e Desenvolvimento Social - Bens alimentares
+  - name: Educação e Desenvolvimento Social - Investigação
+  - name: Estado e Democracia (Boa Governação)
+  - name: Estado e Democracia (Boa Governação) - Democracia e o estado de direito
+  - name: Estado e Democracia (Boa Governação) - Finanças e administração pública
+  - name: Estado e Democracia (Boa Governação) - Comunicação social e comunicação
+  - name: Estado e Democracia (Boa Governação) - Género
+  - name: Estado e Democracia (Boa Governação) - Desenvolvimento urbano e descentralização
+  - name: Estado e Democracia (Boa Governação) - Liberdade de expressão e acesso à informação
+  - name: Estado e Democracia (Boa Governação) - Anticorrupção
+  - name: Estado e Democracia (Boa Governação) - Comunicação social justa e responsável
+  - name: Estado e Democracia (Boa Governação) - Justiça
+  - name: Estado e Democracia (Boa Governação) - Estabilidade 
+  - name: Estado e Democracia (Boa Governação) - Transparência e responsabilização 
+  - name: Estado e Democracia (Boa Governação) - Transição
+  - name: Estado e Democracia (Boa Governação) - Estados frágeis
+  - name: Estado e Democracia (Boa Governação) - Resolução de conflitos
+  - name: Infraestrutura sustentável
+  - name: Infraestrutura sustentável - Energia
+  - name: Infraestrutura sustentável - Água
+  - name: Infraestrutura sustentável - Infraestrutura TIC
+  - name: Infraestrutura sustentável - Transporte e infraestrutura 
+  - name: Infraestrutura sustentável - Ambientes construídos
+  - name: Trabalho e Emprego
+  - name: Trabalho e Emprego - Desenvolvimento de sistemas financeiros
+  - name: Trabalho e Emprego - Formação vocacional e mercado de trabalho
+  - name: Trabalho e Emprego - Política económica e comércio
+  - name: Trabalho e Emprego - Desenvolvimento do setor privado
+  - name: Trabalho e Emprego - Desenvolvimento regional
+  - name: Trabalho e Emprego - Gestão de recursos naturais
+  - name: Trabalho e Emprego - Força de trabalho
+  - name: Trabalho e Emprego - Formação e emprego
+  - name: Economia e Finanças
+  - name: Economia e Finanças - Finanças
+  - name: Economia e Finanças - Política económica e comércio
+  - name: Economia e Finanças - Seguros
+  - name: Economia e Finanças - Pagamentos
+  - name: Digital, Dados e Tecnologia
+  - name: Digital, Dados e Tecnologia - Macrodados
+  - name: Digital, Dados e Tecnologia - Criação de plataformas
+  - name: Digital, Dados e Tecnologia - Recolha de dados
+  - name: Digital, Dados e Tecnologia - Gestão e políticas de dados
+  - name: Digital, Dados e Tecnologia - Segurança de dados
+  - name: Digital, Dados e Tecnologia - Inteligência artificial
+  - name: Digital, Dados e Tecnologia - Desenvolvimento de capacidades
+  - name: Digital, Dados e Tecnologia - Infraestrutura TIC
+  - name: Digital, Dados e Tecnologia - Comunicação
+  - name: Digital, Dados e Tecnologia - Vigilância
+  - name: Saúde
+  - name: Saúde - Nutrição
+  - name: Saúde - Fome 
+  - name: Saúde - Obstetrícia e maternal
+  - name: Saúde - Higiene
+  - name: Saúde - Bens alimentares
+  - name: Saúde - Género 
+  - name: Saúde - Doença infeciosa
+  - name: Saúde - Puericultura
+  - name: Saúde - Planeamento familiar
+  - name: Saúde - Educação de saúde
+  - name: Envolvimento do Setor Privado
+  - name: Envolvimento do Setor Privado - Representação das empresas 
+  - name: Envolvimento do Setor Privado - Parcerias empresariais
+  - name: Envolvimento do Setor Privado - Gestão corporativo e empresarial
+  - name: Envolvimento do Setor Privado - Ecossistemas empresariais
+  - name: Desenvolvimento Sustentável 
+  - name: Desenvolvimento Sustentável - Impacto do desenvolvimento
+  - name: Desenvolvimento Sustentável - Cidades sustentáveis 
+  - name: Outro
+  - name: Outro - Entretenimento
+  - name: Outro - Viagens e hospitalidade
+  - name: Outro - Centros para a excelência
+  - name: Outro - Cadeia de fornecimento e logística
