@@ -1,0 +1,114 @@
+sectors:
+  - name: Medio ambiente y clima
+  - name: Medio ambiente y clima-Gestión de los recursos naturales
+  - name: Medio ambiente y clima-Medio ambiente y política
+  - name: Medio ambiente y clima-Agua
+  - name: Medio ambiente y clima-Clima
+  - name: Medio ambiente y clima-Gestión medioambiental en la industria y las ciudades
+  - name: Medio ambiente y clima-Residuos y saneamiento
+  - name: Medio ambiente y clima-Conflictos por los recursos naturales
+  - name: Medio ambiente y clima-Recursos regionales 
+  - name: Agricultura y desarrollo rural
+  - name: Agricultura y desarrollo rural-Producción agrícola y uso de recursos
+  - name: Agricultura y desarrollo rural-Gestión de los recursos naturales
+  - name: Agricultura y desarrollo rural-Política agraria y alimentación
+  - name: Agricultura y desarrollo rural-Desarrollo regional
+  - name: Agricultura y desarrollo rural-Comercio agrícola
+  - name: Agricultura y desarrollo rural-Economía
+  - name: Agricultura y desarrollo rural-Normas
+  - name: Agricultura y desarrollo rural - Medios de vida
+  - name: Seguridad, paz y reconstrucción
+  - name: Seguridad, paz y reconstrucción-Paz y seguridad
+  - name: Seguridad, paz y reconstrucción - Ayuda humanitaria y gestión de catástrofes
+  - name: Seguridad, paz y reconstrucción - Refugiados y migración
+  - name: Seguridad, paz y reconstrucción-salud
+  - name: Seguridad, paz y reconstrucción-Desarrollo urbano y descentralización
+  - name: Seguridad, paz y reconstrucción-Producción agrícola y uso de recursos
+  - name: Seguridad, paz y reconstrucción-Desarme
+  - name: Seguridad, paz y reconstrucción-Extremismo violento
+  - name: Seguridad, paz y reconstrucción-Violencia de género
+  - name: Seguridad, paz y reconstrucción-Desmovilización y reintegración
+  - name: Educación y desarrollo social
+  - name: Educación y desarrollo social-Educación y juventud
+  - name: Educación y desarrollo social-Salud
+  - name: Educación y desarrollo social - Género
+  - name: Educación y desarrollo social-Seguridad social
+  - name: Educación y desarrollo social-Protección social
+  - name: Educación y desarrollo social-Sociedad civil 
+  - name: Educación y desarrollo social-Educación
+  - name: Educación y desarrollo social-Jóvenes
+  - name: Educación y desarrollo social-Población mundial
+  - name: Educación y desarrollo social-Educación
+  - name: Educación y desarrollo social - Compromiso religioso
+  - name: Educación y desarrollo social-Alimentación
+  - name: Educación y desarrollo social-Investigación
+  - name: Estado y democracia (buena gobernanza)
+  - name: Estado y democracia (buena gobernanza)-Democracia y estado de derecho
+  - name: Estado y democracia (buena gobernanza)-Finanzas públicas y administración
+  - name: Estado y democracia (buena gobernanza) - Medios de comunicación
+  - name: Estado y democracia (buena gobernanza) - Género
+  - name: Estado y democracia (buena gobernanza) - Desarrollo urbano y descentralización
+  - name: Estado y democracia (buena gobernanza)-Libertad de expresión y acceso a la información
+  - name: Estado y democracia (buena gobernanza) - Anticorrupción
+  - name: Estado y democracia (buena gobernanza) - Medios de comunicación justos y responsables
+  - name: Estado y democracia (buena gobernanza) -Justicia
+  - name: Estado y democracia (buena gobernanza) - Estabilidad 
+  - name: Estado y democracia (buena gobernanza) -Transparencia y rendición de cuentas 
+  - name: Estado y democracia (buena gobernanza) - Transición
+  - name: Estado y democracia (buena gobernanza) - Estados frágiles
+  - name: Estado y democracia (buena gobernanza) - Resolución de conflictos
+  - name: Infraestructura sostenible
+  - name: Infraestructura sostenible-Energía
+  - name: Infraestructura sostenible-Agua
+  - name: Infraestructura sostenible-Infraestructura de las TIC
+  - name: Infraestructura sostenible-Transporte e infraestructura 
+  - name: Infraestructura sostenible-Entornos construidos
+  - name: Trabajo y Empleo
+  - name: Trabajo y Empleo-Desarrollo de sistemas financieros
+  - name: Trabajo y Empleo-Formación profesional y mercado laboral
+  - name: Trabajo y Empleo-Política económica y comercio
+  - name: Trabajo y Empleo-Desarrollo del sector privado
+  - name: Trabajo y Empleo-Desarrollo regional
+  - name: Trabajo y Empleo-Gestión de los recursos naturales
+  - name: Trabajo y Empleo - Fuerza de trabajo
+  - name: Trabajo y Empleo-Formación y Empleo
+  - name: Economía y Finanzas
+  - name: Economía y Finanzas-Finanzas
+  - name: Economía y Finanzas-Política económica y comercio
+  - name: Economía y Finanzas-Seguros
+  - name: Economía y Finanzas-Pagos
+  - name: Digital, datos y tecnología
+  - name: Digital, datos y tecnología-Grandes datos
+  - name: Digital, datos y tecnología-Creación de plataformas
+  - name: Digital, datos y tecnología-Recopilación de datos
+  - name: Digital, datos y tecnología-Gestión y política de datos
+  - name: Digital, datos y tecnología-Seguridad de los datos
+  - name: Digital, datos y tecnología-inteligencia artificial
+  - name: Digital, datos y tecnología-desarrollo de capacidades
+  - name: Digital, datos y tecnología - Infraestructura de las ICT
+  - name: Digital, datos y tecnología-Comunicación
+  - name: Digital, datos y tecnología-Vigilancia
+  - name: Salud
+  - name: Salud-Nutrición
+  - name: Salud-Hambre 
+  - name: Salud-Matronería y maternidad
+  - name: Salud-Higiene
+  - name: Salud-Alimentación
+  - name: Salud-Género 
+  - name: Salud-Enfermedades infecciosas
+  - name: Salud-Cuidado de niños
+  - name: Salud-Planificación familiar
+  - name: Salud-Educación sanitaria
+  - name: Compromiso del sector privado
+  - name: Compromiso del sector privado- defensa de los intereses de las empresas 
+  - name: Compromiso del sector privado - Asociaciones empresariales
+  - name: Compromiso del sector privado-Gestión empresarial y de negocios
+  - name: Compromiso del sector privado-Ecosistemas empresariales
+  - name: Desarrollo sostenible 
+  - name: Desarrollo sostenible - Impacto del desarrollo
+  - name: Desarrollo sostenible-Ciudades sostenibles 
+  - name: Otros
+  - name: Otros-Entretenimiento
+  - name: Otros-Turismo y hostelería
+  - name: Otros-Centros de excelencia
+  - name: Otros-Cadena de suministro y logística
