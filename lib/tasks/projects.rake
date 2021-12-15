@@ -478,4 +478,57 @@ namespace :projects do
       puts "Updated project: " + project.name
     end
   end
+
+  task :translate_proj_prod_org => :environment do |_, params|
+    
+    translate = Google::Cloud::Translate::V2.new(project_id: "molten-plate-329021", credentials: "./utils/translate-key-file.json")
+    
+    projects = Project.all
+    projects.each do | project |
+      puts "Translating " + project.name
+      project_desc = ProjectDescription.where(project_id: project, locale: 'en').first
+      next if project_desc.nil?
+
+      ['es','pt','sw'].each do |locale|
+        new_desc = ProjectDescription.where(project_id: project, locale: locale).first || ProjectDescription.new
+        new_desc.locale = locale
+        new_desc.project_id = project.id
+        new_translation = translate.translate project_desc.description, to: locale
+        new_desc.description = new_translation
+        new_desc.save
+      end
+    end
+
+    products = Product.all
+    products.each do | product |
+      puts "Translating " + product.name
+      product_desc = ProductDescription.where(product_id: product, locale: 'en').first
+      next if product_desc.nil?
+
+      ['es','pt','sw'].each do |locale|
+        new_desc = ProductDescription.where(product_id: product, locale: locale).first || ProductDescription.new
+        new_desc.locale = locale
+        new_desc.product_id = product.id
+        new_translation = translate.translate product_desc.description, to: locale
+        new_desc.description = new_translation
+        new_desc.save
+      end
+    end
+
+    orgs = Organization.all
+    orgs.each do | org |
+      puts "Translating " + org.name
+      org_desc = OrganizationDescription.where(organization_id: org, locale: 'en').first
+      next if org_desc.nil?
+
+      ['es','pt','sw'].each do |locale|
+        new_desc = OrganizationDescription.where(organization_id: org, locale: locale).first || OrganizationDescription.new
+        new_desc.locale = locale
+        new_desc.organization_id = org.id
+        new_translation = translate.translate org_desc.description, to: locale
+        new_desc.description = new_translation
+        new_desc.save
+      end
+    end
+  end
 end
