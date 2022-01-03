@@ -286,9 +286,8 @@ namespace :sync do
   task :fetch_website_data, [:path] => :environment do |_, _params|
     puts 'Updating organization and product description data ...'
 
-    without_description_clause = " COALESCE(SUBSTRING(product_descriptions.description, '\S(?:.*\S)*'), '') = '' "
     Product.left_joins(:product_descriptions)
-           .where(without_description_clause)
+           .where(product_descriptions: { id: nil })
            .each do |product|
       next if product.website.nil? || product.website.empty?
 
@@ -324,9 +323,8 @@ namespace :sync do
       end
     end
 
-    without_description_clause = " COALESCE(SUBSTRING(organization_descriptions.description, '\S(?:.*\S)*'), '') = '' "
     Organization.left_joins(:organization_descriptions)
-                .where(without_description_clause)
+                .where(organization_descriptions: { id: nil })
                 .each do |organization|
       next if organization.website.nil? || organization.website.empty?
 
