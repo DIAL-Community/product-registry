@@ -15,4 +15,6 @@ echo "Version: $(git rev-parse --short HEAD)" > public/version.txt
 
 rails assets:precompile RAILS_ENV=production
 
+service cron restart
+
 rails server -e production
