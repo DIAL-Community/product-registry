@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_03_193339) do
+ActiveRecord::Schema.define(version: 2022_01_14_212158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -321,6 +321,57 @@ ActiveRecord::Schema.define(version: 2021_12_03_193339) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "move_descriptions", id: :bigint, default: -> { "nextval('task_descriptions_id_seq'::regclass)" }, force: :cascade do |t|
+    t.bigint "play_move_id"
+    t.string "locale", null: false
+    t.string "description", null: false
+    t.string "prerequisites", default: "", null: false
+    t.string "outcomes", default: "", null: false
+    t.index ["play_move_id"], name: "index_task_descriptions_on_play_task_id"
+  end
+
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.integer "expires_in", null: false
+    t.text "redirect_uri", null: false
+    t.datetime "created_at", null: false
+    t.datetime "revoked_at"
+    t.string "scopes", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
+  end
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.bigint "resource_owner_id"
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.string "refresh_token"
+    t.integer "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
+    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
+    t.text "redirect_uri", null: false
+    t.string "scopes", default: "", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
   create_table "offices", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -349,18 +400,8 @@ ActiveRecord::Schema.define(version: 2021_12_03_193339) do
     t.index ["organization_id"], name: "index_organization_descriptions_on_organization_id"
   end
 
-  create_table "organizations", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.datetime "when_endorsed"
-    t.string "website"
-    t.boolean "is_endorser", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "is_mni", default: false
-    t.string "aliases", default: [], array: true
-    t.index ["slug"], name: "index_organizations_on_slug", unique: true
-  end
+# Could not dump table "organizations" because of following StandardError
+#   Unknown type 'endorser_type' for column 'endorser_level'
 
   create_table "organizations_contacts", force: :cascade do |t|
     t.bigint "organization_id", null: false
@@ -424,6 +465,87 @@ ActiveRecord::Schema.define(version: 2021_12_03_193339) do
     t.string "styles"
     t.string "editor_type"
     t.index ["handbook_page_id"], name: "index_page_contents_on_handbook_page_id"
+  end
+
+  create_table "play_descriptions", force: :cascade do |t|
+    t.bigint "play_id"
+    t.string "locale", null: false
+    t.string "description", null: false
+    t.index ["play_id"], name: "index_play_descriptions_on_play_id"
+  end
+
+  create_table "play_moves", id: :bigint, default: -> { "nextval('play_tasks_id_seq'::regclass)" }, force: :cascade do |t|
+    t.bigint "play_id"
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.integer "order", null: false
+    t.jsonb "resources", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["play_id"], name: "index_play_tasks_on_play_id"
+  end
+
+  create_table "playbook_descriptions", force: :cascade do |t|
+    t.bigint "playbook_id"
+    t.string "locale", null: false
+    t.string "overview", null: false
+    t.string "audience", null: false
+    t.string "outcomes", null: false
+    t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
+  end
+
+  create_table "playbook_plays", force: :cascade do |t|
+    t.bigint "playbook_id", null: false
+    t.bigint "play_id", null: false
+    t.string "phase"
+    t.integer "order"
+    t.index ["play_id"], name: "index_playbook_plays_on_play_id"
+    t.index ["playbook_id"], name: "index_playbook_plays_on_playbook_id"
+  end
+
+  create_table "playbooks", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.jsonb "phases", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "tags", default: [], array: true
+  end
+
+  create_table "plays", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "author"
+    t.jsonb "resources", default: [], null: false
+    t.string "version", default: "1.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "tags", default: [], array: true
+  end
+
+  create_table "plays_building_blocks", force: :cascade do |t|
+    t.bigint "play_id"
+    t.bigint "building_block_id"
+    t.index ["building_block_id", "play_id"], name: "bbs_plays_idx", unique: true
+    t.index ["building_block_id"], name: "index_plays_building_blocks_on_building_block_id"
+    t.index ["play_id", "building_block_id"], name: "plays_bbs_idx", unique: true
+    t.index ["play_id"], name: "index_plays_building_blocks_on_play_id"
+  end
+
+  create_table "plays_products", force: :cascade do |t|
+    t.bigint "play_id"
+    t.bigint "product_id"
+    t.index ["play_id", "product_id"], name: "plays_products_idx", unique: true
+    t.index ["play_id"], name: "index_plays_products_on_play_id"
+    t.index ["product_id", "play_id"], name: "products_plays_idx", unique: true
+    t.index ["product_id"], name: "index_plays_products_on_product_id"
+  end
+
+  create_table "plays_subplays", force: :cascade do |t|
+    t.bigint "parent_play_id", null: false
+    t.bigint "child_play_id", null: false
+    t.integer "order"
+    t.index ["parent_play_id", "child_play_id"], name: "play_rel_index", unique: true
   end
 
   create_table "portal_views", force: :cascade do |t|
@@ -892,6 +1014,11 @@ ActiveRecord::Schema.define(version: 2021_12_03_193339) do
   add_foreign_key "handbook_pages", "handbook_questions", column: "handbook_questions_id"
   add_foreign_key "handbook_pages", "handbooks"
   add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
+  add_foreign_key "move_descriptions", "play_moves"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "offices", "countries"
   add_foreign_key "offices", "organizations"
   add_foreign_key "offices", "regions"
@@ -911,6 +1038,21 @@ ActiveRecord::Schema.define(version: 2021_12_03_193339) do
   add_foreign_key "organizations_states", "organizations"
   add_foreign_key "organizations_states", "regions"
   add_foreign_key "page_contents", "handbook_pages"
+  add_foreign_key "play_descriptions", "plays"
+  add_foreign_key "play_moves", "plays"
+  add_foreign_key "playbook_descriptions", "playbooks"
+  add_foreign_key "playbook_plays", "playbooks"
+  add_foreign_key "playbook_plays", "plays"
+  add_foreign_key "plays_building_blocks", "building_blocks"
+  add_foreign_key "plays_building_blocks", "building_blocks", name: "bbs_plays_bb_fk"
+  add_foreign_key "plays_building_blocks", "plays"
+  add_foreign_key "plays_building_blocks", "plays", name: "bbs_plays_play_fk"
+  add_foreign_key "plays_products", "plays"
+  add_foreign_key "plays_products", "plays", name: "products_plays_play_fk"
+  add_foreign_key "plays_products", "products"
+  add_foreign_key "plays_products", "products", name: "products_plays_product_fk"
+  add_foreign_key "plays_subplays", "plays", column: "child_play_id", name: "child_play_fk"
+  add_foreign_key "plays_subplays", "plays", column: "parent_play_id", name: "parent_play_fk"
   add_foreign_key "principle_descriptions", "digital_principles"
   add_foreign_key "product_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "product_building_blocks", "products", name: "products_building_blocks_product_fk"

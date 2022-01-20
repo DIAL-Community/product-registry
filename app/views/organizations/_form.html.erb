@@ -59,6 +59,15 @@
       <%= form.label :when_endorsed, t('view.organization.form.when-endorsed') %>
     </fieldset>
 
+    <%= label_tag "endorser_level", 'Endorser Level' %>
+    <fieldset class="form-label-group">
+      <%= form.select(:endorser_level, options_for_select(Organization.endorser_levels
+                                                                         .map {|k, v| [k.humanize.capitalize, v]},
+                                                        selected: organization.endorser_level),
+                   {},
+                   { class: 'custom-select mb-2', style: 'height: calc(1.5em + 0.75rem + 15px) !important' }) %>
+    </fieldset>
+
     <fieldset class="form-label-group">
       <%= form.text_field :website, id: :organization_website,
           disabled: !policy(organization).permitted_attributes.include?(:website),
