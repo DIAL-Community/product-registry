@@ -12,7 +12,7 @@ class OrganizationPolicy < ApplicationPolicy
     if user.roles.include?(User.user_roles[:admin]) ||
          user.roles.include?(User.user_roles[:principle]) ||
          user.roles.include?(User.user_roles[:mni])
-      [:id, :name, :is_endorser, :is_mni, :when_endorsed, :website, :slug, :logo,
+      [:id, :name, :is_endorser, :is_mni, :when_endorsed, :endorser_level, :website, :slug, :logo,
        :organization_description, :aliases]
     elsif user.roles.include?(User.user_roles[:org_user]) &&
           @record.is_a?(Organization) && user.organization_id == @record.id
