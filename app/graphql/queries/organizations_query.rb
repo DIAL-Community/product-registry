@@ -37,11 +37,14 @@ module Queries
     argument :years, [Int], required: false, default_value: []
     argument :aggregator_only, Boolean, required: false, default_value: false
     argument :endorser_only, Boolean, required: false, default_value: false
+    argument :endorser_level, String, required: false, default_value: ''
     argument :aggregators, [String], required: false, default_value: []
     argument :locale, String, required: false, default_value: 'en'
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, aggregators:, locale: )
+    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale: )
+      puts "ENDORSER LEVEL: " + endorser_level.to_s
+      
       organizations = Organization.order(:name)
                                   .eager_load(:countries, :offices)
 
@@ -51,6 +54,10 @@ module Queries
 
       if endorser_only
         organizations = organizations.where(is_endorser: true)
+      end
+
+      if !endorser_level.empty?
+        organizations = organizations.where(endorser_level: endorser_level)
       end
 
       filtered_aggregators = aggregators.reject { |x| x.nil? || x.empty? }

@@ -4,6 +4,7 @@ class Organization < ApplicationRecord
   include Auditable
 
   enum org_type: { endorser: 'endorser', mni: 'mni', product: 'product' }, _suffix: true
+  enum endorser_levels: { NONE: 'none', GOLD: 'gold', SILVER: 'silver', BRONZE: 'bronze' }
 
   attr_accessor :organization_description
 

@@ -25,6 +25,7 @@ module Types
     field :is_mni, Boolean, null: true
     field :is_endorser, Boolean, null: true
     field :when_endorsed, GraphQL::Types::ISO8601Date, null: true
+    field :endorser_level, String, null: true
 
     field :organization_descriptions, [Types::OrganizationDescriptionType], null: true
     field :sectorsWithLocale, [Types::SectorType], null: true do
@@ -33,5 +34,6 @@ module Types
     field :countries, [Types::CountryType], null: true
     field :offices, [Types::OfficeType], null: true
     field :projects, [Types::ProjectType], null: false
+    field :products, [Types::ProductType], null: false
   end
 end
