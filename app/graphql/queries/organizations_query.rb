@@ -43,7 +43,6 @@ module Queries
     type Types::OrganizationType.connection_type, null: false
 
     def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale: )
-      puts "ENDORSER LEVEL: " + endorser_level.to_s
       
       organizations = Organization.order(:name)
                                   .eager_load(:countries, :offices)
