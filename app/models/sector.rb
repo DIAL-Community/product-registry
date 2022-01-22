@@ -1,6 +1,6 @@
 class Sector < ApplicationRecord
   attr_accessor :parent_sector_name
-  
+
   has_and_belongs_to_many :organizations
 
   has_many :product_sectors
@@ -10,7 +10,7 @@ class Sector < ApplicationRecord
   has_many :use_cases, dependent: :restrict_with_error
   belongs_to :origin
 
-  validates :name,  presence: true, length: { maximum: 300 }
+  validates :name, presence: true, length: { maximum: 300 }
 
   scope :name_contains, -> (name) { where("LOWER(name) like LOWER(?)", "%#{name}%")}
   scope :slug_starts_with, -> (slug) { where("LOWER(slug) like LOWER(?)", "#{slug}\\_%")}
