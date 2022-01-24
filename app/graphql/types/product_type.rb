@@ -31,17 +31,22 @@ module Types
     field :main_repository, Types::ProductRepositoryType, null: true
 
     field :product_descriptions, [Types::ProductDescriptionType], null: true
+
+    field :sectors, [Types::SectorType], null: true, method: :sectors_localized
+    field :product_description, Types::ProductDescriptionType, null: true,
+      method: :product_description_localized
+
     field :origins, [Types::OriginType], null: true
     field :endorsers, [Types::EndorserType], null: true
     field :organizations, [Types::OrganizationType], null: true
+
     field :current_projects, [Types::ProjectType], null: true do
       argument :first, Integer, required: false
     end
+
     field :building_blocks, [Types::BuildingBlockType], null: true
     field :sustainable_development_goals, [Types::SustainableDevelopmentGoalType], null: true
-    field :sectors_with_locale, [Types::SectorType], null: true do
-      argument :locale, String, required: false
-    end
+
     field :interoperates_with, [Types::ProductType], null: true
     field :includes, [Types::ProductType], null: true
     field :maturity_scores, GraphQL::Types::JSON, null: true

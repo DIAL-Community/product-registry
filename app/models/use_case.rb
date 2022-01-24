@@ -34,6 +34,16 @@ class UseCase < ApplicationRecord
     end
   end
 
+  def use_case_description_localized
+    description = use_case_descriptions.order('LENGTH(description) DESC')
+                                       .find_by(locale: I18n.locale)
+    if description.nil?
+      description = use_case_descriptions.order('LENGTH(description) DESC')
+                                         .find_by(locale: 'en')
+    end
+    description
+  end
+
   # overridden
   def to_param
     slug
