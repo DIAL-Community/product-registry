@@ -13,13 +13,15 @@ module Types
     field :tags, GraphQL::Types::JSON, null: true
 
     field :project_descriptions, [Types::ProjectDescriptionType], null: true
+
+    field :sectors, [Types::SectorType], null: true, method: :sectors_localized
+    field :project_description, Types::ProjectDescriptionType, null: true,
+      method: :project_description_localized
+
     field :origin, Types::OriginType, null: true
 
     field :organizations, [Types::OrganizationType], null: true
     field :products, [Types::ProductType], null: true
     field :countries, [Types::CountryType], null: true
-    field :sectorsWithLocale, [Types::SectorType], null: true do
-      argument :locale, String, required: false
-    end
   end
 end

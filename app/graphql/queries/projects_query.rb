@@ -124,26 +124,12 @@ module Queries
     else
       projects = projects.order(:name)
     end
-
-    project_list = Project.where(id: projects.map(&:id).uniq)
-    unless offset_params.empty?
-      project_list = project_list.offset(offset_params[:offset])
-    end
-    project_list
+    projects
   end
 
-  def wizard_projects (
-    search, origins, sectors, sub_sectors, countries, organizations, products, sdgs,
-    tags, sort_hint, offset_params = {}
-    )
-
+  def wizard_projects(sectors, sub_sectors, countries, tags, sort_hint, offset_params = {})
     sector_ids, curr_sector = get_sector_list(sectors, sub_sectors)
-    projects = get_project_list(sector_ids, curr_sector, countries, tags, sort_hint)
-    project_list = Project.where(id: projects.map(&:id).uniq)
-    unless offset_params.empty?
-      project_list = project_list.offset(offset_params[:offset])
-    end
-    project_list
+    get_project_list(sector_ids, curr_sector, countries, tags, sort_hint, offset_params).uniq
   end
 
   class SearchProjectsQuery < Queries::BaseQuery
@@ -167,10 +153,11 @@ module Queries
       search:, origins:, sectors:, sub_sectors:, countries:, organizations:, products:, sdgs:,
       tags:, project_sort_hint:
     )
-      filter_projects(
+      projects = filter_projects(
         search, origins, sectors, sub_sectors, countries, organizations, products, sdgs, tags,
         project_sort_hint
       )
+      projects.uniq
     end
   end
 
@@ -178,28 +165,17 @@ module Queries
     include ActionView::Helpers::TextHelper
     include Queries
 
-    argument :search, String, required: false, default_value: ''
-    argument :origins, [String], required: false, default_value: []
     argument :sectors, [String], required: false, default_value: []
     argument :sub_sectors, [String], required: false, default_value: []
     argument :countries, [String], required: false, default_value: []
-    argument :organizations, [String], required: false, default_value: []
-    argument :products, [String], required: false, default_value: []
-    argument :sdgs, [String], required: false, default_value: []
     argument :tags, [String], required: false, default_value: []
     argument :offset_attributes, Types::OffsetAttributeInput, required: true
 
     argument :project_sort_hint, String, required: false, default_value: 'name'
     type Types::ProjectType.connection_type, null: false
 
-    def resolve(
-      search:, origins:, sectors:, sub_sectors:, countries:, organizations:, products:, sdgs:,
-      tags:, offset_attributes:, project_sort_hint:
-    )
-      wizard_projects(
-        search, origins, sectors, sub_sectors, countries, organizations, products, sdgs,
-        tags, project_sort_hint, offset_attributes
-      )
+    def resolve(sectors:, sub_sectors:, countries:, tags:, project_sort_hint:, offset_attributes:)
+      wizard_projects(sectors, sub_sectors, countries, tags, project_sort_hint, offset_attributes)
     end
   end
 end

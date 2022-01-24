@@ -16,13 +16,11 @@ module Modules
         end
       end
 
-      puts "SECTOR IDS: " + sector_ids.to_s
-      puts "CURR SECTOR: " + curr_sector.to_s
-      return sector_ids, curr_sector
+      [sector_ids, curr_sector]
     end
 
-    def get_project_list(sector_ids, curr_sector, countries, tags, sort_hint)
-      if !sector_ids.empty?
+    def get_project_list(sector_ids, curr_sector, countries, tags, sort_hint, offset_params = {})
+      unless sector_ids.empty?
         sector_projects = ProjectsSector.where(sector_id: sector_ids).map(&:project_id)
         if sector_projects.empty? && !curr_sector.parent_sector_id.nil?
           sector_projects = ProjectsSector.where(sector_id: curr_sector.parent_sector_id).map(&:project_id)
@@ -40,11 +38,11 @@ module Modules
         end
       end
 
-      project_list = filter_matching_projects(sector_projects, country_projects, tag_projects, sort_hint)
-      project_list
+      project_list = filter_matching_projects(sector_projects, country_projects, tag_projects, sort_hint, offset_params)
+      project_list.limit(20)
     end
 
-    def filter_matching_projects(sector_projects, country_projects, tag_projects, sort_hint)
+    def filter_matching_projects(sector_projects, country_projects, tag_projects, sort_hint, offset_params)
       # Filter first by sector and tag and combine.
       # If there are more than 5 then find projects that match both sector and tag
       # If we have less than 10 results, add in projects that are connected to selected country
@@ -71,18 +69,25 @@ module Modules
         end
       end
 
-      project_list = Project
+      project_list = Project.all
       if sort_hint.to_s.downcase == 'country'
         project_list = project_list.joins(:countries).order('countries.name')
       elsif sort_hint.to_s.downcase == 'sector'
         project_list = project_list.joins(:sectors).order('sectors.name')
       elsif sort_hint.to_s.downcase == 'tag'
         project_list = project_list.order('tags')
+      else
+        project_list = project_list.order('name')
       end
-      project_list.where(id: sector_tag_projects).order('name').first(20)
+
+      unless offset_params.empty?
+        project_list = project_list.offset(offset_params[:offset])
+      end
+
+      project_list.where(id: sector_tag_projects)
     end
 
-    def filter_matching_products(product_bb, product_project, product_sector, product_tag, sort_hint)
+    def filter_matching_products(product_bb, product_project, product_sector, product_tag, sort_hint, offset_params)
       # First, identify products that are aligned with selected sector and tags
       # Next, identify products that are aligned with needed building blocks
       # Finally, add products that are connected to relevant projects
@@ -122,15 +127,22 @@ module Modules
         sector_tag_products = product_project
       end
 
-      product_list = Product
+      product_list = Product.all
       if sort_hint.to_s.downcase == 'country'
         product_list = product_list.joins(:countries).order('countries.name')
       elsif sort_hint.to_s.downcase == 'sector'
         product_list = product_list.joins(:sectors).order('sectors.name')
       elsif sort_hint.to_s.downcase == 'tag'
         product_list = product_list.order('tags')
+      else
+        product_list = product_list.order('name')
       end
-      product_list.where(id: sector_tag_products).order('name').first(20)
+
+      unless offset_params.empty?
+        product_list = product_list.offset(offset_params[:offset])
+      end
+
+      product_list.where(id: sector_tag_products).limit(20)
     end
   end
 end

@@ -28,9 +28,11 @@ module Types
     field :endorser_level, String, null: true
 
     field :organization_descriptions, [Types::OrganizationDescriptionType], null: true
-    field :sectorsWithLocale, [Types::SectorType], null: true do
-      argument :locale, String, required: false
-    end
+
+    field :sectors, [Types::SectorType], null: true, method: :sectors_localized
+    field :organization_description, Types::OrganizationDescriptionType, null: true,
+      method: :organization_description_localized
+
     field :countries, [Types::CountryType], null: true
     field :offices, [Types::OfficeType], null: true
     field :projects, [Types::ProjectType], null: false

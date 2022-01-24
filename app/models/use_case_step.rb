@@ -14,6 +14,16 @@ class UseCaseStep < ApplicationRecord
   scope :name_contains, ->(name) { where('LOWER(name) like LOWER(?)', "%#{name}%") }
   scope :slug_starts_with, ->(slug) { where('LOWER(slug) like LOWER(?)', "#{slug}\\_%") }
 
+  def use_case_step_description_localized
+    description = use_case_step_descriptions.order('LENGTH(description) DESC')
+                                            .find_by(locale: I18n.locale)
+    if description.nil?
+      description = use_case_step_descriptions.order('LENGTH(description) DESC')
+                                              .find_by(locale: 'en')
+    end
+    description
+  end
+
   # overridden
   def to_param
     slug

@@ -193,21 +193,12 @@ module Queries
     else
       products = products.order('name')
     end
-
-    product_list = Product.where(id: products.map(&:id).uniq)
-    unless offset_params.empty?
-      product_list = product_list.offset(offset_params[:offset])
-    end
-    product_list
+    products
   end
 
-  def wizard_products (
-  search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
-    use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
-    sort_hint, offset_params = {}
-  )
+  def wizard_products(sectors, sub_sectors, countries, tags, building_blocks, sort_hint, offset_params = {})
     sector_ids, curr_sector = get_sector_list(sectors, sub_sectors)
-    if !sector_ids.empty?
+    unless sector_ids.empty?
       sector_products = ProductSector.where(sector_id: sector_ids).map(&:product_id)
       if sector_products.empty? && !curr_sector.parent_sector_id.nil?
         sector_products = ProductsSector.where(sector_id: curr_sector.parent_sector_id).map(&:product_id)
@@ -226,12 +217,7 @@ module Queries
       end
     end
 
-    products = filter_matching_products(product_bb, product_project, sector_products, tag_products, sort_hint)
-    product_list = Product.where(id: products.map(&:id).uniq)
-    unless offset_params.empty?
-      product_list = product_list.offset(offset_params[:offset])
-    end
-    product_list
+    filter_matching_products(product_bb, product_project, sector_products, tag_products, sort_hint, offset_params).uniq
   end
 
   class SearchProductsQuery < Queries::BaseQuery
@@ -262,50 +248,31 @@ module Queries
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:,
       product_sort_hint:
     )
-      filter_products(
+      products = filter_products(
         search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
         use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
         product_sort_hint
       )
+      products.uniq
     end
   end
-
-
 
   class PaginatedProductsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
     include Queries
 
-    argument :search, String, required: false, default_value: ''
-    argument :origins, [String], required: false, default_value: []
     argument :sectors, [String], required: false, default_value: []
     argument :sub_sectors, [String], required: false, default_value: []
     argument :countries, [String], required: false, default_value: []
-    argument :organizations, [String], required: false, default_value: []
-    argument :sdgs, [String], required: false, default_value: []
     argument :tags, [String], required: false, default_value: []
-    argument :use_cases, [String], required: false, default_value: []
-    argument :workflows, [String], required: false, default_value: []
     argument :building_blocks, [String], required: false, default_value: []
-    argument :product_types, [String], required: false, default_value: []
-    argument :endorsers, [String], required: false, default_value: []
-    argument :with_maturity, Boolean, required: false, default_value: false
-    argument :product_deployable, Boolean, required: false, default_value: false
     argument :offset_attributes, Types::OffsetAttributeInput, required: true
 
     argument :product_sort_hint, String, required: false, default_value: 'name'
     type Types::ProductType.connection_type, null: false
 
-    def resolve(
-      search:, origins:, sectors:, sub_sectors:, countries:, organizations:, sdgs:, tags:, endorsers:,
-      use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:,
-      product_sort_hint:, offset_attributes:
-    )
-      wizard_products(
-        search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
-        use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
-        product_sort_hint, offset_attributes
-      )
+    def resolve(sectors:, sub_sectors:, countries:, tags:, building_blocks:, product_sort_hint:, offset_attributes:)
+      wizard_products(sectors, sub_sectors, countries, tags, building_blocks, product_sort_hint, offset_attributes)
     end
   end
 
