@@ -21,6 +21,9 @@ module Types
     field :maturity, String, null: true
 
     field :use_case_descriptions, [Types::UseCaseDescriptionType], null: true
+    field :use_case_description, Types::UseCaseDescriptionType, null: true,
+      method: :use_case_description_localized
+
     field :use_case_steps, [Types::UseCaseStepType], null: true
 
     field :use_case_headers, [Types::UseCaseHeaderType], null: true

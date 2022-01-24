@@ -13,6 +13,8 @@ module Types
     field :step_number, Integer, null: false
 
     field :use_case_step_descriptions, [Types::UseCaseStepDescriptionType], null: true
+    field :use_case_step_description, Types::UseCaseStepDescriptionType, null: true,
+      method: :use_case_step_description_localized
 
     field :use_case, Types::UseCaseType, null: false
     field :workflows, [Types::WorkflowType], null: false
