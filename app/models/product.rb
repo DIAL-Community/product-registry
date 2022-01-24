@@ -99,6 +99,20 @@ class Product < ApplicationRecord
     end
   end
 
+  def sectors_localized
+    sectors.where('locale = ?', I18n.locale)
+  end
+
+  def product_description_localized
+    description = product_descriptions.order('LENGTH(description) DESC')
+                                      .find_by(locale: I18n.locale)
+    if description.nil?
+      description = product_descriptions.order('LENGTH(description) DESC')
+                                        .find_by(locale: 'en')
+    end
+    description
+  end
+
   def owner
     owner = User.joins(:products).where(products: { id: id })
     unless owner.empty?
@@ -112,10 +126,6 @@ class Product < ApplicationRecord
 
   def current_projects(num_projects)
     projects.limit(num_projects[:first])
-  end
-
-  def sectors_with_locale(locale)
-    sectors.where('locale = ?', locale[:locale])
   end
 
   def maturity_scores

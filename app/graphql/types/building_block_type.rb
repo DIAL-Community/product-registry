@@ -15,6 +15,9 @@ module Types
     field :discourse_id, Integer, null: true
 
     field :building_block_descriptions, [Types::BuildingBlockDescriptionType], null: true
+    field :building_block_description, Types::BuildingBlockDescriptionType, null: true,
+      method: :building_block_description_localized
+
     field :workflows, [Types::WorkflowType], null: true
     field :products, [Types::ProductType], null: true
   end

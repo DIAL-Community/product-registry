@@ -66,19 +66,29 @@ class Organization < ApplicationRecord
     end
   end
 
+  def sectors_localized
+    sectors.where('locale = ?', I18n.locale)
+  end
+
+  def organization_description_localized
+    description = organization_descriptions.order('LENGTH(description) DESC')
+                                           .find_by(locale: I18n.locale)
+    if description.nil?
+      description = organization_descriptions.order('LENGTH(description) DESC')
+                                             .find_by(locale: 'en')
+    end
+    description
+  end
+
   # overridden
   def to_param
     slug
   end
-  
+
   def self.first_duplicate(name, slug)
     find_by("name = ? OR slug = ? OR ? = ANY(aliases)", name, slug, name)
   end
 
-  def sectorsWithLocale(locale)
-    sectors.where('locale = ?', locale[:locale])
-  end
-  
   def self.to_csv
     attributes = %w{id name slug aliases when_endorsed website is_endorser is_mni countries offices sectors}
 

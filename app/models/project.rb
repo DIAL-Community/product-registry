@@ -24,12 +24,22 @@ class Project < ApplicationRecord
   scope :name_contains, ->(name) { where('LOWER(projects.name) like LOWER(?)', "%#{name}%") }
   scope :slug_starts_with, ->(slug) { where("LOWER(projects.slug) like LOWER(?)", "#{slug}%\\_") }
 
-  def to_param
-    slug
+  def sectors_localized
+    sectors.where('locale = ?', I18n.locale)
   end
 
-  def sectorsWithLocale(locale)
-    sectors.where('locale = ?', locale[:locale])
+  def project_description_localized
+    description = project_descriptions.order('LENGTH(description) DESC')
+                                      .find_by(locale: I18n.locale)
+    if description.nil?
+      description = project_descriptions.order('LENGTH(description) DESC')
+                                        .find_by(locale: 'en')
+    end
+    description
+  end
+
+  def to_param
+    slug
   end
 
   def image_file

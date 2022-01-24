@@ -20,6 +20,16 @@ class Workflow < ApplicationRecord
     end
   end
 
+  def workflow_description_localized
+    description = workflow_descriptions.order('LENGTH(description) DESC')
+                                       .find_by(locale: I18n.locale)
+    if description.nil?
+      description = workflow_descriptions.order('LENGTH(description) DESC')
+                                         .find_by(locale: 'en')
+    end
+    description
+  end
+
   def to_param  # overridden
     slug
   end
