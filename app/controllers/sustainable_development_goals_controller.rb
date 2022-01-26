@@ -5,8 +5,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
   before_action :set_sustainable_development_goal, only: [:show, :edit]
 
   def unique_search
-    record = SustainableDevelopmentGoal.eager_load(:sdg_targets, sdg_targets: :use_cases)
-                                       .find_by(slug: params[:id])
+    record = SustainableDevelopmentGoal.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -20,7 +19,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
   def simple_search
     default_page_size = 20
-    sdgs = SustainableDevelopmentGoal.eager_load(:sdg_targets, sdg_targets: :use_cases)
+    sdgs = SustainableDevelopmentGoal.order(:number)
 
     current_page = 1
     if params[:page].present? && params[:page].to_i > 0
@@ -103,8 +102,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
       return
     end
 
-    @sustainable_development_goals = filter_sdgs.eager_load(:sdg_targets).order(:number)
-    @sustainable_development_goals = @sustainable_development_goals.eager_load(:sdg_targets)
+    @sustainable_development_goals = filter_sdgs.order(:number)
 
     if params[:search]
       @sustainable_development_goals = @sustainable_development_goals.where(

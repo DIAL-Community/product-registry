@@ -22,8 +22,7 @@ class OrganizationsController < ApplicationController
   end
 
   def unique_search
-    record = Organization.eager_load(:products, :countries, :sectors, :projects, :offices)
-                         .find_by(slug: params[:id])
+    record = Organization.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -77,8 +76,7 @@ class OrganizationsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = organizations.eager_load(:products, :countries, :sectors, :projects, :offices)
-                                      .paginate(page: current_page, per_page: page_size)
+    results['results'] = organizations.paginate(page: current_page, per_page: page_size)
                                       .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -158,8 +156,7 @@ class OrganizationsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = organizations.eager_load(:products, :countries, :sectors, :projects, :offices)
-                                      .paginate(page: current_page, per_page: page_size)
+    results['results'] = organizations.paginate(page: current_page, per_page: page_size)
                                       .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -185,7 +182,7 @@ class OrganizationsController < ApplicationController
       !params[:mni_only].nil? && @organizations = @organizations.where('is_mni is true')
       !params[:sector_id].nil? && @organizations = @organizations.joins(:sectors).where('sectors.id = ?', params[:sector_id])
       !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
-      @organizations = @organizations.eager_load(:sectors, :countries, :offices).order(:name)
+      @organizations = @organizations.order(:name)
       authorize @organizations, :view_allowed?
       return
     end
@@ -251,7 +248,7 @@ class OrganizationsController < ApplicationController
   end
 
   def export_data
-    @organizations = Organization.where(id: filter_organizations).eager_load(:countries, :offices, :products, :sectors)
+    @organizations = Organization.where(id: filter_organizations)
     authorize(@organizations, :view_allowed?)
     respond_to do |format|
       format.csv do
@@ -561,7 +558,7 @@ class OrganizationsController < ApplicationController
   end
 
   def map_aggregators
-    @organizations = Organization.eager_load(:locations)
+    @organizations = Organization.all
     authorize @organizations, :view_allowed?
   end
 
@@ -583,12 +580,11 @@ class OrganizationsController < ApplicationController
     end
 
     # If we didn't redirect, load the default map view
-    @organizations = Organization.eager_load(:locations)
     authorize @organizations, :view_allowed?
   end
 
   def map_fs
-    @organizations = Organization.eager_load(:locations)
+    @organizations = Organization.all
     response.set_header('Content-Security-Policy', 'frame-ancestors digitalprinciples.org')
     authorize @organizations, :view_allowed?
   end

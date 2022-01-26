@@ -13,14 +13,12 @@ class TaskTrackersController < ApplicationController
 
     current_page = params[:page] || 1
 
-    @task_tracker = TaskTracker.eager_load(:task_tracker_descriptions)
+    @task_tracker = TaskTracker.order(:name)
     if params[:search].present?
       @task_trackers = @task_tracker.name_contains(params[:search])
-                                    .order(:name)
                                     .paginate(page: current_page, per_page: 5)
     else
-      @task_trackers = @task_tracker.order(:name)
-                                    .paginate(page: current_page, per_page: 5)
+      @task_trackers = @task_tracker.paginate(page: current_page, per_page: 5)
     end
     authorize(@task_trackers, :view_allowed?)
   end

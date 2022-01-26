@@ -14,11 +14,10 @@ class TasksController < ApplicationController
 
     current_page = params[:page] || 1
 
-    @tasks = Task.eager_load(:task_descriptions)
+    @tasks = Task.order(:name)
     if params[:search]
       @tasks = @tasks.name_contains(params[:search])
-                                          .order(:name)
-                                          .paginate(page: current_page, per_page: 5)
+                     .paginate(page: current_page, per_page: 5)
     else
       @tasks = @tasks.order(:name).paginate(page: current_page, per_page: 5)
     end

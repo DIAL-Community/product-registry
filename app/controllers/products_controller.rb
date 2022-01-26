@@ -35,12 +35,7 @@ class ProductsController < ApplicationController
   end
 
   def unique_search
-    record = Product.eager_load(:organizations,
-                                  :products_origins, :origins,
-                                  :sectors, :sectors,
-                                  :product_sustainable_development_goals, :sustainable_development_goals,
-                                  :product_building_blocks, :building_blocks)
-                    .find_by(slug: params[:id])
+    record = Product.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -101,12 +96,7 @@ class ProductsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = products.eager_load(:organizations,
-                                             :products_origins, :origins,
-                                             :sectors, :sectors,
-                                             :product_sustainable_development_goals, :sustainable_development_goals,
-                                             :product_building_blocks, :building_blocks)
-                                 .paginate(page: current_page, per_page: page_size)
+    results['results'] = products.paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -257,12 +247,7 @@ class ProductsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = products.eager_load(:organizations,
-                                             :products_origins, :origins,
-                                             :sectors, :sectors,
-                                             :product_sustainable_development_goals, :sustainable_development_goals,
-                                             :product_building_blocks, :building_blocks)
-                                 .paginate(page: current_page, per_page: page_size)
+    results['results'] = products.paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -281,8 +266,8 @@ class ProductsController < ApplicationController
   end
 
   def map
-    @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
-    @product_relationships = ProductProductRelationship.order(:id).eager_load(:from_product, :to_product)
+    @products = Product.order(:slug)
+    @product_relationships = ProductProductRelationship.order(:id)
     render(layout: 'layouts/raw')
   end
 
@@ -383,8 +368,7 @@ class ProductsController < ApplicationController
       @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
-    @products = @products.eager_load(:includes, :interoperates_with, :origins, :organizations)
-                         .paginate(page: current_page, per_page: 20)
+    @products = @products.paginate(page: current_page, per_page: 20)
                          .order(:name)
 
     authorize(@products, :view_allowed?)
@@ -410,7 +394,7 @@ class ProductsController < ApplicationController
   end
 
   def export_data
-    @products = Product.where(id: filter_products).eager_load(:organizations, :origins, :building_blocks, :sustainable_development_goals)
+    @products = Product.where(id: filter_products)
     authorize(@products, :view_allowed?)
     respond_to do |format|
       format.csv do
@@ -847,7 +831,7 @@ class ProductsController < ApplicationController
   def productlist
     @products = Array.new
 
-    product_list = Product.all.eager_load(:sustainable_development_goals, :sectors, :organizations, :origins)
+    product_list = Product.all
 
     curr_products = product_list.map do |product|
       origin_list = product.origins.map do |origin|
