@@ -2,8 +2,7 @@ class CitiesController < ApplicationController
   before_action :set_city, only: [:show, :edit, :update, :destroy]
 
   def unique_search
-    record = City.eager_load(:region)
-                 .find_by(slug: params[:id])
+    record = City.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -50,7 +49,6 @@ class CitiesController < ApplicationController
     end
 
     results['results'] = cities.paginate(page: current_page, per_page: default_page_size)
-                               .eager_load(:region)
                                .order(:slug)
 
     uri.fragment = uri.query = nil

@@ -35,12 +35,7 @@ class ProductsController < ApplicationController
   end
 
   def unique_search
-    record = Product.eager_load(:organizations,
-                                  :products_origins, :origins,
-                                  :sectors, :sectors,
-                                  :product_sustainable_development_goals, :sustainable_development_goals,
-                                  :product_building_blocks, :building_blocks)
-                    .find_by(slug: params[:id])
+    record = Product.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -101,12 +96,7 @@ class ProductsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = products.eager_load(:organizations,
-                                             :products_origins, :origins,
-                                             :sectors, :sectors,
-                                             :product_sustainable_development_goals, :sustainable_development_goals,
-                                             :product_building_blocks, :building_blocks)
-                                 .paginate(page: current_page, per_page: page_size)
+    results['results'] = products.paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -257,12 +247,7 @@ class ProductsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = products.eager_load(:organizations,
-                                             :products_origins, :origins,
-                                             :sectors, :sectors,
-                                             :product_sustainable_development_goals, :sustainable_development_goals,
-                                             :product_building_blocks, :building_blocks)
-                                 .paginate(page: current_page, per_page: page_size)
+    results['results'] = products.paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -281,8 +266,8 @@ class ProductsController < ApplicationController
   end
 
   def map
-    @products = Product.order(:slug).eager_load(:references, :include_relationships, :interop_relationships)
-    @product_relationships = ProductProductRelationship.order(:id).eager_load(:from_product, :to_product)
+    @products = Product.order(:slug)
+    @product_relationships = ProductProductRelationship.order(:id)
     render(layout: 'layouts/raw')
   end
 
@@ -383,8 +368,7 @@ class ProductsController < ApplicationController
       @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
-    @products = @products.eager_load(:includes, :interoperates_with, :origins, :organizations)
-                         .paginate(page: current_page, per_page: 20)
+    @products = @products.paginate(page: current_page, per_page: 20)
                          .order(:name)
 
     authorize(@products, :view_allowed?)
@@ -410,7 +394,7 @@ class ProductsController < ApplicationController
   end
 
   def export_data
-    @products = Product.where(id: filter_products).eager_load(:organizations, :origins, :building_blocks, :sustainable_development_goals)
+    @products = Product.where(id: filter_products)
     authorize(@products, :view_allowed?)
     respond_to do |format|
       format.csv do
@@ -847,7 +831,7 @@ class ProductsController < ApplicationController
   def productlist
     @products = Array.new
 
-    product_list = Product.all.eager_load(:sustainable_development_goals, :sectors, :organizations, :origins)
+    product_list = Product.all
 
     curr_products = product_list.map do |product|
       origin_list = product.origins.map do |origin|
@@ -920,86 +904,84 @@ class ProductsController < ApplicationController
     end
   end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find_by(slug: params[:id])
-      if @product.nil? && params[:id].scan(/\D/).empty?
-        @product = Product.find_by(id: params[:id])
-      end
-      @product_description = ProductDescription.where(product_id: @product, locale: I18n.locale)
-                                               .first
-      @product_description ||= ProductDescription.where(product_id: @product, locale: I18n.default_locale)
-                                               .first
-      if @product_description.nil?
-        @product_description = ProductDescription.new
-      end
-
-      @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product
+    @product = Product.find_by(slug: params[:id])
+    if @product.nil? && params[:id].scan(/\D/).empty?
+      @product = Product.find_by(id: params[:id])
     end
-
-    def set_current_user
-      @product.set_current_user(current_user)
-      @product_description.set_current_user(current_user)
+    @product_description = ProductDescription.where(product_id: @product, locale: I18n.locale)
+                                             .first
+    @product_description ||= ProductDescription.where(product_id: @product, locale: I18n.default_locale)
+                                             .first
+    if @product_description.nil?
+      @product_description = ProductDescription.new
     end
+    @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
+  end
 
-    def load_maturity
-      @osc_maturity = YAML.load_file("config/maturity_osc.yml")
-      @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
+  def set_current_user
+    @product.set_current_user(current_user)
+    @product_description.set_current_user(current_user)
+  end
+
+  def load_maturity
+    @osc_maturity = YAML.load_file("config/maturity_osc.yml")
+    @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def product_params
+    permitted_attributes = policy(Product).permitted_attributes
+    unless @product.nil?
+      permitted_attributes = policy(@product).permitted_attributes
     end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def product_params
-      permitted_attributes = policy(Product).permitted_attributes
-      unless @product.nil?
-        permitted_attributes = policy(@product).permitted_attributes
-      end
-
-      params
-        .require(:product)
-        .permit(permitted_attributes)
-        .tap do |attr|
-          if attr[:website].present?
-            # Handle both:
-            # * http:// or https://
-            # * (and the typo) http//: or https//:
-            attr[:website] = attr[:website].strip
-                                           .sub(/^https?\:\/\//i, '')
-                                           .sub(/^https?\/\/\:/i, '')
-                                           .sub(/\/$/, '')
+    params
+      .require(:product)
+      .permit(permitted_attributes)
+      .tap do |attr|
+        if attr[:website].present?
+          # Handle both:
+          # * http:// or https://
+          # * (and the typo) http//: or https//:
+          attr[:website] = attr[:website].strip
+                                         .sub(/^https?\:\/\//i, '')
+                                         .sub(/^https?\/\/\:/i, '')
+                                         .sub(/\/$/, '')
+        end
+        if attr[:repository].present?
+          attr[:repository] = attr[:repository].strip
+                                               .sub(/^https?\:\/\//i, '')
+                                               .sub(/^https?\/\/\:/i, '')
+                                               .sub(/\/$/, '')
+        end
+        if attr[:est_hosting].present? && !attr[:est_hosting].nil?
+          attr[:est_hosting] = attr[:est_hosting].to_i
+        end
+        if attr[:est_invested].present? && !attr[:est_invested].nil?
+          attr[:est_invested] = attr[:est_invested].to_i
+        end
+        if permitted_attributes.include?(:aliases)
+          valid_aliases = []
+          if params[:other_names].present?
+            valid_aliases = params[:other_names].reject(&:empty?)
           end
-          if attr[:repository].present?
-            attr[:repository] = attr[:repository].strip
-                                                 .sub(/^https?\:\/\//i, '')
-                                                 .sub(/^https?\/\/\:/i, '')
-                                                 .sub(/\/$/, '')
+          attr[:aliases] = valid_aliases
+        end
+        if permitted_attributes.include?(:tags)
+          valid_tags = []
+          if params[:product_tags].present?
+            valid_tags = params[:product_tags].reject(&:empty?).map(&:downcase)
           end
-          if attr[:est_hosting].present? && !attr[:est_hosting].nil?
-            attr[:est_hosting] = attr[:est_hosting].to_i
-          end
-          if attr[:est_invested].present? && !attr[:est_invested].nil?
-            attr[:est_invested] = attr[:est_invested].to_i
-          end
-          if permitted_attributes.include?(:aliases)
-            valid_aliases = []
-            if params[:other_names].present?
-              valid_aliases = params[:other_names].reject(&:empty?)
-            end
-            attr[:aliases] = valid_aliases
-          end
-          if permitted_attributes.include?(:tags)
-            valid_tags = []
-            if params[:product_tags].present?
-              valid_tags = params[:product_tags].reject(&:empty?).map(&:downcase)
-            end
-            attr[:tags] = valid_tags
-          end
-          if params[:reslug].present? && permitted_attributes.include?(:slug)
-            attr[:slug] = slug_em(attr[:name])
-            if params[:duplicate].present?
-              first_duplicate = Product.slug_starts_with(attr[:slug]).order(slug: :desc).first
-              attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
-            end
+          attr[:tags] = valid_tags
+        end
+        if params[:reslug].present? && permitted_attributes.include?(:slug)
+          attr[:slug] = slug_em(attr[:name])
+          if params[:duplicate].present?
+            first_duplicate = Product.slug_starts_with(attr[:slug]).order(slug: :desc).first
+            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
           end
         end
-    end
+      end
+  end
 end

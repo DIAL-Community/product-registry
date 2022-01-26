@@ -10,9 +10,7 @@ class UseCasesController < ApplicationController
   before_action :set_current_user, only: [:edit, :update, :destroy]
 
   def unique_search
-    record = UseCase.eager_load(:sdg_targets, :sector, :use_case_descriptions,
-                                :use_case_steps, use_case_steps: :use_case_step_descriptions)
-                    .find_by(slug: params[:id])
+    record = UseCase.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -74,9 +72,7 @@ class UseCasesController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = use_cases.eager_load(:sdg_targets, :sector, :use_case_descriptions,
-                                              :use_case_steps, use_case_steps: :use_case_step_descriptions)
-                                  .paginate(page: current_page, per_page: page_size)
+    results['results'] = use_cases.paginate(page: current_page, per_page: page_size)
                                   .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -194,9 +190,7 @@ class UseCasesController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = use_cases.eager_load(:sdg_targets, :sector, :use_case_descriptions,
-                                              :use_case_steps, use_case_steps: :use_case_step_descriptions)
-                                  .paginate(page: current_page, per_page: page_size)
+    results['results'] = use_cases.paginate(page: current_page, per_page: page_size)
 
     uri.fragment = uri.query = nil
 
@@ -265,7 +259,6 @@ class UseCasesController < ApplicationController
       @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
 
-    @use_cases = @use_cases.eager_load(:sdg_targets)
     authorize @use_cases, :view_allowed?
   end
 
@@ -277,7 +270,7 @@ class UseCasesController < ApplicationController
   end
 
   def export_data
-    @use_cases = UseCase.where(id: filter_use_cases).eager_load(:sdg_targets, :use_case_steps, :use_case_descriptions)
+    @use_cases = UseCase.where(id: filter_use_cases)
     authorize(@use_cases, :view_allowed?)
     respond_to do |format|
       format.csv do

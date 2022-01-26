@@ -14,14 +14,12 @@ class MaturityRubricsController < ApplicationController
 
     current_page = params[:page] || 1
 
-    @maturity_rubric = MaturityRubric.eager_load(:maturity_rubric_descriptions)
+    @maturity_rubric = MaturityRubric.order(:name)
     if params[:search]
       @maturity_rubrics = @maturity_rubric.name_contains(params[:search])
-                                          .order(:name)
                                           .paginate(page: current_page, per_page: 5)
     else
-      @maturity_rubrics = @maturity_rubric.order(:name)
-                                          .paginate(page: current_page, per_page: 5)
+      @maturity_rubrics = @maturity_rubric.paginate(page: current_page, per_page: 5)
     end
     authorize @maturity_rubrics, :view_allowed?
   end

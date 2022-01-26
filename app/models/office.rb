@@ -6,8 +6,7 @@ class Office < ApplicationRecord
   belongs_to :region
 
   def self_url(options = {})
-    record = City.eager_load(:region, region: :country)
-                 .find_by(name: city)
+    record = City.find_by(name: city)
     return "#{options[:api_path]}/cities/#{record.slug}" if options[:api_path].present?
   end
 

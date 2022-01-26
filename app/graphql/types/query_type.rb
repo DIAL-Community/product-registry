@@ -14,6 +14,7 @@ module Types
     field :products, resolver: Queries::ProductsQuery
     field :product, resolver: Queries::ProductQuery
     field :search_products, resolver: Queries::SearchProductsQuery
+    field :paginated_products, resolver: Queries::PaginatedProductsQuery
 
     field :product_repositories, resolver: Queries::ProductRepositoriesQuery
     field :product_repository, resolver: Queries::ProductRepositoryQuery
@@ -23,6 +24,7 @@ module Types
     field :projects, resolver: Queries::ProjectsQuery
     field :project, resolver: Queries::ProjectQuery
     field :search_projects, resolver: Queries::SearchProjectsQuery
+    field :paginated_projects, resolver: Queries::PaginatedProjectsQuery
 
     field :building_blocks, resolver: Queries::BuildingBlocksQuery
     field :building_block, resolver: Queries::BuildingBlockQuery
@@ -48,6 +50,11 @@ module Types
     field :organizations, resolver: Queries::OrganizationsQuery
     field :organization, resolver: Queries::OrganizationQuery
     field :search_organizations, resolver: Queries::SearchOrganizationsQuery
+
+    field :aggregators, resolver: Queries::AggregatorsQuery
+    field :aggregator, resolver: Queries::AggregatorQuery
+    field :search_aggregators, resolver: Queries::SearchAggregatorsQuery
+    field :paginated_aggregators, resolver: Queries::PaginatedAggregatorsQuery
 
     field :capabilities, resolver: Queries::CapabilitiesQuery
     field :operator_services, resolver: Queries::OperatorServicesQuery

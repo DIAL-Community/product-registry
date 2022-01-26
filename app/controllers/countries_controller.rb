@@ -2,8 +2,7 @@ class CountriesController < ApplicationController
   before_action :set_country, only: [:show, :edit, :update, :destroy]
 
   def unique_search
-    record = Country.eager_load(:organizations)
-                    .find_by(slug: params[:id])
+    record = Country.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -50,7 +49,6 @@ class CountriesController < ApplicationController
     end
 
     results['results'] = countries.paginate(page: current_page, per_page: default_page_size)
-                                  .eager_load(:organizations)
 
     uri.fragment = uri.query = nil
     render(json: results.to_json(Country.serialization_options

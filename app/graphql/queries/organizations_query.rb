@@ -42,10 +42,8 @@ module Queries
     argument :locale, String, required: false, default_value: 'en'
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale: )
-      
+    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale:)
       organizations = Organization.order(:name)
-                                  .eager_load(:countries, :offices)
 
       if aggregator_only
         organizations = organizations.where(is_mni: true)
@@ -67,7 +65,7 @@ module Queries
       unless search.blank?
         name_orgs = organizations.name_contains(search)
         desc_orgs = organizations.joins(:organization_descriptions)
-                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+                                 .where("LOWER(description) like LOWER(?)", "%#{search}%")
         organizations = organizations.where(id: (name_orgs + desc_orgs).uniq)
       end
 

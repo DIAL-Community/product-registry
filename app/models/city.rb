@@ -30,9 +30,7 @@ class City < ApplicationRecord
     json['region'] = region.as_json({ only: [:name] })
     if options[:include_relationships].present?
       offices = Office.where(city: name)
-                      .eager_load(:organization)
-      json['organizations'] = offices.map(&:organization)
-                                     .as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
+      json['organizations'] = offices.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
     end
     if options[:collection_path].present? || options[:api_path].present?
       json['self_url'] = self_url(options)
