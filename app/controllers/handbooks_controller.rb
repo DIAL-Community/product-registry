@@ -18,13 +18,12 @@ class HandbooksController < ApplicationController
 
     current_page = params[:page] || 1
 
-    @handbooks = Handbook.eager_load(:handbook_descriptions)
+    @handbooks = Handbook.order(:name)
     if params[:search]
       @handbooks = @handbooks.name_contains(params[:search])
-                                          .order(:name)
-                                          .paginate(page: current_page, per_page: 5)
+                             .paginate(page: current_page, per_page: 5)
     else
-      @handbooks = @handbooks.order(:name).paginate(page: current_page, per_page: 5)
+      @handbooks = @handbooks.paginate(page: current_page, per_page: 5)
     end
     authorize @handbooks, :view_allowed?
   end

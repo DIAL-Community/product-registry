@@ -7,9 +7,7 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def unique_search
-    record = Project.eager_load(:countries, :organizations, :products, :origin,
-                                :sustainable_development_goals, :sectors)
-                    .find_by(slug: params[:id])
+    record = Project.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -69,9 +67,7 @@ class ProjectsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = projects.eager_load(:countries, :organizations, :origin, :products,
-                                             :sustainable_development_goals, :sectors)
-                                 .paginate(page: current_page, per_page: page_size)
+    results['results'] = projects.paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -165,9 +161,7 @@ class ProjectsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = projects.eager_load(:countries, :organizations, :products, :origin,
-                                             :sustainable_development_goals, :sectors)
-                                 .paginate(page: current_page, per_page: page_size)
+    results['results'] = projects.paginate(page: current_page, per_page: page_size)
                                  .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -227,7 +221,6 @@ class ProjectsController < ApplicationController
   def index
     if params[:without_paging]
       @projects = Project.name_contains(params[:search])
-                         .eager_load(:countries)
                          .order(:name)
 
       if params[:origin]
@@ -256,8 +249,7 @@ class ProjectsController < ApplicationController
       @projects = @projects.where(id: session[:project_filtered_ids])
     end
 
-    @projects = @projects.eager_load(:organizations, :products, :locations, :origin)
-                         .paginate(page: current_page, per_page: 20)
+    @projects = @projects.paginate(page: current_page, per_page: 20)
 
     params[:search].present? && @projects = @projects.name_contains(params[:search])
     authorize @projects, :view_allowed?
@@ -281,7 +273,7 @@ class ProjectsController < ApplicationController
   end
 
   def export_data
-    @projects = Project.where(id: filter_projects).eager_load(:organizations, :products, :countries, :sectors)
+    @projects = Project.where(id: filter_projects)
     authorize(@projects, :view_allowed?)
     respond_to do |format|
       format.csv do
@@ -557,12 +549,12 @@ class ProjectsController < ApplicationController
   end
 
   def map_projects
-    @projects = Project.eager_load(:locations)
+    @projects = Project.all
     authorize @projects, :view_allowed?
   end
 
   def map_covid
-    @projects = Project.eager_load(:locations)
+    @projects = Project.all
     authorize @projects, :view_allowed?
   end
 

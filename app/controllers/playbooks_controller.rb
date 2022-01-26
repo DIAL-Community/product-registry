@@ -18,13 +18,12 @@ class PlaybooksController < ApplicationController
 
     current_page = params[:page] || 1
 
-    @playbooks = Playbook.eager_load(:playbook_descriptions)
+    @playbooks = Playbook.order(:name)
     if params[:search]
       @playbooks = @playbooks.name_contains(params[:search])
-                                          .order(:name)
-                                          .paginate(page: current_page, per_page: 5)
+                             .paginate(page: current_page, per_page: 5)
     else
-      @playbooks = @playbooks.order(:name).paginate(page: current_page, per_page: 5)
+      @playbooks = @playbooks.paginate(page: current_page, per_page: 5)
     end
     authorize @playbooks, :view_allowed?
   end

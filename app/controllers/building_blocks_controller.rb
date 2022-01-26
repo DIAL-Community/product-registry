@@ -9,9 +9,7 @@ class BuildingBlocksController < ApplicationController
   before_action :set_current_user, only: [:edit, :update, :destroy]
 
   def unique_search
-    record = BuildingBlock.eager_load(:workflows, :building_block_descriptions,
-                                      :product_building_blocks, :products)
-                          .find_by(slug: params[:id])
+    record = BuildingBlock.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -57,9 +55,7 @@ class BuildingBlocksController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = building_blocks.eager_load(:workflows, :building_block_descriptions,
-                                              :product_building_blocks, :products)
-                                        .paginate(page: current_page, per_page: page_size)
+    results['results'] = building_blocks.paginate(page: current_page, per_page: page_size)
                                         .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -175,9 +171,7 @@ class BuildingBlocksController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = building_blocks.eager_load(:workflows, :building_block_descriptions,
-                                              :product_building_blocks, :products)
-                                        .paginate(page: current_page, per_page: page_size)
+    results['results'] = building_blocks.paginate(page: current_page, per_page: page_size)
                                         .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -215,7 +209,6 @@ class BuildingBlocksController < ApplicationController
       @building_blocks = @building_blocks.where('LOWER("building_blocks"."name") like LOWER(?)', "%" + params[:search] + "%")
     end
 
-    @building_blocks = @building_blocks.eager_load(:workflows, :products)
     authorize @building_blocks, :view_allowed?
   end
 
@@ -227,7 +220,7 @@ class BuildingBlocksController < ApplicationController
   end
 
   def export_data
-    @building_blocks = BuildingBlock.where(id: filter_building_blocks).eager_load(:products, :workflows, :building_block_descriptions)
+    @building_blocks = BuildingBlock.where(id: filter_building_blocks)
     authorize(@building_blocks, :view_allowed?)
     respond_to do |format|
       format.csv do

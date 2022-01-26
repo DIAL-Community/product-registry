@@ -103,7 +103,7 @@ class Organization < ApplicationRecord
                    .map(&:city)
                    .join('; ')
 
-        sectors = o.sectors
+        sectors = o.sectors_localized
                    .map(&:name)
                    .join('; ')
 

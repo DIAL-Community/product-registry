@@ -9,9 +9,7 @@ class WorkflowsController < ApplicationController
   before_action :set_current_user, only: [:edit, :update, :destroy]
 
   def unique_search
-    record = Workflow.eager_load(:workflow_descriptions, :building_blocks,
-                                 :use_case_steps, use_case_steps: :use_case)
-                     .find_by(slug: params[:id])
+    record = Workflow.find_by(slug: params[:id])
     if record.nil?
       return render(json: {}, status: :not_found)
     end
@@ -57,9 +55,7 @@ class WorkflowsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = workflows.eager_load(:workflow_descriptions, :building_blocks,
-                                              :use_case_steps, use_case_steps: :use_case)
-                                  .paginate(page: current_page, per_page: page_size)
+    results['results'] = workflows.paginate(page: current_page, per_page: page_size)
                                   .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -173,9 +169,7 @@ class WorkflowsController < ApplicationController
       results['previous_page'] = URI.decode(uri.to_s)
     end
 
-    results['results'] = workflows.eager_load(:workflow_descriptions, :building_blocks,
-                                              :use_case_steps, use_case_steps: :use_case)
-                                  .paginate(page: current_page, per_page: page_size)
+    results['results'] = workflows.paginate(page: current_page, per_page: page_size)
                                   .order(:slug)
 
     uri.fragment = uri.query = nil
@@ -203,7 +197,7 @@ class WorkflowsController < ApplicationController
       return
     end
 
-    @workflows = filter_workflows.eager_load(:building_blocks, :use_case_steps).order(:name)
+    @workflows = filter_workflows.order(:name)
 
     if params[:search]
       @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%#{params[:search]}%")
@@ -224,7 +218,7 @@ class WorkflowsController < ApplicationController
   end
 
   def export_data
-    @workflows = Workflow.where(id: filter_workflows).eager_load(:building_blocks, :use_case_steps)
+    @workflows = Workflow.where(id: filter_workflows)
     authorize(@workflows, :view_allowed?)
     respond_to do |format|
       format.csv do
