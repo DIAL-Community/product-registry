@@ -189,11 +189,11 @@ module Queries
     elsif sort_hint.to_s.downcase == 'sector'
       products = products.joins(:sectors).order('sectors.name')
     elsif sort_hint.to_s.downcase == 'tag'
-      products = products.order('tags')
+      products = products.order('products.tags')
     else
-      products = products.order('name')
+      products = products.order('products.name')
     end
-    products
+    products.uniq
   end
 
   def wizard_products(sectors, sub_sectors, countries, tags, building_blocks, sort_hint, offset_params = {})
