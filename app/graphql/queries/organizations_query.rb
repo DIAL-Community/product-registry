@@ -40,9 +40,10 @@ module Queries
     argument :endorser_level, String, required: false, default_value: ''
     argument :aggregators, [String], required: false, default_value: []
     argument :locale, String, required: false, default_value: 'en'
+    argument :map_view, Boolean, required: false, default_value: false
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale:)
+    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale:, map_view:)
       organizations = Organization.order(:name)
 
       if aggregator_only
@@ -96,7 +97,11 @@ module Queries
         organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
       end
 
-      organizations.distinct
+      if map_view
+        return organizations.eager_load(:countries, :offices).distinct
+      else
+        return organizations.distinct
+      end
     end
   end
 end

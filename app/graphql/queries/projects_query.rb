@@ -147,17 +147,22 @@ module Queries
     argument :tags, [String], required: false, default_value: []
 
     argument :project_sort_hint, String, required: false, default_value: 'name'
+    argument :map_view, Boolean, required: false, default_value: false
     type Types::ProjectType.connection_type, null: false
 
     def resolve(
       search:, origins:, sectors:, sub_sectors:, countries:, organizations:, products:, sdgs:,
-      tags:, project_sort_hint:
+      tags:, project_sort_hint:, map_view:
     )
       projects = filter_projects(
         search, origins, sectors, sub_sectors, countries, organizations, products, sdgs, tags,
         project_sort_hint
       )
-      projects.uniq
+      if map_view
+        return projects.eager_load(:countries).uniq
+      else
+        return projects.uniq
+      end
     end
   end
 
