@@ -14,7 +14,11 @@ module Modules
         dpga_endorser = Endorser.find_by(slug: 'dpga')
         name_aliases = [json_data['name']]
         unless json_data['aliases'].nil?
-          name_aliases += json_data['aliases']
+          json_data['aliases'].each do |curr_alias|
+            if curr_alias != ""
+              name_aliases << curr_alias
+            end
+          end
         end
 
         existing_product = nil
@@ -76,9 +80,9 @@ module Modules
         end
 
         # Update specific information that we need to save for later syncing
-        existing_product.publicgoods_data["name"] = json_data["name"]
-        existing_product.publicgoods_data["aliases"] = json_data["aliases"]
-        existing_product.publicgoods_data["stage"] = json_data["stage"]
+        #existing_product.publicgoods_data["name"] = json_data["name"]
+        #existing_product.publicgoods_data["aliases"] = json_data["aliases"]
+        #existing_product.publicgoods_data["stage"] = json_data["stage"]
 
         if json_data["stage"] == "DPG"
           unless existing_product.endorsers.include?(dpga_endorser)
@@ -86,14 +90,15 @@ module Modules
           end
         end
 
-        existing_product.save
+        existing_product.save!
         update_attributes(json_data, existing_product)
-        existing_product.save
+        existing_product.save!
 
         unless existing_product.manual_update
           update_product_description(existing_product, json_data["description"])
         end
       end
+      existing_product
     end
 
     def sync_digisquare_product(digi_product, digisquare_maturity)
@@ -127,6 +132,7 @@ module Modules
         existing_product.origins.push(digisquare_origin)
       end
 
+      existing_product.save
       # This will update website, license, repo URL, organizations, and SDGs
       update_attributes(digi_product, existing_product)
 
@@ -159,6 +165,7 @@ module Modules
             end
           end
         end
+        existing_product
       end
 
       unless existing_product.endorsers.include?(dsq_endorser)
@@ -170,6 +177,7 @@ module Modules
         update_product_description(existing_product, digi_product['description'])
       end
       puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
+      existing_product
     end
 
     def sync_osc_product(product)
@@ -204,6 +212,10 @@ module Modules
         sync_product.slug = slug_em(existing_product.name)
         @@product_list << existing_product.name
         is_new = true
+      end
+
+      if !product['type'].nil? && !product['type'].detect { |element| element.downcase == 'data' }.nil?
+        sync_product.product_type = 'dataset'
       end
 
       # This will update website, license, repo URL, organizations, and SDGs
@@ -251,6 +263,7 @@ module Modules
           update_product_description(sync_product, description)
         end
       end
+      sync_product
     end
 
     def assign_sdg_to_product(sdg_obj, product_obj, mapping_status)
@@ -284,31 +297,85 @@ module Modules
           return "Skipped product data."
         end
       end
+      return false
     end
 
-    def update_repository_data(product_data)
-      product_repository = ProductRepository.find_by(slug: slug_em("#{product_data['name']} Repository"))
-      return if product_repository.nil?
-      return if product_repository.product.manual_update
 
-      license = product_data['license']
-      if !license.nil? && !license.empty?
-        puts "  Updating license for: #{product_repository.name} => #{license}."
-        if !license.is_a?(Array)
-          product_repository.license = license
-        else
-          product_repository.license = license.first['spdx']
-          product_repository.dpga_data["licenseURL"] = license.first['licenseURL']
+    def update_repository_data(product_data, product)
+      if product_data['type'].nil? || !product_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
+        prod_name = product_data['name']
+        if !product.nil? 
+          prod_name = product.name
+        end
+
+        # This section is used for Digi Square and OSC sync
+        repository = product_data['repositoryURL']
+        if !repository.nil? && !repository.empty?
+          product_repository = ProductRepository.find_by(slug: slug_em("#{prod_name} Repository"))
+          return if !product_repository.nil? && product_repository.product.manual_update
+
+          if product_repository.nil?
+            puts "  Creating repository for: #{prod_name} => #{repository}."
+            repository_attrs = {
+                name: "#{prod_name} Repository",
+                absolute_url: "#{repository}",
+                description: "Main code repository of #{prod_name}.",
+                main_repository: true
+              }
+              repository_attrs[:product] = product
+              repository_attrs[:slug] = slug_em(repository_attrs[:name])
+              product_repository = ProductRepository.create!(repository_attrs)
+          else
+            puts "  Updating repository for: #{product_repository.name} => #{repository}."
+            product_repository.absolute_url = repository
+            license = product_data['license']
+            if !license.nil? && !license.empty?
+              puts "  Updating license for: #{product_repository.name} => #{license}."
+              if !license.is_a?(Array)
+                product_repository.license = license
+              else
+                product_repository.license = license.first['spdx']
+                product_repository.dpga_data["licenseURL"] = license.first['licenseURL']
+              end
+            end
+          end
+          product_repository.save!
+        end
+
+        # DPGA now lists multiple repositories
+        repositories = product_data['repositories']
+        if !repositories.nil?
+          repositories.each do | curr_repo |
+            repo_name = prod_name + ' ' + curr_repo['name']
+            product_repository = ProductRepository.find_by(slug: slug_em(repo_name)) || ProductRepository.find_by(slug: slug_em("#{prod_name} Repository"))
+            if product_repository.nil?
+              puts "  Creating repository for: #{repo_name} "
+              repository_attrs = {
+                name: "#{repo_name}",
+                slug: "#{slug_em(repo_name)}",
+                absolute_url: "#{curr_repo['url']}",
+                description: "Main code repository of #{prod_name}.",
+                main_repository: true
+              }
+              repository_attrs[:product] = product
+              product_repository = ProductRepository.create!(repository_attrs)
+            else
+              puts "  Updating repository for: #{repo_name} "
+              product_repository.absolute_url = curr_repo['url']
+              if !license.nil? && !license.empty?
+                puts "  Updating license for: #{product_repository.name} => #{license}."
+                if !license.is_a?(Array)
+                  product_repository.license = license
+                else
+                  product_repository.license = license.first['spdx']
+                  product_repository.dpga_data["licenseURL"] = license.first['licenseURL']
+                end
+              end
+            end
+            product_repository.save!
+          end
         end
       end
-
-      repository = product_data['repositoryURL']
-      if !repository.nil? && !repository.empty?
-        puts "  Updating repository for: #{product_repository.name} => #{repository}."
-        product_repository.absolute_url = repository
-      end
-
-      product_repository.save!
     end
 
     def update_attributes(product, sync_product)

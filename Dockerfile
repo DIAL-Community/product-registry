@@ -13,8 +13,8 @@ RUN git clone https://github.com/unicef/publicgoods-candidates.git /candidates
 RUN mkdir /products
 RUN git clone https://github.com/publicgoods/products.git /products
 
-RUN mkdir /maturity-rubric
-RUN git clone https://github.com/publicgoods/maturity-rubric.git /maturity-rubric
+RUN mkdir /product-evaluation-rubric
+RUN git clone https://gitlab.com/dial/product-evaluation-rubric/product-evaluation-rubric.git /product-evaluation-rubric
 
 COPY cron-sync /etc/cron.d/cron-sync
 RUN crontab /etc/cron.d/cron-sync
@@ -47,8 +47,8 @@ RUN git clone https://github.com/unicef/publicgoods-candidates.git /candidates
 RUN mkdir /products
 RUN git clone https://github.com/publicgoods/products.git /products
 
-RUN mkdir /maturity-rubric
-RUN git clone https://github.com/publicgoods/maturity-rubric.git /maturity-rubric
+RUN mkdir /product-evaluation-rubric
+RUN git clone https://gitlab.com/dial/product-evaluation-rubric/product-evaluation-rubric.git /product-evaluation-rubric
 
 WORKDIR /tmp
 ENV BUNDLER_VERSION 2.1.4
