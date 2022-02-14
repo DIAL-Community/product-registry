@@ -37,20 +37,20 @@ namespace :sync do
     dpg_response = Net::HTTP.get(dpg_uri)
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
-      update_repository_data(entry)
       next if search_in_ignorelist(entry, ignore_list)
 
-      sync_public_product entry
+      prod = sync_public_product entry
+      update_repository_data(entry, prod)
     end
 
     dpg_uri = URI.parse("https://api.digitalpublicgoods.net/nominees/")
     dpg_response = Net::HTTP.get(dpg_uri)
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
-      update_repository_data(entry)
       next if search_in_ignorelist(entry, ignore_list)
 
-      sync_public_product entry
+      prod = sync_public_product entry
+      update_repository_data(entry, prod)
     end
     puts 'Digital public good data synced ...'
     send_notification
@@ -63,10 +63,10 @@ namespace :sync do
     digisquare_maturity = JSON.load(File.open("config/digisquare_maturity_data.json"))
     digisquare_products = YAML.load_file('config/digisquare_global_goods.yml')
     digisquare_products['products'].each do |digi_product|
-      update_repository_data(digi_product)
       next if search_in_ignorelist(digi_product, ignore_list)
 
-      sync_digisquare_product(digi_product, digisquare_maturity)
+      prod = sync_digisquare_product(digi_product, digisquare_maturity)
+      update_repository_data(digi_product, prod)
     end
 
     puts 'Digital square data synced.'
@@ -80,10 +80,10 @@ namespace :sync do
     osc_file = File.read('utils/digital_global_goods.json')
     osc_data = JSON.parse(osc_file)
     osc_data.each do |product|
-      update_repository_data(product)
       next if search_in_ignorelist(product, ignore_list)
 
-      sync_osc_product product
+      prod = sync_osc_product product
+      update_repository_data(product, prod)
     end
     send_notification
   end
