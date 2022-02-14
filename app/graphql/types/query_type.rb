@@ -81,6 +81,15 @@ module Types
     field :candidate_organization, resolver: Queries::CandidateOrganizationQuery
     field :search_candidate_organizations, resolver: Queries::SearchCandidateOrganizationsQuery
 
+    field :playbooks, resolver: Queries::PlaybooksQuery
+    field :playbook, resolver: Queries::PlaybookQuery
+    field :search_playbooks, resolver: Queries::SearchPlaybooksQuery
+
+    field :plays, resolver: Queries::PlaysQuery
+    field :play, resolver: Queries::PlayQuery
+    field :search_plays, resolver: Queries::SearchPlaysQuery
+    field :move, resolver: Queries::MoveQuery
+
     field :me, resolver: Queries::MeQuery
   end
 end

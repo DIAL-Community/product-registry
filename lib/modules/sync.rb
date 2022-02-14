@@ -123,7 +123,8 @@ module Modules
       if existing_product.nil?
         existing_product = Product.new
         existing_product.name = digi_product['name']
-        existing_product.slug = slug_em(digi_product['name'])
+        existing_product.slug = slug_em digi_product['name']
+        existing_product.save
         @@product_list << existing_product.name
         is_new = true
       end

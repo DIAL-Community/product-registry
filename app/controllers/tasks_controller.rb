@@ -1,31 +1,32 @@
-class TasksController < ApplicationController
+class MovesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_move, only: [:show, :edit, :update, :destroy]
 
-  # GET /tasks
-  # GET /tasks.json
+  # GET /moves
+  # GET /moves.json
   def index
     if params[:without_paging]
-      @tasks = Task.order(:name)
-      !params[:search].blank? && @tasks = @tasks.name_contains(params[:search])
-      authorize @tasks, :view_allowed?
-      return @tasks
+      @moves = Move.order(:name)
+      !params[:search].blank? && @moves = @moves.name_contains(params[:search])
+      authorize Playbooks, :view_allowed?
+      return @moves
     end
 
     current_page = params[:page] || 1
 
-    @tasks = Task.order(:name)
+    @moves = Move.eager_load(:move_descriptions)
     if params[:search]
-      @tasks = @tasks.name_contains(params[:search])
-                     .paginate(page: current_page, per_page: 5)
+      @moves = @moves.name_contains(params[:search])
+                                          .order(:name)
+                                          .paginate(page: current_page, per_page: 5)
     else
-      @tasks = @tasks.order(:name).paginate(page: current_page, per_page: 5)
+      @moves = @moves.order(:name).paginate(page: current_page, per_page: 5)
     end
-    authorize @tasks, :view_allowed?
+    authorize Playbook, :view_allowed?
   end
 
-  # GET /task/1
-  # GET /task/1.json
+  # GET /move/1
+  # GET /move/1.json
   def show
     if params[:play_id]
       @parent_play = Play.find_by(slug: params[:play_id])
@@ -34,104 +35,91 @@ class TasksController < ApplicationController
       @parent_playbook = Playbook.find_by(slug: params[:playbook_id])
       @parent_activity = Activity.find_by(slug: params[:activity_id])
     end
-    authorize @task, :view_allowed?
+    authorize Playbook, :view_allowed?
   end
 
-  # GET /tasks/new
+  # GET /moves/new
   def new
-    @task = Task.new
+    @move = Move.new
     if params[:play_id]
-      @task.parent_play = params[:play_id]
+      @play = Play.find_by(slug: params[:play_id])
+      @move.plays << @play
     end
-    if params[:activity_id]
-      @task.parent_activity = params[:activity_id]
-      @task.parent_playbook = params[:playbook_id]
-      @order = 1
-    end
-  
-    authorize @task, :mod_allowed?
+    @description = MoveDescription.new
+    authorize Playbook, :mod_allowed?
   end
 
-  # GET /tasks/1/edit
+  # GET /moves/1/edit
   def edit
     if params[:play_id]
-      @task.parent_play = params[:play_id]
+      @move.parent_play = params[:play_id]
     end
     if params[:activity_id]
-      @task.parent_activity = params[:activity_id]
-      @task.parent_playbook = params[:playbook_id]
+      @move.parent_activity = params[:activity_id]
+      @move.parent_playbook = params[:playbook_id]
     end
-    @description = @task.task_descriptions
+    @description = @move.move_descriptions
                                    .select { |desc| desc.locale == I18n.locale.to_s }
                                    .first
-    authorize @task, :mod_allowed?
+    authorize Playbook, :mod_allowed?
   end
 
-  # POST /tasks
-  # POST /tasks.json
+  # POST /moves
+  # POST /moves.json
   def create
-    @task = Task.new(task_params)
-    @task_desc = TaskDescription.new
+    @move = Move.new(move_params)
+    @move_desc = MoveDescription.new
 
-    authorize @task, :mod_allowed?
+    authorize Playbook, :mod_allowed?
 
-    if !task_params[:parent_play].nil?
-      @play = Play.find_by(slug: task_params[:parent_play])
-      @task.plays << @play
-    end
-
-    if !task_params[:parent_activity].nil?
-      @activity = Activity.find_by(slug: task_params[:parent_activity])
-      @playbook = Playbook.find_by(slug: task_params[:parent_playbook])
-      @task.activities << @activity
+    if !move_params[:parent_play].nil?
+      @play = Play.find_by(slug: move_params[:parent_play])
+      @move.plays << @play
     end
 
     if (params[:selected_organizations])
       params[:selected_organizations].keys.each do |organization_id|
         organization = Organization.find(organization_id)
-        @task.organizations.push(organization)
+        @move.organizations.push(organization)
       end
     end
 
     respond_to do |format|
-      if @task.save
-        if task_params[:task_desc].present?
-          @task_desc.task_id = @task.id
-          @task_desc.locale = I18n.locale
-          @task_desc.description = task_params[:task_desc]
-          @task_desc.save
+      if @move.save
+        if move_params[:move_description].present?
+          @move_desc.move_id = @move.id
+          @move_desc.locale = I18n.locale
+          @move_desc.description = move_params[:move_description]
+          @move_desc.prerequisites = move_params[:move_prerequisites]
+          @move_desc.outcomes = move_params[:move_outcomes]
+          @move_desc.save
         end
 
         format.html do
-          if (!@activity.nil?)
-            redirect_to playbook_activity_task_path(@playbook, @activity, @task),
-                    notice: t('messages.model.created', model: t('model.task').to_s.humanize)
-          else 
-            redirect_to play_task_path(@play, @task),
-                    notice: t('messages.model.created', model: t('model.task').to_s.humanize)
-          end
+          redirect_to play_path(@play),
+                  notice: t('messages.model.created', model: t('model.move').to_s.humanize)
         end
-        format.json { render :show, status: :created, location: @task }
+        format.json { render :show, status: :created, location: @move }
       else
         format.html { render :new }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        format.json { render json: @move.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /tasks/1
-  # PATCH/PUT /tasks/1.json
+  # PATCH/PUT /moves/1
+  # PATCH/PUT /moves/1.json
   def update
-    authorize @task, :mod_allowed?
+    authorize Playbook, :mod_allowed?
 
-    if task_params[:task_desc].present?
-      @task_desc = TaskDescription.where(task_id: @task.id,
+    if move_params[:move_desc].present?
+      @move_desc = MoveDescription.where(move_id: @move.id,
                                                               locale: I18n.locale)
-                                                        .first || TaskDescription.new
-      @task_desc.task_id = @task.id
-      @task_desc.locale = I18n.locale
-      @task_desc.description = task_params[:task_desc]
-      @task_desc.save
+                                                        .first || MoveDescription.new
+      @move_desc.move_id = @move.id
+      @move_desc.locale = I18n.locale
+      @move_desc.description = move_params[:move_desc]
+      @move_desc.save
     end
 
     organizations = Set.new
@@ -141,86 +129,89 @@ class TasksController < ApplicationController
         organizations.add(organization)
       end
     end
-    @task.organizations = organizations.to_a
+    @move.organizations = organizations.to_a
 
     respond_to do |format|
-      if @task.update(task_params)
+      if @move.update(move_params)
 
-        if !task_params[:parent_play].nil?
-          @play = Play.find_by(slug: task_params[:parent_play])
+        if !move_params[:parent_play].nil?
+          @play = Play.find_by(slug: move_params[:parent_play])
         end
 
-        if !task_params[:parent_activity].nil?
-          @activity = Activity.find_by(slug: task_params[:parent_activity])
-          @playbook = Playbook.find_by(slug: task_params[:parent_playbook])
+        if !move_params[:parent_activity].nil?
+          @activity = Activity.find_by(slug: move_params[:parent_activity])
+          @playbook = Playbook.find_by(slug: move_params[:parent_playbook])
         end
         
         format.html do 
           if (!@activity.nil?)
-            redirect_to playbook_activity_task_path(@playbook, @activity, @task),
-                    notice: t('messages.model.updated', model: t('model.task').to_s.humanize)
+            redirect_to playbook_activity_move_path(@playbook, @activity, @move),
+                    notice: t('messages.model.updated', model: t('model.move').to_s.humanize)
           else 
-            redirect_to play_task_path(@play, @task),
-                    notice: t('messages.model.updated', model: t('model.task').to_s.humanize)
+            redirect_to play_move_path(@play, @move),
+                    notice: t('messages.model.updated', model: t('model.move').to_s.humanize)
           end
           
         end
 
-        format.json { render :show, status: :ok, location: @task }
+        format.json { render :show, status: :ok, location: @move }
       else
         format.html { render :edit }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        format.json { render json: @move.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /tasks/1
-  # DELETE /tasks/1.json
+  # DELETE /moves/1
+  # DELETE /moves/1.json
   def destroy
-    authorize @task, :mod_allowed?
-    @task.destroy
+    authorize Playbook, :mod_allowed?
+    @move.destroy
     respond_to do |format|
       format.html do
-        redirect_to play_task_url,
-                    notice: t('messages.model.deleted', model: t('model.task').to_s.humanize)
+        redirect_to play_move_url,
+                    notice: t('messages.model.deleted', model: t('model.move').to_s.humanize)
       end
       format.json { head :no_content }
     end
   end
 
   def duplicates
-    @tasks = Array.new
+    @moves = Array.new
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
       if current_slug != original_slug
-        @tasks = Task.where(slug: current_slug)
+        @moves = Move.where(slug: current_slug)
       end
     end
-    authorize Task, :view_allowed?
-    render json: @tasks, only: [:name]
+    authorize Playbook, :view_allowed?
+    render json: @moves, only: [:name]
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_task
+  def set_move
     if !params[:id].scan(/\D/).empty?
-      @task = Task.find_by(slug: params[:id]) || not_found
+      @move = Move.find_by(slug: params[:id]) || not_found
     else
-      @task = Task.find(params[:id]) || not_found
+      @move = Move.find(params[:id]) || not_found
     end
+    @description = @move.move_descriptions
+                                 .select { |desc| desc.locale == I18n.locale.to_s }
+                                 .first
   end
 
   # Only allow a list of trusted parameters through.
-  def task_params
-    params.require(:task)
-          .permit(:name, :slug, :task_desc, :description, :complete, :due_date, :order, :media_url, :play_id, :parent_play, :parent_activity, :parent_playbook, :resources => [:name, :description, :url])
+  def move_params
+    params.require(:move)
+          .permit(:name, :slug, :move_description, :move_prerequisites, :move_outcomes, :description, :complete, :due_date, :order, :media_url, :play_id, :parent_play, :parent_activity, :parent_playbook, :resources => [:name, :description, :url])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])
               if params[:duplicate].present?
-                first_duplicate = Task.slug_starts_with(attr[:slug]).order(slug: :desc).first
+                first_duplicate = Move.slug_starts_with(attr[:slug]).order(slug: :desc).first
                 attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
               end
             end

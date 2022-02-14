@@ -41,11 +41,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :tasks, only: [:index, :update, :create, :destroy]
+  resources :moves, only: [:index, :update, :create, :destroy]
   resources :activities, only: [:index, :update, :create, :destroy]
 
-  
-  resources :playbooks
+  resources :plays do
+    resources :moves
+  end
+
+  resources :playbooks do
+    post 'assign_play'
+    post 'remove_play'
+    resources :plays do
+      resources :moves
+    end
+  end
 
   resources :handbook_pages, only: [:index, :update, :create, :destroy]
   resources :handbooks do

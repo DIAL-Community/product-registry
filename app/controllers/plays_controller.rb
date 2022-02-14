@@ -8,7 +8,7 @@ class PlaysController < ApplicationController
     if params[:without_paging]
       @plays = Play.order(:name)
       !params[:search].blank? && @plays = @plays.name_contains(params[:search])
-      authorize @plays, :view_allowed?
+      authorize Playbooks, :view_allowed?
       return @plays
     end
 
@@ -22,30 +22,24 @@ class PlaysController < ApplicationController
     else
       @plays = @plays.order(:name).paginate(page: current_page, per_page: 5)
     end
-    authorize @plays, :view_allowed?
+    authorize Playbook, :view_allowed?
   end
 
   # GET /play/1
   # GET /play/1.json
   def show
-    if params[:activity_id]
-      @activity = Activity.find_by(slug: params[:activity_id])
-      @playbook = Playbook.find(@activity.playbook_id)
-    end
-    authorize @play, :view_allowed?
+    
+    authorize Playbook, :view_allowed?
   end
 
   # GET /plays/new
   def new
     @play = Play.new
     if params[:playbook_id]
-      @play.playbook_id = params[:playbook_id]
-    end
-    if params[:activity_id]
-      @play.activity_id = params[:activity_id]
+      @playbook_id = params[:playbook_id]
     end
     @description = PlayDescription.new
-    authorize @play, :mod_allowed?
+    authorize Playbook, :mod_allowed?
   end
 
   # GET /plays/1/edit
@@ -53,13 +47,13 @@ class PlaysController < ApplicationController
     if params[:playbook_id]
       @play.playbook_id = params[:playbook_id]
     end
-    if params[:activity_id]
-      @play.activity_id = params[:activity_id]
+    if params[:move_id]
+      @play.move_id = params[:move_id]
     end
     @description = @play.play_descriptions
                                  .select { |desc| desc.locale == I18n.locale.to_s }
                                  .first
-    authorize @play, :mod_allowed?
+    authorize Playbook, :mod_allowed?
   end
 
   # POST /plays
@@ -68,7 +62,7 @@ class PlaysController < ApplicationController
     @play = Play.new(play_params)
     @play_desc = PlayDescription.new
 
-    authorize @play, :mod_allowed?
+    authorize Playbook, :mod_allowed?
 
     respond_to do |format|
       if @play.save
@@ -76,8 +70,6 @@ class PlaysController < ApplicationController
           @play_desc.play_id = @play.id
           @play_desc.locale = I18n.locale
           params[:play_description].present? && @play_desc.description = params[:play_description]
-          params[:play_prerequisites].present? && @play_desc.prerequisites = params[:play_prerequisites]
-          params[:play_outcomes].present? && @play_desc.outcomes = params[:play_outcomes]
           @play_desc.save
         end
 
@@ -90,16 +82,16 @@ class PlaysController < ApplicationController
           end
         end
 
-        if play_params[:activity_id]
-          @activity = Activity.find_by(slug: play_params[:activity_id])
-          @playbook = Playbook.find(@activity.playbook_id)
-          @activity.plays << @play
-          @activity.save
+        if params[:playbook_id]
+          # Assign it to a playbook immediately
+          playbook = Playbook.find_by(slug: params[:playbook_id])
+          playbook.playbook_plays << @play
+          playbook.save
         end
 
         format.html do
-          if (!@activity.nil?)
-            redirect_to playbook_activity_path(@playbook, @activity),
+          if (!@move_id.nil?)
+            redirect_to playbook_move_path(@playbook, @move_id),
                       notice: t('messages.model.created', model: t('model.play').to_s.humanize)
           else
             redirect_to @play,
@@ -117,7 +109,7 @@ class PlaysController < ApplicationController
   # PATCH/PUT /plays/1
   # PATCH/PUT /plays/1.json
   def update
-    authorize @play, :mod_allowed?
+    authorize Playbook, :mod_allowed?
     if play_params[:play_description].present? || play_params[:play_outcomes].present? || play_params[:play_prerequisites].present?
       @play_desc = PlaybookDescription.where(playbook_id: @play.id,
                                                               locale: I18n.locale)
@@ -156,7 +148,7 @@ class PlaysController < ApplicationController
   # DELETE /plays/1
   # DELETE /plays/1.json
   def destroy
-    authorize @play, :mod_allowed?
+    authorize Playbook, :mod_allowed?
     @play.destroy
     respond_to do |format|
       format.html do
@@ -190,12 +182,16 @@ class PlaysController < ApplicationController
     else
       @play = Play.find(params[:id]) || not_found
     end
+
+    @description = @play.play_descriptions
+                                 .select { |desc| desc.locale == I18n.locale.to_s }
+                                 .first
   end
 
   # Only allow a list of trusted parameters through.
   def play_params
     params.require(:play)
-      .permit(:name, :slug, :play_desc, :description_html, :author, :version, :logo, :play_prerequisites, :play_description, :play_outcomes, :playbook_id, :activity_id, :resources => [:name, :description, :url])
+      .permit(:name, :slug, :play_desc, :description_html, :author, :version, :logo, :play_prerequisites, :play_description, :play_outcomes, :playbook_id, :move_id, :resources => [:name, :description, :url])
       .tap do |attr|
         if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])

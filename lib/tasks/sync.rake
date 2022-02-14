@@ -291,6 +291,9 @@ namespace :sync do
            .each do |product|
       next if product.website.nil? || product.website.empty?
 
+      product_description = ProductDescription.where(product_id: product, locale: I18n.locale)
+      next if !product_description.empty?
+
       begin
         puts "(Product) Opening connection to: #{product.website}."
         uri = URI.parse("https://#{product.website}")
@@ -327,6 +330,9 @@ namespace :sync do
                 .where(organization_descriptions: { id: nil })
                 .each do |organization|
       next if organization.website.nil? || organization.website.empty?
+
+      org_description = OrganizationDescription.where(organization_id: organization, locale: I18n.locale)
+      next if !org_description.empty?
 
       begin
         puts "(Organization) Opening connection to: #{organization.website}."
