@@ -1,7 +1,3 @@
-require 'combine_pdf'
-require 'pdfkit'
-require 'tempfile'
-
 class PlaybooksController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_playbook, only: [:show, :edit, :update, :destroy, :create_pdf, :show_pdf]
@@ -26,20 +22,6 @@ class PlaybooksController < ApplicationController
       @playbooks = @playbooks.paginate(page: current_page, per_page: 5)
     end
     authorize @playbooks, :view_allowed?
-  end
-
-  def upload_design_images
-    uploaded_filenames = []
-    uploaded_files = params[:files]
-    root_rails = Rails.root.join('public', 'assets', 'playbooks', 'design_images') 
-    uploaded_files.each do |uploaded_file|
-      File.open("#{root_rails}/#{uploaded_file.original_filename}", 'wb') do |file|
-        file.write(uploaded_file.read)
-        uploaded_filenames << "/assets/playbooks/design_images/#{uploaded_file.original_filename}"
-      end
-    end
-
-    respond_to { |format| format.json { render json: { data: uploaded_filenames }, status: :ok } }
   end
 
   # GET /playbook/1
@@ -78,7 +60,6 @@ class PlaybooksController < ApplicationController
         playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
         playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
         playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
-        playbook_params[:playbook_cover].present? && @playbook_desc.cover = playbook_params[:playbook_cover]
         @playbook_desc.save
 
         if params[:logo].present?
@@ -106,7 +87,7 @@ class PlaybooksController < ApplicationController
   # PATCH/PUT /playbooks/1.json
   def update
     authorize @playbook, :mod_allowed?
-    if playbook_params[:playbook_overview].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present? || playbook_params[:playbook_cover].present?
+    if playbook_params[:playbook_desc].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present?
       @playbook_desc = PlaybookDescription.where(playbook_id: @playbook.id,
                                                               locale: I18n.locale)
                                                         .first || PlaybookDescription.new
@@ -115,7 +96,6 @@ class PlaybooksController < ApplicationController
       playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
       playbook_params[:playbook_audience].present? && @playbook_desc.audience = playbook_params[:playbook_audience]
       playbook_params[:playbook_outcomes].present? && @playbook_desc.outcomes = playbook_params[:playbook_outcomes]
-      playbook_params[:playbook_cover].present? && @playbook_desc.cover = playbook_params[:playbook_cover]
       @playbook_desc.save
     end
 
@@ -174,44 +154,7 @@ class PlaybooksController < ApplicationController
     end
     authorize Playbook, :view_allowed?
     render json: @playbook, only: [:name]
-  end
-
-  def convert_pages
-    unless params[:page_ids].present?
-      format.json { render json: {}, status: :unprocessable_entity }
-    end
-
-    base_filename = ''
-    combined_pdfs = CombinePDF.new
-
-    params[:page_ids].each do |page_id|
-      base_filename += "#{page_id}-"
-
-      page_content = PageContent.find_by(playbook_page_id: page_id, locale: "en")
-      next if page_content.nil? || page_content.html.nil?
-
-      pdf_data = PDFKit.new(page_content.html, page_size: 'Letter')
-      if page_content.editor_type != "simple"
-        pdf_data.stylesheets = page_content.css
-      end
-
-      temporary = Tempfile.new(Time.now.strftime('%s'))
-      pdf_data.to_file(temporary.path)
-
-      combined_pdfs << CombinePDF.load(temporary.path)
-    end
-
-    temporary = Tempfile.new(Time.now.strftime('%s'))
-    combined_pdfs.save(temporary.path)
-
-    json = {}
-    json["filename"] = "Page-#{base_filename}-exported.pdf"
-    json["content_type"] = "application/pdf"
-    json["data"] = Base64.strict_encode64(File.read(temporary.path))
-
-    respond_to do |format|
-      format.json { render json: json }
-    end
+    
   end
 
   private
@@ -224,35 +167,16 @@ class PlaybooksController < ApplicationController
       @playbook = Playbook.find(params[:id]) || not_found
     end
 
-    @pages = []
-    parent_pages = PlaybookPage.where("playbook_id=? and parent_page_id is null", @playbook.id).order(:page_order)
-    parent_pages.each do |page|
-      @pages << page
-      child_pages = PlaybookPage.where(parent_page_id: page).order(:page_order)
-      if !child_pages.empty?
-        page.child_pages = []
-        child_pages.each do |child_page|
-          page.child_pages << child_page
-          grandchild_pages = PlaybookPage.where(parent_page_id: child_page).order(:page_order)
-          if !grandchild_pages.empty?
-            child_page.child_pages = []
-            grandchild_pages.each do |grandchild_page|
-              child_page.child_pages << grandchild_page
-            end
-          end
-        end
-      end
-    end
-
     @description = @playbook.playbook_descriptions
                                  .select { |desc| desc.locale == I18n.locale.to_s }
                                  .first
+
   end
 
   # Only allow a list of trusted parameters through.
   def playbook_params
     params.require(:playbook)
-          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :playbook_cover, :logo, :maturity, :pdf_url, :phases => [:name, :description])
+          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :phases => [:name, :description])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])
