@@ -203,7 +203,7 @@ class Product < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:id, :statistics, :license_analysis, :default_url, :publicgoods_data, :status, :created_at, :updated_at],
+      except: [:id, :statistics, :license_analysis, :default_url, :status, :created_at, :updated_at],
       include: {
         organizations: { only: [:name] },
         sectors: { only: [:name] },

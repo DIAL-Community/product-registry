@@ -852,12 +852,6 @@ class ProductsController < ApplicationController
         { :name => org.name, :website => 'https://'+org.website.to_s, :org_type => org_prod.org_type }
       end
 
-      # Get data from publicgoods_data attribute
-      publicgoods_name = product.publicgoods_data['name']
-      publicgoods_licenseURL = product.publicgoods_data['licenseURL']
-      publicgoods_aliases = product.publicgoods_data['aliases']
-      publicgoods_stage = product.publicgoods_data['stage']
-
       description = ProductDescription.where(product_id: product, locale: I18n.locale).first
 
       if description.nil? 
@@ -871,7 +865,7 @@ class ProductsController < ApplicationController
         repositoryURL = product.repository
       end
 
-      { :name => product.name, :publicgoods_name => publicgoods_name, :aliases => publicgoods_aliases.as_json, :stage => publicgoods_stage, :description => product_desc, :website => 'https://'+product.website.to_s, :license => [{:spdx => product.license, :licenseURL => publicgoods_licenseURL}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => [ "software" ], :repositoryURL => repositoryURL, :organizations => org_list.as_json }
+      { :name => product.name, :description => product_desc, :website => 'https://'+product.website.to_s, :license => [{:spdx => product.license, :licenseURL => publicgoods_licenseURL}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => [ "software" ], :repositoryURL => repositoryURL, :organizations => org_list.as_json }
     end
 
     curr_products.each do |prod|
