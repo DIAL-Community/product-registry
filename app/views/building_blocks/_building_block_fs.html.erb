@@ -15,11 +15,23 @@ a:hover {
     text-decoration:none;
     cursor:pointer;
 }
+
+.published {
+  background-color: #50c878;
+}
+
+.working {
+  background-color: #ffae00;
+}
+
+.future {
+  background-color: #0031ee;
+}
 </style>
 
 <div class="col-lg-3 col-md-4 d-flex mt-2">
     <div class="card w-100 index-card">
-      <div class="card-header text-white truncate-parent" style="background-color:#0031ee;">
+      <div class="card-header text-white truncate-parent <%= @bb_status %>">
         <%= link_to building_block.name, building_block, class: 'truncate-text', target: :_blank,
             'title' => building_block.name %>
       </div>
