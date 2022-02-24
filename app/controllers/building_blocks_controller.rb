@@ -442,32 +442,35 @@ class BuildingBlocksController < ApplicationController
   end
 
   def bb_fs 
-    @building_blocks = BuildingBlock.name_contains(params[:search])
-                                      .order(:name)
-    @bb_desc = [{name: 'Analytics and Business Intelligence', desc: 'Provides data-driven insights about business processes, performance and predictive modelling.'},
-      {name: 'Artificial Intelligence', desc: 'AI capabilities packaged as reusable services to perform work, extract insights from data, or provide other business capabilities.'},
-      {name: 'Client Case Management', desc: 'Registration of a client and the longitudinal tracking of services for the client, often across multiple service categories, providers and locations.'},
-      {name: 'Collaboration Management', desc: 'Enables multiple users to simultaneously access, modify or contribute to a single activity, such as content creation, through a unified portal.'},
-      {name: 'Consent Management', desc: 'Manages a set of policies allowing users to determine the info that will be accessible to specific potential info consumers, for which purpose, for how long and whether this info can be shared.<br/><br/>'},
-      {name: 'Content Management', desc: 'Supports the creation, editing, publication and management of digital media and other information.'},
-      {name: 'Data Collection', desc: 'Supports data collection from humans, sensors and other systems through digital interfaces.'},
-      {name: 'Digital Registries', desc: 'Registries are centrally managed databases that uniquely identify persons, vendors, procedures, products and sites related to an organization or activity.'},
-      {name: 'eLearning', desc: 'Supports facilitated or remote learning through digital interaction between educators and students.'},
-      {name: 'eMarketplace', desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell products & services to other entities (B2B) or end-customers (B2C).'},
-      {name: 'Geographic Information Services (GIS)', desc: 'Provides functionality to identify, tag and analyze geographic locations of an object, such as a water source, building, mobile phone or medical commodity.'},
-      {name: 'Identification and Authentication', desc: 'Enables unique identification and authentication of users, organizations and other entities.'},
-      {name: 'Information Mediator', desc: 'Provides a gateway between external digital apps & ICT Building Blocks, ensuring implementation of standards, for integrating various ICT Building Blocks & apps.'},
-      {name: 'Messaging', desc: 'Facilitates notifications, alerts and two-way communications between applications and communications services, including SMS, USSD, IVR, email and social media platforms.'},
-      {name: 'Mobility Management', desc: 'Services to securely enable employees’ use and management of mobile devices and applications in a business context.'},
-      {name: 'Payments', desc: 'Implements financial transactions (e.g., remittances, claims, purchases & payments, transactional info). Tracking costs utilities & audit trials.'},
-      {name: 'Registration', desc: 'Records identifiers and general information about a person, place or entity, typically for the purpose of registration  in specific services or programmes and tracking of that entity over time.'},
-      {name: 'Reporting and Dashboards', desc: 'Provides pre-packaged and custom presentations of data and summaries of an organization’s pre-defined key performance metrics, often in visual format.'},
-      {name: 'Scheduling', desc: 'Provides an engine for setting up events based on regular intervals or specific combinations of status of several parameters in order to trigger specific tasks in an automated business process.'},
-      {name: 'Security', desc: 'Allows ICT admins to centrally configure & manage user access permissions to network resources, services, databases, apps and devices. Enables secure info exchange between apps.'},
-      {name: 'Shared Data Repositories', desc: 'Shared space to store data for a specified knowledge area that external applications use, often providing domain-specific functionality and data presentations.'},
-      {name: 'Terminology', desc: 'Registry of definitions with defined standards, synonyms for a particular domain of knowledge (eg agriculture), used to facilitate semantic interoperability.'},
-      {name: 'Workflow and Algorithm', desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, the type of info exchanged  to orchestrate the process flow from initiation to completion.'},
-  ]
+    all_bb_desc = [{name: 'Analytics and Business Intelligence', status: 'future', desc: 'Provides data-driven insights about business processes, performance and predictive modelling.'},
+      {name: 'Artificial Intelligence', status: 'future', desc: 'AI capabilities packaged as reusable services to perform work, extract insights from data, or provide other business capabilities.'},
+      {name: 'Client Case Management', status: 'future', desc: 'Registration of a client and the longitudinal tracking of services for the client, often across multiple service categories, providers and locations.'},
+      {name: 'Collaboration Management', status: 'future', desc: 'Enables multiple users to simultaneously access, modify or contribute to a single activity, such as content creation, through a unified portal.'},
+      {name: 'Consent Management', status: 'working', desc: 'Manages a set of policies allowing users to determine the info that will be accessible to specific potential info consumers, for which purpose, for how long and whether this info can be shared.<br/><br/>'},
+      {name: 'Content Management', status: 'future', desc: 'Supports the creation, editing, publication and management of digital media and other information.'},
+      {name: 'Data Collection', status: 'future', desc: 'Supports data collection from humans, sensors and other systems through digital interfaces.'},
+      {name: 'Digital Registries', status: 'published', desc: 'Registries are centrally managed databases that uniquely identify persons, vendors, procedures, products and sites related to an organization or activity.'},
+      {name: 'eLearning', status: 'future', desc: 'Supports facilitated or remote learning through digital interaction between educators and students.'},
+      {name: 'eMarketplace', status: 'working', desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell products & services to other entities (B2B) or end-customers (B2C).'},
+      {name: 'Geographic Information Services (GIS)', status: 'future', desc: 'Provides functionality to identify, tag and analyze geographic locations of an object, such as a water source, building, mobile phone or medical commodity.'},
+      {name: 'Identification and Authentication', status: 'published', desc: 'Enables unique identification and authentication of users, organizations and other entities.'},
+      {name: 'Information Mediator', status: 'published', desc: 'Provides a gateway between external digital apps & ICT Building Blocks, ensuring implementation of standards, for integrating various ICT Building Blocks & apps.'},
+      {name: 'Messaging', status: 'working', desc: 'Facilitates notifications, alerts and two-way communications between applications and communications services, including SMS, USSD, IVR, email and social media platforms.'},
+      {name: 'Mobility Management', status: 'future', desc: 'Services to securely enable employees’ use and management of mobile devices and applications in a business context.'},
+      {name: 'Payments', status: 'published', desc: 'Implements financial transactions (e.g., remittances, claims, purchases & payments, transactional info). Tracking costs utilities & audit trials.'},
+      {name: 'Registration', status: 'published', desc: 'Records identifiers and general information about a person, place or entity, typically for the purpose of registration  in specific services or programmes and tracking of that entity over time.'},
+      {name: 'Reporting and Dashboards', status: 'future', desc: 'Provides pre-packaged and custom presentations of data and summaries of an organization’s pre-defined key performance metrics, often in visual format.'},
+      {name: 'Scheduling', status: 'working', desc: 'Provides an engine for setting up events based on regular intervals or specific combinations of status of several parameters in order to trigger specific tasks in an automated business process.'},
+      {name: 'Security', status: 'published', desc: 'Allows ICT admins to centrally configure & manage user access permissions to network resources, services, databases, apps and devices. Enables secure info exchange between apps.'},
+      {name: 'Shared Data Repositories', status: 'future', desc: 'Shared space to store data for a specified knowledge area that external applications use, often providing domain-specific functionality and data presentations.'},
+      {name: 'Terminology', status: 'future', desc: 'Registry of definitions with defined standards, synonyms for a particular domain of knowledge (eg agriculture), used to facilitate semantic interoperability.'},
+      {name: 'Workflow and Algorithm', status: 'working', desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, the type of info exchanged  to orchestrate the process flow from initiation to completion.'},
+    ]
+
+    @bb_status = params[:status]
+    @bb_desc = all_bb_desc.select { |bb| bb[:status] == params[:status] }
+    bb_names = @bb_desc.pluck(:name).map(&:downcase)
+    @building_blocks = BuildingBlock.where("lower(name) in (?)", bb_names)
   end
 
   private
