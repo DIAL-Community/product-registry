@@ -467,10 +467,10 @@ class BuildingBlocksController < ApplicationController
       {name: 'Workflow and Algorithm', status: 'working', desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, the type of info exchanged  to orchestrate the process flow from initiation to completion.'},
     ]
 
-    @bb_status = params[:status]
-    @bb_desc = all_bb_desc.select { |bb| bb[:status] == params[:status] }
+    @bb_status = !params[:status].nil? ? params[:status] : nil
+    @bb_desc = !@bb_status.nil? ? all_bb_desc.select { |bb| bb[:status] == @bb_status } : all_bb_desc
     bb_names = @bb_desc.pluck(:name).map(&:downcase)
-    @building_blocks = BuildingBlock.where("lower(name) in (?)", bb_names)
+    @building_blocks = BuildingBlock.where("lower(name) in (?)", bb_names).order(:name)
   end
 
   private
