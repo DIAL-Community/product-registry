@@ -1,8 +1,9 @@
 class GraphqlController < ApplicationController
+  #before_action :authenticate_user!
   # If accessing from outside this domain, nullify the session
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
-  # protect_from_forgery with: :null_session
+  protect_from_forgery with: :null_session
 
   # before_action :block_unknown_remote_addresses
   def block_unknown_remote_addresses
@@ -35,7 +36,7 @@ class GraphqlController < ApplicationController
     token = request.headers['Authorization'].split(' ').last
     return nil if token.blank?
     User.find_by(authentication_token: token)
-  end
+ end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)

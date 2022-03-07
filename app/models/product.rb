@@ -160,7 +160,7 @@ class Product < ApplicationRecord
                    .map(&:name)
                    .join('; ')
 
-        csv << [p.id, p.name, p.slug, p.website, p.repository, organizations, origins]
+        csv << [p.id, p.name, p.slug, p.website, p.main_repository, organizations, origins]
       end
     end
   end
@@ -191,6 +191,8 @@ class Product < ApplicationRecord
       json['building_blocks'] = building_blocks.as_json({ only: [:name, :slug], api_path: api_path(options) })
       json['sustainable_development_goals'] = sustainable_development_goals.as_json({ only: [:name, :slug, :number],
                                                                                       api_path: api_path(options) })
+      json['repositories'] = product_repositories.as_json({ only: [:name, :slug, :absolute_url],
+                                                            api_path: api_path(options) })
     end
     if options[:collection_path].present? || options[:api_path].present?
       json['self_url'] = self_url(options)

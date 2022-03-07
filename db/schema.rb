@@ -416,6 +416,67 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.index ["handbook_page_id"], name: "index_page_contents_on_handbook_page_id"
   end
 
+  create_table "play_descriptions", force: :cascade do |t|
+    t.bigint "play_id"
+    t.string "locale", null: false
+    t.string "description", null: false
+    t.index ["play_id"], name: "index_play_descriptions_on_play_id"
+  end
+
+  create_table "play_moves", force: :cascade do |t|
+    t.bigint "play_id"
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.integer "order", null: false
+    t.jsonb "resources", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["play_id"], name: "index_play_moves_on_play_id"
+  end
+
+  create_table "playbook_descriptions", force: :cascade do |t|
+    t.bigint "playbook_id"
+    t.string "locale", null: false
+    t.string "overview", null: false
+    t.string "audience", null: false
+    t.string "outcomes", null: false
+    t.index ["playbook_id"], name: "index_playbook_descriptions_on_playbook_id"
+  end
+
+  create_table "playbook_plays", force: :cascade do |t|
+    t.bigint "playbook_id", null: false
+    t.bigint "play_id", null: false
+    t.string "phase"
+    t.integer "order"
+    t.index ["play_id"], name: "index_playbook_plays_on_play_id"
+    t.index ["playbook_id"], name: "index_playbook_plays_on_playbook_id"
+  end
+
+  create_table "playbooks", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.jsonb "phases", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "plays", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "author"
+    t.jsonb "resources", default: [], null: false
+    t.string "version", default: "1.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "plays_subplays", force: :cascade do |t|
+    t.bigint "parent_play_id", null: false
+    t.bigint "child_play_id", null: false
+    t.integer "order"
+    t.index ["parent_play_id", "child_play_id"], name: "play_rel_index", unique: true
+  end
+
   create_table "portal_views", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -720,20 +781,45 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "move_descriptions", force: :cascade do |t|
+    t.bigint "play_move_id"
+    t.string "locale", null: false
+    t.string "description", null: false
+    t.string "prerequisites", default: "", null: false
+    t.string "outcomes", default: "", null: false
+    t.index ["play_move_id"], name: "index_move_descriptions_on_play_move_id"
+  end
+
   create_table "task_tracker_descriptions", force: :cascade do |t|
     t.bigint "task_tracker_id", null: false
     t.string "locale", null: false
     t.jsonb "description", default: {}, null: false
-    t.index ["task_tracker_id"], name: "index_task_tracker_descriptions_on_task_tracker_id"
+    t.index ["move_tracker_id"], name: "index_move_tracker_descriptions_on_move_tracker_id"
   end
 
-  create_table "task_trackers", force: :cascade do |t|
+  create_table "move_trackers", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
     t.datetime "last_run"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "message", null: false
+  end
+
+  create_table "moves_organizations", force: :cascade do |t|
+    t.bigint "play_move_id"
+    t.bigint "organization_id", null: false
+    t.index ["organization_id", "play_move_id"], name: "organizations_move_idx", unique: true
+    t.index ["play_move_id", "organization_id"], name: "move_organizations_idx", unique: true
+    t.index ["play_move_id"], name: "index_moves_organizations_on_play_move_id"
+  end
+
+  create_table "moves_products", force: :cascade do |t|
+    t.bigint "play_move_id"
+    t.bigint "product_id", null: false
+    t.index ["play_move_id", "product_id"], name: "moves_products_idx", unique: true
+    t.index ["play_move_id"], name: "index_moves_products_on_play_move_id"
+    t.index ["product_id", "play_move_id"], name: "products_moves_idx", unique: true
   end
 
   create_table "use_case_descriptions", force: :cascade do |t|
@@ -901,6 +987,13 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
   add_foreign_key "organizations_states", "organizations"
   add_foreign_key "organizations_states", "regions"
   add_foreign_key "page_contents", "handbook_pages"
+  add_foreign_key "play_descriptions", "plays"
+  add_foreign_key "play_moves", "plays"
+  add_foreign_key "playbook_descriptions", "playbooks"
+  add_foreign_key "playbook_plays", "playbooks"
+  add_foreign_key "playbook_plays", "plays"
+  add_foreign_key "plays_subplays", "plays", column: "child_play_id", name: "child_play_fk"
+  add_foreign_key "plays_subplays", "plays", column: "parent_play_id", name: "parent_play_fk"
   add_foreign_key "principle_descriptions", "digital_principles"
   add_foreign_key "product_building_blocks", "building_blocks", name: "products_building_blocks_building_block_fk"
   add_foreign_key "product_building_blocks", "products", name: "products_building_blocks_product_fk"
@@ -945,6 +1038,13 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
   add_foreign_key "sectors", "origins"
   add_foreign_key "sectors", "sectors", column: "parent_sector_id"
   add_foreign_key "tag_descriptions", "tags"
+  add_foreign_key "move_descriptions", "play_moves"
+  add_foreign_key "moves_organizations", "organizations", name: "organizations_moves_org_fk"
+  add_foreign_key "moves_organizations", "play_moves"
+  add_foreign_key "moves_organizations", "play_moves", name: "organizations_moves_play_fk"
+  add_foreign_key "moves_products", "play_moves"
+  add_foreign_key "moves_products", "play_moves", name: "products_moves_move_fk"
+  add_foreign_key "moves_products", "products", name: "products_moves_product_fk"
   add_foreign_key "task_tracker_descriptions", "task_trackers"
   add_foreign_key "use_case_descriptions", "use_cases"
   add_foreign_key "use_case_headers", "use_cases"

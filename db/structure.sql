@@ -1796,10 +1796,10 @@ ALTER SEQUENCE public.play_descriptions_id_seq OWNED BY public.play_descriptions
 
 
 --
--- Name: play_tasks; Type: TABLE; Schema: public; Owner: -
+-- Name: play_moves; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.play_tasks (
+CREATE TABLE public.play_moves (
     id bigint NOT NULL,
     play_id bigint,
     name character varying NOT NULL,
@@ -1812,10 +1812,10 @@ CREATE TABLE public.play_tasks (
 
 
 --
--- Name: play_tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: play_moves_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.play_tasks_id_seq
+CREATE SEQUENCE public.play_moves_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1824,10 +1824,10 @@ CREATE SEQUENCE public.play_tasks_id_seq
 
 
 --
--- Name: play_tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: play_moves_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.play_tasks_id_seq OWNED BY public.play_tasks.id;
+ALTER SEQUENCE public.play_moves_id_seq OWNED BY public.play_moves.id;
 
 
 --
@@ -3069,12 +3069,12 @@ ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
--- Name: task_descriptions; Type: TABLE; Schema: public; Owner: -
+-- Name: move_descriptions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.task_descriptions (
+CREATE TABLE public.move_descriptions (
     id bigint NOT NULL,
-    play_task_id bigint,
+    play_move_id bigint,
     locale character varying NOT NULL,
     description character varying NOT NULL,
     prerequisites character varying DEFAULT ''::character varying NOT NULL,
@@ -3083,10 +3083,10 @@ CREATE TABLE public.task_descriptions (
 
 
 --
--- Name: task_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: move_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.task_descriptions_id_seq
+CREATE SEQUENCE public.move_descriptions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3095,29 +3095,29 @@ CREATE SEQUENCE public.task_descriptions_id_seq
 
 
 --
--- Name: task_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: move_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.task_descriptions_id_seq OWNED BY public.task_descriptions.id;
+ALTER SEQUENCE public.move_descriptions_id_seq OWNED BY public.move_descriptions.id;
 
 
 --
--- Name: task_tracker_descriptions; Type: TABLE; Schema: public; Owner: -
+-- Name: move_tracker_descriptions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.task_tracker_descriptions (
+CREATE TABLE public.move_tracker_descriptions (
     id bigint NOT NULL,
-    task_tracker_id bigint NOT NULL,
+    move_tracker_id bigint NOT NULL,
     locale character varying NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
 --
--- Name: task_tracker_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: move_tracker_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.task_tracker_descriptions_id_seq
+CREATE SEQUENCE public.move_tracker_descriptions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3126,17 +3126,17 @@ CREATE SEQUENCE public.task_tracker_descriptions_id_seq
 
 
 --
--- Name: task_tracker_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: move_tracker_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.task_tracker_descriptions_id_seq OWNED BY public.task_tracker_descriptions.id;
+ALTER SEQUENCE public.move_tracker_descriptions_id_seq OWNED BY public.move_tracker_descriptions.id;
 
 
 --
--- Name: task_trackers; Type: TABLE; Schema: public; Owner: -
+-- Name: move_trackers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.task_trackers (
+CREATE TABLE public.move_trackers (
     id bigint NOT NULL,
     name character varying NOT NULL,
     slug character varying NOT NULL,
@@ -3148,10 +3148,10 @@ CREATE TABLE public.task_trackers (
 
 
 --
--- Name: task_trackers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: move_trackers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.task_trackers_id_seq
+CREATE SEQUENCE public.move_trackers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3160,28 +3160,28 @@ CREATE SEQUENCE public.task_trackers_id_seq
 
 
 --
--- Name: task_trackers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: move_trackers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.task_trackers_id_seq OWNED BY public.task_trackers.id;
+ALTER SEQUENCE public.move_trackers_id_seq OWNED BY public.move_trackers.id;
 
 
 --
--- Name: tasks_organizations; Type: TABLE; Schema: public; Owner: -
+-- Name: moves_organizations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.tasks_organizations (
+CREATE TABLE public.moves_organizations (
     id bigint NOT NULL,
-    play_task_id bigint,
+    play_move_id bigint,
     organization_id bigint NOT NULL
 );
 
 
 --
--- Name: tasks_organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: moves_organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.tasks_organizations_id_seq
+CREATE SEQUENCE public.moves_organizations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3190,28 +3190,28 @@ CREATE SEQUENCE public.tasks_organizations_id_seq
 
 
 --
--- Name: tasks_organizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: moves_organizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.tasks_organizations_id_seq OWNED BY public.tasks_organizations.id;
+ALTER SEQUENCE public.moves_organizations_id_seq OWNED BY public.moves_organizations.id;
 
 
 --
--- Name: tasks_products; Type: TABLE; Schema: public; Owner: -
+-- Name: moves_products; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.tasks_products (
+CREATE TABLE public.moves_products (
     id bigint NOT NULL,
-    play_task_id bigint,
+    play_move_id bigint,
     product_id bigint NOT NULL
 );
 
 
 --
--- Name: tasks_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: moves_products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.tasks_products_id_seq
+CREATE SEQUENCE public.moves_products_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3220,10 +3220,10 @@ CREATE SEQUENCE public.tasks_products_id_seq
 
 
 --
--- Name: tasks_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: moves_products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.tasks_products_id_seq OWNED BY public.tasks_products.id;
+ALTER SEQUENCE public.moves_products_id_seq OWNED BY public.moves_products.id;
 
 
 --
@@ -3961,10 +3961,10 @@ ALTER TABLE ONLY public.play_descriptions ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- Name: play_tasks id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: play_moves id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.play_tasks ALTER COLUMN id SET DEFAULT nextval('public.play_tasks_id_seq'::regclass);
+ALTER TABLE ONLY public.play_moves ALTER COLUMN id SET DEFAULT nextval('public.play_moves_id_seq'::regclass);
 
 
 --
@@ -4213,38 +4213,38 @@ ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id
 
 
 --
--- Name: task_descriptions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: move_descriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.task_descriptions ALTER COLUMN id SET DEFAULT nextval('public.task_descriptions_id_seq'::regclass);
-
-
---
--- Name: task_tracker_descriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.task_tracker_descriptions ALTER COLUMN id SET DEFAULT nextval('public.task_tracker_descriptions_id_seq'::regclass);
+ALTER TABLE ONLY public.move_descriptions ALTER COLUMN id SET DEFAULT nextval('public.move_descriptions_id_seq'::regclass);
 
 
 --
--- Name: task_trackers id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: move_tracker_descriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.task_trackers ALTER COLUMN id SET DEFAULT nextval('public.task_trackers_id_seq'::regclass);
-
-
---
--- Name: tasks_organizations id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.tasks_organizations ALTER COLUMN id SET DEFAULT nextval('public.tasks_organizations_id_seq'::regclass);
+ALTER TABLE ONLY public.move_tracker_descriptions ALTER COLUMN id SET DEFAULT nextval('public.move_tracker_descriptions_id_seq'::regclass);
 
 
 --
--- Name: tasks_products id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: move_trackers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_products ALTER COLUMN id SET DEFAULT nextval('public.tasks_products_id_seq'::regclass);
+ALTER TABLE ONLY public.move_trackers ALTER COLUMN id SET DEFAULT nextval('public.move_trackers_id_seq'::regclass);
+
+
+--
+-- Name: moves_organizations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.moves_organizations ALTER COLUMN id SET DEFAULT nextval('public.moves_organizations_id_seq'::regclass);
+
+
+--
+-- Name: moves_products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.moves_products ALTER COLUMN id SET DEFAULT nextval('public.moves_products_id_seq'::regclass);
 
 
 --
@@ -4677,11 +4677,11 @@ ALTER TABLE ONLY public.play_descriptions
 
 
 --
--- Name: play_tasks play_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: play_moves play_moves_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.play_tasks
-    ADD CONSTRAINT play_tasks_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.play_moves
+    ADD CONSTRAINT play_moves_pkey PRIMARY KEY (id);
 
 
 --
@@ -4973,43 +4973,43 @@ ALTER TABLE ONLY public.tags
 
 
 --
--- Name: task_descriptions task_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: move_descriptions move_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.task_descriptions
-    ADD CONSTRAINT task_descriptions_pkey PRIMARY KEY (id);
-
-
---
--- Name: task_tracker_descriptions task_tracker_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.task_tracker_descriptions
-    ADD CONSTRAINT task_tracker_descriptions_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.move_descriptions
+    ADD CONSTRAINT move_descriptions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: task_trackers task_trackers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: move_tracker_descriptions move_tracker_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.task_trackers
-    ADD CONSTRAINT task_trackers_pkey PRIMARY KEY (id);
-
-
---
--- Name: tasks_organizations tasks_organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.tasks_organizations
-    ADD CONSTRAINT tasks_organizations_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.move_tracker_descriptions
+    ADD CONSTRAINT move_tracker_descriptions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: tasks_products tasks_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: move_trackers move_trackers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_products
-    ADD CONSTRAINT tasks_products_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.move_trackers
+    ADD CONSTRAINT move_trackers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: moves_organizations moves_organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.moves_organizations
+    ADD CONSTRAINT moves_organizations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: moves_products moves_products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.moves_products
+    ADD CONSTRAINT moves_products_pkey PRIMARY KEY (id);
 
 
 --
@@ -5549,10 +5549,10 @@ CREATE INDEX index_play_descriptions_on_play_id ON public.play_descriptions USIN
 
 
 --
--- Name: index_play_tasks_on_play_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_play_moves_on_play_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_play_tasks_on_play_id ON public.play_tasks USING btree (play_id);
+CREATE INDEX index_play_moves_on_play_id ON public.play_moves USING btree (play_id);
 
 
 --
@@ -5773,31 +5773,31 @@ CREATE INDEX index_tag_descriptions_on_tag_id ON public.tag_descriptions USING b
 
 
 --
--- Name: index_task_descriptions_on_play_task_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_move_descriptions_on_play_move_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_task_descriptions_on_play_task_id ON public.task_descriptions USING btree (play_task_id);
-
-
---
--- Name: index_task_tracker_descriptions_on_task_tracker_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_task_tracker_descriptions_on_task_tracker_id ON public.task_tracker_descriptions USING btree (task_tracker_id);
+CREATE INDEX index_move_descriptions_on_play_move_id ON public.move_descriptions USING btree (play_move_id);
 
 
 --
--- Name: index_tasks_organizations_on_play_task_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_move_tracker_descriptions_on_move_tracker_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tasks_organizations_on_play_task_id ON public.tasks_organizations USING btree (play_task_id);
+CREATE INDEX index_move_tracker_descriptions_on_move_tracker_id ON public.move_tracker_descriptions USING btree (move_tracker_id);
 
 
 --
--- Name: index_tasks_products_on_play_task_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_moves_organizations_on_play_move_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tasks_products_on_play_task_id ON public.tasks_products USING btree (play_task_id);
+CREATE INDEX index_moves_organizations_on_play_move_id ON public.moves_organizations USING btree (play_move_id);
+
+
+--
+-- Name: index_moves_products_on_play_move_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_moves_products_on_play_move_id ON public.moves_products USING btree (play_move_id);
 
 
 --
@@ -5934,10 +5934,10 @@ CREATE UNIQUE INDEX organizations_projects_idx ON public.projects_organizations 
 
 
 --
--- Name: organizations_task_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: organizations_move_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX organizations_task_idx ON public.tasks_organizations USING btree (organization_id, play_task_id);
+CREATE UNIQUE INDEX organizations_move_idx ON public.moves_organizations USING btree (organization_id, play_move_id);
 
 
 --
@@ -6004,10 +6004,10 @@ CREATE UNIQUE INDEX products_projects_idx ON public.projects_products USING btre
 
 
 --
--- Name: products_tasks_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: products_moves_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX products_tasks_idx ON public.tasks_products USING btree (product_id, play_task_id);
+CREATE UNIQUE INDEX products_moves_idx ON public.moves_products USING btree (product_id, play_move_id);
 
 
 --
@@ -6102,17 +6102,17 @@ CREATE UNIQUE INDEX sectors_projects_idx ON public.projects_sectors USING btree 
 
 
 --
--- Name: task_organizations_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: move_organizations_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX task_organizations_idx ON public.tasks_organizations USING btree (play_task_id, organization_id);
+CREATE UNIQUE INDEX move_organizations_idx ON public.moves_organizations USING btree (play_move_id, organization_id);
 
 
 --
--- Name: tasks_products_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: moves_products_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX tasks_products_idx ON public.tasks_products USING btree (play_task_id, product_id);
+CREATE UNIQUE INDEX moves_products_idx ON public.moves_products USING btree (play_move_id, product_id);
 
 
 --
@@ -6203,11 +6203,11 @@ ALTER TABLE ONLY public.organizations_states
 
 
 --
--- Name: task_descriptions fk_rails_0684d55f45; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: move_descriptions fk_rails_0684d55f45; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.task_descriptions
-    ADD CONSTRAINT fk_rails_0684d55f45 FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+ALTER TABLE ONLY public.move_descriptions
+    ADD CONSTRAINT fk_rails_0684d55f45 FOREIGN KEY (play_move_id) REFERENCES public.play_moves(id);
 
 
 --
@@ -6435,11 +6435,11 @@ ALTER TABLE ONLY public.operator_services
 
 
 --
--- Name: tasks_products fk_rails_5d0fe9f0da; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: moves_products fk_rails_5d0fe9f0da; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_products
-    ADD CONSTRAINT fk_rails_5d0fe9f0da FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+ALTER TABLE ONLY public.moves_products
+    ADD CONSTRAINT fk_rails_5d0fe9f0da FOREIGN KEY (play_move_id) REFERENCES public.play_moves(id);
 
 
 --
@@ -6467,11 +6467,11 @@ ALTER TABLE ONLY public.handbook_pages
 
 
 --
--- Name: task_tracker_descriptions fk_rails_64d4c2c34c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: move_tracker_descriptions fk_rails_64d4c2c34c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.task_tracker_descriptions
-    ADD CONSTRAINT fk_rails_64d4c2c34c FOREIGN KEY (task_tracker_id) REFERENCES public.task_trackers(id);
+ALTER TABLE ONLY public.move_tracker_descriptions
+    ADD CONSTRAINT fk_rails_64d4c2c34c FOREIGN KEY (move_tracker_id) REFERENCES public.move_trackers(id);
 
 
 --
@@ -6611,10 +6611,10 @@ ALTER TABLE ONLY public.products_endorsers
 
 
 --
--- Name: play_tasks fk_rails_9fa08eb942; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: play_moves fk_rails_9fa08eb942; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.play_tasks
+ALTER TABLE ONLY public.play_moves
     ADD CONSTRAINT fk_rails_9fa08eb942 FOREIGN KEY (play_id) REFERENCES public.plays(id);
 
 
@@ -6763,11 +6763,11 @@ ALTER TABLE ONLY public.regions
 
 
 --
--- Name: tasks_organizations fk_rails_f657a28a49; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: moves_organizations fk_rails_f657a28a49; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_organizations
-    ADD CONSTRAINT fk_rails_f657a28a49 FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+ALTER TABLE ONLY public.moves_organizations
+    ADD CONSTRAINT fk_rails_f657a28a49 FOREIGN KEY (play_move_id) REFERENCES public.play_moves(id);
 
 
 --
@@ -6843,19 +6843,19 @@ ALTER TABLE ONLY public.organizations_sectors
 
 
 --
--- Name: tasks_organizations organizations_tasks_org_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: moves_organizations organizations_moves_org_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_organizations
-    ADD CONSTRAINT organizations_tasks_org_fk FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+ALTER TABLE ONLY public.moves_organizations
+    ADD CONSTRAINT organizations_moves_org_fk FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
 
 
 --
--- Name: tasks_organizations organizations_tasks_play_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: moves_organizations organizations_moves_play_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_organizations
-    ADD CONSTRAINT organizations_tasks_play_fk FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+ALTER TABLE ONLY public.moves_organizations
+    ADD CONSTRAINT organizations_moves_play_fk FOREIGN KEY (play_move_id) REFERENCES public.play_moves(id);
 
 
 --
@@ -6931,19 +6931,19 @@ ALTER TABLE ONLY public.product_sustainable_development_goals
 
 
 --
--- Name: tasks_products products_tasks_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: moves_products products_moves_product_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_products
-    ADD CONSTRAINT products_tasks_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
+ALTER TABLE ONLY public.moves_products
+    ADD CONSTRAINT products_moves_product_fk FOREIGN KEY (product_id) REFERENCES public.products(id);
 
 
 --
--- Name: tasks_products products_tasks_task_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: moves_products products_moves_move_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tasks_products
-    ADD CONSTRAINT products_tasks_task_fk FOREIGN KEY (play_task_id) REFERENCES public.play_tasks(id);
+ALTER TABLE ONLY public.moves_products
+    ADD CONSTRAINT products_moves_move_fk FOREIGN KEY (play_move_id) REFERENCES public.play_moves(id);
 
 
 --
