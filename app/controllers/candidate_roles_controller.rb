@@ -30,6 +30,7 @@ class CandidateRolesController < ApplicationController
     unless @candidate_role.product_id.nil?
       product = Product.find_by(id: @candidate_role.product_id)
       user.products << product unless product.nil?
+      user.save
     end
 
     respond_to do |format|

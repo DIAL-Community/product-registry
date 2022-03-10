@@ -321,6 +321,57 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "move_descriptions", id: :bigint, default: -> { "nextval('task_descriptions_id_seq'::regclass)" }, force: :cascade do |t|
+    t.bigint "play_move_id"
+    t.string "locale", null: false
+    t.string "description", null: false
+    t.string "prerequisites", default: "", null: false
+    t.string "outcomes", default: "", null: false
+    t.index ["play_move_id"], name: "index_task_descriptions_on_play_task_id"
+  end
+
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.integer "expires_in", null: false
+    t.text "redirect_uri", null: false
+    t.datetime "created_at", null: false
+    t.datetime "revoked_at"
+    t.string "scopes", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
+  end
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.bigint "resource_owner_id"
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.string "refresh_token"
+    t.integer "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
+    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
+    t.text "redirect_uri", null: false
+    t.string "scopes", default: "", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
   create_table "offices", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -423,7 +474,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.index ["play_id"], name: "index_play_descriptions_on_play_id"
   end
 
-  create_table "play_moves", force: :cascade do |t|
+  create_table "play_moves", id: :bigint, default: -> { "nextval('play_tasks_id_seq'::regclass)" }, force: :cascade do |t|
     t.bigint "play_id"
     t.string "name", null: false
     t.string "slug", null: false
@@ -431,7 +482,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.jsonb "resources", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["play_id"], name: "index_play_moves_on_play_id"
+    t.index ["play_id"], name: "index_play_tasks_on_play_id"
   end
 
   create_table "playbook_descriptions", force: :cascade do |t|
@@ -458,6 +509,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.jsonb "phases", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tags", default: [], array: true
   end
 
   create_table "plays", force: :cascade do |t|
@@ -468,6 +520,25 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.string "version", default: "1.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tags", default: [], array: true
+  end
+
+  create_table "plays_building_blocks", force: :cascade do |t|
+    t.bigint "play_id"
+    t.bigint "building_block_id"
+    t.index ["building_block_id", "play_id"], name: "bbs_plays_idx", unique: true
+    t.index ["building_block_id"], name: "index_plays_building_blocks_on_building_block_id"
+    t.index ["play_id", "building_block_id"], name: "plays_bbs_idx", unique: true
+    t.index ["play_id"], name: "index_plays_building_blocks_on_play_id"
+  end
+
+  create_table "plays_products", force: :cascade do |t|
+    t.bigint "play_id"
+    t.bigint "product_id"
+    t.index ["play_id", "product_id"], name: "plays_products_idx", unique: true
+    t.index ["play_id"], name: "index_plays_products_on_play_id"
+    t.index ["product_id", "play_id"], name: "products_plays_idx", unique: true
+    t.index ["product_id"], name: "index_plays_products_on_product_id"
   end
 
   create_table "plays_subplays", force: :cascade do |t|
@@ -781,45 +852,20 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "move_descriptions", force: :cascade do |t|
-    t.bigint "play_move_id"
-    t.string "locale", null: false
-    t.string "description", null: false
-    t.string "prerequisites", default: "", null: false
-    t.string "outcomes", default: "", null: false
-    t.index ["play_move_id"], name: "index_move_descriptions_on_play_move_id"
-  end
-
   create_table "task_tracker_descriptions", force: :cascade do |t|
     t.bigint "task_tracker_id", null: false
     t.string "locale", null: false
     t.jsonb "description", default: {}, null: false
-    t.index ["move_tracker_id"], name: "index_move_tracker_descriptions_on_move_tracker_id"
+    t.index ["task_tracker_id"], name: "index_task_tracker_descriptions_on_task_tracker_id"
   end
 
-  create_table "move_trackers", force: :cascade do |t|
+  create_table "task_trackers", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
     t.datetime "last_run"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "message", null: false
-  end
-
-  create_table "moves_organizations", force: :cascade do |t|
-    t.bigint "play_move_id"
-    t.bigint "organization_id", null: false
-    t.index ["organization_id", "play_move_id"], name: "organizations_move_idx", unique: true
-    t.index ["play_move_id", "organization_id"], name: "move_organizations_idx", unique: true
-    t.index ["play_move_id"], name: "index_moves_organizations_on_play_move_id"
-  end
-
-  create_table "moves_products", force: :cascade do |t|
-    t.bigint "play_move_id"
-    t.bigint "product_id", null: false
-    t.index ["play_move_id", "product_id"], name: "moves_products_idx", unique: true
-    t.index ["play_move_id"], name: "index_moves_products_on_play_move_id"
-    t.index ["product_id", "play_move_id"], name: "products_moves_idx", unique: true
   end
 
   create_table "use_case_descriptions", force: :cascade do |t|
@@ -968,6 +1014,11 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
   add_foreign_key "handbook_pages", "handbook_questions", column: "handbook_questions_id"
   add_foreign_key "handbook_pages", "handbooks"
   add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
+  add_foreign_key "move_descriptions", "play_moves"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "offices", "countries"
   add_foreign_key "offices", "organizations"
   add_foreign_key "offices", "regions"
@@ -992,6 +1043,14 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
   add_foreign_key "playbook_descriptions", "playbooks"
   add_foreign_key "playbook_plays", "playbooks"
   add_foreign_key "playbook_plays", "plays"
+  add_foreign_key "plays_building_blocks", "building_blocks"
+  add_foreign_key "plays_building_blocks", "building_blocks", name: "bbs_plays_bb_fk"
+  add_foreign_key "plays_building_blocks", "plays"
+  add_foreign_key "plays_building_blocks", "plays", name: "bbs_plays_play_fk"
+  add_foreign_key "plays_products", "plays"
+  add_foreign_key "plays_products", "plays", name: "products_plays_play_fk"
+  add_foreign_key "plays_products", "products"
+  add_foreign_key "plays_products", "products", name: "products_plays_product_fk"
   add_foreign_key "plays_subplays", "plays", column: "child_play_id", name: "child_play_fk"
   add_foreign_key "plays_subplays", "plays", column: "parent_play_id", name: "parent_play_fk"
   add_foreign_key "principle_descriptions", "digital_principles"
@@ -1038,13 +1097,6 @@ ActiveRecord::Schema.define(version: 2022_01_14_212158) do
   add_foreign_key "sectors", "origins"
   add_foreign_key "sectors", "sectors", column: "parent_sector_id"
   add_foreign_key "tag_descriptions", "tags"
-  add_foreign_key "move_descriptions", "play_moves"
-  add_foreign_key "moves_organizations", "organizations", name: "organizations_moves_org_fk"
-  add_foreign_key "moves_organizations", "play_moves"
-  add_foreign_key "moves_organizations", "play_moves", name: "organizations_moves_play_fk"
-  add_foreign_key "moves_products", "play_moves"
-  add_foreign_key "moves_products", "play_moves", name: "products_moves_move_fk"
-  add_foreign_key "moves_products", "products", name: "products_moves_product_fk"
   add_foreign_key "task_tracker_descriptions", "task_trackers"
   add_foreign_key "use_case_descriptions", "use_cases"
   add_foreign_key "use_case_headers", "use_cases"

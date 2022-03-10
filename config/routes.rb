@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     get '/users', to: 'users#index'
     get '/users/password', to: 'devise/passwords#new'
     post '/authenticate/credentials', to: 'authentication#sign_in_ux'
+    post '/authenticate/auth0', to: 'authentication#sign_in_auth0'
     post '/authenticate/signup', to: 'authentication#sign_up_ux'
     get '/authenticate/token', to: 'authentication#fetch_token'
     delete '/auth/invalidate', to: 'authentication#invalidate_token'
