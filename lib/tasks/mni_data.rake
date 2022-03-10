@@ -26,22 +26,22 @@ namespace :mni do
         country_name = mni_row['Country'].strip
         core_service = mni_row['Core Service'].strip
         operator = mni_row['Operator'].strip
-        location = Location.where(location_type: 'country', name: country_name).first
-        if location == nil
+        country = Country.where(name: country_name).first
+        #if location == nil
           # Create the country record
-          puts "Adding Country: " + country_name
-          location = Location.new
-          location.name = country_name
-          location.location_type = 'country'
-          location.slug = slug_em(country_name)
-          location.save
-        end
-        operator_service = OperatorService.where(name: operator, locations_id: location.id, service: core_service).first
+        #  puts "Adding Country: " + country_name
+        #  location = Location.new
+        #  location.name = country_name
+        #  location.location_type = 'country'
+        #  location.slug = slug_em(country_name)
+        #  location.save
+        #end
+        operator_service = OperatorService.where(name: operator, country_id: country.id, service: core_service).first
         if operator_service == nil
           #puts "Adding operator service: " + mni_row['Operator'] +","+location.id.to_s+","+mni_row['Core Service']
           operator_service = OperatorService.new
           operator_service.name = operator
-          operator_service.locations_id = location.id
+          operator_service.country_id = country.id
           operator_service.service = core_service
           operator_service.save
         end

@@ -398,7 +398,7 @@ module FilterConcern
       all_filters["aggregator_only"] && org_list = org_list.where(is_mni: true)
     end
 
-    !all_filters["countries"].empty? && org_list = org_list.joins(:locations).where('locations.id in (?)', all_filters["countries"])
+    !all_filters["countries"].empty? && org_list = org_list.joins(:countries).where('countries.id in (?)', all_filters["countries"])
     !all_filters["sectors"].empty? && org_list = org_list.joins(:sectors).where('sectors.id in (?) or sectors.parent_sector_id in (?)', all_filters["sectors"], all_filters["sectors"])
     !all_filters["years"].empty? && org_list = org_list.where('extract(year from when_endorsed) in (?)', all_filters["years"])
 
@@ -425,8 +425,8 @@ module FilterConcern
               all_filters["aggregator_only"] || !all_filters["sectors"].empty?)
 
     country_filters = []
-    !all_filters["countries"].empty? && country_filters += Project.joins(:locations)
-                                                     .where('locations.id in (?)', all_filters["countries"])
+    !all_filters["countries"].empty? && country_filters += Project.joins(:countries)
+                                                     .where('countries.id in (?)', all_filters["countries"])
                                                      .ids
 
     !all_filters["projects"].empty? && project_product_ids += Product.joins(:projects)

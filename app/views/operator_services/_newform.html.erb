@@ -36,7 +36,7 @@
   <% end %>
 
 <script>
-  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
+  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addCountry)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
 </script>

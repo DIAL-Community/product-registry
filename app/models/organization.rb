@@ -8,15 +8,9 @@ class Organization < ApplicationRecord
 
   attr_accessor :organization_description
 
-  has_many :organizations_locations
-  has_many :locations, through: :organizations_locations
-
   has_and_belongs_to_many :products, join_table: :organizations_products,
                                      after_add: :association_add,
                                      before_remove: :association_remove
-  has_and_belongs_to_many :locations, join_table: :organizations_locations,
-                                      after_add: :association_add,
-                                      before_remove: :association_remove
   has_and_belongs_to_many :countries, join_table: :organizations_countries,
                                       after_add: :association_add,
                                       before_remove: :association_remove
@@ -50,8 +44,6 @@ class Organization < ApplicationRecord
 
   has_many :organization_descriptions, dependent: :destroy
   has_many :offices, dependent: :destroy, after_add: :association_add, before_remove: :association_remove
-
-  acts_as_commontable
 
   validates :name, presence: true, length: { maximum: 300 }
 
