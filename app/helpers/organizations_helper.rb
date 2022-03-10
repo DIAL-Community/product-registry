@@ -51,7 +51,7 @@ module OrganizationsHelper
         end
       end
 
-      country_name = organization.locations.select {|location| location.location_type != 'point'}.map{|location| location.name}.join(", ")
+      country_name = organization.countries.map{|country| country.name}.join(", ")
       if (column_length[3 + column_offset] < country_name.length)
         column_length[3 + column_offset] = country_name.length
       end
@@ -61,7 +61,7 @@ module OrganizationsHelper
         column_length[4 + column_offset] = sector_name.length
       end
 
-      office = organization.locations.select {|location| location.location_type == 'point'}.pop
+      office = organization.offices.pop
       if (!office.nil? && column_length[5 + column_offset] < office.name.length)
         column_length[5 + column_offset] = office.name.length
       end

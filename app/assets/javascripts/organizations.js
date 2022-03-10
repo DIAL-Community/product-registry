@@ -2,7 +2,7 @@ function addSector(value, label) {
   addElement("base-selected-sectors", "selected_sectors", value, label);
 }
 
-function addLocation(value, label) {
+function addCountry(value, label) {
   addElement("base-selected-countries", "selected_countries", value, label);
 }
 
@@ -28,7 +28,7 @@ var setupAutoComplete = function() {
                       });
 
   // Init the autocomplete for the country field.
-  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addLocation)
+  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addCountry)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
 

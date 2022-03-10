@@ -318,7 +318,7 @@
     addProject('<%= project.id %>', '<%= project.name %>');
   <% end %>
   <% organization.countries.order("name").each do |country| %>
-    addLocation('<%= country.id %>', '<%= country.name %>');
+    addCountry('<%= country.id %>', '<%= country.name %>');
   <% end %>
   <% organization.offices.order("name").each do |office| %>
     addOffice('<%= office.name %>', '<%= office.id %>');

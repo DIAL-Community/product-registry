@@ -19,8 +19,6 @@ class BuildingBlock < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(building_blocks.name) like LOWER(?)", "%#{name}%") }
   scope :slug_starts_with, -> (slug) { where("LOWER(building_blocks.slug) like LOWER(?)", "#{slug}\\_%") }
 
-  acts_as_commontable
-
   attr_accessor :bb_desc
 
   def building_block_description_localized

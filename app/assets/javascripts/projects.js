@@ -32,7 +32,7 @@ function tagProject(value, label) {
 
 const projectsReady = function() {
   // Init the autocomplete for the country field.
-  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addLocation)
+  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addCountry)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
 

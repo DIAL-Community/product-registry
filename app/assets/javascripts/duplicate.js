@@ -144,8 +144,6 @@ $(document).on('candidate_organizations#edit:loaded', candidateDuplicateCheck);
 $(document).on('candidate_organizations#new:loaded', candidateDuplicateCheck);
 $(document).on('contacts#edit:loaded', contactDuplicateCheck);
 $(document).on('contacts#new:loaded', contactDuplicateCheck);
-$(document).on('locations#edit:loaded', locationDuplicateCheck);
-$(document).on('locations#new:loaded', locationDuplicateCheck);
 $(document).on('sectors#edit:loaded', sectorDuplicateCheck);
 $(document).on('sectors#new:loaded', sectorDuplicateCheck);
 $(document).on('products#edit:loaded', productDuplicateCheck);
