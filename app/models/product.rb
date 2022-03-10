@@ -10,7 +10,6 @@ class Product < ApplicationRecord
   has_many :product_indicators, dependent: :delete_all
   has_many :product_repositories, dependent: :delete_all
   has_many :product_descriptions, dependent: :delete_all
-  has_many :product_versions, dependent: :delete_all
 
   has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products,
                                            dependent: :delete_all,

@@ -29,7 +29,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :product_suites
   resources :glossaries
   resources :settings
 
@@ -278,7 +277,6 @@ Rails.application.routes.draw do
   get 'use_case_duplicates', :to => 'use_cases#duplicates'
   get 'workflow_duplicates', :to => 'workflows#duplicates'
   get 'glossary_duplicates', :to => 'glossaries#duplicates'
-  get 'product_suite_duplicates', :to => 'product_suites#duplicates'
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
   get 'project_duplicates', to: 'projects#duplicates'
   get 'portal_view_duplicates', to: 'portal_views#duplicates'

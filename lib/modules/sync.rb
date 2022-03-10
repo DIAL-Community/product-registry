@@ -628,17 +628,6 @@ module Modules
       puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
-    def add_latest_product_version(product)
-      version_code = 'Latest'
-      return if product.product_versions.exists?(version: version_code)
-
-      product_version = ProductVersion.new(version: version_code, version_order: 1)
-      product.product_versions << product_version
-      if product.save
-        puts "Adding 'Latest' as version code for #{product.name}."
-      end
-    end
-
     def sync_license_information(product_repository)
       return if product_repository.absolute_url.blank?
 

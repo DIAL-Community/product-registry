@@ -30,16 +30,7 @@
       <% end %>
     </div>
   </div>
-  <% if !product.product_versions.nil? and !product.product_versions.empty? %>
-    <div class="row text-muted mt-2 mb-2">
-      <div class="col-12 col-md-3">
-        <strong><%= t('view.product.show.active-version') %>:</strong>
-      </div>
-      <div class="col-12 col-md-8">
-        <%= product.product_versions.last.version %>
-      </div>
-    </div>
-  <% end %>
+  
   <div class="row text-muted mt-2 mb-2">
     <div class="col-12 col-md-3">
       <strong><%= t('view.product.show.license') %>:</strong>
