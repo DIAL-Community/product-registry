@@ -1170,7 +1170,7 @@ type User {
   confirmedAt: ISO8601DateTime
   createdAt: ISO8601DateTime!
   email: String!
-  encryptedPassword: String!
+  password: String!
   expired: Boolean
   expiredAt: ISO8601DateTime
   id: ID!

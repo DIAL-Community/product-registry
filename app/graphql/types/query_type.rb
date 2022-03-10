@@ -44,6 +44,10 @@ module Types
     field :use_case_steps, resolver: Queries::UseCaseStepsQuery
     field :use_case_step, resolver: Queries::UseCaseStepQuery
 
+    field :users, resolver: Queries::UsersQuery
+    field :user, resolver: Queries::UserQuery
+    field :search_users, resolver: Queries::SearchUsersQuery
+
     field :countries, resolver: Queries::CountriesQuery
     field :search_countries, resolver: Queries::SearchCountriesQuery
 

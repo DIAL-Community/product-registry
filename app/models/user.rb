@@ -20,10 +20,20 @@ class User < ApplicationRecord
   # Custom function validation
   validate :validate_organization, :validate_product
 
+  scope :name_contains, -> (name) { where("LOWER(users.email) like LOWER(?)", "%#{name}%") }
+
   attr_accessor :is_approved
+
+  def organization
+    !self.organization_id.nil? ? Organization.find(self.organization_id) : nil
+  end
 
   def set_default_role
     self.roles = [:user]
+  end
+
+  def all_roles
+    User.user_roles.values
   end
 
   def self.serialization_options
