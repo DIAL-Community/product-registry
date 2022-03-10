@@ -17,6 +17,12 @@ module Types
     field :image_file, String, null: true
 
     field :play_descriptions, [Types::PlayDescriptionType], null: true
+    field :play_description, Types::PlayDescriptionType, null: true,
+      method: :play_description_localized
+
+    field :products, [Types::ProductType], null: true
+    field :building_blocks, [Types::BuildingBlockType], null: true
+
     field :play_moves, [Types::MoveType], null: true
   end
 end

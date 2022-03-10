@@ -21,20 +21,6 @@ module Queries
     end
   end
 
-  class SearchPlaybookPlaysQuery < Queries::BaseQuery
-    include ActionView::Helpers::TextHelper
-
-    argument :slug, String, required: true
-
-    type Types::PlayType.connection_type, null: false
-
-    def resolve(slug:)
-      Play.joins(:playbooks)
-          .where(playbooks: { slug: slug })
-          .order('playbook_plays.order')
-    end
-  end
-
   class SearchPlaysQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 

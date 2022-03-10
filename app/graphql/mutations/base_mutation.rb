@@ -24,7 +24,6 @@ module Mutations
     def is_product_owner
       if !context[:current_user].nil? 
         user = User.find(context[:current_user].id)
-        puts "USER PRODUCTS: " + user.products.inspect
         # Return true to continue the mutation:
         true
       else
