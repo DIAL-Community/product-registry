@@ -161,9 +161,6 @@ namespace :sync do
         end
       end
       blacklist_product.organizations.delete_all
-      blacklist_product.product_versions.each do |version|
-        puts "Deleting version: #{version.version}." if version.destroy
-      end
       blacklist_product.product_descriptions.each do |description|
         puts "Deleting description: #{description.id}." if description.destroy
       end
