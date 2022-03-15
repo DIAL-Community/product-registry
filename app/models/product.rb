@@ -10,7 +10,6 @@ class Product < ApplicationRecord
   has_many :product_indicators, dependent: :delete_all
   has_many :product_repositories, dependent: :delete_all
   has_many :product_descriptions, dependent: :delete_all
-  has_many :product_versions, dependent: :delete_all
 
   has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_products,
                                            dependent: :delete_all,
@@ -77,8 +76,6 @@ class Product < ApplicationRecord
                         after_add: :association_add, before_remove: :association_remove
 
   validates :name, presence: true, length: { maximum: 300 }
-
-  acts_as_commontable
 
   scope :name_contains, ->(name) { where("LOWER(products.name) like LOWER(?)", "%#{name}%") }
   scope :slug_starts_with, ->(slug) { where("LOWER(products.slug) like LOWER(?)", "#{slug}%\\_") }

@@ -6,7 +6,6 @@ class Mutations::CreatePlaybook < Mutations::BaseMutation
   argument :name, String, required: true
   argument :slug, String, required: true
   argument :tags, GraphQL::Types::JSON, required: false, default_value: []
-  argument :phases, GraphQL::Types::JSON, required: false, default_value: []
   argument :plays, GraphQL::Types::JSON, required: false, default_value: []
   argument :overview, String, required: true
   argument :audience, String, required: false, default_value: ''
@@ -16,7 +15,7 @@ class Mutations::CreatePlaybook < Mutations::BaseMutation
   field :playbook, Types::PlaybookType, null: true
   field :errors, [String], null: true
 
-  def resolve(name:, slug:, tags:, phases:, overview:, audience:, outcomes:, plays:, locale:)
+  def resolve(name:, slug:, tags:, overview:, audience:, outcomes:, plays:, locale:)
     if !is_admin
       return {
         playbook: nil,
@@ -30,7 +29,6 @@ class Mutations::CreatePlaybook < Mutations::BaseMutation
       playbook = Playbook.new(name: name)
       playbook.slug = slug_em(name)
     end
-    playbook.phases = phases
     playbook.tags = tags
     if playbook.save
       playbook_desc = PlaybookDescription.find_by(playbook: playbook, locale: locale)

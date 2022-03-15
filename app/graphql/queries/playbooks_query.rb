@@ -34,18 +34,17 @@ module Queries
       if !search.nil? && !search.to_s.strip.empty?
         name_playbooks = playbooks.name_contains(search)
         desc_playbooks = playbooks.joins(:playbook_descriptions)
-                                .where("LOWER(description) like LOWER(?)", "%#{search}%")
+                                  .where("LOWER(description) like LOWER(?)", "%#{search}%")
         playbooks = playbooks.where(id: (name_playbooks + desc_playbooks).uniq)
       end
 
       filtered_products = products.reject { |x| x.nil? || x.empty? }
       unless filtered_products.empty?
         playbooks = playbooks.joins(:products)
-                           .where(products: { id: filtered_products })
+                             .where(products: { id: filtered_products })
       end
 
       playbooks.distinct
     end
-
   end
 end

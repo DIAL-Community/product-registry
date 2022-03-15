@@ -4,16 +4,12 @@ class Project < ApplicationRecord
   include Auditable
   attr_accessor :project_description
 
-  has_many :projects_locations
-  has_many :locations, through: :projects_locations
-
   has_and_belongs_to_many :countries, join_table: :projects_countries
 
   has_and_belongs_to_many :organizations, join_table: :projects_organizations,
                           after_add: :association_add, before_remove: :association_remove
   has_and_belongs_to_many :products, join_table: :projects_products,
                           after_add: :association_add, before_remove: :association_remove
-  has_and_belongs_to_many :locations, join_table: :projects_locations
   has_and_belongs_to_many :digital_principles, join_table: :projects_digital_principles
   has_and_belongs_to_many :sectors, join_table: :projects_sectors
   has_and_belongs_to_many :sustainable_development_goals, join_table: :projects_sdgs, association_foreign_key: :sdg_id

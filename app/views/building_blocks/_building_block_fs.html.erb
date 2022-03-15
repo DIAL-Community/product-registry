@@ -43,7 +43,7 @@ a:hover {
                         class: 'card-img-top align-middle') %>
       </div>
       </div>
-      <div class="card-footer" style="background-color:#eaeaea;">
+      <div class="card-footer" style="background-color:#eaeaea; height:7rem;">
         <%= simple_format(@bb_desc.select {|bb| bb[:name].downcase == building_block.name.downcase }.first[:desc]) %>
       </div>
       <% end %>

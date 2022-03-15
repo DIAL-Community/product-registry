@@ -732,7 +732,7 @@ class OrganizationsController < ApplicationController
         #operator_services_ids = @organization.aggregator_capabilities.all.select(:operator_services_id).map(&:operator_services_id).uniq
         #@operator_services = OperatorService.where('id in (?)', operator_services_ids)
         # Build the list of countries where they work
-        #country_list = @operator_services.select(:locations_id).map(&:locations_id).uniq
+        #country_list = @operator_services.select(:country_id).map(&:country_id).uniq
         #country_list = @organization.aggregator_capabilities.select(:country_name).map(&:country_name).uniq
         #@countries = Location.where('name in (?)', country_list)
         @can_view_mni = policy(@organization).view_capabilities_allowed?

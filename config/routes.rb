@@ -9,7 +9,6 @@ Rails.application.routes.draw do
 
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
-  mount Commontator::Engine => '/commontator'
 
   resources :task_trackers
 
@@ -29,7 +28,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :product_suites
   resources :glossaries
   resources :settings
 
@@ -104,6 +102,7 @@ Rails.application.routes.draw do
     get '/users', to: 'users#index'
     get '/users/password', to: 'devise/passwords#new'
     post '/authenticate/credentials', to: 'authentication#sign_in_ux'
+    post '/authenticate/auth0', to: 'authentication#sign_in_auth0'
     post '/authenticate/signup', to: 'authentication#sign_up_ux'
     get '/authenticate/token', to: 'authentication#fetch_token'
     delete '/auth/invalidate', to: 'authentication#invalidate_token'
@@ -278,7 +277,6 @@ Rails.application.routes.draw do
   get 'use_case_duplicates', :to => 'use_cases#duplicates'
   get 'workflow_duplicates', :to => 'workflows#duplicates'
   get 'glossary_duplicates', :to => 'glossaries#duplicates'
-  get 'product_suite_duplicates', :to => 'product_suites#duplicates'
   get 'deploys_refresh_list', :to => 'deploys#refresh_list'
   get 'project_duplicates', to: 'projects#duplicates'
   get 'portal_view_duplicates', to: 'portal_views#duplicates'

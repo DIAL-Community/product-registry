@@ -18,8 +18,6 @@ class UseCase < ApplicationRecord
   scope :name_contains, -> (name) { where("LOWER(use_cases.name) like LOWER(?)", "%#{name}%") }
   scope :slug_starts_with, -> (slug) { where("LOWER(use_cases.slug) like LOWER(?)", "#{slug}\\_%") }
 
-  acts_as_commontable
-
   attr_accessor :uc_desc
   attr_accessor :ucs_header
   attr_accessor :building_blocks

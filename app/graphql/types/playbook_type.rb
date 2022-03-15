@@ -9,6 +9,14 @@ module Types
     field :cover, String, null: true
   end
 
+  class PlaybookPlayType < Types::BaseObject
+    field :id, ID, null: false
+    field :playbook_slug, String, null: true
+    field :play_slug, String, null: true
+    field :play_name, String, null: true
+    field :order, Integer, null: true
+  end
+
   class PlaybookType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
@@ -21,6 +29,12 @@ module Types
     field :image_file, String, null: true
 
     field :playbook_descriptions, [Types::PlaybookDescriptionType], null: true
+    field :playbook_description, Types::PlaybookDescriptionType, null: true,
+      method: :playbook_description_localized
+
+    field :playbook_plays, [Types::PlaybookPlayType], null: true,
+      method: :playbook_play_with_slug_list
+
     field :plays, [Types::PlayType], null: true
   end
 end

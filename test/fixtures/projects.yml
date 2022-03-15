@@ -5,7 +5,7 @@ one:
   slug: project_a
   origin: one
   organizations: one
-  locations: one
+  countries: one
   products: one
   sectors: one
   sustainable_development_goals: one
@@ -18,7 +18,7 @@ two:
   slug: project_b
   origin: two
   organizations: two
-  locations: two
+  countries: two
   products: two
   sectors: two
   sustainable_development_goals: two

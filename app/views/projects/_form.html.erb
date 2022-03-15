@@ -170,7 +170,7 @@
   <% end %>
 
   <% project.countries.order("name").each do |country| %>
-    addLocation('<%= country.id %>', '<%= country.name %>');
+    addCountry('<%= country.id %>', '<%= country.name %>');
   <% end %>
 
   <% project.tags.each {|tag| %>

@@ -37,9 +37,9 @@
 
 <script>
   <% operator_service.country_list.order("name").each do |location| %>
-    addLocation('<%= location.id %>', '<%= location.name %>');
+    addCountry('<%= location.id %>', '<%= location.name %>');
   <% end %>
-  var countryAutoComplete = autoComplete("/locations.json?without_paging=true", addLocation)
+  var countryAutoComplete = autoComplete("/countries.json?without_paging=true", addCountry)
   $('#base-selected-countries').hide();
   $("#country-search").autocomplete(countryAutoComplete);
 </script>
