@@ -509,7 +509,8 @@ class ApplicationController < ActionController::Base
       return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
     end
 
-    AdminMailer.send_mail_from_client('notifier@solutions.dial.community', 'issues@solutions.dial.community', 'User Reported Issue ' + params[:name], params[:issue])
+    email_body = "Issue Reported by " + params[:name] + "(" + params[:email] + ")\n\nIssue Type: " + params[:issue_type] + "\n\n" + params[:issue]
+    AdminMailer.send_mail_from_client('notifier@solutions.dial.community', 'issues@solutions.dial.community', 'User Reported Issue ', email_body)
 
     respond_to do |format|
       format.json { render json: { email: 'Issue' }, status: :ok }
