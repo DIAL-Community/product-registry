@@ -504,6 +504,18 @@ class ApplicationController < ActionController::Base
     bbs_ids
   end
 
+  def send_email
+    if params[:email_token] != ENV['EMAIL_TOKEN']
+      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+    end
+
+    AdminMailer.send_mail_from_client('notifier@solutions.dial.community', 'issues@solutions.dial.community', 'User Reported Issue ' + params[:name], params[:issue])
+
+    respond_to do |format|
+      format.json { render json: { email: 'Issue' }, status: :ok }
+    end
+  end
+
   def save_url
     if current_user.nil?
       return respond_to { |format| format.json { render json: {}, status: :unauthorized } }

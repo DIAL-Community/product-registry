@@ -1,4 +1,13 @@
 class AdminMailer < ApplicationMailer
+  def send_mail_from_client(mailFrom, mailTo, emailSubject, emailBody)
+    # issues@solutions.dial.community
+
+    mail(from: mailFrom,
+          to: mailTo,
+          subject: emailSubject,
+          body: emailBody)
+  end
+
   def notify_product_owner_request
     admin_users = User.where(receive_admin_emails: true)
     user_hash = params[:user]

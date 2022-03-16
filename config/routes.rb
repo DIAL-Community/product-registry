@@ -265,6 +265,7 @@ Rails.application.routes.draw do
 
   post '/save_url', to: 'application#save_url', as: :save_url
   post '/remove_url', to: 'application#remove_url', as: :remove_url
+  post '/send_email', to: 'application#send_email', as: :send_email
 
   get 'export', :to => 'organizations#export'
   get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
