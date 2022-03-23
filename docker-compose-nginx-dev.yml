@@ -15,6 +15,4 @@ services:
   ports:
    - 80:80
    - 443:443
-  entrypoint: /t4d/docker-entrypoint-nginx.sh
- 
- 
+  entrypoint: /t4d/docker-entrypoint-nginx.sh 
