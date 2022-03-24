@@ -21,7 +21,7 @@ module Queries
     argument :product_id, String, required: true
     argument :organization_id, String, required: true
     argument :email, String, required: true
-    type Types::CandidateRoleType, null: false
+    type Types::CandidateRoleType, null: true
 
     def resolve(product_id:, organization_id:, email:)
       candidate_roles = CandidateRole

@@ -14,7 +14,13 @@ module Mutations
     field :slug, String, null: true
 
     def resolve(name:, website:, repository:, description:, email:, captcha:)
-      candidate_product_params = { name: name, website: website, repository: repository, submitter_email: email, description: description }
+      candidate_product_params = {
+        name: name,
+        website: website,
+        repository: repository,
+        submitter_email: email,
+        description: description
+      }
       candidate_product_params[:slug] = slug_em(candidate_product_params[:name])
 
       candidate_products = CandidateProduct.where(slug: candidate_product_params[:slug])

@@ -36,7 +36,7 @@ class GraphqlController < ApplicationController
     token = request.headers['Authorization'].split(' ').last
     return nil if token.blank?
     User.find_by(authentication_token: token)
- end
+  end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
