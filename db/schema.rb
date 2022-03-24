@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_09_190707) do
+ActiveRecord::Schema.define(version: 2022_03_16_170226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,49 +130,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.string "source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "commontator_comments", force: :cascade do |t|
-    t.bigint "thread_id", null: false
-    t.string "creator_type", null: false
-    t.bigint "creator_id", null: false
-    t.string "editor_type"
-    t.bigint "editor_id"
-    t.text "body", null: false
-    t.datetime "deleted_at"
-    t.integer "cached_votes_up", default: 0
-    t.integer "cached_votes_down", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "parent_id"
-    t.index ["cached_votes_down"], name: "index_commontator_comments_on_cached_votes_down"
-    t.index ["cached_votes_up"], name: "index_commontator_comments_on_cached_votes_up"
-    t.index ["creator_id", "creator_type", "thread_id"], name: "index_commontator_comments_on_c_id_and_c_type_and_t_id"
-    t.index ["editor_type", "editor_id"], name: "index_commontator_comments_on_editor_type_and_editor_id"
-    t.index ["parent_id"], name: "index_commontator_comments_on_parent_id"
-    t.index ["thread_id", "created_at"], name: "index_commontator_comments_on_thread_id_and_created_at"
-  end
-
-  create_table "commontator_subscriptions", force: :cascade do |t|
-    t.bigint "thread_id", null: false
-    t.string "subscriber_type", null: false
-    t.bigint "subscriber_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["subscriber_id", "subscriber_type", "thread_id"], name: "index_commontator_subscriptions_on_s_id_and_s_type_and_t_id", unique: true
-    t.index ["thread_id"], name: "index_commontator_subscriptions_on_thread_id"
-  end
-
-  create_table "commontator_threads", force: :cascade do |t|
-    t.string "commontable_type"
-    t.bigint "commontable_id"
-    t.string "closer_type"
-    t.bigint "closer_id"
-    t.datetime "closed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["closer_type", "closer_id"], name: "index_commontator_threads_on_closer_type_and_closer_id"
-    t.index ["commontable_type", "commontable_id"], name: "index_commontator_threads_on_c_id_and_c_type", unique: true
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -304,9 +261,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.string "pdf_url"
   end
 
-# Could not dump table "locations" because of following StandardError
-#   Unknown type 'location_type' for column 'location_type'
-
   create_table "maturity_rubric_descriptions", force: :cascade do |t|
     t.bigint "maturity_rubric_id", null: false
     t.string "locale", null: false
@@ -327,6 +281,7 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.string "description", null: false
     t.string "prerequisites", default: "", null: false
     t.string "outcomes", default: "", null: false
+    t.index ["play_move_id"], name: "index_move_descriptions_on_play_move_id"
     t.index ["play_move_id"], name: "index_task_descriptions_on_play_task_id"
   end
 
@@ -418,15 +373,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.index ["organization_id"], name: "index_organizations_countries_on_organization_id"
   end
 
-  create_table "organizations_locations", force: :cascade do |t|
-    t.bigint "location_id", null: false
-    t.bigint "organization_id", null: false
-    t.boolean "migrated"
-    t.datetime "migrated_date"
-    t.index ["location_id", "organization_id"], name: "loc_orcs", unique: true
-    t.index ["organization_id", "location_id"], name: "org_locs", unique: true
-  end
-
 # Could not dump table "organizations_products" because of following StandardError
 #   Unknown type 'org_type' for column 'org_type'
 
@@ -482,6 +428,7 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.jsonb "resources", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["play_id"], name: "index_play_moves_on_play_id"
     t.index ["play_id"], name: "index_play_tasks_on_play_id"
   end
 
@@ -507,9 +454,10 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.string "name", null: false
     t.string "slug", null: false
     t.jsonb "phases", default: [], null: false
+    t.string "tags", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "tags", default: [], array: true
+    t.boolean "draft", default: true, null: false
   end
 
   create_table "plays", force: :cascade do |t|
@@ -517,10 +465,10 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.string "slug", null: false
     t.string "author"
     t.jsonb "resources", default: [], null: false
+    t.string "tags", default: [], array: true
     t.string "version", default: "1.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "tags", default: [], array: true
   end
 
   create_table "plays_building_blocks", force: :cascade do |t|
@@ -684,15 +632,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.bigint "digital_principle_id", null: false
     t.index ["digital_principle_id"], name: "index_projects_digital_principles_on_digital_principle_id"
     t.index ["project_id"], name: "index_projects_digital_principles_on_project_id"
-  end
-
-  create_table "projects_locations", force: :cascade do |t|
-    t.bigint "project_id", null: false
-    t.bigint "location_id", null: false
-    t.boolean "migrated"
-    t.datetime "migrated_date"
-    t.index ["location_id", "project_id"], name: "locations_projects_idx", unique: true
-    t.index ["project_id", "location_id"], name: "projects_locations_idx", unique: true
   end
 
 # Could not dump table "projects_organizations" because of following StandardError
@@ -921,22 +860,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
     t.index ["user_id", "product_id"], name: "users_products_idx", unique: true
   end
 
-  create_table "votes", force: :cascade do |t|
-    t.string "votable_type"
-    t.bigint "votable_id"
-    t.string "voter_type"
-    t.bigint "voter_id"
-    t.boolean "vote_flag"
-    t.string "vote_scope"
-    t.integer "vote_weight"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
-    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
-    t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
-    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter_type_and_voter_id"
-  end
-
   create_table "workflow_descriptions", force: :cascade do |t|
     t.bigint "workflow_id", null: false
     t.string "locale", null: false
@@ -981,9 +904,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
   add_foreign_key "category_indicator_descriptions", "category_indicators"
   add_foreign_key "category_indicators", "rubric_categories"
   add_foreign_key "cities", "regions"
-  add_foreign_key "commontator_comments", "commontator_comments", column: "parent_id", on_update: :restrict, on_delete: :cascade
-  add_foreign_key "commontator_comments", "commontator_threads", column: "thread_id", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "commontator_subscriptions", "commontator_threads", column: "thread_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
   add_foreign_key "districts", "regions"
@@ -993,6 +913,7 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
   add_foreign_key "handbook_pages", "handbooks"
   add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
   add_foreign_key "move_descriptions", "play_moves"
+  add_foreign_key "move_descriptions", "play_moves"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
@@ -1001,14 +922,11 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
   add_foreign_key "offices", "organizations"
   add_foreign_key "offices", "regions"
   add_foreign_key "operator_services", "countries"
-  add_foreign_key "operator_services", "locations", column: "locations_id"
   add_foreign_key "organization_descriptions", "organizations"
   add_foreign_key "organizations_contacts", "contacts", name: "organizations_contacts_contact_fk"
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_countries", "countries"
   add_foreign_key "organizations_countries", "organizations"
-  add_foreign_key "organizations_locations", "locations", name: "organizations_locations_location_fk"
-  add_foreign_key "organizations_locations", "organizations", name: "organizations_locations_organization_fk"
   add_foreign_key "organizations_products", "organizations", name: "organizations_products_organization_fk"
   add_foreign_key "organizations_products", "products", name: "organizations_products_product_fk"
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"
@@ -1017,6 +935,7 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
   add_foreign_key "organizations_states", "regions"
   add_foreign_key "page_contents", "handbook_pages"
   add_foreign_key "play_descriptions", "plays"
+  add_foreign_key "play_moves", "plays"
   add_foreign_key "play_moves", "plays"
   add_foreign_key "playbook_descriptions", "playbooks"
   add_foreign_key "playbook_plays", "playbooks"
@@ -1056,8 +975,6 @@ ActiveRecord::Schema.define(version: 2022_03_09_190707) do
   add_foreign_key "projects_countries", "projects"
   add_foreign_key "projects_digital_principles", "digital_principles"
   add_foreign_key "projects_digital_principles", "projects"
-  add_foreign_key "projects_locations", "locations", name: "projects_locations_location_fk"
-  add_foreign_key "projects_locations", "projects", name: "projects_locations_project_fk"
   add_foreign_key "projects_organizations", "organizations", name: "projects_organizations_organization_fk"
   add_foreign_key "projects_organizations", "projects", name: "projects_organizations_project_fk"
   add_foreign_key "projects_products", "products", name: "projects_products_product_fk"
