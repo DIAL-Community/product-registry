@@ -22,7 +22,7 @@
     </div>
   </fieldset>
 
-  <% if user.roles.include?(User.user_roles[:admin]) %>
+  <% if !user.roles.nil? && user.roles.include?(User.user_roles[:admin]) %>
     <fieldset>
       <%= form.check_box :receive_backup, { id: 'receive-backup' }, true, false %>
       <label class="form-label-group mt-2" for="receive-backup">
@@ -75,6 +75,7 @@
 <% end %>
 
 <script type="text/javascript">
+  <% if !user.roles.nil? %>
   <% user.roles.sort.each do |role| %>
     $('#user-role-selector').next('.row').find('.badges').append(
       '<span class="badge badge-secondary mr-1"><%= t("view.user.role.#{role}") %>' +
@@ -89,6 +90,7 @@
         addProduct('<%= product.id %>', '<%= product.name %>');
       <% end %>
     <% end %>
+  <% end %>
   <% end %>
   <% @user.user_products.each do |product_id| %>
     <% product = Product.find(product_id) %>

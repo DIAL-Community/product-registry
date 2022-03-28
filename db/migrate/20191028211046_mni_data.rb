@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class MniData < ActiveRecord::Migration[5.1]
   def up
-    add_column :organizations, :is_mni, :boolean, :default => false
+    add_column :organizations, :is_mni, :boolean, default: false
     add_column :organizations_locations, :id, :primary_key
 
     execute <<-DDL
@@ -15,7 +17,7 @@ class MniData < ActiveRecord::Migration[5.1]
       'Business to Subscriber', 'Subscriber to Business', 'Bulk Transfer',
       'Alarm Support', 'Consolidated Reports', 'Automated realtime alerts', 'Configure & Monitor Message length', 'Threshold Monitoring', 'Spam Control',
       'WhatsApp', 'Facebook Messenger', 'Media Streaming',
-      'Reliability percent', 'High Availability', 'Redundancy', 'Support', 'Security Policies', 
+      'Reliability percent', 'High Availability', 'Redundancy', 'Support', 'Security Policies',#{' '}
       'One Way', 'Two Way', 'Bulk SMS', 'Delivery Reports', 'Sender ID Configuration', 'Number Masking', 'Premium Billing', 'Zero Rating', 'Dedicated Short Code Provisioning', 'Shared Short Code', 'Long Code Provisioning', 'SMS Spam filter', 'Automated regulatory compliance', 'Traffic-Capacity-Bandwidth',
       'Graphical User Interface', 'Customized User Creation',
       'Session Reports', 'Hosted Menu',
@@ -37,7 +39,7 @@ class MniData < ActiveRecord::Migration[5.1]
     end
 
     add_column :operator_services, :service, :mobile_services
-    add_index :operator_services, [:name, :locations_id, :service], unique: true
+    add_index :operator_services, %i[name locations_id service], unique: true
 
     create_table :aggregator_capabilities do |t|
       t.references :organization, foreign_key: true
@@ -48,8 +50,8 @@ class MniData < ActiveRecord::Migration[5.1]
     add_column :aggregator_capabilities, :service, :mobile_services
     add_column :aggregator_capabilities, :capability, :agg_capabilities
     add_column :aggregator_capabilities, :country_name, :string
-    add_index :aggregator_capabilities, [:aggregator_id, :operator_services_id, :capability], unique: true, :name => 'agg_cap_operator_capability_index'
-    
+    add_index :aggregator_capabilities, %i[aggregator_id operator_services_id capability], unique: true,
+                                                                                           name: 'agg_cap_operator_capability_index'
   end
 
   def down
@@ -58,7 +60,7 @@ class MniData < ActiveRecord::Migration[5.1]
 
     remove_column :organizations, :is_mni
     remove_column :organizations_locations, :id, :primary_key
-    
+
     execute <<-SQL
       ALTER TABLE users ALTER role DROP DEFAULT;
       ALTER TYPE user_role rename TO user_role_;
@@ -68,7 +70,7 @@ class MniData < ActiveRecord::Migration[5.1]
       DROP TYPE user_role_;
     SQL
 
-    execute "DROP TYPE mobile_services;"
-    execute "DROP TYPE agg_capabilities;"
+    execute 'DROP TYPE mobile_services;'
+    execute 'DROP TYPE agg_capabilities;'
   end
 end

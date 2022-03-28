@@ -17,21 +17,21 @@ class CreateCkeditorAssets < ActiveRecord::Migration[5.2]
 
     add_index :ckeditor_assets, :type
 
-    change_column :building_block_descriptions, :description, :string, default: ""
-    change_column :category_indicator_descriptions, :description, :string, default: ""
-    change_column :glossaries, :description, :string, default: ""
-    change_column :maturity_rubric_descriptions, :description, :string, default: ""
-    change_column :organization_descriptions, :description, :string, default: ""
-    change_column :product_descriptions, :description, :string, default: ""
-    change_column :project_descriptions, :description, :string, default: ""
-    change_column :rubric_category_descriptions, :description, :string, default: ""
-    change_column :tag_descriptions, :description, :string, default: ""
-    change_column :use_case_descriptions, :description, :string, default: ""
-    change_column :use_case_headers, :header, :string, default: ""
-    change_column :use_case_step_descriptions, :description, :string, default: ""
-    change_column :workflow_descriptions, :description, :string, default: ""
-    change_column :stylesheets, :about_page, :string, default: ""
-    change_column :stylesheets, :footer_content, :string, default: ""
+    change_column :building_block_descriptions, :description, :string, default: ''
+    change_column :category_indicator_descriptions, :description, :string, default: ''
+    change_column :glossaries, :description, :string, default: ''
+    change_column :maturity_rubric_descriptions, :description, :string, default: ''
+    change_column :organization_descriptions, :description, :string, default: ''
+    change_column :product_descriptions, :description, :string, default: ''
+    change_column :project_descriptions, :description, :string, default: ''
+    change_column :rubric_category_descriptions, :description, :string, default: ''
+    change_column :tag_descriptions, :description, :string, default: ''
+    change_column :use_case_descriptions, :description, :string, default: ''
+    change_column :use_case_headers, :header, :string, default: ''
+    change_column :use_case_step_descriptions, :description, :string, default: ''
+    change_column :workflow_descriptions, :description, :string, default: ''
+    change_column :stylesheets, :about_page, :string, default: ''
+    change_column :stylesheets, :footer_content, :string, default: ''
 
     remove_column :maturity_rubric_descriptions, :description_html
     remove_column :rubric_category_descriptions, :description_html

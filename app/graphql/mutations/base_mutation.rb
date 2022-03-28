@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mutations
   class BaseMutation < GraphQL::Schema::Mutation
     null true
@@ -5,7 +7,7 @@ module Mutations
     field_class Types::BaseField
     object_class Types::BaseObject
 
-    def ready?(**args)
+    def ready?(**_args)
       # Called with mutation args.
       # Use keyword args such as employee_id: or **args to collect them
       true
@@ -17,17 +19,17 @@ module Mutations
         true
       else
         false
-        #raise GraphQL::ExecutionError, "Only admins can run this mutation"
+        # raise GraphQL::ExecutionError, "Only admins can run this mutation"
       end
     end
 
     def is_product_owner
-      if !context[:current_user].nil? 
+      if !context[:current_user].nil?
         user = User.find(context[:current_user].id)
         # Return true to continue the mutation:
         true
       else
-        raise GraphQL::ExecutionError, "Only product owners can run this mutation"
+        raise GraphQL::ExecutionError, 'Only product owners can run this mutation'
       end
     end
   end

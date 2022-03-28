@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDescriptionToMaturityRubricIndicator < ActiveRecord::Migration[5.2]
   def change
     create_table :category_indicator_descriptions do |t|

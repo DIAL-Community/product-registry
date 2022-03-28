@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 ActionView::Base.field_error_proc = proc do |html_tag, instance|
   html = ''
   form_fields = %w[textarea input select]
-  tag_elements = Nokogiri::HTML::DocumentFragment.parse(html_tag).css('label, ' + form_fields.join(', '))
+  tag_elements = Nokogiri::HTML::DocumentFragment.parse(html_tag).css("label, #{form_fields.join(', ')}")
 
   tag_elements.each do |e|
     if e.node_name.eql?('label')

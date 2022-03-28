@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ActivitiesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_activity, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_activity, only: %i[show edit update destroy]
 
   # GET /activities
   # GET /activities.json
@@ -15,22 +17,20 @@ class ActivitiesController < ApplicationController
     current_page = params[:page] || 1
 
     @activities = Activity.order(:name)
-    if params[:search]
-      @activities = @activities.name_contains(params[:search])
-                                          .order(:name)
-                                          .paginate(page: current_page, per_page: 5)
-    else
-      @activities = @activities.order(:name).paginate(page: current_page, per_page: 5)
-    end
+    @activities = if params[:search]
+                    @activities.name_contains(params[:search])
+                               .order(:name)
+                               .paginate(page: current_page, per_page: 5)
+                  else
+                    @activities.order(:name).paginate(page: current_page, per_page: 5)
+                  end
     authorize @activities, :view_allowed?
   end
 
   # GET /activity/1
   # GET /activity/1.json
   def show
-    if params[:playbook_id]
-      @playbook = Playbook.find_by(slug: params[:playbook_id])
-    end
+    @playbook = Playbook.find_by(slug: params[:playbook_id]) if params[:playbook_id]
     authorize @activity, :view_allowed?
   end
 
@@ -42,7 +42,7 @@ class ActivitiesController < ApplicationController
       @activity.playbook_id = params[:playbook_id]
       @playbook = Playbook.find_by(slug: params[:playbook_id])
       @phases = @playbook.phases.map do |phase|
-        phase["name"]
+        phase['name']
       end
     end
     @plays = Play.all
@@ -54,7 +54,7 @@ class ActivitiesController < ApplicationController
     if params[:playbook_id]
       @playbook = Playbook.find_by(slug: params[:playbook_id])
       @phases = @playbook.phases.map do |phase|
-        phase["name"]
+        phase['name']
       end
     end
     authorize @activity, :mod_allowed?
@@ -63,7 +63,7 @@ class ActivitiesController < ApplicationController
   # POST /activities
   # POST /activities.json
   def create
-    if activity_params[:name] == "Assign-From-Play"
+    if activity_params[:name] == 'Assign-From-Play'
       params[:play_ids].each do |play_id|
         @activity = Activity.new
         authorize @activity, :mod_allowed?
@@ -88,7 +88,7 @@ class ActivitiesController < ApplicationController
       end
     else
       @activity = Activity.new(activity_params)
-      if !activity_params[:question_text].nil?
+      unless activity_params[:question_text].nil?
         question = PlaybookQuestion.new
         question.question_text = activity_params[:question_text]
         question.save!
@@ -114,7 +114,7 @@ class ActivitiesController < ApplicationController
         @activity_desc.save
         format.html do
           redirect_to playbook_path(@playbook),
-                    notice: t('messages.model.created', model: t('model.activity').to_s.humanize)
+                      notice: t('messages.model.created', model: t('model.activity').to_s.humanize)
         end
         format.json { render :show, status: :created, location: @activity }
       else
@@ -130,35 +130,33 @@ class ActivitiesController < ApplicationController
     authorize @activity, :mod_allowed?
     if activity_params[:activity_desc].present?
       @activity_desc = ActivityDescription.where(activity_id: @activity.id,
-                                                              locale: I18n.locale)
-                                                        .first || ActivityDescription.new
+                                                 locale: I18n.locale)
+                                          .first || ActivityDescription.new
       @activity_desc.activity_id = @activity.id
       @activity_desc.locale = I18n.locale
       activity_params[:activity_desc].present? && @activity_desc.description = activity_params[:activity_desc]
       @activity_desc.save
     end
 
-    if @activity.playbook_id
-      @playbook = Playbook.find(@activity.playbook_id)
-    end
+    @playbook = Playbook.find(@activity.playbook_id) if @activity.playbook_id
 
     if activity_params[:activity_description].present?
       @activity_desc = ActivityDescription.where(activity_id: @activity.id,
-                                                              locale: I18n.locale)
-                                                        .first || ActivityDescription.new
+                                                 locale: I18n.locale)
+                                          .first || ActivityDescription.new
       @activity_desc.activity_id = @activity.id
       @activity_desc.locale = I18n.locale
       activity_params[:activity_description].present? && @activity_desc.description = activity_params[:activity_description]
       @activity_desc.save
     end
 
-    if !activity_params[:question_text].nil?
+    unless activity_params[:question_text].nil?
       question = @activity.playbook_questions_id.nil? ? PlaybookQuestion.new : PlaybookQuestion.find(@activity.playbook_questions_id)
       question.question_text = activity_params[:question_text]
       question.save!
       @activity.playbook_questions_id = question.id
     end
-    
+
     respond_to do |format|
       if @activity.update(activity_params)
         format.html do
@@ -179,9 +177,7 @@ class ActivitiesController < ApplicationController
     authorize @activity, :mod_allowed?
     @playbook = Playbook.find(@activity.playbook_id)
 
-    @activity.tasks.each do |task|
-      task.destroy
-    end
+    @activity.tasks.each(&:destroy)
 
     @activity.destroy
     respond_to do |format|
@@ -200,7 +196,7 @@ class ActivitiesController < ApplicationController
       original_slug = slug_em(params[:original])
       if current_slug != original_slug
         @activity = Activity.where(slug: current_slug)
-                                          .to_a
+                            .to_a
       end
     end
     authorize Activity, :view_allowed?
@@ -211,39 +207,39 @@ class ActivitiesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_activity
-    if !params[:id].scan(/\D/).empty?
-      @activity = Activity.find_by(slug: params[:id]) || not_found
-    else
-      @activity = Activity.find(params[:id]) || not_found
-    end
+    @activity = if !params[:id].scan(/\D/).empty?
+                  Activity.find_by(slug: params[:id]) || not_found
+                else
+                  Activity.find(params[:id]) || not_found
+                end
 
     @description = ActivityDescription.where(activity_id: @activity, locale: I18n.locale)
-                                               .first
-    if @description.nil?
-      @description = ActivityDescription.new
-    end
+                                      .first
+    @description = ActivityDescription.new if @description.nil?
 
-    if !@activity.playbook_questions_id.nil?
+    unless @activity.playbook_questions_id.nil?
       @question = PlaybookQuestion.find(@activity.playbook_questions_id)
       @answers = PlaybookAnswer.find_by(playbook_questions_id: @activity.playbook_questions_id)
     end
     @description = @activity.activity_descriptions
-                                 .select { |desc| desc.locale == I18n.locale.to_s }
-                                 .first
+                            .select { |desc| desc.locale == I18n.locale.to_s }
+                            .first
   end
 
   # Only allow a list of trusted parameters through.
   def activity_params
     params.require(:activity)
-      .permit(:name, :slug, :activity_description, :phase, :order, :media_url, :question_text, :playbook_id, :resources => [:name, :description, :url])
-      .tap do |attr|
-        if params[:reslug].present?
-          attr[:slug] = slug_em(attr[:name])
-          if params[:duplicate].present?
-            first_duplicate = Activity.slug_starts_with(attr[:slug]).order(slug: :desc).first
-            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
-          end
+          .permit(:name, :slug, :activity_description, :phase, :order, :media_url, :question_text, :playbook_id, resources: %i[
+                    name description url
+                  ])
+          .tap do |attr|
+      if params[:reslug].present?
+        attr[:slug] = slug_em(attr[:name])
+        if params[:duplicate].present?
+          first_duplicate = Activity.slug_starts_with(attr[:slug]).order(slug: :desc).first
+          attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
         end
       end
+    end
   end
 end

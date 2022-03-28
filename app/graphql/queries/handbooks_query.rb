@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 require 'combine_pdf'
 require 'pdfkit'
 require 'tempfile'
 
 module Queries
-
   class HandbooksQuery < Queries::BaseQuery
-    graphql_name "Handbooks"
+    graphql_name 'Handbooks'
 
     type [Types::HandbookType], null: false
 
@@ -15,7 +16,6 @@ module Queries
   end
 
   class HandbookQuery < Queries::BaseQuery
-
     argument :slug, String, required: true
 
     type Types::HandbookType, null: false
@@ -86,7 +86,7 @@ module Queries
     argument :page_ids, [Int], required: true
     argument :locale, String, required: false, default_value: 'en'
 
-    type Types::ExportedPdfType, null: false 
+    type Types::ExportedPdfType, null: false
 
     def resolve(page_ids:, locale:)
       base_filename = ''
@@ -94,13 +94,11 @@ module Queries
       page_ids.each do |page_id|
         base_filename += "#{page_id}-"
 
-        page_content = PageContent.find_by(handbook_page_id: page_id, locale: "en")
+        page_content = PageContent.find_by(handbook_page_id: page_id, locale: 'en')
         next if page_content.nil? || page_content.html.nil?
 
         pdf_data = PDFKit.new(page_content.html, page_size: 'Letter')
-        if page_content.editor_type != "simple"
-          pdf_data.stylesheets = page_content.css
-        end
+        pdf_data.stylesheets = page_content.css if page_content.editor_type != 'simple'
 
         temporary = Tempfile.new(Time.now.strftime('%s'))
         pdf_data.to_file(temporary.path)
@@ -124,7 +122,7 @@ module Queries
     argument :handbook_page_id, ID, required: true
     argument :locale, String, required: false, default_value: 'en'
 
-    type Types::PageContentType, null: false 
+    type Types::PageContentType, null: false
 
     def resolve(handbook_page_id:, locale:)
       PageContent.find_by(handbook_page_id: handbook_page_id, locale: locale[0, 2])

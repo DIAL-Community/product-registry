@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class MoveDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -15,7 +17,7 @@ module Types
 
     field :move_descriptions, [Types::MoveDescriptionType], null: true
     field :move_description, Types::MoveDescriptionType, null: true,
-      method: :move_description_localized
+                                                         method: :move_description_localized
 
     field :play_name, String, null: true
     field :play_slug, String, null: true

@@ -1,18 +1,18 @@
+# frozen_string_literal: true
+
 module Queries
   class UseCasesQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
     argument :mature, Boolean, required: false, default_value: false
     type [Types::UseCaseType], null: false
 
-    def resolve(search:, mature: )
-      if mature
-        use_cases = UseCase.where(maturity: 'MATURE').order(:name)
-      else
-        use_cases = UseCase.order(:name)
-      end
-      unless search.blank?
-        use_cases = use_cases.name_contains(search)
-      end
+    def resolve(search:, mature:)
+      use_cases = if mature
+                    UseCase.where(maturity: 'MATURE').order(:name)
+                  else
+                    UseCase.order(:name)
+                  end
+      use_cases = use_cases.name_contains(search) unless search.blank?
       use_cases
     end
   end
@@ -54,7 +54,7 @@ module Queries
       unless search.blank?
         name_ucs = use_cases.name_contains(search)
         desc_ucs = use_cases.joins(:use_case_descriptions)
-                            .where("LOWER(use_case_descriptions.description) like LOWER(?)", "%#{search}%")
+                            .where('LOWER(use_case_descriptions.description) like LOWER(?)', "%#{search}%")
         use_cases = use_cases.where(id: (name_ucs + desc_ucs).uniq)
       end
 
@@ -66,9 +66,7 @@ module Queries
                              .where(sdg_targets: { sdg_number: sdg_numbers })
       end
 
-      unless show_beta
-        use_cases = use_cases.where(maturity: UseCase.entity_status_types[:MATURE])
-      end
+      use_cases = use_cases.where(maturity: UseCase.entity_status_types[:MATURE]) unless show_beta
 
       use_cases.distinct
     end

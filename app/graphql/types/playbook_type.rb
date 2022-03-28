@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class PlaybookDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -30,10 +32,10 @@ module Types
 
     field :playbook_descriptions, [Types::PlaybookDescriptionType], null: true
     field :playbook_description, Types::PlaybookDescriptionType, null: true,
-      method: :playbook_description_localized
+                                                                 method: :playbook_description_localized
 
     field :playbook_plays, [Types::PlaybookPlayType], null: true,
-      method: :playbook_play_with_slug_list
+                                                      method: :playbook_play_with_slug_list
 
     field :plays, [Types::PlayType], null: true
   end

@@ -1,19 +1,19 @@
+# frozen_string_literal: true
+
 class UseCasesController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[new create edit update destroy]
 
-  before_action :set_use_case, only: [:show, :edit, :update, :destroy]
-  before_action :set_sectors, only: [:new, :edit, :update, :show]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_current_user, only: [:edit, :update, :destroy]
+  before_action :set_use_case, only: %i[show edit update destroy]
+  before_action :set_sectors, only: %i[new edit update show]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_current_user, only: %i[edit update destroy]
 
   def unique_search
     record = UseCase.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     uri.fragment = uri.query = nil
     respond_to do |format|
@@ -23,9 +23,9 @@ class UseCasesController < ApplicationController
       format.json do
         render(json: results.to_json(UseCase.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -35,18 +35,14 @@ class UseCasesController < ApplicationController
     use_cases = UseCase
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      use_cases = use_cases.name_contains(params[:search])
-    end
+    use_cases = use_cases.name_contains(params[:search]) if params[:search].present?
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = use_cases.count
       end
     end
@@ -61,13 +57,13 @@ class UseCasesController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if use_cases.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -83,9 +79,9 @@ class UseCasesController < ApplicationController
       format.json do
         render(json: results.to_json(UseCase.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -95,23 +91,17 @@ class UseCasesController < ApplicationController
     use_cases = UseCase.order(:slug)
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
     if !params[:show_beta].present? || params[:show_beta].to_s == 'false'
       use_cases = use_cases.where(maturity: UseCase.entity_status_types[:MATURE])
     end
 
-    if params[:search].present?
-      use_cases = use_cases.name_contains(params[:search])
-    end
+    use_cases = use_cases.name_contains(params[:search]) if params[:search].present?
 
     sdg_use_case_slugs = []
     # Allowing 'sdgs' or 'sustainable_development_goals' as param.
-    if valid_array_parameter(params[:sdgs])
-      sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs])
-    end
+    sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs]) if valid_array_parameter(params[:sdgs])
     if sdg_use_case_slugs.nil? && valid_array_parameter(params[:sustainable_development_goals])
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sustainable_development_goals])
     end
@@ -162,9 +152,9 @@ class UseCasesController < ApplicationController
       unless use_case_slugs.nil? || use_case_slugs.empty?
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = products.count
       end
     end
@@ -179,13 +169,13 @@ class UseCasesController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if use_cases.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -201,9 +191,9 @@ class UseCasesController < ApplicationController
       format.json do
         render(json: results.to_json(UseCase.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -255,9 +245,7 @@ class UseCasesController < ApplicationController
 
     @use_cases = filter_use_cases.order(:name)
 
-    if params[:search]
-      @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%" + params[:search] + "%")
-    end
+    @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%#{params[:search]}%") if params[:search]
 
     authorize @use_cases, :view_allowed?
   end
@@ -302,16 +290,14 @@ class UseCasesController < ApplicationController
   end
 
   def duplicates
-    @use_cases = Array.new
+    @use_cases = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
-        @use_cases = UseCase.where(slug: current_slug).to_a
-      end
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
+      @use_cases = UseCase.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize UseCase, :view_allowed?
-    render json: @use_cases, :only => [:name]
+    render json: @use_cases, only: [:name]
   end
 
   # POST /use_cases
@@ -324,16 +310,14 @@ class UseCasesController < ApplicationController
     @uc_desc.set_current_user(current_user)
     @ucs_header = UseCaseHeader.new
 
-    if (params[:selected_sdg_targets])
-      params[:selected_sdg_targets].keys.each do |sdg_target_id|
-        sdg_target = SdgTarget.find(sdg_target_id)
-        @use_case.sdg_targets.push(sdg_target)
-      end
+    params[:selected_sdg_targets]&.keys&.each do |sdg_target_id|
+      sdg_target = SdgTarget.find(sdg_target_id)
+      @use_case.sdg_targets.push(sdg_target)
     end
 
     if policy(@use_case).beta_only?
       if use_case_params[:maturity] != UseCase.entity_status_types[:BETA] &&
-          session[:use_case_elevated_role].to_s.downcase != 'true'
+         session[:use_case_elevated_role].to_s.downcase != 'true'
         session[:use_case_elevated_role] = true
       end
 
@@ -355,8 +339,11 @@ class UseCasesController < ApplicationController
           @ucs_header.header = use_case_params[:ucs_header]
           @ucs_header.save
         end
-        format.html { redirect_to @use_case,
-                      flash: { notice: t('messages.model.created', model: t('model.use-case').to_s.humanize) }}
+        format.html do
+          redirect_to @use_case,
+                      flash: { notice: t('messages.model.created',
+                                         model: t('model.use-case').to_s.humanize) }
+        end
         format.json { render :show, status: :created, location: @use_case }
       else
         format.html { render :new }
@@ -371,18 +358,14 @@ class UseCasesController < ApplicationController
     authorize @use_case, :mod_allowed?
 
     sdg_targets = Set.new
-    if (params[:selected_sdg_targets])
-      params[:selected_sdg_targets].keys.each do |sdg_target_id|
-        sdg_target = SdgTarget.find(sdg_target_id)
-        sdg_targets.add(sdg_target)
-      end
+    params[:selected_sdg_targets]&.keys&.each do |sdg_target_id|
+      sdg_target = SdgTarget.find(sdg_target_id)
+      sdg_targets.add(sdg_target)
     end
     @use_case.sdg_targets = sdg_targets.to_a
 
     if use_case_params[:uc_desc].present?
-      if @uc_desc.locale != I18n.locale.to_s
-        @uc_desc = UseCaseDescription.new
-      end
+      @uc_desc = UseCaseDescription.new if @uc_desc.locale != I18n.locale.to_s
       @uc_desc.use_case_id = @use_case.id
       @uc_desc.locale = I18n.locale
       @uc_desc.description = use_case_params[:uc_desc]
@@ -391,7 +374,7 @@ class UseCasesController < ApplicationController
 
     if policy(@use_case).beta_only?
       if use_case_params[:maturity] != UseCase.entity_status_types[:BETA] &&
-          session[:use_case_elevated_role].to_s.downcase != 'true'
+         session[:use_case_elevated_role].to_s.downcase != 'true'
         session[:use_case_elevated_role] = true
       end
 
@@ -408,8 +391,11 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if @use_case.update(use_case_params)
-        format.html { redirect_to use_case_path(@use_case, locale: session[:locale]),
-                                  flash: { notice: t('messages.model.updated', model: t('model.use-case').to_s.humanize) }}
+        format.html do
+          redirect_to use_case_path(@use_case, locale: session[:locale]),
+                      flash: { notice: t('messages.model.updated',
+                                         model: t('model.use-case').to_s.humanize) }
+        end
         format.json { render :show, status: :ok, location: @use_case }
       else
         format.html { render :edit }
@@ -424,40 +410,38 @@ class UseCasesController < ApplicationController
     authorize(@use_case, :delete_allowed?)
     @use_case.destroy
     respond_to do |format|
-      format.html { redirect_to use_cases_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.use-case').to_s.humanize) }}
+      format.html do
+        redirect_to use_cases_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.use-case').to_s.humanize) }
+      end
       format.json { head :no_content }
     end
   end
 
   private
 
-    def set_use_case
-      if !params[:id].scan(/\D/).empty?
-        @use_case = UseCase.find_by(slug: params[:id]) or not_found
-      else
-        @use_case = UseCase.find_by(id: params[:id]) or not_found
-      end
-      @sector_name = Sector.find(@use_case.sector_id).name
-      @uc_desc = UseCaseDescription.where(use_case_id: @use_case, locale: I18n.locale).first
-      @uc_desc ||= UseCaseDescription.where(use_case_id: @use_case, locale: I18n.default_locale).first
-      if @uc_desc.nil?
-        @uc_desc = UseCaseDescription.new
-      end
-      @ucs_header = UseCaseHeader.where(use_case_id: @use_case, locale: I18n.locale).first
-      if @ucs_header.nil?
-        @ucs_header = UseCaseHeader.new
-      end
+  def set_use_case
+    if !params[:id].scan(/\D/).empty?
+      @use_case = UseCase.find_by(slug: params[:id]) or not_found
+    else
+      @use_case = UseCase.find_by(id: params[:id]) or not_found
     end
+    @sector_name = Sector.find(@use_case.sector_id).name
+    @uc_desc = UseCaseDescription.where(use_case_id: @use_case, locale: I18n.locale).first
+    @uc_desc ||= UseCaseDescription.where(use_case_id: @use_case, locale: I18n.default_locale).first
+    @uc_desc = UseCaseDescription.new if @uc_desc.nil?
+    @ucs_header = UseCaseHeader.where(use_case_id: @use_case, locale: I18n.locale).first
+    @ucs_header = UseCaseHeader.new if @ucs_header.nil?
+  end
 
-    def set_sectors
-      @sectors = Sector.order(:name)
-    end
+  def set_sectors
+    @sectors = Sector.order(:name)
+  end
 
-    def set_current_user
-      @use_case.set_current_user(current_user)
-      @uc_desc.set_current_user(current_user)
-    end
+  def set_current_user
+    @use_case.set_current_user(current_user)
+    @uc_desc.set_current_user(current_user)
+  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def use_case_params
@@ -465,9 +449,7 @@ class UseCasesController < ApplicationController
           .permit(:name, :slug, :sector_id, :uc_desc, :ucs_header, :maturity)
           .tap do |attr|
             valid_tags = []
-            if params[:use_case_tags].present?
-              valid_tags = params[:use_case_tags].reject(&:empty?).map(&:downcase)
-            end
+            valid_tags = params[:use_case_tags].reject(&:empty?).map(&:downcase) if params[:use_case_tags].present?
             attr[:tags] = valid_tags
 
             if params[:reslug].present?

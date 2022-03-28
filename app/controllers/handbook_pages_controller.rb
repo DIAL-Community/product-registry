@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class HandbookPagesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_handbook_page, only: [:show, :edit, :update, :destroy, :copy_page]
-  before_action :redirect_cancel, only: [:create, :update, :save_design]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_handbook_page, only: %i[show edit update destroy copy_page]
+  before_action :redirect_cancel, only: %i[create update save_design]
 
   # GET /handbook_pages
   # GET /handbook_pages.json
@@ -16,22 +18,20 @@ class HandbookPagesController < ApplicationController
     current_page = params[:page] || 1
 
     @pages = HandbookPage.order(:name)
-    if params[:search]
-      @pages = @pages.name_contains(params[:search])
+    @pages = if params[:search]
+               @pages.name_contains(params[:search])
                      .order(:name)
                      .paginate(page: current_page, per_page: 5)
-    else
-      @pages = @pages.order(:name).paginate(page: current_page, per_page: 5)
-    end
+             else
+               @pages.order(:name).paginate(page: current_page, per_page: 5)
+             end
     authorize Handbook, :view_allowed?
   end
 
   # GET /handbook_page/1
   # GET /handbook_page/1.json
   def show
-    if params[:handbook_id]
-      @handbook = Handbook.find_by(slug: params[:handbook_id])
-    end
+    @handbook = Handbook.find_by(slug: params[:handbook_id]) if params[:handbook_id]
     @child_pages = HandbookPage.where(parent_page_id: @page.id)
   end
 
@@ -39,14 +39,14 @@ class HandbookPagesController < ApplicationController
   def new
     @page = HandbookPage.new
     @page_contents = PageContent.new
-    @page_contents.editor_type = "simple"
+    @page_contents.editor_type = 'simple'
     if params[:handbook_id].present?
       @handbook = Handbook.find_by(slug: params[:handbook_id])
       @page.handbook = @handbook
       @pages = HandbookPage.where(handbook_id: @handbook.id)
 
       @phases = @handbook.phases.map do |phase|
-        phase["name"]
+        phase['name']
       end
       @pages = HandbookPage.where(handbook_id: @handbook.id)
     end
@@ -58,7 +58,7 @@ class HandbookPagesController < ApplicationController
     if params[:handbook_id]
       @handbook = Handbook.find_by(slug: params[:handbook_id])
       @phases = @handbook.phases.map do |phase|
-        phase["name"]
+        phase['name']
       end
       @pages = HandbookPage.where(handbook_id: @handbook.id)
     end
@@ -81,13 +81,13 @@ class HandbookPagesController < ApplicationController
         params[:answer_texts].keys.each do |answer_text_key|
           next if answer_text_key.empty? || params[:answer_texts][answer_text_key].empty?
 
-          if answer_text_key.scan(/\D/).empty?
-            # Numbers only, so this is an id of the answer text.
-            answer = HandbookAnswer.find(answer_text_key.to_i)
-          else
-            # Contains text, we need to create new answer
-            answer = HandbookAnswer.new
-          end
+          answer = if answer_text_key.scan(/\D/).empty?
+                     # Numbers only, so this is an id of the answer text.
+                     HandbookAnswer.find(answer_text_key.to_i)
+                   else
+                     # Contains text, we need to create new answer
+                     HandbookAnswer.new
+                   end
           answer.answer_text = params[:answer_texts][answer_text_key]
           answer.action = params[:mapped_actions][answer_text_key]
           answer.locale = I18n.locale
@@ -111,7 +111,7 @@ class HandbookPagesController < ApplicationController
       if @page.save
         format.html do
           redirect_to @handbook,
-                    notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize)
+                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize)
         end
         format.json { render :show, status: :created, location: @page }
       else
@@ -126,9 +126,7 @@ class HandbookPagesController < ApplicationController
   def update
     authorize(Handbook, :mod_allowed?)
 
-    if @page.handbook_id
-      @handbook = Handbook.find(@page.handbook_id)
-    end
+    @handbook = Handbook.find(@page.handbook_id) if @page.handbook_id
 
     unless params[:question_text].nil?
       question = @page.handbook_question
@@ -140,13 +138,13 @@ class HandbookPagesController < ApplicationController
         params[:answer_texts].keys.each do |answer_text_key|
           next if answer_text_key.empty? || params[:answer_texts][answer_text_key].empty?
 
-          if answer_text_key.scan(/\D/).empty?
-            # Numbers only, so this is an id of the answer text.
-            answer = HandbookAnswer.find(answer_text_key.to_i)
-          else
-            # Contains text, we need to create new answer
-            answer = HandbookAnswer.new
-          end
+          answer = if answer_text_key.scan(/\D/).empty?
+                     # Numbers only, so this is an id of the answer text.
+                     HandbookAnswer.find(answer_text_key.to_i)
+                   else
+                     # Contains text, we need to create new answer
+                     HandbookAnswer.new
+                   end
           answer.answer_text = params[:answer_texts][answer_text_key]
           answer.action = params[:mapped_actions][answer_text_key]
           answer.locale = I18n.locale
@@ -201,8 +199,8 @@ class HandbookPagesController < ApplicationController
     @handbook = Handbook.find(@page.handbook_id)
 
     @new_page = @page.dup
-    @new_page.name = @page.name + " Copy"
-    @new_page.slug = @page.slug + "_copy"
+    @new_page.name = "#{@page.name} Copy"
+    @new_page.slug = "#{@page.slug}_copy"
     @new_page.save!
 
     @page.page_contents.each do |contents|
@@ -229,9 +227,7 @@ class HandbookPagesController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @page = HandbookPage.where(slug: current_slug).to_a
-      end
+      @page = HandbookPage.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize(Handbook, :view_allowed?)
     render(json: @page, only: [:name])
@@ -240,7 +236,7 @@ class HandbookPagesController < ApplicationController
   def upload_design_images
     uploaded_filenames = []
     uploaded_files = params[:files]
-    root_rails = Rails.root.join('public', 'assets', 'handbooks', 'design_images') 
+    root_rails = Rails.root.join('public', 'assets', 'handbooks', 'design_images')
     uploaded_files.each do |uploaded_file|
       File.open("#{root_rails}/#{uploaded_file.original_filename}", 'wb') do |file|
         file.write(uploaded_file.read)
@@ -264,15 +260,9 @@ class HandbookPagesController < ApplicationController
     # if !@page_contents.components.nil? && !@page_contents.components.blank?
     #   design['gjs-components'] = @page_contents.components
     # end
-    if !@page_contents.html.nil? && !@page_contents.html.blank?
-      design['gjs-html'] = @page_contents.html
-    end
-    if !@page_contents.styles.nil? && !@page_contents.styles.blank?
-      design['gjs-styles'] = @page_contents.styles
-    end
-    if !@page_contents.assets.nil? && !@page_contents.assets.blank?
-      design['gjs-assets'] = @page_contents.assets
-    end
+    design['gjs-html'] = @page_contents.html if !@page_contents.html.nil? && !@page_contents.html.blank?
+    design['gjs-styles'] = @page_contents.styles if !@page_contents.styles.nil? && !@page_contents.styles.blank?
+    design['gjs-assets'] = @page_contents.assets if !@page_contents.assets.nil? && !@page_contents.assets.blank?
 
     respond_to { |format| format.json { render json: design, status: :ok } }
   end
@@ -284,7 +274,7 @@ class HandbookPagesController < ApplicationController
       return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
     end
 
-    if params.key?(:editor_type) && params[:editor_type] == "on"
+    if params.key?(:editor_type) && params[:editor_type] == 'on'
       # This means that it is a page builder and has already been saved
       return respond_to do |format|
         format.html do
@@ -296,15 +286,15 @@ class HandbookPagesController < ApplicationController
 
     if params.key?(:page_content)
       @page_contents.html = params['page_content']
-      @page_contents.css = ""
-      @page_contents.editor_type = "simple"
+      @page_contents.css = ''
+      @page_contents.editor_type = 'simple'
     else
       @page_contents.css = params['gjs-css']
       @page_contents.html = params['gjs-html']
       @page_contents.styles = params['gjs-styles']
       @page_contents.components = params['gjs-components']
       @page_contents.assets = params['gjs-assets']
-      @page_contents.editor_type = "builder"
+      @page_contents.editor_type = 'builder'
     end
 
     @page_contents.locale = params['language'] || I18n.locale
@@ -331,9 +321,7 @@ class HandbookPagesController < ApplicationController
 
   def set_page_contents
     language = I18n.locale
-    if params['language'].present?
-      language = params['language']
-    end
+    language = params['language'] if params['language'].present?
 
     if @page_contents.nil?
       if !params[:id].scan(/\D/).empty?
@@ -351,29 +339,25 @@ class HandbookPagesController < ApplicationController
         @page_contents = en_contents.dup unless en_contents.nil?
         @page_contents = PageContent.new if @page_contents.nil?
         @page_contents.handbook_page_id = @page.id
-        @page_contents.editor_type = "simple"
+        @page_contents.editor_type = 'simple'
       end
     end
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_handbook_page
-    if !params[:id].scan(/\D/).empty?
-      @page = HandbookPage.find_by(slug: params[:id]) || not_found
-    else
-      @page = HandbookPage.find(params[:id]) || not_found
-    end
+    @page = if !params[:id].scan(/\D/).empty?
+              HandbookPage.find_by(slug: params[:id]) || not_found
+            else
+              HandbookPage.find(params[:id]) || not_found
+            end
 
     language = I18n.locale
-    if params['language'].present?
-      language = params['language']
-    end
+    language = params['language'] if params['language'].present?
 
     @page_contents = PageContent.where(handbook_page_id: @page, locale: language).first
 
-    if @page_contents.nil?
-      @page_contents = PageContent.new
-    end
+    @page_contents = PageContent.new if @page_contents.nil?
   end
 
   # Only allow a list of trusted parameters through.
@@ -381,7 +365,7 @@ class HandbookPagesController < ApplicationController
     params.require(:handbook_page)
           .permit(:name, :slug, :phase, :page_order, :media_url, :question_text, :handbook_id,
                   :parent_page_id, :content_html, :content_css,
-                  :editor_type, resources: [:name, :description, :url])
+                  :editor_type, resources: %i[name description url])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

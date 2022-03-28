@@ -1,23 +1,26 @@
+# frozen_string_literal: true
+
 class SdgTargetsController < ApplicationController
-  before_action :set_sdg_target, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_sdg_target, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
 
   def index
     if params[:without_paging]
-      @sdg_targets = SdgTarget.where('LOWER("sdg_targets"."name") like LOWER(?) OR target_number like ?', '%' + params[:search] + '%', params[:search] + '%')
+      @sdg_targets = SdgTarget.where('LOWER("sdg_targets"."name") like LOWER(?) OR target_number like ?',
+                                     "%#{params[:search]}%", "#{params[:search]}%")
                               .order(:target_number)
       authorize @sdg_targets, :view_allowed?
       return
     end
 
-    if params[:search]
-      @sdg_targets = SdgTarget.where('LOWER("sdg_targets"."name") like LOWER(?) OR target_number like ?', '%' + params[:search] + '%', params[:search] + '%')
+    @sdg_targets = if params[:search]
+                     SdgTarget.where('LOWER("sdg_targets"."name") like LOWER(?) OR target_number like ?', "%#{params[:search]}%", "#{params[:search]}%")
                               .order(:target_number)
                               .paginate(page: params[:page], per_page: 20)
-    else
-      @sdg_targets = SdgTarget.order(:target_number)
+                   else
+                     SdgTarget.order(:target_number)
                               .paginate(page: params[:page], per_page: 20)
-    end
+                   end
     authorize @sdg_targets, :view_allowed?
   end
 
@@ -27,7 +30,7 @@ class SdgTargetsController < ApplicationController
 
   def destroy
     authorize @sdg_target, :mod_allowed?
-    use_case = UseCase.find(params[:use_case_id]);
+    use_case = UseCase.find(params[:use_case_id])
     use_case.sdg_targets.delete(params[:id])
   end
 
@@ -44,9 +47,9 @@ class SdgTargetsController < ApplicationController
       .require(:sdg_target)
       .permit(:name, :slug, :confirmation, :description, :target_number, :sdg_number)
       .tap do |attr|
-        if (params[:reslug].present?)
+        if params[:reslug].present?
           attr[:slug] = slug_em(attr[:name])
-          if (params[:duplicate].present?)
+          if params[:duplicate].present?
             first_duplicate = BuildingBlock.slug_starts_with(attr[:slug]).order(slug: :desc).first
             attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
           end

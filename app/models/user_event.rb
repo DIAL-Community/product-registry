@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserEvent < ApplicationRecord
   enum event_type: {
     login_success: 'LOGIN SUCCESS', login_failed: 'LOGIN FAILED', index_view: 'INDEX VIEW',

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LogoUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -18,7 +20,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    Rails.root.join('public','assets', "#{model.class.to_s.underscore}s")
+    Rails.root.join('public', 'assets', "#{model.class.to_s.underscore}s")
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -39,12 +41,10 @@ class LogoUploader < CarrierWave::Uploader::Base
         elsif image[:height] < size
           image.resize("x#{size}<")
         end
-      else
-        if image[:width] > size
-          image.resize("#{size}>")
-        elsif image[:width] < size
-          image.resize("#{size}<")
-        end
+      elsif image[:width] > size
+        image.resize("#{size}>")
+      elsif image[:width] < size
+        image.resize("#{size}<")
       end
       image.format('png')
       image
@@ -67,11 +67,11 @@ class LogoUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg png gif)
+    %w[jpg jpeg png gif]
   end
 
   def content_type_whitelist
-    [/image\//]
+    [%r{image/}]
   end
 
   # Override the filename of the uploaded files:

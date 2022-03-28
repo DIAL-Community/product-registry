@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CandidateProductPolicy < ApplicationPolicy
   attr_reader :user, :record
 
@@ -8,6 +10,7 @@ class CandidateProductPolicy < ApplicationPolicy
 
   def create_allowed?
     return false if user.nil?
+
     true
   end
 
@@ -19,6 +22,7 @@ class CandidateProductPolicy < ApplicationPolicy
 
   def view_allowed?
     return false if user.nil?
+
     true
   end
 end

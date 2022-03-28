@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from commontator (originally 10)
 class InstallCommontator < ActiveRecord::Migration[5.2]
   def change
@@ -28,9 +30,9 @@ class InstallCommontator < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_index :commontator_comments, [ :creator_id, :creator_type, :thread_id ],
+    add_index :commontator_comments, %i[creator_id creator_type thread_id],
               name: 'index_commontator_comments_on_c_id_and_c_type_and_t_id'
-    add_index :commontator_comments, [ :thread_id, :created_at ]
+    add_index :commontator_comments, %i[thread_id created_at]
 
     create_table :commontator_subscriptions do |t|
       t.references :thread, null: false, foreign_key: {
@@ -41,7 +43,7 @@ class InstallCommontator < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_index :commontator_subscriptions, [ :subscriber_id, :subscriber_type, :thread_id ],
+    add_index :commontator_subscriptions, %i[subscriber_id subscriber_type thread_id],
               unique: true,
               name: 'index_commontator_subscriptions_on_s_id_and_s_type_and_t_id'
   end

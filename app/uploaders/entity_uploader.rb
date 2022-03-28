@@ -24,11 +24,11 @@ class EntityUploader < CarrierWave::Uploader::Base
   end
 
   def extension_whitelist
-    %w(json csv txt)
+    %w[json csv txt]
   end
 
   def content_type_whitelist
-    %w(text/plain text/csv application/json)
+    %w[text/plain text/csv application/json]
   end
 
   def send_notification(file)

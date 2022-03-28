@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Handbook < ApplicationRecord
   include Auditable
   attr_accessor :handbook_overview, :handbook_audience, :handbook_outcomes, :handbook_cover
@@ -13,10 +15,10 @@ class Handbook < ApplicationRecord
   end
 
   def image_file
-    if File.exist?(File.join('public','assets','playbooks',"#{slug}.png"))
-      return "/assets/playbooks/#{slug}.png"
+    if File.exist?(File.join('public', 'assets', 'playbooks', "#{slug}.png"))
+      "/assets/playbooks/#{slug}.png"
     else
-      return "/assets/playbooks/handbook_placeholder.png"
+      '/assets/playbooks/handbook_placeholder.png'
     end
   end
 end

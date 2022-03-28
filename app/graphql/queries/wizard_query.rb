@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class WizardQuery < Queries::BaseQuery
     argument :sector, String, required: false
@@ -12,9 +14,7 @@ module Queries
       wizard['digital_principles'] = DigitalPrinciple.all
 
       sector_name = sector
-      if !subsector.nil? && subsector != ''
-        sector_name += ":" + subsector
-      end
+      sector_name += ":#{subsector}" if !subsector.nil? && subsector != ''
       curr_sector = Sector.find_by(name: sector_name)
       curr_sdg = SustainableDevelopmentGoal.find_by(name: sdg)
 
@@ -26,10 +26,8 @@ module Queries
         if curr_sector.parent_sector_id.nil?
           (sector_ids << Sector.where(parent_sector_id: curr_sector.id).map(&:id)).flatten!
         end
-        unless curr_sector.parent_sector_id.nil?
-          sector_ids << curr_sector.parent_sector_id
-        end
-        sector_use_cases = UseCase.where(sector_id: sector_ids, maturity: "MATURE")
+        sector_ids << curr_sector.parent_sector_id unless curr_sector.parent_sector_id.nil?
+        sector_use_cases = UseCase.where(sector_id: sector_ids, maturity: 'MATURE')
       end
       unless curr_sdg.nil?
         curr_targets = SdgTarget.where(sdg_number: curr_sdg.number)

@@ -29,9 +29,7 @@ module Modules
         end
 
         country.aliases << country_code_or_name
-        if country.save!
-          puts("Country saved: #{country.name}.")
-        end
+        puts("Country saved: #{country.name}.") if country.save!
       end
       country
     end
@@ -42,7 +40,7 @@ module Modules
       puts "Processing region: #{region_name}."
       country = find_country(country_code, google_auth_key)
       region = Region.find_by('(name = ? OR ? = ANY(aliases)) AND country_id = ?',
-                                    region_name, region_name, country.id)
+                              region_name, region_name, country.id)
       if region.nil?
         region = Region.new
         region.country_id = country.id
@@ -65,9 +63,7 @@ module Modules
         end
 
         region.aliases << region_name
-        if region.save!
-          puts("Region saved: #{region.name}.")
-        end
+        puts("Region saved: #{region.name}.") if region.save!
       end
       region
     end
@@ -77,27 +73,21 @@ module Modules
 
       # Need to do this because Ramallah doesn't have region or country.
       region = find_region(region_name, country_code, google_auth_key)
-      if region.nil?
-        city = City.find_by('(name = ? OR ? = ANY(aliases))', city_name, city_name)
-      else
-        city = City.find_by('(name = ? OR ? = ANY(aliases)) AND region_id = ?', city_name, city_name, region.id)
-      end
+      city = if region.nil?
+               City.find_by('(name = ? OR ? = ANY(aliases))', city_name, city_name)
+             else
+               City.find_by('(name = ? OR ? = ANY(aliases)) AND region_id = ?', city_name, city_name, region.id)
+             end
 
       if city.nil?
         city = City.new
 
-        unless region.nil?
-          city.region_id = region.id
-        end
+        city.region_id = region.id unless region.nil?
 
         address = city_name
-        unless region_name.blank?
-          address = "#{address}, #{region_name}"
-        end
+        address = "#{address}, #{region_name}" unless region_name.blank?
 
-        unless country_code.blank?
-          address = "#{address}, #{country_code}"
-        end
+        address = "#{address}, #{country_code}" unless country_code.blank?
 
         city_data = JSON.parse(geocode_with_google(address, country_code, google_auth_key))
 
@@ -116,9 +106,7 @@ module Modules
         end
 
         city.aliases << city_name
-        if city.save!
-          puts("City saved: #{city.name}.")
-        end
+        puts("City saved: #{city.name}.") if city.save!
       end
       city
     end
@@ -127,26 +115,26 @@ module Modules
       puts "Geocoding address: #{address} in region: #{country_code}."
       uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
       geocode_uri = uri_template.expand({
-        'q' => {
-          'key' => auth_key,
-          'address' => address,
-          'region' => country_code
-        }
-      })
+                                          'q' => {
+                                            'key' => auth_key,
+                                            'address' => address,
+                                            'region' => country_code
+                                          }
+                                        })
 
       uri = URI.parse(geocode_uri)
       Net::HTTP.get(uri)
     end
 
-    def reverse_geocode_with_google(location, auth_key)
-      puts "Reverse geocoding location: (#{location.points[0].x.to_f}, #{location.points[0].y.to_f})."
+    def reverse_geocode_with_google(points, auth_key)
+      puts "Reverse geocoding location: (#{points[0].x.to_f}, #{points[0].y.to_f})."
       uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
       geocode_uri = uri_template.expand({
-        'q' => {
-          'key' => auth_key,
-          'latlng' => "#{location.points[0].x.to_f}, #{location.points[0].y.to_f}"
-        }
-      })
+                                          'q' => {
+                                            'key' => auth_key,
+                                            'latlng' => "#{points[0].x.to_f}, #{points[0].y.to_f}"
+                                          }
+                                        })
 
       uri = URI.parse(geocode_uri)
       Net::HTTP.get(uri)

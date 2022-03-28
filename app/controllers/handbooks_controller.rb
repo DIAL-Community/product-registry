@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'combine_pdf'
 require 'pdfkit'
 require 'tempfile'
 
 class HandbooksController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_handbook, only: [:show, :edit, :update, :destroy, :create_pdf, :show_pdf]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_handbook, only: %i[show edit update destroy create_pdf show_pdf]
 
   # GET /handbooks
   # GET /handbooks.json
@@ -19,19 +21,19 @@ class HandbooksController < ApplicationController
     current_page = params[:page] || 1
 
     @handbooks = Handbook.order(:name)
-    if params[:search]
-      @handbooks = @handbooks.name_contains(params[:search])
+    @handbooks = if params[:search]
+                   @handbooks.name_contains(params[:search])
                              .paginate(page: current_page, per_page: 5)
-    else
-      @handbooks = @handbooks.paginate(page: current_page, per_page: 5)
-    end
+                 else
+                   @handbooks.paginate(page: current_page, per_page: 5)
+                 end
     authorize @handbooks, :view_allowed?
   end
 
   def upload_design_images
     uploaded_filenames = []
     uploaded_files = params[:files]
-    root_rails = Rails.root.join('public', 'assets', 'handbooks', 'design_images') 
+    root_rails = Rails.root.join('public', 'assets', 'handbooks', 'design_images')
     uploaded_files.each do |uploaded_file|
       File.open("#{root_rails}/#{uploaded_file.original_filename}", 'wb') do |file|
         file.write(uploaded_file.read)
@@ -48,8 +50,7 @@ class HandbooksController < ApplicationController
     authorize @handbook, :view_allowed?
   end
 
-  def show_pdf
-  end
+  def show_pdf; end
 
   # GET /handbooks/new
   def new
@@ -108,8 +109,8 @@ class HandbooksController < ApplicationController
     authorize @handbook, :mod_allowed?
     if handbook_params[:handbook_overview].present? || handbook_params[:handbook_audience].present? || handbook_params[:handbook_outcomes].present? || handbook_params[:handbook_cover].present?
       @handbook_desc = HandbookDescription.where(handbook_id: @handbook.id,
-                                                              locale: I18n.locale)
-                                                        .first || HandbookDescription.new
+                                                 locale: I18n.locale)
+                                          .first || HandbookDescription.new
       @handbook_desc.handbook_id = @handbook.id
       @handbook_desc.locale = I18n.locale
       handbook_params[:handbook_overview].present? && @handbook_desc.overview = handbook_params[:handbook_overview]
@@ -157,9 +158,9 @@ class HandbooksController < ApplicationController
   end
 
   def create_pdf
-    url = request.base_url + "/handbooks/" + @handbook.slug + "/show_pdf"
+    url = "#{request.base_url}/handbooks/#{@handbook.slug}/show_pdf"
     pdf_data = Dhalang::PDF.get_from_url(url)
-    send_data(pdf_data, filename: @handbook.slug+'.pdf', type: 'application/pdf')
+    send_data(pdf_data, filename: "#{@handbook.slug}.pdf", type: 'application/pdf')
   end
 
   def duplicates
@@ -169,7 +170,7 @@ class HandbooksController < ApplicationController
       original_slug = slug_em(params[:original])
       if current_slug != original_slug
         @handbook = Handbook.where(slug: current_slug)
-                                          .to_a
+                            .to_a
       end
     end
     authorize Handbook, :view_allowed?
@@ -177,9 +178,7 @@ class HandbooksController < ApplicationController
   end
 
   def convert_pages
-    unless params[:page_ids].present?
-      format.json { render json: {}, status: :unprocessable_entity }
-    end
+    format.json { render json: {}, status: :unprocessable_entity } unless params[:page_ids].present?
 
     base_filename = ''
     combined_pdfs = CombinePDF.new
@@ -187,13 +186,11 @@ class HandbooksController < ApplicationController
     params[:page_ids].each do |page_id|
       base_filename += "#{page_id}-"
 
-      page_content = PageContent.find_by(handbook_page_id: page_id, locale: "en")
+      page_content = PageContent.find_by(handbook_page_id: page_id, locale: 'en')
       next if page_content.nil? || page_content.html.nil?
 
       pdf_data = PDFKit.new(page_content.html, page_size: 'Letter')
-      if page_content.editor_type != "simple"
-        pdf_data.stylesheets = page_content.css
-      end
+      pdf_data.stylesheets = page_content.css if page_content.editor_type != 'simple'
 
       temporary = Tempfile.new(Time.now.strftime('%s'))
       pdf_data.to_file(temporary.path)
@@ -205,9 +202,9 @@ class HandbooksController < ApplicationController
     combined_pdfs.save(temporary.path)
 
     json = {}
-    json["filename"] = "Page-#{base_filename}-exported.pdf"
-    json["content_type"] = "application/pdf"
-    json["data"] = Base64.strict_encode64(File.read(temporary.path))
+    json['filename'] = "Page-#{base_filename}-exported.pdf"
+    json['content_type'] = 'application/pdf'
+    json['data'] = Base64.strict_encode64(File.read(temporary.path))
 
     respond_to do |format|
       format.json { render json: json }
@@ -218,41 +215,43 @@ class HandbooksController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_handbook
-    if !params[:id].scan(/\D/).empty?
-      @handbook = Handbook.find_by(slug: params[:id]) || not_found
-    else
-      @handbook = Handbook.find(params[:id]) || not_found
-    end
+    @handbook = if !params[:id].scan(/\D/).empty?
+                  Handbook.find_by(slug: params[:id]) || not_found
+                else
+                  Handbook.find(params[:id]) || not_found
+                end
 
     @pages = []
-    parent_pages = HandbookPage.where("handbook_id=? and parent_page_id is null", @handbook.id).order(:page_order)
+    parent_pages = HandbookPage.where('handbook_id=? and parent_page_id is null', @handbook.id).order(:page_order)
     parent_pages.each do |page|
       @pages << page
       child_pages = HandbookPage.where(parent_page_id: page).order(:page_order)
-      if !child_pages.empty?
-        page.child_pages = []
-        child_pages.each do |child_page|
-          page.child_pages << child_page
-          grandchild_pages = HandbookPage.where(parent_page_id: child_page).order(:page_order)
-          if !grandchild_pages.empty?
-            child_page.child_pages = []
-            grandchild_pages.each do |grandchild_page|
-              child_page.child_pages << grandchild_page
-            end
-          end
+      next if child_pages.empty?
+
+      page.child_pages = []
+      child_pages.each do |child_page|
+        page.child_pages << child_page
+        grandchild_pages = HandbookPage.where(parent_page_id: child_page).order(:page_order)
+        next if grandchild_pages.empty?
+
+        child_page.child_pages = []
+        grandchild_pages.each do |grandchild_page|
+          child_page.child_pages << grandchild_page
         end
       end
     end
 
     @description = @handbook.handbook_descriptions
-                                 .select { |desc| desc.locale == I18n.locale.to_s }
-                                 .first
+                            .select { |desc| desc.locale == I18n.locale.to_s }
+                            .first
   end
 
   # Only allow a list of trusted parameters through.
   def handbook_params
     params.require(:handbook)
-          .permit(:name, :slug, :handbook_overview, :handbook_audience, :handbook_outcomes, :handbook_cover, :logo, :maturity, :pdf_url, :phases => [:name, :description])
+          .permit(:name, :slug, :handbook_overview, :handbook_audience, :handbook_outcomes, :handbook_cover, :logo, :maturity, :pdf_url, phases: %i[
+                    name description
+                  ])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

@@ -1,0 +1,43 @@
+image: ruby:2.7.2
+
+services:
+  - postgres:latest
+  - redis:latest
+
+stages:
+  - lint
+
+variables:
+  BUNDLE_PATH: vendor/bundle
+  BUNDLE_BIN: vendor/bundle/bin
+  GEM_HOME: vendor/bundle
+  POSTGRES_DB: registry_test
+  POSTGRES_USER: registry
+  POSTGRES_PASSWORD: 'Password!1'
+  POSTGRES_HOST_AUTH_METHOD: trust
+  DB_HOST: postgres
+  DB_NAME: registry_test
+  DB_USERNAME: registry
+  DB_PASSWORD: 'Password!1'
+  RAILS_ENV: test
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  
+cache:
+  paths:
+    - "vendor/bundle"
+
+lintandtest:
+  stage: lint
+  script:
+    - curl -sL https://deb.nodesource.com/setup_16.x | bash -
+    - apt-get update -yy && apt-get install build-essential libpq-dev postgresql postgresql-contrib cmake nodejs -y
+    - gem install bundler -v 2.2.13
+    - bundle install
+    - bundle exec rubocop
+    - cp config/database.yml.gitlab config/database.yml
+    - until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_test" -c '\q'; do sleep 2s; done
+    - RAILS_ENV=test bundle exec rake db:create db:migrate
+    - RAILS_ENV=test bundle exec rails test
+
+    

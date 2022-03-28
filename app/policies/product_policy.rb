@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductPolicy < ApplicationPolicy
   attr_reader :user, :record
 
@@ -8,8 +10,8 @@ class ProductPolicy < ApplicationPolicy
 
   def permitted_attributes
     if mod_allowed?
-      [:name, :is_launchable, :website, :slug, :aliases, :tags, :default_url, :logo, :start_assessment,
-       :product_description]
+      %i[name is_launchable website slug aliases tags default_url logo start_assessment
+         product_description]
     else
       []
     end
@@ -45,7 +47,7 @@ class ProductPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:product_user]) &&
-      @record.is_a?(Product) && user.user_products.include?(@record.id)
+                   @record.is_a?(Product) && user.user_products.include?(@record.id)
 
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:content_editor])
@@ -57,7 +59,7 @@ class ProductPolicy < ApplicationPolicy
     return false if user.nil?
 
     return true if user.roles.include?(User.user_roles[:product_user]) &&
-      @record.is_a?(Product) && user.user_products.include?(@record.id)
+                   @record.is_a?(Product) && user.user_products.include?(@record.id)
 
     user.roles.include?(User.user_roles[:admin]) ||
       user.roles.include?(User.user_roles[:content_editor]) ||
@@ -68,7 +70,7 @@ class ProductPolicy < ApplicationPolicy
     return true if user.nil?
 
     !user.roles.include?(User.user_roles[:content_editor]) &&
-        !user.roles.include?(User.user_roles[:admin]) &&
-        !user.roles.include?(User.user_roles[:ict4sdg])
+      !user.roles.include?(User.user_roles[:admin]) &&
+      !user.roles.include?(User.user_roles[:ict4sdg])
   end
 end

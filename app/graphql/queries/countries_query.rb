@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class CountriesQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -5,9 +7,7 @@ module Queries
 
     def resolve(search:)
       countries = Country.order(:name)
-      unless search.blank?
-        countries = countries.name_contains(search)
-      end
+      countries = countries.name_contains(search) unless search.blank?
       countries
     end
   end
@@ -20,9 +20,7 @@ module Queries
 
     def resolve(search:)
       countries = Country.order(:name)
-      unless search.blank?
-        countries = countries.name_contains(search)
-      end
+      countries = countries.name_contains(search) unless search.blank?
       countries
     end
   end

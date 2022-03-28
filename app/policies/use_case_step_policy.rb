@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UseCaseStepPolicy < ApplicationPolicy
   attr_reader :user, :record
 

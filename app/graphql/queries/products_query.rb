@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/wizard_helpers'
 
 module Queries
@@ -9,9 +11,7 @@ module Queries
 
     def resolve(search:)
       products = Product.order(:name)
-      unless search.blank?
-        products = products.name_contains(search)
-      end
+      products = products.name_contains(search) unless search.blank?
       products
     end
   end
@@ -72,13 +72,13 @@ module Queries
   def filter_products(
     search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
     use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
-    sort_hint, offset_params = {}
+    sort_hint, _offset_params = {}
   )
     products = Product.all
     if !search.nil? && !search.to_s.strip.empty?
       name_products = products.name_contains(search)
       desc_products = products.joins(:product_descriptions)
-                              .where("LOWER(description) like LOWER(?)", "%#{search}%")
+                              .where('LOWER(description) like LOWER(?)', "%#{search}%")
       products = products.where(id: (name_products + desc_products).uniq)
     end
 
@@ -120,17 +120,19 @@ module Queries
     user_sectors = sectors.reject { |x| x.nil? || x.empty? }
     user_sectors.each do |user_sector|
       # Find the sector record.
-      if user_sector.scan(/\D/).empty?
-        sector = Sector.find_by(id: user_sector)
-      else
-        sector = Sector.find_by(name: user_sector)
-      end
+      sector = if user_sector.scan(/\D/).empty?
+                 Sector.find_by(id: user_sector)
+               else
+                 Sector.find_by(name: user_sector)
+               end
       # Skip if we can't find any sector
       next if sector.nil?
+
       # Add the id to the accepted sector list
       filtered_sectors << sector.id
       # Skip if the parent sector id is empty
       next if sector.parent_sector_id.nil?
+
       # Iterate over the child sector and match on the subsector if available
       child_sectors = Sector.where(parent_sector_id: sector.id)
       unless sub_sectors.empty?
@@ -139,6 +141,7 @@ module Queries
           sub_sectors.each do |sub_sector|
             # Keepn on skipping if we found a match already
             next if sub_sector_match
+
             # Try to find a match if we can.
             sub_sector_match = child_sector.name == "#{sector.name}:#{sub_sector}"
           end
@@ -164,18 +167,12 @@ module Queries
                          .where(sustainable_development_goals: { id: filtered_sdgs })
     end
 
-    if product_deployable
-      products = products.where(is_launchable: product_deployable)
-    end
+    products = products.where(is_launchable: product_deployable) if product_deployable
 
-    if with_maturity
-      products = products.where('maturity_score is not null')
-    end
+    products = products.where('maturity_score is not null') if with_maturity
 
-    if !product_types.include?('product_and_dataset') && !product_types.empty?
-      unless product_types.include?('product') && product_types.include?('dataset')
-        products = products.where(product_type: product_types)
-      end
+    if !product_types.include?('product_and_dataset') && !product_types.empty? && !(product_types.include?('product') && product_types.include?('dataset'))
+      products = products.where(product_type: product_types)
     end
 
     filtered_endorsers = endorsers.reject { |x| x.nil? || x.empty? }
@@ -184,15 +181,16 @@ module Queries
                          .where(endorsers: { id: filtered_endorsers })
     end
 
-    if sort_hint.to_s.downcase == 'country'
-      products = products.joins(:countries).order('countries.name')
-    elsif sort_hint.to_s.downcase == 'sector'
-      products = products.joins(:sectors).order('sectors.name')
-    elsif sort_hint.to_s.downcase == 'tag'
-      products = products.order('products.tags')
-    else
-      products = products.order('products.name')
-    end
+    products = case sort_hint.to_s.downcase
+               when 'country'
+                 products.joins(:countries).order('countries.name')
+               when 'sector'
+                 products.joins(:sectors).order('sectors.name')
+               when 'tag'
+                 products.order('products.tags')
+               else
+                 products.order('products.name')
+               end
     products.uniq
   end
 
@@ -282,9 +280,7 @@ module Queries
 
     def resolve(search:)
       endorsers = Endorser.order(:name)
-      unless search.blank?
-        endorsers = endorsers.name_contains(search)
-      end
+      endorsers = endorsers.name_contains(search) unless search.blank?
       endorsers
     end
   end

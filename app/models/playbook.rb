@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Playbook < ApplicationRecord
   include Auditable
   attr_accessor :playbook_overview, :playbook_audience, :playbook_outcomes, :playbook_cover
@@ -40,7 +42,7 @@ class Playbook < ApplicationRecord
     if File.exist?(File.join('public', 'assets', 'playbooks', "#{slug}.png"))
       "/assets/playbooks/#{slug}.png"
     else
-      "/assets/playbooks/playbook_placeholder.png"
+      '/assets/playbooks/playbook_placeholder.png'
     end
   end
 end

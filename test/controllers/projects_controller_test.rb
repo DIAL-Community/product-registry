@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
@@ -8,17 +10,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @project = projects(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get projects_url
     assert_response :success
   end
 
-  test "should get show" do
+  test 'should get show' do
     get project_url(@project)
     assert_response :success
   end
 
-  test "search test" do
+  test 'search test' do
     get projects_url(search: 'Project A')
     assert_equal(1, assigns(:projects).count)
 
@@ -26,12 +28,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(0, assigns(:projects).count)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_project_url
     assert_response :success
   end
 
-  test "should create project" do
+  test 'should create project' do
     assert_difference('Project.count') do
       post(
         projects_url,
@@ -49,17 +51,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_url(Project.last)
   end
 
-  test "should fail on project create with no origin" do
+  test 'should fail on project create with no origin' do
     @project.origin = nil
     assert @project.invalid?
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_project_url(@project)
     assert_response :success
   end
 
-  test "should update project" do
+  test 'should update project' do
     patch(
       project_url(@project),
       params: { project: { name: @project.name, sectors: @project.sectors, slug: @project.slug } }
@@ -67,7 +69,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_url(@project, locale: 'en')
   end
 
-  test "should destroy project" do
+  test 'should destroy project' do
     assert_difference('Project.count', -1) do
       delete project_url(@project)
     end
@@ -75,7 +77,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to projects_url
   end
 
-  test "add projects filter" do
+  test 'add projects filter' do
     # With no filters, should load 2 workflows
     get projects_url
     assert_equal(2, assigns(:projects).count)
@@ -83,7 +85,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # project2 = assigns(:projects)[1]
 
     param = { 'filter_name' => 'projects', 'filter_value' => project1.id, 'filter_label' => project1.name }
-    post "/add_filter", params: param
+    post '/add_filter', params: param
 
     # Filter is set, should only load 1
     get projects_url
@@ -103,7 +105,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # assert_equal(0, assigns(:use_cases).count)
   end
 
-  test "Policy tests: Should only allow get" do
+  test 'Policy tests: Should only allow get' do
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get project_url(@project)

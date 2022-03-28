@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ContactsControllerTest < ActionDispatch::IntegrationTest
@@ -8,25 +10,25 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     @contact = contacts(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get contacts_url
     assert_response :success
   end
 
-  test "search test" do
-    get contacts_url(search: "Contact1")
+  test 'search test' do
+    get contacts_url(search: 'Contact1')
     assert_equal(1, assigns(:contacts).count)
 
-    get contacts_url(search: "InvalidContact")
+    get contacts_url(search: 'InvalidContact')
     assert_equal(0, assigns(:contacts).count)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_contact_url
     assert_response :success
   end
 
-  test "should create contact" do
+  test 'should create contact' do
     assert_difference('Contact.count') do
       post(
         contacts_url,
@@ -37,17 +39,17 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to contact_url(Contact.last)
   end
 
-  test "should show contact" do
+  test 'should show contact' do
     get contact_url(@contact)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_contact_url(@contact)
     assert_response :success
   end
 
-  test "should update contact" do
+  test 'should update contact' do
     patch(
       contact_url(@contact),
       params: { contact: { email: @contact.email, name: @contact.name, slug: @contact.slug, title: @contact.title } }
@@ -55,7 +57,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to contact_url(@contact)
   end
 
-  test "should destroy contact" do
+  test 'should destroy contact' do
     assert_difference('Contact.count', -1) do
       delete contact_url(@contact)
     end
@@ -63,7 +65,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to contacts_url
   end
 
-  test "Policy tests: should reject all actions for regular user." do
+  test 'Policy tests: should reject all actions for regular user.' do
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get contact_url(@contact)

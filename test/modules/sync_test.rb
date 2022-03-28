@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'modules/sync'
 require 'modules/maturity_sync'
@@ -6,7 +8,7 @@ include Modules::Sync
 class SyncModuleTest < ActiveSupport::TestCase
   include Modules::MaturitySync
 
-  def capture_stdout(&block)
+  def capture_stdout
     original_stdout = $stdout
     $stdout = fake = StringIO.new
     begin
@@ -17,7 +19,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     fake.string
   end
 
-  test "sync_public_product should update product with aliases" do
+  test 'sync_public_product should update product with aliases' do
     initial_size = Product.count
 
     new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "website": "https://opendatakit.org/"}')
@@ -26,7 +28,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
 
     saved_product = Product.find_by(slug: 'odk')
-    assert_equal saved_product.website, "opendatakit.org"
+    assert_equal saved_product.website, 'opendatakit.org'
     assert_equal saved_product.aliases.length, 1
     assert_equal saved_product.aliases[0], 'Open Data Kit'
     assert_equal saved_product.slug, 'odk'
@@ -35,7 +37,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_nil not_saved_product
   end
 
-  test "sync_public_product should update sdg for existing product" do
+  test 'sync_public_product should update sdg for existing product' do
     initial_size = Product.count
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.length, 0
@@ -57,7 +59,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal saved_product.sustainable_development_goals.size, 2
   end
 
-  test "sync_public_product should save product with alias" do
+  test 'sync_public_product should save product with alias' do
     initial_size = Product.count
 
     existing_product = products(:four)
@@ -71,9 +73,9 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
 
     saved_product = Product.find_by(slug: 'product_4')
-    assert_equal saved_product.name, "Product 4"
+    assert_equal saved_product.name, 'Product 4'
     assert_equal saved_product.slug, 'product_4'
-    assert_equal saved_product.website, "me.com"
+    assert_equal saved_product.website, 'me.com'
     assert_equal saved_product.aliases.length, 1
     assert_equal saved_product.aliases[0], 'Prod 4'
 
@@ -104,44 +106,46 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'product_4')
     assert_not_nil saved_product
     assert_equal saved_product.aliases.length, 2
-    assert_equal saved_product.aliases[0], "Prod 4"
-    assert_equal saved_product.aliases[1], "Product4"
+    assert_equal saved_product.aliases[0], 'Prod 4'
+    assert_equal saved_product.aliases[1], 'Product4'
 
     assert_equal Product.count, initial_size
   end
 
-  test "sync_digisquare_product should update existing product" do
+  test 'sync_digisquare_product should update existing product' do
     initial_size = Product.count
     assert_not_nil Product.find_by(slug: 'odk')
 
     new_product = JSON.parse('{"name": "ODK"}')
-    digisquare_maturity = [{"name":"ODK","maturity":{"Indicator1":"high"}}]
+    digisquare_maturity = [{ "name": 'ODK', "maturity": { "Indicator1": 'high' } }]
     capture_stdout { sync_digisquare_product(new_product, digisquare_maturity) }
 
     rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     odk_product = Product.find_by(slug: 'odk')
-    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    maturity_scores = calculate_maturity_scores(odk_product.id,
+                                                rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
     assert_equal maturity_scores.first[:score], 10
 
     assert_not_nil Product.find_by(slug: 'odk')
     assert_equal Product.count, initial_size
   end
 
-  test "sync_digisquare_product should save new product" do
+  test 'sync_digisquare_product should save new product' do
     initial_size = Product.count
     assert_nil Product.find_by(slug: 'open_data_kit')
 
     new_product = JSON.parse('{"name": "Open Data Kit"}')
-    digisquare_maturity = JSON.load(File.open("config/digisquare_maturity_data.json"))
+    digi_file = File.open('config/digisquare_maturity_data.json')
+    digisquare_maturity = JSON.parse(digi_file.read)
     capture_stdout { sync_digisquare_product(new_product, digisquare_maturity) }
 
     assert_not_nil Product.find_by(slug: 'open_data_kit')
     assert_equal Product.count, initial_size + 1
   end
 
-  test "sync_osc_product should also search for dupes in aliases" do
+  test 'sync_osc_product should also search for dupes in aliases' do
     product = products(:one)
-    product.aliases.push("Just Another Product Name")
+    product.aliases.push('Just Another Product Name')
     product.save
 
     initial_size = Product.count
@@ -152,7 +156,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
   end
 
-  test "update product website" do
+  test 'update product website' do
     p1 = products(:one)
     p1.website = nil
     p1.save
@@ -170,7 +174,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal p1.website, 'www.foo.org'
   end
 
-  test "add product organizations" do
+  test 'add product organizations' do
     p1 = products(:one)
     assert p1.organizations.empty?
 
@@ -201,7 +205,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert p1.organizations.include? Organization.where(name: 'Organization Again')[0]
   end
 
-  test "update product SDGs" do
+  test 'update product SDGs' do
     p1 = products(:one)
     assert p1.sustainable_development_goals.empty?
 
@@ -232,14 +236,14 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert p1.sustainable_development_goals.include? SustainableDevelopmentGoal.where(number: 8)[0]
   end
 
-  test "create a new product" do
+  test 'create a new product' do
     initial_size = Product.all.size
 
     capture_stdout { sync_osc_product(JSON.parse('{ "name": "OpenFOO"}')) }
     assert_equal Product.all.size, initial_size + 1
   end
 
-  test "ensure origin is set" do
+  test 'ensure origin is set' do
     p1 = products(:four)
     assert p1.origins.empty?
 
@@ -250,19 +254,19 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal p1.origins[0].slug, 'dial_osc'
   end
 
-  test "overwrites things" do
+  test 'overwrites things' do
     capture_stdout { sync_osc_product(JSON.parse('{ "name":"Product", "website": "foo.org"}')) }
     assert_equal Product.where(name: 'Product')[0].website, 'foo.org'
   end
 
-  test "updates maturity data" do
-
+  test 'updates maturity data' do
     new_product = JSON.parse('{"name": "ODK", "maturity":{"indicator2":true}}')
     capture_stdout { sync_osc_product(new_product) }
 
     rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     odk_product = Product.find_by(slug: 'odk')
-    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    maturity_scores = calculate_maturity_scores(odk_product.id,
+                                                rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
     assert_equal maturity_scores.first[:score], 10
   end
 end

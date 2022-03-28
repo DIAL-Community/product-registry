@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class CategoryIndicatorsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_category_indicator, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_category_indicator, only: %i[show edit update destroy]
 
   # GET /category_indicators
   # GET /category_indicators.json
@@ -59,7 +61,7 @@ class CategoryIndicatorsController < ApplicationController
           maturity_rubric = rubric_category.maturity_rubric
           redirect_to maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
                                                                               @category_indicator),
-                    notice: t('messages.model.created', model: t('model.category-indicator').to_s.humanize)
+                      notice: t('messages.model.created', model: t('model.category-indicator').to_s.humanize)
         end
         format.json { render :show, status: :created, location: @category_indicator }
       else
@@ -89,7 +91,7 @@ class CategoryIndicatorsController < ApplicationController
           maturity_rubric = rubric_category.maturity_rubric
           redirect_to maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
                                                                               @category_indicator),
-                    notice: t('messages.model.updated', model: t('model.category-indicator').to_s.humanize)
+                      notice: t('messages.model.updated', model: t('model.category-indicator').to_s.humanize)
         end
         format.json { render :show, status: :ok, location: @category_indicator }
       else
@@ -132,11 +134,11 @@ class CategoryIndicatorsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_category_indicator
-    if !params[:id].scan(/\D/).empty?
-      @category_indicator = CategoryIndicator.find_by(slug: params[:id]) || not_found
-    else
-      @category_indicator = CategoryIndicator.find(params[:id]) || not_found
-    end
+    @category_indicator = if !params[:id].scan(/\D/).empty?
+                            CategoryIndicator.find_by(slug: params[:id]) || not_found
+                          else
+                            CategoryIndicator.find(params[:id]) || not_found
+                          end
   end
 
   # Only allow a list of trusted parameters through.

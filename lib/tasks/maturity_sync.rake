@@ -12,7 +12,7 @@ namespace :maturity_sync do
   include Nokogiri
 
   task :sync_data, [:path] => :environment do |_, params|
-    logger = Logger.new(STDOUT)
+    logger = Logger.new($stdout)
     logger.level = Logger::DEBUG
 
     if MaturityRubric.default_maturity_rubric.nil?
@@ -36,9 +36,7 @@ namespace :maturity_sync do
     current_node = document_header.next_sibling
     until current_node.nil?
       description += current_node.to_html
-      unless current_node.to_html.blank?
-        description += '<br />'
-      end
+      description += '<br />' unless current_node.to_html.blank?
       current_node = current_node.next_sibling
     end
 
@@ -66,7 +64,7 @@ namespace :maturity_sync do
                                            .order(slug: :desc)
 
       rubric_category = nil
-      if duplicate_categories.count > 0
+      if duplicate_categories.count.positive?
         first_duplicate = duplicate_categories.first
         if first_duplicate.maturity_rubric_id == maturity_rubric.id
           # It's not a duplicate, so we should update this record.
@@ -105,13 +103,12 @@ namespace :maturity_sync do
       current_node = document_header.next_sibling
       until current_node.name == 'h2' && current_node.text == 'Indicators'
         description += current_node.to_html
-        unless current_node.to_html.blank?
-          description += '<br />'
-        end
+        description += '<br />' unless current_node.to_html.blank?
         current_node = current_node.next_sibling
       end
 
-      rubric_category_desc = RubricCategoryDescription.where(rubric_category_id: rubric_category.id, locale: I18n.locale)
+      rubric_category_desc = RubricCategoryDescription.where(rubric_category_id: rubric_category.id,
+                                                             locale: I18n.locale)
                                                       .first || RubricCategoryDescription.new
       rubric_category_desc.rubric_category_id = rubric_category.id
       rubric_category_desc.locale = I18n.locale
@@ -138,7 +135,7 @@ namespace :maturity_sync do
         duplicate_indicators = CategoryIndicator.where(slug: indicator_slug)
                                                 .order(slug: :desc)
 
-        if duplicate_indicators.count > 0
+        if duplicate_indicators.count.positive?
           first_duplicate = duplicate_indicators.first
           if first_duplicate.rubric_category_id == rubric_category.id
             # It's not a duplicate, so we should update this record.
@@ -178,7 +175,8 @@ namespace :maturity_sync do
         category_indicator.indicator_type = CategoryIndicator.category_indicator_types.key(indicator_type.downcase)
         category_indicator.save!
 
-        category_indicator_desc = CategoryIndicatorDescription.where(category_indicator_id: category_indicator.id, locale: I18n.locale)
+        category_indicator_desc = CategoryIndicatorDescription.where(category_indicator_id: category_indicator.id,
+                                                                     locale: I18n.locale)
                                                               .first || CategoryIndicatorDescription.new
         category_indicator_desc.category_indicator_id = category_indicator.id
         category_indicator_desc.locale = I18n.locale
@@ -188,10 +186,9 @@ namespace :maturity_sync do
     end
   end
 
-  task :sync_legacy, [:path] => :environment do |_, params|
-
+  task :sync_legacy, [:path] => :environment do |_, _params|
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric') || MaturityRubric.new
-    maturity_rubric.name = "Legacy Rubric"
+    maturity_rubric.name = 'Legacy Rubric'
     maturity_rubric.slug = 'legacy_rubric'
     maturity_rubric.save!
 
@@ -199,48 +196,48 @@ namespace :maturity_sync do
                                                     .first || MaturityRubricDescription.new
     maturity_rubric_desc.maturity_rubric_id = maturity_rubric.id
     maturity_rubric_desc.locale = I18n.locale
-    maturity_rubric_desc.description = "<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>"
+    maturity_rubric_desc.description = '<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>'
     maturity_rubric_desc.save!
 
     digisquare_maturity = YAML.load_file('config/maturity_digisquare.yml')
     digisquare_maturity.each do |digi_category|
-      rubric_category = create_category(digi_category['core'], maturity_rubric) 
+      rubric_category = create_category(digi_category['core'], maturity_rubric)
 
       category_count = digi_category['sub-indicators'].count
       digi_category['sub-indicators'].each do |indicator|
-      
-        puts "CATEGORY: "+digi_category['core']+ " INDICATOR: "+indicator['name']
-        cat_indicator = create_indicator(indicator['name'], indicator['name'], 'Digital Square', category_count, 'scale', rubric_category.id)
+        puts "CATEGORY: #{digi_category['core']} INDICATOR: #{indicator['name']}"
+        cat_indicator = create_indicator(indicator['name'], indicator['name'], 'Digital Square', category_count,
+                                         'scale', rubric_category.id)
       end
     end
 
     osc_maturity = YAML.load_file('config/maturity_osc.yml')
     osc_maturity.each do |osc_category|
-      rubric_category = create_category(osc_category['header'], maturity_rubric) 
+      rubric_category = create_category(osc_category['header'], maturity_rubric)
 
       category_count = osc_category['items'].count
       osc_category['items'].each do |indicator|
-      
-        puts "CATEGORY: "+osc_category['header']+ " INDICATOR: "+indicator['code']
-        cat_indicator = create_indicator(indicator['code'], indicator['desc'], 'DIAL OSC', category_count, 'boolean', rubric_category.id)
+        puts "CATEGORY: #{osc_category['header']} INDICATOR: #{indicator['code']}"
+        cat_indicator = create_indicator(indicator['code'], indicator['desc'], 'DIAL OSC', category_count, 'boolean',
+                                         rubric_category.id)
       end
     end
   end
 
-  task :update_maturity_scores, [:path] => :environment do |_, params|
+  task :update_maturity_scores, [:path] => :environment do |_, _params|
     # Note, we are going to use the legacy rubric for now. Eventually, we will want to set this
     # to the default rubric
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     Product.all.each do |product|
       product_indicators = ProductIndicator.where(product_id: product.id)
-      if product_indicators.any?
-        puts "UPDATING SCORE FOR: " + product.name
-        maturity_score = calculate_maturity_scores(product.id, maturity_rubric.id)
-        overall_score = maturity_score[:rubric_scores][0][:overall_score].to_i
-        puts "OVERALL SCORE: " + overall_score.to_s
-        product.maturity_score = overall_score
-        product.save!
-      end
+      next unless product_indicators.any?
+
+      puts "UPDATING SCORE FOR: #{product.name}"
+      maturity_score = calculate_maturity_scores(product.id, maturity_rubric.id)
+      overall_score = maturity_score[:rubric_scores][0][:overall_score].to_i
+      puts "OVERALL SCORE: #{overall_score}"
+      product.maturity_score = overall_score
+      product.save!
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module WorkflowsHelper
   def workflow_footer(workflow, category)
     images = []
@@ -26,14 +28,13 @@ module WorkflowsHelper
                      alt_text: t('alt.el-logo', el: "#{building_block.name} #{t('model.building-block')}").humanize,
                      controller: 'building_blocks']
         images.push(image)
-
       end
     end
     images
   end
 
   def workflow_footer_popover(elements)
-    content = '<div>' + workflow_format_popover(elements) + '</div>'
+    content = "<div>#{workflow_format_popover(elements)}</div>"
     content.html_safe
   end
 
@@ -44,9 +45,7 @@ module WorkflowsHelper
     elements.sort_by { |x| x[:name] }
             .each do |element|
       popover_class = 'popover-image'
-      if element[:controller] == 'building_blocks'
-        popover_class += ' popover-image-small'
-      end
+      popover_class += ' popover-image-small' if element[:controller] == 'building_blocks'
       formatted += link_to(image_tag(element[:filename], class: popover_class, title: element[:tooltip]),
                            action: 'show', controller: element[:controller], id: element[:id])
     end

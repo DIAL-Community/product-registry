@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectPolicy < ApplicationPolicy
   attr_reader :user, :record
 
@@ -10,7 +12,7 @@ class ProjectPolicy < ApplicationPolicy
     return false if user.nil?
 
     user.roles.include?(User.user_roles[:admin]) ||
-    user.roles.include?(User.user_roles[:org_user]) ||
+      user.roles.include?(User.user_roles[:org_user]) ||
       user.roles.include?(User.user_roles[:product_user])
   end
 

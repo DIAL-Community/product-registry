@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeColumnNameLinkType < ActiveRecord::Migration[5.2]
   def up
     change_column(:products_sustainable_development_goals,

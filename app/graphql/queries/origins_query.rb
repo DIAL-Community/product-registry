@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class OriginsQuery < Queries::BaseQuery
     argument :search, String, required: true
@@ -5,9 +7,7 @@ module Queries
 
     def resolve(search:)
       origins = Origin.order(:name)
-      unless search.blank?
-        origins = origins.name_contains(search)
-      end
+      origins = origins.name_contains(search) unless search.blank?
       origins
     end
   end
@@ -20,9 +20,7 @@ module Queries
 
     def resolve(search:)
       origins = Origin.order(:name)
-      unless search.blank?
-        origins = origins.name_contains(search)
-      end
+      origins = origins.name_contains(search) unless search.blank?
       origins
     end
   end

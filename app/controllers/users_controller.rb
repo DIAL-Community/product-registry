@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  
+  acts_as_token_authentication_handler_for User, only: %i[index show new create edit update destroy]
+
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: %i[show edit update destroy]
 
   def statistics
     if current_user.nil?
@@ -15,13 +17,9 @@ class UsersController < ApplicationController
     end_date = Date.today + 1
     start_date = end_date.last_month
 
-    if params[:end_date].present?
-      end_date = Date.strptime(params[:end_date], '%m/%d/%Y') + 1
-    end
+    end_date = Date.strptime(params[:end_date], '%m/%d/%Y') + 1 if params[:end_date].present?
 
-    if params[:start_date].present?
-      start_date = Date.strptime(params[:start_date], '%m/%d/%Y')
-    end
+    start_date = Date.strptime(params[:start_date], '%m/%d/%Y') if params[:start_date].present?
 
     @number_distinct_user = UserEvent.group(:identifier)
                                      .where('event_datetime BETWEEN ? AND ?', start_date, end_date)
@@ -40,9 +38,7 @@ class UsersController < ApplicationController
                                      .where('event_datetime BETWEEN ? AND ?', start_date, end_date)
                                      .select("extended_data -> 'name' as product_name")
                                      .each_with_object({}) do |element, count|
-                                       if count[element.product_name].nil?
-                                         count[element.product_name] = 0
-                                       end
+                                       count[element.product_name] = 0 if count[element.product_name].nil?
                                        count[element.product_name] += 1
                                      end
                                      .sort_by { |_k, v| v }
@@ -67,15 +63,15 @@ class UsersController < ApplicationController
   end
 
   def index
-    if params[:search]
-      @users = User.where(nil)
+    @users = if params[:search]
+               User.where(nil)
                    .email_contains(params[:search])
                    .order(:email)
                    .paginate(page: params[:page], per_page: 20)
-    else
-      @users = User.order(:email)
+             else
+               User.order(:email)
                    .paginate(page: params[:page], per_page: 20)
-    end
+             end
     authorize @users
   end
 
@@ -103,9 +99,7 @@ class UsersController < ApplicationController
     user_hash[:receive_backup] = false
     user_hash[:receive_admin_emails] = false
     if user_hash[:roles].include?(User.user_roles[:admin])
-      if user_params[:receive_backup].present?
-        user_hash[:receive_backup] = user_params[:receive_backup]
-      end
+      user_hash[:receive_backup] = user_params[:receive_backup] if user_params[:receive_backup].present?
       if user_params[:receive_admin_emails].present?
         user_hash[:receive_admin_emails] = user_params[:receive_admin_emails]
       end
@@ -131,8 +125,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_hash)
-        format.html { redirect_to @user,
-                      flash: { notice: t('messages.model.updated', model: t('model.user').to_s.humanize) }}
+        format.html do
+          redirect_to @user,
+                      flash: { notice: t('messages.model.updated', model: t('model.user').to_s.humanize) }
+        end
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -144,14 +140,14 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if user_params[:is_approved]
-      @user.confirmed_at = Time.now.to_s
-    end
+    @user.confirmed_at = Time.now.to_s if user_params[:is_approved]
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user,
-                      flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) }}
+        format.html do
+          redirect_to @user,
+                      flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) }
+        end
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -163,8 +159,10 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.user').to_s.humanize) }}
+      format.html do
+        redirect_to users_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.user').to_s.humanize) }
+      end
       format.json { head :no_content }
     end
   end

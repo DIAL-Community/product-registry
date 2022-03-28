@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OperatorService < ActiveRecord::Base
   belongs_to :country
 
@@ -6,7 +8,7 @@ class OperatorService < ActiveRecord::Base
   scope :name_contains, ->(name) { where('LOWER(name) like LOWER(?)', "%#{name}%") }
 
   def self.to_csv
-    attributes = %w{id name country service}
+    attributes = %w[id name country service]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes

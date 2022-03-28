@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrganizationsContact < ApplicationRecord
   include AssociationSource
 
@@ -11,9 +13,7 @@ class OrganizationsContact < ApplicationRecord
   end
 
   def generate_slug
-    if !organization.nil? && !contact.nil?
-      self.slug = "#{organization.slug}_#{contact.slug}"
-    end
+    self.slug = "#{organization.slug}_#{contact.slug}" if !organization.nil? && !contact.nil?
   end
 
   def audit_id_value

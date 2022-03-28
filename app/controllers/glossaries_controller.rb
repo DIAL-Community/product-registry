@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 class GlossariesController < ApplicationController
-  before_action :set_glossary, only: [:show, :edit, :update, :destroy]
+  before_action :set_glossary, only: %i[show edit update destroy]
 
   # GET /glossaries
   # GET /glossaries.json
   def index
-    if params[:search]
-      @glossaries = Glossary.name_contains(params[:search])
+    @glossaries = if params[:search]
+                    Glossary.name_contains(params[:search])
                             .where(locale: I18n.locale)
                             .order(:name)
-    else
-      @glossaries = Glossary.where(locale: I18n.locale)
+                  else
+                    Glossary.where(locale: I18n.locale)
                             .order(:name)
-    end
+                  end
     authorize @glossaries, :view_allowed?
   end
 
@@ -82,9 +84,7 @@ class GlossariesController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @glossaries = Glossary.where(slug: current_slug).to_a
-      end
+      @glossaries = Glossary.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize @glossaries, :view_allowed?
     render json: @glossaries, only: [:name]

@@ -1,4 +1,6 @@
-require "fileutils"
+# frozen_string_literal: true
+
+require 'fileutils'
 require 'modules/projects'
 require 'modules/geocode'
 require 'google/cloud/translate/v2'
@@ -7,23 +9,22 @@ include Modules::Projects
 
 namespace :projects do
   desc 'Read data from COVID projects spreadsheet (UNICEF)'
-  task :sync_unicef_covid => :environment do |_, params|
-
-    spreadsheet_id = "1Y6fl3Uqvn0lcFhBlYPXLKKi2HXi79kw8pWR_h8PwE3s"
-    range = "1. Partners support to frontline HWs tools!A1:Z"
+  task sync_unicef_covid: :environment do |_, _params|
+    spreadsheet_id = '1Y6fl3Uqvn0lcFhBlYPXLKKi2HXi79kw8pWR_h8PwE3s'
+    range = '1. Partners support to frontline HWs tools!A1:Z'
     response = sync_spreadsheet(spreadsheet_id, range)
     headers = response.values.shift
     # take off the first 2 - region and country
     headers.shift
     headers.shift
-    puts "No data found." if response.values.empty?
-    response.values.each do |row|
+    puts 'No data found.' if response.values.empty?
+    response.each_value do |row|
       region = row.shift
       country = row.shift
-      row.each_with_index do |column, index| 
+      row.each_with_index do |column, index|
         if !column.nil? && !column.blank?
-          #puts column + " implemented " + headers[index] + " in " + country
-          create_project_entry(column, headers[index], country, "UNICEF Covid")  # org, product, country
+          # puts column + " implemented " + headers[index] + " in " + country
+          create_project_entry(column, headers[index], country, 'UNICEF Covid') # org, product, country
         end
       end
     end
@@ -33,28 +34,23 @@ namespace :projects do
     city_data = {}
     google_auth_key = Rails.application.secrets.google_api_key
 
-    city_location = nil
     geocode_data = JSON.parse(geocode_with_google(city_name, nil, google_auth_key))
     geocode_results = geocode_data['results']
     geocode_results.each do |geocode_result|
       next if geocode_result['types'].include?('point_of_interest')
 
       geometry = geocode_result['geometry']
-      city_location = Location.new(
-        points: [ActiveRecord::Point.new(geometry['location']['lat'], geometry['location']['lng'])]
-      )
+      points = [ActiveRecord::Point.new(geometry['location']['lat'], geometry['location']['lng'])]
     end
 
-    return if city_location.nil?
-
-    geocode_data = JSON.parse(reverse_geocode_with_google(city_location, google_auth_key))
+    geocode_data = JSON.parse(reverse_geocode_with_google(points, google_auth_key))
     geocode_results = geocode_data['results']
     geocode_results.each do |geocode_result|
       next if geocode_result['types'].include?('point_of_interest')
 
       geocode_result['address_components'].each do |address_component|
         if address_component['types'].include?('locality') ||
-          address_component['types'].include?('postal_town')
+           address_component['types'].include?('postal_town')
           city_data['city'] = address_component['long_name']
         elsif address_component['types'].include?('administrative_area_level_1')
           city_data['region'] = address_component['long_name']
@@ -76,42 +72,40 @@ namespace :projects do
       dgpt_origin = Origin.new
       dgpt_origin.name = 'Digital Government Platform Tracker'
       dgpt_origin.slug = slug_em(dgpt_origin.name)
-      dgpt_origin.description = "The Digital Government Platform Tracker is a catalogue of "\
-                                "digital government platforms that strengthen public institutions. "\
-                                "The examples represent the work of different jurisdictions and "\
-                                "organizations to build digital government platforms that improve "\
-                                "public services for their constituents. "
+      dgpt_origin.description = 'The Digital Government Platform Tracker is a catalogue of '\
+                                'digital government platforms that strengthen public institutions. '\
+                                'The examples represent the work of different jurisdictions and '\
+                                'organizations to build digital government platforms that improve '\
+                                'public services for their constituents. '
 
-      if dgpt_origin.save
-        puts 'Digital government platform tracker as origin is created.'
-      end
+      puts 'Digital government platform tracker as origin is created.' if dgpt_origin.save
     end
 
     tracker_data = CSV.parse(File.read(params[:digital_gov_tracker_file]), headers: true,
-                             liberal_parsing: { double_quote_outside_quote: true })
+                                                                           liberal_parsing: { double_quote_outside_quote: true })
     tracker_data.each do |data|
-      description_template = ""\
-        "<div>"\
-        "  <p>"\
+      description_template = ''\
+        '<div>'\
+        '  <p>'\
         "    <div class='text-muted'>Jurisdiction of Origin</div>"\
         "    <div class='text-body'>{{_jurisdiction_of_origin_}}</div>"\
-        "  </p>"\
-        "  <p>"\
+        '  </p>'\
+        '  <p>'\
         "    <div class='text-muted'>Lead Organization</div>"\
         "    <div class='text-body'>{{_lead_organization_}}</div>"\
-        "  </p>"\
-        "  <p>"\
+        '  </p>'\
+        '  <p>'\
         "    <div class='text-muted'>Partners</div>"\
         "    <div class='text-body'>{{_partners_}}</div>"\
-        "  </p>"\
-        "  <p>"\
+        '  </p>'\
+        '  <p>'\
         "    <div class='text-muted'>Description</div>"\
         "    <div class='text-body'>{{_description_}}</div>"\
-        "  </p>"\
-        "</div>"
+        '  </p>'\
+        '</div>'
 
-      project_name = data["Platform Name"]
-      puts "-----***-----"
+      project_name = data['Platform Name']
+      puts '-----***-----'
       puts "Processing: #{project_name}."
 
       existing_project = Project.find_by(name: project_name, origin_id: dgpt_origin.id)
@@ -121,9 +115,9 @@ namespace :projects do
         existing_project.slug = slug_em(existing_project.name)
         existing_project.origin = dgpt_origin
       end
-      description_template = description_template.sub('{{_description_}}', data["Description"])
+      description_template = description_template.sub('{{_description_}}', data['Description'])
 
-      jurisdictions = data["Jurisdiction of Origin"]
+      jurisdictions = data['Jurisdiction of Origin']
       description_template = description_template.sub('{{_jurisdiction_of_origin_}}', jurisdictions)
 
       country = nil
@@ -173,10 +167,8 @@ namespace :projects do
       existing_project.countries = project_countries
 
       # Assign sector information based on the pillar data?
-      sector = Sector.find_by(name: data["Pillar"].strip)
-      unless sector.nil?
-        existing_project.sectors << sector
-      end
+      sector = Sector.find_by(name: data['Pillar'].strip)
+      existing_project.sectors << sector unless sector.nil?
 
       # Set the project url
       existing_project.project_url = data['Link']
@@ -186,7 +178,7 @@ namespace :projects do
       # It could be in this column.
       data['Open Source + Repo'].gsub(/\s+/m, ' ')
                                 .strip
-                                .split(" ")
+                                .split(' ')
                                 .each do |oss_website|
         # sanitized_website = oss_website.sub(/.*?(?=http)/im, '')
         product = Product.where('LOWER(products.website) like LOWER(?)', "%#{oss_website}%")
@@ -199,7 +191,7 @@ namespace :projects do
       # Or it could be in the link column
       data['Link'].gsub(/\s+/m, ' ')
                   .strip
-                  .split(" ")
+                  .split(' ')
                   .each do |oss_website|
         product = Product.where('LOWER(products.website) like LOWER(?)', "%#{oss_website}%")
                          .first
@@ -210,12 +202,10 @@ namespace :projects do
       end
       existing_project.products = products.to_a
 
-      if existing_project.save!
-        puts "Project #{existing_project.name} saved!"
-      end
+      puts "Project #{existing_project.name} saved!" if existing_project.save!
 
-      description_template = description_template.sub('{{_lead_organization_}}', data["Lead Organization"])
-      data["Lead Organization"].split(',')
+      description_template = description_template.sub('{{_lead_organization_}}', data['Lead Organization'])
+      data['Lead Organization'].split(',')
                                .each do |organization|
         owner_org = Organization.find_by(name: organization.strip)
         next if owner_org.nil?
@@ -225,13 +215,11 @@ namespace :projects do
         project_owner.org_type = 'owner'
         project_owner.project_id = existing_project.id
         project_owner.organization_id = owner_org.id
-        if project_owner.save!
-          puts "Owning organization saved!"
-        end
+        puts 'Owning organization saved!' if project_owner.save!
       end
 
-      description_template = description_template.sub('{{_partners_}}', data["Partners"])
-      data["Partners"].split(',')
+      description_template = description_template.sub('{{_partners_}}', data['Partners'])
+      data['Partners'].split(',')
                       .each do |partner|
         partner_org = Organization.find_by(name: partner.strip)
         next if partner_org.nil?
@@ -241,9 +229,7 @@ namespace :projects do
         project_partner.org_type = 'implementer'
         project_partner.project_id = existing_project.id
         project_partner.organization_id = partner_org.id
-        if project_partner.save!
-          puts "Partner organization saved!"
-        end
+        puts 'Partner organization saved!' if project_partner.save!
       end
 
       project_description = ProjectDescription.find_by(project_id: existing_project.id, locale: I18n.locale)
@@ -254,9 +240,7 @@ namespace :projects do
       end
 
       project_description.description = description_template
-      if project_description.save!
-        puts "Project description updated!"
-      end
+      puts 'Project description updated!' if project_description.save!
     end
   end
 
@@ -266,119 +250,114 @@ namespace :projects do
     sector_list = Sector.where("slug = 'health' and is_displayable is true")
 
     mm_data = CSV.parse(File.read(params[:map_match_file]), headers: true,
-                             liberal_parsing: { double_quote_outside_quote: true })
+                                                            liberal_parsing: { double_quote_outside_quote: true })
     missing_product_list = []
     mm_data.each do |mm_proj|
-      if !mm_proj["software"].nil?
-        product_list = mm_proj["software"].split(',')
-        prod_list = []
-        product_list.each do |prod|
-          product = Product.first_duplicate(prod.split('(')[0].strip, nil)
-          if !product.nil?
-            prod_list << product
-          else 
-            missing_product_list << prod.split('(')[0].strip
-          end
+      next if mm_proj['software'].nil?
+
+      product_list = mm_proj['software'].split(',')
+      prod_list = []
+      product_list.each do |prod|
+        product = Product.first_duplicate(prod.split('(')[0].strip, nil)
+        if !product.nil?
+          prod_list << product
+        else
+          missing_product_list << prod.split('(')[0].strip
         end
-        if !prod_list.empty?
-          proj_name = mm_proj["country"] + " " + mm_proj["tool"]
-          curr_proj = Project.find_by(name: proj_name)
-          if curr_proj.nil?
-            curr_proj = Project.new
-            curr_proj.origin = dsq_origin
-            curr_proj.name = proj_name
-            curr_proj.slug = slug_em(proj_name)
-          else
-            puts "Project exists: " + proj_name
-            puts "New Description: " + mm_proj["tool_description"]
-          end
-          curr_proj.tags = ['COVID-19']
+      end
+      next if prod_list.empty?
 
-          # TODO: Look at dha_broad and add this to sectors?? Create a map?
-          curr_proj.sectors = sector_list
-          curr_proj.products = prod_list.uniq
+      proj_name = "#{mm_proj['country']} #{mm_proj['tool']}"
+      curr_proj = Project.find_by(name: proj_name)
+      if curr_proj.nil?
+        curr_proj = Project.new
+        curr_proj.origin = dsq_origin
+        curr_proj.name = proj_name
+        curr_proj.slug = slug_em(proj_name)
+      else
+        puts "Project exists: #{proj_name}"
+        puts "New Description: #{mm_proj['tool_description']}"
+      end
+      curr_proj.tags = ['COVID-19']
 
-          country = Country.find_by(name: mm_proj["country"])
-          if !country.nil?
-            existing_country = ProjectsCountry.find_by(project: curr_proj, country: country)
-            if existing_country.nil?
-              curr_proj.countries << country
-            end
-          end
-          curr_proj.save
-          mm_proj["funder"] && mm_proj["funder"].split(',').each do |funder|
-            funder_org = Organization.first_duplicate(funder.strip, slug_em(funder.strip) )
-            if funder_org.nil?
-              puts "Can't find Org: " + funder
-            else
-              existing_org = ProjectsOrganization.find_by(project: curr_proj, organization: funder_org)
-              if existing_org.nil?
-                proj_org = ProjectsOrganization.new
-                proj_org.project = curr_proj
-                proj_org.organization = funder_org
-                proj_org.org_type = 'funder'
-                proj_org.save
-              end
-            end
-          end
-          mm_proj["implementer"] && mm_proj["implementer"].split(',').each do |implementer|
-            impl_org = Organization.first_duplicate(implementer.strip, slug_em(implementer.strip) )
-            if !impl_org.nil?
-              existing_org = ProjectsOrganization.find_by(project: curr_proj, organization: impl_org)
-              if existing_org.nil?
-                proj_org = ProjectsOrganization.new
-                proj_org.project = curr_proj
-                proj_org.organization = impl_org
-                proj_org.org_type = 'implementer'
-                proj_org.save
-              end
-            end
-          end
-          ['en','de','fr'].each do |locale|
-            project_desc = ProjectDescription.find_by(project: curr_proj, locale: locale)
-            if project_desc.nil?
-              project_desc = ProjectDescription.new
-            end
-            project_desc.project = curr_proj
-            project_desc.locale = locale
+      # TODO: Look at dha_broad and add this to sectors?? Create a map?
+      curr_proj.sectors = sector_list
+      curr_proj.products = prod_list.uniq
 
-            if !mm_proj["tool_description"].nil?
-              project_desc.description = mm_proj["tool_description"]
-              # Put the contact information in the description as well
-              if !mm_proj["dha_contact_ph1"].nil?
-                project_desc.description += "<br /><strong>Contact Information</strong><p>"+mm_proj["dha_contact_ph1"]+"</p>"
-              end
-              if !mm_proj["dha_contact_email"].nil?
-                project_desc.description += "<br /><strong>Contact Information</strong><p>"
-                !mm_proj["dha_contact_firstname"].nil? && project_desc.description += mm_proj["dha_contact_firstname"]
-                !mm_proj["dha_contact_surname"].nil? && project_desc.description += mm_proj["dha_contact_surname"]
-                project_desc.description += "<br />"
-                !mm_proj["dha_contact_org"].nil? && project_desc.description += mm_proj["dha_contact_org"]
-                project_desc.description += "<br />"
-                !mm_proj["dha_contact_email"].nil? && project_desc.description += mm_proj["dha_contact_email"]
-                project_desc.description += "</p>"
-              end
-
-              # Link to the use case steps in the description
-              if !mm_proj["covid_use_cases"].nil?
-                project_desc.description += "<br /><strong>Use Cases: </strong><p>"+mm_proj["covid_use_cases"]+"</p>"
-              end
-            else
-              project_desc.description = "No project description"
-            end
-            project_desc.save
+      country = Country.find_by(name: mm_proj['country'])
+      unless country.nil?
+        existing_country = ProjectsCountry.find_by(project: curr_proj, country: country)
+        curr_proj.countries << country if existing_country.nil?
+      end
+      curr_proj.save
+      mm_proj['funder']&.split(',')&.each do |funder|
+        funder_org = Organization.first_duplicate(funder.strip, slug_em(funder.strip))
+        if funder_org.nil?
+          puts "Can't find Org: #{funder}"
+        else
+          existing_org = ProjectsOrganization.find_by(project: curr_proj, organization: funder_org)
+          if existing_org.nil?
+            proj_org = ProjectsOrganization.new
+            proj_org.project = curr_proj
+            proj_org.organization = funder_org
+            proj_org.org_type = 'funder'
+            proj_org.save
           end
         end
       end
+      mm_proj['implementer']&.split(',')&.each do |implementer|
+        impl_org = Organization.first_duplicate(implementer.strip, slug_em(implementer.strip))
+        next if impl_org.nil?
+
+        existing_org = ProjectsOrganization.find_by(project: curr_proj, organization: impl_org)
+        next unless existing_org.nil?
+
+        proj_org = ProjectsOrganization.new
+        proj_org.project = curr_proj
+        proj_org.organization = impl_org
+        proj_org.org_type = 'implementer'
+        proj_org.save
+      end
+      %w[en de fr].each do |locale|
+        project_desc = ProjectDescription.find_by(project: curr_proj, locale: locale)
+        project_desc = ProjectDescription.new if project_desc.nil?
+        project_desc.project = curr_proj
+        project_desc.locale = locale
+
+        if !mm_proj['tool_description'].nil?
+          project_desc.description = mm_proj['tool_description']
+          # Put the contact information in the description as well
+          unless mm_proj['dha_contact_ph1'].nil?
+            project_desc.description += "<br /><strong>Contact Information</strong><p>#{mm_proj['dha_contact_ph1']}</p>"
+          end
+          unless mm_proj['dha_contact_email'].nil?
+            project_desc.description += '<br /><strong>Contact Information</strong><p>'
+            !mm_proj['dha_contact_firstname'].nil? && project_desc.description += mm_proj['dha_contact_firstname']
+            !mm_proj['dha_contact_surname'].nil? && project_desc.description += mm_proj['dha_contact_surname']
+            project_desc.description += '<br />'
+            !mm_proj['dha_contact_org'].nil? && project_desc.description += mm_proj['dha_contact_org']
+            project_desc.description += '<br />'
+            !mm_proj['dha_contact_email'].nil? && project_desc.description += mm_proj['dha_contact_email']
+            project_desc.description += '</p>'
+          end
+
+          # Link to the use case steps in the description
+          unless mm_proj['covid_use_cases'].nil?
+            project_desc.description += "<br /><strong>Use Cases: </strong><p>#{mm_proj['covid_use_cases']}</p>"
+          end
+        else
+          project_desc.description = 'No project description'
+        end
+        project_desc.save
+      end
     end
-    puts "Missing products: " + missing_product_list.uniq.inspect
+    puts "Missing products: #{missing_product_list.uniq.inspect}"
   end
 
   desc 'Read data from WHO categorization spreadsheet (Digital Square)'
-  task :sync_who_categories => :environment do |_, params|
-
-    spreadsheet_id = "1OFGTQsjtEuSU2biJtc1ps53Dbh9AaRMBr_SzVuOPxGw"
-    range = "Mapping!B2:AD66"
+  task sync_who_categories: :environment do |_, _params|
+    spreadsheet_id = '1OFGTQsjtEuSU2biJtc1ps53Dbh9AaRMBr_SzVuOPxGw'
+    range = 'Mapping!B2:AD66'
     response = sync_spreadsheet(spreadsheet_id, range)
     headers = response.values.shift
     # take off the first column - empty
@@ -386,110 +365,113 @@ namespace :projects do
 
     # First create all of the category data from the headers
     headers.each do |header|
-      indicator = header.slice(0,3)
+      indicator = header.slice(0, 3)
       desc = header[4..-1]
-      if Classification.find_by(indicator: indicator).nil?
-        puts "CREATING CLASSIFICATION"
-        classification = Classification.new
-        classification.indicator = indicator
-        classification.name = desc
-        classification.description = desc
-        classification.source = "Digital Health Atlas"
-        classification.save
-      end
+      next unless Classification.find_by(indicator: indicator).nil?
+
+      puts 'CREATING CLASSIFICATION'
+      classification = Classification.new
+      classification.indicator = indicator
+      classification.name = desc
+      classification.description = desc
+      classification.source = 'Digital Health Atlas'
+      classification.save
     end
 
-    puts "No data found." if response.values.empty?
-    response.values.each do |row|
+    puts 'No data found.' if response.values.empty?
+    response.each_value do |row|
       product = row.shift
-      if !product.nil?
-        prod_search = product.strip.downcase
-        curr_product = Product.find_by("LOWER(name) LIKE ?", prod_search)
-        if curr_product.nil?
-          curr_product = Product.find_by("LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])", "%"+prod_search+"%", prod_search)
+      next if product.nil?
+
+      prod_search = product.strip.downcase
+      curr_product = Product.find_by('LOWER(name) LIKE ?', prod_search)
+      if curr_product.nil?
+        curr_product = Product.find_by('LOWER(name) LIKE ? OR ? = ANY(LOWER(aliases::text)::text[])',
+                                       "%#{prod_search}%", prod_search)
+      end
+      if !curr_product.nil?
+        row.each_with_index do |column, index|
+          next unless !column.nil? && !column.blank?
+
+          indicator = headers[index].slice(0, 3)
+          classification = Classification.find_by(indicator: indicator)
+          next if classification.nil?
+
+          puts "#{product} mapped to #{headers[index]}"
+          curr_class = ProductClassification.find_by('product_id=? AND classification_id=?', curr_product,
+                                                     classification)
+          next unless curr_class.nil?
+
+          prod_class = ProductClassification.new
+          prod_class.product_id = curr_product.id
+          prod_class.classification_id = classification.id
+          prod_class.save
         end
-        if !curr_product.nil?
-          row.each_with_index do |column, index| 
-            if !column.nil? && !column.blank?
-              indicator = headers[index].slice(0,3)
-              classification = Classification.find_by(indicator: indicator)
-              if !classification.nil?
-                puts product.to_s + " mapped to " + headers[index].to_s
-                curr_class = ProductClassification.find_by("product_id=? AND classification_id=?", curr_product, classification)
-                if curr_class.nil?
-                  prod_class = ProductClassification.new
-                  prod_class.product_id = curr_product.id
-                  prod_class.classification_id = classification.id
-                  prod_class.save
-                end
-              end
-            end
-          end
-        else
-          puts "COULD NOT FIND PRODUCT: "+product.to_s
-        end
+      else
+        puts "COULD NOT FIND PRODUCT: #{product}"
       end
     end
   end
 
   desc 'Use Google Cloud to update project translations'
-  task :translate_projects => :environment do |_, params|
-    
-    translate = Google::Cloud::Translate::V2.new(project_id: "molten-plate-329021", credentials: "./utils/translate-key-file.json")
+  task translate_projects: :environment do |_, _params|
+    translate = Google::Cloud::Translate::V2.new(project_id: 'molten-plate-329021',
+                                                 credentials: './utils/translate-key-file.json')
 
     projects = Project.all
-    projects.each do | project |
+    projects.each do |project|
       project_desc = ProjectDescription.where(project_id: project, locale: 'en').first
       next if project_desc.nil?
-      
+
       language = translate.detect project_desc.description
-      if language.results[0].language == 'en'
-        puts "Project desc is English"
+      case language.results[0].language
+      when 'en'
+        puts 'Project desc is English'
         german_desc = ProjectDescription.where(project_id: project, locale: 'de').first || ProjectDescription.new
         german_desc.locale = 'de'
         german_desc.project_id = project.id
-        de_translation = translate.translate project_desc.description, to: "de"
+        de_translation = translate.translate project_desc.description, to: 'de'
         german_desc.description = de_translation
         german_desc.save
 
         french_desc = ProjectDescription.where(project_id: project, locale: 'fr').first || ProjectDescription.new
         french_desc.locale = 'fr'
         french_desc.project_id = project.id
-        fr_translation = translate.translate project_desc.description, to: "fr"
+        fr_translation = translate.translate project_desc.description, to: 'fr'
         french_desc.description = fr_translation
         french_desc.save
-      elsif language.results[0].language == 'de'
-        puts "Project desc is German"
+      when 'de'
+        puts 'Project desc is German'
         english_desc = ProjectDescription.where(project_id: project, locale: 'en').first || ProjectDescription.new
         english_desc.locale = 'en'
         english_desc.project_id = project.id
-        en_translation = translate.translate project_desc.description, to: "en"
+        en_translation = translate.translate project_desc.description, to: 'en'
         english_desc.description = en_translation
         english_desc.save
 
         french_desc = ProjectDescription.where(project_id: project, locale: 'fr').first || ProjectDescription.new
         french_desc.locale = 'fr'
         french_desc.project_id = project.id
-        fr_translation = translate.translate project_desc.description, to: "fr"
+        fr_translation = translate.translate project_desc.description, to: 'fr'
         french_desc.description = fr_translation
         french_desc.save
       end
-      
-      puts "Updated project: " + project.name
+
+      puts "Updated project: #{project.name}"
     end
   end
 
-  task :translate_proj_prod_org => :environment do |_, params|
-    
-    translate = Google::Cloud::Translate::V2.new(project_id: "molten-plate-329021", credentials: "./utils/translate-key-file.json")
-    
+  task translate_proj_prod_org: :environment do |_, _params|
+    translate = Google::Cloud::Translate::V2.new(project_id: 'molten-plate-329021',
+                                                 credentials: './utils/translate-key-file.json')
+
     projects = Project.all
-    projects.each do | project |
-      puts "Translating " + project.name
+    projects.each do |project|
+      puts "Translating #{project.name}"
       project_desc = ProjectDescription.where(project_id: project, locale: 'en').first
       next if project_desc.nil?
 
-      ['es','pt','sw'].each do |locale|
+      %w[es pt sw].each do |locale|
         new_desc = ProjectDescription.where(project_id: project, locale: locale).first || ProjectDescription.new
         new_desc.locale = locale
         new_desc.project_id = project.id
@@ -500,12 +482,12 @@ namespace :projects do
     end
 
     products = Product.all
-    products.each do | product |
-      puts "Translating " + product.name
+    products.each do |product|
+      puts "Translating #{product.name}"
       product_desc = ProductDescription.where(product_id: product, locale: 'en').first
       next if product_desc.nil?
 
-      ['es','pt','sw'].each do |locale|
+      %w[es pt sw].each do |locale|
         new_desc = ProductDescription.where(product_id: product, locale: locale).first || ProductDescription.new
         new_desc.locale = locale
         new_desc.product_id = product.id
@@ -516,13 +498,14 @@ namespace :projects do
     end
 
     orgs = Organization.all
-    orgs.each do | org |
-      puts "Translating " + org.name
+    orgs.each do |org|
+      puts "Translating #{org.name}"
       org_desc = OrganizationDescription.where(organization_id: org, locale: 'en').first
       next if org_desc.nil?
 
-      ['es','pt','sw'].each do |locale|
-        new_desc = OrganizationDescription.where(organization_id: org, locale: locale).first || OrganizationDescription.new
+      %w[es pt sw].each do |locale|
+        new_desc = OrganizationDescription.where(organization_id: org,
+                                                 locale: locale).first || OrganizationDescription.new
         new_desc.locale = locale
         new_desc.organization_id = org.id
         new_translation = translate.translate org_desc.description, to: locale

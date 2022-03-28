@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 
 module Mutations
@@ -33,15 +35,13 @@ module Mutations
       candidate_product = CandidateProduct.new(candidate_product_params)
 
       response = {}
-      if Recaptcha.verify_via_api_call(captcha,
-                                       {
-                                         secret_key: Rails.application.secrets.captcha_secret_key,
-                                         skip_remote_ip: true
-                                       }) && candidate_product.save!
-        response[:slug] = candidate_product.slug
-      else
-        response[:slug] = nil
-      end
+      response[:slug] = if Recaptcha.verify_via_api_call(captcha,
+                                                         {
+                                                           secret_key: Rails.application.secrets.captcha_secret_key,
+                                                           skip_remote_ip: true
+                                                         }) && candidate_product.save!
+                          candidate_product.slug
+                        end
       response
     end
 

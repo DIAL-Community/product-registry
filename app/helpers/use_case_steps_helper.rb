@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module UseCaseStepsHelper
   def calculate_step_number(use_case_step)
-    return use_case_step.step_number if !use_case_step.step_number.nil?
+    return use_case_step.step_number unless use_case_step.step_number.nil?
 
     logger.info('Calculating use case step number!')
 
@@ -12,9 +14,7 @@ module UseCaseStepsHelper
                             .where('step_number is not null')
                             .order(:step_number)
                             .last
-      unless max_step.nil?
-        max_step_number = max_step.step_number + 1
-      end
+      max_step_number = max_step.step_number + 1 unless max_step.nil?
     end
     logger.info("Setting default step number to: #{max_step_number}.")
 

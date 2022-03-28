@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePortalViews < ActiveRecord::Migration[5.1]
   def change
     create_table :portal_views do |t|
@@ -10,7 +12,7 @@ class CreatePortalViews < ActiveRecord::Migration[5.1]
       t.string :product_views, default: [], array: true
       t.string :organization_views, default: [], array: true
       t.string :subdomain
-      
+
       t.timestamps
     end
   end

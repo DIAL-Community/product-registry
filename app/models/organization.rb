@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('csv')
 
 class Organization < ApplicationRecord
@@ -78,11 +80,11 @@ class Organization < ApplicationRecord
   end
 
   def self.first_duplicate(name, slug)
-    find_by("name = ? OR slug = ? OR ? = ANY(aliases)", name, slug, name)
+    find_by('name = ? OR slug = ? OR ? = ANY(aliases)', name, slug, name)
   end
 
   def self.to_csv
-    attributes = %w{id name slug aliases when_endorsed website is_endorser is_mni countries offices sectors}
+    attributes = %w[id name slug aliases when_endorsed website is_endorser is_mni countries offices sectors]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -99,7 +101,8 @@ class Organization < ApplicationRecord
                    .map(&:name)
                    .join('; ')
 
-        csv << [o.id, o.name, o.slug, o.aliases, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries, offices, sectors]
+        csv << [o.id, o.name, o.slug, o.aliases, o.when_endorsed, o.website, o.is_endorser, o.is_mni, countries,
+                offices, sectors]
       end
     end
   end
@@ -125,33 +128,29 @@ class Organization < ApplicationRecord
   def as_json(options = {})
     json = super(options)
     if options[:include_relationships].present?
-      json['countries'] = countries.as_json({ only: [:name, :slug, :code], api_path: api_path(options) })
-      json['offices'] = offices.as_json({ only: [:name, :slug, :city], api_path: api_path(options) })
-      json['products'] = products.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
+      json['countries'] = countries.as_json({ only: %i[name slug code], api_path: api_path(options) })
+      json['offices'] = offices.as_json({ only: %i[name slug city], api_path: api_path(options) })
+      json['products'] = products.as_json({ only: %i[name slug website], api_path: api_path(options) })
     end
-    if options[:collection_path].present? || options[:api_path].present?
-      json['self_url'] = self_url(options)
-    end
-    if options[:item_path].present?
-      json['collection_url'] = collection_url(options)
-    end
+    json['self_url'] = self_url(options) if options[:collection_path].present? || options[:api_path].present?
+    json['collection_url'] = collection_url(options) if options[:item_path].present?
     json
   end
 
   def self.serialization_options
     {
-      except: [:id, :created_at, :updated_at],
+      except: %i[id created_at updated_at],
       include: {
-        countries: { only: [:name, :slug, :code] },
+        countries: { only: %i[name slug code] },
         offices: {
-          only: [:name, :city],
+          only: %i[name city],
           include: {
-            country: { only: [:name, :slug, :code] },
+            country: { only: %i[name slug code] },
             region: { only: [:name] }
           }
         },
-        products: { only: [:name, :slug] },
-        projects: { only: [:name, :slug] }
+        products: { only: %i[name slug] },
+        projects: { only: %i[name slug] }
       }
     }
   end
