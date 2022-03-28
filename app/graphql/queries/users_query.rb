@@ -1,12 +1,12 @@
+# frozen_string_literal: true
+
 module Queries
   class UsersQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
     type [Types::UserType], null: false
 
     def resolve(search:)
-      unless search.blank?
-        use_cases = use_cases.name_contains(search)
-      end
+      use_cases = use_cases.name_contains(search) unless search.blank?
       use_cases
     end
   end
@@ -16,9 +16,7 @@ module Queries
     type Types::UserType, null: false
 
     def resolve(user_id:)
-      user = User.find(user_id)
-
-      user
+      User.find(user_id)
     end
   end
 
@@ -30,12 +28,9 @@ module Queries
 
     def resolve(search:)
       users = User.order(:email)
-      unless search.blank?
-        users = users.name_contains(search)
-      end
+      users = users.name_contains(search) unless search.blank?
 
       users.distinct
     end
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   attr_accessor :association_source
@@ -13,19 +15,19 @@ class ApplicationRecord < ActiveRecord::Base
 
   def generate_slug
     if has_attribute?(:slug)
-      raise NotImplementedError, "Auditable association object subclasses must define `generate_slug`."
+      raise NotImplementedError, 'Auditable association object subclasses must define `generate_slug`.'
     end
   end
 
   def audit_id_value
     if auditable_association_object
-      raise NotImplementedError, "Auditable association object subclasses must define `audit_id_value`."
+      raise NotImplementedError, 'Auditable association object subclasses must define `audit_id_value`.'
     end
   end
 
   def audit_field_name
     if auditable_association_object
-      raise NotImplementedError, "Auditable association object subclasses must define `audit_field_name`."
+      raise NotImplementedError, 'Auditable association object subclasses must define `audit_field_name`.'
     end
   end
 end

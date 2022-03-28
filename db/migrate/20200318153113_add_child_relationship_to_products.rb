@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class AddChildRelationshipToProducts < ActiveRecord::Migration[5.1]
   def up
-
     execute <<-DDL
     ALTER TYPE org_type RENAME TO org_type_orig;
     CREATE TYPE org_type AS ENUM ('owner', 'maintainer', 'funder');

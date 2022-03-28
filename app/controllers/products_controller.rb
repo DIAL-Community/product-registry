@@ -1,19 +1,19 @@
+# frozen_string_literal: true
+
 class ProductsController < ApplicationController
   include ProductsHelper
   include FilterConcern
   include ApiFilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:owner_search, :index, :new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[owner_search index new create edit update destroy]
 
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :load_maturity, only: [:show, :new, :edit, :create, :update]
-  before_action :set_current_user, only: [:edit, :update, :destroy]
+  before_action :set_product, only: %i[show edit update destroy]
+  before_action :load_maturity, only: %i[show new edit create update]
+  before_action :set_current_user, only: %i[edit update destroy]
 
   def owner_search
     product = Product.find_by(slug: params[:product])
-    if product&.id
-      owner = User.joins(:products).find_by(products: { id: product.id })
-    end
+    owner = User.joins(:products).find_by(products: { id: product.id }) if product&.id
 
     verified_captcha = Recaptcha.verify_via_api_call(
       params[:captcha],
@@ -36,15 +36,13 @@ class ProductsController < ApplicationController
 
   def unique_search
     record = Product.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(Product.serialization_options
                                        .merge({
-                                         item_path: request.original_url,
-                                         include_relationships: true
-                                       })))
+                                                item_path: request.original_url,
+                                                include_relationships: true
+                                              })))
   end
 
   def simple_search
@@ -52,25 +50,22 @@ class ProductsController < ApplicationController
     products = Product
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      products = products.name_contains(params[:search])
-    end
+    products = products.name_contains(params[:search]) if params[:search].present?
 
     if params[:origins].present?
       origins = params[:origins].reject { |x| x.nil? || x.empty? }
-      products = products.joins(:origins)
-                         .where(origins: { slug: origins }) \
-        unless origins.empty?
+      unless origins.empty?
+        products = products.joins(:origins)
+                           .where(origins: { slug: origins })
+      end
     end
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = products.count
       end
     end
@@ -85,13 +80,13 @@ class ProductsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if products.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -107,9 +102,9 @@ class ProductsController < ApplicationController
       format.json do
         render(json: results.to_json(Product.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -119,19 +114,16 @@ class ProductsController < ApplicationController
     products = Product
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      products = products.name_contains(params[:search])
-    end
+    products = products.name_contains(params[:search]) if params[:search].present?
 
     if params[:origins].present?
       origins = params[:origins].reject { |x| x.nil? || x.empty? }
-      products = products.joins(:origins)
-                         .where(origins: { slug: origins }) \
-        unless origins.empty?
+      unless origins.empty?
+        products = products.joins(:origins)
+                           .where(origins: { slug: origins })
+      end
     end
 
     if params[:tags].present?
@@ -150,9 +142,7 @@ class ProductsController < ApplicationController
       filtered_sectors = []
       sectors.each do |sector|
         current_sector = Sector.find_by(slug: sector)
-        unless current_sector.nil?
-          filtered_sectors << current_sector.id
-        end
+        filtered_sectors << current_sector.id unless current_sector.nil?
         if current_sector.parent_sector_id.nil?
           child_sectors = Sector.where(parent_sector_id: current_sector.id)
           filtered_sectors += child_sectors.map(&:id)
@@ -219,9 +209,9 @@ class ProductsController < ApplicationController
     products = products.where(slug: product_slugs) unless product_slugs.nil? || product_slugs.empty?
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = products.count
       end
     end
@@ -236,13 +226,13 @@ class ProductsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if products.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -258,9 +248,9 @@ class ProductsController < ApplicationController
       format.json do
         render(json: results.to_json(Product.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -310,17 +300,15 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    if !session[:org].nil?
+    unless session[:org].nil?
       # Check settings
-      view_setting_slug = session[:org].downcase+'_default_view'
+      view_setting_slug = "#{session[:org].downcase}_default_view"
       default_view = Setting.where(slug: view_setting_slug).first
-      if !default_view.nil?
+      unless default_view.nil?
         case default_view.value
         when 'custom'
           session[:portal] = PortalView.where(slug: session[:org].downcase).first
-          if !session[:portal].nil?
-            redirect_to about_path
-          end
+          redirect_to about_path unless session[:portal].nil?
         when 'map'
           redirect_to map_path
         when 'wizard'
@@ -351,7 +339,7 @@ class ProductsController < ApplicationController
     # Current page information will be stored in the main page div.
     current_page = params[:page] || 1
 
-    @products = Product.where(is_child: false)
+    @products = Product.all
     if session[:product_filtered].to_s.downcase == 'true'
       @products = @products.where(id: session[:product_filtered_ids])
     end
@@ -364,7 +352,7 @@ class ProductsController < ApplicationController
     if params[:search].present?
       name_products = @products.name_contains(params[:search])
       desc_products = @products.joins(:product_descriptions)
-                               .where("LOWER(description) like LOWER(?)", "%#{params[:search]}%")
+                               .where('LOWER(description) like LOWER(?)', "%#{params[:search]}%")
       @products = @products.where(id: (name_products + desc_products).uniq)
     end
 
@@ -384,7 +372,7 @@ class ProductsController < ApplicationController
       session[:product_filtered_time] = session[:filtered_time]
     end
 
-    product_count = Product.where(is_child: false)
+    product_count = Product.all
     if session[:product_filtered].to_s.downcase == 'true'
       product_count = product_count.where(id: session[:product_filtered_ids])
     end
@@ -420,14 +408,12 @@ class ProductsController < ApplicationController
     # Right now, we are using the legacy rubric. Eventually we will change this to use
     # the default rubric - just use the 'else' part
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-    if !maturity_rubric.nil?
-      @maturity_scores = calculate_maturity_scores(@product.id, maturity_rubric.id)[:rubric_scores].first
-    else
-      @maturity_scores = calculate_maturity_scores(@product.id, nil)[:rubric_scores].first
-    end
-    if !@maturity_scores.nil?
-      @maturity_scores = @maturity_scores[:category_scores]
-    end
+    @maturity_scores = if !maturity_rubric.nil?
+                         calculate_maturity_scores(@product.id, maturity_rubric.id)[:rubric_scores].first
+                       else
+                         calculate_maturity_scores(@product.id, nil)[:rubric_scores].first
+                       end
+    @maturity_scores = @maturity_scores[:category_scores] unless @maturity_scores.nil?
   end
 
   # GET /products/new
@@ -480,9 +466,7 @@ class ProductsController < ApplicationController
         new_prod_sector.sector_id = sector_id
 
         mapping_status = ProductSector.mapping_status_types[:BETA]
-        unless policy(@product).beta_only?
-          mapping_status = ProductSector.mapping_status_types[:VALIDATED]
-        end
+        mapping_status = ProductSector.mapping_status_types[:VALIDATED] unless policy(@product).beta_only?
         new_prod_sector.mapping_status = mapping_status
 
         @product.product_sectors << new_prod_sector
@@ -565,7 +549,7 @@ class ProductsController < ApplicationController
     # topic_id = create_discourse_topic(@product, 'Products')
 
     respond_to do |format|
-      if !@product.errors.any? && @product.save!
+      if @product.errors.none? && @product.save!
 
         if product_params[:product_description].present?
           @product_description.product_id = @product.id
@@ -582,8 +566,8 @@ class ProductsController < ApplicationController
       else
         logger.error("Create returning errors: #{@product.errors}.")
 
-        error_message = ""
-        @product.errors.each do |attr, err|
+        error_message = ''
+        @product.errors.each do |_attr, err|
           error_message = err
         end
         format.html { redirect_to new_product_url, flash: { error: error_message } }
@@ -660,9 +644,7 @@ class ProductsController < ApplicationController
           new_prod_sector.sector_id = sector_id
 
           mapping_status = ProductSector.mapping_status_types[:BETA]
-          unless policy(@product).beta_only?
-            mapping_status = ProductSector.mapping_status_types[:VALIDATED]
-          end
+          mapping_status = ProductSector.mapping_status_types[:VALIDATED] unless policy(@product).beta_only?
           new_prod_sector.mapping_status = mapping_status
 
           @product.product_sectors << new_prod_sector
@@ -773,9 +755,7 @@ class ProductsController < ApplicationController
     end
 
     if product_params[:product_description].present?
-      if @product_description.locale != I18n.locale.to_s
-        @product_description = ProductDescription.new
-      end
+      @product_description = ProductDescription.new if @product_description.locale != I18n.locale.to_s
       @product_description.product_id = @product.id
       @product_description.locale = I18n.locale
       @product_description.description = product_params[:product_description]
@@ -816,62 +796,50 @@ class ProductsController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @products = Product.where(slug: current_slug)
-      end
+      @products = Product.where(slug: current_slug) if current_slug != original_slug
 
-      if @products.empty?
-        @products = Product.where(':other_name = ANY(aliases)', other_name: params[:current])
-      end
+      @products = Product.where(':other_name = ANY(aliases)', other_name: params[:current]) if @products.empty?
     end
     authorize(Product, :view_allowed?)
-    render(json: @products, :only => [:name])
+    render(json: @products, only: [:name])
   end
 
   def productlist
-    @products = Array.new
+    @products = []
 
     product_list = Product.all
 
     curr_products = product_list.map do |product|
-      origin_list = product.origins.map do |origin|
-        origin.slug
-      end
+      origin_list = product.origins.map(&:slug)
       next if params[:source] && !origin_list.include?(params[:source])
 
       sdg_list = product.sustainable_development_goals.order(:number).map do |sdg|
-        [ sdg.number, sdg.name ]
+        [sdg.number, sdg.name]
       end
 
-      sector_list = product.sectors.map do |sector|
-        sector.name
-      end
+      sector_list = product.sectors.map(&:name)
 
       org_list = product.organizations.order(:name).map do |org|
         org_prod = OrganizationsProduct.where(product_id: product, organization_id: org).first
-        { :name => org.name, :website => 'https://'+org.website.to_s, :org_type => org_prod.org_type }
+        { name: org.name, website: "https://#{org.website}", org_type: org_prod.org_type }
       end
 
       description = ProductDescription.where(product_id: product, locale: I18n.locale).first
 
-      if description.nil? 
-        product_desc = ""
-      else
-        product_desc = description.description
-      end
+      product_desc = if description.nil?
+                       ''
+                     else
+                       description.description
+                     end
 
-      repositoryURL=""
-      if !product.repository.nil?
-        repositoryURL = product.repository
-      end
+      repositoryURL = ''
+      repositoryURL = product.repository unless product.repository.nil?
 
-      { :name => product.name, :description => product_desc, :website => 'https://'+product.website.to_s, :license => [{:spdx => product.license, :licenseURL => publicgoods_licenseURL}], :SDGs => sdg_list.as_json, :sectors => sector_list.as_json, :type => [ "software" ], :repositoryURL => repositoryURL, :organizations => org_list.as_json }
+      { name: product.name, description: product_desc, website: "https://#{product.website}", license: [{ spdx: product.license, licenseURL: publicgoods_licenseURL }], SDGs: sdg_list.as_json, sectors: sector_list.as_json, type: ['software'], repositoryURL: repositoryURL, organizations: org_list.as_json }
     end
 
     curr_products.each do |prod|
-      if !prod.nil?
-        @products.push(prod)
-      end
+      @products.push(prod) unless prod.nil?
     end
 
     render json: @products
@@ -885,32 +853,22 @@ class ProductsController < ApplicationController
     user_event.event_type = event_type
     user_event.event_datetime = Time.now
 
-    unless current_user.nil?
-      user_event.email = current_user.email
-    end
+    user_event.email = current_user.email unless current_user.nil?
 
-    unless @product.nil?
-      user_event.extended_data = { slug: @product.slug, name: @product.name }
-    end
+    user_event.extended_data = { slug: @product.slug, name: @product.name } unless @product.nil?
 
-    if user_event.save!
-      logger.info("User event '#{event_type}' for #{user_event.identifier} saved.")
-    end
+    logger.info("User event '#{event_type}' for #{user_event.identifier} saved.") if user_event.save!
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_product
     @product = Product.find_by(slug: params[:id])
-    if @product.nil? && params[:id].scan(/\D/).empty?
-      @product = Product.find_by(id: params[:id])
-    end
+    @product = Product.find_by(id: params[:id]) if @product.nil? && params[:id].scan(/\D/).empty?
     @product_description = ProductDescription.where(product_id: @product, locale: I18n.locale)
                                              .first
     @product_description ||= ProductDescription.where(product_id: @product, locale: I18n.default_locale)
-                                             .first
-    if @product_description.nil?
-      @product_description = ProductDescription.new
-    end
+                                               .first
+    @product_description = ProductDescription.new if @product_description.nil?
     @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
   end
 
@@ -920,16 +878,14 @@ class ProductsController < ApplicationController
   end
 
   def load_maturity
-    @osc_maturity = YAML.load_file("config/maturity_osc.yml")
-    @digisquare_maturity = YAML.load_file("config/maturity_digisquare.yml")
+    @osc_maturity = YAML.load_file('config/maturity_osc.yml')
+    @digisquare_maturity = YAML.load_file('config/maturity_digisquare.yml')
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
     permitted_attributes = policy(Product).permitted_attributes
-    unless @product.nil?
-      permitted_attributes = policy(@product).permitted_attributes
-    end
+    permitted_attributes = policy(@product).permitted_attributes unless @product.nil?
     params
       .require(:product)
       .permit(permitted_attributes)
@@ -939,34 +895,26 @@ class ProductsController < ApplicationController
           # * http:// or https://
           # * (and the typo) http//: or https//:
           attr[:website] = attr[:website].strip
-                                         .sub(/^https?\:\/\//i, '')
-                                         .sub(/^https?\/\/\:/i, '')
-                                         .sub(/\/$/, '')
+                                         .sub(%r{^https?://}i, '')
+                                         .sub(%r{^https?//:}i, '')
+                                         .sub(%r{/$}, '')
         end
         if attr[:repository].present?
           attr[:repository] = attr[:repository].strip
-                                               .sub(/^https?\:\/\//i, '')
-                                               .sub(/^https?\/\/\:/i, '')
-                                               .sub(/\/$/, '')
+                                               .sub(%r{^https?://}i, '')
+                                               .sub(%r{^https?//:}i, '')
+                                               .sub(%r{/$}, '')
         end
-        if attr[:est_hosting].present? && !attr[:est_hosting].nil?
-          attr[:est_hosting] = attr[:est_hosting].to_i
-        end
-        if attr[:est_invested].present? && !attr[:est_invested].nil?
-          attr[:est_invested] = attr[:est_invested].to_i
-        end
+        attr[:est_hosting] = attr[:est_hosting].to_i if attr[:est_hosting].present? && !attr[:est_hosting].nil?
+        attr[:est_invested] = attr[:est_invested].to_i if attr[:est_invested].present? && !attr[:est_invested].nil?
         if permitted_attributes.include?(:aliases)
           valid_aliases = []
-          if params[:other_names].present?
-            valid_aliases = params[:other_names].reject(&:empty?)
-          end
+          valid_aliases = params[:other_names].reject(&:empty?) if params[:other_names].present?
           attr[:aliases] = valid_aliases
         end
         if permitted_attributes.include?(:tags)
           valid_tags = []
-          if params[:product_tags].present?
-            valid_tags = params[:product_tags].reject(&:empty?).map(&:downcase)
-          end
+          valid_tags = params[:product_tags].reject(&:empty?).map(&:downcase) if params[:product_tags].present?
           attr[:tags] = valid_tags
         end
         if params[:reslug].present? && permitted_attributes.include?(:slug)

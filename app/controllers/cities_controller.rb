@@ -1,17 +1,17 @@
+# frozen_string_literal: true
+
 class CitiesController < ApplicationController
-  before_action :set_city, only: [:show, :edit, :update, :destroy]
+  before_action :set_city, only: %i[show edit update destroy]
 
   def unique_search
     record = City.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(City.serialization_options
                                     .merge({
-                                      item_path: request.original_url,
-                                      include_relationships: true
-                                    })))
+                                             item_path: request.original_url,
+                                             include_relationships: true
+                                           })))
   end
 
   def simple_search
@@ -19,13 +19,9 @@ class CitiesController < ApplicationController
     cities = City
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      cities = cities.name_contains(params[:search])
-    end
+    cities = cities.name_contains(params[:search]) if params[:search].present?
 
     results = {
       url: request.original_url,
@@ -37,13 +33,13 @@ class CitiesController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if cities.count > default_page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -54,9 +50,9 @@ class CitiesController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(City.serialization_options
                                      .merge({
-                                       collection_path: uri.to_s,
-                                       include_relationships: true
-                                     })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
   end
 
   # GET /cities
@@ -69,22 +65,21 @@ class CitiesController < ApplicationController
       return
     end
 
-    if params[:search]
-      @cities = City.where(nil)
+    @cities = if params[:search]
+                City.where(nil)
                     .name_contains(params[:search])
                     .order(:name)
                     .paginate(page: params[:page], per_page: 20)
-    else
-      @cities = City.order(:name)
+              else
+                City.order(:name)
                     .paginate(page: params[:page], per_page: 20)
-    end
+              end
     authorize(@cities, :view_allowed?)
   end
 
   # GET /cities/1
   # GET /cities/1.json
-  def show
-  end
+  def show; end
 
   private
 

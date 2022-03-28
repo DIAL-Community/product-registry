@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PlayMove < ApplicationRecord
   has_many :move_descriptions, dependent: :destroy
 

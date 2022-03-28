@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeMaturityTypeOnUseCase < ActiveRecord::Migration[5.2]
   def up
     change_column_default(:use_cases, :maturity, nil)

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Queries
   class CountsQuery < Queries::BaseQuery
     type Types::CountType, null: false
 
-    def resolve()
+    def resolve
       counts = {}
       counts['sdgCount'] = SustainableDevelopmentGoal.count
       counts['useCaseCount'] = UseCase.where(maturity: 'MATURE').count
@@ -12,7 +14,7 @@ module Queries
       counts['projectCount'] = Project.count
       counts['orgCount'] = Organization.count
       counts['mapCount'] = 3
-      
+
       counts
     end
   end

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class CreateCandidateRoles < ActiveRecord::Migration[5.2]
   def change
     create_table :candidate_roles do |t|
       t.string :email, null: false
-      t.column :roles, :user_role, default: [], array: true
+      t.column :roles, :user_role, array: true
       t.string :description, null: false
 
       t.boolean :rejected

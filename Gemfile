@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -8,30 +10,30 @@ end
 gem 'redis-rails'
 gem 'simple_token_authentication', '~> 1.0'
 
+gem 'actionpack-page_caching'
 gem 'bootstrap'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'will_paginate'
-gem "actionpack-page_caching"
 
 gem 'sassc-rails'
 
-gem 'spreadsheet'
 gem 'google-api-client'
+gem 'spreadsheet'
 
 gem 'addressable'
 
 gem 'pundit'
 
-gem 'wysiwyg-rails'
 gem 'carrierwave'
 gem 'mini_magick'
+gem 'wysiwyg-rails'
 
 gem 'http_accept_language'
 
 gem 'cookies_eu'
+gem 'Dhalang', github: 'conradsp/Dhalang', branch: 'master'
 gem 'haml'
-gem 'Dhalang', github: "conradsp/Dhalang", branch: "master"
 
 gem 'licensee'
 
@@ -86,7 +88,7 @@ gem 'pdfkit'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
@@ -103,6 +105,11 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rswag-specs'
 
+  gem 'rubocop'
+  gem 'rubocop-graphql'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+
   # Seed data generator
   gem 'faker'
 end
@@ -118,7 +125,7 @@ group :development do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Auth/login/etc
 gem 'devise'
@@ -130,6 +137,6 @@ gem 'mailgun-ruby'
 gem 'graphiql-rails', group: :development
 
 # Throttling, blocking, etc.
-gem "rack-attack"
+gem 'rack-attack'
 
-gem "google-cloud-translate", "~> 3.2"
+gem 'google-cloud-translate', '~> 3.2'

@@ -25,10 +25,10 @@ class EntitiesController < ApplicationController
 
     captcha = params[:captcha]
     captcha_verified = Recaptcha.verify_via_api_call(captcha,
-                                {
-                                  secret_key: Rails.application.secrets.captcha_secret_key,
-                                  skip_remote_ip: true
-                                })
+                                                     {
+                                                       secret_key: Rails.application.secrets.captcha_secret_key,
+                                                       skip_remote_ip: true
+                                                     })
 
     respond_to do |format|
       if captcha_verified && entity_object.save
@@ -60,14 +60,10 @@ class EntitiesController < ApplicationController
     end
 
     origin = Origin.find_by(name: json_data[:origin])
-    if origin.nil?
-      origin = Origin.find_by(slug: json_data[:origin].downcase)
-    end
+    origin = Origin.find_by(slug: json_data[:origin].downcase) if origin.nil?
 
     valid_aliases = []
-    if json_data[:aliases] && !json_data[:aliases].empty?
-      valid_aliases = json_data[:aliases].reject(&:empty?)
-    end
+    valid_aliases = json_data[:aliases].reject(&:empty?) if json_data[:aliases] && !json_data[:aliases].empty?
 
     sectors = []
     unless json_data[:sectors].empty?
@@ -86,9 +82,10 @@ class EntitiesController < ApplicationController
     end
 
     product_type = 'product'
-    if json_data[:type] == 'data'
+    case json_data[:type]
+    when 'data'
       product_type = 'dataset'
-    elsif json_data[:type] == 'content'
+    when 'content'
       product_type = 'content'
     end
 
@@ -131,9 +128,7 @@ class EntitiesController < ApplicationController
     end
 
     origin = Origin.find_by(name: json_data[:origin])
-    if origin.nil?
-      origin = Origin.find_by(slug: json_data[:origin].downcase)
-    end
+    origin = Origin.find_by(slug: json_data[:origin].downcase) if origin.nil?
 
     countries = []
     unless json_data[:countries].empty?

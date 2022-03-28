@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'resolv-replace'
 require 'modules/slugger'
 include Modules::Slugger
@@ -13,12 +15,8 @@ module Modules
         dpga_origin = Origin.find_by(slug: 'dpga')
         dpga_endorser = Endorser.find_by(slug: 'dpga')
         name_aliases = [json_data['name']]
-        unless json_data['aliases'].nil?
-          json_data['aliases'].each do |curr_alias|
-            if curr_alias != ""
-              name_aliases << curr_alias
-            end
-          end
+        json_data['aliases']&.each do |curr_alias|
+          name_aliases << curr_alias if curr_alias != ''
         end
 
         existing_product = nil
@@ -28,7 +26,7 @@ module Modules
 
           slug = slug_em(name_alias)
           existing_product = Product.first_duplicate(name_alias, slug)
-          # Check to see if both just have the same alias. In this case, it's not a duplicate 
+          # Check to see if both just have the same alias. In this case, it's not a duplicate
         end
 
         if existing_product.nil?
@@ -59,7 +57,7 @@ module Modules
           end
         end
 
-        sectors = json_data["sectors"]
+        sectors = json_data['sectors']
         if !sectors.nil? && !sectors.empty?
           sectors.each do |sector|
             get_sector(sector, nil, 'en')
@@ -67,36 +65,30 @@ module Modules
 
             # Check to see if the sector exists already
             if !sector_obj.nil? && !existing_product.sectors.include?(sector_obj)
-              puts "Adding sector " + sector_obj.name + " to product"
+              puts "Adding sector #{sector_obj.name} to product"
               existing_product.sectors << sector_obj
             else
-              puts "Unable to find sector: " + sector
+              puts "Unable to find sector: #{sector}"
             end
           end
         end
 
-        if json_data['type'][0].downcase == 'data'
-          existing_product.product_type = 'dataset'
-        end
+        existing_product.product_type = 'dataset' if json_data['type'][0].downcase == 'data'
 
         # Update specific information that we need to save for later syncing
-        #existing_product.publicgoods_data["name"] = json_data["name"]
-        #existing_product.publicgoods_data["aliases"] = json_data["aliases"]
-        #existing_product.publicgoods_data["stage"] = json_data["stage"]
+        # existing_product.publicgoods_data["name"] = json_data["name"]
+        # existing_product.publicgoods_data["aliases"] = json_data["aliases"]
+        # existing_product.publicgoods_data["stage"] = json_data["stage"]
 
-        if json_data["stage"] == "DPG"
-          unless existing_product.endorsers.include?(dpga_endorser)
-            existing_product.endorsers << dpga_endorser
-          end
+        if json_data['stage'] == 'DPG' && !existing_product.endorsers.include?(dpga_endorser)
+          existing_product.endorsers << dpga_endorser
         end
 
         existing_product.save!
         update_attributes(json_data, existing_product)
         existing_product.save!
 
-        unless existing_product.manual_update
-          update_product_description(existing_product, json_data["description"])
-        end
+        update_product_description(existing_product, json_data['description']) unless existing_product.manual_update
       end
       existing_product
     end
@@ -129,9 +121,7 @@ module Modules
         is_new = true
       end
 
-      unless existing_product.origins.exists?(id: digisquare_origin.id)
-        existing_product.origins.push(digisquare_origin)
-      end
+      existing_product.origins.push(digisquare_origin) unless existing_product.origins.exists?(id: digisquare_origin.id)
 
       existing_product.save
       # This will update website, license, repo URL, organizations, and SDGs
@@ -148,17 +138,18 @@ module Modules
 
       # Find maturity data if it exists and update
       digisquare_maturity.each do |ds_maturity|
-        if existing_product.name == ds_maturity["name"]
+        if existing_product.name == ds_maturity['name']
           # Get the legacy rubric
           maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
           unless maturity_rubric.nil?
-            ds_maturity["maturity"].each do |key, value|
+            ds_maturity['maturity'].each do |key, value|
               # Find the correct category and indicator
               categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
               category_indicator = CategoryIndicator.find_by(rubric_category: categories, name: key)
               # Save the value in ProductIndicators
-              product_indicator = ProductIndicator.where(product_id: existing_product.id, category_indicator_id: category_indicator.id)
-                                                      .first || ProductIndicator.new
+              product_indicator = ProductIndicator.where(product_id: existing_product.id,
+                                                         category_indicator_id: category_indicator.id)
+                                                  .first || ProductIndicator.new
               product_indicator.product_id = existing_product.id
               product_indicator.category_indicator_id = category_indicator.id
               product_indicator.indicator_value = value
@@ -169,9 +160,7 @@ module Modules
         existing_product
       end
 
-      unless existing_product.endorsers.include?(dsq_endorser)
-        existing_product.endorsers << dsq_endorser
-      end
+      existing_product.endorsers << dsq_endorser unless existing_product.endorsers.include?(dsq_endorser)
 
       existing_product.save
       if is_new || !existing_product.manual_update
@@ -201,9 +190,7 @@ module Modules
         sync_product = Product.new
         sync_product.name = product['name']
         sync_product.slug = slug_em(product['name'])
-        if sync_product.save
-          puts "  Added new product: #{sync_product.name} -> #{sync_product.slug}"
-        end
+        puts "  Added new product: #{sync_product.name} -> #{sync_product.slug}" if sync_product.save
         @@product_list << sync_product.name
       end
 
@@ -241,7 +228,7 @@ module Modules
             categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
             category_indicator = CategoryIndicator.find_by(rubric_category: categories, slug: key)
             # Save the value in ProductIndicators
-            product_indicator = ProductIndicator.where(product_id: sync_product.id, 
+            product_indicator = ProductIndicator.where(product_id: sync_product.id,
                                                        category_indicator_id: category_indicator.id)
                                                 .first || ProductIndicator.new
             product_indicator.product_id = sync_product.id
@@ -253,22 +240,18 @@ module Modules
       end
 
       osc_origin = Origin.find_by(slug: 'dial_osc')
-      unless sync_product.origins.exists?(id: osc_origin.id)
-        sync_product.origins.push(osc_origin)
-      end
+      sync_product.origins.push(osc_origin) unless sync_product.origins.exists?(id: osc_origin.id)
 
       sync_product.save
       if is_new || !sync_product.manual_update
         description = product['description']
-        if !description.nil? && !description.empty?
-          update_product_description(sync_product, description)
-        end
+        update_product_description(sync_product, description) if !description.nil? && !description.empty?
       end
       sync_product
     end
 
     def assign_sdg_to_product(sdg_obj, product_obj, mapping_status)
-      unless sdg_obj.nil? 
+      unless sdg_obj.nil?
         prod_sdg = ProductSustainableDevelopmentGoal.where(sustainable_development_goal_id: sdg_obj.id,
                                                            product_id: product_obj.id)
         if prod_sdg.empty?
@@ -295,19 +278,18 @@ module Modules
       ignore_list.each do |ignored|
         if json_data['name'] == ignored['item']
           puts "Skipping #{json_data['name']}"
-          return "Skipped product data."
+          return 'Skipped product data.'
         end
       end
-      return false
+      false
     end
 
-
     def update_repository_data(product_data, product)
-      if product_data['type'].nil? || !product_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
+      if product_data['type'].nil? || !product_data['type'].detect do |element|
+           element.downcase == 'software' || element.downcase == 'data'
+         end.nil?
         prod_name = product_data['name']
-        if !product.nil? 
-          prod_name = product.name
-        end
+        prod_name = product.name unless product.nil?
 
         # This section is used for Digi Square and OSC sync
         repository = product_data['repositoryURL']
@@ -318,14 +300,14 @@ module Modules
           if product_repository.nil?
             puts "  Creating repository for: #{prod_name} => #{repository}."
             repository_attrs = {
-                name: "#{prod_name} Repository",
-                absolute_url: "#{repository}",
-                description: "Main code repository of #{prod_name}.",
-                main_repository: true
-              }
-              repository_attrs[:product] = product
-              repository_attrs[:slug] = slug_em(repository_attrs[:name])
-              product_repository = ProductRepository.create!(repository_attrs)
+              name: "#{prod_name} Repository",
+              absolute_url: repository.to_s,
+              description: "Main code repository of #{prod_name}.",
+              main_repository: true
+            }
+            repository_attrs[:product] = product
+            repository_attrs[:slug] = slug_em(repository_attrs[:name])
+            product_repository = ProductRepository.create!(repository_attrs)
           else
             puts "  Updating repository for: #{product_repository.name} => #{repository}."
             product_repository.absolute_url = repository
@@ -336,7 +318,7 @@ module Modules
                 product_repository.license = license
               else
                 product_repository.license = license.first['spdx']
-                product_repository.dpga_data["licenseURL"] = license.first['licenseURL']
+                product_repository.dpga_data['licenseURL'] = license.first['licenseURL']
               end
             end
           end
@@ -345,36 +327,34 @@ module Modules
 
         # DPGA now lists multiple repositories
         repositories = product_data['repositories']
-        if !repositories.nil?
-          repositories.each do | curr_repo |
-            repo_name = prod_name + ' ' + curr_repo['name']
-            product_repository = ProductRepository.find_by(slug: slug_em(repo_name)) || ProductRepository.find_by(slug: slug_em("#{prod_name} Repository"))
-            if product_repository.nil?
-              puts "  Creating repository for: #{repo_name} "
-              repository_attrs = {
-                name: "#{repo_name}",
-                slug: "#{slug_em(repo_name)}",
-                absolute_url: "#{curr_repo['url']}",
-                description: "Main code repository of #{prod_name}.",
-                main_repository: true
-              }
-              repository_attrs[:product] = product
-              product_repository = ProductRepository.create!(repository_attrs)
-            else
-              puts "  Updating repository for: #{repo_name} "
-              product_repository.absolute_url = curr_repo['url']
-              if !license.nil? && !license.empty?
-                puts "  Updating license for: #{product_repository.name} => #{license}."
-                if !license.is_a?(Array)
-                  product_repository.license = license
-                else
-                  product_repository.license = license.first['spdx']
-                  product_repository.dpga_data["licenseURL"] = license.first['licenseURL']
-                end
+        repositories&.each do |curr_repo|
+          repo_name = "#{prod_name} #{curr_repo['name']}"
+          product_repository = ProductRepository.find_by(slug: slug_em(repo_name)) || ProductRepository.find_by(slug: slug_em("#{prod_name} Repository"))
+          if product_repository.nil?
+            puts "  Creating repository for: #{repo_name} "
+            repository_attrs = {
+              name: repo_name.to_s,
+              slug: slug_em(repo_name).to_s,
+              absolute_url: (curr_repo['url']).to_s,
+              description: "Main code repository of #{prod_name}.",
+              main_repository: true
+            }
+            repository_attrs[:product] = product
+            product_repository = ProductRepository.create!(repository_attrs)
+          else
+            puts "  Updating repository for: #{repo_name} "
+            product_repository.absolute_url = curr_repo['url']
+            if !license.nil? && !license.empty?
+              puts "  Updating license for: #{product_repository.name} => #{license}."
+              if !license.is_a?(Array)
+                product_repository.license = license
+              else
+                product_repository.license = license.first['spdx']
+                product_repository.dpga_data['licenseURL'] = license.first['licenseURL']
               end
             end
-            product_repository.save!
           end
+          product_repository.save!
         end
       end
     end
@@ -391,9 +371,7 @@ module Modules
         organizations.each do |organization|
           org_name = organization['name'].gsub('\'', '')
           org = Organization.where('lower(name) = lower(?) or slug = ?', org_name, slug_em(org_name))[0]
-          if org.nil?
-            org = Organization.where("aliases @> ARRAY['" + org_name + "']::varchar[]").first
-          end
+          org = Organization.where("aliases @> ARRAY['#{org_name}']::varchar[]").first if org.nil?
           if org.nil?
             # Create a new organization and assign it as an owner
             org = Organization.new
@@ -411,22 +389,22 @@ module Modules
             org.name = org_name
             org.save
           end
-          if !sync_product.organizations.include?(org)
-            puts "  Adding org to product: #{org.name}"
-            org_product = OrganizationsProduct.new
-            org_product.org_type = organization['org_type']
-            org_product.organization_id = org.id
-            org_product.product_id = sync_product.id
-            org_product.save!
-          end
+          next if sync_product.organizations.include?(org)
+
+          puts "  Adding org to product: #{org.name}"
+          org_product = OrganizationsProduct.new
+          org_product.org_type = organization['org_type']
+          org_product.organization_id = org.id
+          org_product.product_id = sync_product.id
+          org_product.save!
         end
       end
     end
 
     def sync_giz_project(english_project, german_project, giz_origin)
       # Create sector if it does not exist
-      english_sectors = get_sector(english_project[19], english_project[20], "en")
-      #german_sectors = get_sector(german_project[19], german_project[20], "de")
+      english_sectors = get_sector(english_project[19], english_project[20], 'en')
+      # german_sectors = get_sector(german_project[19], german_project[20], "de")
       german_sectors = []
 
       # Create new project or update existing project
@@ -434,21 +412,19 @@ module Modules
       new_project.name = english_project[0].force_encoding('UTF-8')
       new_project.slug = slug_em(english_project[0])
       new_project.origin_id = giz_origin.id
-      if !english_project[11].nil?
+      unless english_project[11].nil?
         begin
           new_project.start_date = Date.strptime(english_project[11], '%m/%Y')
-        rescue 
+        rescue StandardError
         end
       end
-      if !english_project[12].nil?
+      unless english_project[12].nil?
         begin
           new_project.end_date = Date.strptime(english_project[12], '%m/%Y')
-        rescue
+        rescue StandardError
         end
       end
-      if !english_project[25].nil?
-        new_project.project_url = english_project[25]
-      end
+      new_project.project_url = english_project[25] unless english_project[25].nil?
       new_project.save!
 
       # Assign implementing organization
@@ -468,35 +444,33 @@ module Modules
       # Assign to sectors
       english_sectors.each do |sector_id|
         sector = Sector.find(sector_id)
-        if !new_project.sectors.include?(sector)
-          new_project.sectors << sector
-        end
+        new_project.sectors << sector unless new_project.sectors.include?(sector)
       end
 
       german_sectors.each do |sector_id|
         sector = Sector.find(sector_id)
-        if !new_project.sectors.include?(sector)
-          new_project.sectors << sector
-        end
+        new_project.sectors << sector unless new_project.sectors.include?(sector)
       end
 
       # Assign tags
-      if !english_project[23].nil?
+      unless english_project[23].nil?
         proj_tags = english_project[23].gsub(/\s*\(.+\)/, '').split(',').map(&:strip)
         proj_tags.each do |proj_tag|
-          Tag.where(name: proj_tag,slug: slug_em(proj_tag)).first_or_create
+          Tag.where(name: proj_tag, slug: slug_em(proj_tag)).first_or_create
         end
         new_project.tags = proj_tags
       end
 
       # Assign to SDGs
-      if !english_project[24].nil?
-        sdg_list = english_project[24].sub("Peace, Justice", "Peace Justice").sub("Reduced Inequality", "Reduced Inequalities").sub("Industry, Innovation, and", "Industry Innovation and")
+      unless english_project[24].nil?
+        sdg_list = english_project[24].sub('Peace, Justice', 'Peace Justice').sub('Reduced Inequality', 'Reduced Inequalities').sub(
+          'Industry, Innovation, and', 'Industry Innovation and'
+        )
         sdg_names = sdg_list.split(',')
         sdg_names.each do |sdg_name|
-          sdg_slug = slug_em(sdg_name.strip)  
+          sdg_slug = slug_em(sdg_name.strip)
           sdg = SustainableDevelopmentGoal.find_by(slug: sdg_slug)
-          if !new_project.sustainable_development_goals.include?(sdg)
+          unless new_project.sustainable_development_goals.include?(sdg)
             new_project.sustainable_development_goals << sdg
           end
         end
@@ -506,42 +480,35 @@ module Modules
       country_names = english_project[15].split(',')
       country_names.each do |country_name|
         country = Country.find_by(name: country_name.strip)
-        if !country.nil?
-          if !new_project.countries.include?(country)
-            new_project.countries << country
-          end
-          # Add any German aliases to the country
+        next if country.nil?
 
-        end
+        new_project.countries << country unless new_project.countries.include?(country)
+        # Add any German aliases to the country
       end
 
       # Create both English and German descriptions
-      project_desc = ProjectDescription.where(project_id: new_project.id, locale: "en").first || ProjectDescription.new
+      project_desc = ProjectDescription.where(project_id: new_project.id, locale: 'en').first || ProjectDescription.new
       project_desc.project_id = new_project.id
-      if english_project[2].nil?
-        english_project[2] = "No description"
-      end
+      english_project[2] = 'No description' if english_project[2].nil?
       project_desc.description = english_project[2]
-      project_desc.locale = "en"
+      project_desc.locale = 'en'
       project_desc.save!
 
-      project_desc = ProjectDescription.where(project_id: new_project.id, locale: "de").first || ProjectDescription.new
+      project_desc = ProjectDescription.where(project_id: new_project.id, locale: 'de').first || ProjectDescription.new
       project_desc.project_id = new_project.id
-      if german_project[2].nil?
-        german_project[2] = "Kein description"
-      end
+      german_project[2] = 'Kein description' if german_project[2].nil?
       project_desc.description = german_project[2]
-      project_desc.locale = "de"
+      project_desc.locale = 'de'
       project_desc.save!
 
       # Create links to Digital Principles
       principles = DigitalPrinciple.all.order(:id)
-      for principle_col in 30..38 do
-        principle_index = principle_col-30
-        if english_project[principle_col] == "1" 
-          if !new_project.digital_principles.include?(principles[principle_index])
-            new_project.digital_principles << principles[principle_index]
-          end
+      (30..38).each do |principle_col|
+        principle_index = principle_col - 30
+        next unless english_project[principle_col] == '1'
+
+        unless new_project.digital_principles.include?(principles[principle_index])
+          new_project.digital_principles << principles[principle_index]
         end
       end
 
@@ -553,37 +520,41 @@ module Modules
       sector_json = JSON.parse(sector_map)
 
       sector_array = []
-      if !sector_name.nil?
+      unless sector_name.nil?
         sector_name = sector_name.strip
         sector_slug = slug_em sector_name
-        existing_sector = Sector.where('slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', '%'+sector_slug+'%',locale).first
+        existing_sector = Sector.where(
+          'slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', "%#{sector_slug}%", locale
+        ).first
         if existing_sector.nil?
           if !sector_json[sector_slug].nil?
-            existing_sector = Sector.where('slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', '%'+sector_json[sector_slug]+'%',locale).first
-            if !existing_sector.nil?
-              sector_array << existing_sector.id
-            end
-          else 
-            puts "Add sector to map: " + sector_slug
+            existing_sector = Sector.where(
+              'slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', "%#{sector_json[sector_slug]}%", locale
+            ).first
+            sector_array << existing_sector.id unless existing_sector.nil?
+          else
+            puts "Add sector to map: #{sector_slug}"
           end
         else
           sector_array << existing_sector.id
         end
 
-        if !subsectors.nil? 
+        unless subsectors.nil?
           subsector_array = subsectors.split(',')
           subsector_array.each do |subsector|
             subsector = subsector.strip
-            subsector_slug = slug_em(subsector,64)
-            existing_subsector = Sector.where('slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', '%'+subsector_slug+'%', existing_sector.id, locale).first
+            subsector_slug = slug_em(subsector, 64)
+            existing_subsector = Sector.where(
+              'slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', "%#{subsector_slug}%", existing_sector.id, locale
+            ).first
             if existing_subsector.nil?
               if !sector_json[subsector_slug].nil?
-                existing_subsector = Sector.where('slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', '%'+sector_json[subsector_slug]+'%', existing_sector.id, locale).first
-                if !existing_sector.nil?
-                  sector_array << existing_sector.id
-                end
+                existing_subsector = Sector.where(
+                  'slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', "%#{sector_json[subsector_slug]}%", existing_sector.id, locale
+                ).first
+                sector_array << existing_sector.id unless existing_sector.nil?
               else
-                puts "Add sector to map: " + subsector_slug
+                puts "Add sector to map: #{subsector_slug}"
               end
             else
               sector_array << existing_subsector.id
@@ -598,9 +569,9 @@ module Modules
       cleaned_url = ''
       unless maybe_url.blank?
         cleaned_url = maybe_url.strip
-                               .sub(/^https?\:\/\//i, '')
-                               .sub(/^https?\/\/\:/i, '')
-                               .sub(/\/$/, '')
+                               .sub(%r{^https?://}i, '')
+                               .sub(%r{^https?//:}i, '')
+                               .sub(%r{/$}, '')
       end
       cleaned_url
     end
@@ -632,7 +603,7 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      repo_regex = %r{(github.com/)(\S+)/(\S+)/?}
       return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
@@ -645,13 +616,11 @@ module Modules
       license_data = stdout
       license = stdout.lines.first.split(/\s+/)[1]
 
-      if license != "NOASSERTION"
+      if license != 'NOASSERTION'
         product_repository.license_data = license_data
         product_repository.license = license
 
-        if product_repository.save!
-          puts "Repository license data for #{product_repository.name} saved."
-        end
+        puts "Repository license data for #{product_repository.name} saved." if product_repository.save!
       end
     end
 
@@ -659,8 +628,8 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       # We can't process Gitlab repos currently, so ignore those
-      return if product_repository.absolute_url.include?("gitlab")
-      return if product_repository.absolute_url.include?("AsTeR")
+      return if product_repository.absolute_url.include?('gitlab')
+      return if product_repository.absolute_url.include?('AsTeR')
 
       puts "Processing: #{product_repository.absolute_url}"
       command = "./cloc-git.sh #{product_repository.absolute_url}"
@@ -668,7 +637,7 @@ module Modules
 
       return if stdout.blank?
 
-      code_data = CSV.parse(File.read("./repodata.csv"), headers: true)
+      code_data = CSV.parse(File.read('./repodata.csv'), headers: true)
       code_data.each do |code_row|
         next unless code_row['language'] == 'SUM'
 
@@ -682,14 +651,12 @@ module Modules
 
         product_repository.cocomo = effort.round.to_s
         puts "Product effort: #{effort.round}."
-        if product_repository.save!
-          puts "Product repository #{product_repository.name} COCOMO data saved."
-        end
+        puts "Product repository #{product_repository.name} COCOMO data saved." if product_repository.save!
       end
     end
 
     def send_notification
-      if !@@product_list.empty?
+      unless @@product_list.empty?
         admin_users = User.where(receive_backup: true)
         email_body = "New product(s) added by the nightly sync process: <br />#{@@product_list.join('<br />')}."
         admin_users.each do |user|
@@ -709,7 +676,7 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      repo_regex = %r{(github.com/)(\S+)/(\S+)/?}
       return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
@@ -725,15 +692,13 @@ module Modules
       response = http.request(request)
       product_repository.statistical_data = JSON.parse(response.body)
 
-      if product_repository.save!
-        puts "Repository statistical data for #{product_repository.name} saved."
-      end
+      puts "Repository statistical data for #{product_repository.name} saved." if product_repository.save!
     end
 
     def export_products(source)
-      #session = ActionDispatch::Integration::Session.new(Rails.application)
-      #session.get "/productlist?source="+source
-      server_uri = URI.parse("https://solutions.dial.community/productlist?source="+source)
+      # session = ActionDispatch::Integration::Session.new(Rails.application)
+      # session.get "/productlist?source="+source
+      server_uri = URI.parse("https://solutions.dial.community/productlist?source=#{source}")
 
       response = Net::HTTP.get(server_uri)
       prod_list = JSON.parse(response)
@@ -741,19 +706,17 @@ module Modules
         publicgoods_name = prod['publicgoods_name']
         if publicgoods_name.nil?
           publicgoods_name = prod['name']
-          puts "NEW PRODUCT: " + publicgoods_name
+          puts "NEW PRODUCT: #{publicgoods_name}"
         end
-        if prod['aliases'].nil?
-          prod.except!('aliases')
-        end
+        prod.except!('aliases') if prod['aliases'].nil?
         prod.except!('publicgoods_name')
-        puts "SECTOR LIST: " + prod['sectors'].to_s
+        puts "SECTOR LIST: #{prod['sectors']}"
         prod['name'] = publicgoods_name
         json_string = JSON.pretty_generate prod
         regex = /(?<content>"(?:[^\\"]|\\.)+")|(?<open>\{)\s+(?<close>\})|(?<open>\[)\s+(?<close>\])/m
         json_string = json_string.gsub(regex, '\k<open>\k<content>\k<close>')
-        json_string = json_string + "\n"
-        File.open("export/"+slug_em(publicgoods_name, 100).gsub("_","-")+".json","w") do |f|
+        json_string += "\n"
+        File.open("export/#{slug_em(publicgoods_name, 100).gsub('_', '-')}.json", 'w') do |f|
           f.write(json_string)
         end
       end
@@ -808,7 +771,7 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      repo_regex = %r{(github.com/)(\S+)/(\S+)/?}
       return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
@@ -824,9 +787,7 @@ module Modules
       response = http.request(request)
       product_repository.language_data = JSON.parse(response.body)
 
-      if product_repository.save!
-        puts "Repository language data for '#{product_repository.name}' saved."
-      end
+      puts "Repository language data for '#{product_repository.name}' saved." if product_repository.save!
     end
 
     def graph_ql_languages(owner, repo)

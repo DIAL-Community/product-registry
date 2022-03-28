@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class CandidateProductsController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :show, :edit, :new, :create, :update, :destroy, :approve, :reject]
+  acts_as_token_authentication_handler_for User,
+                                           only: %i[index show edit new create update destroy approve reject]
   skip_before_action :verify_authenticity_token, if: :json_request
 
-  before_action :set_candidate_product, only: [:show, :edit, :update, :destroy, :duplicate, :approve, :reject]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
+  before_action :set_candidate_product, only: %i[show edit update destroy duplicate approve reject]
+  before_action :authenticate_user!, only: %i[new create edit update destroy duplicate approve reject]
 
   def json_request
     request.format.json?
@@ -28,8 +31,8 @@ class CandidateProductsController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if (@candidate_product.rejected.nil? || @candidate_product.rejected) &&
-        product.save && @candidate_product.update(rejected: false, approved_date: Time.now,
-                                                  approved_by_id: current_user.id)
+         product.save && @candidate_product.update(rejected: false, approved_date: Time.now,
+                                                   approved_by_id: current_user.id)
         format.html { redirect_to(product_url(product), notice: 'Candidate promoted to product.') }
         format.json { render(json: { message: 'Candidate product approved.' }, status: :ok) }
       else
@@ -142,9 +145,7 @@ class CandidateProductsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_candidate_product
     @candidate_product = CandidateProduct.find_by(slug: params[:id])
-    if @candidate_product.nil? && params[:id].scan(/\D/).empty?
-      @candidate_product = CandidateProduct.find(params[:id])
-    end
+    @candidate_product = CandidateProduct.find(params[:id]) if @candidate_product.nil? && params[:id].scan(/\D/).empty?
   end
 
   # Only allow a list of trusted parameters through.
@@ -154,9 +155,9 @@ class CandidateProductsController < ApplicationController
           .tap do |attr|
             if attr[:website].present?
               attr[:website] = attr[:website].strip
-                                             .sub(/^https?\:\/\//i, '')
-                                             .sub(/^https?\/\/\:/i, '')
-                                             .sub(/\/$/, '')
+                                             .sub(%r{^https?://}i, '')
+                                             .sub(%r{^https?//:}i, '')
+                                             .sub(%r{/$}, '')
             end
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

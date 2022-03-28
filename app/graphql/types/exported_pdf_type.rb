@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class ExportedPdfType < Types::BaseObject
     field :data, String, null: false

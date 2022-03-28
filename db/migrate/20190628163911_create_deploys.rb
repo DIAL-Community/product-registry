@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDeploys < ActiveRecord::Migration[5.1]
   def change
     create_table :deploys do |t|
@@ -16,6 +18,6 @@ class CreateDeploys < ActiveRecord::Migration[5.1]
     end
 
     remove_column :products, :docker_image, :string
-    add_column :products, :default_url, :string, :null => false, default: 'http://<host_ip>'
+    add_column :products, :default_url, :string, null: false, default: 'http://<host_ip>'
   end
 end

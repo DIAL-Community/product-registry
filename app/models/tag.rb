@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tag < ApplicationRecord
   attr_accessor :tag_desc
 
@@ -12,7 +14,7 @@ class Tag < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:created_at, :updated_at]
+      except: %i[created_at updated_at]
     }
   end
 end

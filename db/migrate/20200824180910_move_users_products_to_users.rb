@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MoveUsersProductsToUsers < ActiveRecord::Migration[5.2]
   def up
     User.all.each do |unmigrated_user|
@@ -7,9 +9,7 @@ class MoveUsersProductsToUsers < ActiveRecord::Migration[5.2]
 
       unmigrated_user.products.destroy_all
 
-      if unmigrated_user.save!
-        puts "Migrated user-products information for: #{unmigrated_user.email}."
-      end
+      puts "Migrated user-products information for: #{unmigrated_user.email}." if unmigrated_user.save!
     end
   end
 
@@ -22,9 +22,7 @@ class MoveUsersProductsToUsers < ActiveRecord::Migration[5.2]
 
       unmigrated_user.user_products = []
 
-      if unmigrated_user.save!
-        puts "Migrated user-products information for: #{unmigrated_user.email}."
-      end
+      puts "Migrated user-products information for: #{unmigrated_user.email}." if unmigrated_user.save!
     end
   end
 end

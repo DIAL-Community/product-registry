@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Queries
   class CapabilitiesQuery < Queries::BaseQuery
@@ -11,27 +12,17 @@ module Queries
 
     def resolve(search:, capabilities:, services:, country_ids:, aggregator_ids:)
       capability_data = AggregatorCapability.order(service: :asc, capability: :asc)
-      unless search.blank?
-        capability_data = capability_data.name_contains(search)
-      end
+      capability_data = capability_data.name_contains(search) unless search.blank?
 
-      unless country_ids.empty?
-        capability_data = capability_data.where(country_id: country_ids)
-      end
+      capability_data = capability_data.where(country_id: country_ids) unless country_ids.empty?
 
-      unless aggregator_ids.empty?
-        capability_data = capability_data.where(aggregator_id: aggregator_ids)
-      end
+      capability_data = capability_data.where(aggregator_id: aggregator_ids) unless aggregator_ids.empty?
 
       filtered_capabilities = capabilities.reject { |x| x.nil? || x.empty? }
-      unless filtered_capabilities.empty?
-        capability_data = capability_data.where(capability: filtered_capabilities)
-      end
+      capability_data = capability_data.where(capability: filtered_capabilities) unless filtered_capabilities.empty?
 
       filtered_services = services.reject { |x| x.nil? || x.empty? }
-      unless filtered_services.empty?
-        capability_data = capability_data.where(service: filtered_services)
-      end
+      capability_data = capability_data.where(service: filtered_services) unless filtered_services.empty?
       capability_data
     end
   end
@@ -77,18 +68,12 @@ module Queries
 
     def resolve(search:, operators:, operator_ids:)
       operator_data = OperatorService.order(name: :asc, service: :asc)
-      unless search.blank?
-        operator_data = operator_data.name_contains(search)
-      end
+      operator_data = operator_data.name_contains(search) unless search.blank?
 
-      unless operator_ids.empty?
-        operator_data = operator_data.where(id: operator_ids)
-      end
+      operator_data = operator_data.where(id: operator_ids) unless operator_ids.empty?
 
       filtered_operators = operators.reject { |x| x.nil? || x.empty? }
-      unless filtered_operators.empty?
-        operator_data = operator_data.where(name: filtered_operators)
-      end
+      operator_data = operator_data.where(name: filtered_operators) unless filtered_operators.empty?
       operator_data
     end
   end

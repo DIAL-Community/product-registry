@@ -18,28 +18,11 @@
     <div class="col-12 col-md-3 text-muted">
       <strong><%= t('view.product.form.repository') %>:</strong>
     </div>
-    <div class="col-12 col-md-8">
-      <% if !product.repository.blank? %>
-        <% if product.repository.start_with?('http') %>
-          <a href="<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
-        <% else %>
-          <a href="//<%= product.repository %>" target="_new"><%= product.repository %> &#x29c9;</a>
-        <% end %>
-      <% else %>
-        <%= t('view.product.show.na') %>
-      <% end %>
-    </div>
   </div>
   
   <div class="row text-muted mt-2 mb-2">
     <div class="col-12 col-md-3">
       <strong><%= t('view.product.show.license') %>:</strong>
-    </div>
-    <div class="col-12 col-md-8">
-      <%= product.license.blank? ? t('view.product.show.na') :
-          product.license == 'NOASSERTION' ? t('view.product.show.license-unknown') :
-          product.license
-      %>
     </div>
   </div>
   <% if !product.origins.nil? and !@product.origins.empty? %>

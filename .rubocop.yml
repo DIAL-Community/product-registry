@@ -1,0 +1,104 @@
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 200
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+Naming/VariableName:
+  Enabled: false
+
+Naming/MethodName:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Security/Open:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/MixinUsage:
+  Enabled: false
+
+Lint/UselessAssignment:
+  Enabled: false
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
+
+Lint/NestedMethodDefinition:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Lint/ShadowedArgument:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/StringConcatenation:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: false
+
+Lint/Void:
+  Enabled: false
+
+Lint/SuppressedException:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Lint/UriEscapeUnescape:
+  Enabled: false
+
+Lint/EmptyConditionalBody:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false

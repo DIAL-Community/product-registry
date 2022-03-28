@@ -1,9 +1,7 @@
+# frozen_string_literal: true
+
 class SessionsController < Devise::SessionsController
   after_action :record_failed_auth, only: :new
-
-  def new
-    super
-  end
 
   def create
     super
@@ -26,12 +24,8 @@ class SessionsController < Devise::SessionsController
     user_event.event_type = event_type
     user_event.event_datetime = Time.now
 
-    unless current_user.nil?
-      user_event.email = current_user.email
-    end
+    user_event.email = current_user.email unless current_user.nil?
 
-    if user_event.save!
-      logger.info("User event '#{event_type}' for #{user_event.identifier} saved.")
-    end
+    logger.info("User event '#{event_type}' for #{user_event.identifier} saved.") if user_event.save!
   end
 end

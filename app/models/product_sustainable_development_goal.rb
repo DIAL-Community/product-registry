@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductSustainableDevelopmentGoal < ApplicationRecord
   include MappingStatusType
   include AssociationSource

@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class CandidateOrganizationsController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :show, :edit, :new, :create, :update, :destroy, :approve, :reject]
+  acts_as_token_authentication_handler_for User,
+                                           only: %i[index show edit new create update destroy approve reject]
   skip_before_action :verify_authenticity_token, if: :json_request
 
-  before_action :set_candidate_organization, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
+  before_action :set_candidate_organization, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy duplicate approve reject]
 
   def json_request
     request.format.json?
@@ -184,9 +187,9 @@ class CandidateOrganizationsController < ApplicationController
           .tap do |attr|
             if attr[:website].present?
               attr[:website] = attr[:website].strip
-                                             .sub(/^https?\:\/\//i,'')
-                                             .sub(/^https?\/\/\:/i,'')
-                                             .sub(/\/$/, '')
+                                             .sub(%r{^https?://}i, '')
+                                             .sub(%r{^https?//:}i, '')
+                                             .sub(%r{/$}, '')
             end
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class OrganizationDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -31,7 +33,7 @@ module Types
 
     field :sectors, [Types::SectorType], null: true, method: :sectors_localized
     field :organization_description, Types::OrganizationDescriptionType, null: true,
-      method: :organization_description_localized
+                                                                         method: :organization_description_localized
 
     field :countries, [Types::CountryType], null: true
     field :offices, [Types::OfficeType], null: true

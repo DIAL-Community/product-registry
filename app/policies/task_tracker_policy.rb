@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TaskTrackerPolicy < ApplicationPolicy
   attr_reader :user, :record
 

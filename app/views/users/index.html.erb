@@ -36,9 +36,11 @@
         <tr>
           <td class="d-none d-md-table-cell"><%= user.email %></td>
           <td class="d-none d-md-table-cell">
+            <% if !user.roles.nil? %>
             <% user.roles.each_with_index do |role, index| %>
               <%= ', ' if index > 0 %>
               <%= t("view.user.role.#{role}") %>
+            <% end %>
             <% end %>
           </td>
           <td class="d-none d-md-table-cell">
@@ -49,10 +51,12 @@
             <div class="text-muted">
               <%= t('view.user.form.role')%>:
               <strong>
+              <% if !user.roles.nil? %>
                 <% user.roles.each_with_index do |role, index| %>
                   <%= ', ' if index > 0 %>
                   <%= t("view.user.role.#{role}") %>
                 <% end %>
+              <% end %>
               </strong>
             </div>
             <div class="text-muted">

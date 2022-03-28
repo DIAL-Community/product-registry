@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UseCasesHelper
   def uc_footer(use_case, category)
     images = []
@@ -6,7 +8,7 @@ module UseCasesHelper
       use_case.sdg_targets.each do |sdg_target|
         next if sdg_target.nil?
 
-        tooltip = "Target #{sdg_target.target_number }: #{sdg_target.name}"
+        tooltip = "Target #{sdg_target.target_number}: #{sdg_target.name}"
         image = Hash[filename: sdg_target.image_file, tooltip: tooltip,
                      alt_text: t('alt.el-logo', el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize,
                      id: sdg_target.id, controller: 'sdg_targets']
@@ -45,12 +47,12 @@ module UseCasesHelper
     formatted = ''
     elements.sort_by { |x| x[:name] }
             .each do |element|
-      if element[:controller] == 'sdg_targets'
-        formatted += image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
-      else
-        formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
+      formatted += if element[:controller] == 'sdg_targets'
+                     image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
+                   else
+                     link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
                              action: 'show', controller: element[:controller], id: element[:id])
-      end
+                   end
     end
     formatted
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 
 module Mutations
@@ -19,7 +21,7 @@ module Mutations
       unless is_admin
         return {
           playbook: nil,
-          errors: ["Must be admin to create a playbook"]
+          errors: ['Must be admin to create a playbook']
         }
       end
 
@@ -30,9 +32,7 @@ module Mutations
         playbook.slug = slug_em(name)
 
         first_duplicate = Playbook.slug_starts_with(playbook.slug).order(slug: :desc).first
-        unless first_duplicate.nil?
-          playbook.slug = playbook.slug + generate_offset(first_duplicate)
-        end
+        playbook.slug = playbook.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
       end
 
       # Re-slug if the name is updated (not the same with the one in the db).
@@ -41,18 +41,14 @@ module Mutations
         playbook.slug = slug_em(name)
 
         first_duplicate = Playbook.slug_starts_with(playbook.slug).order(slug: :desc).first
-        unless first_duplicate.nil?
-          play.slug = play.slug + generate_offset(first_duplicate)
-        end
+        play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
       end
 
       playbook.tags = tags
 
       if playbook.save
         playbook_desc = PlaybookDescription.find_by(playbook: playbook, locale: I18n.locale)
-        if playbook_desc.nil?
-          playbook_desc = PlaybookDescription.new
-        end
+        playbook_desc = PlaybookDescription.new if playbook_desc.nil?
         playbook_desc.playbook = playbook
         playbook_desc.locale = I18n.locale
         playbook_desc.overview = overview
@@ -63,7 +59,7 @@ module Mutations
         index = 0
         playbook.plays = []
         plays.each do |play|
-          curr_play = Play.find(play["id"])
+          curr_play = Play.find(play['id'])
           next if curr_play.nil?
 
           playbook_play = PlaybookPlay.new

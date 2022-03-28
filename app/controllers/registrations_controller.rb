@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Adding override for the default registration to display captcha.
 class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :check_captcha, only: [:create]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RubricCategory < ApplicationRecord
   attr_accessor :rc_desc
 

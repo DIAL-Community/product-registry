@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 class UseCaseStepsController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
-  
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_use_case_step, only: [:show, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[new create edit update destroy]
+
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_use_case_step, only: %i[show edit update destroy]
 
   def unique_search
     record = UseCaseStep.find_by(slug: params[:step_id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(UseCaseStep.serialization_options
                                            .merge({
-                                             item_path: request.original_url,
-                                             include_relationships: true
-                                           })))
+                                                    item_path: request.original_url,
+                                                    include_relationships: true
+                                                  })))
   end
 
   def simple_search
@@ -23,13 +23,9 @@ class UseCaseStepsController < ApplicationController
                             .use_case_steps
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      use_case_steps = use_case_steps.name_contains(params[:search])
-    end
+    use_case_steps = use_case_steps.name_contains(params[:search]) if params[:search].present?
 
     use_case_steps = use_case_steps.paginate(page: current_page, per_page: default_page_size)
 
@@ -43,13 +39,13 @@ class UseCaseStepsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if use_case_steps.count > default_page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -59,9 +55,9 @@ class UseCaseStepsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(UseCaseStep.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
   end
 
   def complex_search
@@ -70,13 +66,9 @@ class UseCaseStepsController < ApplicationController
                             .use_case_steps
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      use_case_steps = use_case_steps.name_contains(params[:search])
-    end
+    use_case_steps = use_case_steps.name_contains(params[:search]) if params[:search].present?
 
     use_case_steps = use_case_steps.paginate(page: current_page, per_page: default_page_size)
 
@@ -90,13 +82,13 @@ class UseCaseStepsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if use_case_steps.count > default_page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -106,27 +98,26 @@ class UseCaseStepsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(UseCaseStep.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
   end
 
   # GET /use_case_steps/1
   # GET /use_case_steps/1.json
-  def show
-  end
+  def show; end
 
   # GET /use_case_steps/new
   def new
     @use_case_step = UseCaseStep.new
     @ucs_desc = UseCaseStepDescription.new
     if params[:use_case_id]
-      if !params[:use_case_id].scan(/\D/).empty?
-        @use_case = UseCase.find_by(slug: params[:use_case_id])
-      else
-        @use_case = UseCase.find_by(id: params[:use_case_id])
-      end
-      if !@use_case.nil?
+      @use_case = if !params[:use_case_id].scan(/\D/).empty?
+                    UseCase.find_by(slug: params[:use_case_id])
+                  else
+                    UseCase.find_by(id: params[:use_case_id])
+                  end
+      unless @use_case.nil?
         @use_case_step.use_case = @use_case
         @use_case_step.use_case_id = @use_case.id
       end
@@ -134,8 +125,7 @@ class UseCaseStepsController < ApplicationController
   end
 
   # GET /use_case_steps/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /use_case_steps
   # POST /use_case_steps.json
@@ -170,7 +160,10 @@ class UseCaseStepsController < ApplicationController
           @ucs_desc.description = use_case_step_params[:ucs_desc]
           @ucs_desc.save
         end
-        format.html { redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step), notice: 'Use case step was successfully created.' }
+        format.html do
+          redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step),
+                      notice: 'Use case step was successfully created.'
+        end
         format.json { render :show, status: :created, location: @use_case_step }
       else
         format.html { render :new }
@@ -183,9 +176,7 @@ class UseCaseStepsController < ApplicationController
   # PATCH/PUT /use_case_steps/1.json
   def update
     if use_case_step_params[:ucs_desc]
-      if @ucs_desc.locale != I18n.locale.to_s
-        @ucs_desc = UseCaseStepDescription.new
-      end
+      @ucs_desc = UseCaseStepDescription.new if @ucs_desc.locale != I18n.locale.to_s
       @ucs_desc.use_case_step_id = @use_case_step.id
       @ucs_desc.locale = I18n.locale
       @ucs_desc.description = use_case_step_params[:ucs_desc]
@@ -212,7 +203,10 @@ class UseCaseStepsController < ApplicationController
 
     respond_to do |format|
       if @use_case_step.update(use_case_step_params)
-        format.html { redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step, locale: session[:locale]), notice: 'Use case step was successfully updated.' }
+        format.html do
+          redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step, locale: session[:locale]),
+                      notice: 'Use case step was successfully updated.'
+        end
         format.json { render :show, status: :ok, location: @use_case_step }
       else
         format.html { render :edit }
@@ -242,9 +236,7 @@ class UseCaseStepsController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @use_case_steps = UseCaseStep.where(slug: current_slug).to_a
-      end
+      @use_case_steps = UseCaseStep.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize UseCaseStep, :view_allowed?
     render json: @use_case_steps, only: [:name]
@@ -254,16 +246,14 @@ class UseCaseStepsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_use_case_step
-    if !params[:id].scan(/\D/).empty?
-      @use_case_step = UseCaseStep.find_by(slug: params[:id]) || not_found
-    else
-      @use_case_step = UseCaseStep.find(params[:id]) || not_found
-    end
+    @use_case_step = if !params[:id].scan(/\D/).empty?
+                       UseCaseStep.find_by(slug: params[:id]) || not_found
+                     else
+                       UseCaseStep.find(params[:id]) || not_found
+                     end
     @ucs_desc = UseCaseStepDescription.where(use_case_step_id: @use_case_step, locale: I18n.locale).first
     @ucs_desc ||= UseCaseStepDescription.where(use_case_step_id: @use_case_step, locale: I18n.default_locale).first
-    if @ucs_desc.nil?
-      @ucs_desc = UseCaseStepDescription.new
-    end
+    @ucs_desc = UseCaseStepDescription.new if @ucs_desc.nil?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

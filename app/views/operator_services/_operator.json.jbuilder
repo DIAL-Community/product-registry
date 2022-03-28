@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 normalized_operators = {}
 @operators.each do |operator|
   operator_name = operator.name

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SustainableDevelopmentGoalsHelper
   def sdg_footer(sustainable_development_goal, category)
     images = []
@@ -19,7 +21,7 @@ module SustainableDevelopmentGoalsHelper
         next if sdg_target.nil?
 
         tooltip = sdg_target.name
-        image = Hash[filename: sdg_target.image_file,  tooltip: tooltip,
+        image = Hash[filename: sdg_target.image_file, tooltip: tooltip,
                      id: sdg_target.id, controller: 'sdg_targets',
                      alt_text: t('alt.el-logo', el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize]
         images.push(image)
@@ -38,7 +40,7 @@ module SustainableDevelopmentGoalsHelper
   end
 
   def sdg_footer_popover(elements)
-    content = '<div>' + sdg_format_popover(elements) + '</div>'
+    content = "<div>#{sdg_format_popover(elements)}</div>"
     content.html_safe
   end
 

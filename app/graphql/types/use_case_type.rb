@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class UseCaseDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -22,7 +24,7 @@ module Types
 
     field :use_case_descriptions, [Types::UseCaseDescriptionType], null: true
     field :use_case_description, Types::UseCaseDescriptionType, null: true,
-      method: :use_case_description_localized
+                                                                method: :use_case_description_localized
 
     field :use_case_steps, [Types::UseCaseStepType], null: true
 

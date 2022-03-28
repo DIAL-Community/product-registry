@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/wizard_helpers'
 
 module Queries
@@ -9,9 +11,7 @@ module Queries
 
     def resolve(search:)
       projects = Project.order(:name)
-      unless search.blank?
-        projects = projects.name_contains(search)
-      end
+      projects = projects.name_contains(search) unless search.blank?
       projects
     end
   end
@@ -27,36 +27,36 @@ module Queries
 
   def filter_projects(
     search, origins, sectors, sub_sectors, countries, organizations, products, sdgs,
-    tags, sort_hint, offset_params = {}
+    tags, sort_hint, _offset_params = {}
   )
     projects = Project.all
     if !search.nil? && !search.to_s.strip.empty?
       name_projects = projects.name_contains(search)
       desc_projects = projects.joins(:project_descriptions)
-                              .where("LOWER(description) like LOWER(?)", "%#{search}%")
+                              .where('LOWER(description) like LOWER(?)', "%#{search}%")
       projects = projects.where(id: (name_projects + desc_projects).uniq)
     end
 
     filtered_origins = origins.reject { |x| x.nil? || x.empty? }
-    unless filtered_origins.empty?
-      projects = projects.where(origin_id: filtered_origins)
-    end
+    projects = projects.where(origin_id: filtered_origins) unless filtered_origins.empty?
 
     filtered_sectors = []
     user_sectors = sectors.reject { |x| x.nil? || x.empty? }
     user_sectors.each do |user_sector|
       # Find the sector record.
-      if user_sector.scan(/\D/).empty?
-        sector = Sector.find_by(id: user_sector)
-      else
-        sector = Sector.find_by(name: user_sector)
-      end
+      sector = if user_sector.scan(/\D/).empty?
+                 Sector.find_by(id: user_sector)
+               else
+                 Sector.find_by(name: user_sector)
+               end
       # Skip if we can't find any sector
       next if sector.nil?
+
       # Add the id to the accepted sector list
       filtered_sectors << sector.id
       # Skip if the parent sector id is empty
       next if sector.parent_sector_id.nil?
+
       # Iterate over the child sector and match on the subsector if available
       child_sectors = Sector.where(parent_sector_id: sector.id)
       unless sub_sectors.empty?
@@ -65,6 +65,7 @@ module Queries
           sub_sectors.each do |sub_sector|
             # Keepn on skipping if we found a match already
             next if sub_sector_match
+
             # Try to find a match if we can.
             sub_sector_match = child_sector.name == "#{sector.name}:#{sub_sector}"
           end
@@ -80,13 +81,13 @@ module Queries
 
     filtered_countries = countries.reject { |x| x.nil? || x.empty? }
     unless filtered_countries.empty?
-      if filtered_countries.all? { |i| i.scan(/\D/).empty? }
-        projects = projects.joins(:countries)
+      projects = if filtered_countries.all? { |i| i.scan(/\D/).empty? }
+                   projects.joins(:countries)
                            .where(countries: { id: filtered_countries })
-      else
-        projects = projects.joins(:countries)
+                 else
+                   projects.joins(:countries)
                            .where(countries: { name: filtered_countries })
-      end
+                 end
     end
 
     filtered_organizations = organizations.reject { |x| x.nil? || x.empty? }
@@ -115,16 +116,16 @@ module Queries
       )
     end
 
-    if sort_hint.to_s.downcase == 'country'
-      projects = projects.includes(:countries).order('countries.name')
-    elsif sort_hint.to_s.downcase == 'sector'
-      projects = projects.includes(:sectors).order('sectors.name')
-    elsif sort_hint.to_s.downcase == 'tag'
-      projects = projects.order('tags')
+    case sort_hint.to_s.downcase
+    when 'country'
+      projects.includes(:countries).order('countries.name')
+    when 'sector'
+      projects.includes(:sectors).order('sectors.name')
+    when 'tag'
+      projects.order('tags')
     else
-      projects = projects.order(:name)
+      projects.order(:name)
     end
-    projects
   end
 
   def wizard_projects(sectors, sub_sectors, countries, tags, sort_hint, offset_params = {})
@@ -159,9 +160,9 @@ module Queries
         project_sort_hint
       )
       if map_view
-        return projects.eager_load(:countries).uniq
+        projects.eager_load(:countries).uniq
       else
-        return projects.uniq
+        projects.uniq
       end
     end
   end

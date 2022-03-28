@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSlugToOrganizationsProducts < ActiveRecord::Migration[5.2]
   def up
     add_column(:organizations_products, :id, :primary_key)
@@ -5,9 +7,7 @@ class AddSlugToOrganizationsProducts < ActiveRecord::Migration[5.2]
     OrganizationsProduct.all.each do |op|
       op.slug = "#{op.organization.slug}_#{op.product.slug}"
 
-      if op.save!
-        puts "Organization product updated with: #{op.slug}."
-      end
+      puts "Organization product updated with: #{op.slug}." if op.save!
     end
     change_column(:organizations_products, :slug, :string, null: false, unique: true)
   end

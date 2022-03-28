@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class GraphqlController < ApplicationController
-  #before_action :authenticate_user!
+  # before_action :authenticate_user!
   # If accessing from outside this domain, nullify the session
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
@@ -24,8 +26,9 @@ class GraphqlController < ApplicationController
     }
     result = RegistrySchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render(json: result)
-  rescue => e
+  rescue StandardError => e
     raise e unless Rails.env.development?
+
     handle_error_in_development(e)
   end
 
@@ -33,8 +36,10 @@ class GraphqlController < ApplicationController
 
   def current_user
     return nil if request.headers['Authorization'].blank?
+
     token = request.headers['Authorization'].split(' ').last
     return nil if token.blank?
+
     User.find_by(authentication_token: token)
   end
 

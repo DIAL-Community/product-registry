@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SectorPolicy < ApplicationPolicy
   attr_reader :user, :record
 

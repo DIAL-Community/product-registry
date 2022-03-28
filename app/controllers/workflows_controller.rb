@@ -1,24 +1,24 @@
+# frozen_string_literal: true
+
 class WorkflowsController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[new create edit update destroy]
 
-  before_action :set_workflow, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_current_user, only: [:edit, :update, :destroy]
+  before_action :set_workflow, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_current_user, only: %i[edit update destroy]
 
   def unique_search
     record = Workflow.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(Workflow.serialization_options
                                         .merge({
-                                          item_path: request.original_url,
-                                          include_relationships: true
-                                        })))
+                                                 item_path: request.original_url,
+                                                 include_relationships: true
+                                               })))
   end
 
   def simple_search
@@ -26,13 +26,9 @@ class WorkflowsController < ApplicationController
     workflows = Workflow
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      workflows = workflows.name_contains(params[:search])
-    end
+    workflows = workflows.name_contains(params[:search]) if params[:search].present?
 
     results = {
       url: request.original_url,
@@ -44,13 +40,13 @@ class WorkflowsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if workflows.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -66,9 +62,9 @@ class WorkflowsController < ApplicationController
       format.json do
         render(json: results.to_json(Workflow.serialization_options
                                              .merge({
-                                               collection_path: uri.to_s,
-                                               include_relationships: true
-                                             })))
+                                                      collection_path: uri.to_s,
+                                                      include_relationships: true
+                                                    })))
       end
     end
   end
@@ -78,18 +74,12 @@ class WorkflowsController < ApplicationController
     workflows = Workflow
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      workflows = workflows.name_contains(params[:search])
-    end
+    workflows = workflows.name_contains(params[:search]) if params[:search].present?
 
     sdg_use_case_slugs = []
-    if valid_array_parameter(params[:sdgs])
-      sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs])
-    end
+    sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs]) if valid_array_parameter(params[:sdgs])
     if sdg_use_case_slugs.nil? && valid_array_parameter(params[:sustainable_development_goals])
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sustainable_development_goals])
     end
@@ -141,9 +131,9 @@ class WorkflowsController < ApplicationController
       unless workflow_slugs.nil? || workflow_slugs.empty?
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = workflows.count
       end
     end
@@ -158,13 +148,13 @@ class WorkflowsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if workflows.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -181,9 +171,9 @@ class WorkflowsController < ApplicationController
       format.json do
         render(json: results.to_json(Workflow.serialization_options
                                              .merge({
-                                               collection_path: uri.to_s,
-                                               include_relationships: true
-                                             })))
+                                                      collection_path: uri.to_s,
+                                                      include_relationships: true
+                                                    })))
       end
     end
   end
@@ -199,13 +189,9 @@ class WorkflowsController < ApplicationController
 
     @workflows = filter_workflows.order(:name)
 
-    if params[:search]
-      @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%#{params[:search]}%")
-    end
+    @workflows = @workflows.where('LOWER("workflows"."name") like LOWER(?)', "%#{params[:search]}%") if params[:search]
 
-    if !params[:without_paging]
-      @workflows = @workflows.paginate(page: params[:page], per_page: 20)
-    end
+    @workflows = @workflows.paginate(page: params[:page], per_page: 20) unless params[:without_paging]
 
     authorize @workflows, :view_allowed?
   end
@@ -273,8 +259,11 @@ class WorkflowsController < ApplicationController
           @wf_desc.save
         end
 
-        format.html { redirect_to @workflow,
-                      flash: { notice: t('messages.model.created', model: t('model.workflow').to_s.humanize) }}
+        format.html do
+          redirect_to @workflow,
+                      flash: { notice: t('messages.model.created',
+                                         model: t('model.workflow').to_s.humanize) }
+        end
         format.json { render :show, status: :created, location: @workflow }
       else
         format.html { render :new }
@@ -289,18 +278,14 @@ class WorkflowsController < ApplicationController
     authorize @workflow, :mod_allowed?
 
     building_blocks = Set.new
-    if (params[:selected_building_blocks])
-      params[:selected_building_blocks].keys.each do |building_block_id|
-        building_block = BuildingBlock.find(building_block_id)
-        building_blocks.add(building_block)
-      end
+    params[:selected_building_blocks]&.keys&.each do |building_block_id|
+      building_block = BuildingBlock.find(building_block_id)
+      building_blocks.add(building_block)
     end
     @workflow.building_blocks = building_blocks.to_a
 
     if workflow_params[:wf_desc].present?
-      if @wf_desc.locale != I18n.locale.to_s
-        @wf_desc = WorkflowDescription.new
-      end
+      @wf_desc = WorkflowDescription.new if @wf_desc.locale != I18n.locale.to_s
       @wf_desc.workflow_id = @workflow.id
       @wf_desc.locale = I18n.locale
       @wf_desc.description = workflow_params[:wf_desc]
@@ -329,57 +314,56 @@ class WorkflowsController < ApplicationController
     authorize @workflow, :mod_allowed?
     @workflow.destroy
     respond_to do |format|
-      format.html { redirect_to workflows_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.workflow').to_s.humanize) }}
+      format.html do
+        redirect_to workflows_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.workflow').to_s.humanize) }
+      end
       format.json { head :no_content }
     end
   end
 
   def duplicates
-    @workflows = Array.new
+    @workflows = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
-        @workflows = Workflow.where(slug: current_slug).to_a
-      end
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
+      @workflows = Workflow.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize Workflow, :view_allowed?
-    render json: @workflows, :only => [:name]
+    render json: @workflows, only: [:name]
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_workflow
-      if !params[:id].scan(/\D/).empty?
-        @workflow = Workflow.find_by(slug: params[:id]) or not_found
-      else
-        @workflow = Workflow.find_by(id: params[:id]) or not_found
-      end
-      @wf_desc = WorkflowDescription.where(workflow_id: @workflow, locale: I18n.locale).first
-      @wf_desc ||= WorkflowDescription.where(workflow_id: @workflow, locale: I18n.default_locale).first
-      if !@wf_desc
-        @wf_desc = WorkflowDescription.new
-      end
-    end
 
-    def set_current_user
-      @workflow.set_current_user(current_user)
-      @wf_desc.set_current_user(current_user)
+  # Use callbacks to share common setup or constraints between actions.
+  def set_workflow
+    if !params[:id].scan(/\D/).empty?
+      @workflow = Workflow.find_by(slug: params[:id]) or not_found
+    else
+      @workflow = Workflow.find_by(id: params[:id]) or not_found
     end
+    @wf_desc = WorkflowDescription.where(workflow_id: @workflow, locale: I18n.locale).first
+    @wf_desc ||= WorkflowDescription.where(workflow_id: @workflow, locale: I18n.default_locale).first
+    @wf_desc ||= WorkflowDescription.new
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def workflow_params
-      params.require(:workflow)
-      .permit(:name, :slug, :wf_desc, :other_names, :category)
-      .tap do |attr|
-        if (params[:reslug].present?)
-          attr[:slug] = slug_em(attr[:name])
-          if (params[:duplicate].present?)
-            first_duplicate = Workflow.slug_starts_with(attr[:slug]).order(slug: :desc).first
-            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
-          end
+  def set_current_user
+    @workflow.set_current_user(current_user)
+    @wf_desc.set_current_user(current_user)
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def workflow_params
+    params.require(:workflow)
+          .permit(:name, :slug, :wf_desc, :other_names, :category)
+          .tap do |attr|
+      if params[:reslug].present?
+        attr[:slug] = slug_em(attr[:name])
+        if params[:duplicate].present?
+          first_duplicate = Workflow.slug_starts_with(attr[:slug]).order(slug: :desc).first
+          attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
         end
       end
     end
+  end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class OrganizationsControllerTest < ActionDispatch::IntegrationTest
@@ -8,94 +10,94 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     @organization = organizations(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get organizations_url
     assert_response :success
   end
 
-  test "search test" do
-    get organizations_url(search: "Organization Again")
+  test 'search test' do
+    get organizations_url(search: 'Organization Again')
     assert_equal(1, assigns(:organizations).count)
 
-    get organizations_url(search: "InvalidOrg")
+    get organizations_url(search: 'InvalidOrg')
     assert_equal(0, assigns(:organizations).count)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_organization_url
     assert_response :success
   end
 
-  test "creating organization without logo should not fail" do
+  test 'creating organization without logo should not fail' do
     post organizations_url,
-         params: { organization: { name: "Some Name", slug: 'some_name', when_endorsed: '11/16/2018' } }
+         params: { organization: { name: 'Some Name', slug: 'some_name', when_endorsed: '11/16/2018' } }
     created_organization = Organization.last
 
-    assert_equal created_organization.name, "Some Name"
+    assert_equal created_organization.name, 'Some Name'
     assert_redirected_to organization_url(created_organization)
   end
 
-  test "updating organization without logo should not fail" do
-    patch organization_url(@organization), params: { organization: { name: "Some New Name" } }
+  test 'updating organization without logo should not fail' do
+    patch organization_url(@organization), params: { organization: { name: 'Some New Name' } }
 
     updated_organization = Organization.find(@organization.id)
-    assert_equal updated_organization.name, "Some New Name"
+    assert_equal updated_organization.name, 'Some New Name'
     assert_redirected_to organization_url(updated_organization, locale: 'en')
   end
 
-  test "should slug digits" do
-    digit_org_name = "1234-56-789 011"
+  test 'should slug digits' do
+    digit_org_name = '1234-56-789 011'
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     post organizations_url,
-         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+         params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, logo: uploaded_file }
     saved_organization = Organization.last
-    assert_equal saved_organization.slug, "123456789_011"
+    assert_equal saved_organization.slug, '123456789_011'
 
-    digit_org_name = "1234 56 789 011"
+    digit_org_name = '1234 56 789 011'
     uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
     post organizations_url,
-         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+         params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, logo: uploaded_file }
     saved_organization = Organization.last
-    assert_equal saved_organization.slug, "1234_56_789_011"
+    assert_equal saved_organization.slug, '1234_56_789_011'
   end
 
-  test "should append counter to duplicate slugs" do
-    digit_org_name = "ABCD 56 789 011"
+  test 'should append counter to duplicate slugs' do
+    digit_org_name = 'ABCD 56 789 011'
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     post organizations_url,
-         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+         params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, logo: uploaded_file }
     saved_organization = Organization.last
-    assert_equal saved_organization.slug, "abcd_56_789_011"
+    assert_equal saved_organization.slug, 'abcd_56_789_011'
 
-    digit_org_name = "ABCD?$% 56 789 011"
+    digit_org_name = 'ABCD?$% 56 789 011'
     uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
     post organizations_url,
-         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+         params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, duplicate: true, logo: uploaded_file }
     saved_organization = Organization.last
-    assert_equal saved_organization.slug, "abcd_56_789_011_dup1"
+    assert_equal saved_organization.slug, 'abcd_56_789_011_dup1'
 
-    digit_org_name = "ABCD?$% 56 789 011"
+    digit_org_name = 'ABCD?$% 56 789 011'
     uploaded_file = fixture_file_upload('files/other-logo.png', 'image/png')
     post organizations_url,
-         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+         params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, duplicate: true, logo: uploaded_file }
     saved_organization = Organization.last
-    assert_equal saved_organization.slug, "abcd_56_789_011_dup2"
+    assert_equal saved_organization.slug, 'abcd_56_789_011_dup2'
 
-    digit_org_name = "ABCD?$% 56 789 011"
+    digit_org_name = 'ABCD?$% 56 789 011'
     uploaded_file = fixture_file_upload('files/more-logo.png', 'image/png')
     post organizations_url,
-         params: { organization: { name: digit_org_name, website: "aaa.com", when_endorsed: '11/16/2018' },
+         params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, duplicate: true, logo: uploaded_file }
     saved_organization = Organization.last
-    assert_equal saved_organization.slug, "abcd_56_789_011_dup3"
+    assert_equal saved_organization.slug, 'abcd_56_789_011_dup3'
   end
 
-  test "should create organization" do
+  test 'should create organization' do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     assert_difference('Organization.count') do
       post organizations_url,
@@ -107,23 +109,23 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organization_url(Organization.last)
   end
 
-  test "should show organization" do
+  test 'should show organization' do
     get organization_url(@organization)
     assert_response :success
   end
 
-  test "should show organization with digit only slug" do
+  test 'should show organization with digit only slug' do
     digit_only_organization = organizations(:three)
     get organization_url(digit_only_organization)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_organization_url(@organization)
     assert_response :success
   end
 
-  test "should update organization" do
+  test 'should update organization' do
     uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
     patch organization_url(@organization),
           params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name,
@@ -133,7 +135,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organization_url(@organization, locale: 'en')
   end
 
-  test "should destroy organization" do
+  test 'should destroy organization' do
     assert_difference('Organization.count', -1) do
       delete organization_url(@organization)
     end
@@ -182,14 +184,14 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_nil(updated_fourth_user.organization_id)
   end
 
-  test "should destroy project along with organization" do
+  test 'should destroy project along with organization' do
     @project = projects(:one)
     assert_difference('Project.count', -1) do
       delete organization_url(@organization)
     end
   end
 
-  test "should not destroy sectors when destroying organization" do
+  test 'should not destroy sectors when destroying organization' do
     @sector = sectors(:one)
     assert_difference('Sector.count', 0) do
       delete organization_url(@organization)
@@ -198,7 +200,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organizations_url
   end
 
-  test "should not destroy products when destroying organization" do
+  test 'should not destroy products when destroying organization' do
     @product = products(:one)
     assert_difference('Product.count', 0) do
       delete organization_url(@organization)
@@ -207,7 +209,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to organizations_url
   end
 
-  test "should not destroy contact when destroying organization" do
+  test 'should not destroy contact when destroying organization' do
     @contact = contacts(:one)
     assert_difference('Contact.count', 0) do
       delete organization_url(@organization)
@@ -240,14 +242,14 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     get organizations_url
     assert_equal(5, assigns(:organizations).count)
 
-    first_location = locations(:one)
+    first_country = countries(:one)
     second_organization = organizations(:two)
-    second_organization.locations.push(first_location)
+    second_organization.countries.push(first_country)
     second_organization.save
 
     add_parameter = { 'filter_name': 'countries',
-                      'filter_value': first_location.id,
-                      'filter_label': first_location.name }
+                      'filter_value': first_country.id,
+                      'filter_label': first_country.name }
     post '/add_filter', params: add_parameter
 
     # Country filter: should return the above org plus the first org, which has a project assigned to that location
@@ -339,7 +341,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(2018, assigns(:organization).when_endorsed.year)
   end
 
-  test "Policy tests: Should only allow get" do
+  test 'Policy tests: Should only allow get' do
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get organization_url(@organization)
@@ -373,9 +375,9 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:one)
 
     assert_difference('Organization.count') do
-      post organizations_url, params: { organization: { name: "Some Name", slug: 'some_name',
+      post organizations_url, params: { organization: { name: 'Some Name', slug: 'some_name',
                                                         when_endorsed: '11/16/2018' },
-                                        contact: { name: "Example Contact", email: 'a@a.com' },
+                                        contact: { name: 'Example Contact', email: 'a@a.com' },
                                         selected_countries: { country.id => country.id },
                                         selected_sectors: { sector.id => sector.id },
                                         selected_products: { product.id => product.id },
@@ -484,7 +486,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'mni user allowed to edit mni organizations' do
-    patch organization_url(@organization), params: { organization: { name: "Some Name", is_mni: true } }
+    patch organization_url(@organization), params: { organization: { name: 'Some Name', is_mni: true } }
 
     delete(destroy_user_session_url)
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['mni'])
@@ -492,24 +494,24 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     get edit_organization_url(@organization)
     assert_response :success
 
-    patch organization_url(@organization), params: { organization: { name: "Another Name" } }
+    patch organization_url(@organization), params: { organization: { name: 'Another Name' } }
 
     updated_organization = Organization.find(@organization.id)
     assert_redirected_to organization_url(updated_organization, locale: 'en')
-    assert_equal updated_organization.name, "Another Name"
+    assert_equal updated_organization.name, 'Another Name'
 
     get edit_organization_url(organizations(:two))
     assert_response :redirect
 
-    patch organization_url(organizations(:two)), params: { organization: { name: "Different Name" } }
+    patch organization_url(organizations(:two)), params: { organization: { name: 'Different Name' } }
     assert_response :redirect
 
     updated_organization = Organization.find(organizations(:two).id)
-    assert_equal updated_organization.name, "Organization Again"
+    assert_equal updated_organization.name, 'Organization Again'
   end
 
   test 'principle user allowed to edit principle organizations' do
-    patch organization_url(@organization), params: { organization: { name: "Some Name", is_endorser: true } }
+    patch organization_url(@organization), params: { organization: { name: 'Some Name', is_endorser: true } }
 
     delete(destroy_user_session_url)
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['principle'])
@@ -517,19 +519,19 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     get edit_organization_url(@organization)
     assert_response :success
 
-    patch organization_url(@organization), params: { organization: { name: "Another Name" } }
+    patch organization_url(@organization), params: { organization: { name: 'Another Name' } }
 
     updated_organization = Organization.find(@organization.id)
     assert_redirected_to organization_url(updated_organization, locale: 'en')
-    assert_equal updated_organization.name, "Another Name"
+    assert_equal updated_organization.name, 'Another Name'
 
     get edit_organization_url(organizations(:two))
     assert_response :redirect
 
-    patch organization_url(organizations(:two)), params: { organization: { name: "Different Name" } }
+    patch organization_url(organizations(:two)), params: { organization: { name: 'Different Name' } }
     assert_response :redirect
 
     updated_organization = Organization.find(organizations(:two).id)
-    assert_equal updated_organization.name, "Organization Again"
+    assert_equal updated_organization.name, 'Organization Again'
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDescriptionTablesForI18n < ActiveRecord::Migration[5.1]
   def change
     create_table :use_case_descriptions do |t|

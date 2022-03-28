@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class ProjectDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -16,7 +18,7 @@ module Types
 
     field :sectors, [Types::SectorType], null: true, method: :sectors_localized
     field :project_description, Types::ProjectDescriptionType, null: true,
-      method: :project_description_localized
+                                                               method: :project_description_localized
 
     field :origin, Types::OriginType, null: true
 

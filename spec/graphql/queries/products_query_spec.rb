@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'graph_helpers'
 
 RSpec.describe(Queries::ProductsQuery, type: :graphql) do
@@ -94,7 +96,7 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
 
     result = execute_graphql(
       query,
-      variables: { search: 'Open' },
+      variables: { search: 'Open' }
     )
 
     aggregate_failures do
@@ -106,7 +108,7 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
   it 'fails' do
     result = execute_graphql(
       query,
-      variables: { search: 'Whatever' },
+      variables: { search: 'Whatever' }
     )
 
     expect(result['data']['searchProducts']['totalCount']).to(eq(0))

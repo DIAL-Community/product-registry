@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveUnusedTables < ActiveRecord::Migration[5.2]
   def change
     drop_table 'product_suites_product_versions'
@@ -14,6 +16,5 @@ class RemoveUnusedTables < ActiveRecord::Migration[5.2]
     drop_table :projects_locations
     drop_table :organizations_locations
     drop_table :locations
-    
   end
 end

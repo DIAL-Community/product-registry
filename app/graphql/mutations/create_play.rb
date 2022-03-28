@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 
 module Mutations
@@ -16,7 +18,7 @@ module Mutations
       unless is_admin
         return {
           playbook: nil,
-          errors: ["Must be admin to create a playbook"]
+          errors: ['Must be admin to create a playbook']
         }
       end
 
@@ -26,9 +28,7 @@ module Mutations
         play.slug = slug_em(name)
 
         first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
-        unless first_duplicate.nil?
-          play.slug = play.slug + generate_offset(first_duplicate)
-        end
+        play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
       end
 
       # Re-slug if the name is updated (not the same with the one in the db).
@@ -37,18 +37,14 @@ module Mutations
         play.slug = slug_em(name)
 
         first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
-        unless first_duplicate.nil?
-          play.slug = play.slug + generate_offset(first_duplicate)
-        end
+        play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
       end
 
       play.tags = tags
 
       if play.save
         play_desc = PlayDescription.find_by(play: play, locale: I18n.locale)
-        if play_desc.nil?
-          play_desc = PlayDescription.new
-        end
+        play_desc = PlayDescription.new if play_desc.nil?
         play_desc.play = play
         play_desc.locale = I18n.locale
         play_desc.description = description
@@ -92,15 +88,17 @@ module Mutations
       unless is_admin
         return {
           playbook: nil,
-          errors: ["Must be admin to create a playbook"]
+          errors: ['Must be admin to create a playbook']
         }
       end
 
       base_play = Play.find_by(slug: play_slug)
-      return {
-        play: nil,
-        errors: 'Unable to find play to duplicate.'
-      } if base_play.nil?
+      if base_play.nil?
+        return {
+          play: nil,
+          errors: 'Unable to find play to duplicate.'
+        }
+      end
 
       # Create a duplicate of the base play object.
       duplicate_play = base_play.dup
@@ -147,32 +145,35 @@ module Mutations
       unless is_admin
         return {
           playbook: nil,
-          errors: ["Must be admin to create a playbook"]
+          errors: ['Must be admin to create a playbook']
         }
       end
 
       playbook = Playbook.find_by(slug: playbook_slug)
 
-      return {
-        play: nil,
-        errors: 'Unable to find playbook record.'
-      } if playbook.nil?
+      if playbook.nil?
+        return {
+          play: nil,
+          errors: 'Unable to find playbook record.'
+        }
+      end
 
       play = Play.find_by(slug: play_slug)
 
-      return {
-        play: nil,
-        errors: 'Unable to find play record.'
-      } if play.nil?
+      if play.nil?
+        return {
+          play: nil,
+          errors: 'Unable to find play record.'
+        }
+      end
 
       successful_operation = false
-      if operation == 'UNASSIGN'
+      case operation
+      when 'UNASSIGN'
         # We're deleting the play because the order -1
         deleted = playbook.plays.delete(play)
-        unless deleted.nil?
-          successful_operation = true
-        end
-      elsif operation == 'ASSIGN'
+        successful_operation = true unless deleted.nil?
+      when 'ASSIGN'
         # We're adding a play, the order is length of the current plays (appending as the last play).
         max_order = PlaybookPlay.where(playbook: playbook).maximum('order')
         max_order = max_order.nil? ? 0 : (max_order + 1)
@@ -181,9 +182,7 @@ module Mutations
         assigned_play.play = play
         assigned_play.playbook = playbook
         assigned_play.order = max_order
-        if assigned_play.save
-          successful_operation = true
-        end
+        successful_operation = true if assigned_play.save
       else
         # Reordering actually trigger swap order with adjacent play.
         playbook_play = PlaybookPlay.find_by(playbook: playbook, play: play)
@@ -195,9 +194,7 @@ module Mutations
         playbook_play.order = swapped_playbook_play.order
         swapped_playbook_play.order = temp_order
         # Save both playbook_play
-        if playbook_play.save && swapped_playbook_play.save
-          successful_operation = true
-        end
+        successful_operation = true if playbook_play.save && swapped_playbook_play.save
       end
 
       if successful_operation

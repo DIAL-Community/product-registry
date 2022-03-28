@@ -2,22 +2,22 @@
 
 # Setting page where user can set the owning organization.
 class SettingsController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  
+  acts_as_token_authentication_handler_for User, only: %i[index show new create edit update destroy]
+
   before_action :authenticate_user!
-  before_action :set_setting, only: [:edit, :update, :show]
+  before_action :set_setting, only: %i[edit update show]
 
   # GET /settings
   # GET /settings.json
   def index
-    if params[:search]
-      @settings = Setting.order(:name)
+    @settings = if params[:search]
+                  Setting.order(:name)
                          .name_contains(params[:search])
                          .paginate(page: params[:page], per_page: 20)
-    else
-      @settings = Setting.order(:name)
+                else
+                  Setting.order(:name)
                          .paginate(page: params[:page], per_page: 20)
-    end
+                end
     authorize @settings, :view_allowed?
   end
 

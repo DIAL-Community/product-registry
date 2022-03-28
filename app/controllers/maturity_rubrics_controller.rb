@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class MaturityRubricsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_maturity_rubric, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_maturity_rubric, only: %i[show edit update destroy]
 
   # GET /maturity_rubrics
   # GET /maturity_rubrics.json
@@ -15,12 +17,12 @@ class MaturityRubricsController < ApplicationController
     current_page = params[:page] || 1
 
     @maturity_rubric = MaturityRubric.order(:name)
-    if params[:search]
-      @maturity_rubrics = @maturity_rubric.name_contains(params[:search])
+    @maturity_rubrics = if params[:search]
+                          @maturity_rubric.name_contains(params[:search])
                                           .paginate(page: current_page, per_page: 5)
-    else
-      @maturity_rubrics = @maturity_rubric.paginate(page: current_page, per_page: 5)
-    end
+                        else
+                          @maturity_rubric.paginate(page: current_page, per_page: 5)
+                        end
     authorize @maturity_rubrics, :view_allowed?
   end
 
@@ -129,11 +131,11 @@ class MaturityRubricsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_maturity_rubric
-    if !params[:id].scan(/\D/).empty?
-      @maturity_rubric = MaturityRubric.find_by(slug: params[:id]) || not_found
-    else
-      @maturity_rubric = MaturityRubric.find(params[:id]) || not_found
-    end
+    @maturity_rubric = if !params[:id].scan(/\D/).empty?
+                         MaturityRubric.find_by(slug: params[:id]) || not_found
+                       else
+                         MaturityRubric.find(params[:id]) || not_found
+                       end
   end
 
   # Only allow a list of trusted parameters through.

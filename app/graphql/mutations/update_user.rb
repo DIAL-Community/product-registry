@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Mutations
   class UpdateUser < Mutations::BaseMutation
-    graphql_name "CreateUser"
+    graphql_name 'CreateUser'
 
     argument :email, String, required: true
     argument :roles, GraphQL::Types::JSON, required: false, default_value: []
@@ -11,7 +13,7 @@ module Mutations
     field :user, Types::UserType, null: false
     field :errors, [String], null: false
 
-    def resolve(email:, roles:, username:, organizations:, products: )
+    def resolve(email:, roles:, username:, organizations:, products:)
       user = User.find_by(email: email)
       if user.nil?
         {
@@ -24,16 +26,16 @@ module Mutations
       user.roles = roles
 
       if !organizations.nil? && !organizations.empty?
-        org = Organization.find_by(slug: organizations[0]["slug"])
+        org = Organization.find_by(slug: organizations[0]['slug'])
         user.organization_id = org.id
-      else 
+      else
         user.organization_id = nil
       end
 
       user.products = []
       if !products.nil? && !products.empty?
-        products.each do | prod |
-          curr_prod = Product.find_by(slug: prod["slug"])
+        products.each do |prod|
+          curr_prod = Product.find_by(slug: prod['slug'])
           user.products << curr_prod
         end
       end
@@ -41,13 +43,12 @@ module Mutations
       if user.save
         { user: user,
           success: user.persisted?,
-          errors: user.errors
-        }
+          errors: user.errors }
       end
-    rescue ActiveRecord::RecordInvalid => invalid
+    rescue ActiveRecord::RecordInvalid => e
       GraphQL::ExecutionError.new(
-        "Invalid Attributes for #{invalid.record.class.name}: " \
-        "#{invalid.record.errors.full_messages.join(', ')}"
+        "Invalid Attributes for #{e.record.class.name}: " \
+        "#{e.record.errors.full_messages.join(', ')}"
       )
     end
   end

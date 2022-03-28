@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.extract! project, :id, :name, :slug, :tags
 
 json.countries project.countries do |country|
