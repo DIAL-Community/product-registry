@@ -30,7 +30,7 @@ a:hover {
 </style>
 
 <div class="col-lg-3 col-md-4 d-flex mt-2">
-    <div class="card w-100 index-card">
+    <div class="card w-100 index-card" style="overflow: hidden;">
       <div class="card-header text-white truncate-parent <%= !@bb_status.nil? ? @bb_status : 'future' %>">
         <%= link_to building_block.name, building_block, class: 'truncate-text', target: :_blank,
             'title' => building_block.name %>
@@ -43,7 +43,7 @@ a:hover {
                         class: 'card-img-top align-middle') %>
       </div>
       </div>
-      <div class="card-footer" style="background-color:#eaeaea; height:7rem;">
+      <div class="card-footer" style="background-color:#eaeaea; height:9rem;">
         <%= simple_format(@bb_desc.select {|bb| bb[:name].downcase == building_block.name.downcase }.first[:desc]) %>
       </div>
       <% end %>
