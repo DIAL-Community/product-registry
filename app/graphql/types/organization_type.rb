@@ -35,7 +35,7 @@ module Types
     field :organization_description, Types::OrganizationDescriptionType, null: true,
                                                                          method: :organization_description_localized
 
-    field :countries, [Types::CountryType], null: true
+    field :countries, [Types::CountryType], null: true, method: :organization_countries_ordered
     field :offices, [Types::OfficeType], null: true
     field :projects, [Types::ProjectType], null: false
     field :products, [Types::ProductType], null: false

@@ -74,6 +74,12 @@ class Organization < ApplicationRecord
     description
   end
 
+  def organization_countries_ordered
+    countries = self.countries&.order('name ASC')
+    
+    countries
+  end
+
   # overridden
   def to_param
     slug
