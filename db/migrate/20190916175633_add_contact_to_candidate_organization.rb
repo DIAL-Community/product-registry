@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddContactToCandidateOrganization < ActiveRecord::Migration[5.1]
   def change
     create_table 'candidate_organizations_contacts', id: false, force: :cascade do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class PlayDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -18,7 +20,7 @@ module Types
 
     field :play_descriptions, [Types::PlayDescriptionType], null: true
     field :play_description, Types::PlayDescriptionType, null: true,
-      method: :play_description_localized
+                                                         method: :play_description_localized
 
     field :products, [Types::ProductType], null: true
     field :building_blocks, [Types::BuildingBlockType], null: true

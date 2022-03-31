@@ -1,18 +1,18 @@
+# frozen_string_literal: true
+
 class SectorsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_sector, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_sector, only: %i[show edit update destroy]
 
   def unique_search
     record = Sector.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(Sector.serialization_options
                                       .merge({
-                                        item_path: request.original_url,
-                                        include_relationships: true
-                                      })))
+                                               item_path: request.original_url,
+                                               include_relationships: true
+                                             })))
   end
 
   def simple_search
@@ -20,13 +20,9 @@ class SectorsController < ApplicationController
     sectors = Sector.order(:slug)
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      sectors = sectors.name_contains(params[:search])
-    end
+    sectors = sectors.name_contains(params[:search]) if params[:search].present?
 
     sectors = sectors.paginate(page: current_page, per_page: default_page_size)
 
@@ -40,13 +36,13 @@ class SectorsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if sectors.count > default_page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -56,9 +52,9 @@ class SectorsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(Sector.serialization_options
                                        .merge({
-                                         collection_path: uri.to_s,
-                                         include_relationships: true
-                                       })))
+                                                collection_path: uri.to_s,
+                                                include_relationships: true
+                                              })))
   end
 
   def complex_search
@@ -66,13 +62,9 @@ class SectorsController < ApplicationController
     sectors = Sector.order(:slug)
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      sectors = sectors.name_contains(params[:search])
-    end
+    sectors = sectors.name_contains(params[:search]) if params[:search].present?
 
     sectors = sectors.paginate(page: current_page, per_page: default_page_size)
 
@@ -86,13 +78,13 @@ class SectorsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if sectors.count > default_page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -102,20 +94,18 @@ class SectorsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(Sector.serialization_options
                                        .merge({
-                                         collection_path: uri.to_s,
-                                         include_relationships: true
-                                       })))
+                                                collection_path: uri.to_s,
+                                                include_relationships: true
+                                              })))
   end
 
   # GET /sectors
   # GET /sectors.json
   def index
     if params[:without_paging]
-      origin_name = session[:org] ? session[:org] : Setting.find_by(slug: 'default_sector_list').value 
+      origin_name = session[:org] || Setting.find_by(slug: 'default_sector_list').value
       origin = Origin.find_by(name: origin_name)
-      if origin.nil?
-        origin = Origin.find_by(name:Setting.find_by(slug: 'default_sector_list').value)
-      end
+      origin = Origin.find_by(name: Setting.find_by(slug: 'default_sector_list').value) if origin.nil?
       @sectors = Sector.where(origin_id: origin.id)
       !params[:search].blank? && @sectors = @sectors.name_contains(params[:search])
       !params[:display_only].nil? && @sectors = @sectors.where(is_displayable: true)
@@ -124,15 +114,15 @@ class SectorsController < ApplicationController
       return
     end
 
-    if params[:search]
-      @sectors = Sector.where(nil)
+    @sectors = if params[:search]
+                 Sector.where(nil)
                        .name_contains(params[:search])
                        .order(:name)
                        .paginate(page: params[:page], per_page: 20)
-    else
-      @sectors = Sector.order(:name)
+               else
+                 Sector.order(:name)
                        .paginate(page: params[:page], per_page: 20)
-    end
+               end
     authorize @sectors, :view_allowed?
   end
 
@@ -146,7 +136,7 @@ class SectorsController < ApplicationController
   def new
     authorize Sector, :mod_allowed?
     @sector = Sector.new
-    if (params[:organization_id])
+    if params[:organization_id]
       @organization = Organization.find(params[:organization_id])
       @sector.organizations.push(@organization)
     end
@@ -155,9 +145,7 @@ class SectorsController < ApplicationController
   # GET /sectors/1/edit
   def edit
     authorize @sector, :mod_allowed?
-    if (params[:organization_id])
-      @organization = Organization.find(params[:organization_id])
-    end
+    @organization = Organization.find(params[:organization_id]) if params[:organization_id]
   end
 
   # POST /sectors
@@ -237,53 +225,56 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.destroy
-        format.html { redirect_to sectors_url,
-                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize) }}
-        format.json { head :no_content }
+        format.html do
+          redirect_to sectors_url,
+                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize) }
+        end
       else
-        format.html { redirect_to sectors_url,
-                      flash: { notice: t('messages.model.delete-failed', model: t('model.sector').to_s.humanize) }}
-        format.json { head :no_content }
+        format.html do
+          redirect_to sectors_url,
+                      flash: { notice: t('messages.model.delete-failed',
+                                         model: t('model.sector').to_s.humanize) }
+        end
       end
+      format.json { head :no_content }
     end
   end
 
   def duplicates
-    @sectors = Array.new
+    @sectors = []
     if params[:current].present?
-      current_slug = slug_em(params[:current]);
-      original_slug = slug_em(params[:original]);
-      if (current_slug != original_slug)
-        @sectors = Sector.where(slug: current_slug).to_a
-      end
+      current_slug = slug_em(params[:current])
+      original_slug = slug_em(params[:original])
+      @sectors = Sector.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize Sector, :view_allowed?
-    render json: @sectors, :only => [:name]
+    render json: @sectors, only: [:name]
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sector
-      if !params[:id].scan(/\D/).empty?
-        @sector = Sector.find_by(slug: params[:id])
-      else
-        @sector = Sector.find(params[:id])
-      end
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def sector_params
-      params
-        .require(:sector)
-        .permit(:name, :confirmation, :slug, :origin_id, :parent_sector_id)
-        .tap do |attr|
-          if (params[:reslug].present?)
-            attr[:slug] = slug_em(attr[:name])
-            if (params[:duplicate].present?)
-              first_duplicate = Sector.slug_starts_with(attr[:slug]).order(slug: :desc).first
-              attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
-            end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sector
+    @sector = if !params[:id].scan(/\D/).empty?
+                Sector.find_by(slug: params[:id])
+              else
+                Sector.find(params[:id])
+              end
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def sector_params
+    params
+      .require(:sector)
+      .permit(:name, :confirmation, :slug, :origin_id, :parent_sector_id)
+      .tap do |attr|
+        if params[:reslug].present?
+          attr[:slug] = slug_em(attr[:name])
+          if params[:duplicate].present?
+            first_duplicate = Sector.slug_starts_with(attr[:slug]).order(slug: :desc).first
+            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
           end
         end
-    end
+      end
+  end
 end

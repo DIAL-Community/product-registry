@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeFieldsNotNullable < ActiveRecord::Migration[5.2]
   def up
     change_column(:product_suites, :description, :jsonb, null: false, default: {})
@@ -94,6 +96,5 @@ class MakeFieldsNotNullable < ActiveRecord::Migration[5.2]
     change_column_null(:workflows, :name, false)
     change_column_null(:workflows, :slug, false)
     change_column_default(:workflows, :description, from: '{}', to: {})
-
   end
 end

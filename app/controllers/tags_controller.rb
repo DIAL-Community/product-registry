@@ -1,12 +1,12 @@
+# frozen_string_literal: true
+
 class TagsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_tag, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_tag, only: %i[show edit update destroy]
 
   def unique_search
     record = Tag.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(Tag.serialization_options))
   end
@@ -16,13 +16,9 @@ class TagsController < ApplicationController
     tags = Tag.order(:slug)
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      tags = tags.name_contains(params[:search])
-    end
+    tags = tags.name_contains(params[:search]) if params[:search].present?
 
     tags = tags.paginate(page: current_page, per_page: default_page_size)
 
@@ -32,13 +28,9 @@ class TagsController < ApplicationController
       page_size: default_page_size
     }
 
-    if tags.count > default_page_size * current_page
-      results['next_page'] = current_page + 1
-    end
+    results['next_page'] = current_page + 1 if tags.count > default_page_size * current_page
 
-    if current_page > 1
-      results['previous_page'] = current_page - 1
-    end
+    results['previous_page'] = current_page - 1 if current_page > 1
 
     results['results'] = tags
 
@@ -50,13 +42,9 @@ class TagsController < ApplicationController
     tags = Tag.order(:slug)
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      tags = tags.name_contains(params[:search])
-    end
+    tags = tags.name_contains(params[:search]) if params[:search].present?
 
     tags = tags.paginate(page: current_page, per_page: default_page_size)
 
@@ -66,13 +54,9 @@ class TagsController < ApplicationController
       page_size: default_page_size
     }
 
-    if tags.count > default_page_size * current_page
-      results['next_page'] = current_page + 1
-    end
+    results['next_page'] = current_page + 1 if tags.count > default_page_size * current_page
 
-    if current_page > 1
-      results['previous_page'] = current_page - 1
-    end
+    results['previous_page'] = current_page - 1 if current_page > 1
 
     results['results'] = tags
 
@@ -91,14 +75,14 @@ class TagsController < ApplicationController
 
     current_page = params[:page] || 1
 
-    if params[:search]
-      @tags = Tag.name_contains(params[:search])
+    @tags = if params[:search]
+              Tag.name_contains(params[:search])
                  .order(:name)
                  .paginate(page: current_page, per_page: 20)
-    else
-      @tags = Tag.order(:name)
+            else
+              Tag.order(:name)
                  .paginate(page: current_page, per_page: 20)
-    end
+            end
     authorize @tags, :view_allowed?
   end
 
@@ -116,8 +100,7 @@ class TagsController < ApplicationController
   end
 
   # GET /tags/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /tags
   # POST /tags.json
@@ -180,9 +163,7 @@ class TagsController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @tags = Tag.where(slug: current_slug).to_a
-      end
+      @tags = Tag.where(slug: current_slug).to_a if current_slug != original_slug
     end
     @tags = authorize(Tag, :view_allowed?)
     render(json: @tags, only: [:name])
@@ -193,13 +174,9 @@ class TagsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tag
     @tag = Tag.find_by(slug: params[:id])
-    if @tag.nil? && params[:id].scan(/\D/).empty?
-      @tag = Tag.find(params[:id])
-    end
+    @tag = Tag.find(params[:id]) if @tag.nil? && params[:id].scan(/\D/).empty?
     @tag_desc = TagDescription.where(tag_id: @tag.id, locale: I18n.locale).first
-    if !@tag_desc
-      @tag_desc = TagDescription.new
-    end
+    @tag_desc ||= TagDescription.new
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

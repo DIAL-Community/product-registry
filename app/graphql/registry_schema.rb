@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RegistrySchema < GraphQL::Schema
   max_depth(13)
 

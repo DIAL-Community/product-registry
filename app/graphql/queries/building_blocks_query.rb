@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class BuildingBlocksQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -5,9 +7,7 @@ module Queries
 
     def resolve(search:)
       building_blocks = BuildingBlock.order(:name)
-      unless search.blank?
-        building_blocks = building_blocks.name_contains(search)
-      end
+      building_blocks = building_blocks.name_contains(search) unless search.blank?
       building_blocks
     end
   end
@@ -37,7 +37,7 @@ module Queries
       unless search.blank?
         name_bbs = building_blocks.name_contains(search)
         desc_bbs = building_blocks.joins(:building_block_descriptions)
-                                .where("LOWER(building_block_descriptions.description) like LOWER(?)", "%#{search}%")
+                                  .where('LOWER(building_block_descriptions.description) like LOWER(?)', "%#{search}%")
         building_blocks = building_blocks.where(id: (name_bbs + desc_bbs).uniq)
       end
 
@@ -64,9 +64,7 @@ module Queries
       end
 
       filtered_workflows = workflows.reject { |x| x.nil? || x.empty? }
-      unless filtered
-        filtered = !filtered_workflows.empty?
-      end
+      filtered ||= !filtered_workflows.empty?
 
       filtered_workflows = workflow_ids.concat(filtered_workflows)
       if filtered
@@ -78,9 +76,7 @@ module Queries
         end
       end
 
-      if show_mature
-        building_blocks = building_blocks.where(maturity: BuildingBlock.entity_status_types[:MATURE])
-      end
+      building_blocks = building_blocks.where(maturity: BuildingBlock.entity_status_types[:MATURE]) if show_mature
 
       building_blocks.distinct
     end

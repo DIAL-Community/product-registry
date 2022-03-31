@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 
 module Mutations
@@ -33,9 +35,9 @@ module Mutations
       current_product = Product.find_by(slug: slug)
       if (current_user.user_products.include?(current_product.id) &&
         current_user.roles.include?(User.user_roles[:product_user])) ||
-        current_user.roles.include?(User.user_roles[:admin]) ||
-        current_user.roles.include?(User.user_roles[:content_editor]) ||
-        current_user.roles.include?(User.user_roles[:content_writer])
+         current_user.roles.include?(User.user_roles[:admin]) ||
+         current_user.roles.include?(User.user_roles[:content_editor]) ||
+         current_user.roles.include?(User.user_roles[:content_writer])
 
         repository_params[:updated_by] = current_user[:id]
         repository_params[:updated_at] = Time.now
@@ -86,9 +88,9 @@ module Mutations
       product_repository = ProductRepository.find_by(slug: slug)
       if (current_user.user_products.include?(product_repository.product.id) &&
         current_user.roles.include?(User.user_roles[:product_user])) ||
-        current_user.roles.include?(User.user_roles[:admin]) ||
-        current_user.roles.include?(User.user_roles[:content_editor]) ||
-        current_user.roles.include?(User.user_roles[:content_writer])
+         current_user.roles.include?(User.user_roles[:admin]) ||
+         current_user.roles.include?(User.user_roles[:content_editor]) ||
+         current_user.roles.include?(User.user_roles[:content_writer])
 
         repository_params[:updated_by] = current_user[:id]
         repository_params[:updated_at] = Time.now
@@ -116,17 +118,15 @@ module Mutations
       product_repository = ProductRepository.find_by(slug: slug)
       if (current_user.user_products.include?(product_repository.product.id) &&
         current_user.roles.include?(User.user_roles[:product_user])) ||
-        current_user.roles.include?(User.user_roles[:admin]) ||
-        current_user.roles.include?(User.user_roles[:content_editor]) ||
-        current_user.roles.include?(User.user_roles[:content_writer])
+         current_user.roles.include?(User.user_roles[:admin]) ||
+         current_user.roles.include?(User.user_roles[:content_editor]) ||
+         current_user.roles.include?(User.user_roles[:content_writer])
 
         repository_params[:deleted] = true
         repository_params[:deleted_by] = current_user.id
         repository_params[:deleted_at] = Time.now
 
-        if product_repository.update!(repository_params)
-          response[:slug] = product_repository.slug
-        end
+        response[:slug] = product_repository.slug if product_repository.update!(repository_params)
       end
       response
     end

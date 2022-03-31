@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FroalaImageUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -40,7 +42,7 @@ class FroalaImageUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_white_list
-    [ 'jpeg', 'jpg', 'png', 'gif', 'bmp', 'webp', 'tiff', 'svg' ]
+    %w[jpeg jpg png gif bmp webp tiff svg]
   end
 
   # Override the filename of the uploaded files:

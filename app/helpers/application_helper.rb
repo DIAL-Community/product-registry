@@ -8,7 +8,7 @@ module ApplicationHelper
   include Modules::Constants
 
   ADMIN_NAV_CONTROLLERS = %w[contacts users sectors candidate_organizations use_cases_steps tags
-                            operator_services settings glossaries portal_views maturity_rubrics
+                             operator_services settings glossaries portal_views maturity_rubrics
                              rubric_categories cities countries task_trackers candidate_roles audits
                              candidate_products].freeze
 
@@ -48,16 +48,17 @@ module ApplicationHelper
   def build_breadcrumbs(params, query_parameters)
     breadcrumbs = []
 
-    if params[:controller].downcase == 'use_case_steps'
+    case params[:controller].downcase
+    when 'use_case_steps'
       breadcrumbs << { path: 'use_cases', label: t('model.use-case').titlecase.pluralize }
       if params[:use_case_id].present?
         uc_step_path = "use_cases/#{params[:use_case_id]}"
         uc_step_name = UseCase.find_by(slug: params[:use_case_id]).name
         breadcrumbs << { path: uc_step_path, label: uc_step_name }
       end
-    elsif params[:controller].downcase == 'users'
+    when 'users'
       breadcrumbs << { path: 'users', label: t('model.user').titlecase.pluralize }
-    elsif params[:controller].downcase == 'rubric_categories' || params[:controller].downcase == 'category_indicators'
+    when 'rubric_categories', 'category_indicators'
       breadcrumbs << { path: 'maturity_rubrics', label: t('model.maturity-rubric').titlecase.pluralize }
       if params[:maturity_rubric_id].present?
         mr_path = "maturity_rubrics/#{params[:maturity_rubric_id]}"
@@ -71,7 +72,7 @@ module ApplicationHelper
       else
         breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/rubric_categories", label: '' }
       end
-    elsif params[:controller].downcase == 'handbook_pages'
+    when 'handbook_pages'
       if params[:handbook_id].present?
         breadcrumbs << { path: 'handbooks', label: t('model.handbook').titlecase.pluralize }
         handbook_path = "handbooks/#{params[:handbook_id]}"
@@ -91,19 +92,19 @@ module ApplicationHelper
     end
 
     unless object_record.nil?
-      if breadcrumbs[-1][:path] == 'users' || breadcrumbs[-1][:path] == 'candidate_roles'
-        id_label = object_record.email
-      else
-        id_label = object_record.name
-      end
+      id_label = if breadcrumbs[-1][:path] == 'users' || breadcrumbs[-1][:path] == 'candidate_roles'
+                   object_record.email
+                 else
+                   object_record.name
+                 end
     end
 
-    if !query_parameters['user_token'].nil?
-      breadcrumb_query_param = "?user_email="+query_parameters['user_email']+"&user_token="+query_parameters['user_token']
+    unless query_parameters['user_token'].nil?
+      breadcrumb_query_param = "?user_email=#{query_parameters['user_email']}&user_token=#{query_parameters['user_token']}"
     end
     breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/#{params[:id]}", label: id_label }
-    if !query_parameters['user_token'].nil?
-      breadcrumb_query_param = "?user_email="+query_parameters['user_email']+"&user_token="+query_parameters['user_token']
+    unless query_parameters['user_token'].nil?
+      breadcrumb_query_param = "?user_email=#{query_parameters['user_email']}&user_token=#{query_parameters['user_token']}"
       breadcrumbs.each do |crumb|
         crumb[:path] && crumb[:path] += breadcrumb_query_param
       end
@@ -117,9 +118,7 @@ module ApplicationHelper
     counter = 0
     unless active_filters.nil?
       counter = 1
-      if active_filters.is_a?(Array)
-        counter = active_filters.size
-      end
+      counter = active_filters.size if active_filters.is_a?(Array)
     end
     counter
   end

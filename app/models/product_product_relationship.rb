@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductProductRelationship < ApplicationRecord
   include AssociationSource
 
@@ -12,9 +14,7 @@ class ProductProductRelationship < ApplicationRecord
   end
 
   def generate_slug
-    if !to_product.nil? && !from_product.nil?
-      self.slug = "#{from_product.slug}_#{to_product.slug}_#{relationship_type}"
-    end
+    self.slug = "#{from_product.slug}_#{to_product.slug}_#{relationship_type}" if !to_product.nil? && !from_product.nil?
   end
 
   def audit_id_value

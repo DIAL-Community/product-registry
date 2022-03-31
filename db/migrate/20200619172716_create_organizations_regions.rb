@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateOrganizationsRegions < ActiveRecord::Migration[5.2]
   def change
     create_table :organizations_states do |t|

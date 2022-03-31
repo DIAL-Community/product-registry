@@ -1,22 +1,22 @@
+# frozen_string_literal: true
+
 class ProjectsController < ApplicationController
   include FilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[new create edit update destroy]
 
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_project, only: %i[show edit update destroy]
 
   def unique_search
     record = Project.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(Project.serialization_options
                                        .merge({
-                                         item_path: request.original_url,
-                                         include_relationships: true
-                                       })))
+                                                item_path: request.original_url,
+                                                include_relationships: true
+                                              })))
   end
 
   def simple_search
@@ -24,13 +24,9 @@ class ProjectsController < ApplicationController
     projects = Project
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      projects = projects.name_contains(params[:search])
-    end
+    projects = projects.name_contains(params[:search]) if params[:search].present?
 
     if params[:origins].present?
       origins = params[:origins].reject { |x| x.nil? || x.empty? }
@@ -39,9 +35,9 @@ class ProjectsController < ApplicationController
     end
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = projects.count
       end
     end
@@ -56,13 +52,13 @@ class ProjectsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if projects.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -78,9 +74,9 @@ class ProjectsController < ApplicationController
       format.json do
         render(json: results.to_json(Project.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -90,13 +86,9 @@ class ProjectsController < ApplicationController
     projects = Project
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      projects = projects.name_contains(params[:search])
-    end
+    projects = projects.name_contains(params[:search]) if params[:search].present?
 
     if params[:origins].present?
       origins = params[:origins].reject { |x| x.nil? || x.empty? }
@@ -106,36 +98,40 @@ class ProjectsController < ApplicationController
 
     if params[:sectors].present?
       sectors = params[:sectors].reject { |x| x.nil? || x.empty? }
-      projects = projects.joins(:sectors)
-                         .where('sectors.slug in (?)', sectors) \
-        unless sectors.empty?
+      unless sectors.empty?
+        projects = projects.joins(:sectors)
+                           .where('sectors.slug in (?)', sectors)
+      end
     end
 
     if params[:products].present?
       products = params[:products].reject { |x| x.nil? || x.empty? }
-      projects = projects.joins(:products)
-                         .where('products.slug in (?)', products) \
-        unless products.empty?
+      unless products.empty?
+        projects = projects.joins(:products)
+                           .where('products.slug in (?)', products)
+      end
     end
 
     if params[:organizations].present?
       organizations = params[:organizations].reject { |x| x.nil? || x.empty? }
-      projects = projects.joins(:organizations)
-                         .where('organizations.slug in (?)', organizations) \
-        unless organizations.empty?
+      unless organizations.empty?
+        projects = projects.joins(:organizations)
+                           .where('organizations.slug in (?)', organizations)
+      end
     end
 
     if params[:countries].present?
       countries = params[:countries].reject { |x| x.nil? || x.empty? }
-      projects = projects.joins(:countries)
-                         .where('countries.slug in (?)', countries) \
-        unless countries.empty?
+      unless countries.empty?
+        projects = projects.joins(:countries)
+                           .where('countries.slug in (?)', countries)
+      end
     end
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = projects.count
       end
     end
@@ -150,13 +146,13 @@ class ProjectsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if projects.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -172,9 +168,9 @@ class ProjectsController < ApplicationController
       format.json do
         render(json: results.to_json(Project.serialization_options
                                             .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                                     collection_path: uri.to_s,
+                                                     include_relationships: true
+                                                   })))
       end
     end
   end
@@ -215,8 +211,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def map_projects_osm
-  end
+  def map_projects_osm; end
 
   def index
     if params[:without_paging]
@@ -302,9 +297,7 @@ class ProjectsController < ApplicationController
       end
 
       organization = Organization.find_by(id: current_user.organization_id)
-      unless organization.nil?
-        @project.organizations.push(organization)
-      end
+      @project.organizations.push(organization) unless organization.nil?
     end
 
     @project_description = ProjectDescription.new
@@ -342,7 +335,7 @@ class ProjectsController < ApplicationController
     if params[:selected_sectors].present?
       params[:selected_sectors].keys.each do |sector_id|
         sector = Sector.find(sector_id)
-        @project.sectors.push(sector) unless country.nil?
+        @project.sectors.push(sector) unless sector.nil?
       end
     end
 
@@ -500,9 +493,7 @@ class ProjectsController < ApplicationController
     end
 
     if project_params[:project_description].present?
-      if @project_description.locale != I18n.locale.to_s
-        @project_description = ProjectDescription.new
-      end
+      @project_description = ProjectDescription.new if @project_description.locale != I18n.locale.to_s
       @project_description.project_id = @project.id
       @project_description.locale = I18n.locale
       @project_description.description = project_params[:project_description]
@@ -540,9 +531,7 @@ class ProjectsController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @projects = Project.where(slug: current_slug).to_a
-      end
+      @projects = Project.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize Project, :view_allowed?
     render json: @projects, only: [:name]
@@ -562,11 +551,11 @@ class ProjectsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project
-    if !params[:id].scan(/\D/).empty?
-      @project = Project.find_by(slug: params[:id]) || not_found
-    else
-      @project = Project.find(params[:id]) || not_found
-    end
+    @project = if !params[:id].scan(/\D/).empty?
+                 Project.find_by(slug: params[:id]) || not_found
+               else
+                 Project.find(params[:id]) || not_found
+               end
 
     @project_description = ProjectDescription.where(project_id: @project, locale: I18n.locale).first
 
@@ -574,9 +563,7 @@ class ProjectsController < ApplicationController
       @project_description = ProjectDescription.where(project_id: @project, locale: I18n.default_locale).first
     end
 
-    if @project_description.nil?
-      @project_description = ProjectDescription.new
-    end
+    @project_description = ProjectDescription.new if @project_description.nil?
   end
 
   def project_params
@@ -592,9 +579,7 @@ class ProjectsController < ApplicationController
           end
         end
         valid_tags = []
-        if params[:project_tags].present?
-          valid_tags = params[:project_tags].reject(&:empty?)
-        end
+        valid_tags = params[:project_tags].reject(&:empty?) if params[:project_tags].present?
         attr[:tags] = valid_tags
       end
   end

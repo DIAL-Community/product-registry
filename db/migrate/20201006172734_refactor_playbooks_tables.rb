@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RefactorPlaybooksTables < ActiveRecord::Migration[5.2]
   def change
     drop_table :activity_descriptions
@@ -23,7 +25,7 @@ class RefactorPlaybooksTables < ActiveRecord::Migration[5.2]
       t.string :slug, null: false
       t.string :phase
       t.integer :page_order
-      t.references :parent_page, foreign_key: {to_table: :playbook_pages}
+      t.references :parent_page, foreign_key: { to_table: :playbook_pages }
       t.references :playbook_questions, foreign_key: true
       t.jsonb :resources, null: false, default: [] # External URLs and documents that can be referenced
       t.string :media_url

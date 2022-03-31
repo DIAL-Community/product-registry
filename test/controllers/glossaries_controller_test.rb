@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class GlossariesControllerTest < ActionDispatch::IntegrationTest
@@ -7,40 +9,44 @@ class GlossariesControllerTest < ActionDispatch::IntegrationTest
     @glossary = glossaries(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get glossaries_url
     assert_response :success
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_glossary_url
     assert_response :success
   end
 
-  test "should create glossary" do
+  test 'should create glossary' do
     assert_difference('Glossary.count') do
-      post glossaries_url, params: { glossary: { description: @glossary.description, locale: @glossary.locale, name: @glossary.name, slug: @glossary.slug } }
+      post glossaries_url,
+           params: { glossary: { description: @glossary.description, locale: @glossary.locale, name: @glossary.name,
+                                 slug: @glossary.slug } }
     end
 
     assert_redirected_to glossary_url(Glossary.last)
   end
 
-  test "should show glossary" do
+  test 'should show glossary' do
     get glossary_url(@glossary)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_glossary_url(@glossary)
     assert_response :success
   end
 
-  test "should update glossary" do
-    patch glossary_url(@glossary), params: { glossary: { description: @glossary.description, locale: @glossary.locale, name: @glossary.name, slug: @glossary.slug } }
+  test 'should update glossary' do
+    patch glossary_url(@glossary),
+          params: { glossary: { description: @glossary.description, locale: @glossary.locale, name: @glossary.name,
+                                slug: @glossary.slug } }
     assert_redirected_to glossary_url(@glossary)
   end
 
-  test "should destroy glossary" do
+  test 'should destroy glossary' do
     assert_difference('Glossary.count', -1) do
       delete glossary_url(@glossary)
     end

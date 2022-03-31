@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePlaybookPage < ActiveRecord::Migration[5.2]
   def change
     create_table :playbook_pages do |t|

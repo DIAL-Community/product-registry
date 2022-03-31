@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BuildingBlocksHelper
   def bb_footer(building_block, category)
     images = []
@@ -27,9 +29,8 @@ module BuildingBlocksHelper
   end
 
   def bb_footer_popover(elements, title)
-    content = '<div class="border rounded bg-secondary text-white clearfix border card-header">' +
-              t(title, count: elements.count) +
-              '</div><div>' + bb_format_image_popover(elements) + '</div>'
+    content = "<div class=\"border rounded bg-secondary text-white clearfix border card-header\">#{t(title,
+                                                                                                     count: elements.count)}</div><div>#{bb_format_image_popover(elements)}</div>"
     content.html_safe
   end
 

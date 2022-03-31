@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateUseCaseHeaders < ActiveRecord::Migration[5.2]
   def change
     create_table :use_case_headers do |t|

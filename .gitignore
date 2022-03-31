@@ -96,3 +96,4 @@ prod/ssl/data/
 lib/tasks/local_setup.rake
 
 .vscode
+.metals

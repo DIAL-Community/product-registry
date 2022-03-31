@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class TagsQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -5,9 +7,7 @@ module Queries
 
     def resolve(search:)
       tags = Tag.order(:name)
-      unless search.blank?
-        tags = tags.name_contains(search)
-      end
+      tags = tags.name_contains(search) unless search.blank?
       tags
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SdgTargetPolicy < ApplicationPolicy
   attr_reader :user, :record
 

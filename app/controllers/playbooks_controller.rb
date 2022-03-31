@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class PlaybooksController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_playbook, only: [:show, :edit, :update, :destroy, :create_pdf, :show_pdf]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_playbook, only: %i[show edit update destroy create_pdf show_pdf]
 
   # GET /playbooks
   # GET /playbooks.json
@@ -15,12 +17,12 @@ class PlaybooksController < ApplicationController
     current_page = params[:page] || 1
 
     @playbooks = Playbook.order(:name)
-    if params[:search]
-      @playbooks = @playbooks.name_contains(params[:search])
+    @playbooks = if params[:search]
+                   @playbooks.name_contains(params[:search])
                              .paginate(page: current_page, per_page: 5)
-    else
-      @playbooks = @playbooks.paginate(page: current_page, per_page: 5)
-    end
+                 else
+                   @playbooks.paginate(page: current_page, per_page: 5)
+                 end
     authorize @playbooks, :view_allowed?
   end
 
@@ -30,8 +32,7 @@ class PlaybooksController < ApplicationController
     authorize @playbook, :view_allowed?
   end
 
-  def show_pdf
-  end
+  def show_pdf; end
 
   # GET /playbooks/new
   def new
@@ -89,8 +90,8 @@ class PlaybooksController < ApplicationController
     authorize @playbook, :mod_allowed?
     if playbook_params[:playbook_desc].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present?
       @playbook_desc = PlaybookDescription.where(playbook_id: @playbook.id,
-                                                              locale: I18n.locale)
-                                                        .first || PlaybookDescription.new
+                                                 locale: I18n.locale)
+                                          .first || PlaybookDescription.new
       @playbook_desc.playbook_id = @playbook.id
       @playbook_desc.locale = I18n.locale
       playbook_params[:playbook_overview].present? && @playbook_desc.overview = playbook_params[:playbook_overview]
@@ -137,9 +138,9 @@ class PlaybooksController < ApplicationController
   end
 
   def create_pdf
-    url = request.base_url + "/playbooks/" + @playbook.slug + "/show_pdf"
+    url = "#{request.base_url}/playbooks/#{@playbook.slug}/show_pdf"
     pdf_data = Dhalang::PDF.get_from_url(url)
-    send_data(pdf_data, filename: @playbook.slug+'.pdf', type: 'application/pdf')
+    send_data(pdf_data, filename: "#{@playbook.slug}.pdf", type: 'application/pdf')
   end
 
   def duplicates
@@ -149,34 +150,33 @@ class PlaybooksController < ApplicationController
       original_slug = slug_em(params[:original])
       if current_slug != original_slug
         @playbook = Playbook.where(slug: current_slug)
-                                          .to_a
+                            .to_a
       end
     end
     authorize Playbook, :view_allowed?
     render json: @playbook, only: [:name]
-    
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_playbook
-    if !params[:id].scan(/\D/).empty?
-      @playbook = Playbook.find_by(slug: params[:id]) || not_found
-    else
-      @playbook = Playbook.find(params[:id]) || not_found
-    end
+    @playbook = if !params[:id].scan(/\D/).empty?
+                  Playbook.find_by(slug: params[:id]) || not_found
+                else
+                  Playbook.find(params[:id]) || not_found
+                end
 
     @description = @playbook.playbook_descriptions
-                                 .select { |desc| desc.locale == I18n.locale.to_s }
-                                 .first
-
+                            .select { |desc| desc.locale == I18n.locale.to_s }
+                            .first
   end
 
   # Only allow a list of trusted parameters through.
   def playbook_params
     params.require(:playbook)
-          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, :phases => [:name, :description])
+          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, phases: %i[name
+                                                                                                              description])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

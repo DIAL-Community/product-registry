@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CandidateOrganization < ApplicationRecord
   include Auditable
   has_and_belongs_to_many(:contacts, join_table: :candidate_organizations_contacts,

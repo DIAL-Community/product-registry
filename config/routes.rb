@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   get 'errors/not_found'
   get 'errors/server_error'
-  if Rails.env.development?
-    mount(GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql")
-  end
+  mount(GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql') if Rails.env.development?
 
-  post "/graphql", to: "graphql#execute"
+  post '/graphql', to: 'graphql#execute'
 
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
@@ -31,16 +31,16 @@ Rails.application.routes.draw do
   resources :glossaries
   resources :settings
 
-  resources :rubric_categories, only: [:index, :update, :create, :destroy]
-  resources :category_indicators, only: [:index, :update, :create, :destroy]
+  resources :rubric_categories, only: %i[index update create destroy]
+  resources :category_indicators, only: %i[index update create destroy]
   resources :maturity_rubrics do
     resources :rubric_categories do
       resources :category_indicators
     end
   end
 
-  resources :moves, only: [:index, :update, :create, :destroy]
-  resources :activities, only: [:index, :update, :create, :destroy]
+  resources :moves, only: %i[index update create destroy]
+  resources :activities, only: %i[index update create destroy]
 
   resources :plays do
     resources :moves
@@ -54,7 +54,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :handbook_pages, only: [:index, :update, :create, :destroy]
+  resources :handbook_pages, only: %i[index update create destroy]
   resources :handbooks do
     get 'count', on: :collection
     post 'upload_design_images', on: :collection
@@ -142,17 +142,17 @@ Rails.application.routes.draw do
     get 'export_data', on: :collection
   end
 
-  resources :sustainable_development_goals, only: [:index, :show] do
+  resources :sustainable_development_goals, only: %i[index show] do
     get 'count', on: :collection
   end
 
-  resources :sdg_targets, only: [:index, :show]
+  resources :sdg_targets, only: %i[index show]
 
-  resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
+  resources :use_case_steps, only: %i[new create edit update show]
   resources :use_cases do
     get 'count', on: :collection
     get 'export_data', on: :collection
-    resources :use_case_steps, only: [:new, :create, :edit, :update, :show]
+    resources :use_case_steps, only: %i[new create edit update show]
     member do
       post 'favorite_use_case'
       post 'unfavorite_use_case'
@@ -174,7 +174,7 @@ Rails.application.routes.draw do
     get 'export_data', on: :collection
   end
 
-  get :update_locale, controller:"application"
+  get :update_locale, controller: 'application'
 
   # Start of external API routes
   get 'api/v1/organizations/:id', to: 'organizations#unique_search'
@@ -208,7 +208,8 @@ Rails.application.routes.draw do
   post 'api/v1/sdgs', to: 'sustainable_development_goals#simple_search', defaults: { format: 'json' }
 
   get 'api/v1/sustainable_development_goals/:id', to: 'sustainable_development_goals#unique_search'
-  get 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#simple_search', defaults: { format: 'json' }
+  get 'api/v1/sustainable_development_goals', to: 'sustainable_development_goals#simple_search',
+                                              defaults: { format: 'json' }
 
   get 'api/v1/tags/:id', to: 'tags#unique_search'
   get 'api/v1/tags', to: 'tags#simple_search', defaults: { format: 'json' }
@@ -230,8 +231,8 @@ Rails.application.routes.draw do
   resources :audits, only: [:index]
   resources :stylesheets
 
-  resources :cities, only: [:index, :show]
-  resources :countries, only: [:index, :show]
+  resources :cities, only: %i[index show]
+  resources :countries, only: %i[index show]
 
   resources :locations do
     resources :organizations
@@ -265,19 +266,20 @@ Rails.application.routes.draw do
 
   post '/save_url', to: 'application#save_url', as: :save_url
   post '/remove_url', to: 'application#remove_url', as: :remove_url
+  post '/send_email', to: 'application#send_email', as: :send_email
 
-  get 'export', :to => 'organizations#export'
-  get 'candidate_organization_duplicates', :to => 'candidate_organizations#duplicates'
-  get 'contact_duplicates', :to => 'contacts#duplicates'
-  get 'location_duplicates', :to => 'locations#duplicates'
-  get 'sector_duplicates', :to => 'sectors#duplicates'
-  get 'product_duplicates', :to => 'products#duplicates'
-  get 'building_block_duplicates', :to => 'building_blocks#duplicates'
-  get 'organization_duplicates', :to => 'organizations#duplicates'
-  get 'use_case_duplicates', :to => 'use_cases#duplicates'
-  get 'workflow_duplicates', :to => 'workflows#duplicates'
-  get 'glossary_duplicates', :to => 'glossaries#duplicates'
-  get 'deploys_refresh_list', :to => 'deploys#refresh_list'
+  get 'export', to: 'organizations#export'
+  get 'candidate_organization_duplicates', to: 'candidate_organizations#duplicates'
+  get 'contact_duplicates', to: 'contacts#duplicates'
+  get 'location_duplicates', to: 'locations#duplicates'
+  get 'sector_duplicates', to: 'sectors#duplicates'
+  get 'product_duplicates', to: 'products#duplicates'
+  get 'building_block_duplicates', to: 'building_blocks#duplicates'
+  get 'organization_duplicates', to: 'organizations#duplicates'
+  get 'use_case_duplicates', to: 'use_cases#duplicates'
+  get 'workflow_duplicates', to: 'workflows#duplicates'
+  get 'glossary_duplicates', to: 'glossaries#duplicates'
+  get 'deploys_refresh_list', to: 'deploys#refresh_list'
   get 'project_duplicates', to: 'projects#duplicates'
   get 'portal_view_duplicates', to: 'portal_views#duplicates'
   get 'use_case_step_duplicates', to: 'use_case_steps#duplicates'
@@ -289,22 +291,22 @@ Rails.application.routes.draw do
 
   post '/froala_image/upload' => 'froala_images#upload'
 
-  get 'covidresources', :to => 'covid#resources'
-  get 'productlist', :to => 'products#productlist', as: :productlist
-  get 'productmap', :to => 'products#map'
+  get 'covidresources', to: 'covid#resources'
+  get 'productlist', to: 'products#productlist', as: :productlist
+  get 'productmap', to: 'products#map'
 
   get 'map_projects', to: 'projects#map_projects'
   get 'map_covid', to: 'projects#map_covid'
 
   get 'map', to: 'organizations#map'
   get 'map_osm', to: 'organizations#map_osm'
-  get 'map_fs', :to => 'organizations#map_fs'
+  get 'map_fs', to: 'organizations#map_fs'
   get 'map_aggregators_osm', to: 'organizations#map_aggregators_osm'
   get 'map_projects_osm', to: 'projects#map_projects_osm'
 
-  get 'bb_fs', :to => 'building_blocks#bb_fs'
+  get 'bb_fs', to: 'building_blocks#bb_fs'
 
-  match "/404", to: "errors#not_found", via: :all
-  match "/500", to: "errors#server_error", via: :all
-  match "/422", to: "errors#server_error", via: :all
+  match '/404', to: 'errors#not_found', via: :all
+  match '/500', to: 'errors#server_error', via: :all
+  match '/422', to: 'errors#server_error', via: :all
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('csv')
 
 class UseCase < ApplicationRecord
@@ -13,16 +15,12 @@ class UseCase < ApplicationRecord
   has_many :use_case_descriptions, dependent: :destroy
 
   has_and_belongs_to_many :sdg_targets, join_table: :use_cases_sdg_targets,
-    after_add: :association_add, before_remove: :association_remove
+                                        after_add: :association_add, before_remove: :association_remove
 
-  scope :name_contains, -> (name) { where("LOWER(use_cases.name) like LOWER(?)", "%#{name}%") }
-  scope :slug_starts_with, -> (slug) { where("LOWER(use_cases.slug) like LOWER(?)", "#{slug}\\_%") }
+  scope :name_contains, ->(name) { where('LOWER(use_cases.name) like LOWER(?)', "%#{name}%") }
+  scope :slug_starts_with, ->(slug) { where('LOWER(use_cases.slug) like LOWER(?)', "#{slug}\\_%") }
 
-  attr_accessor :uc_desc
-  attr_accessor :ucs_header
-  attr_accessor :building_blocks
-  attr_accessor :workflows
-
+  attr_accessor :uc_desc, :ucs_header, :building_blocks, :workflows
 
   def image_file
     if File.exist?(File.join('public', 'assets', 'use_cases', "#{slug}.png"))
@@ -67,21 +65,17 @@ class UseCase < ApplicationRecord
 
   def as_json(options = {})
     json = super(options)
-    json['sector'] = sector.as_json({ only: [:name, :slug], api_path: api_path(options) })
+    json['sector'] = sector.as_json({ only: %i[name slug], api_path: api_path(options) })
     if options[:include_relationships].present?
-      json['use_case_steps'] = use_case_steps.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
+      json['use_case_steps'] = use_case_steps.as_json({ only: %i[name slug website], api_path: api_path(options) })
     end
-    if options[:collection_path].present? || options[:api_path].present?
-      json['self_url'] = self_url(options)
-    end
-    if options[:item_path].present?
-      json['collection_url'] = collection_url(options)
-    end
+    json['self_url'] = self_url(options) if options[:collection_path].present? || options[:api_path].present?
+    json['collection_url'] = collection_url(options) if options[:item_path].present?
     json
   end
 
   def self.to_csv
-    attributes = %w{id name slug description sdg_targets use_case_steps}
+    attributes = %w[id name slug description sdg_targets use_case_steps]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -100,15 +94,14 @@ class UseCase < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:id, :sector_id, :created_at, :updated_at, :description],
+      except: %i[id sector_id created_at updated_at description],
       include: {
         use_case_descriptions: { only: [:description] },
-        sdg_targets: { only: [:name, :target_number] },
-        use_case_steps: { only: [:name, :description], 
-          include: {
-            use_case_step_descriptions: { only: [:description] }
-          }
-        } 
+        sdg_targets: { only: %i[name target_number] },
+        use_case_steps: { only: %i[name description],
+                          include: {
+                            use_case_step_descriptions: { only: [:description] }
+                          } }
       }
     }
   end

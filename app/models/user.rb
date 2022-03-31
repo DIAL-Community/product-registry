@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('csv')
 
 class User < ApplicationRecord
@@ -20,12 +22,12 @@ class User < ApplicationRecord
   # Custom function validation
   validate :validate_organization, :validate_product
 
-  scope :name_contains, -> (name) { where("LOWER(users.email) like LOWER(?)", "%#{name}%") }
+  scope :name_contains, ->(name) { where('LOWER(users.email) like LOWER(?)', "%#{name}%") }
 
   attr_accessor :is_approved
 
   def organization
-    !self.organization_id.nil? ? Organization.find(self.organization_id) : nil
+    !organization_id.nil? ? Organization.find(organization_id) : nil
   end
 
   def set_default_role
@@ -38,12 +40,12 @@ class User < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:created_at, :updated_at]
+      except: %i[created_at updated_at]
     }
   end
 
   def self.to_csv
-    attributes = %w{id email role organization_id}
+    attributes = %w[id email role organization_id]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -132,7 +134,7 @@ class User < ApplicationRecord
     skip_confirmation_notification!
   end
 
-  scope :email_contains, ->(email) { where('LOWER(email) like LOWER(?)', "%#{email}%")}
+  scope :email_contains, ->(email) { where('LOWER(email) like LOWER(?)', "%#{email}%") }
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable

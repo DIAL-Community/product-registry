@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrganizationsProduct < ApplicationRecord
   include AssociationSource
 
@@ -14,9 +16,7 @@ class OrganizationsProduct < ApplicationRecord
   end
 
   def generate_slug
-    if !organization.nil? && !product.nil?
-      self.slug = "#{organization.slug}_#{product.slug}"
-    end
+    self.slug = "#{organization.slug}_#{product.slug}" if !organization.nil? && !product.nil?
   end
 
   def set_default_type

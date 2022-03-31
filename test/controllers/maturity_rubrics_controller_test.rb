@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class MaturityRubricsControllerTest < ActionDispatch::IntegrationTest
@@ -8,25 +10,25 @@ class MaturityRubricsControllerTest < ActionDispatch::IntegrationTest
     @rubric = maturity_rubrics(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get maturity_rubrics_url
     assert_response :success
   end
 
-  test "search test" do
-    get maturity_rubrics_url(search: "Default Rubric")
+  test 'search test' do
+    get maturity_rubrics_url(search: 'Default Rubric')
     assert_equal(1, assigns(:maturity_rubrics).count)
 
-    get maturity_rubrics_url(search: "InvalidRubric")
+    get maturity_rubrics_url(search: 'InvalidRubric')
     assert_equal(0, assigns(:maturity_rubrics).count)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_maturity_rubric_url
     assert_response :success
   end
 
-  test "should create rubric" do
+  test 'should create rubric' do
     assert_difference('MaturityRubric.count') do
       post maturity_rubrics_url, params: { maturity_rubric: { name: @rubric.name, slug: 'testslug' } }
     end
@@ -34,22 +36,22 @@ class MaturityRubricsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to maturity_rubric_url(MaturityRubric.last)
   end
 
-  test "should show rubric" do
+  test 'should show rubric' do
     get maturity_rubric_url(@rubric)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_maturity_rubric_url(@rubric)
     assert_response :success
   end
 
-  test "should update rubric" do
+  test 'should update rubric' do
     patch maturity_rubric_url(@rubric), params: { maturity_rubric: { name: @rubric.name, slug: @rubric.slug } }
     assert_redirected_to maturity_rubric_url(@rubric)
   end
 
-  test "should destroy rubric" do
+  test 'should destroy rubric' do
     assert_difference('MaturityRubric.count', -1) do
       @indicator = category_indicators(:one)
       @category = rubric_categories(:one)
@@ -62,7 +64,7 @@ class MaturityRubricsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to maturity_rubrics_url
   end
 
-  test "Policy tests: Should only allow get" do
+  test 'Policy tests: Should only allow get' do
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get maturity_rubric_url(@rubric)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CategoryIndicator < ApplicationRecord
   enum category_indicator_type: { boolean: 'boolean', numeric: 'numeric', scale: 'scale' }
 

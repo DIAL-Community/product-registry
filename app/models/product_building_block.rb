@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductBuildingBlock < ApplicationRecord
   include MappingStatusType
   include AssociationSource
@@ -12,9 +14,7 @@ class ProductBuildingBlock < ApplicationRecord
   end
 
   def generate_slug
-    if !product.nil? && !building_block.nil?
-      self.slug = "#{product.slug}_#{building_block.slug}"
-    end
+    self.slug = "#{product.slug}_#{building_block.slug}" if !product.nil? && !building_block.nil?
   end
 
   def audit_id_value

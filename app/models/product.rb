@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('csv')
 require 'modules/maturity_sync'
 
@@ -77,22 +79,20 @@ class Product < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 300 }
 
-  scope :name_contains, ->(name) { where("LOWER(products.name) like LOWER(?)", "%#{name}%") }
-  scope :slug_starts_with, ->(slug) { where("LOWER(products.slug) like LOWER(?)", "#{slug}%\\_") }
+  scope :name_contains, ->(name) { where('LOWER(products.name) like LOWER(?)', "%#{name}%") }
+  scope :slug_starts_with, ->(slug) { where('LOWER(products.slug) like LOWER(?)', "#{slug}%\\_") }
 
   def self.first_duplicate(name, slug)
-    find_by("name = ? OR slug = ? OR ? = ANY(aliases)", name, slug, name)
+    find_by('name = ? OR slug = ? OR ? = ANY(aliases)', name, slug, name)
   end
 
   def image_file
     if File.exist?(File.join('public', 'assets', 'products', "#{slug}.png"))
-      return "/assets/products/#{slug}.png"
+      "/assets/products/#{slug}.png"
+    elsif product_type == 'dataset'
+      '/assets/products/dataset_placeholder.png'
     else
-      if product_type == "dataset"
-        return "/assets/products/dataset_placeholder.png"
-      else
-        return "/assets/products/prod_placeholder.png"
-      end
+      '/assets/products/prod_placeholder.png'
     end
   end
 
@@ -112,9 +112,7 @@ class Product < ApplicationRecord
 
   def owner
     owner = User.joins(:products).where(products: { id: id })
-    unless owner.empty?
-      owner.first.id
-    end
+    owner.first.id unless owner.empty?
   end
 
   def main_repository
@@ -127,14 +125,12 @@ class Product < ApplicationRecord
 
   def maturity_scores
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-    if !maturity_rubric.nil?
-      maturity_scores = calculate_maturity_scores(id, maturity_rubric.id)[:rubric_scores].first
-    else
-      maturity_scores = calculate_maturity_scores(id, nil)[:rubric_scores].first
-    end
-    if !maturity_scores.nil?
-      maturity_scores = maturity_scores[:category_scores]
-    end
+    maturity_scores = if !maturity_rubric.nil?
+                        calculate_maturity_scores(id, maturity_rubric.id)[:rubric_scores].first
+                      else
+                        calculate_maturity_scores(id, nil)[:rubric_scores].first
+                      end
+    maturity_scores = maturity_scores[:category_scores] unless maturity_scores.nil?
     maturity_scores
   end
 
@@ -144,7 +140,7 @@ class Product < ApplicationRecord
   end
 
   def self.to_csv
-    attributes = %w{id name slug website repository organizations origins}
+    attributes = %w[id name slug website repository organizations origins]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -183,32 +179,28 @@ class Product < ApplicationRecord
   def as_json(options = {})
     json = super(options)
     if options[:include_relationships].present?
-      json['organizations'] = organizations.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
-      json['origins'] = origins.as_json({ only: [:name, :slug], api_path: api_path(options), api_source: 'products' })
-      json['building_blocks'] = building_blocks.as_json({ only: [:name, :slug], api_path: api_path(options) })
-      json['sustainable_development_goals'] = sustainable_development_goals.as_json({ only: [:name, :slug, :number],
+      json['organizations'] = organizations.as_json({ only: %i[name slug website], api_path: api_path(options) })
+      json['origins'] = origins.as_json({ only: %i[name slug], api_path: api_path(options), api_source: 'products' })
+      json['building_blocks'] = building_blocks.as_json({ only: %i[name slug], api_path: api_path(options) })
+      json['sustainable_development_goals'] = sustainable_development_goals.as_json({ only: %i[name slug number],
                                                                                       api_path: api_path(options) })
-      json['repositories'] = product_repositories.as_json({ only: [:name, :slug, :absolute_url],
+      json['repositories'] = product_repositories.as_json({ only: %i[name slug absolute_url],
                                                             api_path: api_path(options) })
     end
-    if options[:collection_path].present? || options[:api_path].present?
-      json['self_url'] = self_url(options)
-    end
-    if options[:item_path].present?
-      json['collection_url'] = collection_url(options)
-    end
+    json['self_url'] = self_url(options) if options[:collection_path].present? || options[:api_path].present?
+    json['collection_url'] = collection_url(options) if options[:item_path].present?
     json
   end
 
   def self.serialization_options
     {
-      except: [:id, :statistics, :license_analysis, :default_url, :status, :created_at, :updated_at],
+      except: %i[id statistics license_analysis default_url status created_at updated_at],
       include: {
         organizations: { only: [:name] },
         sectors: { only: [:name] },
         origins: { only: [:name] },
         building_blocks: { only: [:name] },
-        sustainable_development_goals: { only: [:number, :name] }
+        sustainable_development_goals: { only: %i[number name] }
       }
     }
   end

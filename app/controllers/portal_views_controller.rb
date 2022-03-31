@@ -1,21 +1,23 @@
+# frozen_string_literal: true
+
 class PortalViewsController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_portal_view, only: [:show, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[index show new create edit update destroy]
+
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_portal_view, only: %i[show edit update destroy]
 
   # GET /portal_views
   # GET /portal_views.json
   def index
-    if params[:search]
-      @portal_views = PortalView.where(nil)
+    @portal_views = if params[:search]
+                      PortalView.where(nil)
                                 .name_contains(params[:search])
                                 .order(:name)
                                 .paginate(page: params[:page], per_page: 20)
-    else
-      @portal_views = PortalView.order(:name)
+                    else
+                      PortalView.order(:name)
                                 .paginate(page: params[:page], per_page: 20)
-    end
+                    end
     authorize @portal_views, :view_allowed?
   end
 
@@ -34,11 +36,9 @@ class PortalViewsController < ApplicationController
       end
     end
 
-    if !params[:id].nil?
+    unless params[:id].nil?
       @portal_view = PortalView.find(params[:id])
-      if !@portal_view.nil? && (@portal_view.user_roles & current_user.roles).empty?
-        @portal_view = nil
-      end
+      @portal_view = nil if !@portal_view.nil? && (@portal_view.user_roles & current_user.roles).empty?
     end
     session[:portal] = @portal_view
     render json: { portal_view: @portal_view }
@@ -47,11 +47,8 @@ class PortalViewsController < ApplicationController
   # GET /portal_views/1
   # GET /portal_views/1.json
   def show
-
     stylesheet = Stylesheet.where(portal: @portal_view.slug).first
-    if stylesheet.nil?
-      stylesheet = Stylesheet.new
-    end
+    stylesheet = Stylesheet.new if stylesheet.nil?
     @about_page = stylesheet.about_page
     @stylesheet_color = stylesheet.background_color
     @footer = stylesheet.footer_content
@@ -67,9 +64,7 @@ class PortalViewsController < ApplicationController
   # GET /portal_views/1/edit
   def edit
     stylesheet = Stylesheet.where(portal: @portal_view.slug).first
-    if stylesheet.nil?
-      stylesheet = Stylesheet.new
-    end
+    stylesheet = Stylesheet.new if stylesheet.nil?
     @about_page = stylesheet.about_page
     @stylesheet_color = stylesheet.background_color
     @footer = stylesheet.footer_content
@@ -99,7 +94,7 @@ class PortalViewsController < ApplicationController
           stylesheet.about_page = portal_view_params[:about_page]
           stylesheet.background_color = portal_view_params[:stylesheet_color]
           stylesheet.footer_content = portal_view_params[:page_footer]
-          stylesheet.header_logo = @portal_view.slug+".png"
+          stylesheet.header_logo = "#{@portal_view.slug}.png"
           stylesheet.save
         end
         format.html { redirect_to @portal_view, notice: 'Portal view was successfully created.' }
@@ -126,22 +121,18 @@ class PortalViewsController < ApplicationController
     authorize @portal_view, :view_allowed?
     if portal_view_params[:about_page].present?
       stylesheet = Stylesheet.where(portal: @portal_view.slug).first || Stylesheet.new
-      if stylesheet.portal.nil?
-        stylesheet.portal = slug_em(portal_view_params[:name])
-      end
+      stylesheet.portal = slug_em(portal_view_params[:name]) if stylesheet.portal.nil?
       stylesheet.about_page = portal_view_params[:about_page]
       stylesheet.background_color = params[:stylesheet_color]
       stylesheet.footer_content = portal_view_params[:page_footer]
-      stylesheet.header_logo = @portal_view.slug+".png"
+      stylesheet.header_logo = "#{@portal_view.slug}.png"
       stylesheet.save
     end
 
     respond_to do |format|
       if @portal_view.update(portal_view_params.except(:about_page, :page_footer))
         # Update the session's portal if we're editing active portal.
-        if session[:portal]['id'] == @portal_view.id
-          session[:portal] = @portal_view
-        end
+        session[:portal] = @portal_view if session[:portal]['id'] == @portal_view.id
         format.html { redirect_to @portal_view, notice: 'Portal view was successfully updated.' }
         format.json { render :show, status: :ok, location: @portal_view }
       else
@@ -169,9 +160,7 @@ class PortalViewsController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @portal_views = PortalView.where(slug: current_slug).to_a
-      end
+      @portal_views = PortalView.where(slug: current_slug).to_a if current_slug != original_slug
     end
 
     authorize @portal_views, :view_allowed?
@@ -190,46 +179,41 @@ class PortalViewsController < ApplicationController
     params.require(:portal_view)
           .permit(:name, :description, :subdomain, :top_nav, :filter_nav, :user_roles, :product_view, :organization_view, :about_page, :page_footer)
           .tap do |attr|
-            if params[:selected_top_navs].present?
-              attr[:top_navs] =
-                params[:selected_top_navs].keys
-                                          .map { |key| key }
-                                          .reject(&:empty?)
-            else
-              attr[:top_navs] = []
-            end
-            if params[:selected_filter_navs].present?
-              attr[:filter_navs] =
-                params[:selected_filter_navs].keys
-                                             .map { |key| key }
-                                             .reject(&:empty?)
-            else
-              attr[:filter_navs] = []
-            end
-            if params[:selected_user_roles].present?
-              attr[:user_roles] =
-                params[:selected_user_roles].keys
-                                            .map { |key| key }
-                                            .reject(&:empty?)
-            else
-              attr[:user_roles] = []
-            end
-            if params[:selected_organizations].present?
-              attr[:organization_views] =
-                params[:selected_organizations].keys
-                                               .map { |key| key }
-                                               .reject(&:empty?)
-            else
-              attr[:organization_views] = []
-            end
-            if params[:selected_products].present?
-              attr[:product_views] =
-                params[:selected_products].keys
-                                          .map { |key| key }
-                                          .reject(&:empty?)
-            else
-              attr[:product_views] = []
-            end
+            attr[:top_navs] = if params[:selected_top_navs].present?
+                                params[:selected_top_navs].keys
+                                                          .map { |key| key }
+                                                          .reject(&:empty?)
+                              else
+                                []
+                              end
+            attr[:filter_navs] = if params[:selected_filter_navs].present?
+                                   params[:selected_filter_navs].keys
+                                                                .map { |key| key }
+                                                                .reject(&:empty?)
+                                 else
+                                   []
+                                 end
+            attr[:user_roles] = if params[:selected_user_roles].present?
+                                  params[:selected_user_roles].keys
+                                                              .map { |key| key }
+                                                              .reject(&:empty?)
+                                else
+                                  []
+                                end
+            attr[:organization_views] = if params[:selected_organizations].present?
+                                          params[:selected_organizations].keys
+                                                                         .map { |key| key }
+                                                                         .reject(&:empty?)
+                                        else
+                                          []
+                                        end
+            attr[:product_views] = if params[:selected_products].present?
+                                     params[:selected_products].keys
+                                                               .map { |key| key }
+                                                               .reject(&:empty?)
+                                   else
+                                     []
+                                   end
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])
               if params[:duplicate].present?

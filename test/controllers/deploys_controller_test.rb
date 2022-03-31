@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeploysControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
-  
+
   setup do
     sign_in FactoryBot.create(:user, roles: [:admin])
   end
 
-  test "should get index" do
+  test 'should get index' do
     get deploys_index_url
     assert_response :success
   end
-
 end

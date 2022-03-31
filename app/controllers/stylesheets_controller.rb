@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # stylesheets_controller.rb
 class StylesheetsController < ApplicationController
   caches_page :show # magic happens here
@@ -5,7 +7,7 @@ class StylesheetsController < ApplicationController
 
   def show
     @stylesheet = Stylesheet.find_by(portal: params[:id])
-    @stylesheet_contents = ""
+    @stylesheet_contents = ''
 
     render(css: @stylesheet_contents, content_type: 'text/css')
   end

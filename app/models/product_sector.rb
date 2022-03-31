@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductSector < ApplicationRecord
   include MappingStatusType
   include AssociationSource
@@ -12,9 +14,7 @@ class ProductSector < ApplicationRecord
   end
 
   def generate_slug
-    if !product.nil? && !sector.nil?
-      self.slug = "#{product.slug}_#{sector.slug}"
-    end
+    self.slug = "#{product.slug}_#{sector.slug}" if !product.nil? && !sector.nil?
   end
 
   def audit_id_value

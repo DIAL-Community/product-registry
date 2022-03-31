@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PortalView < ApplicationRecord
   enum top_nav: { sdgs: 'sdgs', use_cases: 'use_cases', workflows: 'workflows',
                   building_blocks: 'building_blocks', products: 'products',

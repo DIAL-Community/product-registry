@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class AuthenticationController < Devise::SessionsController
-  acts_as_token_authentication_handler_for User, only: [:fetch_token, :invalidate_token]
-  prepend_before_action :allow_params_authentication!, only: [:sign_in_ux, :sign_in_auth0]
-  skip_before_action :verify_authenticity_token, only: [:sign_in_ux, :sign_in_auth0]
+  acts_as_token_authentication_handler_for User, only: %i[fetch_token invalidate_token]
+  prepend_before_action :allow_params_authentication!, only: %i[sign_in_ux sign_in_auth0]
+  skip_before_action :verify_authenticity_token, only: %i[sign_in_ux sign_in_auth0]
 
   def sign_up_ux
     user = User.new(user_params)
@@ -48,12 +50,10 @@ class AuthenticationController < Devise::SessionsController
 
   def sign_in_auth0
     user = User.find_by(email: params['user']['email'])
-    
+
     sign_in user, store: true
     can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
-    if user.organization_id
-      organization = Organization.find(user.organization_id)
-    end
+    organization = Organization.find(user.organization_id) if user.organization_id
     respond_to do |format|
       status = :unauthorized
       json = unauthorized_response
@@ -71,14 +71,14 @@ class AuthenticationController < Devise::SessionsController
   end
 
   def fetch_token
-    user = User.find_by(email: request.headers["X-User-Email"])
+    user = User.find_by(email: request.headers['X-User-Email'])
     respond_to do |format|
       format.json { render(json: { userToken: user.authentication_token }) }
     end
   end
 
   def validate_reset_token
-    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, request.headers["X-User-Token"])
+    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, request.headers['X-User-Token'])
     user = User.find_by(reset_password_token: reset_password_token)
     respond_to do |format|
       if user.nil?
@@ -90,7 +90,7 @@ class AuthenticationController < Devise::SessionsController
   end
 
   def apply_reset_token
-    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, request.headers["X-User-Token"])
+    reset_password_token = Devise.token_generator.digest(self, :reset_password_token, request.headers['X-User-Token'])
     user = User.find_by(reset_password_token: reset_password_token)
     if user.nil?
       # User is not in the database based on the email address.
@@ -110,7 +110,7 @@ class AuthenticationController < Devise::SessionsController
   end
 
   def reset_password
-    user = User.find_by(email: request.headers["X-User-Email"])
+    user = User.find_by(email: request.headers['X-User-Email'])
     if user.nil?
       # User is not in the database based on the email address.
       respond_to do |format|
@@ -130,7 +130,7 @@ class AuthenticationController < Devise::SessionsController
   end
 
   def invalidate_token
-    user = User.find_by(email: request.headers["X-User-Email"])
+    user = User.find_by(email: request.headers['X-User-Email'])
     user.authentication_token = Devise.friendly_token
     respond_to do |format|
       if user.save!

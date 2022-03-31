@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class CandidateOrganizationsQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -5,9 +7,7 @@ module Queries
 
     def resolve(search:)
       candidate_organizations = CandidateOrganization.order(:name)
-      unless search.blank?
-        candidate_organizations = candidate_organizations.name_contains(search)
-      end
+      candidate_organizations = candidate_organizations.name_contains(search) unless search.blank?
       candidate_organizations
     end
   end
@@ -29,9 +29,7 @@ module Queries
 
     def resolve(search:)
       candidate_organizations = CandidateOrganization.order(rejected: :desc).order(:slug)
-      unless search.blank?
-        candidate_organizations = candidate_organizations.name_contains(search)
-      end
+      candidate_organizations = candidate_organizations.name_contains(search) unless search.blank?
       candidate_organizations
     end
   end

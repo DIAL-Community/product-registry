@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SettingsControllerTest < ActionDispatch::IntegrationTest
@@ -8,22 +10,22 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     @setting = settings(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get settings_url
     assert_response :success
   end
 
-  test "should show setting" do
+  test 'should show setting' do
     get setting_url(@setting)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_setting_url(@setting)
     assert_response :success
   end
 
-  test "should update setting" do
+  test 'should update setting' do
     patch setting_url(@setting), params: { setting: { value: @setting.value } }
     assert_redirected_to setting_url(@setting)
   end

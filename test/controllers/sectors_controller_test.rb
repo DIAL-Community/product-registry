@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SectorsControllerTest < ActionDispatch::IntegrationTest
@@ -8,25 +10,25 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
     @sector = sectors(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get sectors_url
     assert_response :success
   end
 
-  test "search test" do
-    get sectors_url(search: "Sector1")
+  test 'search test' do
+    get sectors_url(search: 'Sector1')
     assert_equal(1, assigns(:sectors).count)
 
-    get sectors_url(search: "InvalidSector")
+    get sectors_url(search: 'InvalidSector')
     assert_equal(0, assigns(:sectors).count)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_sector_url
     assert_response :success
   end
 
-  test "should create sector" do
+  test 'should create sector' do
     @origin = origins(:one)
     assert_difference('Sector.count') do
       post sectors_url, params: { sector: { name: 'Another sector', slug: 'another_sector', origin_id: @origin.id } }
@@ -35,22 +37,22 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to sector_url(Sector.last)
   end
 
-  test "should show sector" do
+  test 'should show sector' do
     get sector_url(@sector)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_sector_url(@sector)
     assert_response :success
   end
 
-  test "should update sector" do
+  test 'should update sector' do
     patch sector_url(@sector), params: { sector: { name: @sector.name, slug: @sector.slug } }
     assert_redirected_to sector_url(@sector)
   end
 
-  test "should destroy sector" do
+  test 'should destroy sector' do
     # Should not delete because it is referenced by a use case
     assert_difference('Sector.count', 0) do
       delete sector_url(@sector)
@@ -67,7 +69,7 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to sectors_url
   end
 
-  test "Policy tests: Should only allow get" do
+  test 'Policy tests: Should only allow get' do
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get sector_url(@sector)

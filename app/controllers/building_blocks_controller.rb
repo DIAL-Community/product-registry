@@ -1,24 +1,24 @@
+# frozen_string_literal: true
+
 class BuildingBlocksController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
-  acts_as_token_authentication_handler_for User, only: [:new, :create, :edit, :update, :destroy]
+  acts_as_token_authentication_handler_for User, only: %i[new create edit update destroy]
 
-  before_action :set_building_block, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate]
-  before_action :set_current_user, only: [:edit, :update, :destroy]
+  before_action :set_building_block, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy duplicate]
+  before_action :set_current_user, only: %i[edit update destroy]
 
   def unique_search
     record = BuildingBlock.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(BuildingBlock.serialization_options
                                              .merge({
-                                               item_path: request.original_url,
-                                               include_relationships: true
-                                             })))
+                                                      item_path: request.original_url,
+                                                      include_relationships: true
+                                                    })))
   end
 
   def simple_search
@@ -26,13 +26,9 @@ class BuildingBlocksController < ApplicationController
     building_blocks = BuildingBlock
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
-    if params[:search].present?
-      building_blocks = building_blocks.name_contains(params[:search])
-    end
+    building_blocks = building_blocks.name_contains(params[:search]) if params[:search].present?
 
     results = {
       url: request.original_url,
@@ -44,13 +40,13 @@ class BuildingBlocksController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if building_blocks.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -66,9 +62,9 @@ class BuildingBlocksController < ApplicationController
       format.json do
         render(json: results.to_json(BuildingBlock.serialization_options
                                                   .merge({
-                                                    collection_path: uri.to_s,
-                                                    include_relationships: true
-                                                  })))
+                                                           collection_path: uri.to_s,
+                                                           include_relationships: true
+                                                         })))
       end
     end
   end
@@ -78,9 +74,7 @@ class BuildingBlocksController < ApplicationController
     building_blocks = BuildingBlock
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
     if params[:search].present?
       name_bbs = building_blocks.name_contains(params[:search])
@@ -91,9 +85,7 @@ class BuildingBlocksController < ApplicationController
     end
 
     sdg_use_case_slugs = []
-    if valid_array_parameter(params[:sdgs])
-      sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs])
-    end
+    sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sdgs]) if valid_array_parameter(params[:sdgs])
     if sdg_use_case_slugs.nil? && valid_array_parameter(params[:sustainable_development_goals])
       sdg_use_case_slugs = use_cases_from_sdg_slugs(params[:sustainable_development_goals])
     end
@@ -143,9 +135,9 @@ class BuildingBlocksController < ApplicationController
       unless building_block_slugs.nil? || building_block_slugs.empty?
 
     if params[:page_size].present?
-      if params[:page_size].to_i > 0
+      if params[:page_size].to_i.positive?
         page_size = params[:page_size].to_i
-      elsif params[:page_size].to_i < 0
+      elsif params[:page_size].to_i.negative?
         page_size = building_blocks.count
       end
     end
@@ -160,13 +152,13 @@ class BuildingBlocksController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if building_blocks.count > page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -182,9 +174,9 @@ class BuildingBlocksController < ApplicationController
       format.json do
         render(json: results.to_json(BuildingBlock.serialization_options
                                                   .merge({
-                                                    collection_path: uri.to_s,
-                                                    include_relationships: true
-                                                  })))
+                                                           collection_path: uri.to_s,
+                                                           include_relationships: true
+                                                         })))
       end
     end
   end
@@ -206,7 +198,8 @@ class BuildingBlocksController < ApplicationController
     end
 
     if params[:search]
-      @building_blocks = @building_blocks.where('LOWER("building_blocks"."name") like LOWER(?)', "%" + params[:search] + "%")
+      @building_blocks = @building_blocks.where('LOWER("building_blocks"."name") like LOWER(?)',
+                                                "%#{params[:search]}%")
     end
 
     authorize @building_blocks, :view_allowed?
@@ -259,15 +252,13 @@ class BuildingBlocksController < ApplicationController
     @bb_desc = BuildingBlockDescription.new
     @bb_desc.set_current_user(current_user)
 
-    if params[:selected_products].present? &&  policy(@building_block).adding_mapping_allowed?
+    if params[:selected_products].present? && policy(@building_block).adding_mapping_allowed?
       params[:selected_products].keys.each do |product_id|
         new_prod_bb = ProductBuildingBlock.new
         new_prod_bb.product_id = product_id
 
         mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
-        unless policy(@building_block).beta_only?
-          mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED]
-        end
+        mapping_status = ProductBuildingBlock.mapping_status_types[:VALIDATED] unless policy(@building_block).beta_only?
         new_prod_bb.mapping_status = mapping_status
         new_prod_bb.association_source = ProductBuildingBlock.RIGHT
 
@@ -294,7 +285,7 @@ class BuildingBlocksController < ApplicationController
 
     if policy(@building_block).beta_only?
       if building_block_params[:maturity] != BuildingBlock.entity_status_types[:BETA] &&
-          session[:building_block_elevated_role].to_s.downcase != 'true'
+         session[:building_block_elevated_role].to_s.downcase != 'true'
         session[:building_block_elevated_role] = true
       end
 
@@ -303,18 +294,21 @@ class BuildingBlocksController < ApplicationController
     end
 
     respond_to do |format|
-      if !@building_block.errors.any? && @building_block.save
-        if (building_block_params[:bb_desc])
+      if @building_block.errors.none? && @building_block.save
+        if building_block_params[:bb_desc]
           @bb_desc.building_block_id = @building_block.id
           @bb_desc.locale = I18n.locale
           @bb_desc.description = building_block_params[:bb_desc]
           @bb_desc.save
         end
-        format.html { redirect_to @building_block,
-                      flash: { notice: t('messages.model.created', model: t('model.building-block').to_s.humanize) }}
+        format.html do
+          redirect_to @building_block,
+                      flash: { notice: t('messages.model.created',
+                                         model: t('model.building-block').to_s.humanize) }
+        end
         format.json { render :show, status: :created, location: @building_block }
       else
-        error_message = ""
+        error_message = ''
         @building_block.errors.each do |_attr, err|
           error_message = err
         end
@@ -385,9 +379,7 @@ class BuildingBlocksController < ApplicationController
     end
 
     if building_block_params[:bb_desc].present?
-      if @bb_desc.locale != I18n.locale.to_s
-        @bb_desc = BuildingBlockDescription.new
-      end
+      @bb_desc = BuildingBlockDescription.new if @bb_desc.locale != I18n.locale.to_s
       @bb_desc.building_block_id = @building_block.id
       @bb_desc.locale = I18n.locale
       @bb_desc.description = building_block_params[:bb_desc]
@@ -396,7 +388,7 @@ class BuildingBlocksController < ApplicationController
 
     if policy(@building_block).beta_only?
       if building_block_params[:maturity] != BuildingBlock.entity_status_types[:BETA] &&
-          session[:building_block_elevated_role].to_s.downcase != 'true'
+         session[:building_block_elevated_role].to_s.downcase != 'true'
         session[:building_block_elevated_role] = true
       end
 
@@ -405,9 +397,12 @@ class BuildingBlocksController < ApplicationController
     end
 
     respond_to do |format|
-      if !@building_block.errors.any? && @building_block.update(building_block_params)
-        format.html { redirect_to(building_block_path(@building_block, locale: session[:locale]),
-                                  flash: { notice: t('messages.model.updated', model: t('model.building-block').to_s.humanize) })}
+      if @building_block.errors.none? && @building_block.update(building_block_params)
+        format.html do
+          redirect_to(building_block_path(@building_block, locale: session[:locale]),
+                      flash: { notice: t('messages.model.updated',
+                                         model: t('model.building-block').to_s.humanize) })
+        end
         format.json { render :show, status: :ok, location: @building_block }
       else
         format.html { render :edit }
@@ -422,8 +417,11 @@ class BuildingBlocksController < ApplicationController
     authorize(@building_block, :delete_allowed?)
     @building_block.destroy
     respond_to do |format|
-      format.html { redirect_to building_blocks_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.building-block').to_s.humanize) }}
+      format.html do
+        redirect_to building_blocks_url,
+                    flash: { notice: t('messages.model.deleted',
+                                       model: t('model.building-block').to_s.humanize) }
+      end
       format.json { head :no_content }
     end
   end
@@ -433,80 +431,97 @@ class BuildingBlocksController < ApplicationController
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @building_blocks = BuildingBlock.where(slug: current_slug).to_a
-      end
+      @building_blocks = BuildingBlock.where(slug: current_slug).to_a if current_slug != original_slug
     end
     authorize BuildingBlock, :view_allowed?
     render json: @building_blocks, only: [:name]
   end
 
-  def bb_fs 
-    all_bb_desc = [{name: 'Analytics and Business Intelligence', status: 'future', desc: 'Provides data-driven insights about business processes, performance and predictive modelling.'},
-      {name: 'Artificial Intelligence', status: 'future', desc: 'AI capabilities packaged as reusable services to perform work, extract insights from data, or provide other business capabilities.'},
-      {name: 'Client Case Management', status: 'future', desc: 'Registration of a client and the longitudinal tracking of services for the client, often across multiple service categories, providers and locations.'},
-      {name: 'Collaboration Management', status: 'future', desc: 'Enables multiple users to simultaneously access, modify or contribute to a single activity, such as content creation, through a unified portal.'},
-      {name: 'Consent Management', status: 'working', desc: 'Manages a set of policies allowing users to determine the info that will be accessible to specific potential info consumers, for which purpose, for how long and whether this info can be shared.<br/><br/>'},
-      {name: 'Content Management', status: 'future', desc: 'Supports the creation, editing, publication and management of digital media and other information.'},
-      {name: 'Data Collection', status: 'future', desc: 'Supports data collection from humans, sensors and other systems through digital interfaces.'},
-      {name: 'Digital Registries', status: 'published', desc: 'Registries are centrally managed databases that uniquely identify persons, vendors, procedures, products and sites related to an organization or activity.'},
-      {name: 'eLearning', status: 'future', desc: 'Supports facilitated or remote learning through digital interaction between educators and students.'},
-      {name: 'eMarketplace', status: 'working', desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell products & services to other entities (B2B) or end-customers (B2C).'},
-      {name: 'Geographic Information Services (GIS)', status: 'future', desc: 'Provides functionality to identify, tag and analyze geographic locations of an object, such as a water source, building, mobile phone or medical commodity.'},
-      {name: 'Identification and Authentication', status: 'published', desc: 'Enables unique identification and authentication of users, organizations and other entities.'},
-      {name: 'Information Mediator', status: 'published', desc: 'Provides a gateway between external digital apps & ICT Building Blocks, ensuring implementation of standards, for integrating various ICT Building Blocks & apps.'},
-      {name: 'Messaging', status: 'working', desc: 'Facilitates notifications, alerts and two-way communications between applications and communications services, including SMS, USSD, IVR, email and social media platforms.'},
-      {name: 'Mobility Management', status: 'future', desc: 'Services to securely enable employees’ use and management of mobile devices and applications in a business context.'},
-      {name: 'Payments', status: 'published', desc: 'Implements financial transactions (e.g., remittances, claims, purchases & payments, transactional info). Tracking costs utilities & audit trials.'},
-      {name: 'Registration', status: 'published', desc: 'Records identifiers and general information about a person, place or entity, typically for the purpose of registration  in specific services or programmes and tracking of that entity over time.'},
-      {name: 'Reporting and Dashboards', status: 'future', desc: 'Provides pre-packaged and custom presentations of data and summaries of an organization’s pre-defined key performance metrics, often in visual format.'},
-      {name: 'Scheduling', status: 'working', desc: 'Provides an engine for setting up events based on regular intervals or specific combinations of status of several parameters in order to trigger specific tasks in an automated business process.'},
-      {name: 'Security', status: 'published', desc: 'Allows ICT admins to centrally configure & manage user access permissions to network resources, services, databases, apps and devices. Enables secure info exchange between apps.'},
-      {name: 'Shared Data Repositories', status: 'future', desc: 'Shared space to store data for a specified knowledge area that external applications use, often providing domain-specific functionality and data presentations.'},
-      {name: 'Terminology', status: 'future', desc: 'Registry of definitions with defined standards, synonyms for a particular domain of knowledge (eg agriculture), used to facilitate semantic interoperability.'},
-      {name: 'Workflow and Algorithm', status: 'working', desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, the type of info exchanged  to orchestrate the process flow from initiation to completion.'},
-    ]
+  def bb_fs
+    all_bb_desc = [{ name: 'Analytics and Business Intelligence', status: 'future', desc: 'Provides data-driven insights about business processes, performance and predictive modelling.' },
+                   { name: 'Artificial Intelligence', status: 'future',
+                     desc: 'AI capabilities packaged as reusable services to perform work, extract insights from data, or provide other business capabilities.' },
+                   { name: 'Client Case Management', status: 'future',
+                     desc: 'Registration of a client and the longitudinal tracking of services for the client, often across multiple service categories, providers and locations.' },
+                   { name: 'Collaboration Management', status: 'future',
+                     desc: 'Enables multiple users to simultaneously access, modify or contribute to a single activity, such as content creation, through a unified portal.' },
+                   { name: 'Consent Management', status: 'working',
+                     desc: 'Manages a set of policies allowing users to determine the info that will be accessible to specific potential info consumers, for which purpose, for how long and whether this info can be shared.<br/><br/>' },
+                   { name: 'Content Management', status: 'future',
+                     desc: 'Supports the creation, editing, publication and management of digital media and other information.' },
+                   { name: 'Data Collection', status: 'future',
+                     desc: 'Supports data collection from humans, sensors and other systems through digital interfaces.' },
+                   { name: 'Digital Registries', status: 'published',
+                     desc: 'Registries are centrally managed databases that uniquely identify persons, vendors, procedures, products and sites related to an organization or activity.' },
+                   { name: 'eLearning', status: 'future',
+                     desc: 'Supports facilitated or remote learning through digital interaction between educators and students.' },
+                   { name: 'eMarketplace', status: 'working',
+                     desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell products & services to other entities (B2B) or end-customers (B2C).' },
+                   { name: 'Geographic Information Services (GIS)', status: 'future',
+                     desc: 'Provides functionality to identify, tag and analyze geographic locations of an object, such as a water source, building, mobile phone or medical commodity.' },
+                   { name: 'Identification and Authentication', status: 'published',
+                     desc: 'Enables unique identification and authentication of users, organizations and other entities.' },
+                   { name: 'Information Mediator', status: 'published',
+                     desc: 'Provides a gateway between external digital apps & ICT Building Blocks, ensuring implementation of standards, for integrating various ICT Building Blocks & apps.' },
+                   { name: 'Messaging', status: 'working',
+                     desc: 'Facilitates notifications, alerts and two-way communications between applications and communications services, including SMS, USSD, IVR, email and social media platforms.' },
+                   { name: 'Mobility Management', status: 'future',
+                     desc: 'Services to securely enable employees’ use and management of mobile devices and applications in a business context.' },
+                   { name: 'Payments', status: 'published',
+                     desc: 'Implements financial transactions (e.g., remittances, claims, purchases & payments, transactional info). Tracking costs utilities & audit trials.' },
+                   { name: 'Registration', status: 'published',
+                     desc: 'Records identifiers and general information about a person, place or entity, typically for the purpose of registration  in specific services or programmes and tracking of that entity over time.' },
+                   { name: 'Reporting and Dashboards', status: 'future',
+                     desc: 'Provides pre-packaged and custom presentations of data and summaries of an organization’s pre-defined key performance metrics, often in visual format.' },
+                   { name: 'Scheduling', status: 'working',
+                     desc: 'Provides an engine for setting up events based on regular intervals or specific combinations of status of several parameters in order to trigger specific tasks in an automated business process.' },
+                   { name: 'Security', status: 'published',
+                     desc: 'Allows ICT admins to centrally configure & manage user access permissions to network resources, services, databases, apps and devices. Enables secure info exchange between apps.' },
+                   { name: 'Shared Data Repositories', status: 'future',
+                     desc: 'Shared space to store data for a specified knowledge area that external applications use, often providing domain-specific functionality and data presentations.' },
+                   { name: 'Terminology', status: 'future',
+                     desc: 'Registry of definitions with defined standards, synonyms for a particular domain of knowledge (eg agriculture), used to facilitate semantic interoperability.' },
+                   { name: 'Workflow and Algorithm', status: 'working',
+                     desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, the type of info exchanged  to orchestrate the process flow from initiation to completion.' }]
 
     @bb_status = !params[:status].nil? ? params[:status] : nil
     @bb_desc = !@bb_status.nil? ? all_bb_desc.select { |bb| bb[:status] == @bb_status } : all_bb_desc
     bb_names = @bb_desc.pluck(:name).map(&:downcase)
-    @building_blocks = BuildingBlock.where("lower(name) in (?)", bb_names).order(:name)
+    @building_blocks = BuildingBlock.where('lower(name) in (?)', bb_names).order(:name)
   end
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_building_block
-      if !params[:id].scan(/\D/).empty?
-        @building_block = BuildingBlock.find_by(slug: params[:id]) or not_found
-      else
-        @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
-      end
-      @bb_desc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
-      @bb_desc ||= BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.default_locale).first
-      if !@bb_desc
-        @bb_desc = BuildingBlockDescription.new
-      end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_building_block
+    if !params[:id].scan(/\D/).empty?
+      @building_block = BuildingBlock.find_by(slug: params[:id]) or not_found
+    else
+      @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
     end
+    @bb_desc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
+    @bb_desc ||= BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.default_locale).first
+    @bb_desc ||= BuildingBlockDescription.new
+  end
 
-    def set_current_user
-      @building_block.set_current_user(current_user)
-      @bb_desc.set_current_user(current_user)
-    end
+  def set_current_user
+    @building_block.set_current_user(current_user)
+    @bb_desc.set_current_user(current_user)
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def building_block_params
-      params
-        .require(:building_block)
-        .permit(:name, :confirmation, :bb_desc, :slug, :maturity)
-        .tap do |attr|
-          if (params[:reslug].present?)
-            attr[:slug] = slug_em(attr[:name])
-            if (params[:duplicate].present?)
-              first_duplicate = BuildingBlock.slug_starts_with(attr[:slug]).order(slug: :desc).first
-              attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
-            end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def building_block_params
+    params
+      .require(:building_block)
+      .permit(:name, :confirmation, :bb_desc, :slug, :maturity)
+      .tap do |attr|
+        if params[:reslug].present?
+          attr[:slug] = slug_em(attr[:name])
+          if params[:duplicate].present?
+            first_duplicate = BuildingBlock.slug_starts_with(attr[:slug]).order(slug: :desc).first
+            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
           end
         end
-    end
+      end
+  end
 end
