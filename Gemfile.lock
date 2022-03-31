@@ -233,8 +233,8 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.1.1)
     netrc (0.11.0)
-    nio4r (2.5.5)
-    nio4r (2.5.5-java)
+    nio4r (2.5.8)
+    nio4r (2.5.8-java)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -265,9 +265,9 @@ GEM
       websocket-driver (>= 0.2.0)
     popper_js (1.16.0)
     public_suffix (4.0.6)
-    puma (4.3.7)
+    puma (4.3.12)
       nio4r (~> 2.0)
-    puma (4.3.7-java)
+    puma (4.3.12-java)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -531,7 +531,7 @@ DEPENDENCIES
   phantomjs
   piwik_analytics (~> 1.0.0)
   poltergeist
-  puma (~> 4.3.3)
+  puma (~> 4.3.12)
   pundit
   rack-cors
   rails (~> 5.2.4)
