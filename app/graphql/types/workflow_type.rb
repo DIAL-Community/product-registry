@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class WorkflowDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -14,7 +16,7 @@ module Types
 
     field :workflow_descriptions, [Types::WorkflowDescriptionType], null: true
     field :workflow_description, Types::WorkflowDescriptionType, null: true,
-      method: :workflow_description_localized
+                                                                 method: :workflow_description_localized
 
     field :use_case_steps, [Types::UseCaseStepType], null: true
     field :building_blocks, [Types::BuildingBlockType], null: true

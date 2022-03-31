@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LogoUploadMailer < ApplicationMailer
   def notify_upload
     @user = params[:user]
@@ -8,10 +10,10 @@ class LogoUploadMailer < ApplicationMailer
     admin_users = User.where(receive_admin_emails: true)
     mailTo = ''
     admin_users.each do |admin|
-      mailTo += admin.email + '; '
+      mailTo += "#{admin.email}; "
     end
     mail(from: 'notifier@solutions.dial.community',
-          to: mailTo,
-          subject: 'New Logo Received.')
+         to: mailTo,
+         subject: 'New Logo Received.')
   end
 end

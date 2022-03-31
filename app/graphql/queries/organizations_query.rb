@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class OrganizationsQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -7,13 +9,9 @@ module Queries
 
     def resolve(search:, aggregator_only:)
       organizations = Organization.order(:name)
-      unless search.blank?
-        organizations = organizations.name_contains(search)
-      end
+      organizations = organizations.name_contains(search) unless search.blank?
 
-      if aggregator_only
-        organizations = organizations.where(is_mni: true)
-      end
+      organizations = organizations.where(is_mni: true) if aggregator_only
 
       organizations
     end
@@ -46,35 +44,25 @@ module Queries
     def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale:, map_view:)
       organizations = Organization.order(:name)
 
-      if aggregator_only
-        organizations = organizations.where(is_mni: true)
-      end
+      organizations = organizations.where(is_mni: true) if aggregator_only
 
-      if endorser_only
-        organizations = organizations.where(is_endorser: true)
-      end
+      organizations = organizations.where(is_endorser: true) if endorser_only
 
-      if !endorser_level.empty?
-        organizations = organizations.where(endorser_level: endorser_level)
-      end
+      organizations = organizations.where(endorser_level: endorser_level) unless endorser_level.empty?
 
       filtered_aggregators = aggregators.reject { |x| x.nil? || x.empty? }
-      unless filtered_aggregators.empty?
-        organizations = organizations.where(id: filtered_aggregators)
-      end
+      organizations = organizations.where(id: filtered_aggregators) unless filtered_aggregators.empty?
 
       unless search.blank?
         name_orgs = organizations.name_contains(search)
         desc_orgs = organizations.joins(:organization_descriptions)
-                                 .where("LOWER(description) like LOWER(?)", "%#{search}%")
+                                 .where('LOWER(description) like LOWER(?)', "%#{search}%")
         organizations = organizations.where(id: (name_orgs + desc_orgs).uniq)
       end
 
       filtered_sectors = []
       user_sectors = sectors.reject { |x| x.nil? || x.empty? }
-      unless user_sectors.empty?
-        filtered_sectors = user_sectors.clone
-      end
+      filtered_sectors = user_sectors.clone unless user_sectors.empty?
       user_sectors.each do |user_sector|
         curr_sector = Sector.find(user_sector)
         if curr_sector.parent_sector_id.nil?
@@ -93,14 +81,12 @@ module Queries
                                      .where(countries: { id: filtered_countries })
       end
 
-      unless years.empty?
-        organizations = organizations.where('extract(year from when_endorsed) in (?)', years)
-      end
+      organizations = organizations.where('extract(year from when_endorsed) in (?)', years) unless years.empty?
 
       if map_view
-        return organizations.eager_load(:countries, :offices).distinct
+        organizations.eager_load(:countries, :offices).distinct
       else
-        return organizations.distinct
+        organizations.distinct
       end
     end
   end

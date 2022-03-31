@@ -1,4 +1,15 @@
+# frozen_string_literal: true
+
 class AdminMailer < ApplicationMailer
+  def send_mail_from_client(mailFrom, mailTo, emailSubject, emailBody)
+    # issues@solutions.dial.community
+
+    mail(from: mailFrom,
+         to: mailTo,
+         subject: emailSubject,
+         body: emailBody)
+  end
+
   def notify_product_owner_request
     admin_users = User.where(receive_admin_emails: true)
     user_hash = params[:user]
@@ -20,12 +31,12 @@ class AdminMailer < ApplicationMailer
     end
     mailTo = ''
     admin_users.each do |admin|
-      mailTo += admin.email + '; '
+      mailTo += "#{admin.email}; "
     end
     mail(from: 'notifier@solutions.dial.community',
-          to: mailTo,
-          subject: email_subject,
-          body: email_body)
+         to: mailTo,
+         subject: email_subject,
+         body: email_body)
   end
 
   def notify_product_owner_approval
@@ -52,11 +63,11 @@ class AdminMailer < ApplicationMailer
     end
     mailTo = ''
     admin_users.each do |admin|
-      mailTo += admin.email + '; '
+      mailTo += "#{admin.email}; "
     end
     mail(from: 'notifier@solutions.dial.community',
-          to: mailTo,
-          subject: email_subject,
-          body: email_body)
+         to: mailTo,
+         subject: email_subject,
+         body: email_body)
   end
 end

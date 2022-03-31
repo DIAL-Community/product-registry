@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class RubricCategoriesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_rubric_category, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_rubric_category, only: %i[show edit update destroy]
 
   # GET /rubric_categories
   # GET /rubric_categories.json
@@ -126,11 +128,11 @@ class RubricCategoriesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_rubric_category
-    if !params[:id].scan(/\D/).empty?
-      @rubric_category = RubricCategory.find_by(slug: params[:id]) || not_found
-    else
-      @rubric_category = RubricCategory.find(params[:id]) || not_found
-    end
+    @rubric_category = if !params[:id].scan(/\D/).empty?
+                         RubricCategory.find_by(slug: params[:id]) || not_found
+                       else
+                         RubricCategory.find(params[:id]) || not_found
+                       end
   end
 
   # Only allow a list of trusted parameters through.

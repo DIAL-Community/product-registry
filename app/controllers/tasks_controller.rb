@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class MovesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_move, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_move, only: %i[show edit update destroy]
 
   # GET /moves
   # GET /moves.json
@@ -15,22 +17,20 @@ class MovesController < ApplicationController
     current_page = params[:page] || 1
 
     @moves = Move.eager_load(:move_descriptions)
-    if params[:search]
-      @moves = @moves.name_contains(params[:search])
-                                          .order(:name)
-                                          .paginate(page: current_page, per_page: 5)
-    else
-      @moves = @moves.order(:name).paginate(page: current_page, per_page: 5)
-    end
+    @moves = if params[:search]
+               @moves.name_contains(params[:search])
+                     .order(:name)
+                     .paginate(page: current_page, per_page: 5)
+             else
+               @moves.order(:name).paginate(page: current_page, per_page: 5)
+             end
     authorize Playbook, :view_allowed?
   end
 
   # GET /move/1
   # GET /move/1.json
   def show
-    if params[:play_id]
-      @parent_play = Play.find_by(slug: params[:play_id])
-    end
+    @parent_play = Play.find_by(slug: params[:play_id]) if params[:play_id]
     if params[:activity_id]
       @parent_playbook = Playbook.find_by(slug: params[:playbook_id])
       @parent_activity = Activity.find_by(slug: params[:activity_id])
@@ -51,16 +51,14 @@ class MovesController < ApplicationController
 
   # GET /moves/1/edit
   def edit
-    if params[:play_id]
-      @move.parent_play = params[:play_id]
-    end
+    @move.parent_play = params[:play_id] if params[:play_id]
     if params[:activity_id]
       @move.parent_activity = params[:activity_id]
       @move.parent_playbook = params[:playbook_id]
     end
     @description = @move.move_descriptions
-                                   .select { |desc| desc.locale == I18n.locale.to_s }
-                                   .first
+                        .select { |desc| desc.locale == I18n.locale.to_s }
+                        .first
     authorize Playbook, :mod_allowed?
   end
 
@@ -72,16 +70,14 @@ class MovesController < ApplicationController
 
     authorize Playbook, :mod_allowed?
 
-    if !move_params[:parent_play].nil?
+    unless move_params[:parent_play].nil?
       @play = Play.find_by(slug: move_params[:parent_play])
       @move.plays << @play
     end
 
-    if (params[:selected_organizations])
-      params[:selected_organizations].keys.each do |organization_id|
-        organization = Organization.find(organization_id)
-        @move.organizations.push(organization)
-      end
+    params[:selected_organizations]&.keys&.each do |organization_id|
+      organization = Organization.find(organization_id)
+      @move.organizations.push(organization)
     end
 
     respond_to do |format|
@@ -97,7 +93,7 @@ class MovesController < ApplicationController
 
         format.html do
           redirect_to play_path(@play),
-                  notice: t('messages.model.created', model: t('model.move').to_s.humanize)
+                      notice: t('messages.model.created', model: t('model.move').to_s.humanize)
         end
         format.json { render :show, status: :created, location: @move }
       else
@@ -114,8 +110,8 @@ class MovesController < ApplicationController
 
     if move_params[:move_desc].present?
       @move_desc = MoveDescription.where(move_id: @move.id,
-                                                              locale: I18n.locale)
-                                                        .first || MoveDescription.new
+                                         locale: I18n.locale)
+                                  .first || MoveDescription.new
       @move_desc.move_id = @move.id
       @move_desc.locale = I18n.locale
       @move_desc.description = move_params[:move_desc]
@@ -134,24 +130,21 @@ class MovesController < ApplicationController
     respond_to do |format|
       if @move.update(move_params)
 
-        if !move_params[:parent_play].nil?
-          @play = Play.find_by(slug: move_params[:parent_play])
-        end
+        @play = Play.find_by(slug: move_params[:parent_play]) unless move_params[:parent_play].nil?
 
-        if !move_params[:parent_activity].nil?
+        unless move_params[:parent_activity].nil?
           @activity = Activity.find_by(slug: move_params[:parent_activity])
           @playbook = Playbook.find_by(slug: move_params[:parent_playbook])
         end
-        
-        format.html do 
-          if (!@activity.nil?)
+
+        format.html do
+          if !@activity.nil?
             redirect_to playbook_activity_move_path(@playbook, @activity, @move),
-                    notice: t('messages.model.updated', model: t('model.move').to_s.humanize)
-          else 
+                        notice: t('messages.model.updated', model: t('model.move').to_s.humanize)
+          else
             redirect_to play_move_path(@play, @move),
-                    notice: t('messages.model.updated', model: t('model.move').to_s.humanize)
+                        notice: t('messages.model.updated', model: t('model.move').to_s.humanize)
           end
-          
         end
 
         format.json { render :show, status: :ok, location: @move }
@@ -177,13 +170,11 @@ class MovesController < ApplicationController
   end
 
   def duplicates
-    @moves = Array.new
+    @moves = []
     if params[:current].present?
       current_slug = slug_em(params[:current])
       original_slug = slug_em(params[:original])
-      if current_slug != original_slug
-        @moves = Move.where(slug: current_slug)
-      end
+      @moves = Move.where(slug: current_slug) if current_slug != original_slug
     end
     authorize Playbook, :view_allowed?
     render json: @moves, only: [:name]
@@ -193,20 +184,22 @@ class MovesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_move
-    if !params[:id].scan(/\D/).empty?
-      @move = Move.find_by(slug: params[:id]) || not_found
-    else
-      @move = Move.find(params[:id]) || not_found
-    end
+    @move = if !params[:id].scan(/\D/).empty?
+              Move.find_by(slug: params[:id]) || not_found
+            else
+              Move.find(params[:id]) || not_found
+            end
     @description = @move.move_descriptions
-                                 .select { |desc| desc.locale == I18n.locale.to_s }
-                                 .first
+                        .select { |desc| desc.locale == I18n.locale.to_s }
+                        .first
   end
 
   # Only allow a list of trusted parameters through.
   def move_params
     params.require(:move)
-          .permit(:name, :slug, :move_description, :move_prerequisites, :move_outcomes, :description, :complete, :due_date, :order, :media_url, :play_id, :parent_play, :parent_activity, :parent_playbook, :resources => [:name, :description, :url])
+          .permit(:name, :slug, :move_description, :move_prerequisites, :move_outcomes, :description, :complete, :due_date, :order, :media_url, :play_id, :parent_play, :parent_activity, :parent_playbook, resources: %i[
+                    name description url
+                  ])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

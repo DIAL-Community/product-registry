@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SustainableDevelopmentGoalsControllerTest < ActionDispatch::IntegrationTest
@@ -8,25 +10,25 @@ class SustainableDevelopmentGoalsControllerTest < ActionDispatch::IntegrationTes
     @goal = sustainable_development_goals(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get sustainable_development_goals_url
     assert_response :success
   end
 
-  test "search test" do
-    get sustainable_development_goals_url(:search=>"SDG1")
+  test 'search test' do
+    get sustainable_development_goals_url(search: 'SDG1')
     assert_equal(1, assigns(:sustainable_development_goals).count)
 
-    get sustainable_development_goals_url(:search=>"InvalidSDG")
+    get sustainable_development_goals_url(search: 'InvalidSDG')
     assert_equal(0, assigns(:sustainable_development_goals).count)
   end
 
-  test "should show use_case" do
+  test 'should show use_case' do
     get sustainable_development_goal_url(@goal)
     assert_response :success
   end
 
-  test "add SDG filter" do
+  test 'add SDG filter' do
     # With no filters, should load 2 workflows
     get sustainable_development_goals_url
     assert_equal(2, assigns(:sustainable_development_goals).count)
@@ -40,5 +42,4 @@ class SustainableDevelopmentGoalsControllerTest < ActionDispatch::IntegrationTes
     get sustainable_development_goals_url
     assert_equal(1, assigns(:sustainable_development_goals).count)
   end
-
 end

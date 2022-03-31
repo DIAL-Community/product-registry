@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('csv')
 
 class Workflow < ApplicationRecord
@@ -7,16 +9,16 @@ class Workflow < ApplicationRecord
 
   has_many :workflow_descriptions, dependent: :destroy
 
-  scope :name_contains, -> (name) { where("LOWER(workflows.name) like LOWER(?)", "%#{name}%")}
-  scope :slug_starts_with, -> (slug) { where("LOWER(workflows.slug) like LOWER(?)", "#{slug}\\_%")}
+  scope :name_contains, ->(name) { where('LOWER(workflows.name) like LOWER(?)', "%#{name}%") }
+  scope :slug_starts_with, ->(slug) { where('LOWER(workflows.slug) like LOWER(?)', "#{slug}\\_%") }
 
   attr_accessor :wf_desc
 
   def image_file
     if File.exist?(File.join('public', 'assets', 'workflows', "#{slug}.svg"))
-      return "/assets/workflows/#{slug}.svg"
+      "/assets/workflows/#{slug}.svg"
     else
-      return '/assets/workflows/workflow_placeholder.png'
+      '/assets/workflows/workflow_placeholder.png'
     end
   end
 
@@ -30,7 +32,8 @@ class Workflow < ApplicationRecord
     description
   end
 
-  def to_param  # overridden
+  # overridden
+  def to_param
     slug
   end
 
@@ -55,21 +58,17 @@ class Workflow < ApplicationRecord
   def as_json(options = {})
     json = super(options)
     if options[:include_relationships].present?
-      json['building_blocks'] = building_blocks.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
-      json['use_case_steps'] = use_case_steps.as_json({ only: [:name, :slug, :description],
+      json['building_blocks'] = building_blocks.as_json({ only: %i[name slug website], api_path: api_path(options) })
+      json['use_case_steps'] = use_case_steps.as_json({ only: %i[name slug description],
                                                         api_path: api_path(options) })
     end
-    if options[:collection_path].present? || options[:api_path].present?
-      json['self_url'] = self_url(options)
-    end
-    if options[:item_path].present?
-      json['collection_url'] = collection_url(options)
-    end
+    json['self_url'] = self_url(options) if options[:collection_path].present? || options[:api_path].present?
+    json['collection_url'] = collection_url(options) if options[:item_path].present?
     json
   end
 
   def self.to_csv
-    attributes = %w{id name slug description building_blocks use_case_steps}
+    attributes = %w[id name slug description building_blocks use_case_steps]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -88,10 +87,10 @@ class Workflow < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:id, :created_at, :updated_at],
+      except: %i[id created_at updated_at],
       include: {
-        building_blocks: { only: [:name, :slug] },
-        use_case_steps: { only: [:name, :slug, :description] }
+        building_blocks: { only: %i[name slug] },
+        use_case_steps: { only: %i[name slug description] }
       }
     }
   end

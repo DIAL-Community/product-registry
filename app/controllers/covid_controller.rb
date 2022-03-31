@@ -1,7 +1,7 @@
-class CovidController < ApplicationController
-  def index
-  end
+# frozen_string_literal: true
 
-  def resources
-  end
+class CovidController < ApplicationController
+  def index; end
+
+  def resources; end
 end

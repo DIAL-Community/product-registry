@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class HandbookQuestionType < Types::BaseObject
     field :id, ID, null: false

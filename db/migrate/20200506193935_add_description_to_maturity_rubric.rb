@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDescriptionToMaturityRubric < ActiveRecord::Migration[5.2]
   def change
     create_table :maturity_rubric_descriptions do |t|

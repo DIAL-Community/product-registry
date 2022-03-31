@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SettingPolicy < ApplicationPolicy
   attr_reader :user, :record
 
@@ -16,7 +18,7 @@ class SettingPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user.roles.include?(User.user_roles[:admin])
-      [:name, :description, :value]
+      %i[name description value]
     else
       []
     end

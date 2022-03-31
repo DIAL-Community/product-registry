@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 class MoveRepositoryDataFromProductTable < ActiveRecord::Migration[5.2]
   def up
     Product.all.each do |current_product|
       product = current_product
-      unless current_product.parent_product_id.nil?
-        product = Product.find(current_product.parent_product_id)
-      end
+      product = Product.find(current_product.parent_product_id) unless current_product.parent_product_id.nil?
 
       repository_attrs = {
         name: "#{current_product.name} Repository",

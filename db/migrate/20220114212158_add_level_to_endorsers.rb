@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class AddLevelToEndorsers < ActiveRecord::Migration[5.2]
   def up
-
     execute <<-DDL
     CREATE TYPE endorser_type AS ENUM ('none', 'bronze', 'silver', 'gold');
     DDL

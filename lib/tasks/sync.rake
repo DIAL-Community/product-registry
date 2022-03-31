@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 require 'modules/sync'
 require 'faraday'
@@ -8,7 +10,7 @@ include Modules::Sync
 namespace :sync do
   desc 'Sync uploaded images with local environment.'
   task :uploaded_images, [:path] => :environment do |_, _|
-    directories = ["organizations", "products"]
+    directories = %w[organizations products]
     directories.each do |directory|
       cmd = " rsync -avP root@134.209.41.212:/root/product-registry/public/assets/#{directory}/ " \
             " public/assets/#{directory}/ "
@@ -20,9 +22,7 @@ namespace :sync do
           puts "stdout: #{line}"
         end
         exit_status = wait_thr.value
-        unless exit_status.success?
-          abort("Sync failed for #{cmd}.")
-        end
+        abort("Sync failed for #{cmd}.") unless exit_status.success?
         puts "#{directory.titlecase} synced."
       end
     end
@@ -33,7 +33,7 @@ namespace :sync do
     puts 'Pulling data from digital public goods repository ...'
     ignore_list = YAML.load_file('config/product_ignorelist.yml')
 
-    dpg_uri = URI.parse("https://api.digitalpublicgoods.net/dpgs/")
+    dpg_uri = URI.parse('https://api.digitalpublicgoods.net/dpgs/')
     dpg_response = Net::HTTP.get(dpg_uri)
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
@@ -43,7 +43,7 @@ namespace :sync do
       update_repository_data(entry, prod)
     end
 
-    dpg_uri = URI.parse("https://api.digitalpublicgoods.net/nominees/")
+    dpg_uri = URI.parse('https://api.digitalpublicgoods.net/nominees/')
     dpg_response = Net::HTTP.get(dpg_uri)
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
@@ -60,7 +60,7 @@ namespace :sync do
     puts 'Pulling Digital Square Global Goods ...'
     ignore_list = YAML.load_file('config/product_ignorelist.yml')
 
-    digisquare_maturity = JSON.load(File.open("config/digisquare_maturity_data.json"))
+    digisquare_maturity = JSON.parse(File.open('config/digisquare_maturity_data.json'))
     digisquare_products = YAML.load_file('config/digisquare_global_goods.yml')
     digisquare_products['products'].each do |digi_product|
       next if search_in_ignorelist(digi_product, ignore_list)
@@ -109,23 +109,19 @@ namespace :sync do
       end
 
       unicef_list.push(json_data['name'])
-      if json_data.key?('initialism')
-        unicef_list.push(json_data['initialism'])
-      end
+      unicef_list.push(json_data['initialism']) if json_data.key?('initialism')
     end
     unicef_products = Product.all.joins(:products_origins).where('origin_id=?', unicef_origin.id)
 
     removed_products = []
     unicef_products.each do |product|
-      if product.origins.count == 1
-        # the product's only origin is Unicef
-        if !unicef_list.include?(product.name)
-          removed_products << product.name
-        end
-      end
+      next unless product.origins.count == 1
+
+      # the product's only origin is Unicef
+      removed_products << product.name unless unicef_list.include?(product.name)
     end
     # Send email to admin to remove this product
-    msg_string = "Products no longer in the Unicef list. Please remove from catalog. <br />"\
+    msg_string = 'Products no longer in the Unicef list. Please remove from catalog. <br />'\
                  "#{removed_products.join('<br />')}"
     users = User.where(receive_backup: true)
     users.each do |user|
@@ -153,7 +149,7 @@ namespace :sync do
           puts "Deleting organization: #{organization.name}." if organization.destroy
         elsif org_products.count > 1
           curr_org_product = org_products.where(product_id: blacklist_product.id).first
-          if !curr_org_product.nil?
+          unless curr_org_product.nil?
             puts "Deleting org product relationship: #{curr_org_product.inspect}."
             delete_statement = "delete from organizations_products where product_id=#{blacklist_product.id}"
             results = ActiveRecord::Base.connection.execute(delete_statement)
@@ -216,20 +212,16 @@ namespace :sync do
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
         response = http.head(uri.request_uri)
-        if response.code == '200'
-          puts "Website for #{product.name} is up and valid."
-        end
-      rescue
+        puts "Website for #{product.name} is up and valid." if response.code == '200'
+      rescue StandardError
         # Try connecting on the non SSL
         begin
           uri = URI.parse("http://#{product.website}")
           http = Net::HTTP.new(uri.host, uri.port)
 
           response = http.head(uri.request_uri)
-          if response.code == '200'
-            puts "Website for #{product.name} is up, but it is not using SSL."
-          end
-        rescue => e
+          puts "Website for #{product.name} is up, but it is not using SSL." if response.code == '200'
+        rescue StandardError => e
           puts "Unable to check website for product: #{product.name}."
           puts "Error message for #{product.website}: #{e}."
           if invalid_website
@@ -241,9 +233,7 @@ namespace :sync do
     end
     banned_product_setting.value = banned_products.join(', ')
 
-    if banned_product_setting.save!
-      puts "Banned product list updated."
-    end
+    puts 'Banned product list updated.' if banned_product_setting.save!
   end
 
   def extract_description(response_body)
@@ -252,30 +242,22 @@ namespace :sync do
     description = nil
     if description.nil? || description.blank?
       meta_description = parsed_response.at_css('meta[@name="description"]')
-      unless meta_description.nil?
-        description = meta_description.attr('content')
-      end
+      description = meta_description.attr('content') unless meta_description.nil?
     end
 
     if description.nil? || description.blank?
       twitter_description = parsed_response.at_css('meta[@name="twitter:description"]')
-      unless twitter_description.nil?
-        description = twitter_description.attr('content')
-      end
+      description = twitter_description.attr('content') unless twitter_description.nil?
     end
 
     if description.nil? || description.blank?
       og_description = parsed_response.at_css('meta[@property="og:description"]')
-      unless og_description.nil?
-        description = og_description.attr('content')
-      end
+      description = og_description.attr('content') unless og_description.nil?
     end
 
     if description.nil? || description.blank?
       long_paragraphs = parsed_response.search('//p[string-length() >= 120]')
-      unless long_paragraphs.empty?
-        description = long_paragraphs.first.attr('content')
-      end
+      description = long_paragraphs.first.attr('content') unless long_paragraphs.empty?
     end
     description
   end
@@ -289,7 +271,7 @@ namespace :sync do
       next if product.website.nil? || product.website.empty?
 
       product_description = ProductDescription.where(product_id: product, locale: I18n.locale)
-      next if !product_description.empty?
+      next unless product_description.empty?
 
       begin
         puts "(Product) Opening connection to: #{product.website}."
@@ -299,13 +281,13 @@ namespace :sync do
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         request = Net::HTTP::Get.new(uri.request_uri)
         response = http.request(request)
-      rescue
+      rescue StandardError
         begin
           uri = URI.parse("http://#{product.website}")
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
           response = http.request(request)
-        rescue => e_retry
+        rescue StandardError => e_retry
           puts "Unable to retrieve meta information. Message: #{e_retry}."
         end
       end
@@ -318,9 +300,7 @@ namespace :sync do
       product_description.product_id = product.id
       product_description.locale = I18n.locale
       product_description.description = description.strip
-      if product_description.save!
-        puts "Setting description for: #{product.name} => #{description}"
-      end
+      puts "Setting description for: #{product.name} => #{description}" if product_description.save!
     end
 
     Organization.left_joins(:organization_descriptions)
@@ -329,7 +309,7 @@ namespace :sync do
       next if organization.website.nil? || organization.website.empty?
 
       org_description = OrganizationDescription.where(organization_id: organization, locale: I18n.locale)
-      next if !org_description.empty?
+      next unless org_description.empty?
 
       begin
         puts "(Organization) Opening connection to: #{organization.website}."
@@ -339,13 +319,13 @@ namespace :sync do
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         request = Net::HTTP::Get.new(uri.request_uri)
         response = http.request(request)
-      rescue
+      rescue StandardError
         begin
           uri = URI.parse("http://#{organization.website}")
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
           response = http.request(request)
-        rescue => e_retry
+        rescue StandardError => e_retry
           puts "Unable to retrieve meta information. Message: #{e_retry}."
         end
       end
@@ -376,9 +356,9 @@ namespace :sync do
   task :generate_repositories, [:path] => :environment do |_, _params|
     Rails.logger.level = Logger::DEBUG
 
-    product_list = YAML.load_file("config/product_parent_child.yml")
+    product_list = YAML.load_file('config/product_parent_child.yml')
     product_list.each do |product_entry|
-      parent_product_name = product_entry["parent"].first["name"]
+      parent_product_name = product_entry['parent'].first['name']
       parent_product = Product.where(name: parent_product_name).first
       next if parent_product.nil?
 
@@ -399,7 +379,7 @@ namespace :sync do
         puts "Repository exists: #{main_repository.name}."
       end
 
-      product_entry["children"].each do |child_product_entry|
+      product_entry['children'].each do |child_product_entry|
         repository_attrs = {
           name: "#{child_product_entry['name']} Repository",
           absolute_url: 'N/A',
@@ -428,22 +408,18 @@ namespace :sync do
     Dir.entries('./export').select { |item| item.include?('.json') }.each do |entry|
       product_file = entry
 
-      curr_prod = Product.where(slug: entry.chomp('.json').gsub("-", "_")).first
+      curr_prod = Product.where(slug: entry.chomp('.json').gsub('-', '_')).first
       if curr_prod.nil?
-        alias_name = entry.chomp('.json').gsub("-", " ").downcase
+        alias_name = entry.chomp('.json').gsub('-', ' ').downcase
         puts "Alias: #{alias_name}"
-        curr_prod = Product.find_by("? = ANY(LOWER(aliases::text)::text[])", alias_name)
+        curr_prod = Product.find_by('? = ANY(LOWER(aliases::text)::text[])', alias_name)
       end
-      curr_prod['aliases'] && curr_prod['aliases'].each do |prod_alias|
+      curr_prod['aliases']&.each do |prod_alias|
         alias_file = "#{prod_alias.downcase.gsub(' ', '-')}.json"
-        if File.exist?("#{params[:path]}/#{alias_file}")
-          product_file = alias_file
-        end
+        product_file = alias_file if File.exist?("#{params[:path]}/#{alias_file}")
       end
 
-      if !File.exist?("#{params[:path]}/#{product_file}")
-        puts "New product: #{product_file}."
-      end
+      puts "New product: #{product_file}." unless File.exist?("#{params[:path]}/#{product_file}")
       FileUtils.cp_r("./export/#{entry}", "#{params[:path]}/#{product_file}")
     end
   end
@@ -492,9 +468,7 @@ namespace :sync do
       giz_origin.slug = slug_em(giz_origin.name)
       giz_origin.description = 'Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH'
 
-      if giz_origin.save
-        puts 'GIZ as origin is created.'
-      end
+      puts 'GIZ as origin is created.' if giz_origin.save
     end
 
     # Get credentials for Toolkit
@@ -503,7 +477,7 @@ namespace :sync do
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.path)
-    request.set_form_data({ "email" => ENV['TOOLKIT_EMAIL'], "password" => ENV['TOOLKIT_PASSWORD'] })
+    request.set_form_data({ 'email' => ENV['TOOLKIT_EMAIL'], 'password' => ENV['TOOLKIT_PASSWORD'] })
 
     response = http.request(request)
     cookies = response.header['Set-Cookie']
@@ -544,30 +518,28 @@ namespace :sync do
       dha_origin.slug = slug_em(dha_origin.name)
       dha_origin.description = 'Digital Health Atlas Website'
 
-      if dha_origin.save
-        puts 'Digital health atlas as origin is created.'
-      end
+      puts 'Digital health atlas as origin is created.' if dha_origin.save
     end
 
-    structure_uri = URI.parse("https://digitalatlas.who.int/api/projects/structure/")
+    structure_uri = URI.parse('https://digitalatlas.who.int/api/projects/structure/')
     structure_response = Net::HTTP.get(structure_uri)
     structure_data = JSON.parse(structure_response)
-    products_data = structure_data["technology_platforms"]
+    products_data = structure_data['technology_platforms']
 
-    projects_uri = URI.parse("https://digitalatlas.who.int/api/search/?page=1&type=list&page_size=1000")
+    projects_uri = URI.parse('https://digitalatlas.who.int/api/search/?page=1&type=list&page_size=1000')
     projects_response = Net::HTTP.get(projects_uri)
     dha_data = JSON.parse(projects_response)
 
-    country_uri = URI.parse("https://digitalatlas.who.int/api/landing-country/")
+    country_uri = URI.parse('https://digitalatlas.who.int/api/landing-country/')
     country_response = Net::HTTP.get(country_uri)
     country_data = JSON.parse(country_response)
 
-    org_uri = URI.parse("https://digitalatlas.who.int/api/organisations/")
+    org_uri = URI.parse('https://digitalatlas.who.int/api/organisations/')
     org_response = Net::HTTP.get(org_uri)
     org_data = JSON.parse(org_response)
 
-    dha_data["results"]["projects"].each do |project|
-      project_name = project["name"]
+    dha_data['results']['projects'].each do |project|
+      project_name = project['name']
 
       existing_project = Project.find_by(name: project_name, origin_id: dha_origin.id)
 
@@ -578,24 +550,19 @@ namespace :sync do
         existing_project.origin = dha_origin
       end
 
-      country_id = project["country"]
+      country_id = project['country']
       next if country_id.nil?
-      country_name = country_data.select { |country| country["id"] == country_id }[0]["name"]
+
+      country_name = country_data.select { |country| country['id'] == country_id }[0]['name']
       country = Country.find_by(name: country_name)
-      if !country.nil?
-        if !existing_project.countries.include?(country)
-          existing_project.countries << country
-        end
-      end
+      existing_project.countries << country if !country.nil? && !existing_project.countries.include?(country)
 
       # There's two date. We will always try to use the start date.
       # If start date is nil, then we will try to use the implementing date.
-      start_date = project["start_date"]
-      if start_date.nil?
-        start_date = project["implementation_dates"]
-      end
+      start_date = project['start_date']
+      start_date = project['implementation_dates'] if start_date.nil?
 
-      if !start_date.nil?
+      unless start_date.nil?
         begin
           existing_project.start_date = Date.parse(start_date.to_s)
         rescue ArgumentError
@@ -603,8 +570,8 @@ namespace :sync do
         end
       end
 
-      end_date = project["end_date"]
-      if !end_date.nil?
+      end_date = project['end_date']
+      unless end_date.nil?
         begin
           existing_project.end_date = Date.parse(end_date.to_s)
         rescue ArgumentError
@@ -614,10 +581,8 @@ namespace :sync do
 
       description = "<p>#{project['implementation_overview']}</p>"
 
-      sector = Sector.find_by(name: "Health")
-      if !existing_project.sectors.include?(sector)
-        existing_project.sectors << sector
-      end
+      sector = Sector.find_by(name: 'Health')
+      existing_project.sectors << sector unless existing_project.sectors.include?(sector)
 
       project_description = ProjectDescription.find_by(project_id: existing_project.id, locale: I18n.locale)
       if project_description.nil?
@@ -631,28 +596,25 @@ namespace :sync do
         project_description.save!
       end
 
-      project["platforms"].each do |platform|
-        product = products_data.select { |p| p["id"] == platform["id"] }[0]
+      project['platforms'].each do |platform|
+        product = products_data.select { |p| p['id'] == platform['id'] }[0]
         next if product.nil?
-        product_name = product["name"]
+
+        product_name = product['name']
         slug = slug_em(product_name)
         product = Product.first_duplicate(product_name, slug)
-        if !product.nil?
-          if !existing_project.products.include?(product)
-            existing_project.products << product
-          end
-        end
+        next if product.nil?
+
+        existing_project.products << product unless existing_project.products.include?(product)
       end
 
       project_url = "https://digitalhealthatlas.org/#{I18n.locale}/-/projects/#{project['id']}/published"
       existing_project.project_url = project_url
 
-      if existing_project.save!
-        puts "Project #{existing_project.name} saved!"
-      end
+      puts "Project #{existing_project.name} saved!" if existing_project.save!
 
-      org_id = project["organisation"]
-      org_name = org_data.select { |org| org["id"] == org_id }[0]["name"]
+      org_id = project['organisation']
+      org_name = org_data.select { |org| org['id'] == org_id }[0]['name']
       org = Organization.name_contains(org_name)
 
       if !org.empty? && !existing_project.organizations.include?(org[0])
@@ -663,99 +625,93 @@ namespace :sync do
         proj_org.save!
       end
 
-      project["donors"] && project["donors"].each do |donor|
-        donor_name = org_data.select { |org| org["id"] == donor }[0]["name"]
+      project['donors']&.each do |donor|
+        donor_name = org_data.select { |org| org['id'] == donor }[0]['name']
         donor_org = Organization.name_contains(donor_name)
 
-        if !donor_org.empty? && !existing_project.organizations.include?(donor_org[0])
-          proj_org = ProjectsOrganization.new
-          proj_org.org_type = 'funder'
-          proj_org.project_id = existing_project.id
-          proj_org.organization_id = donor_org[0].id
-          proj_org.save!
-        end
+        next unless !donor_org.empty? && !existing_project.organizations.include?(donor_org[0])
+
+        proj_org = ProjectsOrganization.new
+        proj_org.org_type = 'funder'
+        proj_org.project_id = existing_project.id
+        proj_org.organization_id = donor_org[0].id
+        proj_org.save!
       end
 
-      project["implementing_partners"] && project["implementing_partners"].each do |implementer|
+      project['implementing_partners']&.each do |implementer|
         implementer_org = Organization.name_contains(implementer)
 
-        if !implementer_org.empty? && !existing_project.organizations.include?(implementer_org[0])
-          proj_org = ProjectsOrganization.new
-          proj_org.org_type = 'implementer'
-          proj_org.project_id = existing_project.id
-          proj_org.organization_id = implementer_org[0].id
-          proj_org.save!
-        end
+        next unless !implementer_org.empty? && !existing_project.organizations.include?(implementer_org[0])
+
+        proj_org = ProjectsOrganization.new
+        proj_org.org_type = 'implementer'
+        proj_org.project_id = existing_project.id
+        proj_org.organization_id = implementer_org[0].id
+        proj_org.save!
       end
     end
   end
 
   task :import_dha_projects, [] => :environment do
-    
-    structure_uri = URI.parse("https://qa.whomaps.pulilab.com/api/projects/structure/")
+    structure_uri = URI.parse('https://qa.whomaps.pulilab.com/api/projects/structure/')
     structure_response = Net::HTTP.get(structure_uri)
     structure_data = JSON.parse(structure_response)
-    products_data = structure_data["technology_platforms"]
+    products_data = structure_data['technology_platforms']
 
-    country_uri = URI.parse("https://qa.whomaps.pulilab.com/api/landing-country/")
+    country_uri = URI.parse('https://qa.whomaps.pulilab.com/api/landing-country/')
     country_response = Net::HTTP.get(country_uri)
     country_data = JSON.parse(country_response)
 
-    org_uri = URI.parse("https://qa.whomaps.pulilab.com/api/organisations/")
+    org_uri = URI.parse('https://qa.whomaps.pulilab.com/api/organisations/')
     org_response = Net::HTTP.get(org_uri)
     org_data = JSON.parse(org_response)
 
-    project_url = URI.parse("https://qa.whomaps.pulilab.com/api/projects/external/publish/")
+    project_url = URI.parse('https://qa.whomaps.pulilab.com/api/projects/external/publish/')
 
-
-    mm_csv = CSV.parse(File.read("export/MMData.csv"), headers: true)
+    mm_csv = CSV.parse(File.read('export/MMData.csv'), headers: true)
     mm_csv.each do |mm_row|
       # Find the country
-      mm_country = country_data.find {|country| country['name'].include? mm_row[0]}['id']
+      mm_country = country_data.find { |country| country['name'].include? mm_row[0] }['id']
 
       # Find the org
-      if !mm_row[4].nil?
-        mm_org = org_data.find {|org| org['name'].downcase.delete(' ')==mm_row[4].downcase.delete(' ')}
-        if !mm_org.nil?
+      unless mm_row[4].nil?
+        mm_org = org_data.find { |org| org['name'].downcase.delete(' ') == mm_row[4].downcase.delete(' ') }
+        unless mm_org.nil?
           mm_org_id = mm_org['id']
           mm_org_name = mm_org['name']
         end
       end
 
       # Find products
-      mm_platforms = JSON.parse('[]');
-      if !mm_row[2].nil?
+      mm_platforms = JSON.parse('[]')
+      unless mm_row[2].nil?
         mm_products = mm_row[2].split(',')
         mm_products.each do |mm_product|
-          curr_prod = products_data.find {|prod| prod['name'].downcase.delete(' ')==mm_product.downcase.delete(' ')}
-          if !curr_prod.nil?
-            mm_platforms << { 'id': curr_prod['id'] }
-          end
+          curr_prod = products_data.find { |prod| prod['name'].downcase.delete(' ') == mm_product.downcase.delete(' ') }
+          mm_platforms << { 'id': curr_prod['id'] } unless curr_prod.nil?
         end
       end
 
-      params = {'project':{'name': 'Map & Match - ' + mm_row[1], 
-                'organization':mm_org_name,
-                'country': mm_country,
-                'contact_name':mm_row[9],
-                'contact_email': mm_row[10],
-                'implementation_overview': mm_row[3],
-                'platforms': mm_platforms,
-                'start_date': mm_row[12],
-                'health_focus_areas': mm_row[6] == 'yes' ? [{'id': 20}] : []
-              }}
+      params = { 'project': { 'name': "Map & Match - #{mm_row[1]}",
+                              'organization': mm_org_name,
+                              'country': mm_country,
+                              'contact_name': mm_row[9],
+                              'contact_email': mm_row[10],
+                              'implementation_overview': mm_row[3],
+                              'platforms': mm_platforms,
+                              'start_date': mm_row[12],
+                              'health_focus_areas': mm_row[6] == 'yes' ? [{ 'id': 20 }] : [] } }
       headers = {
-          'Authorization'=>"Bearer ENV['DHA_TOKEN']",
-          'Content-Type' =>'application/json'
+        'Authorization' => "Bearer ENV['DHA_TOKEN']",
+        'Content-Type' => 'application/json'
       }
 
-      puts "PARAMS: " + params.to_json.to_s
+      puts "PARAMS: #{params.to_json}"
 
       http = Net::HTTP.new(project_url.host, project_url.port)
       response = http.post(project_url.path, params.to_json, headers)
 
-      puts "RESPONSE: " + response.to_s
+      puts "RESPONSE: #{response}"
     end
-
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UseCasesControllerTest < ActionDispatch::IntegrationTest
@@ -9,25 +11,25 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     @sectors = Sector.order(:name)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get use_cases_url
     assert_response :success
   end
 
-  test "search test" do
-    get use_cases_url(search: "UseCase1")
+  test 'search test' do
+    get use_cases_url(search: 'UseCase1')
     assert_equal(1, assigns(:use_cases).count)
 
-    get use_cases_url(search: "InvalidUseCase")
+    get use_cases_url(search: 'InvalidUseCase')
     assert_equal(0, assigns(:use_cases).count)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_use_case_url
     assert_response :success
   end
 
-  test "should create use_case" do
+  test 'should create use_case' do
     assert_difference('UseCase.count') do
       post use_cases_url, params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
                                                 maturity: 'BETA',
@@ -37,23 +39,23 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to use_case_url(UseCase.last)
   end
 
-  test "should show use_case" do
+  test 'should show use_case' do
     get use_case_url(@use_case)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_use_case_url(@use_case)
     assert_response :success
   end
 
-  test "should update use_case" do
+  test 'should update use_case' do
     patch use_case_url(@use_case), params: { use_case: { uc_desc: @use_case.description, name: @use_case.name,
                                                          sector_id: @use_case.sector_id, slug: @use_case.slug } }
     assert_redirected_to use_case_url(@use_case, locale: 'en')
   end
 
-  test "should destroy use_case" do
+  test 'should destroy use_case' do
     assert_difference('UseCase.count', -1) do
       delete use_case_url(@use_case)
     end
@@ -61,7 +63,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to use_cases_url
   end
 
-  test "add use_case filter" do
+  test 'add use_case filter' do
     # With no filters, should load 2 workflows
     get use_cases_url
     assert_equal(2, assigns(:use_cases).count)
@@ -69,7 +71,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     use_case2 = assigns(:use_cases)[1]
 
     param = { 'filter_name' => 'use_cases', 'filter_value' => use_case1.id, 'filter_label' => use_case1.name }
-    post "/add_filter", params: param
+    post '/add_filter', params: param
 
     # Filter is set, should only load 1
     get use_cases_url
@@ -85,7 +87,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     assert_equal(0, assigns(:use_cases).count)
   end
 
-  test "Policy tests: Should only allow get" do
+  test 'Policy tests: Should only allow get' do
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
 
     get use_case_url(@use_case)
@@ -174,7 +176,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
       use_case: {
         name: created_use_case.name,
         slug: created_use_case.slug,
-        description: "Updated desc"
+        description: 'Updated desc'
       }
     }
 

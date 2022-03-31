@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'factory_bot'
 
 module GraphHelpers
@@ -10,7 +12,7 @@ module GraphHelpers
   def execute_graphql(query, **kwargs)
     RegistrySchema.execute(
       query,
-      { context: { controller: controller } }.merge(kwargs),
+      { context: { controller: controller } }.merge(kwargs)
     )
   end
 end

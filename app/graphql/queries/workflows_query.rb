@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class WorkflowsQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -5,9 +7,7 @@ module Queries
 
     def resolve(search:)
       workflows = Workflow.order(:name)
-      unless search.blank?
-        workflows = workflows.name_contains(search)
-      end
+      workflows = workflows.name_contains(search) unless search.blank?
       workflows
     end
   end
@@ -34,7 +34,7 @@ module Queries
       unless search.blank?
         name_workflow = workflows.name_contains(search)
         desc_workflow = workflows.joins(:workflow_descriptions)
-                                .where("LOWER(workflow_descriptions.description) like LOWER(?)", "%#{search}%")
+                                 .where('LOWER(workflow_descriptions.description) like LOWER(?)', "%#{search}%")
         workflows = workflows.where(id: (name_workflow + desc_workflow).uniq)
       end
 
@@ -51,9 +51,7 @@ module Queries
       end
 
       filtered_use_cases = use_cases.reject { |x| x.nil? || x.empty? }
-      unless filtered
-        filtered = !filtered_use_cases.empty?
-      end
+      filtered ||= !filtered_use_cases.empty?
 
       filtered_use_cases = use_case_ids.concat(filtered_use_cases)
       if filtered

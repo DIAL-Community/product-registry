@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('csv')
 
 class BuildingBlock < ApplicationRecord
@@ -7,17 +9,17 @@ class BuildingBlock < ApplicationRecord
   has_many :product_building_blocks,
            after_add: :association_add, before_remove: :association_remove
   has_many :products, through: :product_building_blocks,
-           after_add: :association_add, before_remove: :association_remove
+                      after_add: :association_add, before_remove: :association_remove
 
   has_many :building_block_descriptions
 
   has_and_belongs_to_many :workflows, join_table: :workflows_building_blocks,
-                          after_add: :association_add, before_remove: :association_remove
+                                      after_add: :association_add, before_remove: :association_remove
 
   has_many :building_block_descriptions, dependent: :destroy
 
-  scope :name_contains, -> (name) { where("LOWER(building_blocks.name) like LOWER(?)", "%#{name}%") }
-  scope :slug_starts_with, -> (slug) { where("LOWER(building_blocks.slug) like LOWER(?)", "#{slug}\\_%") }
+  scope :name_contains, ->(name) { where('LOWER(building_blocks.name) like LOWER(?)', "%#{name}%") }
+  scope :slug_starts_with, ->(slug) { where('LOWER(building_blocks.slug) like LOWER(?)', "#{slug}\\_%") }
 
   attr_accessor :bb_desc
 
@@ -65,20 +67,16 @@ class BuildingBlock < ApplicationRecord
   def as_json(options = {})
     json = super(options)
     if options[:include_relationships].present?
-      json['products'] = products.as_json({ only: [:name, :slug, :website], api_path: api_path(options) })
-      json['workflows'] = workflows.as_json({ only: [:name, :slug], api_path: api_path(options) })
+      json['products'] = products.as_json({ only: %i[name slug website], api_path: api_path(options) })
+      json['workflows'] = workflows.as_json({ only: %i[name slug], api_path: api_path(options) })
     end
-    if options[:collection_path].present? || options[:api_path].present?
-      json['self_url'] = self_url(options)
-    end
-    if options[:item_path].present?
-      json['collection_url'] = collection_url(options)
-    end
+    json['self_url'] = self_url(options) if options[:collection_path].present? || options[:api_path].present?
+    json['collection_url'] = collection_url(options) if options[:item_path].present?
     json
   end
 
   def self.to_csv
-    attributes = %w{id name slug description products workflows}
+    attributes = %w[id name slug description products workflows]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -98,11 +96,11 @@ class BuildingBlock < ApplicationRecord
 
   def self.serialization_options
     {
-      except: [:id, :created_at, :updated_at, :description],
+      except: %i[id created_at updated_at description],
       include: {
         building_block_descriptions: { only: [:description] },
-        products: { only: [:name, :slug] },
-        workflows: { only: [:name, :slug] }
+        products: { only: %i[name slug] },
+        workflows: { only: %i[name slug] }
       }
     }
   end

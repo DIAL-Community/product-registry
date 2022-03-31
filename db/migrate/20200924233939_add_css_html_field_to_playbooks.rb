@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCssHtmlFieldToPlaybooks < ActiveRecord::Migration[5.2]
   def change
     add_column(:playbooks, :design_css, :string)

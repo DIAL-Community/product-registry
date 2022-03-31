@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLocaleToPlaybookAnswers < ActiveRecord::Migration[5.2]
   def change
     add_column(:playbook_answers, :locale, :string, null: false, default: 'en')

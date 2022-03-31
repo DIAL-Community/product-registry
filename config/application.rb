@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -11,7 +13,7 @@ module Registry
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 
-    config.i18n.available_locales = [:en, :cs, :fr, :de, :es, :pt, :sw]
+    config.i18n.available_locales = %i[en cs fr de es pt sw]
     config.i18n.default_locale = :en
     config.i18n.locale = config.i18n.default_locale
     config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]

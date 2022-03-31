@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class CandidateRolesController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:index, :create, :approve, :reject, :show]
+  acts_as_token_authentication_handler_for User, only: %i[index create approve reject show]
   skip_before_action :verify_authenticity_token, if: :json_request
 
-  before_action :set_candidate_role, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :duplicate, :approve, :reject]
+  before_action :set_candidate_role, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy duplicate approve reject]
 
   def json_request
     request.format.json?
@@ -23,9 +25,7 @@ class CandidateRolesController < ApplicationController
 
     user.roles += @candidate_role.roles
 
-    unless @candidate_role.organization_id.nil?
-      user.organization_id = @candidate_role.organization_id
-    end
+    user.organization_id = @candidate_role.organization_id unless @candidate_role.organization_id.nil?
 
     unless @candidate_role.product_id.nil?
       product = Product.find_by(id: @candidate_role.product_id)
@@ -36,8 +36,8 @@ class CandidateRolesController < ApplicationController
     respond_to do |format|
       # Don't re-approve approved candidate.
       if (@candidate_role.rejected.nil? || @candidate_role.rejected) &&
-          user.save && @candidate_role.update(rejected: false, approved_date: Time.now,
-                                              approved_by_id: current_user.id)
+         user.save && @candidate_role.update(rejected: false, approved_date: Time.now,
+                                             approved_by_id: current_user.id)
         format.html { redirect_to candidate_role_url(@candidate_role), notice: 'Request for elevated role approved.' }
         format.json { render :show, status: :ok, location: @candidate_role }
       else
@@ -66,20 +66,18 @@ class CandidateRolesController < ApplicationController
   # GET /candidate_roles
   # GET /candidate_roles.json
   def index
-    unless policy(CandidateRole).view_allowed?
-      return redirect_to(root_path)
-    end
+    return redirect_to(root_path) unless policy(CandidateRole).view_allowed?
 
     current_page = params[:page] || 1
 
-    if params[:search]
-      @candidate_roles = CandidateRole.email_contains(params[:search])
+    @candidate_roles = if params[:search]
+                         CandidateRole.email_contains(params[:search])
                                       .order(:created_at)
                                       .paginate(page: current_page, per_page: 10)
-    else
-      @candidate_roles = CandidateRole.order(:created_at)
+                       else
+                         CandidateRole.order(:created_at)
                                       .paginate(page: current_page, per_page: 10)
-    end
+                       end
     authorize(@candidate_roles, :view_allowed?)
   end
 
@@ -87,21 +85,15 @@ class CandidateRolesController < ApplicationController
   # GET /candidate_roles/1.json
   def show
     authorize(@candidate_role, :view_allowed?)
-    unless @candidate_role.product_id.nil?
-      @product = Product.find(@candidate_role.product_id)
-    end
-    unless @candidate_role.organization_id.nil?
-      @organization = Organization.find(@candidate_role.organization_id)
-    end
+    @product = Product.find(@candidate_role.product_id) unless @candidate_role.product_id.nil?
+    @organization = Organization.find(@candidate_role.organization_id) unless @candidate_role.organization_id.nil?
   end
 
   # GET /candidate_roles/new
   def new
     authorize(CandidateRole, :create_allowed?)
     @candidate_role = CandidateRole.new
-    unless current_user.roles.include?(User.user_roles[:admin])
-      @candidate_role.email = current_user.email
-    end
+    @candidate_role.email = current_user.email unless current_user.roles.include?(User.user_roles[:admin])
   end
 
   # GET /candidate_roles/1/edit
@@ -121,13 +113,9 @@ class CandidateRolesController < ApplicationController
       end
     end
 
-    unless @candidate_role.product_id.nil?
-      @candidate_role[:roles] << User.user_roles[:product_user]
-    end
+    @candidate_role[:roles] << User.user_roles[:product_user] unless @candidate_role.product_id.nil?
 
-    unless @candidate_role.organization_id.nil?
-      @candidate_role[:roles] << User.user_roles[:org_user]
-    end
+    @candidate_role[:roles] << User.user_roles[:org_user] unless @candidate_role.organization_id.nil?
 
     respond_to do |format|
       if @candidate_role.save

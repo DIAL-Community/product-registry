@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Contact < ApplicationRecord
   has_many :organizations_contacts
   has_many :organizations, through: :organizations_contacts

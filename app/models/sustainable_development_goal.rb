@@ -1,15 +1,15 @@
+# frozen_string_literal: true
+
 class SustainableDevelopmentGoal < ApplicationRecord
   has_many :product_sustainable_development_goals
   has_many :products, through: :product_sustainable_development_goals
 
-  has_many :sdg_targets, :foreign_key => 'sdg_number', :primary_key => 'number'
+  has_many :sdg_targets, foreign_key: 'sdg_number', primary_key: 'number'
 
-  scope :name_contains, -> (name) { where("LOWER(sustainable_development_goals.name) like LOWER(?)", "%#{name}%") }
+  scope :name_contains, ->(name) { where('LOWER(sustainable_development_goals.name) like LOWER(?)', "%#{name}%") }
 
   def image_file
-    if File.exist?(File.join('public', 'assets', 'sdgs', "#{slug}.png"))
-      return "/assets/sdgs/#{slug}.png"
-    end
+    return "/assets/sdgs/#{slug}.png" if File.exist?(File.join('public', 'assets', 'sdgs', "#{slug}.png"))
 
     '/assets/sdgs/sdg_placeholder.png'
   end
@@ -53,22 +53,18 @@ class SustainableDevelopmentGoal < ApplicationRecord
 
       use_cases = []
       use_cases += sdg_targets.map(&:use_cases).flatten
-      json['use_cases'] = use_cases.uniq.as_json({ only: [:name, :slug], api_path: api_path(options) })
+      json['use_cases'] = use_cases.uniq.as_json({ only: %i[name slug], api_path: api_path(options) })
     end
-    if options[:collection_path].present? || options[:api_path].present?
-      json['self_url'] = self_url(options)
-    end
-    if options[:item_path].present?
-      json['collection_url'] = collection_url(options)
-    end
+    json['self_url'] = self_url(options) if options[:collection_path].present? || options[:api_path].present?
+    json['collection_url'] = collection_url(options) if options[:item_path].present?
     json
   end
 
   def self.serialization_options
     {
-      except: [:id, :created_at, :updated_at],
+      except: %i[id created_at updated_at],
       include: {
-        sdg_targets: { only: [:name, :target_number] }
+        sdg_targets: { only: %i[name target_number] }
       }
     }
   end

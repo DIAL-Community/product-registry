@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeployPolicy < ApplicationPolicy
   attr_reader :user, :record
 

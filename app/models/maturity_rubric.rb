@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MaturityRubric < ApplicationRecord
   attr_accessor :mr_desc
 

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class OperatorServicesController < ApplicationController
-  before_action :set_operator_services, only: [:show, :edit, :update, :destroy]
+  before_action :set_operator_services, only: %i[show edit update destroy]
   before_action :set_core_services
 
   # GET /operators
@@ -40,9 +42,7 @@ class OperatorServicesController < ApplicationController
     operator_name = params[:operator_service][:name]
 
     selected_countries = []
-    if params[:selected_countries].present?
-      selected_countries = params[:selected_countries].keys.map(&:to_i)
-    end
+    selected_countries = params[:selected_countries].keys.map(&:to_i) if params[:selected_countries].present?
 
     selected_countries.each do |country|
       # create records for each core service in this geography
@@ -56,9 +56,12 @@ class OperatorServicesController < ApplicationController
     end
 
     respond_to do |format|
-        format.html { redirect_to operator_services_path,
-                      flash: { notice: t('messages.model.created', model: t('model.organization').to_s.humanize) }}
-        format.json { render :show, status: :created, location: @operator_service }
+      format.html do
+        redirect_to operator_services_path,
+                    flash: { notice: t('messages.model.created',
+                                       model: t('model.organization').to_s.humanize) }
+      end
+      format.json { render :show, status: :created, location: @operator_service }
     end
   end
 
@@ -67,7 +70,7 @@ class OperatorServicesController < ApplicationController
   def update
     authorize @operator_services, :mod_allowed?
 
-    if (params[:operator_service][:name] != @operator_services.first.name)
+    if params[:operator_service][:name] != @operator_services.first.name
       # update the name for all records
       @operator_services.each do |service|
         service.name = params[:operator_service][:name]
@@ -76,35 +79,36 @@ class OperatorServicesController < ApplicationController
     end
 
     selected_countries = []
-    if (params[:selected_countries].present?)
-      selected_countries = params[:selected_countries].keys.map(&:to_i)
-    end
+    selected_countries = params[:selected_countries].keys.map(&:to_i) if params[:selected_countries].present?
 
     # Remove any countries from operator services that were removed in the edit
     country_ids = @operator_services.pluck(:country_id).uniq
     country_ids.each do |country|
-      if !selected_countries.include?(country)
+      unless selected_countries.include?(country)
         destroy_services = OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
       end
     end
 
     selected_countries.each do |country|
-      if !country_ids.include?(country)
-        # create records for each core service in this geography
-        @core_services.each do |service|
-          new_service = OperatorService.new
-          new_service.name = @operator_services.first.name
-          new_service.country_id = country
-          new_service.service = service
-          new_service.save
-        end
+      next if country_ids.include?(country)
+
+      # create records for each core service in this geography
+      @core_services.each do |service|
+        new_service = OperatorService.new
+        new_service.name = @operator_services.first.name
+        new_service.country_id = country
+        new_service.service = service
+        new_service.save
       end
     end
 
     respond_to do |format|
-        format.html { redirect_to operator_services_path,
-                      flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) }}
-        format.json { render :show, status: :ok, location: @operator_services }
+      format.html do
+        redirect_to operator_services_path,
+                    flash: { notice: t('messages.model.updated',
+                                       model: t('model.organization').to_s.humanize) }
+      end
+      format.json { render :show, status: :ok, location: @operator_services }
     end
   end
 
@@ -120,14 +124,16 @@ class OperatorServicesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to operator_services_path,
-                    flash: { notice: t('messages.model.deleted', model: t('model.operator_services').to_s.humanize) }}
+      format.html do
+        redirect_to operator_services_path,
+                    flash: { notice: t('messages.model.deleted',
+                                       model: t('model.operator_services').to_s.humanize) }
+      end
       format.json { head :no_content }
     end
   end
 
-  def map
-  end
+  def map; end
 
   private
 
@@ -141,9 +147,9 @@ class OperatorServicesController < ApplicationController
     @curr_operator.name = @operator_name
     @curr_operator.country_list = @operator_countries
 
-    # The countries_services list is not currently needed. Keeping the code here in case we 
-      # The countries_services list is not currently needed. Keeping the code here in case we 
-    # The countries_services list is not currently needed. Keeping the code here in case we 
+    # The countries_services list is not currently needed. Keeping the code here in case we
+    # The countries_services list is not currently needed. Keeping the code here in case we
+    # The countries_services list is not currently needed. Keeping the code here in case we
     #  want to add it later
     # @countries_services = { }
     # @operator_countries.each do |country|
@@ -157,8 +163,7 @@ class OperatorServicesController < ApplicationController
   end
 
   def set_core_services
-    @core_services = ['Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT',
-                      'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice'];
+    @core_services = %w[Airtime API HS Mobile-Internet Mobile-Money Ops-Maintenance OTT
+                        SLA SMS User-Interface USSD Voice]
   end
-
 end

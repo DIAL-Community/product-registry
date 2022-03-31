@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 json.extract! organization, :id, :name, :slug, :when_endorsed, :is_endorser, :website, :created_at, :updated_at,
               :is_mni
 json.url organization_url(organization, format: :json)
 json.offices organization.offices do |office|
-    json.lat office.latitude
-    json.lon office.longitude
+  json.lat office.latitude
+  json.lon office.longitude
 end
 
 if organization.is_mni

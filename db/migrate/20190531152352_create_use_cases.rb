@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateUseCases < ActiveRecord::Migration[5.1]
   def change
     create_table :use_cases do |t|

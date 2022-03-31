@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HandbookPolicy < ApplicationPolicy
   attr_reader :user, :record
 

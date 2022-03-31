@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 class SustainableDevelopmentGoalsController < ApplicationController
   include FilterConcern
   include ApiFilterConcern
 
-  before_action :set_sustainable_development_goal, only: [:show, :edit]
+  before_action :set_sustainable_development_goal, only: %i[show edit]
 
   def unique_search
     record = SustainableDevelopmentGoal.find_by(slug: params[:id])
-    if record.nil?
-      return render(json: {}, status: :not_found)
-    end
+    return render(json: {}, status: :not_found) if record.nil?
 
     render(json: record.to_json(SustainableDevelopmentGoal.serialization_options
                                                           .merge({
-                                                            item_path: request.original_url,
-                                                            include_relationships: true
-                                                          })))
+                                                                   item_path: request.original_url,
+                                                                   include_relationships: true
+                                                                 })))
   end
 
   def simple_search
@@ -22,9 +22,7 @@ class SustainableDevelopmentGoalsController < ApplicationController
     sdgs = SustainableDevelopmentGoal.order(:number)
 
     current_page = 1
-    if params[:page].present? && params[:page].to_i > 0
-      current_page = params[:page].to_i
-    end
+    current_page = params[:page].to_i if params[:page].present? && params[:page].to_i.positive?
 
     if valid_array_parameter(params[:sdgs])
       sdgs = sdgs.where('sustainable_development_goals.slug in (?)', params[:sdgs])
@@ -32,8 +30,8 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
     if params[:search].present?
       sdg_name = sdgs.name_contains(params[:search])
-      sdg_desc = sdgs.where("LOWER(long_title) like LOWER(?)", "%#{params[:search]}%")
-      sdg_target = sdgs.joins(:sdg_targets).where("LOWER(sdg_targets.name) like LOWER(?)", "%#{params[:search]}%")
+      sdg_desc = sdgs.where('LOWER(long_title) like LOWER(?)', "%#{params[:search]}%")
+      sdg_target = sdgs.joins(:sdg_targets).where('LOWER(sdg_targets.name) like LOWER(?)', "%#{params[:search]}%")
       sdgs = sdgs.where(id: (sdg_name + sdg_desc + sdg_target).uniq)
     end
 
@@ -47,13 +45,13 @@ class SustainableDevelopmentGoalsController < ApplicationController
     query = Rack::Utils.parse_query(uri.query)
 
     if sdgs.count > default_page_size * current_page
-      query["page"] = current_page + 1
+      query['page'] = current_page + 1
       uri.query = Rack::Utils.build_query(query)
       results['next_page'] = URI.decode(uri.to_s)
     end
 
     if current_page > 1
-      query["page"] = current_page - 1
+      query['page'] = current_page - 1
       uri.query = Rack::Utils.build_query(query)
       results['previous_page'] = URI.decode(uri.to_s)
     end
@@ -83,9 +81,9 @@ class SustainableDevelopmentGoalsController < ApplicationController
       format.json do
         render(json: results.to_json(SustainableDevelopmentGoal.serialization_options
                                                                .merge({
-                                                                 include_relationships: true,
-                                                                 collection_path: uri.to_s
-                                                               })))
+                                                                        include_relationships: true,
+                                                                        collection_path: uri.to_s
+                                                                      })))
       end
     end
   end
@@ -125,11 +123,10 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sustainable_development_goal
-      @sustainable_development_goal = SustainableDevelopmentGoal
-      .includes(:sdg_targets)
-      .find(params[:id])
-    end
-
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sustainable_development_goal
+    @sustainable_development_goal = SustainableDevelopmentGoal
+                                    .includes(:sdg_targets)
+                                    .find(params[:id])
+  end
 end

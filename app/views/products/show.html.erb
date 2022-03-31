@@ -23,17 +23,9 @@
                         alt: t('alt.el-logo', el: @product.name).humanize,) %>
         </div>
       </div>
-      <% if @child_products.empty? %>
-        <div class="col-12 col-md-9 mt-2">
-          <%= render 'productdata', product: @product, product_description: @product_description %>
-        </div>
-      <% else %>
-        <div class="col-12 col-md-9 mt-2">
-          <div class="card-text text-muted mt-2 mb-2">
-              <%= @product.name %> <%= t('view.product.index.multiple') %>
-          </div>
-        </div>
-      <% end %>
+      <div class="col-12 col-md-9 mt-2">
+        <%= render 'productdata', product: @product, product_description: @product_description %>
+      </div>
     </div>
     <div class="row mt-2">
       <div class="col-12 col-md-6">
@@ -55,76 +47,6 @@
     </div>
   </div>
 </div>
-
-<% if !@child_products.empty? %>
-  
-  <div class="card my-3">
-    <div class="card-header bg-secondary text-white">
-      <%= @product.name %>
-    </div>
-    <div class="card-body p-3">
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <%= render 'productdata', product: @product, product_description: @product_description %>
-        </div>
-        <div class="col-12 col-md-6">
-          <% statistics_data = @product.statistics %>
-          <% unless statistics_data['data'].nil? %>
-            <% repository_data = statistics_data['data']['repository'] %>
-            <% if !repository_data.nil? %>
-              <%= render 'repositorydata', repository_data: repository_data %>
-            <% end %>
-          <% end %>
-        </div>
-        <div class="col-12">
-          <p class="float-right mb-1" >
-            <% if user_signed_in? && policy(@product).mod_allowed? %>
-              <%= link_to t('view.general.edit'), edit_product_path(@product), class: "card-link",
-                          'aria-label': "#{t('view.general.edit')} #{@product.name}." %>
-            <% end %>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <% @child_products.each do |child_product| %>
-    <% curr_description = @child_descriptions.where(product_id: child_product).first %>
-    <div class="card my-3">
-      <div class="card-header bg-secondary text-white">
-        <%= child_product.name %>
-      </div>
-      <div class="card-body p-3">
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <%= render 'productdata', product: child_product, product_description: curr_description %>
-          </div>
-          <div class="col-12 col-md-6">
-            <% statistics_data = child_product.statistics %>
-            <% unless statistics_data['data'].nil? %>
-              <% repository_data = statistics_data['data']['repository'] %>
-              <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
-            <% end %>
-          </div>
-          <div class="col-12">
-            <p class="float-right mb-1" >
-              <% if user_signed_in? && policy(@product).mod_allowed? %>
-                <%= link_to t('view.general.edit'), edit_product_path(child_product), class: "card-link",
-                            'aria-label': "#{t('view.general.edit')} #{child_product.name}." %>
-              <% end %>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
-<% else %>
-  <% statistics_data = @product.statistics %>
-  <% unless statistics_data['data'].nil? %>
-    <% repository_data = statistics_data['data']['repository'] %>
-    <% if !repository_data.nil? %><%= render 'repositorydata', repository_data: repository_data %><% end %>
-  <% end %>
-<% end %>
 
 <div class="row">
   <div class="col-12 col-md-6 mt-2">
@@ -419,35 +341,6 @@
           <%= t('view.product.show.cost-data') %>
       </div>
       <div class="card-body">
-        <% if @product.code_lines.nil? && @product.cocomo.nil? && @product.est_hosting.nil? && @product.est_invested.nil? %>
-          <p class="card-text text-muted">
-            <%= t('view.product.show.no-cost-data') %>
-          </p>
-        <% else %>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="text-muted"><%= t('view.product.show.code-lines') %></div>
-              <div><%= @product.code_lines %></div>
-            </div>
-            <div class="col-12 col-md-6" data-toggle="tooltip" data-placement="top" 
-                 data-original-title="<%= t('view.product.show.cocomo') %>">
-              <div class="text-muted"><%= t('view.product.show.est-effort') %>
-                <i class="fas fa-info-circle ml-1"></i>
-              </div>
-              <div><%= @product.cocomo %></div>
-            </div>
-            <% if !@product.est_hosting.nil? || !@product.est_invested.nil? %>
-              <div class="col-12 col-md-6">
-                <div class="text-muted"><%= t('view.product.show.est-hosting') %></div>
-                <div><%= @product.est_hosting %></div>
-              </div>
-              <div class="col-12 col-md-6">
-                <div class="text-muted"><%= t('view.product.show.est-invested') %></div>
-                <div><%= @product.est_invested %></div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
       </div>
     </div>
   </div>

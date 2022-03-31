@@ -17,9 +17,7 @@ module Modules
 
       task_tracker.message = message
       task_tracker.last_run = Time.now
-      if task_tracker.save!
-        puts "Task: '#{task_name}' recorded with message: '#{message}'."
-      end
+      puts "Task: '#{task_name}' recorded with message: '#{message}'." if task_tracker.save!
     end
 
     def start_tracking_task(task_name)

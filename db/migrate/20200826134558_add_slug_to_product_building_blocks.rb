@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSlugToProductBuildingBlocks < ActiveRecord::Migration[5.2]
   def up
     add_column(:product_building_blocks, :id, :primary_key)
@@ -5,9 +7,7 @@ class AddSlugToProductBuildingBlocks < ActiveRecord::Migration[5.2]
     ProductBuildingBlock.all.each do |pb|
       pb.slug = "#{pb.product.slug}_#{pb.building_block.slug}"
 
-      if pb.save!
-        puts "Product building block updated with: #{pb.slug}."
-      end
+      puts "Product building block updated with: #{pb.slug}." if pb.save!
     end
     change_column(:product_building_blocks, :slug, :string, null: false, unique: true)
   end

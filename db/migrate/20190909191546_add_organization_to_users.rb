@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddOrganizationToUsers < ActiveRecord::Migration[5.1]
   def change
     add_column :users, :organization_id, :bigint

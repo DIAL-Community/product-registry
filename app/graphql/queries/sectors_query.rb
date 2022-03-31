@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Queries
   class SectorsQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
@@ -6,9 +8,7 @@ module Queries
 
     def resolve(search:, locale:)
       sectors = Sector.where(is_displayable: true, locale: locale).order(:name)
-      unless search.blank?
-        sectors = sectors.name_contains(search)
-      end
+      sectors = sectors.name_contains(search) unless search.blank?
       sectors
     end
   end
@@ -18,8 +18,7 @@ module Queries
     type [Types::SectorType], null: false
 
     def resolve(locale:)
-      sectors = Sector.where(parent_sector_id: nil, is_displayable: true, locale: locale).order(:name)
-      sectors
+      Sector.where(parent_sector_id: nil, is_displayable: true, locale: locale).order(:name)
     end
   end
 
@@ -33,9 +32,7 @@ module Queries
 
     def resolve(search:, locale:)
       sectors = Sector.where(is_displayable: true, locale: locale, parent_sector_id: nil).order(:name)
-      unless search.blank?
-        sectors = sectors.name_contains(search)
-      end
+      sectors = sectors.name_contains(search) unless search.blank?
       sectors
     end
   end

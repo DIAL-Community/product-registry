@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class ProductDescriptionType < Types::BaseObject
     field :id, ID, null: false
@@ -34,7 +36,7 @@ module Types
 
     field :sectors, [Types::SectorType], null: true, method: :sectors_localized
     field :product_description, Types::ProductDescriptionType, null: true,
-      method: :product_description_localized
+                                                               method: :product_description_localized
 
     field :origins, [Types::OriginType], null: true
     field :endorsers, [Types::EndorserType], null: true

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTaskTrackers < ActiveRecord::Migration[5.2]
   def change
     create_table :task_trackers do |t|

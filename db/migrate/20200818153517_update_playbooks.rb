@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 class UpdatePlaybooks < ActiveRecord::Migration[5.2]
   def up
-    #drop_table :plays_subplays
+    # drop_table :plays_subplays
 
     create_table :activity_descriptions do |t|
       t.references :activity, foreign_key: true
       t.string :locale, null: false
-      t.string :description, null: false, default: ""
+      t.string :description, null: false, default: ''
     end
 
-    change_column :principle_descriptions, :description, :string, default: ""
-    change_column :task_descriptions, :description, :string, default: ""
-    change_column :task_descriptions, :prerequisites, :string, default: ""
-    change_column :task_descriptions, :outcomes, :string, default: ""
+    change_column :principle_descriptions, :description, :string, default: ''
+    change_column :task_descriptions, :description, :string, default: ''
+    change_column :task_descriptions, :prerequisites, :string, default: ''
+    change_column :task_descriptions, :outcomes, :string, default: ''
 
-    change_column :playbook_descriptions, :overview, :string, default: ""
-    change_column :playbook_descriptions, :audience, :string, default: ""
-    change_column :playbook_descriptions, :outcomes, :string, default: ""
+    change_column :playbook_descriptions, :overview, :string, default: ''
+    change_column :playbook_descriptions, :audience, :string, default: ''
+    change_column :playbook_descriptions, :outcomes, :string, default: ''
   end
 
   def down
-    #drop_table :activity_descriptions
+    # drop_table :activity_descriptions
 
     remove_column :principle_descriptions, :description
     add_column :principle_descriptions, :description, :jsonb, default: {}

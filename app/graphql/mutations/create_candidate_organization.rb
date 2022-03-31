@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'modules/slugger'
 
 module Mutations
@@ -40,15 +42,13 @@ module Mutations
       end
 
       response = {}
-      if Recaptcha.verify_via_api_call(captcha,
-                                       {
-                                         secret_key: Rails.application.secrets.captcha_secret_key,
-                                         skip_remote_ip: true
-                                       }) && candidate_organization.save!
-        response[:slug] = candidate_organization.slug
-      else
-        response[:slug] = nil
-      end
+      response[:slug] = if Recaptcha.verify_via_api_call(captcha,
+                                                         {
+                                                           secret_key: Rails.application.secrets.captcha_secret_key,
+                                                           skip_remote_ip: true
+                                                         }) && candidate_organization.save!
+                          candidate_organization.slug
+                        end
       response
     end
 
