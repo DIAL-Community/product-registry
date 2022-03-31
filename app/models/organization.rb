@@ -76,7 +76,6 @@ class Organization < ApplicationRecord
 
   def organization_countries_ordered
     countries = self.countries&.order('name ASC')
-    
     countries
   end
 
