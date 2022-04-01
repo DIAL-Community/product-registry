@@ -31,8 +31,11 @@ module Mutations
         playbook = Playbook.new(name: name)
         playbook.slug = slug_em(name)
 
-        first_duplicate = Playbook.slug_starts_with(playbook.slug).order(slug: :desc).first
-        playbook.slug = playbook.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        if Playbook.where(slug: slug_em(name)).count.positive?
+          # Check if we need to add _dup to the slug.
+          first_duplicate = Playbook.slug_starts_with(slug_em(name)).order(slug: :desc).first
+          playbook.slug = playbook.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        end
       end
 
       # Re-slug if the name is updated (not the same with the one in the db).
@@ -40,8 +43,11 @@ module Mutations
         playbook.name = name
         playbook.slug = slug_em(name)
 
-        first_duplicate = Playbook.slug_starts_with(playbook.slug).order(slug: :desc).first
-        play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        if Playbook.where(slug: slug_em(name)).count.positive?
+          # Check if we need to add _dup to the slug.
+          first_duplicate = Playbook.slug_starts_with(playbook.slug).order(slug: :desc).first
+          playbook.slug = playbook.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        end
       end
 
       playbook.tags = tags

@@ -1,59 +1,50 @@
 # frozen_string_literal: true
 
 module Queries
-  class PlaysQuery < Queries::BaseQuery
+  class MovesQuery < Queries::BaseQuery
     argument :search, String, required: false, default_value: ''
-    type [Types::PlayType], null: false
+    type [Types::MoveType], null: false
 
     def resolve(search:)
-      plays = Play.all.order(:name)
-      plays = plays.name_contains(search) unless search.blank?
-      plays
-    end
-  end
-
-  class PlayQuery < Queries::BaseQuery
-    argument :slug, String, required: true
-    type Types::PlayType, null: false
-
-    def resolve(slug:)
-      Play.find_by(slug: slug)
-    end
-  end
-
-  class SearchPlaysQuery < Queries::BaseQuery
-    include ActionView::Helpers::TextHelper
-
-    argument :search, String, required: false, default_value: ''
-    argument :products, [String], required: false, default_value: []
-
-    type Types::PlayType.connection_type, null: false
-
-    def resolve(search:, products:)
-      plays = Play.all.order(:name)
-      if !search.nil? && !search.to_s.strip.empty?
-        name_plays = plays.name_contains(search)
-        desc_plays = plays.joins(:play_descriptions)
-                          .where('LOWER(description) like LOWER(?)', "%#{search}%")
-        plays = plays.where(id: (name_plays + desc_plays).uniq)
+      moves = PlayMove.all.order(:name)
+      unless search.blank?
+        moves = moves.name_contains(search)
       end
-
-      filtered_products = products.reject { |x| x.nil? || x.empty? }
-      unless filtered_products.empty?
-        plays = plays.joins(:products)
-                     .where(products: { id: filtered_products })
-      end
-
-      plays.distinct
+      moves
     end
   end
 
   class MoveQuery < Queries::BaseQuery
+    argument :play_slug, String, required: true
     argument :slug, String, required: true
     type Types::MoveType, null: false
 
-    def resolve(slug:)
-      PlayMove.find_by(slug: slug)
+    def resolve(play_slug:, slug:)
+      play = Play.find_by(slug: play_slug)
+      PlayMove.find_by(slug: slug, play_id: play.id)
+    end
+  end
+
+  class SearchMovesQuery < Queries::BaseQuery
+    include ActionView::Helpers::TextHelper
+
+    argument :search, String, required: false, default_value: ''
+
+    type Types::MoveType.connection_type, null: false
+
+    def resolve(search:, products:)
+      moves = PlayMove.all.order(:name)
+      if !search.nil? && !search.to_s.strip.empty?
+        moves = moves.name_contains(search)
+      end
+
+      filtered_products = products.reject { |x| x.nil? || x.empty? }
+      unless filtered_products.empty?
+        moves = moves.joins(:products)
+                     .where(products: { id: filtered_products })
+      end
+
+      moves.distinct
     end
   end
 end
