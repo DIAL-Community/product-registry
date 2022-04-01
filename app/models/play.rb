@@ -4,7 +4,7 @@ class Play < ApplicationRecord
   include Auditable
 
   has_many :play_descriptions, dependent: :destroy
-  has_many :play_moves, dependent: :destroy
+  has_many :play_moves, -> { order('play_moves.order ASC') }, dependent: :destroy
   has_and_belongs_to_many :playbooks, join_table: :playbook_plays
   has_and_belongs_to_many :products, join_table: :plays_products
   has_and_belongs_to_many :building_blocks, join_table: :plays_building_blocks

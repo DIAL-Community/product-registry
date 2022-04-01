@@ -61,13 +61,4 @@ module Queries
       plays.distinct
     end
   end
-
-  class MoveQuery < Queries::BaseQuery
-    argument :slug, String, required: true
-    type Types::MoveType, null: false
-
-    def resolve(slug:)
-      PlayMove.find_by(slug: slug)
-    end
-  end
 end

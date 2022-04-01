@@ -19,6 +19,7 @@ module Types
     field :move_description, Types::MoveDescriptionType, null: true,
                                                          method: :move_description_localized
 
+    field :play, Types::PlayType, null: false
     field :play_name, String, null: true
     field :play_slug, String, null: true
   end

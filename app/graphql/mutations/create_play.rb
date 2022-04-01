@@ -10,15 +10,16 @@ module Mutations
     argument :slug, String, required: true
     argument :tags, GraphQL::Types::JSON, required: false, default_value: []
     argument :description, String, required: true
+    argument :playbook_slug, String, required: false
 
     field :play, Types::PlayType, null: false
     field :errors, [String], null: false
 
-    def resolve(name:, slug:, description:, tags:)
+    def resolve(name:, slug:, description:, tags:, playbook_slug:)
       unless is_admin
         return {
           playbook: nil,
-          errors: ['Must be admin to create a playbook']
+          errors: ['Not allowed to create a play.']
         }
       end
 
@@ -27,8 +28,11 @@ module Mutations
         play = Play.new(name: name)
         play.slug = slug_em(name)
 
-        first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
-        play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        if Play.where(slug: play.slug).count.positive?
+          # Check if we need to add _dup to the slug.
+          first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
+          play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        end
       end
 
       # Re-slug if the name is updated (not the same with the one in the db).
@@ -36,8 +40,11 @@ module Mutations
         play.name = name
         play.slug = slug_em(name)
 
-        first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
-        play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        if Play.where(slug: play.slug).count.positive?
+          # Check if we need to add _dup to the slug.
+          first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
+          play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        end
       end
 
       play.tags = tags
@@ -48,7 +55,27 @@ module Mutations
         play_desc.play = play
         play_desc.locale = I18n.locale
         play_desc.description = description
-        play_desc.save
+        if play_desc.save
+          # Need to figure out how to add logger here!
+          puts("Description for '#{play.name}' saved.")
+        end
+
+        if !playbook_slug.nil? && !playbook_slug.blank?
+          playbook = Playbook.find_by(slug: playbook_slug)
+          unless playbook.nil?
+            max_order = PlaybookPlay.where(playbook: playbook).maximum('order')
+            max_order = max_order.nil? ? 0 : (max_order + 1)
+
+            assigned_play = PlaybookPlay.new
+            assigned_play.play = play
+            assigned_play.playbook = playbook
+            assigned_play.order = max_order
+            if assigned_play.save
+              # Need to figure out how to add logger here!
+              puts("Play '#{play.name}' assigned to '#{playbook.name}'.")
+            end
+          end
+        end
 
         # Successful creation, return the created object with no errors
         {
@@ -88,7 +115,7 @@ module Mutations
       unless is_admin
         return {
           playbook: nil,
-          errors: ['Must be admin to create a playbook']
+          errors: ['Not allowed to duplicate a play.']
         }
       end
 
@@ -132,7 +159,7 @@ module Mutations
     end
   end
 
-  class UpdatePlay < Mutations::BaseMutation
+  class UpdatePlayOrder < Mutations::BaseMutation
     argument :playbook_slug, String, required: true
     argument :play_slug, String, required: true
     argument :operation, String, required: true
@@ -145,7 +172,7 @@ module Mutations
       unless is_admin
         return {
           playbook: nil,
-          errors: ['Must be admin to create a playbook']
+          errors: ['Not allowed to update playbook.']
         }
       end
 

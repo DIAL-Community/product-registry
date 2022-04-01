@@ -75,9 +75,7 @@ class Organization < ApplicationRecord
   end
 
   def organization_countries_ordered
-    countries = self.countries&.order('name ASC')
-    
-    countries
+    countries&.order('name ASC')
   end
 
   # overridden
