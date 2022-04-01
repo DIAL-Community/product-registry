@@ -24,10 +24,10 @@ class BuildingBlock < ApplicationRecord
   attr_accessor :bb_desc
 
   def building_block_description_localized
-    description = building_block_descriptions.order('LENGTH(description) DESC')
+    description = building_block_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                              .find_by(locale: I18n.locale)
     if description.nil?
-      description = building_block_descriptions.order('LENGTH(description) DESC')
+      description = building_block_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                                .find_by(locale: 'en')
     end
     description

@@ -95,7 +95,10 @@ module Types
     field :play, resolver: Queries::PlayQuery
     field :search_plays, resolver: Queries::SearchPlaysQuery
     field :search_playbook_plays, resolver: Queries::SearchPlaybookPlaysQuery
+
+    field :moves, resolver: Queries::MovesQuery
     field :move, resolver: Queries::MoveQuery
+    field :search_moves, resolver: Queries::SearchMovesQuery
 
     field :me, resolver: Queries::MeQuery
   end
