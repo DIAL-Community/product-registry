@@ -6,12 +6,15 @@ module Types
     field :create_candidate_organization, mutation: Mutations::CreateCandidateOrganization
 
     field :create_playbook, mutation: Mutations::CreatePlaybook
+    field :auto_save_playbook, mutation: Mutations::CreatePlaybook
 
     field :create_play, mutation: Mutations::CreatePlay
+    field :auto_save_play, mutation: Mutations::CreatePlay
     field :update_play_order, mutation: Mutations::UpdatePlayOrder
     field :duplicate_play, mutation: Mutations::DuplicatePlay
 
     field :create_move, mutation: Mutations::CreateMove
+    field :auto_save_move, mutation: Mutations::CreateMove
     field :update_move_order, mutation: Mutations::UpdateMoveOrder
     field :create_resource, mutation: Mutations::CreateResource
 

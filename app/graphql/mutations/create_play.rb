@@ -15,7 +15,7 @@ module Mutations
     field :play, Types::PlayType, null: false
     field :errors, [String], null: false
 
-    def resolve(name:, slug:, description:, tags:, playbook_slug:)
+    def resolve(name:, slug:, description:, tags:, playbook_slug: nil)
       unless is_admin
         return {
           playbook: nil,
