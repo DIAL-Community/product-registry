@@ -140,3 +140,7 @@ gem 'graphiql-rails', group: :development
 gem 'rack-attack'
 
 gem 'google-cloud-translate', '~> 3.2'
+
+# Uploading images through GraphQL using v2 multi part request spec.
+# https://github.com/jetruby/apollo_upload_server-ruby
+gem 'apollo_upload_server', '2.1.0'

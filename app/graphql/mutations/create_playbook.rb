@@ -8,6 +8,8 @@ module Mutations
 
     argument :name, String, required: true
     argument :slug, String, required: true
+    argument :cover, ApolloUploadServer::Upload, required: false
+    argument :author, String, required: false
     argument :tags, GraphQL::Types::JSON, required: false, default_value: []
     argument :plays, GraphQL::Types::JSON, required: false, default_value: []
     argument :overview, String, required: true
@@ -17,7 +19,7 @@ module Mutations
     field :playbook, Types::PlaybookType, null: true
     field :errors, [String], null: true
 
-    def resolve(name:, slug:, tags:, overview:, audience:, outcomes:, plays:)
+    def resolve(name:, slug:, author:, tags:, overview:, audience:, outcomes:, plays:, cover: nil)
       unless is_admin
         return {
           playbook: nil,
@@ -51,8 +53,19 @@ module Mutations
       end
 
       playbook.tags = tags
+      playbook.author = author
 
       if playbook.save
+        unless cover.nil?
+          uploader = LogoUploader.new(playbook, cover.original_filename, context[:current_user])
+          begin
+            uploader.store!(cover)
+          rescue StandardError => e
+            puts "Unable to save cover for: #{playbook.name}."
+          end
+          playbook.set_image_changed(cover.original_filename)
+        end
+
         playbook_desc = PlaybookDescription.find_by(playbook: playbook, locale: I18n.locale)
         playbook_desc = PlaybookDescription.new if playbook_desc.nil?
         playbook_desc.playbook = playbook

@@ -34,7 +34,7 @@ lintandtest:
     - apt-get update -yy && apt-get install build-essential libpq-dev postgresql postgresql-contrib cmake nodejs -y
     - gem install bundler -v 2.2.13
     - bundle install
-    - bundle exec rubocop
+    - bundle exec rubocop --config .rubocop.yml
     - cp config/database.yml.gitlab config/database.yml
     - until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_test" -c '\q'; do sleep 2s; done
     - RAILS_ENV=test bundle exec rake db:create db:migrate
