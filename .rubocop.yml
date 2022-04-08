@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - 'db/schema.rb'
     - 'vendor/**/*'
+    - 'node_modules/**/*'
 
 Metrics/BlockLength:
   Enabled: false
