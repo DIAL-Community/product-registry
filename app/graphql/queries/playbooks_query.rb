@@ -35,7 +35,7 @@ module Queries
       if !search.nil? && !search.to_s.strip.empty?
         name_playbooks = playbooks.name_contains(search)
         desc_playbooks = playbooks.joins(:playbook_descriptions)
-                                  .where('LOWER(description) like LOWER(?)', "%#{search}%")
+                                  .where('LOWER(overview) like LOWER(?)', "%#{search}%")
         playbooks = playbooks.where(id: (name_playbooks + desc_playbooks).uniq)
       end
 

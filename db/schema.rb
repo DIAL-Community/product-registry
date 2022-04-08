@@ -281,7 +281,6 @@ ActiveRecord::Schema.define(version: 2022_04_04_230635) do
     t.string "description", null: false
     t.string "prerequisites", default: "", null: false
     t.string "outcomes", default: "", null: false
-    t.index ["play_move_id"], name: "index_move_descriptions_on_play_move_id"
     t.index ["play_move_id"], name: "index_task_descriptions_on_play_task_id"
   end
 
@@ -428,7 +427,6 @@ ActiveRecord::Schema.define(version: 2022_04_04_230635) do
     t.jsonb "resources", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["play_id"], name: "index_play_moves_on_play_id"
     t.index ["play_id"], name: "index_play_tasks_on_play_id"
   end
 
@@ -454,9 +452,9 @@ ActiveRecord::Schema.define(version: 2022_04_04_230635) do
     t.string "name", null: false
     t.string "slug", null: false
     t.jsonb "phases", default: [], null: false
-    t.string "tags", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tags", default: [], array: true
     t.boolean "draft", default: true, null: false
     t.string "author"
   end
@@ -466,10 +464,10 @@ ActiveRecord::Schema.define(version: 2022_04_04_230635) do
     t.string "slug", null: false
     t.string "author"
     t.jsonb "resources", default: [], null: false
-    t.string "tags", default: [], array: true
     t.string "version", default: "1.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tags", default: [], array: true
   end
 
   create_table "plays_building_blocks", force: :cascade do |t|
@@ -914,7 +912,6 @@ ActiveRecord::Schema.define(version: 2022_04_04_230635) do
   add_foreign_key "handbook_pages", "handbooks"
   add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
   add_foreign_key "move_descriptions", "play_moves"
-  add_foreign_key "move_descriptions", "play_moves"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
@@ -936,7 +933,6 @@ ActiveRecord::Schema.define(version: 2022_04_04_230635) do
   add_foreign_key "organizations_states", "regions"
   add_foreign_key "page_contents", "handbook_pages"
   add_foreign_key "play_descriptions", "plays"
-  add_foreign_key "play_moves", "plays"
   add_foreign_key "play_moves", "plays"
   add_foreign_key "playbook_descriptions", "playbooks"
   add_foreign_key "playbook_plays", "playbooks"
