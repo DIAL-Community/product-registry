@@ -413,13 +413,13 @@ namespace :geocode do
     Net::HTTP.get(uri)
   end
 
-  def reverse_geocode_with_google(location, auth_key)
-    puts "Reverse geocoding location: (#{location.points[0].x.to_f}, #{location.points[0].y.to_f})."
+  def reverse_geocode_with_google(points, auth_key)
+    puts "Reverse geocoding location: (#{points[0].x.to_f}, #{points[0].y.to_f})."
     uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
     geocode_uri = uri_template.expand({
                                         'q' => {
                                           'key' => auth_key,
-                                          'latlng' => "#{location.points[0].x.to_f}, #{location.points[0].y.to_f}"
+                                          'latlng' => "#{points[0].x.to_f}, #{points[0].y.to_f}"
                                         }
                                       })
 
