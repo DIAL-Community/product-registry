@@ -90,6 +90,7 @@ module Types
     field :playbooks, resolver: Queries::PlaybooksQuery
     field :playbook, resolver: Queries::PlaybookQuery
     field :search_playbooks, resolver: Queries::SearchPlaybooksQuery
+    field :search_playbook_tags, resolver: Queries::SearchPlaybookTagsQuery
 
     field :plays, resolver: Queries::PlaysQuery
     field :play, resolver: Queries::PlayQuery

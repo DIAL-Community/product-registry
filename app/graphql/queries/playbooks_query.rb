@@ -26,25 +26,54 @@ module Queries
 
     argument :search, String, required: false, default_value: ''
     argument :products, [String], required: false, default_value: []
+    argument :tags, [String], required: false, default_value: []
 
     type Types::PlaybookType.connection_type, null: false
 
-    def resolve(search:, products:)
+    def resolve(search:, products:, tags:)
       playbooks = Playbook.all.order(:name)
       if !search.nil? && !search.to_s.strip.empty?
         name_playbooks = playbooks.name_contains(search)
         desc_playbooks = playbooks.joins(:playbook_descriptions)
-                                  .where('LOWER(description) like LOWER(?)', "%#{search}%")
+                                  .where('LOWER(overview) like LOWER(?)', "%#{search}%")
         playbooks = playbooks.where(id: (name_playbooks + desc_playbooks).uniq)
       end
 
-      filtered_products = products.reject { |x| x.nil? || x.empty? }
-      unless filtered_products.empty?
-        playbooks = playbooks.joins(:products)
-                             .where(products: { id: filtered_products })
+      filtered_tags = tags.reject { |x| x.nil? || x.blank? }
+      unless filtered_tags.empty?
+        playbooks = playbooks.where(
+          "tags @> '{#{filtered_tags.join(',').downcase}}'::varchar[] or " \
+          "tags @> '{#{filtered_tags.join(',')}}'::varchar[]"
+        )
       end
 
+      # Commenting this one out until we can assign product to plays.
+      # filtered_products = products.reject { |x| x.nil? || x.empty? }
+      # unless filtered_products.empty?
+      #   play_ids = Play.joins(:products)
+      #                  .where(products: { id: filtered_products })
+      #                  .select('id')
+      #   playbooks.joins(:plays).where(plays: { id: play_ids })
+      # end
+
       playbooks.distinct
+    end
+  end
+
+  class SearchPlaybookTagsQuery < Queries::BaseQuery
+    include ActionView::Helpers::TextHelper
+
+    argument :search, String, required: false, default_value: ''
+
+    type [Types::TagType], null: false
+
+    def resolve(search:)
+      used_tags = []
+      Playbook.all.each do |playbook|
+        used_tags += playbook.tags
+      end
+
+      Tag.where(name: used_tags)
     end
   end
 end

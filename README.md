@@ -26,10 +26,17 @@ Please also reference the [Wiki page for the Catalog](https://solutions-catalog.
 ## Prerequisites
 
  * Ruby (version 2.5 or greater)
- * Rails (version 5)
- * PostgreSQL 
+ * Rails (version 5.2)
+ * PostgreSQL (version 12 or higher)
+ * Redis
 
-## Application configuration
+## Application configuration for development
+
+Environment variables must be set prior to running the application. See the setEnv.example.sh script 
+in the root directory of the project and set all variables for development environment. In your 
+terminal session, run the setEnv.sh script to set environment variables:
+
+ * source ./setEnv.sh dev
 
 To configure and run the application, navigate to project directory and run the following commands:
 

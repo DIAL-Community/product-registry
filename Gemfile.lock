@@ -54,6 +54,9 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ansi (1.5.0)
+    apollo_upload_server (2.1.0)
+      actionpack (>= 4.2)
+      graphql (>= 1.8)
     arel (9.0.0)
     ast (2.4.2)
     autoprefixer-rails (9.8.5)
@@ -566,6 +569,7 @@ DEPENDENCIES
   Dhalang!
   actionpack-page_caching
   addressable
+  apollo_upload_server (= 2.1.0)
   bootsnap (>= 1.1.0)
   bootstrap
   byebug

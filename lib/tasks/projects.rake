@@ -37,31 +37,32 @@ namespace :projects do
     geocode_data = JSON.parse(geocode_with_google(city_name, nil, google_auth_key))
     geocode_results = geocode_data['results']
     geocode_results.each do |geocode_result|
+      puts 'GEOCODE: ' + geocode_result.to_s
       next if geocode_result['types'].include?('point_of_interest')
 
       geometry = geocode_result['geometry']
       points = [ActiveRecord::Point.new(geometry['location']['lat'], geometry['location']['lng'])]
-    end
 
-    geocode_data = JSON.parse(reverse_geocode_with_google(points, google_auth_key))
-    geocode_results = geocode_data['results']
-    geocode_results.each do |geocode_result|
-      next if geocode_result['types'].include?('point_of_interest')
+      geocode_data = JSON.parse(reverse_geocode_with_google(points, google_auth_key))
+      geocode_results = geocode_data['results']
+      geocode_results.each do |geocode_result|
+        next if geocode_result['types'].include?('point_of_interest')
 
-      geocode_result['address_components'].each do |address_component|
-        if address_component['types'].include?('locality') ||
-           address_component['types'].include?('postal_town')
-          city_data['city'] = address_component['long_name']
-        elsif address_component['types'].include?('administrative_area_level_1')
-          city_data['region'] = address_component['long_name']
-        elsif address_component['types'].include?('country')
-          city_data['country_code'] = address_component['short_name']
+        geocode_result['address_components'].each do |address_component|
+          if address_component['types'].include?('locality') ||
+             address_component['types'].include?('postal_town')
+            city_data['city'] = address_component['long_name']
+          elsif address_component['types'].include?('administrative_area_level_1')
+            city_data['region'] = address_component['long_name']
+          elsif address_component['types'].include?('country')
+            city_data['country_code'] = address_component['short_name']
+          end
         end
       end
-    end
 
-    unless city_data['city'].blank? || city_data['region'].blank? || city_data['country_code'].blank?
-      find_city(city_data['city'], city_data['region'], city_data['country_code'], google_auth_key)
+      unless city_data['city'].blank? || city_data['region'].blank? || city_data['country_code'].blank?
+        find_city(city_data['city'], city_data['region'], city_data['country_code'], google_auth_key)
+      end
     end
   end
 
@@ -122,49 +123,53 @@ namespace :projects do
 
       country = nil
       project_countries = []
-      if !jurisdictions.index(';').nil?
-        jurisdiction_data = jurisdictions.split(';')
-        jurisdiction_data.each do |jurisdiction|
-          if jurisdictions.index(',').nil?
-            country = Country.find_by(name: jurisdiction.strip)
-            puts "Searching country: #{jurisdiction} resolving: #{country}."
-          else
-            city_country = jurisdictions.split(',')
-            city = geocode_city(name: city_country[0])
-            puts "Searching city: #{city_country[0]} resolving: #{city}."
-            if city.nil?
-              country = Country.find_by(name: city_country[1])
-              puts "Searching country: #{city_country[1]} resolving: #{country}."
+      if jurisdictions != 'N/A' && jurisdictions != 'Unknown'
+        if !jurisdictions.index(';').nil?
+          jurisdiction_data = jurisdictions.split(';')
+          jurisdiction_data.each do |jurisdiction|
+            if jurisdictions.index(',').nil?
+              country = Country.find_by(name: jurisdiction.strip)
+              puts "Searching country: #{jurisdiction} resolving: #{country}."
             else
+              city_country = jurisdictions.split(',')
+              city = geocode_city(name: city_country[0])
+              puts "Searching city: #{city_country[0]} resolving: #{city}."
+              if city.nil?
+                country = Country.find_by(name: city_country[1])
+                puts "Searching country: #{city_country[1]} resolving: #{country}."
+              elsif !city.is_a?(Array)
+                country = city.region.country
+              end
+            end
+            project_countries << country unless country.nil?
+          end
+        elsif !jurisdictions.index(',').nil?
+          # Multiple country? Or City, Country
+          city_country = jurisdictions.split(',')
+          city = geocode_city(name: city_country[0])
+          puts "Searching city: #{city_country[0]} resolving: #{city[0]}."
+          if city[0].nil?
+            country = Country.find_by(name: city_country[1])
+            puts "Searching country: #{city_country[1]} resolving: #{country}."
+          else
+            country = city[0]['region']['country'] unless city[0]['region'].nil?
+          end
+          project_countries << country unless country.nil?
+        else
+          # It's just a single country entry
+          country = Country.find_by(name: jurisdictions.strip)
+          puts "Searching country: #{jurisdictions} resolving: #{country}."
+          if country.nil?
+            # Or is it a city?
+            city = geocode_city(name: jurisdictions.strip)
+            if !city.is_a?(Array) && !city.nil?
               country = city.region.country
             end
           end
           project_countries << country unless country.nil?
         end
-      elsif !jurisdictions.index(',').nil?
-        # Multiple country? Or City, Country
-        city_country = jurisdictions.split(',')
-        city = geocode_city(name: city_country[0])
-        puts "Searching city: #{city_country[0]} resolving: #{city}."
-        if city.nil?
-          country = Country.find_by(name: city_country[1])
-          puts "Searching country: #{city_country[1]} resolving: #{country}."
-        else
-          country = city.region.country
-        end
-        project_countries << country unless country.nil?
-      else
-        # It's just a single country entry
-        country = Country.find_by(name: jurisdictions.strip)
-        puts "Searching country: #{jurisdictions} resolving: #{country}."
-        if country.nil?
-          # Or is it a city?
-          city = geocode_city(name: jurisdictions.strip)
-          country = city.region.country unless city.nil?
-        end
-        project_countries << country unless country.nil?
+        existing_project.countries = project_countries
       end
-      existing_project.countries = project_countries
 
       # Assign sector information based on the pillar data?
       sector = Sector.find_by(name: data['Pillar'].strip)
@@ -180,12 +185,19 @@ namespace :projects do
                                 .strip
                                 .split(' ')
                                 .each do |oss_website|
+        next if ['N/A', 'No'].include?(oss_website)
+
+        puts 'OSS Website: ' + oss_website
         # sanitized_website = oss_website.sub(/.*?(?=http)/im, '')
         product = Product.where('LOWER(products.website) like LOWER(?)', "%#{oss_website}%")
                          .first
+        puts 'Product found by website: ' + product.name unless product.nil?
         products << product unless product.nil?
-        product = Product.where('LOWER(products.repository) like LOWER(?)', "%#{oss_website}%")
-                         .first
+        repository = ProductRepository.where('LOWER(absolute_url) like LOWER(?)', "%#{oss_website}%").first
+        next if repository.nil?
+
+        product = Product.find(repository['product_id'])
+        puts 'Product found by repository: ' + product.name unless product.nil?
         products << product unless product.nil?
       end
       # Or it could be in the link column
@@ -193,11 +205,17 @@ namespace :projects do
                   .strip
                   .split(' ')
                   .each do |oss_website|
+        puts 'Link OSS Website: ' + oss_website
         product = Product.where('LOWER(products.website) like LOWER(?)', "%#{oss_website}%")
                          .first
+        puts 'Product found by website: ' + product.name unless product.nil?
         products << product unless product.nil?
-        product = Product.where('LOWER(products.repository) like LOWER(?)', "%#{oss_website}%")
-                         .first
+        repository = ProductRepository.where('LOWER(absolute_url) like LOWER(?)', "%#{oss_website}%").first
+        puts 'Repository found: ' + repository.name unless repository.nil?
+        next if repository.nil?
+
+        product = Product.find(repository.product_id)
+        puts 'Product found by repository: ' + product.name unless product.nil?
         products << product unless product.nil?
       end
       existing_project.products = products.to_a
