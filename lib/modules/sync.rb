@@ -428,7 +428,7 @@ module Modules
       new_project.save!
 
       # Assign implementing organization
-      implementer_org = Organization.name_contains(english_project[6])
+      implementer_org = Organization.name_contains(english_project[5])
 
       if !implementer_org.empty? && !new_project.organizations.include?(implementer_org[0])
         proj_org = ProjectsOrganization.new
@@ -454,11 +454,15 @@ module Modules
 
       # Assign tags
       unless english_project[23].nil?
+        add_tags = []
         proj_tags = english_project[23].gsub(/\s*\(.+\)/, '').split(',').map(&:strip)
         proj_tags.each do |proj_tag|
-          Tag.where(name: proj_tag, slug: slug_em(proj_tag)).first_or_create
+          new_tag = Tag.where(name: proj_tag, slug: slug_em(proj_tag)).first
+          unless new_tag.nil?
+            add_tags << new_tag
+          end
         end
-        new_project.tags = proj_tags
+        new_project.tags = add_tags
       end
 
       # Assign to SDGs
@@ -477,7 +481,7 @@ module Modules
       end
 
       # Assign to locations
-      country_names = english_project[15].split(',')
+      country_names = !english_project[14].nil? && english_project[14].split(',')
       country_names.each do |country_name|
         country = Country.find_by(name: country_name.strip)
         next if country.nil?
@@ -503,8 +507,8 @@ module Modules
 
       # Create links to Digital Principles
       principles = DigitalPrinciple.all.order(:id)
-      (30..38).each do |principle_col|
-        principle_index = principle_col - 30
+      (52..60).each do |principle_col|
+        principle_index = principle_col - 52
         next unless english_project[principle_col] == '1'
 
         unless new_project.digital_principles.include?(principles[principle_index])
@@ -527,9 +531,11 @@ module Modules
           'slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', "%#{sector_slug}%", locale
         ).first
         if existing_sector.nil?
+          puts 'Sector slug: ' + sector_slug
+          puts 'Lookup: ' + sector_json[sector_slug].to_s
           if !sector_json[sector_slug].nil?
             existing_sector = Sector.where(
-              'slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', "%#{sector_json[sector_slug]}%", locale
+              'slug like ? and locale = ? and is_displayable is true', "%#{sector_json[sector_slug]}%", locale
             ).first
             sector_array << existing_sector.id unless existing_sector.nil?
           else
