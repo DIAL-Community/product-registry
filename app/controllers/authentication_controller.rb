@@ -52,8 +52,9 @@ class AuthenticationController < Devise::SessionsController
     user = User.find_by(email: params['user']['email'])
 
     if user.nil?
+      puts "USER NIL"
       respond_to do |format|
-        format.json { render(json: {}, status: :ok) }
+        format.json { render(json: { userEmail: params['user']['email'], userName: params['user']['email']}, status: :ok) }
       end
     else
       sign_in user, store: true
@@ -67,6 +68,7 @@ class AuthenticationController < Devise::SessionsController
           json = ok_response(user, can_edit, organization)
         end
         format.json do
+          puts "RENDER: " + json.to_s
           render(
             json: json,
             status: status
