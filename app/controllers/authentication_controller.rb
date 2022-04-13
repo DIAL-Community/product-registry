@@ -53,7 +53,7 @@ class AuthenticationController < Devise::SessionsController
 
     if user.nil?
       respond_to do |format|
-        format.json { render(json: { }, status: :ok) }
+        format.json { render(json: {}, status: :ok) }
       end
     else
       sign_in user, store: true
