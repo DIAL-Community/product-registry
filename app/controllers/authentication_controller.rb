@@ -51,21 +51,27 @@ class AuthenticationController < Devise::SessionsController
   def sign_in_auth0
     user = User.find_by(email: params['user']['email'])
 
-    sign_in user, store: true
-    can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
-    organization = Organization.find(user.organization_id) if user.organization_id
-    respond_to do |format|
-      status = :unauthorized
-      json = unauthorized_response
-      if user.update(authentication_token: Devise.friendly_token)
-        status = :ok
-        json = ok_response(user, can_edit, organization)
+    if user.nil?
+      respond_to do |format|
+        format.json { render(json: { }, status: :ok) }
       end
-      format.json do
-        render(
-          json: json,
-          status: status
-        )
+    else
+      sign_in user, store: true
+      can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
+      organization = Organization.find(user.organization_id) if user.organization_id
+      respond_to do |format|
+        status = :unauthorized
+        json = unauthorized_response
+        if user.update(authentication_token: Devise.friendly_token)
+          status = :ok
+          json = ok_response(user, can_edit, organization)
+        end
+        format.json do
+          render(
+            json: json,
+            status: status
+          )
+        end
       end
     end
   end
@@ -131,12 +137,18 @@ class AuthenticationController < Devise::SessionsController
 
   def invalidate_token
     user = User.find_by(email: request.headers['X-User-Email'])
-    user.authentication_token = Devise.friendly_token
-    respond_to do |format|
-      if user.save!
+    if user.nil?
+      respond_to do |format|
         format.json { render(json: { userToken: nil }, status: :ok) }
-      else
-        format.json { render(json: {}, status: :unprocessable_entity) }
+      end
+    else
+      user.authentication_token = Devise.friendly_token
+      respond_to do |format|
+        if user.save!
+          format.json { render(json: { userToken: nil }, status: :ok) }
+        else
+          format.json { render(json: {}, status: :unprocessable_entity) }
+        end
       end
     end
   end
