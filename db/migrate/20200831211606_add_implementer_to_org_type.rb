@@ -2,7 +2,7 @@
 
 class AddImplementerToOrgType < ActiveRecord::Migration[5.2]
   def up
-    execute <<-DDL
+    execute(<<-DDL)
     ALTER TYPE org_type RENAME TO org_type_save;
     CREATE TYPE org_type AS ENUM ('owner', 'maintainer', 'funder', 'implementer');
     ALTER TYPE product_type RENAME TO product_type_save;
@@ -11,7 +11,7 @@ class AddImplementerToOrgType < ActiveRecord::Migration[5.2]
   end
 
   def down
-    execute <<-DDL
+    execute(<<-DDL)
     ALTER TYPE org_type RENAME TO org_type_new;
     CREATE TYPE org_type AS ENUM ('owner', 'maintainer', 'funder');
     ALTER TYPE product_type RENAME TO product_type_new;

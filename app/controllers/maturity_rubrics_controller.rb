@@ -10,37 +10,37 @@ class MaturityRubricsController < ApplicationController
     if params[:without_paging]
       @maturity_rubrics = MaturityRubric.order(:name)
       !params[:search].blank? && @maturity_rubrics = @maturity_rubrics.name_contains(params[:search])
-      authorize @maturity_rubrics, :view_allowed?
+      authorize(@maturity_rubrics, :view_allowed?)
       return @maturity_rubrics
     end
 
     current_page = params[:page] || 1
 
     @maturity_rubric = MaturityRubric.order(:name)
-    @maturity_rubrics = if params[:search]
-                          @maturity_rubric.name_contains(params[:search])
+    if params[:search]
+      @maturity_rubrics = @maturity_rubric.name_contains(params[:search])
                                           .paginate(page: current_page, per_page: 5)
-                        else
-                          @maturity_rubric.paginate(page: current_page, per_page: 5)
-                        end
-    authorize @maturity_rubrics, :view_allowed?
+    else
+      @maturity_rubrics = @maturity_rubric.paginate(page: current_page, per_page: 5)
+    end
+    authorize(@maturity_rubrics, :view_allowed?)
   end
 
   # GET /maturity_rubrics/1
   # GET /maturity_rubrics/1.json
   def show
-    authorize @maturity_rubric, :view_allowed?
+    authorize(@maturity_rubric, :view_allowed?)
   end
 
   # GET /maturity_rubrics/new
   def new
     @maturity_rubric = MaturityRubric.new
-    authorize @maturity_rubric, :mod_allowed?
+    authorize(@maturity_rubric, :mod_allowed?)
   end
 
   # GET /maturity_rubrics/1/edit
   def edit
-    authorize @maturity_rubric, :mod_allowed?
+    authorize(@maturity_rubric, :mod_allowed?)
   end
 
   # POST /maturity_rubrics
@@ -49,7 +49,7 @@ class MaturityRubricsController < ApplicationController
     @maturity_rubric = MaturityRubric.new(maturity_rubric_params)
     @maturity_rubric_desc = MaturityRubricDescription.new
 
-    authorize @maturity_rubric, :mod_allowed?
+    authorize(@maturity_rubric, :mod_allowed?)
 
     respond_to do |format|
       if @maturity_rubric.save
@@ -61,13 +61,13 @@ class MaturityRubricsController < ApplicationController
         end
 
         format.html do
-          redirect_to @maturity_rubric,
-                      notice: t('messages.model.created', model: t('model.maturity-rubric').to_s.humanize)
+          redirect_to(@maturity_rubric,
+                      notice: t('messages.model.created', model: t('model.maturity-rubric').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @maturity_rubric }
+        format.json { render(:show, status: :created, location: @maturity_rubric) }
       else
-        format.html { render :new }
-        format.json { render json: @maturity_rubric.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @maturity_rubric.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -75,7 +75,7 @@ class MaturityRubricsController < ApplicationController
   # PATCH/PUT /maturity_rubrics/1
   # PATCH/PUT /maturity_rubrics/1.json
   def update
-    authorize @maturity_rubric, :mod_allowed?
+    authorize(@maturity_rubric, :mod_allowed?)
     if maturity_rubric_params[:mr_desc].present?
       @maturity_rubric_desc = MaturityRubricDescription.where(maturity_rubric_id: @maturity_rubric.id,
                                                               locale: I18n.locale)
@@ -88,13 +88,13 @@ class MaturityRubricsController < ApplicationController
     respond_to do |format|
       if @maturity_rubric.update(maturity_rubric_params)
         format.html do
-          redirect_to @maturity_rubric,
-                      notice: t('messages.model.updated', model: t('model.maturity-rubric').to_s.humanize)
+          redirect_to(@maturity_rubric,
+                      notice: t('messages.model.updated', model: t('model.maturity-rubric').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @maturity_rubric }
+        format.json { render(:show, status: :ok, location: @maturity_rubric) }
       else
-        format.html { render :edit }
-        format.json { render json: @maturity_rubric.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @maturity_rubric.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -102,14 +102,14 @@ class MaturityRubricsController < ApplicationController
   # DELETE /maturity_rubrics/1
   # DELETE /maturity_rubrics/1.json
   def destroy
-    authorize @maturity_rubric, :mod_allowed?
+    authorize(@maturity_rubric, :mod_allowed?)
     @maturity_rubric.destroy
     respond_to do |format|
       format.html do
-        redirect_to maturity_rubrics_url,
-                    notice: t('messages.model.deleted', model: t('model.maturity-rubric').to_s.humanize)
+        redirect_to(maturity_rubrics_url,
+                    notice: t('messages.model.deleted', model: t('model.maturity-rubric').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -123,19 +123,19 @@ class MaturityRubricsController < ApplicationController
                                           .to_a
       end
     end
-    authorize MaturityRubric, :view_allowed?
-    render json: @maturity_rubrics, only: [:name]
+    authorize(MaturityRubric, :view_allowed?)
+    render(json: @maturity_rubrics, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_maturity_rubric
-    @maturity_rubric = if !params[:id].scan(/\D/).empty?
-                         MaturityRubric.find_by(slug: params[:id]) || not_found
-                       else
-                         MaturityRubric.find(params[:id]) || not_found
-                       end
+    if !params[:id].scan(/\D/).empty?
+      @maturity_rubric = MaturityRubric.find_by(slug: params[:id]) || not_found
+    else
+      @maturity_rubric = MaturityRubric.find(params[:id]) || not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.

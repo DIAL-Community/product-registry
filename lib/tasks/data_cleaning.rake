@@ -17,9 +17,9 @@ namespace :data do
       previous_website = organization.website
       organization.website = organization.website
                                          .strip
-                                         .sub(%r{^https?://}i, '')
-                                         .sub(%r{^https?//:}i, '')
-                                         .sub(%r{/$}, '')
+                                         .sub(/^https?:\/\//i, '')
+                                         .sub(/^https?\/\/:/i, '')
+                                         .sub(/\/$/, '')
       puts "Website changed: #{previous_website} -> #{organization.website}" if organization.save
     end
   end
@@ -128,44 +128,46 @@ namespace :data do
       desc = product_description.description.gsub('"', '"').gsub('\\\\',
                                                                  '\\').delete_prefix('"').delete_suffix('"')
       begin
-        json_desc = JSON.parse desc
+        json_desc = JSON.parse(desc)
         puts "JSON: #{json_desc.inspect}"
         if json_desc['ops'].nil?
           product_description.description = ''
         else
           text_desc = json_desc['ops'][0]['insert']
-          puts "TEXT: #{text_desc}"
+          puts "Text: #{text_desc}"
           product_description.description = text_desc
         end
         product_description.save
       rescue JSON::ParserError => e
+        puts "Exception when parsing product json data from editor. Message: #{e}."
       end
     end
 
     Organization.all.each do |org|
-      puts "ORGANIZATION: #{org.name}"
+      puts "Organization: #{org.name}"
       org_description = OrganizationDescription.where(organization_id: org, locale: I18n.locale)
                                                .first
       next if org_description.nil?
 
       desc = org_description.description.gsub('"', '"').gsub('\\\\', '\\').delete_prefix('"').delete_suffix('"')
       begin
-        json_desc = JSON.parse desc
+        json_desc = JSON.parse(desc)
         puts "JSON: #{json_desc.inspect}"
         if json_desc['ops'].nil?
           org_description.description = ''
         else
           text_desc = json_desc['ops'][0]['insert']
-          puts "TEXT: #{text_desc}"
+          puts "Text: #{text_desc}"
           org_description.description = text_desc
         end
         org_description.save
       rescue JSON::ParserError => e
+        puts "Exception when parsing organization data from editor. Message: #{e}."
       end
     end
 
     Project.all.each do |project|
-      puts "PROJECT: #{project.name}"
+      puts "Project: #{project.name}"
       project_description = ProjectDescription.where(project_id: project, locale: I18n.locale)
                                               .first
       next if project_description.nil?
@@ -173,7 +175,7 @@ namespace :data do
       desc = project_description.description.gsub('"', '"').gsub('\\\\',
                                                                  '\\').delete_prefix('"').delete_suffix('"')
       begin
-        json_desc = JSON.parse desc
+        json_desc = JSON.parse(desc)
         puts "JSON: #{json_desc.inspect}"
         if json_desc['ops'].nil?
           project_description.description = ''
@@ -184,6 +186,7 @@ namespace :data do
         end
         project_description.save
       rescue JSON::ParserError => e
+        puts "Exception when parsing project json data from editor. Message: #{e}."
       end
     end
 
@@ -198,7 +201,7 @@ namespace :data do
     end
 
     RubricCategory.all.each do |category|
-      puts "CATEGORY: #{category.name}"
+      puts "Category: #{category.name}"
       category_description = RubricCategoryDescription.where(rubric_category_id: category, locale: I18n.locale)
                                                       .first
       unless category_description.nil?
@@ -208,7 +211,7 @@ namespace :data do
     end
 
     CategoryIndicator.all.each do |indicator|
-      puts "INDICATOR: #{indicator.name}"
+      puts "Indicator: #{indicator.name}"
       indicator_description = CategoryIndicatorDescription.where(category_indicator_id: indicator, locale: I18n.locale)
                                                           .first
       unless indicator_description.nil?
@@ -288,7 +291,9 @@ namespace :data do
   task sync_discourse_ids: :environment do
     discourse_ids = []
     ActiveRecord.with_db('sync-production') do
-      discourse_ids = ActiveRecord::Base.connection.exec_query('SELECT name, slug, discourse_id FROM products where discourse_id IS NOT null')
+      discourse_ids = ActiveRecord::Base.connection.exec_query(
+        'SELECT name, slug, discourse_id FROM products where discourse_id IS NOT null'
+      )
     end
     puts "DISCOURSE_IDs: #{discourse_ids.rows.inspect}"
     discourse_ids.rows.each do |prod|
@@ -380,7 +385,7 @@ namespace :data do
         puts "New Sector: #{sector_json[sector[:slug]]}"
         new_sector = Sector.find_by(slug: sector_json[sector[:slug]])
         if !new_sector.nil?
-          new_sectors << new_sector unless new_sectors.include? new_sector
+          new_sectors << new_sector unless new_sectors.include?(new_sector)
         elsif sector.is_displayable
           new_sectors << sector
         end
@@ -398,7 +403,7 @@ namespace :data do
         puts "New Sector: #{sector_json[sector[:slug]]}"
         new_sector = Sector.find_by(slug: sector_json[sector[:slug]])
         if !new_sector.nil?
-          new_sectors << new_sector unless new_sectors.include? new_sector
+          new_sectors << new_sector unless new_sectors.include?(new_sector)
         elsif sector.is_displayable
           new_sectors << sector
         end
@@ -429,7 +434,7 @@ namespace :data do
       curr_project = Project.find_by(name: project['Project Name'])
       next if curr_project.nil?
 
-      all_sectors = GetSectors(project, nil)
+      all_sectors = find_sectors(project, nil)
       all_sectors.each do |curr_sector|
         unless curr_project.sectors.include?(curr_sector)
           puts "Assiging Sector: #{curr_sector.inspect}"
@@ -446,7 +451,7 @@ namespace :data do
       curr_product = Product.find_by(slug: product['slug'])
       next if curr_product.nil?
 
-      all_sectors = GetSectors(nil, product)
+      all_sectors = find_sectors(nil, product)
       all_sectors.each do |curr_sector|
         unless curr_product.sectors.include?(curr_sector)
           puts "Assiging Sector: #{curr_sector.inspect}"

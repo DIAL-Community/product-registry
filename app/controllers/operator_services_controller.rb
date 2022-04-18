@@ -9,36 +9,36 @@ class OperatorServicesController < ApplicationController
   def index
     if params[:without_paging]
       @operators = OperatorService.order(:name)
-      authorize @operators, :map_allowed?
+      authorize(@operators, :map_allowed?)
       return
     end
 
     @operators = OperatorService.select(:name).distinct.order(:name)
     !params[:search].nil? && @operators = @operators.name_contains(params[:search])
-    authorize @operators, :view_allowed?
+    authorize(@operators, :view_allowed?)
   end
 
   # GET /organizations/name
   # GET /organizations/name.json
   def show
-    authorize OperatorService, :view_allowed?
+    authorize(OperatorService, :view_allowed?)
   end
 
   # GET /organizations/new
   def new
-    authorize OperatorService, :mod_allowed?
+    authorize(OperatorService, :mod_allowed?)
     @operator_service = OperatorService.new
   end
 
   # GET /organizations/name/edit
   def edit
-    authorize @operator_services, :mod_allowed?
+    authorize(@operator_services, :mod_allowed?)
   end
 
   # POST /organizations
   # POST /organizations.json
   def create
-    authorize OperatorService, :mod_allowed?
+    authorize(OperatorService, :mod_allowed?)
     operator_name = params[:operator_service][:name]
 
     selected_countries = []
@@ -57,18 +57,18 @@ class OperatorServicesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to operator_services_path,
+        redirect_to(operator_services_path,
                     flash: { notice: t('messages.model.created',
-                                       model: t('model.organization').to_s.humanize) }
+                                       model: t('model.organization').to_s.humanize) })
       end
-      format.json { render :show, status: :created, location: @operator_service }
+      format.json { render(:show, status: :created, location: @operator_service) }
     end
   end
 
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
-    authorize @operator_services, :mod_allowed?
+    authorize(@operator_services, :mod_allowed?)
 
     if params[:operator_service][:name] != @operator_services.first.name
       # update the name for all records
@@ -85,7 +85,7 @@ class OperatorServicesController < ApplicationController
     country_ids = @operator_services.pluck(:country_id).uniq
     country_ids.each do |country|
       unless selected_countries.include?(country)
-        destroy_services = OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
+        OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
       end
     end
 
@@ -104,32 +104,32 @@ class OperatorServicesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to operator_services_path,
+        redirect_to(operator_services_path,
                     flash: { notice: t('messages.model.updated',
-                                       model: t('model.organization').to_s.humanize) }
+                                       model: t('model.organization').to_s.humanize) })
       end
-      format.json { render :show, status: :ok, location: @operator_services }
+      format.json { render(:show, status: :ok, location: @operator_services) }
     end
   end
 
   # DELETE /organizations/1
   # DELETE /organizations/1.json
   def destroy
-    authorize @operator_services, :mod_allowed?
+    authorize(@operator_services, :mod_allowed?)
 
     # Remove all countries from operator services
     country_ids = @operator_services.pluck(:country_id).uniq
     country_ids.each do |country|
-      destroy_services = OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
+      OperatorService.where(name: @operator_services.first.name, country_id: country).destroy_all
     end
 
     respond_to do |format|
       format.html do
-        redirect_to operator_services_path,
+        redirect_to(operator_services_path,
                     flash: { notice: t('messages.model.deleted',
-                                       model: t('model.operator_services').to_s.humanize) }
+                                       model: t('model.operator_services').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 

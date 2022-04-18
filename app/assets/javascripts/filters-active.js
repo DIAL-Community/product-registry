@@ -27,7 +27,7 @@ const removeActiveFilter = function(event) {
 
 const activeFilter = function() {
   $("#active-filter-template").hide();
-  $.get('/get_filters', function(filters) {
+  $.get('/fetch_filters', function(filters) {
     for (const filter in filters) {
       if (filters.hasOwnProperty(filter)) {
         const config = configs[filter];
@@ -52,7 +52,7 @@ const activeFilter = function() {
 
 const createLink = function() {
   var url = window.location.href + "?urlFilter=true&"
-  $.get('/get_filters', function(filters) {
+  $.get('/fetch_filters', function(filters) {
     Object.keys(filters).map(function(filterKey) {
       if (Array.isArray(filters[filterKey])) {
         url += filterKey+"="

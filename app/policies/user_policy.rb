@@ -4,6 +4,7 @@ class UserPolicy < ApplicationPolicy
   attr_reader :current_user, :model
 
   def initialize(current_user, model)
+    super(current_user, record)
     @current_user = current_user
     @user = model
   end

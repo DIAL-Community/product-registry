@@ -1,4 +1,10 @@
 # frozen_string_literal: true
+# rubocop:disable Lint/UselessAssignment
+# rubocop:disable Metrics/ParameterLists
+# rubocop:disable Layout/LineLength
+
+# Disabling lint message here as we are moving away from the controller code.
+# All of the front-end queries are executed through graph_controller now.
 
 module FilterConcern
   extend ActiveSupport::Concern
@@ -339,22 +345,22 @@ module FilterConcern
                     all_filters['sdgs'].empty? && all_filters['use_cases'].empty? && all_filters['workflows'].empty? && all_filters['bbs'].empty? && all_filters['countries'].empty?) ||
                      all_filters['with_maturity_assessment'] || all_filters['is_launchable']
 
-    filter_org_ids = if other_filtered
-                       filter_and_intersect_arrays([org_projects + org_products + org_ids])
-                     else
-                       org_ids
-                     end
+    if other_filtered
+      filter_org_ids = filter_and_intersect_arrays([org_projects + org_products + org_ids])
+    else
+      filter_org_ids = org_ids
+    end
 
     organizations = Organization.where(id: filter_org_ids)
   end
 
   def filter_playbooks(all_filters = nil, _filter_set = nil, _project_product_ids = nil, _org_ids = nil, _org_products = nil, _products = nil)
     playbooks = []
-    playbooks = if !all_filters['playbooks'].nil? && !all_filters['playbooks'].empty?
-                  Playbook.where(id: all_filters['playbooks'])
-                else
-                  Playbook.all
-                end
+    if !all_filters['playbooks'].nil? && !all_filters['playbooks'].empty?
+      playbooks = Playbook.where(id: all_filters['playbooks'])
+    else
+      playbooks = Playbook.all
+    end
   end
 
   def get_organizations_from_filters(all_filters)
@@ -491,3 +497,7 @@ module FilterConcern
     product_list
   end
 end
+
+# rubocop:enable Layout/LineLength
+# rubocop:enable Metrics/ParameterLists
+# rubocop:enable Lint/UselessAssignment

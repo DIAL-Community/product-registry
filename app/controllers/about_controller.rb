@@ -14,10 +14,11 @@ class AboutController < ApplicationController
   def terms; end
 
   def healthcheck
-    sys_command = "PGPASSWORD='#{ENV['DATABASE_PASSWORD']}' psql -h #{ENV['DATABASE_HOST']} -U #{ENV['DATABASE_USER']} -d #{ENV['DATABASE_NAME']} -p #{ENV['DATABASE_PORT']} -c '\\q'"
+    sys_command = "PGPASSWORD='#{ENV['DATABASE_PASSWORD']}' psql -h #{ENV['DATABASE_HOST']} " \
+                  "-U #{ENV['DATABASE_USER']} -d #{ENV['DATABASE_NAME']} -p #{ENV['DATABASE_PORT']} -c '\\q'"
 
     db_health = system(sys_command)
 
-    render json: { "webapp": true, "psql": db_health }
+    render(json: { "webapp": true, "psql": db_health })
   end
 end

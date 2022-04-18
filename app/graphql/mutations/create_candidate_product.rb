@@ -40,8 +40,8 @@ module Mutations
                                                            secret_key: Rails.application.secrets.captcha_secret_key,
                                                            skip_remote_ip: true
                                                          }) && candidate_product.save!
-                          candidate_product.slug
-                        end
+        candidate_product.slug
+      end
       response
     end
 

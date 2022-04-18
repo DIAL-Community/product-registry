@@ -260,7 +260,7 @@ namespace :geocode do
         if office_data['city'].blank? || office_data['region'].blank? || office_data['country_code'].blank?
           office.latitude = location[:points][0].x
           office.longitude = location[:points][0].y
-          office.city = office_data['city'].blank? ? 'Unknown' : office_data['city']
+          office_data['city'].blank? ? office.city = 'Unknown' : office.city = office_data['city']
         end
 
         address = "#{city_name}, #{region_name}, #{country_code}"
@@ -360,11 +360,11 @@ namespace :geocode do
 
     # Need to do this because Ramallah doesn't have region or country.
     region = find_region(region_name, country_code, google_auth_key)
-    city = if region.nil?
-             City.find_by('(name = ? OR ? = ANY(aliases))', city_name, city_name)
-           else
-             City.find_by('(name = ? OR ? = ANY(aliases)) AND region_id = ?', city_name, city_name, region.id)
-           end
+    if region.nil?
+      city = City.find_by('(name = ? OR ? = ANY(aliases))', city_name, city_name)
+    else
+      city = City.find_by('(name = ? OR ? = ANY(aliases)) AND region_id = ?', city_name, city_name, region.id)
+    end
 
     if city.nil?
       city = City.new
@@ -402,12 +402,12 @@ namespace :geocode do
     puts "Geocoding address: #{address} in region: #{country_code}."
     uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
     geocode_uri = uri_template.expand({
-                                        'q' => {
-                                          'key' => auth_key,
-                                          'address' => address,
-                                          'region' => country_code
-                                        }
-                                      })
+      'q' => {
+        'key' => auth_key,
+        'address' => address,
+        'region' => country_code
+      }
+    })
 
     uri = URI.parse(geocode_uri)
     Net::HTTP.get(uri)
@@ -417,11 +417,11 @@ namespace :geocode do
     puts "Reverse geocoding location: (#{points[0].x.to_f}, #{points[0].y.to_f})."
     uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
     geocode_uri = uri_template.expand({
-                                        'q' => {
-                                          'key' => auth_key,
-                                          'latlng' => "#{points[0].x.to_f}, #{points[0].y.to_f}"
-                                        }
-                                      })
+      'q' => {
+        'key' => auth_key,
+        'latlng' => "#{points[0].x.to_f}, #{points[0].y.to_f}"
+      }
+    })
 
     uri = URI.parse(geocode_uri)
     Net::HTTP.get(uri)

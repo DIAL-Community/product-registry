@@ -2,6 +2,6 @@
 
 class AddIdToOrganizationsContacts < ActiveRecord::Migration[5.1]
   def change
-    add_column :organizations_contacts, :id, :primary_key
+    add_column(:organizations_contacts, :id, :primary_key)
   end
 end

@@ -14,20 +14,20 @@ class HandbooksController < ApplicationController
     if params[:without_paging]
       @handbooks = Handbook.order(:name)
       !params[:search].blank? && @handbooks = @handbooks.name_contains(params[:search])
-      authorize @handbooks, :view_allowed?
+      authorize(@handbooks, :view_allowed?)
       return @handbooks
     end
 
     current_page = params[:page] || 1
 
     @handbooks = Handbook.order(:name)
-    @handbooks = if params[:search]
-                   @handbooks.name_contains(params[:search])
+    if params[:search]
+      @handbooks = @handbooks.name_contains(params[:search])
                              .paginate(page: current_page, per_page: 5)
-                 else
-                   @handbooks.paginate(page: current_page, per_page: 5)
-                 end
-    authorize @handbooks, :view_allowed?
+    else
+      @handbooks = @handbooks.paginate(page: current_page, per_page: 5)
+    end
+    authorize(@handbooks, :view_allowed?)
   end
 
   def upload_design_images
@@ -41,13 +41,13 @@ class HandbooksController < ApplicationController
       end
     end
 
-    respond_to { |format| format.json { render json: { data: uploaded_filenames }, status: :ok } }
+    respond_to { |format| format.json { render(json: { data: uploaded_filenames }, status: :ok) } }
   end
 
   # GET /handbook/1
   # GET /handbook/1.json
   def show
-    authorize @handbook, :view_allowed?
+    authorize(@handbook, :view_allowed?)
   end
 
   def show_pdf; end
@@ -56,12 +56,12 @@ class HandbooksController < ApplicationController
   def new
     @handbook = Handbook.new
     @description = HandbookDescription.new
-    authorize @handbook, :mod_allowed?
+    authorize(@handbook, :mod_allowed?)
   end
 
   # GET /handbooks/1/edit
   def edit
-    authorize @handbook, :mod_allowed?
+    authorize(@handbook, :mod_allowed?)
   end
 
   # POST /handbooks
@@ -70,7 +70,7 @@ class HandbooksController < ApplicationController
     @handbook = Handbook.new(handbook_params)
     @handbook_desc = HandbookDescription.new
 
-    authorize @handbook, :mod_allowed?
+    authorize(@handbook, :mod_allowed?)
 
     respond_to do |format|
       if @handbook.save
@@ -86,19 +86,19 @@ class HandbooksController < ApplicationController
           uploader = LogoUploader.new(@handbook, params[:logo].original_filename, current_user)
           begin
             uploader.store!(params[:logo])
-          rescue StandardError => e
+          rescue StandardError
             @handbook.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
           end
         end
 
         format.html do
-          redirect_to @handbook,
-                      notice: t('messages.model.created', model: t('model.handbook').to_s.humanize)
+          redirect_to(@handbook,
+                      notice: t('messages.model.created', model: t('model.handbook').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @handbook }
+        format.json { render(:show, status: :created, location: @handbook) }
       else
-        format.html { render :new }
-        format.json { render json: @handbook.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @handbook.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -106,8 +106,9 @@ class HandbooksController < ApplicationController
   # PATCH/PUT /handbooks/1
   # PATCH/PUT /handbooks/1.json
   def update
-    authorize @handbook, :mod_allowed?
-    if handbook_params[:handbook_overview].present? || handbook_params[:handbook_audience].present? || handbook_params[:handbook_outcomes].present? || handbook_params[:handbook_cover].present?
+    authorize(@handbook, :mod_allowed?)
+    if handbook_params[:handbook_overview].present? || handbook_params[:handbook_audience].present? ||
+      handbook_params[:handbook_outcomes].present? || handbook_params[:handbook_cover].present?
       @handbook_desc = HandbookDescription.where(handbook_id: @handbook.id,
                                                  locale: I18n.locale)
                                           .first || HandbookDescription.new
@@ -124,7 +125,7 @@ class HandbooksController < ApplicationController
       uploader = LogoUploader.new(@handbook, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @handbook.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
     end
@@ -132,13 +133,13 @@ class HandbooksController < ApplicationController
     respond_to do |format|
       if @handbook.update(handbook_params)
         format.html do
-          redirect_to @handbook,
-                      notice: t('messages.model.updated', model: t('model.handbook').to_s.humanize)
+          redirect_to(@handbook,
+                      notice: t('messages.model.updated', model: t('model.handbook').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @handbook }
+        format.json { render(:show, status: :ok, location: @handbook) }
       else
-        format.html { render :edit }
-        format.json { render json: @handbook.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @handbook.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -146,14 +147,14 @@ class HandbooksController < ApplicationController
   # DELETE /handbooks/1
   # DELETE /handbooks/1.json
   def destroy
-    authorize @handbook, :mod_allowed?
+    authorize(@handbook, :mod_allowed?)
     @handbook.destroy
     respond_to do |format|
       format.html do
-        redirect_to handbooks_url,
-                    notice: t('messages.model.deleted', model: t('model.handbook').to_s.humanize)
+        redirect_to(handbooks_url,
+                    notice: t('messages.model.deleted', model: t('model.handbook').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -173,12 +174,12 @@ class HandbooksController < ApplicationController
                             .to_a
       end
     end
-    authorize Handbook, :view_allowed?
-    render json: @handbook, only: [:name]
+    authorize(Handbook, :view_allowed?)
+    render(json: @handbook, only: [:name])
   end
 
   def convert_pages
-    format.json { render json: {}, status: :unprocessable_entity } unless params[:page_ids].present?
+    format.json { render(json: {}, status: :unprocessable_entity) } unless params[:page_ids].present?
 
     base_filename = ''
     combined_pdfs = CombinePDF.new
@@ -207,7 +208,7 @@ class HandbooksController < ApplicationController
     json['data'] = Base64.strict_encode64(File.read(temporary.path))
 
     respond_to do |format|
-      format.json { render json: json }
+      format.json { render(json: json) }
     end
   end
 
@@ -215,11 +216,11 @@ class HandbooksController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_handbook
-    @handbook = if !params[:id].scan(/\D/).empty?
-                  Handbook.find_by(slug: params[:id]) || not_found
-                else
-                  Handbook.find(params[:id]) || not_found
-                end
+    if !params[:id].scan(/\D/).empty?
+      @handbook = Handbook.find_by(slug: params[:id]) || not_found
+    else
+      @handbook = Handbook.find(params[:id]) || not_found
+    end
 
     @pages = []
     parent_pages = HandbookPage.where('handbook_id=? and parent_page_id is null', @handbook.id).order(:page_order)
@@ -249,7 +250,8 @@ class HandbooksController < ApplicationController
   # Only allow a list of trusted parameters through.
   def handbook_params
     params.require(:handbook)
-          .permit(:name, :slug, :handbook_overview, :handbook_audience, :handbook_outcomes, :handbook_cover, :logo, :maturity, :pdf_url, phases: %i[
+          .permit(:name, :slug, :handbook_overview, :handbook_audience, :handbook_outcomes, :handbook_cover, :logo,
+                  :maturity, :pdf_url, phases: %i[
                     name description
                   ])
           .tap do |attr|

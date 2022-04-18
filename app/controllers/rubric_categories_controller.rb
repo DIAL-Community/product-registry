@@ -18,7 +18,7 @@ class RubricCategoriesController < ApplicationController
   # GET /rubric_categories/1
   # GET /rubric_categories/1.json
   def show
-    authorize @rubric_category, :view_allowed?
+    authorize(@rubric_category, :view_allowed?)
   end
 
   # GET /rubric_categories/new
@@ -28,18 +28,18 @@ class RubricCategoriesController < ApplicationController
       @maturity_rubric = MaturityRubric.find_by(slug: params[:maturity_rubric_id])
       @rubric_category.maturity_rubric = @maturity_rubric
     end
-    authorize @rubric_category, :mod_allowed?
+    authorize(@rubric_category, :mod_allowed?)
   end
 
   # GET /rubric_categories/1/edit
   def edit
-    authorize @rubric_category, :mod_allowed?
+    authorize(@rubric_category, :mod_allowed?)
   end
 
   # POST /rubric_categories
   # POST /rubric_categories.json
   def create
-    authorize RubricCategory, :mod_allowed?
+    authorize(RubricCategory, :mod_allowed?)
     @rubric_category = RubricCategory.new(rubric_category_params)
     @rubric_category_desc = RubricCategoryDescription.new
 
@@ -57,13 +57,13 @@ class RubricCategoriesController < ApplicationController
           @rubric_category_desc.save
         end
         format.html do
-          redirect_to maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric, @rubric_category),
-                      notice: t('messages.model.created', model: t('model.rubric-category').to_s.humanize)
+          redirect_to(maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric, @rubric_category),
+                      notice: t('messages.model.created', model: t('model.rubric-category').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @rubric_category }
+        format.json { render(:show, status: :created, location: @rubric_category) }
       else
-        format.html { render :new }
-        format.json { render json: @rubric_category.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @rubric_category.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -71,7 +71,7 @@ class RubricCategoriesController < ApplicationController
   # PATCH/PUT /rubric_categories/1
   # PATCH/PUT /rubric_categories/1.json
   def update
-    authorize @rubric_category, :mod_allowed?
+    authorize(@rubric_category, :mod_allowed?)
     if rubric_category_params[:rc_desc].present?
       @rubric_category_desc = RubricCategoryDescription.where(rubric_category_id: @rubric_category.id,
                                                               locale: I18n.locale)
@@ -84,13 +84,13 @@ class RubricCategoriesController < ApplicationController
     respond_to do |format|
       if @rubric_category.update(rubric_category_params)
         format.html do
-          redirect_to maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric, @rubric_category),
-                      notice: t('messages.model.updated', model: t('model.rubric-category').to_s.humanize)
+          redirect_to(maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric, @rubric_category),
+                      notice: t('messages.model.updated', model: t('model.rubric-category').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @rubric_category }
+        format.json { render(:show, status: :ok, location: @rubric_category) }
       else
-        format.html { render :edit }
-        format.json { render json: @rubric_category.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @rubric_category.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -98,15 +98,15 @@ class RubricCategoriesController < ApplicationController
   # DELETE /rubric_categories/1
   # DELETE /rubric_categories/1.json
   def destroy
-    authorize @rubric_category, :mod_allowed?
+    authorize(@rubric_category, :mod_allowed?)
     maturity_rubric = @rubric_category.maturity_rubric
     @rubric_category.destroy
     respond_to do |format|
       format.html do
-        redirect_to maturity_rubric,
-                    notice: t('messages.model.deleted', model: t('model.rubric-category').to_s.humanize)
+        redirect_to(maturity_rubric,
+                    notice: t('messages.model.deleted', model: t('model.rubric-category').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -120,19 +120,19 @@ class RubricCategoriesController < ApplicationController
                                            .to_a
       end
     end
-    authorize RubricCategory, :view_allowed?
-    render json: @rubric_categories, only: [:name]
+    authorize(RubricCategory, :view_allowed?)
+    render(json: @rubric_categories, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_rubric_category
-    @rubric_category = if !params[:id].scan(/\D/).empty?
-                         RubricCategory.find_by(slug: params[:id]) || not_found
-                       else
-                         RubricCategory.find(params[:id]) || not_found
-                       end
+    if !params[:id].scan(/\D/).empty?
+      @rubric_category = RubricCategory.find_by(slug: params[:id]) || not_found
+    else
+      @rubric_category = RubricCategory.find(params[:id]) || not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.

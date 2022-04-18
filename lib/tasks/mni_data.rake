@@ -7,8 +7,8 @@ namespace :mni do
   task import_csv: :environment do
     mni_table = CSV.parse(File.read('./utils/MNIData.csv'), headers: true)
     puts "ROWS: #{mni_table.count}"
-    aggregators = ['9bitsng', 'Africas Talking', 'BetaSMS', 'Cellulant', 'ClickMobile', 'Comviva', 'engageSpark', 'IMImobile',
-                   'InfoBip', 'MTECH', 'SynqAfrica', 'Viamo', 'Vodacom', 'Mobile Accord Inc', 'Axieva']
+    aggregators = ['9bitsng', 'Africas Talking', 'BetaSMS', 'Cellulant', 'ClickMobile', 'Comviva', 'engageSpark',
+                   'IMImobile', 'InfoBip', 'MTECH', 'SynqAfrica', 'Viamo', 'Vodacom', 'Mobile Accord Inc', 'Axieva']
     aggregator_ids = {}
     # Create the aggregator organizations if they don't exist
     aggregators.each do |aggregator|
@@ -68,9 +68,8 @@ namespace :mni do
     end
   end
   task create_aggregators: :environment do
-    aggregators = ['9bitsng', 'Africas Talking', 'BetaSMS', 'Cellulant', 'ClickMobile', 'Comviva', 'engageSpark', 'IMImobile',
-                   'InfoBip', 'MTECH', 'SynqAfrica', 'Viamo', 'Vodacom', 'Mobile Accord Inc', 'Axieva']
-    aggregator_ids = {}
+    aggregators = ['9bitsng', 'Africas Talking', 'BetaSMS', 'Cellulant', 'ClickMobile', 'Comviva', 'engageSpark',
+                   'IMImobile', 'InfoBip', 'MTECH', 'SynqAfrica', 'Viamo', 'Vodacom', 'Mobile Accord Inc', 'Axieva']
     # Create the aggregator organizations if they don't exist
     aggregators.each do |aggregator|
       new_agg = Organization.where(name: aggregator).first
@@ -85,11 +84,14 @@ namespace :mni do
       end
       new_agg.save
       # Add countries based on aggregator_capabilities
-      country_list = AggregatorCapability.select(:country_name).where(aggregator_id: new_agg.id).map(&:country_name).uniq
+      country_list = AggregatorCapability.select(:country_name)
+                                         .where(aggregator_id: new_agg.id)
+                                         .map(&:country_name)
+                                         .uniq
       country_list.each do |country_name|
-        currCountry = Location.where(name: country_name).first
-        currLoc = new_agg.locations.where(id: currCountry.id).first
-        new_agg.locations.push(currCountry) if currLoc.nil?
+        curr_country = Location.where(name: country_name).first
+        curr_loc = new_agg.locations.where(id: curr_country.id).first
+        new_agg.locations.push(curr_country) if curr_loc.nil?
       end
       new_agg.save
     end

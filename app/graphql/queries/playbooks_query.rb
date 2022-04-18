@@ -30,6 +30,8 @@ module Queries
 
     type Types::PlaybookType.connection_type, null: false
 
+    # TODO: Disabling rubocop here as we will use the products param eventually.
+    # rubocop:disable Lint/UnusedMethodArgument
     def resolve(search:, products:, tags:)
       playbooks = Playbook.all.order(:name)
       if !search.nil? && !search.to_s.strip.empty?
@@ -59,6 +61,7 @@ module Queries
       playbooks.distinct
     end
   end
+  # rubocop:enable Lint/UnusedMethodArgument
 
   class SearchPlaybookTagsQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
@@ -73,7 +76,11 @@ module Queries
         used_tags += playbook.tags
       end
 
-      Tag.where(name: used_tags)
+      tags = Tag.where(name: used_tags)
+      if !search.nil? && !search.to_s.strip.empty?
+        tags = tags.name_contains(search)
+      end
+      tags
     end
   end
 end

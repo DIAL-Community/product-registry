@@ -263,7 +263,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     post '/add_filter', params: add_parameter
 
     get organizations_url
-    assert_equal(0, assigns(:organizations).count)
+    assert_equal(2, assigns(:organizations).count)
 
     remove_parameter = { filter_array: { '0' => { filter_name: 'sectors' } } }
     post '/remove_filter', params: remove_parameter

@@ -36,7 +36,7 @@ describe('filters.js:', function() {
 
   it('should get filters on load.', function() {
     expect(requests.length).to.be(1);
-    expect(requests[0].url).to.be("/get_filters");
+    expect(requests[0].url).to.be("/fetch_filters");
   });
 
   it('should call add_filter when control value changes.', function() {
@@ -70,7 +70,7 @@ describe('filters.js:', function() {
       .trigger('click');
     
     expect(requests.length).to.be(1);
-    expect(requests[0].url).to.be("/get_filters");
+    expect(requests[0].url).to.be("/fetch_filters");
 
     expect($(".remove-filter", fixture.el).attr('id') === undefined);
 

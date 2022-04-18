@@ -10,7 +10,8 @@ module UseCasesHelper
 
         tooltip = "Target #{sdg_target.target_number}: #{sdg_target.name}"
         image = Hash[filename: sdg_target.image_file, tooltip: tooltip,
-                     alt_text: t('alt.el-logo', el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize,
+                     alt_text: t('alt.el-logo',
+                                 el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize,
                      id: sdg_target.id, controller: 'sdg_targets']
         images.push(image)
       end
@@ -47,12 +48,12 @@ module UseCasesHelper
     formatted = ''
     elements.sort_by { |x| x[:name] }
             .each do |element|
-      formatted += if element[:controller] == 'sdg_targets'
-                     image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
-                   else
-                     link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
-                             action: 'show', controller: element[:controller], id: element[:id])
-                   end
+      if element[:controller] == 'sdg_targets'
+        formatted += image_tag(element[:filename], class: 'popover-image', title: element[:tooltip])
+      else
+        formatted += link_to(image_tag(element[:filename], class: 'popover-image', title: element[:tooltip]),
+        action: 'show', controller: element[:controller], id: element[:id])
+      end
     end
     formatted
   end

@@ -13,7 +13,7 @@ module Mutations
       true
     end
 
-    def is_admin
+    def an_admin
       if !context[:current_user].nil? && context[:current_user].roles.include?('admin')
         # Return true to continue the mutation:
         true
@@ -23,9 +23,9 @@ module Mutations
       end
     end
 
-    def is_product_owner
+    def a_product_owner
       if !context[:current_user].nil?
-        user = User.find(context[:current_user].id)
+        User.find(context[:current_user].id)
         # Return true to continue the mutation:
         true
       else

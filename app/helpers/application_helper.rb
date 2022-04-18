@@ -92,19 +92,21 @@ module ApplicationHelper
     end
 
     unless object_record.nil?
-      id_label = if breadcrumbs[-1][:path] == 'users' || breadcrumbs[-1][:path] == 'candidate_roles'
-                   object_record.email
-                 else
-                   object_record.name
-                 end
+      if breadcrumbs[-1][:path] == 'users' || breadcrumbs[-1][:path] == 'candidate_roles'
+        id_label = object_record.email
+      else
+        id_label = object_record.name
+      end
     end
 
     unless query_parameters['user_token'].nil?
-      breadcrumb_query_param = "?user_email=#{query_parameters['user_email']}&user_token=#{query_parameters['user_token']}"
+      breadcrumb_query_param = "?user_email=#{query_parameters['user_email']}&" \
+                               "user_token=#{query_parameters['user_token']}"
     end
     breadcrumbs << { path: "#{breadcrumbs[-1][:path]}/#{params[:id]}", label: id_label }
     unless query_parameters['user_token'].nil?
-      breadcrumb_query_param = "?user_email=#{query_parameters['user_email']}&user_token=#{query_parameters['user_token']}"
+      breadcrumb_query_param = "?user_email=#{query_parameters['user_email']}&" \
+                               "user_token=#{query_parameters['user_token']}"
       breadcrumbs.each do |crumb|
         crumb[:path] && crumb[:path] += breadcrumb_query_param
       end
@@ -191,8 +193,9 @@ module ApplicationHelper
                             href='##{filter_name}' role='button'
                             aria-expanded='true' aria-controls='#{filter_name}'>
                         <u>
-                        #{t('view.active-filter.multi-filter', count: count - 3,
-                                                               model: t("view.active-filter.#{filter_name}", count: count))}
+                        #{t('view.active-filter.multi-filter',
+                            count: count - 3,
+                            model: t("view.active-filter.#{filter_name}", count: count))}
                         </u>
                       </span>
                       <span class='close-icon' data-effect='fadeOut'>

@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/BlockNesting
+
+# TODO: Revisit this module to reduce the if nesting.
+# Disabling because of this rubocop issue:
+# - Avoid more than 3 levels of block nesting. (convention:Metrics/BlockNesting)
 
 require 'fileutils'
 require 'modules/projects'
@@ -19,7 +24,7 @@ namespace :projects do
     headers.shift
     puts 'No data found.' if response.values.empty?
     response.each_value do |row|
-      region = row.shift
+      row.shift
       country = row.shift
       row.each_with_index do |column, index|
         if !column.nil? && !column.blank?
@@ -37,18 +42,18 @@ namespace :projects do
     geocode_data = JSON.parse(geocode_with_google(city_name, nil, google_auth_key))
     geocode_results = geocode_data['results']
     geocode_results.each do |geocode_result|
-      puts 'GEOCODE: ' + geocode_result.to_s
+      puts 'Geocode: ' + geocode_result.to_s
       next if geocode_result['types'].include?('point_of_interest')
 
       geometry = geocode_result['geometry']
       points = [ActiveRecord::Point.new(geometry['location']['lat'], geometry['location']['lng'])]
 
-      geocode_data = JSON.parse(reverse_geocode_with_google(points, google_auth_key))
-      geocode_results = geocode_data['results']
-      geocode_results.each do |geocode_result|
-        next if geocode_result['types'].include?('point_of_interest')
+      geopoint_data = JSON.parse(reverse_geocode_with_google(points, google_auth_key))
+      geopoint_results = geopoint_data['results']
+      geopoint_results.each do |geopoint_result|
+        next if geopoint_result['types'].include?('point_of_interest')
 
-        geocode_result['address_components'].each do |address_component|
+        geopoint_result['address_components'].each do |address_component|
           if address_component['types'].include?('locality') ||
              address_component['types'].include?('postal_town')
             city_data['city'] = address_component['long_name']
@@ -82,8 +87,9 @@ namespace :projects do
       puts 'Digital government platform tracker as origin is created.' if dgpt_origin.save
     end
 
-    tracker_data = CSV.parse(File.read(params[:digital_gov_tracker_file]), headers: true,
-                                                                           liberal_parsing: { double_quote_outside_quote: true })
+    tracker_data = CSV.parse(File.read(params[:digital_gov_tracker_file]),
+                             headers: true,
+                             liberal_parsing: { double_quote_outside_quote: true })
     tracker_data.each do |data|
       description_template = ''\
         '<div>'\
@@ -387,7 +393,7 @@ namespace :projects do
       desc = header[4..-1]
       next unless Classification.find_by(indicator: indicator).nil?
 
-      puts 'CREATING CLASSIFICATION'
+      puts 'Creating Classification.'
       classification = Classification.new
       classification.indicator = indicator
       classification.name = desc
@@ -426,7 +432,7 @@ namespace :projects do
           prod_class.save
         end
       else
-        puts "COULD NOT FIND PRODUCT: #{product}"
+        puts "Could not find product: #{product}."
       end
     end
   end
@@ -441,21 +447,21 @@ namespace :projects do
       project_desc = ProjectDescription.where(project_id: project, locale: 'en').first
       next if project_desc.nil?
 
-      language = translate.detect project_desc.description
+      language = translate.detect(project_desc.description)
       case language.results[0].language
       when 'en'
         puts 'Project desc is English'
         german_desc = ProjectDescription.where(project_id: project, locale: 'de').first || ProjectDescription.new
         german_desc.locale = 'de'
         german_desc.project_id = project.id
-        de_translation = translate.translate project_desc.description, to: 'de'
+        de_translation = translate.translate(project_desc.description, to: 'de')
         german_desc.description = de_translation
         german_desc.save
 
         french_desc = ProjectDescription.where(project_id: project, locale: 'fr').first || ProjectDescription.new
         french_desc.locale = 'fr'
         french_desc.project_id = project.id
-        fr_translation = translate.translate project_desc.description, to: 'fr'
+        fr_translation = translate.translate(project_desc.description, to: 'fr')
         french_desc.description = fr_translation
         french_desc.save
       when 'de'
@@ -463,14 +469,14 @@ namespace :projects do
         english_desc = ProjectDescription.where(project_id: project, locale: 'en').first || ProjectDescription.new
         english_desc.locale = 'en'
         english_desc.project_id = project.id
-        en_translation = translate.translate project_desc.description, to: 'en'
+        en_translation = translate.translate(project_desc.description, to: 'en')
         english_desc.description = en_translation
         english_desc.save
 
         french_desc = ProjectDescription.where(project_id: project, locale: 'fr').first || ProjectDescription.new
         french_desc.locale = 'fr'
         french_desc.project_id = project.id
-        fr_translation = translate.translate project_desc.description, to: 'fr'
+        fr_translation = translate.translate(project_desc.description, to: 'fr')
         french_desc.description = fr_translation
         french_desc.save
       end
@@ -493,7 +499,7 @@ namespace :projects do
         new_desc = ProjectDescription.where(project_id: project, locale: locale).first || ProjectDescription.new
         new_desc.locale = locale
         new_desc.project_id = project.id
-        new_translation = translate.translate project_desc.description, to: locale
+        new_translation = translate.translate(project_desc.description, to: locale)
         new_desc.description = new_translation
         new_desc.save
       end
@@ -509,7 +515,7 @@ namespace :projects do
         new_desc = ProductDescription.where(product_id: product, locale: locale).first || ProductDescription.new
         new_desc.locale = locale
         new_desc.product_id = product.id
-        new_translation = translate.translate product_desc.description, to: locale
+        new_translation = translate.translate(product_desc.description, to: locale)
         new_desc.description = new_translation
         new_desc.save
       end
@@ -526,10 +532,11 @@ namespace :projects do
                                                  locale: locale).first || OrganizationDescription.new
         new_desc.locale = locale
         new_desc.organization_id = org.id
-        new_translation = translate.translate org_desc.description, to: locale
+        new_translation = translate.translate(org_desc.description, to: locale)
         new_desc.description = new_translation
         new_desc.save
       end
     end
   end
 end
+# rubocop:enable Metrics/BlockNesting

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DeploysHelper
-  def getDataFromProvider(method, url, provider, auth_token)
+  def fetch_data_from_provider(method, url, provider, auth_token)
     if provider == 'DO'
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
@@ -23,17 +23,17 @@ module DeploysHelper
     end
   end
 
-  def getDataFromJenkins(method, url)
-    jenkinsUrl = Rails.application.secrets.jenkins_url
-    jenkinsUser = Rails.application.secrets.jenkins_user
-    jenkinsPassword = Rails.application.secrets.jenkins_password
+  def fetch_data_from_jenkins(method, url)
+    jenkins_url = Rails.application.secrets.jenkins_url
+    jenkins_user = Rails.application.secrets.jenkins_user
+    jenkins_password = Rails.application.secrets.jenkins_password
 
     # Latest version of Jenkins fails on crumb authentication, so pulling it out for now
     # Try again when Jenkins updates/fixes the issue
     # Will need to re-enable CSRF in Jenkins
-    # crumb = getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
+    # crumb = fetch_crumb(jenkins_url, jenkins_user, jenkins_password)
 
-    uri = URI.parse(jenkinsUrl + url)
+    uri = URI.parse(jenkins_url + url)
     https = Net::HTTP.new(uri.host, uri.port)
     https.use_ssl = uri.scheme == 'https'
     case method
@@ -42,72 +42,71 @@ module DeploysHelper
     when 'POST'
       request = Net::HTTP::Post.new(uri.request_uri)
     end
-    request['Authorization'] = "Basic #{Base64.encode64("#{jenkinsUser}:#{jenkinsPassword}").chomp}"
+    request['Authorization'] = "Basic #{Base64.encode64("#{jenkins_user}:#{jenkins_password}").chomp}"
     # Latest version of Jenkins fails on crumb authentication, so pulling it out for now
     # Try again when Jenkins updates/fixes the issue
     # request["Jenkins-Crumb"] = crumb
 
-    response = https.request(request)
+    https.request(request)
   end
 
-  def getCrumb(jenkinsUrl, jenkinsUser, jenkinsPassword)
-    crumbUrl = "#{jenkinsUrl}/crumbIssuer/api/json"
-    uri = URI.parse(crumbUrl)
+  def fetch_crumb(jenkins_url, jenkins_user, jenkins_password)
+    crumb_url = "#{jenkins_url}/crumbIssuer/api/json"
+    uri = URI.parse(crumb_url)
     https = Net::HTTP.new(uri.host, uri.port)
     https.use_ssl = uri.scheme == 'https'
-    request = Net::HTTP::Get.new(URI(crumbUrl))
-    request['Authorization'] = "Basic #{Base64.encode64("#{jenkinsUser}:#{jenkinsPassword}").chomp}"
+    request = Net::HTTP::Get.new(URI(crumb_url))
+    request['Authorization'] = "Basic #{Base64.encode64("#{jenkins_user}:#{jenkins_password}").chomp}"
 
     response = https.request(request)
-    responseData = JSON.parse(response.body, object_class: OpenStruct)
-    responseData.crumb
+    response_data = JSON.parse(response.body, object_class: OpenStruct)
+    response_data.crumb
   end
 
-  def jenkinsDeleteMachine(instanceName)
-    buildUrl = "/job/dockermachine/buildWithParameters?MACHINE_NAME=#{instanceName}"
+  def jenkins_delete_machine(instance_name)
+    build_url = "/job/dockermachine/buildWithParameters?MACHINE_NAME=#{instance_name}"
 
-    response = getDataFromJenkins('POST', buildUrl)
+    fetch_data_from_jenkins('POST', build_url)
   end
 
-  def jenkinsAddSshUser(instanceName, publicKey)
-    buildUrl = "/job/SetupSshUser/buildWithParameters?ENV_NAME=#{instanceName}&PUBLIC_KEY=#{publicKey}"
+  def jenkins_add_ssh_user(instance_name, public_key)
+    build_url = "/job/SetupSshUser/buildWithParameters?ENV_NAME=#{instance_name}&PUBLIC_KEY=#{public_key}"
 
-    response = getDataFromJenkins('POST', buildUrl)
+    fetch_data_from_jenkins('POST', build_url)
   end
 
-  def queryJenkinsJob(jobName, jobNumber)
-    jobUrl = "/job/#{jobName}/#{jobNumber}/api/json"
+  def query_jenkins_job(job_name, job_number)
+    job_url = "/job/#{job_name}/#{job_number}/api/json"
 
-    response = getDataFromJenkins('GET', jobUrl)
-    responseData = JSON.parse(response.body, object_class: OpenStruct)
+    response = fetch_data_from_jenkins('GET', job_url)
+    response_data = JSON.parse(response.body, object_class: OpenStruct)
 
-    responseData.result
+    response_data.result
   end
 
-  def getJenkinsMessage(jobName, jobNumber, numLines)
-    jobUrl = "/job/#{jobName}/#{jobNumber}/logText/progressiveText?start=0"
-    response = getDataFromJenkins('GET', jobUrl)
-    responseData = response.body
-    messageLines = responseData.strip.split("\n")
-    messageLines = messageLines.pop(numLines) if numLines.positive?
+  def fetch_jenkins_message(job_name, job_number, num_lines)
+    job_url = "/job/#{job_name}/#{job_number}/logText/progressiveText?start=0"
+    response = fetch_data_from_jenkins('GET', job_url)
+    response_data = response.body
+    message_lines = response_data.strip.split("\n")
+    message_lines = message_lines.pop(num_lines) if num_lines.positive?
 
-    messageLines
+    message_lines
   end
 
-  def getMachineInfo(instanceName, provider, authToken)
-    machineName = instanceName
-    ipAddress = '0.0.0.0'
-    port = '80'
-    response = getDataFromProvider('GET', 'https://api.digitalocean.com/v2/droplets/?tag_name=t4dlaunched',
-                                   provider, authToken)
+  def fetch_machine_info(instance_name, provider, auth_token)
+    machine_name = instance_name
+    ip_address = '0.0.0.0'
+    response = fetch_data_from_provider('GET', 'https://api.digitalocean.com/v2/droplets/?tag_name=t4dlaunched',
+                                        provider, auth_token)
     if response.code == '200'
-      responseData = JSON.parse(response.body, object_class: OpenStruct)
-      responseData.droplets.each do |droplet|
+      response_data = JSON.parse(response.body, object_class: OpenStruct)
+      response_data.droplets.each do |droplet|
         puts droplet
-        ipAddress = droplet.networks.v4[0].ip_address if droplet.name == machineName
+        ip_address = droplet.networks.v4[0].ip_address if droplet.name == machine_name
       end
     end
 
-    ipAddress
+    ip_address
   end
 end

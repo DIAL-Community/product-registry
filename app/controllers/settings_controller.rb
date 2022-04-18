@@ -10,39 +10,39 @@ class SettingsController < ApplicationController
   # GET /settings
   # GET /settings.json
   def index
-    @settings = if params[:search]
-                  Setting.order(:name)
+    if params[:search]
+      @settings = Setting.order(:name)
                          .name_contains(params[:search])
                          .paginate(page: params[:page], per_page: 20)
-                else
-                  Setting.order(:name)
+    else
+      @settings = Setting.order(:name)
                          .paginate(page: params[:page], per_page: 20)
-                end
-    authorize @settings, :view_allowed?
+    end
+    authorize(@settings, :view_allowed?)
   end
 
   # GET /settings/1
   # GET /settings/1.json
   def show
-    authorize @setting, :view_allowed?
+    authorize(@setting, :view_allowed?)
   end
 
   # GET /settings/1/edit
   def edit
-    authorize @setting, :mod_allowed?
+    authorize(@setting, :mod_allowed?)
   end
 
   # PATCH/PUT /settings/1
   # PATCH/PUT /settings/1.json
   def update
-    authorize @setting, :mod_allowed?
+    authorize(@setting, :mod_allowed?)
     respond_to do |format|
       if @setting.update(setting_params)
-        format.html { redirect_to @setting, notice: 'Setting was successfully updated.' }
-        format.json { render :show, status: :ok, location: @setting }
+        format.html { redirect_to(@setting, notice: 'Setting was successfully updated.') }
+        format.json { render(:show, status: :ok, location: @setting) }
       else
-        format.html { render :edit }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @setting.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -50,21 +50,21 @@ class SettingsController < ApplicationController
   # GET /portal_views/new
   def new
     @setting = Setting.new
-    authorize @setting, :view_allowed?
+    authorize(@setting, :view_allowed?)
   end
 
   def create
-    authorize Setting, :view_allowed?
+    authorize(Setting, :view_allowed?)
     @setting = Setting.new(setting_params)
-    @setting.slug = slug_em @setting.name
+    @setting.slug = slug_em(@setting.name)
 
     respond_to do |format|
       if @setting.save
-        format.html { redirect_to @setting, notice: 'Portal view was successfully created.' }
-        format.json { render :show, status: :created, location: @portal_view }
+        format.html { redirect_to(@setting, notice: 'Portal view was successfully created.') }
+        format.json { render(:show, status: :created, location: @portal_view) }
       else
-        format.html { render :new }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @setting.errors, status: :unprocessable_entity) }
       end
     end
   end

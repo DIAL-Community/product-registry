@@ -23,11 +23,11 @@ class EntityUploader < CarrierWave::Uploader::Base
     Rails.root.join('public', 'assets', 'entities')
   end
 
-  def extension_whitelist
+  def extension_allowlist
     %w[json csv txt]
   end
 
-  def content_type_whitelist
+  def content_type_allowlist
     %w[text/plain text/csv application/json]
   end
 

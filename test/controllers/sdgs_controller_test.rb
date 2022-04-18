@@ -33,7 +33,6 @@ class SustainableDevelopmentGoalsControllerTest < ActionDispatch::IntegrationTes
     get sustainable_development_goals_url
     assert_equal(2, assigns(:sustainable_development_goals).count)
     sdg1 = assigns(:sustainable_development_goals)[0]
-    sdg2 = assigns(:sustainable_development_goals)[1]
 
     param = { 'filter_name' => 'sdgs', 'filter_value' => sdg1.id, 'filter_label' => sdg1.name }
     post '/add_filter', params: param

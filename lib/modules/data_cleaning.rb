@@ -2,7 +2,7 @@
 
 module Modules
   module DataCleaning
-    def GetSectors(project, product)
+    def find_sectors(project, product)
       subsector_list = []
       parent_sector_list = []
       unless project.nil?
@@ -26,15 +26,15 @@ module Modules
       all_sectors = []
 
       parent_sector_list.each do |parent_sector|
-        foundSector = false
+        found_sector = false
         subsector_list.each do |child_sector|
           curr_sector = Sector.find_by(name: "#{parent_sector}: #{child_sector}")
           unless curr_sector.nil?
             all_sectors << curr_sector
-            foundSector = true
+            found_sector = true
           end
         end
-        unless foundSector
+        unless found_sector
           curr_sector = Sector.find_by(name: parent_sector)
           !curr_sector.nil? && all_sectors << curr_sector
         end

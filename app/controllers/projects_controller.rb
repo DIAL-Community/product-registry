@@ -14,9 +14,9 @@ class ProjectsController < ApplicationController
 
     render(json: record.to_json(Project.serialization_options
                                        .merge({
-                                                item_path: request.original_url,
-                                                include_relationships: true
-                                              })))
+                                         item_path: request.original_url,
+                                         include_relationships: true
+                                       })))
   end
 
   def simple_search
@@ -74,9 +74,9 @@ class ProjectsController < ApplicationController
       format.json do
         render(json: results.to_json(Project.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -168,9 +168,9 @@ class ProjectsController < ApplicationController
       format.json do
         render(json: results.to_json(Project.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -178,7 +178,7 @@ class ProjectsController < ApplicationController
   def favorite_project
     set_project
     if current_user.nil? || @project.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     favoriting_user = current_user
@@ -186,9 +186,9 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render :show, status: :ok }
+        format.json { render(:show, status: :ok) }
       else
-        format.json { render :show, status: :unprocessable_entity }
+        format.json { render(:show, status: :unprocessable_entity) }
       end
     end
   end
@@ -196,7 +196,7 @@ class ProjectsController < ApplicationController
   def unfavorite_project
     set_project
     if current_user.nil? || @project.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     favoriting_user = current_user
@@ -204,9 +204,9 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render :show, status: :ok }
+        format.json { render(:show, status: :ok) }
       else
-        format.json { render :show, status: :unprocessable_entity }
+        format.json { render(:show, status: :unprocessable_entity) }
       end
     end
   end
@@ -247,7 +247,7 @@ class ProjectsController < ApplicationController
     @projects = @projects.paginate(page: current_page, per_page: 20)
 
     params[:search].present? && @projects = @projects.name_contains(params[:search])
-    authorize @projects, :view_allowed?
+    authorize(@projects, :view_allowed?)
   end
 
   def count
@@ -263,8 +263,8 @@ class ProjectsController < ApplicationController
       session[:project_filtered_time] = session[:filtered_time]
     end
 
-    authorize @projects, :view_allowed?
-    render json: @projects.count
+    authorize(@projects, :view_allowed?)
+    render(json: @projects.count)
   end
 
   def export_data
@@ -272,20 +272,20 @@ class ProjectsController < ApplicationController
     authorize(@projects, :view_allowed?)
     respond_to do |format|
       format.csv do
-        render csv: @projects, filename: 'exported-project'
+        render(csv: @projects, filename: 'exported-project')
       end
       format.json do
-        render json: @projects.to_json(Project.serialization_options)
+        render(json: @projects.to_json(Project.serialization_options))
       end
     end
   end
 
   def show
-    authorize @project, :view_allowed?
+    authorize(@project, :view_allowed?)
   end
 
   def new
-    authorize Project, :mod_allowed?
+    authorize(Project, :mod_allowed?)
     @project = Project.new
 
     # Defaulting to manually entered, but allow user to change it.
@@ -304,7 +304,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    authorize Project, :mod_allowed?
+    authorize(Project, :mod_allowed?)
     @project = Project.new(project_params)
 
     if params[:selected_organizations].present?
@@ -369,19 +369,19 @@ class ProjectsController < ApplicationController
         end
 
         format.html do
-          redirect_to @project,
-                      flash: { notice: t('messages.model.created', model: t('model.project').to_s.humanize) }
+          redirect_to(@project,
+                      flash: { notice: t('messages.model.created', model: t('model.project').to_s.humanize) })
         end
-        format.json { render :show, status: :created, project: @project }
+        format.json { render(:show, status: :created, project: @project) }
       else
-        format.html { render :new }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @project.errors, status: :unprocessable_entity) }
       end
     end
   end
 
   def edit
-    authorize @project, :mod_allowed?
+    authorize(@project, :mod_allowed?)
   end
 
   def update
@@ -506,23 +506,23 @@ class ProjectsController < ApplicationController
           redirect_to(project_path(@project, locale: session[:locale]),
                       flash: { notice: t('messages.model.updated', model: t('model.project').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, project: @project }
+        format.json { render(:show, status: :ok, project: @project) }
       else
-        format.html { render :edit }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @project.errors, status: :unprocessable_entity) }
       end
     end
   end
 
   def destroy
-    authorize @project, :mod_allowed?
+    authorize(@project, :mod_allowed?)
     @project.destroy
     respond_to do |format|
       format.html do
-        redirect_to projects_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.project').to_s.humanize) }
+        redirect_to(projects_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.project').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -533,29 +533,29 @@ class ProjectsController < ApplicationController
       original_slug = slug_em(params[:original])
       @projects = Project.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize Project, :view_allowed?
-    render json: @projects, only: [:name]
+    authorize(Project, :view_allowed?)
+    render(json: @projects, only: [:name])
   end
 
   def map_projects
     @projects = Project.all
-    authorize @projects, :view_allowed?
+    authorize(@projects, :view_allowed?)
   end
 
   def map_covid
     @projects = Project.all
-    authorize @projects, :view_allowed?
+    authorize(@projects, :view_allowed?)
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_project
-    @project = if !params[:id].scan(/\D/).empty?
-                 Project.find_by(slug: params[:id]) || not_found
-               else
-                 Project.find(params[:id]) || not_found
-               end
+    if !params[:id].scan(/\D/).empty?
+      @project = Project.find_by(slug: params[:id]) || not_found
+    else
+      @project = Project.find(params[:id]) || not_found
+    end
 
     @project_description = ProjectDescription.where(project_id: @project, locale: I18n.locale).first
 

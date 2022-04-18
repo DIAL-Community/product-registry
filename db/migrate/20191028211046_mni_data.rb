@@ -2,14 +2,14 @@
 
 class MniData < ActiveRecord::Migration[5.1]
   def up
-    add_column :organizations, :is_mni, :boolean, default: false
-    add_column :organizations_locations, :id, :primary_key
+    add_column(:organizations, :is_mni, :boolean, default: false)
+    add_column(:organizations_locations, :id, :primary_key)
 
-    execute <<-DDL
+    execute(<<-DDL)
     CREATE TYPE mobile_services AS ENUM ('Airtime', 'API', 'HS', 'Mobile-Internet', 'Mobile-Money', 'Ops-Maintenance', 'OTT', 'SLA', 'SMS', 'User-Interface', 'USSD', 'Voice' );
     DDL
 
-    execute <<-DDL
+    execute(<<-DDL)
     CREATE TYPE agg_capabilities AS ENUM ('Transfer to Subscribers', 'Transfer to Business', 'Balance Check', 'Delivery Notification', 'Reporting',
       'SMPP', 'HTTP', 'HTTPS', 'XML-RPC', 'FTP', 'GUI-Self Service', 'Data Integrity', 'VPN', 'Other API Support',
       'Content Management', 'Subscription Management', 'Campaign Management', 'Portal Management', 'Recommendation Engine', 'Advertisement Platform', 'Analytics and Reporting',
@@ -24,7 +24,7 @@ class MniData < ActiveRecord::Migration[5.1]
       'IVR Inbound', 'IVR Outbound', 'Leased Lines', 'VOIP', 'Hosted IVR Menu', 'Short Code Provisioning');
     DDL
 
-    execute <<-SQL
+    execute(<<-SQL)
       ALTER TABLE users ALTER role DROP DEFAULT;
       ALTER TYPE user_role rename TO user_role_;
       CREATE TYPE user_role AS ENUM ('admin', 'ict4sdg', 'principle', 'user', 'org_user', 'org_product_user', 'product_user', 'mni');
@@ -33,35 +33,35 @@ class MniData < ActiveRecord::Migration[5.1]
       DROP TYPE user_role_;
     SQL
 
-    create_table :operator_services do |t|
-      t.string :name
-      t.references :locations, foreign_key: true
+    create_table(:operator_services) do |t|
+      t.string(:name)
+      t.references(:locations, foreign_key: true)
     end
 
-    add_column :operator_services, :service, :mobile_services
-    add_index :operator_services, %i[name locations_id service], unique: true
+    add_column(:operator_services, :service, :mobile_services)
+    add_index(:operator_services, %i[name locations_id service], unique: true)
 
-    create_table :aggregator_capabilities do |t|
-      t.references :organization, foreign_key: true
-      t.references :operator_services, foreign_key: true
+    create_table(:aggregator_capabilities) do |t|
+      t.references(:organization, foreign_key: true)
+      t.references(:operator_services, foreign_key: true)
     end
 
-    rename_column :aggregator_capabilities, :organization_id, :aggregator_id
-    add_column :aggregator_capabilities, :service, :mobile_services
-    add_column :aggregator_capabilities, :capability, :agg_capabilities
-    add_column :aggregator_capabilities, :country_name, :string
-    add_index :aggregator_capabilities, %i[aggregator_id operator_services_id capability], unique: true,
-                                                                                           name: 'agg_cap_operator_capability_index'
+    rename_column(:aggregator_capabilities, :organization_id, :aggregator_id)
+    add_column(:aggregator_capabilities, :service, :mobile_services)
+    add_column(:aggregator_capabilities, :capability, :agg_capabilities)
+    add_column(:aggregator_capabilities, :country_name, :string)
+    add_index(:aggregator_capabilities, %i[aggregator_id operator_services_id capability],
+              unique: true, name: 'agg_cap_operator_capability_index')
   end
 
   def down
-    drop_table :aggregator_capabilities
-    drop_table :operator_services
+    drop_table(:aggregator_capabilities)
+    drop_table(:operator_services)
 
-    remove_column :organizations, :is_mni
-    remove_column :organizations_locations, :id, :primary_key
+    remove_column(:organizations, :is_mni)
+    remove_column(:organizations_locations, :id, :primary_key)
 
-    execute <<-SQL
+    execute(<<-SQL)
       ALTER TABLE users ALTER role DROP DEFAULT;
       ALTER TYPE user_role rename TO user_role_;
       CREATE TYPE user_role AS ENUM ('admin', 'ict4sdg', 'principle', 'user', 'org_user', 'org_product_user', 'product_user');
@@ -70,7 +70,7 @@ class MniData < ActiveRecord::Migration[5.1]
       DROP TYPE user_role_;
     SQL
 
-    execute 'DROP TYPE mobile_services;'
-    execute 'DROP TYPE agg_capabilities;'
+    execute('DROP TYPE mobile_services;')
+    execute('DROP TYPE agg_capabilities;')
   end
 end

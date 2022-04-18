@@ -25,6 +25,7 @@ module Queries
     end
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def filter_projects(
     search, origins, sectors, sub_sectors, countries, organizations, products, sdgs,
     tags, sort_hint, _offset_params = {}
@@ -44,11 +45,11 @@ module Queries
     user_sectors = sectors.reject { |x| x.nil? || x.empty? }
     user_sectors.each do |user_sector|
       # Find the sector record.
-      sector = if user_sector.scan(/\D/).empty?
-                 Sector.find_by(id: user_sector)
-               else
-                 Sector.find_by(name: user_sector)
-               end
+      if user_sector.scan(/\D/).empty?
+        sector = Sector.find_by(id: user_sector)
+      else
+        sector = Sector.find_by(name: user_sector)
+      end
       # Skip if we can't find any sector
       next if sector.nil?
 
@@ -81,13 +82,13 @@ module Queries
 
     filtered_countries = countries.reject { |x| x.nil? || x.empty? }
     unless filtered_countries.empty?
-      projects = if filtered_countries.all? { |i| i.scan(/\D/).empty? }
-                   projects.joins(:countries)
+      if filtered_countries.all? { |i| i.scan(/\D/).empty? }
+        projects = projects.joins(:countries)
                            .where(countries: { id: filtered_countries })
-                 else
-                   projects.joins(:countries)
+      else
+        projects = projects.joins(:countries)
                            .where(countries: { name: filtered_countries })
-                 end
+      end
     end
 
     filtered_organizations = organizations.reject { |x| x.nil? || x.empty? }
@@ -127,6 +128,7 @@ module Queries
       projects.order(:name)
     end
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def wizard_projects(sectors, sub_sectors, countries, tags, sort_hint, offset_params = {})
     sector_ids, curr_sector = get_sector_list(sectors, sub_sectors)

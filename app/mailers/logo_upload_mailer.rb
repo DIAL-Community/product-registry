@@ -8,12 +8,12 @@ class LogoUploadMailer < ApplicationMailer
     @type = params[:type]
 
     admin_users = User.where(receive_admin_emails: true)
-    mailTo = ''
+    mail_to = ''
     admin_users.each do |admin|
-      mailTo += "#{admin.email}; "
+      mail_to += "#{admin.email}; "
     end
     mail(from: 'notifier@solutions.dial.community',
-         to: mailTo,
+         to: mail_to,
          subject: 'New Logo Received.')
   end
 end

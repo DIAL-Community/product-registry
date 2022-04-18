@@ -4,8 +4,7 @@ class TaskTrackerPolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
-    @user = user
-    @record = record
+    super(user, record)
   end
 
   def mod_allowed?

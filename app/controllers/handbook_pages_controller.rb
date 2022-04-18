@@ -11,21 +11,21 @@ class HandbookPagesController < ApplicationController
     if params[:without_paging]
       @pages = HandbookPage.order(:name)
       !params[:search].blank? && @pages = @pages.name_contains(params[:search])
-      authorize Handbook, :view_allowed?
+      authorize(Handbook, :view_allowed?)
       return @pages
     end
 
     current_page = params[:page] || 1
 
     @pages = HandbookPage.order(:name)
-    @pages = if params[:search]
-               @pages.name_contains(params[:search])
+    if params[:search]
+      @pages = @pages.name_contains(params[:search])
                      .order(:name)
                      .paginate(page: current_page, per_page: 5)
-             else
-               @pages.order(:name).paginate(page: current_page, per_page: 5)
-             end
-    authorize Handbook, :view_allowed?
+    else
+      @pages = @pages.order(:name).paginate(page: current_page, per_page: 5)
+    end
+    authorize(Handbook, :view_allowed?)
   end
 
   # GET /handbook_page/1
@@ -81,13 +81,13 @@ class HandbookPagesController < ApplicationController
         params[:answer_texts].keys.each do |answer_text_key|
           next if answer_text_key.empty? || params[:answer_texts][answer_text_key].empty?
 
-          answer = if answer_text_key.scan(/\D/).empty?
-                     # Numbers only, so this is an id of the answer text.
-                     HandbookAnswer.find(answer_text_key.to_i)
-                   else
-                     # Contains text, we need to create new answer
-                     HandbookAnswer.new
-                   end
+          if answer_text_key.scan(/\D/).empty?
+            # Numbers only, so this is an id of the answer text.
+            answer = HandbookAnswer.find(answer_text_key.to_i)
+          else
+            # Contains text, we need to create new answer
+            answer = HandbookAnswer.new
+          end
           answer.answer_text = params[:answer_texts][answer_text_key]
           answer.action = params[:mapped_actions][answer_text_key]
           answer.locale = I18n.locale
@@ -110,13 +110,13 @@ class HandbookPagesController < ApplicationController
     respond_to do |format|
       if @page.save
         format.html do
-          redirect_to @handbook,
-                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize)
+          redirect_to(@handbook,
+                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @page }
+        format.json { render(:show, status: :created, location: @page) }
       else
-        format.html { render :new }
-        format.json { render json: @page.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @page.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -138,13 +138,13 @@ class HandbookPagesController < ApplicationController
         params[:answer_texts].keys.each do |answer_text_key|
           next if answer_text_key.empty? || params[:answer_texts][answer_text_key].empty?
 
-          answer = if answer_text_key.scan(/\D/).empty?
-                     # Numbers only, so this is an id of the answer text.
-                     HandbookAnswer.find(answer_text_key.to_i)
-                   else
-                     # Contains text, we need to create new answer
-                     HandbookAnswer.new
-                   end
+          if answer_text_key.scan(/\D/).empty?
+            # Numbers only, so this is an id of the answer text.
+            answer = HandbookAnswer.find(answer_text_key.to_i)
+          else
+            # Contains text, we need to create new answer
+            answer = HandbookAnswer.new
+          end
           answer.answer_text = params[:answer_texts][answer_text_key]
           answer.action = params[:mapped_actions][answer_text_key]
           answer.locale = I18n.locale
@@ -167,13 +167,13 @@ class HandbookPagesController < ApplicationController
     respond_to do |format|
       if @page.update(handbook_page_params)
         format.html do
-          redirect_to handbook_handbook_page_path(@handbook, @page),
-                      notice: t('messages.model.updated', model: t('model.handbook-page').to_s.humanize)
+          redirect_to(handbook_handbook_page_path(@handbook, @page),
+                      notice: t('messages.model.updated', model: t('model.handbook-page').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @page }
+        format.json { render(:show, status: :ok, location: @page) }
       else
-        format.html { render :edit }
-        format.json { render json: @page.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @page.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -181,21 +181,21 @@ class HandbookPagesController < ApplicationController
   # DELETE /handbook_pages/1
   # DELETE /handbook_pages/1.json
   def destroy
-    authorize Handbook, :mod_allowed?
+    authorize(Handbook, :mod_allowed?)
     @handbook = Handbook.find(@page.handbook_id)
 
     @page.destroy
     respond_to do |format|
       format.html do
-        redirect_to handbook_path(@handbook),
-                    notice: t('messages.model.deleted', model: t('model.handbook-page').to_s.humanize)
+        redirect_to(handbook_path(@handbook),
+                    notice: t('messages.model.deleted', model: t('model.handbook-page').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
   def copy_page
-    authorize Handbook, :mod_allowed?
+    authorize(Handbook, :mod_allowed?)
     @handbook = Handbook.find(@page.handbook_id)
 
     @new_page = @page.dup
@@ -215,10 +215,10 @@ class HandbookPagesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to handbook_path(@handbook),
-                    notice: t('messages.model.copied', model: t('model.handbook-page').to_s.humanize)
+        redirect_to(handbook_path(@handbook),
+                    notice: t('messages.model.copied', model: t('model.handbook-page').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -244,7 +244,7 @@ class HandbookPagesController < ApplicationController
       end
     end
 
-    respond_to { |format| format.json { render json: { data: uploaded_filenames }, status: :ok } }
+    respond_to { |format| format.json { render(json: { data: uploaded_filenames }, status: :ok) } }
   end
 
   def edit_content
@@ -264,22 +264,22 @@ class HandbookPagesController < ApplicationController
     design['gjs-styles'] = @page_contents.styles if !@page_contents.styles.nil? && !@page_contents.styles.blank?
     design['gjs-assets'] = @page_contents.assets if !@page_contents.assets.nil? && !@page_contents.assets.blank?
 
-    respond_to { |format| format.json { render json: design, status: :ok } }
+    respond_to { |format| format.json { render(json: design, status: :ok) } }
   end
 
   def save_design
     set_page_contents
 
     if current_user.nil? || @page_contents.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     if params.key?(:editor_type) && params[:editor_type] == 'on'
       # This means that it is a page builder and has already been saved
       return respond_to do |format|
         format.html do
-          redirect_to handbook_path(@handbook),
-                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize)
+          redirect_to(handbook_path(@handbook),
+                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize))
         end
       end
     end
@@ -302,13 +302,13 @@ class HandbookPagesController < ApplicationController
     respond_to do |format|
       if @page_contents.save!
         format.html do
-          redirect_to handbook_handbook_page_path(@handbook, @page),
-                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize)
+          redirect_to(handbook_handbook_page_path(@handbook, @page),
+                      notice: t('messages.model.created', model: t('model.handbook-page').to_s.humanize))
         end
-        format.json { render json: { design: 'Saved successfully.' }, status: :ok }
+        format.json { render(json: { design: 'Saved successfully.' }, status: :ok) }
       else
-        format.html { render :edit_content }
-        format.json { render json: { design: 'Saving failed.' }, status: :unprocessable_entity }
+        format.html { render(:edit_content) }
+        format.json { render(json: { design: 'Saving failed.' }, status: :unprocessable_entity) }
       end
     end
   end
@@ -316,7 +316,7 @@ class HandbookPagesController < ApplicationController
   private
 
   def redirect_cancel
-    redirect_to handbook_path(params[:handbook_id]) if params[:cancel]
+    redirect_to(handbook_path(params[:handbook_id])) if params[:cancel]
   end
 
   def set_page_contents
@@ -346,11 +346,11 @@ class HandbookPagesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_handbook_page
-    @page = if !params[:id].scan(/\D/).empty?
-              HandbookPage.find_by(slug: params[:id]) || not_found
-            else
-              HandbookPage.find(params[:id]) || not_found
-            end
+    if !params[:id].scan(/\D/).empty?
+      @page = HandbookPage.find_by(slug: params[:id]) || not_found
+    else
+      @page = HandbookPage.find(params[:id]) || not_found
+    end
 
     language = I18n.locale
     language = params['language'] if params['language'].present?
