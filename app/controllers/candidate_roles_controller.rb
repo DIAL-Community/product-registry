@@ -18,8 +18,8 @@ class CandidateRolesController < ApplicationController
     user = User.find_by(email: @candidate_role.email)
     if user.nil?
       respond_to do |format|
-        format.html { redirect_to candidate_roles_url, flash: { error: 'Unable to approve request.' } }
-        format.json { head :no_content }
+        format.html { redirect_to(candidate_roles_url, flash: { error: 'Unable to approve request.' }) }
+        format.json { head(:no_content) }
       end
     end
 
@@ -38,11 +38,11 @@ class CandidateRolesController < ApplicationController
       if (@candidate_role.rejected.nil? || @candidate_role.rejected) &&
          user.save && @candidate_role.update(rejected: false, approved_date: Time.now,
                                              approved_by_id: current_user.id)
-        format.html { redirect_to candidate_role_url(@candidate_role), notice: 'Request for elevated role approved.' }
-        format.json { render :show, status: :ok, location: @candidate_role }
+        format.html { redirect_to(candidate_role_url(@candidate_role), notice: 'Request for elevated role approved.') }
+        format.json { render(:show, status: :ok, location: @candidate_role) }
       else
-        format.html { redirect_to candidate_roles_url, flash: { error: 'Unable to approve request.' } }
-        format.json { head :no_content }
+        format.html { redirect_to(candidate_roles_url, flash: { error: 'Unable to approve request.' }) }
+        format.json { head(:no_content) }
       end
     end
   end
@@ -54,11 +54,11 @@ class CandidateRolesController < ApplicationController
       # Can only approve new submission.
       if @candidate_role.rejected.nil? &&
          @candidate_role.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
-        format.html { redirect_to candidate_roles_url, notice: 'Request for elevated role rejected.' }
-        format.json { render :show, status: :ok, location: @candidate_role }
+        format.html { redirect_to(candidate_roles_url, notice: 'Request for elevated role rejected.') }
+        format.json { render(:show, status: :ok, location: @candidate_role) }
       else
-        format.html { redirect_to candidate_roles_url, flash: { error: 'Unable to reject request.' } }
-        format.json { head :no_content }
+        format.html { redirect_to(candidate_roles_url, flash: { error: 'Unable to reject request.' }) }
+        format.json { head(:no_content) }
       end
     end
   end
@@ -70,14 +70,14 @@ class CandidateRolesController < ApplicationController
 
     current_page = params[:page] || 1
 
-    @candidate_roles = if params[:search]
-                         CandidateRole.email_contains(params[:search])
+    if params[:search]
+      @candidate_roles = CandidateRole.email_contains(params[:search])
                                       .order(:created_at)
                                       .paginate(page: current_page, per_page: 10)
-                       else
-                         CandidateRole.order(:created_at)
+    else
+      @candidate_roles = CandidateRole.order(:created_at)
                                       .paginate(page: current_page, per_page: 10)
-                       end
+    end
     authorize(@candidate_roles, :view_allowed?)
   end
 
@@ -125,13 +125,13 @@ class CandidateRolesController < ApplicationController
           .notify_ux_ownership_request
           .deliver_later
         if policy(@candidate_role).view_allowed?
-          format.html { redirect_to @candidate_role, notice: 'Candidate role was successfully created.' }
+          format.html { redirect_to(@candidate_role, notice: 'Candidate role was successfully created.') }
         else
-          format.html { redirect_to products_path, notice: 'Elevated role request submitted.' }
+          format.html { redirect_to(products_path, notice: 'Elevated role request submitted.') }
         end
         format.json { render(json: { message: 'Candidate role was successfully created.' }, status: :created) }
       else
-        format.html { render :new }
+        format.html { render(:new) }
         format.json { render(json: { message: 'Unable to process request.' }, status: :unprocessable_entity) }
       end
     end
@@ -150,11 +150,11 @@ class CandidateRolesController < ApplicationController
 
     respond_to do |format|
       if @candidate_role.update(candidate_role_params)
-        format.html { redirect_to @candidate_role, notice: 'Candidate role was successfully updated.' }
-        format.json { render :show, status: :ok, location: @candidate_role }
+        format.html { redirect_to(@candidate_role, notice: 'Candidate role was successfully updated.') }
+        format.json { render(:show, status: :ok, location: @candidate_role) }
       else
-        format.html { render :edit }
-        format.json { render json: @candidate_role.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @candidate_role.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -165,8 +165,8 @@ class CandidateRolesController < ApplicationController
     authorize(@candidate_role, :mod_allowed?)
     @candidate_role.destroy
     respond_to do |format|
-      format.html { redirect_to candidate_roles_url, notice: 'Candidate role was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to(candidate_roles_url, notice: 'Candidate role was successfully destroyed.') }
+      format.json { head(:no_content) }
     end
   end
 

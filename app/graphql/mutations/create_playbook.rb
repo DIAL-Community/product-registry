@@ -20,7 +20,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(name:, slug:, author:, tags:, overview:, audience:, outcomes:, plays:, cover: nil)
-      unless is_admin
+      unless an_admin
         return {
           playbook: nil,
           errors: ['Must be admin to create a playbook']
@@ -61,9 +61,9 @@ module Mutations
           begin
             uploader.store!(cover)
           rescue StandardError => e
-            puts "Unable to save cover for: #{playbook.name}."
+            puts "Unable to save cover for: #{playbook.name}. Standard error: #{e}."
           end
-          playbook.set_image_changed(cover.original_filename)
+          playbook.auditable_image_changed(cover.original_filename)
         end
 
         playbook_desc = PlaybookDescription.find_by(playbook: playbook, locale: I18n.locale)

@@ -196,7 +196,8 @@ namespace :maturity_sync do
                                                     .first || MaturityRubricDescription.new
     maturity_rubric_desc.maturity_rubric_id = maturity_rubric.id
     maturity_rubric_desc.locale = I18n.locale
-    maturity_rubric_desc.description = '<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>'
+    maturity_rubric_desc.description =
+      '<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>'
     maturity_rubric_desc.save!
 
     digisquare_maturity = YAML.load_file('config/maturity_digisquare.yml')
@@ -205,9 +206,9 @@ namespace :maturity_sync do
 
       category_count = digi_category['sub-indicators'].count
       digi_category['sub-indicators'].each do |indicator|
-        puts "CATEGORY: #{digi_category['core']} INDICATOR: #{indicator['name']}"
-        cat_indicator = create_indicator(indicator['name'], indicator['name'], 'Digital Square', category_count,
-                                         'scale', rubric_category.id)
+        puts "Category: #{digi_category['core']} INDICATOR: #{indicator['name']}"
+        create_indicator(indicator['name'], indicator['name'], 'Digital Square', category_count,
+                         'scale', rubric_category.id)
       end
     end
 
@@ -217,9 +218,9 @@ namespace :maturity_sync do
 
       category_count = osc_category['items'].count
       osc_category['items'].each do |indicator|
-        puts "CATEGORY: #{osc_category['header']} INDICATOR: #{indicator['code']}"
-        cat_indicator = create_indicator(indicator['code'], indicator['desc'], 'DIAL OSC', category_count, 'boolean',
-                                         rubric_category.id)
+        puts "Category: #{osc_category['header']} INDICATOR: #{indicator['code']}"
+        create_indicator(indicator['code'], indicator['desc'], 'DIAL OSC', category_count, 'boolean',
+                         rubric_category.id)
       end
     end
   end

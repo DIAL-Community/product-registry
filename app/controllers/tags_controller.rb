@@ -69,21 +69,21 @@ class TagsController < ApplicationController
     if params[:without_paging]
       @tags = Tag.order(:name)
       !params[:search].blank? && @tags = @tags.name_contains(params[:search])
-      authorize @tags, :view_allowed?
+      authorize(@tags, :view_allowed?)
       return @tags
     end
 
     current_page = params[:page] || 1
 
-    @tags = if params[:search]
-              Tag.name_contains(params[:search])
+    if params[:search]
+      @tags = Tag.name_contains(params[:search])
                  .order(:name)
                  .paginate(page: current_page, per_page: 20)
-            else
-              Tag.order(:name)
+    else
+      @tags = Tag.order(:name)
                  .paginate(page: current_page, per_page: 20)
-            end
-    authorize @tags, :view_allowed?
+    end
+    authorize(@tags, :view_allowed?)
   end
 
   # GET /tags/1
@@ -117,11 +117,11 @@ class TagsController < ApplicationController
           @tag_desc.description = tag_params[:tag_desc]
           @tag_desc.save
         end
-        format.html { redirect_to tags_path, notice: 'Tag was successfully created.' }
-        format.json { render :show, status: :created, location: @tag }
+        format.html { redirect_to(tags_path, notice: 'Tag was successfully created.') }
+        format.json { render(:show, status: :created, location: @tag) }
       else
-        format.html { render :new }
-        format.json { render json: @tag.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @tag.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -138,11 +138,11 @@ class TagsController < ApplicationController
     end
     respond_to do |format|
       if @tag.update(tag_params)
-        format.html { redirect_to tags_path, notice: 'Tag was successfully updated.' }
-        format.json { render :show, status: :ok, location: @tag }
+        format.html { redirect_to(tags_path, notice: 'Tag was successfully updated.') }
+        format.json { render(:show, status: :ok, location: @tag) }
       else
-        format.html { render :edit }
-        format.json { render json: @tag.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @tag.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -153,8 +153,8 @@ class TagsController < ApplicationController
     authorize(@tag, :mod_allowed?)
     @tag.destroy
     respond_to do |format|
-      format.html { redirect_to tags_url, notice: 'Tag was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to(tags_url, notice: 'Tag was successfully destroyed.') }
+      format.json { head(:no_content) }
     end
   end
 

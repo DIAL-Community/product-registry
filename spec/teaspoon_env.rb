@@ -36,7 +36,7 @@ Teaspoon.configure do |config|
     # Note: If no version is specified, the latest is assumed.
     #
     # Versions: 1.10.0, 1.17.1, 1.18.2, 1.19.0, 2.0.1, 2.1.0, 2.2.4, 2.2.5, 2.3.3
-    suite.use_framework :mocha, '2.3.3'
+    suite.use_framework(:mocha, '2.3.3')
 
     # Specify a file matcher as a regular expression and all matching files will be loaded when the suite is run. These
     # files need to be within an asset path. You can add asset paths using the `config.asset_paths`.
@@ -134,7 +134,8 @@ Teaspoon.configure do |config|
   # Specify the formatters to use when outputting the results.
   # Note: Output files can be specified by using `"junit>/path/to/output.xml"`.
   #
-  # Available: :dot, :clean, :documentation, :json, :junit, :pride, :rspec_html, :snowday, :swayze_or_oprah, :tap, :tap_y, :teamcity
+  # Available: :dot, :clean, :documentation, :json, :junit, :pride, :rspec_html, :snowday, :swayze_or_oprah, :tap,
+  #            :tap_y, :teamcity
   # config.formatters = [:dot]
 
   # Specify if you want color output from the formatters.
@@ -176,8 +177,8 @@ Teaspoon.configure do |config|
 
     # Assets to be ignored when generating coverage reports. Accepts an array of filenames or regular expressions. The
     # default excludes assets from vendor, gems and support libraries.
-    coverage.ignore = [%r{/lib/ruby/gems/}, %r{/var/lib/gems}, %r{/app/assets/javascripts/v5.3.0-dist},
-                       %r{/vendor/assets/}, %r{/support/}, %r{/(.+)_helper.}]
+    coverage.ignore = [/\/lib\/ruby\/gems\//, /\/var\/lib\/gems/, /\/app\/assets\/javascripts\/v5.3.0-dist/,
+                       /\/vendor\/assets\//, /\/support\//, /\/(.+)_helper./]
 
     # Various thresholds requirements can be defined, and those thresholds will be checked at the end of a run. If any
     # aren't met the run will fail with a message. Thresholds can be defined as a percentage (0-100), or nil.

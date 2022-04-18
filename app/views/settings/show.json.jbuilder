@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-json.partial! 'settings/setting', setting: @setting
+json.partial!('settings/setting', setting: @setting)

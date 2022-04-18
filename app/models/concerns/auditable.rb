@@ -11,14 +11,14 @@ module Auditable
   def create_audit(action)
     audit_log = Audit.new
     audit_log.associated_type = self.class.name
-    audit_log.associated_id = if has_attribute?(:slug)
-                                slug
-                              else
-                                get_parent_slug(self)
-                              end
+    if has_attribute?(:slug)
+      audit_log.associated_id = slug
+    else
+      audit_log.associated_id = get_parent_slug(self)
+    end
     audit_log.action = action
     audit_log.action = 'CREATED' if action == 'UPDATED' && saved_change_to_id?
-    current_user = get_current_user
+    current_user = fetch_current_user
     if current_user
       audit_log.user_id = current_user.id
       audit_log.user_role = current_user.roles
@@ -27,26 +27,26 @@ module Auditable
     audit_changes = []
     audit_changes.push(saved_changes) unless saved_changes.empty?
     audit_changes.push(association_changes) unless association_changes.nil?
-    audit_changes.push({ "image": get_image_changed.to_s }) unless get_image_changed.nil?
+    audit_changes.push({ "image": fetch_image_changed.to_s }) unless fetch_image_changed.nil?
     if !audit_changes.empty? || audit_log.action == 'DELETED'
       audit_log.audit_changes = audit_changes
       audit_log.save
     end
   end
 
-  def set_current_user(user)
+  def auditable_current_user(user)
     @current_user = user
   end
 
-  def get_current_user
+  def fetch_current_user
     @current_user
   end
 
-  def set_image_changed(filename)
+  def auditable_image_changed(filename)
     @image_changed = filename
   end
 
-  def get_image_changed
+  def fetch_image_changed
     @image_changed
   end
 
@@ -66,25 +66,25 @@ module Auditable
 
   def association_add(new_obj)
     initialize_association_changes
-    curr_change = if new_obj.instance_of?(SdgTarget)
-                    { id: new_obj.name, action: 'ADD' }
-                  elsif new_obj.auditable_association_object
-                    { id: new_obj.audit_id_value, action: 'ADD' }
-                  else
-                    { id: new_obj.slug, action: 'ADD' }
-                  end
+    if new_obj.instance_of?(SdgTarget)
+      curr_change = { id: new_obj.name, action: 'ADD' }
+    elsif new_obj.auditable_association_object
+      curr_change = { id: new_obj.audit_id_value, action: 'ADD' }
+    else
+      curr_change = { id: new_obj.slug, action: 'ADD' }
+    end
     log_association(curr_change, new_obj)
   end
 
   def association_remove(old_obj)
     initialize_association_changes
-    curr_change = if old_obj.instance_of?(SdgTarget)
-                    { id: old_obj.name, action: 'REMOVE' }
-                  elsif old_obj.auditable_association_object
-                    { id: old_obj.audit_id_value, action: 'REMOVE' }
-                  else
-                    { id: old_obj.slug, action: 'REMOVE' }
-                  end
+    if old_obj.instance_of?(SdgTarget)
+      curr_change = { id: old_obj.name, action: 'REMOVE' }
+    elsif old_obj.auditable_association_object
+      curr_change = { id: old_obj.audit_id_value, action: 'REMOVE' }
+    else
+      curr_change = { id: old_obj.slug, action: 'REMOVE' }
+    end
     log_association(curr_change, old_obj)
   end
 

@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   include Modules::Constants
   include Modules::MaturitySync
   include Modules::Discourse
-  include Pundit
+  include Pundit::Authorization
   include FilterConcern
   protect_from_forgery prepend: true
 
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   before_action :set_portal
   before_action :set_org_session
 
-  around_action :set_locale
+  around_action :prepare_locale
 
   after_action :store_action
 
@@ -48,18 +48,18 @@ class ApplicationController < ActionController::Base
 
       user_event = UserEvent.new
       user_event.identifier = session[:default_identifier]
-      user_event.event_type = if request.path_info.include?('/api/v1/')
-                                UserEvent.event_types[:api_request]
-                              else
-                                UserEvent.event_types[:initial_load]
-                              end
+      if request.path_info.include?('/api/v1/')
+        user_event.event_type = UserEvent.event_types[:api_request]
+      else
+        user_event.event_type = UserEvent.event_types[:initial_load]
+      end
       user_event.event_datetime = Time.now
 
       logger.info("User event '#{user_event.event_type}' for #{user_event.identifier} saved.") if user_event.save!
     end
   end
 
-  def set_locale(&action)
+  def prepare_locale(&action)
     if params[:locale].present?
       accept_language = params[:locale]
       I18n.locale = accept_language[0..1].to_sym if I18n.available_locales.index(accept_language[0..1].to_sym)
@@ -88,38 +88,38 @@ class ApplicationController < ActionController::Base
       I18n.locale = :de
       session[:locale] = 'de'
     end
-    redirect_back fallback_location: root_path
+    redirect_back(fallback_location: root_path)
   end
 
   def set_portal
     if session[:portal_subdomain].nil?
       default_url = Setting.where(slug: 'root_domain').first
-      session[:portal_subdomain] = if default_url.nil?
-                                     false
-                                   else
-                                     true
-                                   end
+      if default_url.nil?
+        session[:portal_subdomain] = false
+      else
+        session[:portal_subdomain] = true
+      end
     end
 
-    if session[:portal].nil?
-      if session[:portal_subdomain]
-        # Get current URL, strip off root domain to get subdomain and check against portal_view table
-        root_domain = Setting.where(slug: 'root_domain').first.value
-        subdomain = request.host.split(root_domain)[0]
-        unless subdomain.nil?
-          subdomain_portal = PortalView.where(subdomain: subdomain.chomp('.')).first
-          session[:portal] = subdomain_portal unless subdomain_portal.nil?
-        end
+    return unless session[:portal].nil?
+
+    if session[:portal_subdomain]
+      # Get current URL, strip off root domain to get subdomain and check against portal_view table
+      root_domain = Setting.where(slug: 'root_domain').first.value
+      subdomain = request.host.split(root_domain)[0]
+      unless subdomain.nil?
+        subdomain_portal = PortalView.where(subdomain: subdomain.chomp('.')).first
+        session[:portal] = subdomain_portal unless subdomain_portal.nil?
       end
-      if session[:portal].nil?
-        if current_user.nil?
-          session[:portal] = PortalView.where(slug: 'default').first
-        else
-          PortalView.all.order(:id).each do |portal|
-            unless (portal.user_roles && current_user.roles).empty?
-              session[:portal] = portal
-              break
-            end
+    end
+    if session[:portal].nil?
+      if current_user.nil?
+        session[:portal] = PortalView.where(slug: 'default').first
+      else
+        PortalView.all.order(:id).each do |portal|
+          unless (portal.user_roles && current_user.roles).empty?
+            session[:portal] = portal
+            break
           end
         end
       end
@@ -185,12 +185,13 @@ class ApplicationController < ActionController::Base
     orgs = filter_organizations(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
     # playbooks = filter_playbooks(all_filters, filter_set, project_product_ids, org_ids, org_products, products)
 
-    render json: { "sdgCount": sdgs.count, "useCaseCount": use_cases.count, "workflowCount": workflows.count, "bbCount": bbs.count,
-                   "projectCount": projects.count, "productCount": products.count, "orgCount": orgs.count }
+    render(json: { "sdgCount": sdgs.count, "useCaseCount": use_cases.count, "workflowCount": workflows.count,
+                   "bbCount": bbs.count, "projectCount": projects.count, "productCount": products.count,
+                   "orgCount": orgs.count })
   end
 
   def remove_filter
-    return unless params.key? 'filter_array'
+    return unless params.key?('filter_array')
 
     logger.debug("Removing filter: #{params['filter_array'].values}.")
 
@@ -213,8 +214,8 @@ class ApplicationController < ActionController::Base
       update_cookies(filter_name)
     end
     # Mark when the filter was last updated
-    session[:filtered_time] = DateTime.now.strftime('%Q')
-    render json: true
+    session[:filtered_time] = Time.now.strftime("%s%L")
+    render(json: true)
   end
 
   def add_filters
@@ -248,7 +249,7 @@ class ApplicationController < ActionController::Base
   end
 
   def add_filter
-    return unless params.key? 'filter_name'
+    return unless params.key?('filter_name')
 
     logger.debug("Adding filter: #{params['filter_name']} -> {#{params['filter_value']}, #{params['filter_label']}}.")
 
@@ -263,76 +264,78 @@ class ApplicationController < ActionController::Base
     else
       existing_value = session[filter_name.to_s]
       existing_value.nil? && existing_value = []
-      unless existing_value.include? filter_obj
+      unless existing_value.include?(filter_obj)
         existing_value.push(filter_obj)
         retval = true
       end
       session[filter_name.to_s] = existing_value
     end
     update_cookies(filter_name)
-    session[:filtered_time] = DateTime.now.strftime('%Q')
-    render json: retval
+    session[:filtered_time] = Time.now.strftime('%Q')
+    render(json: retval)
   end
 
   def remove_all_filters
-    logger.info 'Removing all filters'
+    logger.info('Removing all filters')
     ORGANIZATION_FILTER_KEYS.each do |key|
       session.delete(key) if session[key]
     end
     FRAMEWORK_FILTER_KEYS.each do |key|
       session.delete(key) if session[key]
     end
-    session[:filtered_time] = DateTime.now.strftime('%Q')
-    render json: true
+    session[:filtered_time] = Time.now.strftime('%Q')
+    render(json: true)
   end
 
-  def get_filters
+  def fetch_filters
     filters = {}
     ORGANIZATION_FILTER_KEYS.each do |key|
       if session[key]
-        logger.debug "Organization filter in session: #{session[key]}"
+        logger.debug("Organization filter in session: #{session[key]}")
         filters[key] = session[key]
       end
     end
     FRAMEWORK_FILTER_KEYS.each do |key|
       if session[key]
-        logger.debug "Framework filter in session: #{session[key]}"
+        logger.debug("Framework filter in session: #{session[key]}")
         filters[key] = session[key]
       end
     end
-    render json: filters
+    render(json: filters)
   end
 
   def sanitize_all_filters
     all_filters = {}
-    all_filters['use_cases'] = sanitize_session_values 'use_cases'
-    all_filters['workflows'] = sanitize_session_values 'workflows'
-    all_filters['sdgs'] = sanitize_session_values 'sdgs'
-    all_filters['bbs'] = sanitize_session_values 'building_blocks'
-    all_filters['products'] = sanitize_session_values 'products'
-    all_filters['origins'] = sanitize_session_values 'origins'
-    all_filters['organizations'] = sanitize_session_values 'organizations'
-    all_filters['projects'] = sanitize_session_values 'projects'
-    all_filters['project_origins'] = sanitize_session_values 'project_origins'
+    all_filters['use_cases'] = sanitize_session_values('use_cases')
+    all_filters['workflows'] = sanitize_session_values('workflows')
+    all_filters['sdgs'] = sanitize_session_values('sdgs')
+    all_filters['bbs'] = sanitize_session_values('building_blocks')
+    all_filters['products'] = sanitize_session_values('products')
+    all_filters['origins'] = sanitize_session_values('origins')
+    all_filters['organizations'] = sanitize_session_values('organizations')
+    all_filters['projects'] = sanitize_session_values('projects')
+    all_filters['project_origins'] = sanitize_session_values('project_origins')
 
-    all_filters['endorser_only'] = sanitize_session_value 'endorser_only'
-    all_filters['aggregator_only'] = sanitize_session_value 'aggregator_only'
-    all_filters['years'] = sanitize_session_values 'years'
+    all_filters['endorser_only'] = sanitize_session_value('endorser_only')
+    all_filters['aggregator_only'] = sanitize_session_value('aggregator_only')
+    all_filters['years'] = sanitize_session_values('years')
 
-    all_filters['countries'] = sanitize_session_values 'countries'
-    all_filters['sectors'] = sanitize_session_values 'sectors'
+    all_filters['countries'] = sanitize_session_values('countries')
+    all_filters['sectors'] = sanitize_session_values('sectors')
 
-    all_filters['with_maturity_assessment'] = sanitize_session_value 'with_maturity_assessment'
-    all_filters['is_launchable'] = sanitize_session_value 'is_launchable'
+    all_filters['with_maturity_assessment'] = sanitize_session_value('with_maturity_assessment')
+    all_filters['is_launchable'] = sanitize_session_value('is_launchable')
 
-    all_filters['tags'] = sanitize_session_values 'tags'
-    all_filters['product_type'] = sanitize_session_values 'product_type'
+    all_filters['tags'] = sanitize_session_values('tags')
+    all_filters['product_type'] = sanitize_session_values('product_type')
 
-    filter_set = !(all_filters['countries'].empty? && all_filters['products'].empty? && all_filters['sectors'].empty? &&
-                     all_filters['years'].empty? && all_filters['organizations'].empty? && all_filters['origins'].empty? &&
-                     all_filters['projects'].empty? && all_filters['project_origins'].empty? && all_filters['tags'].empty? &&
-                     all_filters['sdgs'].empty? && all_filters['use_cases'].empty? && all_filters['workflows'].empty? &&
-                     all_filters['bbs'].empty? && all_filters['product_type'].empty?) ||
+    filter_set = !(all_filters['countries'].empty? && all_filters['products'].empty? &&
+                   all_filters['sectors'].empty? && all_filters['years'].empty? &&
+                   all_filters['organizations'].empty? && all_filters['origins'].empty? &&
+                   all_filters['projects'].empty? && all_filters['project_origins'].empty? &&
+                   all_filters['tags'].empty? && all_filters['sdgs'].empty? && all_filters['use_cases'].empty? &&
+                   all_filters['workflows'].empty? && all_filters['bbs'].empty? &&
+                   all_filters['product_type'].empty?) ||
                  all_filters['endorser_only'] || all_filters['aggregator_only'] ||
                  all_filters['with_maturity_assessment'] || all_filters['is_launchable']
 
@@ -348,13 +351,13 @@ class ApplicationController < ActionController::Base
 
   def sanitize_filter_value(filter_name)
     filter_value = nil
-    (params.key? filter_name.to_s) && filter_value = params[filter_name.to_s]
+    params.key?(filter_name.to_s) && filter_value = params[filter_name.to_s]
     filter_value
   end
 
   def sanitize_session_values(filter_name)
     filter_values = []
-    if session.key? filter_name.to_s
+    if session.key?(filter_name.to_s)
       session[filter_name.to_s].each do |curr_filter|
         filter_value = curr_filter['value']
         filter_value = filter_value.to_i if filter_value.scan(/\D/).empty?
@@ -366,7 +369,7 @@ class ApplicationController < ActionController::Base
 
   def sanitize_session_value(filter_name)
     filter_value = nil
-    (session.key? filter_name.to_s) && filter_value = session[filter_name.to_s]['value']
+    session.key?(filter_name.to_s) && filter_value = session[filter_name.to_s]['value']
     filter_value.to_s.downcase == 'true'
   end
 
@@ -490,44 +493,45 @@ class ApplicationController < ActionController::Base
 
   def send_email
     if params[:email_token] != ENV['EMAIL_TOKEN']
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
-    email_body = "Issue Reported by #{params[:name]}(#{params[:email]})\n\nIssue Type: #{params[:issue_type]}\n\n#{params[:issue]}"
+    email_body = "Issue Reported by #{params[:name]}(#{params[:email]}) \n\n" \
+                 "Issue Type: #{params[:issue_type]}\n\n#{params[:issue]}"
     AdminMailer.send_mail_from_client('notifier@solutions.dial.community', 'issues@solutions.dial.community',
                                       'User Reported Issue ', email_body)
 
     respond_to do |format|
-      format.json { render json: { email: 'Issue' }, status: :ok }
+      format.json { render(json: { email: 'Issue' }, status: :ok) }
     end
   end
 
   def save_url
-    return respond_to { |format| format.json { render json: {}, status: :unauthorized } } if current_user.nil?
+    return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } } if current_user.nil?
 
     favoriting_user = current_user
     favoriting_user.saved_urls.push(params[:url])
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render json: { saved_url: params[:url] }, status: :ok }
+        format.json { render(json: { saved_url: params[:url] }, status: :ok) }
       else
-        format.json { render json: { saved_url: params[:url] }, status: :unprocessable_entity }
+        format.json { render(json: { saved_url: params[:url] }, status: :unprocessable_entity) }
       end
     end
   end
 
   def remove_url
-    return respond_to { |format| format.json { render json: {}, status: :unauthorized } } if current_user.nil?
+    return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } } if current_user.nil?
 
     favoriting_user = current_user
     deleted_url = favoriting_user.saved_urls.delete_at(params[:index].to_i)
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render json: { deleted_url: deleted_url }, status: :ok }
+        format.json { render(json: { deleted_url: deleted_url }, status: :ok) }
       else
-        format.json { render json: { deleted_url: deleted_url }, status: :unprocessable_entity }
+        format.json { render(json: { deleted_url: deleted_url }, status: :unprocessable_entity) }
       end
     end
   end
@@ -564,10 +568,10 @@ class ApplicationController < ActionController::Base
   def user_not_authorized(exception)
     respond_to do |format|
       format.html do
-        redirect_to request.referrer || root_path,
-                    flash: { error: t(exception.query.to_s), scope: 'pundit', default: :default }
+        redirect_to(request.referrer || root_path,
+                    flash: { error: t(exception.query.to_s), scope: 'pundit', default: :default })
       end
-      format.json { render json: {}, status: 401 }
+      format.json { render(json: {}, status: 401) }
     end
   end
 

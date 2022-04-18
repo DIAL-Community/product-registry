@@ -18,12 +18,12 @@ class CategoryIndicatorsController < ApplicationController
   # GET /category_indicators/1
   # GET /category_indicators/1.json
   def show
-    authorize @category_indicator, :view_allowed?
+    authorize(@category_indicator, :view_allowed?)
   end
 
   # GET /category_indicators/new
   def new
-    authorize CategoryIndicator, :mod_allowed?
+    authorize(CategoryIndicator, :mod_allowed?)
     @category_indicator = CategoryIndicator.new
     if params[:rubric_category_id]
       @rubric_category = RubricCategory.find_by(slug: params[:rubric_category_id])
@@ -33,13 +33,13 @@ class CategoryIndicatorsController < ApplicationController
 
   # GET /category_indicators/1/edit
   def edit
-    authorize @category_indicator, :mod_allowed?
+    authorize(@category_indicator, :mod_allowed?)
   end
 
   # POST /category_indicators
   # POST /category_indicators.json
   def create
-    authorize CategoryIndicator, :mod_allowed?
+    authorize(CategoryIndicator, :mod_allowed?)
     @category_indicator = CategoryIndicator.new(category_indicator_params)
     @category_indicator_desc = CategoryIndicatorDescription.new
 
@@ -59,14 +59,14 @@ class CategoryIndicatorsController < ApplicationController
         format.html do
           rubric_category = @category_indicator.rubric_category
           maturity_rubric = rubric_category.maturity_rubric
-          redirect_to maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
+          redirect_to(maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
                                                                               @category_indicator),
-                      notice: t('messages.model.created', model: t('model.category-indicator').to_s.humanize)
+                      notice: t('messages.model.created', model: t('model.category-indicator').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @category_indicator }
+        format.json { render(:show, status: :created, location: @category_indicator) }
       else
-        format.html { render :new }
-        format.json { render json: @category_indicator.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @category_indicator.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -74,7 +74,7 @@ class CategoryIndicatorsController < ApplicationController
   # PATCH/PUT /category_indicators/1
   # PATCH/PUT /category_indicators/1.json
   def update
-    authorize @category_indicator, :mod_allowed?
+    authorize(@category_indicator, :mod_allowed?)
     if category_indicator_params[:ci_desc].present?
       @category_indicator_desc = CategoryIndicatorDescription.where(category_indicator_id: @category_indicator.id,
                                                                     locale: I18n.locale)
@@ -89,14 +89,14 @@ class CategoryIndicatorsController < ApplicationController
         format.html do
           rubric_category = @category_indicator.rubric_category
           maturity_rubric = rubric_category.maturity_rubric
-          redirect_to maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
+          redirect_to(maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
                                                                               @category_indicator),
-                      notice: t('messages.model.updated', model: t('model.category-indicator').to_s.humanize)
+                      notice: t('messages.model.updated', model: t('model.category-indicator').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @category_indicator }
+        format.json { render(:show, status: :ok, location: @category_indicator) }
       else
-        format.html { render :edit }
-        format.json { render json: @category_indicator.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @category_indicator.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -104,15 +104,15 @@ class CategoryIndicatorsController < ApplicationController
   # DELETE /category_indicators/1
   # DELETE /category_indicators/1.json
   def destroy
-    authorize @category_indicator, :mod_allowed?
+    authorize(@category_indicator, :mod_allowed?)
     rubric_category = @category_indicator.rubric_category
     @category_indicator.destroy
     respond_to do |format|
       format.html do
-        redirect_to maturity_rubric_rubric_category_path(rubric_category.maturity_rubric, rubric_category),
-                    notice: t('messages.model.deleted', model: t('model.category-indicator').to_s.humanize)
+        redirect_to(maturity_rubric_rubric_category_path(rubric_category.maturity_rubric, rubric_category),
+                    notice: t('messages.model.deleted', model: t('model.category-indicator').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -126,25 +126,26 @@ class CategoryIndicatorsController < ApplicationController
                                                 .to_a
       end
     end
-    authorize @category_indicators, :view_allowed?
-    render json: @category_indicators, only: [:name]
+    authorize(@category_indicators, :view_allowed?)
+    render(json: @category_indicators, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_category_indicator
-    @category_indicator = if !params[:id].scan(/\D/).empty?
-                            CategoryIndicator.find_by(slug: params[:id]) || not_found
-                          else
-                            CategoryIndicator.find(params[:id]) || not_found
-                          end
+    if !params[:id].scan(/\D/).empty?
+      @category_indicator = CategoryIndicator.find_by(slug: params[:id]) || not_found
+    else
+      @category_indicator = CategoryIndicator.find(params[:id]) || not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.
   def category_indicator_params
     params.require(:category_indicator)
-          .permit(:name, :slug, :indicator_type, :weight, :data_source, :source_indicator, :ci_desc, :rubric_category_id)
+          .permit(:name, :slug, :indicator_type, :weight, :data_source, :source_indicator, :ci_desc,
+                  :rubric_category_id)
           .tap do |attr|
             if params[:indicator_type].is_a?(String)
               attr[:indicator_type] = CategoryIndicator.category_indicator_types.key(params[:indicator_type].downcase)

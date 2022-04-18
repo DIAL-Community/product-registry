@@ -63,7 +63,7 @@ class AuthenticationController < Devise::SessionsController
         end
       end
     else
-      sign_in user, store: true
+      sign_in(user, store: true)
       can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
       organization = Organization.find(user.organization_id) if user.organization_id
       respond_to do |format|

@@ -10,33 +10,33 @@ class ContactsController < ApplicationController
     if params[:without_paging]
       @contacts = Contact.name_contains(params[:search])
                          .order(:name)
-      authorize @contacts, :view_allowed?
+      authorize(@contacts, :view_allowed?)
       return
     end
 
-    @contacts = if params[:search]
-                  Contact
-                    .where(nil)
-                    .name_contains(params[:search])
-                    .order(:name)
-                    .paginate(page: params[:page], per_page: 20)
-                else
-                  Contact
-                    .order(:name)
-                    .paginate(page: params[:page], per_page: 20)
-                end
-    authorize @contacts, :view_allowed?
+    if params[:search]
+      @contacts = Contact
+                  .where(nil)
+                  .name_contains(params[:search])
+                  .order(:name)
+                  .paginate(page: params[:page], per_page: 20)
+    else
+      @contacts = Contact
+                  .order(:name)
+                  .paginate(page: params[:page], per_page: 20)
+    end
+    authorize(@contacts, :view_allowed?)
   end
 
   # GET /contacts/1
   # GET /contacts/1.json
   def show
-    authorize @contact, :view_allowed?
+    authorize(@contact, :view_allowed?)
   end
 
   # GET /contacts/new
   def new
-    authorize Contact, :mod_allowed?
+    authorize(Contact, :mod_allowed?)
     @contact = Contact.new
     if params[:organization_id]
       @organization = Organization.find(params[:organization_id])
@@ -46,14 +46,14 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1/edit
   def edit
-    authorize @contact, :mod_allowed?
+    authorize(@contact, :mod_allowed?)
     @organization = Organization.find(params[:organization_id]) if params[:organization_id]
   end
 
   # POST /contacts
   # POST /contacts.json
   def create
-    authorize Contact, :mod_allowed?
+    authorize(Contact, :mod_allowed?)
     @contact = Contact.new(contact_params)
     params[:selected_organizations]&.keys&.each do |organization_id|
       organization = Organization.find(organization_id)
@@ -63,14 +63,14 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.save
         format.html do
-          redirect_to @contact,
+          redirect_to(@contact,
                       flash: { notice: t('messages.model.created',
-                                         model: t('model.contact').to_s.humanize) }
+                                         model: t('model.contact').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @contact }
+        format.json { render(:show, status: :created, location: @contact) }
       else
-        format.html { render :new }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @contact.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -78,7 +78,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
-    authorize @contact, :mod_allowed?
+    authorize(@contact, :mod_allowed?)
     if params[:selected_organizations]
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
@@ -91,14 +91,14 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.update(contact_params)
         format.html do
-          redirect_to @contact,
+          redirect_to(@contact,
                       flash: { notice: t('messages.model.updated',
-                                         model: t('model.contact').to_s.humanize) }
+                                         model: t('model.contact').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @contact }
+        format.json { render(:show, status: :ok, location: @contact) }
       else
-        format.html { render :edit, locals: { contact: @contact } }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
+        format.html { render(:edit, locals: { contact: @contact }) }
+        format.json { render(json: @contact.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -106,14 +106,14 @@ class ContactsController < ApplicationController
   # DELETE /contacts/1
   # DELETE /contacts/1.json
   def destroy
-    authorize @contact, :mod_allowed?
+    authorize(@contact, :mod_allowed?)
     @contact.destroy
     respond_to do |format|
       format.html do
-        redirect_to contacts_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.contact').to_s.humanize) }
+        redirect_to(contacts_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.contact').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -124,19 +124,19 @@ class ContactsController < ApplicationController
       original_slug = slug_em(params[:original])
       @contacts = Contact.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize Contact, :view_allowed?
-    render json: @contacts, only: %i[name title]
+    authorize(Contact, :view_allowed?)
+    render(json: @contacts, only: %i[name title])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_contact
-    @contact = if !params[:id].scan(/\D/).empty?
-                 Contact.find_by(slug: params[:id])
-               else
-                 Contact.find(params[:id])
-               end
+    if !params[:id].scan(/\D/).empty?
+      @contact = Contact.find_by(slug: params[:id])
+    else
+      @contact = Contact.find(params[:id])
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

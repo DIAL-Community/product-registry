@@ -37,11 +37,13 @@ module Queries
     argument :endorser_only, Boolean, required: false, default_value: false
     argument :endorser_level, String, required: false, default_value: ''
     argument :aggregators, [String], required: false, default_value: []
-    argument :locale, String, required: false, default_value: 'en'
     argument :map_view, Boolean, required: false, default_value: false
     type Types::OrganizationType.connection_type, null: false
 
-    def resolve(search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:, aggregators:, locale:, map_view:)
+    def resolve(
+      search:, sectors:, countries:, years:, aggregator_only:, endorser_only:, endorser_level:,
+      aggregators:, map_view:
+    )
       organizations = Organization.order(:name)
 
       organizations = organizations.where(is_mni: true) if aggregator_only

@@ -10,26 +10,26 @@ class PlaybooksController < ApplicationController
     if params[:without_paging]
       @playbooks = Playbook.order(:name)
       !params[:search].blank? && @playbooks = @playbooks.name_contains(params[:search])
-      authorize @playbooks, :view_allowed?
+      authorize(@playbooks, :view_allowed?)
       return @playbooks
     end
 
     current_page = params[:page] || 1
 
     @playbooks = Playbook.order(:name)
-    @playbooks = if params[:search]
-                   @playbooks.name_contains(params[:search])
+    if params[:search]
+      @playbooks = @playbooks.name_contains(params[:search])
                              .paginate(page: current_page, per_page: 5)
-                 else
-                   @playbooks.paginate(page: current_page, per_page: 5)
-                 end
-    authorize @playbooks, :view_allowed?
+    else
+      @playbooks = @playbooks.paginate(page: current_page, per_page: 5)
+    end
+    authorize(@playbooks, :view_allowed?)
   end
 
   # GET /playbook/1
   # GET /playbook/1.json
   def show
-    authorize @playbook, :view_allowed?
+    authorize(@playbook, :view_allowed?)
   end
 
   def show_pdf; end
@@ -38,12 +38,12 @@ class PlaybooksController < ApplicationController
   def new
     @playbook = Playbook.new
     @description = PlaybookDescription.new
-    authorize @playbook, :mod_allowed?
+    authorize(@playbook, :mod_allowed?)
   end
 
   # GET /playbooks/1/edit
   def edit
-    authorize @playbook, :mod_allowed?
+    authorize(@playbook, :mod_allowed?)
   end
 
   # POST /playbooks
@@ -52,7 +52,7 @@ class PlaybooksController < ApplicationController
     @playbook = Playbook.new(playbook_params)
     @playbook_desc = PlaybookDescription.new
 
-    authorize @playbook, :mod_allowed?
+    authorize(@playbook, :mod_allowed?)
 
     respond_to do |format|
       if @playbook.save
@@ -67,19 +67,19 @@ class PlaybooksController < ApplicationController
           uploader = LogoUploader.new(@playbook, params[:logo].original_filename, current_user)
           begin
             uploader.store!(params[:logo])
-          rescue StandardError => e
+          rescue StandardError
             @playbook.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
           end
         end
 
         format.html do
-          redirect_to @playbook,
-                      notice: t('messages.model.created', model: t('model.playbook').to_s.humanize)
+          redirect_to(@playbook,
+                      notice: t('messages.model.created', model: t('model.playbook').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @playbook }
+        format.json { render(:show, status: :created, location: @playbook) }
       else
-        format.html { render :new }
-        format.json { render json: @playbook.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @playbook.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -87,8 +87,9 @@ class PlaybooksController < ApplicationController
   # PATCH/PUT /playbooks/1
   # PATCH/PUT /playbooks/1.json
   def update
-    authorize @playbook, :mod_allowed?
-    if playbook_params[:playbook_desc].present? || playbook_params[:playbook_audience].present? || playbook_params[:playbook_outcomes].present?
+    authorize(@playbook, :mod_allowed?)
+    if playbook_params[:playbook_desc].present? || playbook_params[:playbook_audience].present? ||
+      playbook_params[:playbook_outcomes].present?
       @playbook_desc = PlaybookDescription.where(playbook_id: @playbook.id,
                                                  locale: I18n.locale)
                                           .first || PlaybookDescription.new
@@ -104,7 +105,7 @@ class PlaybooksController < ApplicationController
       uploader = LogoUploader.new(@playbook, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @playbook.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
     end
@@ -112,13 +113,13 @@ class PlaybooksController < ApplicationController
     respond_to do |format|
       if @playbook.update(playbook_params)
         format.html do
-          redirect_to @playbook,
-                      notice: t('messages.model.updated', model: t('model.playbook').to_s.humanize)
+          redirect_to(@playbook,
+                      notice: t('messages.model.updated', model: t('model.playbook').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @playbook }
+        format.json { render(:show, status: :ok, location: @playbook) }
       else
-        format.html { render :edit }
-        format.json { render json: @playbook.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @playbook.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -126,14 +127,14 @@ class PlaybooksController < ApplicationController
   # DELETE /playbooks/1
   # DELETE /playbooks/1.json
   def destroy
-    authorize @playbook, :mod_allowed?
+    authorize(@playbook, :mod_allowed?)
     @playbook.destroy
     respond_to do |format|
       format.html do
-        redirect_to playbooks_url,
-                    notice: t('messages.model.deleted', model: t('model.playbook').to_s.humanize)
+        redirect_to(playbooks_url,
+                    notice: t('messages.model.deleted', model: t('model.playbook').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -153,19 +154,19 @@ class PlaybooksController < ApplicationController
                             .to_a
       end
     end
-    authorize Playbook, :view_allowed?
-    render json: @playbook, only: [:name]
+    authorize(Playbook, :view_allowed?)
+    render(json: @playbook, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_playbook
-    @playbook = if !params[:id].scan(/\D/).empty?
-                  Playbook.find_by(slug: params[:id]) || not_found
-                else
-                  Playbook.find(params[:id]) || not_found
-                end
+    if !params[:id].scan(/\D/).empty?
+      @playbook = Playbook.find_by(slug: params[:id]) || not_found
+    else
+      @playbook = Playbook.find(params[:id]) || not_found
+    end
 
     @description = @playbook.playbook_descriptions
                             .select { |desc| desc.locale == I18n.locale.to_s }
@@ -175,8 +176,8 @@ class PlaybooksController < ApplicationController
   # Only allow a list of trusted parameters through.
   def playbook_params
     params.require(:playbook)
-          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo, phases: %i[name
-                                                                                                              description])
+          .permit(:name, :slug, :playbook_overview, :playbook_audience, :playbook_outcomes, :logo,
+                  phases: %i[name description])
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

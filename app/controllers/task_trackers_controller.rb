@@ -16,12 +16,12 @@ class TaskTrackersController < ApplicationController
     current_page = params[:page] || 1
 
     @task_tracker = TaskTracker.order(:name)
-    @task_trackers = if params[:search].present?
-                       @task_tracker.name_contains(params[:search])
+    if params[:search].present?
+      @task_trackers = @task_tracker.name_contains(params[:search])
                                     .paginate(page: current_page, per_page: 5)
-                     else
-                       @task_tracker.paginate(page: current_page, per_page: 5)
-                     end
+    else
+      @task_trackers = @task_tracker.paginate(page: current_page, per_page: 5)
+    end
     authorize(@task_trackers, :view_allowed?)
   end
 
@@ -58,13 +58,13 @@ class TaskTrackersController < ApplicationController
           @task_tracker_description.save
         end
         format.html do
-          redirect_to @task_tracker, notice: t('messages.model.created',
-                                               model: t('model.task-tracker').to_s.humanize)
+          redirect_to(@task_tracker, notice: t('messages.model.created',
+                                               model: t('model.task-tracker').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @task_tracker }
+        format.json { render(:show, status: :created, location: @task_tracker) }
       else
-        format.html { render :new }
-        format.json { render json: @task_tracker.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @task_tracker.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -86,13 +86,13 @@ class TaskTrackersController < ApplicationController
     respond_to do |format|
       if @task_tracker.update(task_tracker_params)
         format.html do
-          redirect_to @task_tracker, notice: t('messages.model.updated',
-                                               model: t('model.task-tracker').to_s.humanize)
+          redirect_to(@task_tracker, notice: t('messages.model.updated',
+                                               model: t('model.task-tracker').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @task_tracker }
+        format.json { render(:show, status: :ok, location: @task_tracker) }
       else
-        format.html { render :edit }
-        format.json { render json: @task_tracker.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @task_tracker.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -102,8 +102,8 @@ class TaskTrackersController < ApplicationController
   def destroy
     @task_tracker.destroy
     respond_to do |format|
-      format.html { redirect_to task_trackers_url, notice: 'Task tracker was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to(task_trackers_url, notice: 'Task tracker was successfully destroyed.') }
+      format.json { head(:no_content) }
     end
   end
 

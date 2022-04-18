@@ -9,9 +9,9 @@ class CitiesController < ApplicationController
 
     render(json: record.to_json(City.serialization_options
                                     .merge({
-                                             item_path: request.original_url,
-                                             include_relationships: true
-                                           })))
+                                      item_path: request.original_url,
+                                      include_relationships: true
+                                    })))
   end
 
   def simple_search
@@ -50,9 +50,9 @@ class CitiesController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(City.serialization_options
                                      .merge({
-                                              collection_path: uri.to_s,
-                                              include_relationships: true
-                                            })))
+                                       collection_path: uri.to_s,
+                                       include_relationships: true
+                                     })))
   end
 
   # GET /cities
@@ -65,15 +65,15 @@ class CitiesController < ApplicationController
       return
     end
 
-    @cities = if params[:search]
-                City.where(nil)
+    if params[:search]
+      @cities = City.where(nil)
                     .name_contains(params[:search])
                     .order(:name)
                     .paginate(page: params[:page], per_page: 20)
-              else
-                City.order(:name)
+    else
+      @cities = City.order(:name)
                     .paginate(page: params[:page], per_page: 20)
-              end
+    end
     authorize(@cities, :view_allowed?)
   end
 

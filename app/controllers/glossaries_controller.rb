@@ -6,48 +6,48 @@ class GlossariesController < ApplicationController
   # GET /glossaries
   # GET /glossaries.json
   def index
-    @glossaries = if params[:search]
-                    Glossary.name_contains(params[:search])
+    if params[:search]
+      @glossaries = Glossary.name_contains(params[:search])
                             .where(locale: I18n.locale)
                             .order(:name)
-                  else
-                    Glossary.where(locale: I18n.locale)
+    else
+      @glossaries = Glossary.where(locale: I18n.locale)
                             .order(:name)
-                  end
-    authorize @glossaries, :view_allowed?
+    end
+    authorize(@glossaries, :view_allowed?)
   end
 
   # GET /glossaries/1
   # GET /glossaries/1.json
   def show
-    authorize @glossary, :view_allowed?
+    authorize(@glossary, :view_allowed?)
   end
 
   # GET /glossaries/new
   def new
-    authorize Glossary, :mod_allowed?
+    authorize(Glossary, :mod_allowed?)
     @glossary = Glossary.new
   end
 
   # GET /glossaries/1/edit
   def edit
-    authorize @glossary, :mod_allowed?
+    authorize(@glossary, :mod_allowed?)
   end
 
   # POST /glossaries
   # POST /glossaries.json
   def create
-    authorize Glossary, :mod_allowed?
+    authorize(Glossary, :mod_allowed?)
     @glossary = Glossary.new(glossary_params)
     @glossary.locale = I18n.locale
 
     respond_to do |format|
       if @glossary.save
-        format.html { redirect_to @glossary, notice: 'Glossary was successfully created.' }
-        format.json { render :show, status: :created, location: @glossary }
+        format.html { redirect_to(@glossary, notice: 'Glossary was successfully created.') }
+        format.json { render(:show, status: :created, location: @glossary) }
       else
-        format.html { render :new }
-        format.json { render json: @glossary.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @glossary.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -55,15 +55,15 @@ class GlossariesController < ApplicationController
   # PATCH/PUT /glossaries/1
   # PATCH/PUT /glossaries/1.json
   def update
-    authorize @glossary, :mod_allowed?
+    authorize(@glossary, :mod_allowed?)
     @glossary.locale = I18n.locale
     respond_to do |format|
       if @glossary.update(glossary_params)
-        format.html { redirect_to @glossary, notice: 'Glossary was successfully updated.' }
-        format.json { render :show, status: :ok, location: @glossary }
+        format.html { redirect_to(@glossary, notice: 'Glossary was successfully updated.') }
+        format.json { render(:show, status: :ok, location: @glossary) }
       else
-        format.html { render :edit }
-        format.json { render json: @glossary.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @glossary.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -71,11 +71,11 @@ class GlossariesController < ApplicationController
   # DELETE /glossaries/1
   # DELETE /glossaries/1.json
   def destroy
-    authorize @glossary, :mod_allowed?
+    authorize(@glossary, :mod_allowed?)
     @glossary.destroy
     respond_to do |format|
-      format.html { redirect_to glossaries_url, notice: 'Glossary was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to(glossaries_url, notice: 'Glossary was successfully destroyed.') }
+      format.json { head(:no_content) }
     end
   end
 
@@ -86,8 +86,8 @@ class GlossariesController < ApplicationController
       original_slug = slug_em(params[:original])
       @glossaries = Glossary.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize @glossaries, :view_allowed?
-    render json: @glossaries, only: [:name]
+    authorize(@glossaries, :view_allowed?)
+    render(json: @glossaries, only: [:name])
   end
 
   private

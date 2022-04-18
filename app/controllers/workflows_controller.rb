@@ -8,7 +8,7 @@ class WorkflowsController < ApplicationController
 
   before_action :set_workflow, only: %i[show edit update destroy]
   before_action :authenticate_user!, only: %i[new create edit update destroy]
-  before_action :set_current_user, only: %i[edit update destroy]
+  before_action :auditable_current_user, only: %i[edit update destroy]
 
   def unique_search
     record = Workflow.find_by(slug: params[:id])
@@ -16,9 +16,9 @@ class WorkflowsController < ApplicationController
 
     render(json: record.to_json(Workflow.serialization_options
                                         .merge({
-                                                 item_path: request.original_url,
-                                                 include_relationships: true
-                                               })))
+                                          item_path: request.original_url,
+                                          include_relationships: true
+                                        })))
   end
 
   def simple_search
@@ -62,9 +62,9 @@ class WorkflowsController < ApplicationController
       format.json do
         render(json: results.to_json(Workflow.serialization_options
                                              .merge({
-                                                      collection_path: uri.to_s,
-                                                      include_relationships: true
-                                                    })))
+                                               collection_path: uri.to_s,
+                                               include_relationships: true
+                                             })))
       end
     end
   end
@@ -171,9 +171,9 @@ class WorkflowsController < ApplicationController
       format.json do
         render(json: results.to_json(Workflow.serialization_options
                                              .merge({
-                                                      collection_path: uri.to_s,
-                                                      include_relationships: true
-                                                    })))
+                                               collection_path: uri.to_s,
+                                               include_relationships: true
+                                             })))
       end
     end
   end
@@ -183,7 +183,7 @@ class WorkflowsController < ApplicationController
   def index
     if params[:without_paging]
       @workflows = Workflow.name_contains(params[:search])
-      authorize @workflows, :view_allowed?
+      authorize(@workflows, :view_allowed?)
       return
     end
 
@@ -193,14 +193,14 @@ class WorkflowsController < ApplicationController
 
     @workflows = @workflows.paginate(page: params[:page], per_page: 20) unless params[:without_paging]
 
-    authorize @workflows, :view_allowed?
+    authorize(@workflows, :view_allowed?)
   end
 
   def count
     @workflows = filter_workflows
 
-    authorize @workflows, :view_allowed?
-    render json: @workflows.count
+    authorize(@workflows, :view_allowed?)
+    render(json: @workflows.count)
   end
 
   def export_data
@@ -208,10 +208,10 @@ class WorkflowsController < ApplicationController
     authorize(@workflows, :view_allowed?)
     respond_to do |format|
       format.csv do
-        render csv: @workflows, filename: 'exported-workflow'
+        render(csv: @workflows, filename: 'exported-workflow')
       end
       format.json do
-        render json: @workflows.to_json(Workflow.serialization_options)
+        render(json: @workflows.to_json(Workflow.serialization_options))
       end
     end
   end
@@ -219,29 +219,29 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1
   # GET /workflows/1.json
   def show
-    authorize @workflow, :view_allowed?
+    authorize(@workflow, :view_allowed?)
   end
 
   # GET /workflows/new
   def new
-    authorize Workflow, :mod_allowed?
+    authorize(Workflow, :mod_allowed?)
     @workflow = Workflow.new
     @wf_desc = WorkflowDescription.new
   end
 
   # GET /workflows/1/edit
   def edit
-    authorize @workflow, :mod_allowed?
+    authorize(@workflow, :mod_allowed?)
   end
 
   # POST /workflows
   # POST /workflows.json
   def create
-    authorize Workflow, :mod_allowed?
+    authorize(Workflow, :mod_allowed?)
     @workflow = Workflow.new(workflow_params)
-    @workflow.set_current_user(current_user)
+    @workflow.auditable_current_user(current_user)
     @wf_desc = WorkflowDescription.new
-    @wf_desc.set_current_user(current_user)
+    @wf_desc.auditable_current_user(current_user)
 
     if params[:selected_building_blocks].present?
       params[:selected_building_blocks].keys.each do |building_block_id|
@@ -260,14 +260,14 @@ class WorkflowsController < ApplicationController
         end
 
         format.html do
-          redirect_to @workflow,
+          redirect_to(@workflow,
                       flash: { notice: t('messages.model.created',
-                                         model: t('model.workflow').to_s.humanize) }
+                                         model: t('model.workflow').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @workflow }
+        format.json { render(:show, status: :created, location: @workflow) }
       else
-        format.html { render :new }
-        format.json { render json: @workflow.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @workflow.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -275,7 +275,7 @@ class WorkflowsController < ApplicationController
   # PATCH/PUT /workflows/1
   # PATCH/PUT /workflows/1.json
   def update
-    authorize @workflow, :mod_allowed?
+    authorize(@workflow, :mod_allowed?)
 
     building_blocks = Set.new
     params[:selected_building_blocks]&.keys&.each do |building_block_id|
@@ -300,10 +300,10 @@ class WorkflowsController < ApplicationController
             flash: { notice: t('messages.model.updated', model: t('model.workflow').to_s.humanize) }
           )
         end
-        format.json { render :show, status: :ok, location: @workflow }
+        format.json { render(:show, status: :ok, location: @workflow) }
       else
-        format.html { render :edit }
-        format.json { render json: @workflow.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @workflow.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -311,14 +311,14 @@ class WorkflowsController < ApplicationController
   # DELETE /workflows/1
   # DELETE /workflows/1.json
   def destroy
-    authorize @workflow, :mod_allowed?
+    authorize(@workflow, :mod_allowed?)
     @workflow.destroy
     respond_to do |format|
       format.html do
-        redirect_to workflows_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.workflow').to_s.humanize) }
+        redirect_to(workflows_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.workflow').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -329,8 +329,8 @@ class WorkflowsController < ApplicationController
       original_slug = slug_em(params[:original])
       @workflows = Workflow.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize Workflow, :view_allowed?
-    render json: @workflows, only: [:name]
+    authorize(Workflow, :view_allowed?)
+    render(json: @workflows, only: [:name])
   end
 
   private
@@ -338,18 +338,18 @@ class WorkflowsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_workflow
     if !params[:id].scan(/\D/).empty?
-      @workflow = Workflow.find_by(slug: params[:id]) or not_found
+      (@workflow = Workflow.find_by(slug: params[:id])) || not_found
     else
-      @workflow = Workflow.find_by(id: params[:id]) or not_found
+      (@workflow = Workflow.find_by(id: params[:id])) || not_found
     end
     @wf_desc = WorkflowDescription.where(workflow_id: @workflow, locale: I18n.locale).first
     @wf_desc ||= WorkflowDescription.where(workflow_id: @workflow, locale: I18n.default_locale).first
     @wf_desc ||= WorkflowDescription.new
   end
 
-  def set_current_user
-    @workflow.set_current_user(current_user)
-    @wf_desc.set_current_user(current_user)
+  def auditable_current_user
+    @workflow.auditable_current_user(current_user)
+    @wf_desc.auditable_current_user(current_user)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

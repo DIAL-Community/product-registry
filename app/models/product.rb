@@ -125,11 +125,11 @@ class Product < ApplicationRecord
 
   def maturity_scores
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-    maturity_scores = if !maturity_rubric.nil?
-                        calculate_maturity_scores(id, maturity_rubric.id)[:rubric_scores].first
-                      else
-                        calculate_maturity_scores(id, nil)[:rubric_scores].first
-                      end
+    if !maturity_rubric.nil?
+      maturity_scores = calculate_maturity_scores(id, maturity_rubric.id)[:rubric_scores].first
+    else
+      maturity_scores = calculate_maturity_scores(id, nil)[:rubric_scores].first
+    end
     maturity_scores = maturity_scores[:category_scores] unless maturity_scores.nil?
     maturity_scores
   end

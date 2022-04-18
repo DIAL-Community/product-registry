@@ -255,7 +255,7 @@ Rails.application.routes.draw do
   post '/add_filters', to: 'application#add_filters', as: :add_filters
   post '/remove_filter', to: 'application#remove_filter', as: :remove_filter
   post '/remove_all_filters', to: 'application#remove_all_filters', as: :remove_all_filters
-  get '/get_filters', to: 'application#get_filters', as: :get_filters
+  get '/fetch_filters', to: 'application#fetch_filters', as: :fetch_filters
   get '/agg_capabilities', to: 'organizations#agg_capabilities', as: :agg_capabilities
   get '/agg_services', to: 'organizations#agg_services', as: :agg_services
   get '/service_capabilities', to: 'organizations#service_capabilities', as: :service_capabilities

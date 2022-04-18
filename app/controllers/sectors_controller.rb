@@ -10,9 +10,9 @@ class SectorsController < ApplicationController
 
     render(json: record.to_json(Sector.serialization_options
                                       .merge({
-                                               item_path: request.original_url,
-                                               include_relationships: true
-                                             })))
+                                        item_path: request.original_url,
+                                        include_relationships: true
+                                      })))
   end
 
   def simple_search
@@ -52,9 +52,9 @@ class SectorsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(Sector.serialization_options
                                        .merge({
-                                                collection_path: uri.to_s,
-                                                include_relationships: true
-                                              })))
+                                         collection_path: uri.to_s,
+                                         include_relationships: true
+                                       })))
   end
 
   def complex_search
@@ -94,9 +94,9 @@ class SectorsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(Sector.serialization_options
                                        .merge({
-                                                collection_path: uri.to_s,
-                                                include_relationships: true
-                                              })))
+                                         collection_path: uri.to_s,
+                                         include_relationships: true
+                                       })))
   end
 
   # GET /sectors
@@ -110,31 +110,31 @@ class SectorsController < ApplicationController
       !params[:search].blank? && @sectors = @sectors.name_contains(params[:search])
       !params[:display_only].nil? && @sectors = @sectors.where(is_displayable: true)
       @sectors = @sectors.order(:name)
-      authorize @sectors, :view_allowed?
+      authorize(@sectors, :view_allowed?)
       return
     end
 
-    @sectors = if params[:search]
-                 Sector.where(nil)
+    if params[:search]
+      @sectors = Sector.where(nil)
                        .name_contains(params[:search])
                        .order(:name)
                        .paginate(page: params[:page], per_page: 20)
-               else
-                 Sector.order(:name)
+    else
+      @sectors = Sector.order(:name)
                        .paginate(page: params[:page], per_page: 20)
-               end
-    authorize @sectors, :view_allowed?
+    end
+    authorize(@sectors, :view_allowed?)
   end
 
   # GET /sectors/1
   # GET /sectors/1.json
   def show
-    authorize @sector, :view_allowed?
+    authorize(@sector, :view_allowed?)
   end
 
   # GET /sectors/new
   def new
-    authorize Sector, :mod_allowed?
+    authorize(Sector, :mod_allowed?)
     @sector = Sector.new
     if params[:organization_id]
       @organization = Organization.find(params[:organization_id])
@@ -144,14 +144,14 @@ class SectorsController < ApplicationController
 
   # GET /sectors/1/edit
   def edit
-    authorize @sector, :mod_allowed?
+    authorize(@sector, :mod_allowed?)
     @organization = Organization.find(params[:organization_id]) if params[:organization_id]
   end
 
   # POST /sectors
   # POST /sectors.json
   def create
-    authorize Sector, :mod_allowed?
+    authorize(Sector, :mod_allowed?)
     @sector = Sector.new(sector_params)
 
     if params[:selected_organizations].present?
@@ -171,13 +171,13 @@ class SectorsController < ApplicationController
     respond_to do |format|
       if @sector.save
         format.html do
-          redirect_to @sector,
-                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) }
+          redirect_to(@sector,
+                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @sector }
+        format.json { render(:show, status: :created, location: @sector) }
       else
-        format.html { render :new }
-        format.json { render json: @sector.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @sector.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -185,7 +185,7 @@ class SectorsController < ApplicationController
   # PATCH/PUT /sectors/1
   # PATCH/PUT /sectors/1.json
   def update
-    authorize @sector, :mod_allowed?
+    authorize(@sector, :mod_allowed?)
     if params[:selected_organizations].present?
       organizations = Set.new
       params[:selected_organizations].keys.each do |organization_id|
@@ -207,13 +207,13 @@ class SectorsController < ApplicationController
     respond_to do |format|
       if @sector.update(sector_params)
         format.html do
-          redirect_to @sector,
-                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) }
+          redirect_to(@sector,
+                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @sector }
+        format.json { render(:show, status: :ok, location: @sector) }
       else
-        format.html { render :edit }
-        format.json { render json: @sector.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @sector.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -221,22 +221,22 @@ class SectorsController < ApplicationController
   # DELETE /sectors/1
   # DELETE /sectors/1.json
   def destroy
-    authorize @sector, :mod_allowed?
+    authorize(@sector, :mod_allowed?)
 
     respond_to do |format|
       if @sector.destroy
         format.html do
-          redirect_to sectors_url,
-                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize) }
+          redirect_to(sectors_url,
+                      flash: { notice: t('messages.model.deleted', model: t('model.sector').to_s.humanize) })
         end
       else
         format.html do
-          redirect_to sectors_url,
+          redirect_to(sectors_url,
                       flash: { notice: t('messages.model.delete-failed',
-                                         model: t('model.sector').to_s.humanize) }
+                                         model: t('model.sector').to_s.humanize) })
         end
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -247,19 +247,19 @@ class SectorsController < ApplicationController
       original_slug = slug_em(params[:original])
       @sectors = Sector.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize Sector, :view_allowed?
-    render json: @sectors, only: [:name]
+    authorize(Sector, :view_allowed?)
+    render(json: @sectors, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_sector
-    @sector = if !params[:id].scan(/\D/).empty?
-                Sector.find_by(slug: params[:id])
-              else
-                Sector.find(params[:id])
-              end
+    if !params[:id].scan(/\D/).empty?
+      @sector = Sector.find_by(slug: params[:id])
+    else
+      @sector = Sector.find(params[:id])
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

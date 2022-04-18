@@ -3,10 +3,10 @@
 module OrganizationsHelper
   def export_with_params(with_contacts)
     book = Spreadsheet::Workbook.new
-    sheet = book.create_worksheet name: 'Endorsing Organizations'
+    sheet = book.create_worksheet(name: 'Endorsing Organizations')
 
     sheet.row(0).height = 20
-    format = Spreadsheet::Format.new weight: :bold, size: 14
+    format = Spreadsheet::Format.new(weight: :bold, size: 14)
     sheet.row(0).default_format = format
 
     column_length = [0, 10, 0, 0, 0, 0]
@@ -19,7 +19,7 @@ module OrganizationsHelper
       column_offset = 3
     end
 
-    sheet.row(0).concat columns
+    sheet.row(0).concat(columns)
 
     organizations = Organization.where(is_endorser: true).order(:name)
 
@@ -60,7 +60,7 @@ module OrganizationsHelper
 
       row_data.insert(3, contact_name, contact_title, contact_email) if with_contacts
 
-      sheet.row(x += 1).concat row_data
+      sheet.row(x += 1).concat(row_data)
     end
 
     column_length.each.with_index do |c, index|
@@ -68,7 +68,7 @@ module OrganizationsHelper
     end
 
     toret = StringIO.new
-    book.write toret
+    book.write(toret)
     toret.string
   end
 end

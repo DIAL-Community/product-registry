@@ -8,7 +8,7 @@ class BuildingBlocksController < ApplicationController
 
   before_action :set_building_block, only: %i[show edit update destroy]
   before_action :authenticate_user!, only: %i[new create edit update destroy duplicate]
-  before_action :set_current_user, only: %i[edit update destroy]
+  before_action :auditable_current_user, only: %i[edit update destroy]
 
   def unique_search
     record = BuildingBlock.find_by(slug: params[:id])
@@ -16,9 +16,9 @@ class BuildingBlocksController < ApplicationController
 
     render(json: record.to_json(BuildingBlock.serialization_options
                                              .merge({
-                                                      item_path: request.original_url,
-                                                      include_relationships: true
-                                                    })))
+                                               item_path: request.original_url,
+                                               include_relationships: true
+                                             })))
   end
 
   def simple_search
@@ -62,9 +62,9 @@ class BuildingBlocksController < ApplicationController
       format.json do
         render(json: results.to_json(BuildingBlock.serialization_options
                                                   .merge({
-                                                           collection_path: uri.to_s,
-                                                           include_relationships: true
-                                                         })))
+                                                    collection_path: uri.to_s,
+                                                    include_relationships: true
+                                                  })))
       end
     end
   end
@@ -174,9 +174,9 @@ class BuildingBlocksController < ApplicationController
       format.json do
         render(json: results.to_json(BuildingBlock.serialization_options
                                                   .merge({
-                                                           collection_path: uri.to_s,
-                                                           include_relationships: true
-                                                         })))
+                                                    collection_path: uri.to_s,
+                                                    include_relationships: true
+                                                  })))
       end
     end
   end
@@ -187,7 +187,7 @@ class BuildingBlocksController < ApplicationController
     if params[:without_paging]
       @building_blocks = BuildingBlock.name_contains(params[:search])
                                       .order(:name)
-      authorize @building_blocks, :view_allowed?
+      authorize(@building_blocks, :view_allowed?)
       return
     end
 
@@ -202,14 +202,14 @@ class BuildingBlocksController < ApplicationController
                                                 "%#{params[:search]}%")
     end
 
-    authorize @building_blocks, :view_allowed?
+    authorize(@building_blocks, :view_allowed?)
   end
 
   def count
     @building_blocks = filter_building_blocks
 
-    authorize @building_blocks, :view_allowed?
-    render json: @building_blocks.count
+    authorize(@building_blocks, :view_allowed?)
+    render(json: @building_blocks.count)
   end
 
   def export_data
@@ -217,10 +217,10 @@ class BuildingBlocksController < ApplicationController
     authorize(@building_blocks, :view_allowed?)
     respond_to do |format|
       format.csv do
-        render csv: @building_blocks, filename: 'exported-building-block'
+        render(csv: @building_blocks, filename: 'exported-building-block')
       end
       format.json do
-        render json: @building_blocks.to_json(BuildingBlock.serialization_options)
+        render(json: @building_blocks.to_json(BuildingBlock.serialization_options))
       end
     end
   end
@@ -228,7 +228,7 @@ class BuildingBlocksController < ApplicationController
   # GET /building_blocks/1
   # GET /building_blocks/1.json
   def show
-    authorize @building_block, :view_allowed?
+    authorize(@building_block, :view_allowed?)
   end
 
   # GET /building_blocks/new
@@ -240,7 +240,7 @@ class BuildingBlocksController < ApplicationController
 
   # GET /building_blocks/1/edit
   def edit
-    authorize @building_block, :mod_allowed?
+    authorize(@building_block, :mod_allowed?)
   end
 
   # POST /building_blocks
@@ -248,9 +248,9 @@ class BuildingBlocksController < ApplicationController
   def create
     authorize(BuildingBlock, :create_allowed?)
     @building_block = BuildingBlock.new(building_block_params)
-    @building_block.set_current_user(current_user)
+    @building_block.auditable_current_user(current_user)
     @bb_desc = BuildingBlockDescription.new
-    @bb_desc.set_current_user(current_user)
+    @bb_desc.auditable_current_user(current_user)
 
     if params[:selected_products].present? && policy(@building_block).adding_mapping_allowed?
       params[:selected_products].keys.each do |product_id|
@@ -277,10 +277,10 @@ class BuildingBlocksController < ApplicationController
       uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
-      @building_block.set_image_changed(params[:logo].original_filename)
+      @building_block.auditable_image_changed(params[:logo].original_filename)
     end
 
     if policy(@building_block).beta_only?
@@ -302,18 +302,18 @@ class BuildingBlocksController < ApplicationController
           @bb_desc.save
         end
         format.html do
-          redirect_to @building_block,
+          redirect_to(@building_block,
                       flash: { notice: t('messages.model.created',
-                                         model: t('model.building-block').to_s.humanize) }
+                                         model: t('model.building-block').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @building_block }
+        format.json { render(:show, status: :created, location: @building_block) }
       else
         error_message = ''
         @building_block.errors.each do |_attr, err|
           error_message = err
         end
-        format.html { redirect_to new_building_block_url, flash: { error: error_message } }
-        format.json { render json: @building_block.errors, status: :unprocessable_entity }
+        format.html { redirect_to(new_building_block_url, flash: { error: error_message }) }
+        format.json { render(json: @building_block.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -321,7 +321,7 @@ class BuildingBlocksController < ApplicationController
   # PATCH/PUT /building_blocks/1
   # PATCH/PUT /building_blocks/1.json
   def update
-    authorize @building_block, :mod_allowed?
+    authorize(@building_block, :mod_allowed?)
 
     if params[:selected_products].present? &&
        (policy(@building_block).removing_mapping_allowed? || policy(@building_block).adding_mapping_allowed?)
@@ -372,10 +372,10 @@ class BuildingBlocksController < ApplicationController
       uploader = LogoUploader.new(@building_block, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @building_block.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
-      @building_block.set_image_changed(params[:logo].original_filename)
+      @building_block.auditable_image_changed(params[:logo].original_filename)
     end
 
     if building_block_params[:bb_desc].present?
@@ -403,10 +403,10 @@ class BuildingBlocksController < ApplicationController
                       flash: { notice: t('messages.model.updated',
                                          model: t('model.building-block').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @building_block }
+        format.json { render(:show, status: :ok, location: @building_block) }
       else
-        format.html { render :edit }
-        format.json { render json: @building_block.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @building_block.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -418,11 +418,11 @@ class BuildingBlocksController < ApplicationController
     @building_block.destroy
     respond_to do |format|
       format.html do
-        redirect_to building_blocks_url,
+        redirect_to(building_blocks_url,
                     flash: { notice: t('messages.model.deleted',
-                                       model: t('model.building-block').to_s.humanize) }
+                                       model: t('model.building-block').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -433,59 +433,80 @@ class BuildingBlocksController < ApplicationController
       original_slug = slug_em(params[:original])
       @building_blocks = BuildingBlock.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize BuildingBlock, :view_allowed?
-    render json: @building_blocks, only: [:name]
+    authorize(BuildingBlock, :view_allowed?)
+    render(json: @building_blocks, only: [:name])
   end
 
   def bb_fs
-    all_bb_desc = [{ name: 'Analytics and Business Intelligence', status: 'future', desc: 'Provides data-driven insights about business processes, performance and predictive modelling.' },
-                   { name: 'Artificial Intelligence', status: 'future',
-                     desc: 'AI capabilities packaged as reusable services to perform work, extract insights from data, or provide other business capabilities.' },
-                   { name: 'Client Case Management', status: 'future',
-                     desc: 'Registration of a client and the longitudinal tracking of services for the client, often across multiple service categories, providers and locations.' },
-                   { name: 'Collaboration Management', status: 'future',
-                     desc: 'Enables multiple users to simultaneously access, modify or contribute to a single activity, such as content creation, through a unified portal.' },
-                   { name: 'Consent Management', status: 'working',
-                     desc: 'Manages a set of policies allowing users to determine the info that will be accessible to specific potential info consumers, for which purpose, for how long and whether this info can be shared.<br/><br/>' },
-                   { name: 'Content Management', status: 'future',
-                     desc: 'Supports the creation, editing, publication and management of digital media and other information.' },
-                   { name: 'Data Collection', status: 'future',
-                     desc: 'Supports data collection from humans, sensors and other systems through digital interfaces.' },
-                   { name: 'Digital Registries', status: 'published',
-                     desc: 'Registries are centrally managed databases that uniquely identify persons, vendors, procedures, products and sites related to an organization or activity.' },
-                   { name: 'eLearning', status: 'future',
-                     desc: 'Supports facilitated or remote learning through digital interaction between educators and students.' },
-                   { name: 'eMarketplace', status: 'working',
-                     desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell products & services to other entities (B2B) or end-customers (B2C).' },
-                   { name: 'Geographic Information Services (GIS)', status: 'future',
-                     desc: 'Provides functionality to identify, tag and analyze geographic locations of an object, such as a water source, building, mobile phone or medical commodity.' },
-                   { name: 'Identification and Authentication', status: 'published',
-                     desc: 'Enables unique identification and authentication of users, organizations and other entities.' },
-                   { name: 'Information Mediator', status: 'published',
-                     desc: 'Provides a gateway between external digital apps & ICT Building Blocks, ensuring implementation of standards, for integrating various ICT Building Blocks & apps.' },
-                   { name: 'Messaging', status: 'working',
-                     desc: 'Facilitates notifications, alerts and two-way communications between applications and communications services, including SMS, USSD, IVR, email and social media platforms.' },
-                   { name: 'Mobility Management', status: 'future',
-                     desc: 'Services to securely enable employees’ use and management of mobile devices and applications in a business context.' },
-                   { name: 'Payments', status: 'published',
-                     desc: 'Implements financial transactions (e.g., remittances, claims, purchases & payments, transactional info). Tracking costs utilities & audit trials.' },
-                   { name: 'Registration', status: 'published',
-                     desc: 'Records identifiers and general information about a person, place or entity, typically for the purpose of registration  in specific services or programmes and tracking of that entity over time.' },
-                   { name: 'Reporting and Dashboards', status: 'future',
-                     desc: 'Provides pre-packaged and custom presentations of data and summaries of an organization’s pre-defined key performance metrics, often in visual format.' },
-                   { name: 'Scheduling', status: 'working',
-                     desc: 'Provides an engine for setting up events based on regular intervals or specific combinations of status of several parameters in order to trigger specific tasks in an automated business process.' },
-                   { name: 'Security', status: 'published',
-                     desc: 'Allows ICT admins to centrally configure & manage user access permissions to network resources, services, databases, apps and devices. Enables secure info exchange between apps.' },
-                   { name: 'Shared Data Repositories', status: 'future',
-                     desc: 'Shared space to store data for a specified knowledge area that external applications use, often providing domain-specific functionality and data presentations.' },
-                   { name: 'Terminology', status: 'future',
-                     desc: 'Registry of definitions with defined standards, synonyms for a particular domain of knowledge (eg agriculture), used to facilitate semantic interoperability.' },
-                   { name: 'Workflow and Algorithm', status: 'working',
-                     desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, the type of info exchanged  to orchestrate the process flow from initiation to completion.' }]
+    all_bb_desc = [
+      { name: 'Analytics and Business Intelligence', status: 'future',
+        desc: 'Provides data-driven insights about business processes, performance and predictive modelling.' },
+      { name: 'Artificial Intelligence', status: 'future',
+        desc: 'AI capabilities packaged as reusable services to perform work, extract insights from data, or '\
+              'provide other business capabilities.' },
+      { name: 'Client Case Management', status: 'future',
+        desc: 'Registration of a client and the longitudinal tracking of services for the client, often across '\
+              'multiple service categories, providers and locations.' },
+      { name: 'Collaboration Management', status: 'future',
+        desc: 'Enables multiple users to simultaneously access, modify or contribute to a single activity, such as '\
+              'content creation, through a unified portal.' },
+      { name: 'Consent Management', status: 'working',
+        desc: 'Manages a set of policies allowing users to determine the info that will be accessible to specific '\
+              'potential info consumers, for which purpose, for how long and whether this info can be shared.<br/>' },
+      { name: 'Content Management', status: 'future',
+        desc: 'Supports the creation, editing, publication and management of digital media and other information.' },
+      { name: 'Data Collection', status: 'future',
+        desc: 'Supports data collection from humans, sensors and other systems through digital interfaces.' },
+      { name: 'Digital Registries', status: 'published',
+        desc: 'Registries are centrally managed databases that uniquely identify persons, vendors, procedures, '\
+              'products and sites related to an organization or activity.' },
+      { name: 'eLearning', status: 'future',
+        desc: 'Supports facilitated or remote learning through digital interaction between educators and students.' },
+      { name: 'eMarketplace', status: 'working',
+        desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell '\
+              'products & services to other entities (B2B) or end-customers (B2C).' },
+      { name: 'Geographic Information Services (GIS)', status: 'future',
+        desc: 'Provides functionality to identify, tag and analyze geographic locations of an object, such as a '\
+              'water source, building, mobile phone or medical commodity.' },
+      { name: 'Identification and Authentication', status: 'published',
+        desc: 'Enables unique identification and authentication of users, organizations and other entities.' },
+      { name: 'Information Mediator', status: 'published',
+        desc: 'Provides a gateway between external digital apps & ICT Building Blocks, ensuring implementation of '\
+              'standards, for integrating various ICT Building Blocks & apps.' },
+      { name: 'Messaging', status: 'working',
+        desc: 'Facilitates notifications, alerts and two-way communications between applications and communications '\
+              'services, including SMS, USSD, IVR, email and social media platforms.' },
+      { name: 'Mobility Management', status: 'future',
+        desc: 'Services to securely enable employees’ use and management of mobile devices and applications in a '\
+              'business context.' },
+      { name: 'Payments', status: 'published',
+        desc: 'Implements financial transactions (e.g., remittances, claims, purchases & payments, transactional '\
+              'info). Tracking costs utilities & audit trials.' },
+      { name: 'Registration', status: 'published',
+        desc: 'Records identifiers and general information about a person, place or entity, typically for the purpose '\
+              'of registration  in specific services or programmes and tracking of that entity over time.' },
+      { name: 'Reporting and Dashboards', status: 'future',
+        desc: 'Provides pre-packaged and custom presentations of data and summaries of an organization’s pre-defined '\
+              'key performance metrics, often in visual format.' },
+      { name: 'Scheduling', status: 'working',
+        desc: 'Provides an engine for setting up events based on regular intervals or specific combinations of status '\
+              'of several parameters in order to trigger specific tasks in an automated business process.' },
+      { name: 'Security', status: 'published',
+        desc: 'Allows ICT admins to centrally configure & manage user access permissions to network '\
+              'resources, services, databases, apps and devices. Enables secure info exchange between apps.' },
+      { name: 'Shared Data Repositories', status: 'future',
+        desc: 'Shared space to store data for a specified knowledge area that external applications use, '\
+              'often providing domain-specific functionality and data presentations.' },
+      { name: 'Terminology', status: 'future',
+        desc: 'Registry of definitions with defined standards, synonyms for a particular domain of knowledge '\
+              '(eg agriculture), used to facilitate semantic interoperability.' },
+      { name: 'Workflow and Algorithm', status: 'working',
+        desc: 'Optimize business processes by specifying rules that govern the sequence of activities executed, '\
+              'the type of info exchanged  to orchestrate the process flow from initiation to completion.' }
+    ]
 
-    @bb_status = !params[:status].nil? ? params[:status] : nil
-    @bb_desc = !@bb_status.nil? ? all_bb_desc.select { |bb| bb[:status] == @bb_status } : all_bb_desc
+    !params[:status].nil? ? @bb_status = params[:status] : @bb_status = nil
+    !@bb_status.nil? ? @bb_desc = all_bb_desc.select { |bb| bb[:status] == @bb_status } : @bb_desc = all_bb_desc
     bb_names = @bb_desc.pluck(:name).map(&:downcase)
     @building_blocks = BuildingBlock.where('lower(name) in (?)', bb_names).order(:name)
   end
@@ -495,18 +516,18 @@ class BuildingBlocksController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_building_block
     if !params[:id].scan(/\D/).empty?
-      @building_block = BuildingBlock.find_by(slug: params[:id]) or not_found
+      (@building_block = BuildingBlock.find_by(slug: params[:id])) || not_found
     else
-      @building_block = BuildingBlock.find_by(id: params[:id]) or not_found
+      (@building_block = BuildingBlock.find_by(id: params[:id])) || not_found
     end
     @bb_desc = BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.locale).first
     @bb_desc ||= BuildingBlockDescription.where(building_block_id: @building_block, locale: I18n.default_locale).first
     @bb_desc ||= BuildingBlockDescription.new
   end
 
-  def set_current_user
-    @building_block.set_current_user(current_user)
-    @bb_desc.set_current_user(current_user)
+  def auditable_current_user
+    @building_block.auditable_current_user(current_user)
+    @bb_desc.auditable_current_user(current_user)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

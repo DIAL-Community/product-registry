@@ -90,11 +90,11 @@ class CandidateProductsController < ApplicationController
 
     respond_to do |format|
       if @candidate_product.save
-        format.html { redirect_to @candidate_product, notice: 'Candidate product was successfully created.' }
-        format.json { render :show, status: :created, location: @candidate_product }
+        format.html { redirect_to(@candidate_product, notice: 'Candidate product was successfully created.') }
+        format.json { render(:show, status: :created, location: @candidate_product) }
       else
-        format.html { render :new }
-        format.json { render json: @candidate_product.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @candidate_product.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -105,11 +105,11 @@ class CandidateProductsController < ApplicationController
     authorize(@candidate_product, :mod_allowed?)
     respond_to do |format|
       if @candidate_product.update(candidate_product_params)
-        format.html { redirect_to @candidate_product, notice: 'Candidate product was successfully updated.' }
-        format.json { render :show, status: :ok, location: @candidate_product }
+        format.html { redirect_to(@candidate_product, notice: 'Candidate product was successfully updated.') }
+        format.json { render(:show, status: :ok, location: @candidate_product) }
       else
-        format.html { render :edit }
-        format.json { render json: @candidate_product.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @candidate_product.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -120,8 +120,8 @@ class CandidateProductsController < ApplicationController
     authorize(@candidate_product, :mod_allowed?)
     @candidate_product.destroy
     respond_to do |format|
-      format.html { redirect_to candidate_products_url, notice: 'Candidate product was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to(candidate_products_url, notice: 'Candidate product was successfully destroyed.') }
+      format.json { head(:no_content) }
     end
   end
 
@@ -155,9 +155,9 @@ class CandidateProductsController < ApplicationController
           .tap do |attr|
             if attr[:website].present?
               attr[:website] = attr[:website].strip
-                                             .sub(%r{^https?://}i, '')
-                                             .sub(%r{^https?//:}i, '')
-                                             .sub(%r{/$}, '')
+                                             .sub(/^https?:\/\//i, '')
+                                             .sub(/^https?\/\/:/i, '')
+                                             .sub(/\/$/, '')
             end
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

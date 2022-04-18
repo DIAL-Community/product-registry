@@ -47,8 +47,8 @@ module Mutations
                                                            secret_key: Rails.application.secrets.captcha_secret_key,
                                                            skip_remote_ip: true
                                                          }) && candidate_organization.save!
-                          candidate_organization.slug
-                        end
+        candidate_organization.slug
+      end
       response
     end
 

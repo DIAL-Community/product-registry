@@ -165,7 +165,7 @@ var loadFilters = function() {
     })
   } else {
     // Get all filters and add to List
-    $.get('/get_filters', function (data) {
+    $.get('/fetch_filters', function (data) {
       Object.keys(data).map(function(key) {
           addToList(key, data[key]);
       })

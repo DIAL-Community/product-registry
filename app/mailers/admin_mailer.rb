@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class AdminMailer < ApplicationMailer
-  def send_mail_from_client(mailFrom, mailTo, emailSubject, emailBody)
+  def send_mail_from_client(mail_from, mail_to, email_subject, email_body)
     # issues@solutions.dial.community
 
-    mail(from: mailFrom,
-         to: mailTo,
-         subject: emailSubject,
-         body: emailBody)
+    mail(from: mail_from,
+         to: mail_to,
+         subject: email_subject,
+         body: email_body)
   end
 
   def notify_product_owner_request
@@ -29,12 +29,12 @@ class AdminMailer < ApplicationMailer
       email_body = "New user '#{user_hash[:email]}' has requested organization ownership of: [#{organization.name}]. "\
                    'Approval from an admin user is *NOT* required.'
     end
-    mailTo = ''
+    mail_to = ''
     admin_users.each do |admin|
-      mailTo += "#{admin.email}; "
+      mail_to += "#{admin.email}; "
     end
     mail(from: 'notifier@solutions.dial.community',
-         to: mailTo,
+         to: mail_to,
          subject: email_subject,
          body: email_body)
   end
@@ -61,12 +61,12 @@ class AdminMailer < ApplicationMailer
       email_body = "User '#{user_hash[:email]}' has requested organization ownership of: [#{organization.name}]. "\
                    'Approval from an admin user is required.'
     end
-    mailTo = ''
+    mail_to = ''
     admin_users.each do |admin|
-      mailTo += "#{admin.email}; "
+      mail_to += "#{admin.email}; "
     end
     mail(from: 'notifier@solutions.dial.community',
-         to: mailTo,
+         to: mail_to,
          subject: email_subject,
          body: email_body)
   end

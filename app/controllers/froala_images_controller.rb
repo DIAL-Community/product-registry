@@ -9,7 +9,7 @@ class FroalaImagesController < ApplicationController
     @froala_image.save
 
     respond_to do |format|
-      format.json { render json: { status: 'OK', link: @froala_image.picture.url } }
+      format.json { render(json: { status: 'OK', link: @froala_image.picture.url }) }
     end
   end
 end

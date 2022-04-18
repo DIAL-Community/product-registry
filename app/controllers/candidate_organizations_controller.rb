@@ -43,7 +43,7 @@ class CandidateOrganizationsController < ApplicationController
     authorize(CandidateOrganization, :create_allowed?)
     # Everyone including unregistered user can post and create candidate organization.
     @candidate_organization = CandidateOrganization.new(candidate_organization_params)
-    @candidate_organization.set_current_user(current_user)
+    @candidate_organization.auditable_current_user(current_user)
 
     if params[:contact].present?
       contact = Contact.new
@@ -64,11 +64,11 @@ class CandidateOrganizationsController < ApplicationController
 
     respond_to do |format|
       if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && @candidate_organization.save!
-        format.html { redirect_to @candidate_organization, notice: t('view.candidate-organization.form.created') }
-        format.json { render :show, status: :created, location: @candidate_organization }
+        format.html { redirect_to(@candidate_organization, notice: t('view.candidate-organization.form.created')) }
+        format.json { render(:show, status: :created, location: @candidate_organization) }
       else
-        format.html { render :new }
-        format.json { render json: @candidate_organization.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @candidate_organization.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -89,11 +89,11 @@ class CandidateOrganizationsController < ApplicationController
 
     respond_to do |format|
       if @candidate_organization.update(candidate_organization_params)
-        format.html { redirect_to @candidate_organization, notice: 'Candidate organization was successfully updated.' }
-        format.json { render :show, status: :ok, location: @candidate_organization }
+        format.html { redirect_to(@candidate_organization, notice: 'Candidate organization was successfully updated.') }
+        format.json { render(:show, status: :ok, location: @candidate_organization) }
       else
-        format.html { render :edit }
-        format.json { render json: @candidate_organization.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @candidate_organization.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -104,8 +104,8 @@ class CandidateOrganizationsController < ApplicationController
     authorize(@candidate_organization, :mod_allowed?)
     @candidate_organization.destroy
     respond_to do |format|
-      format.html { redirect_to candidate_organizations_url, notice: 'Candidate organization was.' }
-      format.json { head :no_content }
+      format.html { redirect_to(candidate_organizations_url, notice: 'Candidate organization was.') }
+      format.json { head(:no_content) }
     end
   end
 
@@ -118,8 +118,8 @@ class CandidateOrganizationsController < ApplicationController
         @candidate_organizations = CandidateOrganization.where(slug: current_slug).select(:name, :slug).to_a
       end
     end
-    authorize CandidateOrganization, :view_allowed?
-    render json: @candidate_organizations, only: [:name]
+    authorize(CandidateOrganization, :view_allowed?)
+    render(json: @candidate_organizations, only: [:name])
   end
 
   def approve
@@ -145,10 +145,10 @@ class CandidateOrganizationsController < ApplicationController
       if (@candidate_organization.rejected.nil? || @candidate_organization.rejected) &&
          organization.save && @candidate_organization.update(rejected: false, approved_date: Time.now,
                                                              approved_by_id: current_user.id)
-        format.html { redirect_to organization_url(organization), notice: 'Candidate promoted to organization.' }
+        format.html { redirect_to(organization_url(organization), notice: 'Candidate promoted to organization.') }
         format.json { render(json: { message: 'Candidate approved.' }, status: :ok) }
       else
-        format.html { redirect_to candidate_organizations_url, flash: { error: 'Unable to approve candidate.' } }
+        format.html { redirect_to(candidate_organizations_url, flash: { error: 'Unable to approve candidate.' }) }
         format.json { render(json: { message: 'Candidate approval failed.' }, status: :bad_request) }
       end
     end
@@ -161,10 +161,10 @@ class CandidateOrganizationsController < ApplicationController
       # Can only approve new submission.
       if @candidate_organization.rejected.nil? &&
          @candidate_organization.update(rejected: true, rejected_date: Time.now, rejected_by_id: current_user.id)
-        format.html { redirect_to candidate_organizations_url, notice: 'Candidate rejected.' }
+        format.html { redirect_to(candidate_organizations_url, notice: 'Candidate rejected.') }
         format.json { render(json: { message: 'Candidate declined.' }, status: :ok) }
       else
-        format.html { redirect_to candidate_organizations_url, flash: { error: 'Unable to reject candidate.' } }
+        format.html { redirect_to(candidate_organizations_url, flash: { error: 'Unable to reject candidate.' }) }
         format.json { render(json: { message: 'Declining candidate failed' }, status: :bad_request) }
       end
     end
@@ -187,9 +187,9 @@ class CandidateOrganizationsController < ApplicationController
           .tap do |attr|
             if attr[:website].present?
               attr[:website] = attr[:website].strip
-                                             .sub(%r{^https?://}i, '')
-                                             .sub(%r{^https?//:}i, '')
-                                             .sub(%r{/$}, '')
+                                             .sub(/^https?:\/\//i, '')
+                                             .sub(/^https?\/\/:/i, '')
+                                             .sub(/\/$/, '')
             end
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

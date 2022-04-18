@@ -4,8 +4,7 @@ class UseCasePolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
-    @user = user
-    @record = record
+    super(user, record)
   end
 
   def create_allowed?

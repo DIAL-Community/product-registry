@@ -16,7 +16,7 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(play_slug:, move_slug:, name:, description:, resources:)
-      unless is_admin
+      unless an_admin
         return {
           move: nil,
           errors: ['Not allowed to create a move.']
@@ -93,7 +93,7 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(play_slug:, move_slug:, url:, name:, description:, index:)
-      return { move: nil, errors: ['Not allowed to update move.'] } unless is_admin
+      return { move: nil, errors: ['Not allowed to update move.'] } unless an_admin
 
       play = Play.find_by(slug: play_slug)
       return { move: nil, errors: ['Unable to find play.'] } if play.nil?
@@ -141,7 +141,7 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(play_slug:, move_slug:, operation:, distance:)
-      unless is_admin
+      unless an_admin
         return {
           move: nil,
           errors: ['Not allowed to update a play.']

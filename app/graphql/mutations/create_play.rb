@@ -16,7 +16,7 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(name:, slug:, description:, tags:, playbook_slug: nil)
-      unless is_admin
+      unless an_admin
         return {
           playbook: nil,
           errors: ['Not allowed to create a play.']
@@ -60,20 +60,17 @@ module Mutations
           puts("Description for '#{play.name}' saved.")
         end
 
-        if !playbook_slug.nil? && !playbook_slug.blank?
-          playbook = Playbook.find_by(slug: playbook_slug)
-          unless playbook.nil?
-            max_order = PlaybookPlay.where(playbook: playbook).maximum('order')
-            max_order = max_order.nil? ? 0 : (max_order + 1)
-
-            assigned_play = PlaybookPlay.new
-            assigned_play.play = play
-            assigned_play.playbook = playbook
-            assigned_play.order = max_order
-            if assigned_play.save
-              # Need to figure out how to add logger here!
-              puts("Play '#{play.name}' assigned to '#{playbook.name}'.")
-            end
+        playbook = Playbook.find_by(slug: playbook_slug)
+        unless playbook.nil?
+          max_order = PlaybookPlay.where(playbook: playbook).maximum('order')
+          max_order = max_order.nil? ? 0 : (max_order + 1)
+          assigned_play = PlaybookPlay.new
+          assigned_play.play = play
+          assigned_play.playbook = playbook
+          assigned_play.order = max_order
+          if assigned_play.save
+            # Need to figure out how to add logger here!
+            puts("Play '#{play.name}' assigned to '#{playbook.name}'.")
           end
         end
 
@@ -112,7 +109,7 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(play_slug:)
-      unless is_admin
+      unless an_admin
         return {
           playbook: nil,
           errors: ['Not allowed to duplicate a play.']
@@ -169,7 +166,7 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(playbook_slug:, play_slug:, operation:, distance:)
-      unless is_admin
+      unless an_admin
         return {
           playbook: nil,
           errors: ['Not allowed to update playbook.']
