@@ -17,7 +17,7 @@ class CandidateProductsController < ApplicationController
     authorize(@candidate_product, :mod_allowed?)
 
     product = Product.new
-    product.name = @candidate_product.name
+    product.name = @candidate_product.name.to_s.strip
     product.website = @candidate_product.website
 
     product.slug = @candidate_product.slug
@@ -33,6 +33,29 @@ class CandidateProductsController < ApplicationController
       if (@candidate_product.rejected.nil? || @candidate_product.rejected) &&
          product.save && @candidate_product.update(rejected: false, approved_date: Time.now,
                                                    approved_by_id: current_user.id)
+
+        unless @candidate_product.repository.nil?
+          product_repository = ProductRepository.new
+          product_repository.name = "#{@candidate_product.name} Repository"
+          product_repository.slug = slug_em(product_repository.name)
+
+          product_repositorys = ProductRepository.where(slug: product_repository.slug)
+          unless product_repositorys.empty?
+            first_duplicate = ProductRepository.slug_starts_with(product_repository.slug)
+                                               .order(slug: :desc).first
+            product_repository.slug = product_repository.slug + generate_offset(first_duplicate).to_s
+          end
+
+          product_repository.absolute_url = @candidate_product.repository
+          product_repository.description = "Default repository for #{@candidate_product.name}."
+          product_repository.main_repository = true
+          product_repository.product = product
+
+          if product_repository.save!
+            logger.info("Created repository for: #{@candidate_product.name}.")
+          end
+        end
+
         format.html { redirect_to(product_url(product), notice: 'Candidate promoted to product.') }
         format.json { render(json: { message: 'Candidate product approved.' }, status: :ok) }
       else
