@@ -1,0 +1,26 @@
+version: "3.7"
+
+# External services required to run the Catalog: PostgreSQL and Redis.
+# Requires an .env file in the CWD with the variables used in this file.
+
+services:
+  redis:
+    image: redis
+    command: "--requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}"
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - catalog-data-dev:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+volumes:
+  catalog-data-dev:
