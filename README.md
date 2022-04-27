@@ -31,6 +31,17 @@ Please also reference the [Wiki page for the Catalog](https://solutions-catalog.
  * PostgreSQL (version 12 or higher). See [Postgres Download](https://www.postgresql.org/download/) for download and install instructions.
  * Redis. See [Getting Started with Redis](https://redis.io/docs/getting-started/) for instruction. Please ensure that redis is set to start and run in the background automatically. This [link](https://redis.io/docs/getting-started/#installing-redis-more-properly) describes how to configure redis. 
 
+Note that PostgreSQL and Redis can be started easily using docker-compose and the sample compose file provided using the following command:
+
+ ```bash
+ docker-compose -f docker-compose-dev.yml up -d
+ ```
+
+This method does not require installing PostgreSQL or Redis manually on the system.
+
+When starting up, this approach requires an .env file in the current working directory, that defines the following variables: REDIS_PORT, REDIS_PASSWORD, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT.
+
+
 ## Postgres Configuration for development
 
 Before running the application configuration for your local development environment, Postgres must be configured 
