@@ -23,7 +23,8 @@ module SustainableDevelopmentGoalsHelper
         tooltip = sdg_target.name
         image = Hash[filename: sdg_target.image_file, tooltip: tooltip,
                      id: sdg_target.id, controller: 'sdg_targets',
-                     alt_text: t('alt.el-logo', el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize]
+                     alt_text: t('alt.el-logo',
+                                 el: "#{t('view.sdg.show.target')} #{sdg_target.target_number}").humanize]
         images.push(image)
       end
     end

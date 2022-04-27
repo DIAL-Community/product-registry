@@ -10,28 +10,28 @@ class ActivitiesController < ApplicationController
     if params[:without_paging]
       @activities = Activity.order(:name)
       !params[:search].blank? && @activities = @activities.name_contains(params[:search])
-      authorize @activities, :view_allowed?
+      authorize(@activities, :view_allowed?)
       return @activities
     end
 
     current_page = params[:page] || 1
 
     @activities = Activity.order(:name)
-    @activities = if params[:search]
-                    @activities.name_contains(params[:search])
+    if params[:search]
+      @activities = @activities.name_contains(params[:search])
                                .order(:name)
                                .paginate(page: current_page, per_page: 5)
-                  else
-                    @activities.order(:name).paginate(page: current_page, per_page: 5)
-                  end
-    authorize @activities, :view_allowed?
+    else
+      @activities = @activities.order(:name).paginate(page: current_page, per_page: 5)
+    end
+    authorize(@activities, :view_allowed?)
   end
 
   # GET /activity/1
   # GET /activity/1.json
   def show
     @playbook = Playbook.find_by(slug: params[:playbook_id]) if params[:playbook_id]
-    authorize @activity, :view_allowed?
+    authorize(@activity, :view_allowed?)
   end
 
   # GET /activities/new
@@ -46,7 +46,7 @@ class ActivitiesController < ApplicationController
       end
     end
     @plays = Play.all
-    authorize @activity, :mod_allowed?
+    authorize(@activity, :mod_allowed?)
   end
 
   # GET /activities/1/edit
@@ -57,7 +57,7 @@ class ActivitiesController < ApplicationController
         phase['name']
       end
     end
-    authorize @activity, :mod_allowed?
+    authorize(@activity, :mod_allowed?)
   end
 
   # POST /activities
@@ -66,7 +66,7 @@ class ActivitiesController < ApplicationController
     if activity_params[:name] == 'Assign-From-Play'
       params[:play_ids].each do |play_id|
         @activity = Activity.new
-        authorize @activity, :mod_allowed?
+        authorize(@activity, :mod_allowed?)
         @play = Play.find(play_id)
         @activity.name = @play.name
         first_duplicate = Activity.slug_starts_with(@play.slug).order(slug: :desc).first
@@ -94,7 +94,7 @@ class ActivitiesController < ApplicationController
         question.save!
         @activity.playbook_questions_id = question.id
       end
-      authorize @activity, :mod_allowed?
+      authorize(@activity, :mod_allowed?)
       @activity.slug = slug_em(@activity.name)
     end
 
@@ -110,16 +110,17 @@ class ActivitiesController < ApplicationController
         @activity_desc = PlaybookDescription.new
         @activity_desc.activity_id = @playbook.id
         @activity_desc.locale = I18n.locale
-        activity_params[:activity_description].present? && @activity_desc.description = activity_params[:activity_description]
+        activity_params[:activity_description].present? &&
+          @activity_desc.description = activity_params[:activity_description]
         @activity_desc.save
         format.html do
-          redirect_to playbook_path(@playbook),
-                      notice: t('messages.model.created', model: t('model.activity').to_s.humanize)
+          redirect_to(playbook_path(@playbook),
+                      notice: t('messages.model.created', model: t('model.activity').to_s.humanize))
         end
-        format.json { render :show, status: :created, location: @activity }
+        format.json { render(:show, status: :created, location: @activity) }
       else
-        format.html { render :new }
-        format.json { render json: @activity.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @activity.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -127,7 +128,7 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1
   # PATCH/PUT /activities/1.json
   def update
-    authorize @activity, :mod_allowed?
+    authorize(@activity, :mod_allowed?)
     if activity_params[:activity_desc].present?
       @activity_desc = ActivityDescription.where(activity_id: @activity.id,
                                                  locale: I18n.locale)
@@ -146,12 +147,17 @@ class ActivitiesController < ApplicationController
                                           .first || ActivityDescription.new
       @activity_desc.activity_id = @activity.id
       @activity_desc.locale = I18n.locale
-      activity_params[:activity_description].present? && @activity_desc.description = activity_params[:activity_description]
+      activity_params[:activity_description].present? &&
+        @activity_desc.description = activity_params[:activity_description]
       @activity_desc.save
     end
 
     unless activity_params[:question_text].nil?
-      question = @activity.playbook_questions_id.nil? ? PlaybookQuestion.new : PlaybookQuestion.find(@activity.playbook_questions_id)
+      if @activity.playbook_questions_id.nil?
+        question = PlaybookQuestion.new
+      else
+        question = PlaybookQuestion.find(@activity.playbook_questions_id)
+      end
       question.question_text = activity_params[:question_text]
       question.save!
       @activity.playbook_questions_id = question.id
@@ -160,13 +166,13 @@ class ActivitiesController < ApplicationController
     respond_to do |format|
       if @activity.update(activity_params)
         format.html do
-          redirect_to playbook_path(@playbook),
-                      notice: t('messages.model.updated', model: t('model.activity').to_s.humanize)
+          redirect_to(playbook_path(@playbook),
+                      notice: t('messages.model.updated', model: t('model.activity').to_s.humanize))
         end
-        format.json { render :show, status: :ok, location: @activity }
+        format.json { render(:show, status: :ok, location: @activity) }
       else
-        format.html { render :edit }
-        format.json { render json: @activity.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @activity.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -174,7 +180,7 @@ class ActivitiesController < ApplicationController
   # DELETE /activities/1
   # DELETE /activities/1.json
   def destroy
-    authorize @activity, :mod_allowed?
+    authorize(@activity, :mod_allowed?)
     @playbook = Playbook.find(@activity.playbook_id)
 
     @activity.tasks.each(&:destroy)
@@ -182,10 +188,10 @@ class ActivitiesController < ApplicationController
     @activity.destroy
     respond_to do |format|
       format.html do
-        redirect_to playbook_path(@playbook),
-                    notice: t('messages.model.deleted', model: t('model.activity').to_s.humanize)
+        redirect_to(playbook_path(@playbook),
+                    notice: t('messages.model.deleted', model: t('model.activity').to_s.humanize))
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -199,19 +205,19 @@ class ActivitiesController < ApplicationController
                             .to_a
       end
     end
-    authorize Activity, :view_allowed?
-    render json: @activity, only: [:name]
+    authorize(Activity, :view_allowed?)
+    render(json: @activity, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_activity
-    @activity = if !params[:id].scan(/\D/).empty?
-                  Activity.find_by(slug: params[:id]) || not_found
-                else
-                  Activity.find(params[:id]) || not_found
-                end
+    if !params[:id].scan(/\D/).empty?
+      @activity = Activity.find_by(slug: params[:id]) || not_found
+    else
+      @activity = Activity.find(params[:id]) || not_found
+    end
 
     @description = ActivityDescription.where(activity_id: @activity, locale: I18n.locale)
                                       .first
@@ -229,17 +235,16 @@ class ActivitiesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def activity_params
     params.require(:activity)
-          .permit(:name, :slug, :activity_description, :phase, :order, :media_url, :question_text, :playbook_id, resources: %i[
-                    name description url
-                  ])
+          .permit(:name, :slug, :activity_description, :phase, :order, :media_url, :question_text, :playbook_id,
+            resources: %i[name description url])
           .tap do |attr|
-      if params[:reslug].present?
-        attr[:slug] = slug_em(attr[:name])
-        if params[:duplicate].present?
-          first_duplicate = Activity.slug_starts_with(attr[:slug]).order(slug: :desc).first
-          attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
-        end
-      end
-    end
+            if params[:reslug].present?
+              attr[:slug] = slug_em(attr[:name])
+              if params[:duplicate].present?
+                first_duplicate = Activity.slug_starts_with(attr[:slug]).order(slug: :desc).first
+                attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+              end
+            end
+          end
   end
 end

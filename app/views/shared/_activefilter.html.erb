@@ -39,7 +39,7 @@ $("#save-link").on("click", function(event) {
     event.preventDefault();
 
     let url = window.location.href + "?urlFilter=true&"
-    $.get('/get_filters', function(filters) {
+    $.get('/fetch_filters', function(filters) {
       Object.keys(filters).map(function(filterKey) {
         if (Array.isArray(filters[filterKey])) {
           url += filterKey + "="

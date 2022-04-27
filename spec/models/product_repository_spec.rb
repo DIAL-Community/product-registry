@@ -2,6 +2,6 @@
 
 require 'rails_helper'
 
-RSpec.describe ProductRepository, type: :model do
+RSpec.describe(ProductRepository, type: :model) do
   pending "add some examples to (or delete) #{__FILE__}"
 end

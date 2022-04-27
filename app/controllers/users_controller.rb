@@ -9,8 +9,8 @@ class UsersController < ApplicationController
   def statistics
     if current_user.nil?
       return respond_to do |format|
-        format.html { redirect_to users_url }
-        format.json { render json: {}, status: :unauthorized }
+        format.html { redirect_to(users_url) }
+        format.json { render(json: {}, status: :unauthorized) }
       end
     end
 
@@ -63,29 +63,29 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = if params[:search]
-               User.where(nil)
+    if params[:search]
+      @users = User.where(nil)
                    .email_contains(params[:search])
                    .order(:email)
                    .paginate(page: params[:page], per_page: 20)
-             else
-               User.order(:email)
+    else
+      @users = User.order(:email)
                    .paginate(page: params[:page], per_page: 20)
-             end
-    authorize @users
+    end
+    authorize(@users)
   end
 
   def show
-    authorize @user
+    authorize(@user)
   end
 
   def edit
-    authorize @user
+    authorize(@user)
   end
 
   def new
     @user = User.new
-    authorize @user
+    authorize(@user)
   end
 
   def update
@@ -126,13 +126,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_hash)
         format.html do
-          redirect_to @user,
-                      flash: { notice: t('messages.model.updated', model: t('model.user').to_s.humanize) }
+          redirect_to(@user,
+                      flash: { notice: t('messages.model.updated', model: t('model.user').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @user }
+        format.json { render(:show, status: :ok, location: @user) }
       else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @user.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -145,13 +145,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         format.html do
-          redirect_to @user,
-                      flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) }
+          redirect_to(@user,
+                      flash: { notice: t('messages.model.created', model: t('model.user').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @user }
+        format.json { render(:show, status: :created, location: @user) }
       else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @user.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -160,10 +160,10 @@ class UsersController < ApplicationController
     @user.destroy
     respond_to do |format|
       format.html do
-        redirect_to users_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.user').to_s.humanize) }
+        redirect_to(users_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.user').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -172,10 +172,10 @@ class UsersController < ApplicationController
     authorize(@user, :show?)
     respond_to do |format|
       format.csv do
-        render csv: @user, filename: 'exported-users'
+        render(csv: @user, filename: 'exported-users')
       end
       format.json do
-        render json: @user.to_json(User.serialization_options)
+        render(json: @user.to_json(User.serialization_options))
       end
     end
   end

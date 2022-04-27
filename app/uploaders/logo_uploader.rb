@@ -66,12 +66,12 @@ class LogoUploader < CarrierWave::Uploader::Base
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  def extension_whitelist
+  def extension_allowlist
     %w[jpg jpeg png gif]
   end
 
-  def content_type_whitelist
-    [%r{image/}]
+  def content_type_allowlist
+    [/image\//]
   end
 
   # Override the filename of the uploaded files:

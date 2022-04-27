@@ -12,7 +12,7 @@ class OrganizationsController < ApplicationController
 
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :set_organization, only: %i[show edit update destroy]
-  before_action :set_current_user, only: %i[edit update destroy]
+  before_action :auditable_current_user, only: %i[edit update destroy]
   before_action :set_core_services, only: %i[show edit update new]
 
   skip_before_action :verify_authenticity_token, only: [:complex_search]
@@ -27,9 +27,9 @@ class OrganizationsController < ApplicationController
 
     render(json: record.as_json(Organization.serialization_options
                                             .merge({
-                                                     item_path: request.original_url,
-                                                     include_relationships: true
-                                                   })))
+                                              item_path: request.original_url,
+                                              include_relationships: true
+                                            })))
   end
 
   def simple_search
@@ -81,9 +81,9 @@ class OrganizationsController < ApplicationController
       format.json do
         render(json: results.to_json(Organization.serialization_options
                                                  .merge({
-                                                          collection_path: uri.to_s,
-                                                          include_relationships: true
-                                                        })))
+                                                   collection_path: uri.to_s,
+                                                   include_relationships: true
+                                                 })))
       end
     end
   end
@@ -159,9 +159,9 @@ class OrganizationsController < ApplicationController
       format.json do
         render(json: results.to_json(Organization.serialization_options
                                                  .merge({
-                                                          collection_path: uri.to_s,
-                                                          include_relationships: true
-                                                        })))
+                                                   collection_path: uri.to_s,
+                                                   include_relationships: true
+                                                 })))
       end
     end
   end
@@ -176,7 +176,7 @@ class OrganizationsController < ApplicationController
                                                                                         params[:sector_id])
       !params[:search].nil? && @organizations = @organizations.name_contains(params[:search])
       @organizations = @organizations.order(:name)
-      authorize @organizations, :view_allowed?
+      authorize(@organizations, :view_allowed?)
       return
     end
 
@@ -209,7 +209,7 @@ class OrganizationsController < ApplicationController
 
     @organizations = @organizations.paginate(page: current_page, per_page: 20)
 
-    authorize @organizations, :view_allowed?
+    authorize(@organizations, :view_allowed?)
   end
 
   def count
@@ -227,8 +227,8 @@ class OrganizationsController < ApplicationController
       organizations = organizations.where(id: session[:org_filtered_ids])
     end
 
-    authorize organizations, :view_allowed?
-    render json: organizations.count
+    authorize(organizations, :view_allowed?)
+    render(json: organizations.count)
   end
 
   def export
@@ -245,10 +245,10 @@ class OrganizationsController < ApplicationController
     authorize(@organizations, :view_allowed?)
     respond_to do |format|
       format.csv do
-        render csv: @organizations, filename: 'exported-organization'
+        render(csv: @organizations, filename: 'exported-organization')
       end
       format.json do
-        render json: @organizations.to_json(Organization.serialization_options)
+        render(json: @organizations.to_json(Organization.serialization_options))
       end
     end
   end
@@ -256,27 +256,27 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
-    authorize @organization, :view_allowed?
+    authorize(@organization, :view_allowed?)
   end
 
   # GET /organizations/new
   def new
-    authorize Organization, :create_allowed?
+    authorize(Organization, :create_allowed?)
     @organization = Organization.new
     @organization_description = OrganizationDescription.new
   end
 
   # GET /organizations/1/edit
   def edit
-    authorize @organization, :mod_allowed?
+    authorize(@organization, :mod_allowed?)
   end
 
   # POST /organizations
   # POST /organizations.json
   def create
-    authorize Organization, :create_allowed?
+    authorize(Organization, :create_allowed?)
     @organization = Organization.new(organization_params)
-    @organization.set_current_user(current_user)
+    @organization.auditable_current_user(current_user)
 
     if params[:selected_sectors].present?
       params[:selected_sectors].keys.each do |sector_id|
@@ -347,7 +347,8 @@ class OrganizationsController < ApplicationController
       end
     end
 
-    if organization_params[:is_endorser].present? && organization_params[:is_endorser] == '1' && (organization_params[:when_endorsed] == '')
+    if organization_params[:is_endorser].present? && organization_params[:is_endorser] == '1' &&
+        organization_params[:when_endorsed] == ''
       @organization.when_endorsed = Date.today
     end
 
@@ -355,10 +356,10 @@ class OrganizationsController < ApplicationController
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @organization.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
-      @organization.set_image_changed(params[:logo].original_filename)
+      @organization.auditable_image_changed(params[:logo].original_filename)
     end
 
     respond_to do |format|
@@ -373,18 +374,18 @@ class OrganizationsController < ApplicationController
         end
 
         format.html do
-          redirect_to @organization, flash: {
+          redirect_to(@organization, flash: {
             notice: t('messages.model.created', model: t('model.organization').to_s.humanize)
-          }
+          })
         end
-        format.json { render :show, status: :created, location: @organization }
+        format.json { render(:show, status: :created, location: @organization) }
       else
         error_message = ''
         @organization.errors.each do |_, err|
           error_message = err
         end
-        format.html { redirect_to new_organization_url, flash: { error: error_message } }
-        format.json { render json: @organization.errors, status: :unprocessable_entity }
+        format.html { redirect_to(new_organization_url, flash: { error: error_message }) }
+        format.json { render(json: @organization.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -392,7 +393,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
-    authorize @organization, :mod_allowed?
+    authorize(@organization, :mod_allowed?)
     if params[:selected_sectors].present?
       sectors = Set.new
       params[:selected_sectors].keys.each do |sector_id|
@@ -482,10 +483,10 @@ class OrganizationsController < ApplicationController
       uploader = LogoUploader.new(@organization, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @organization.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
-      @organization.set_image_changed(params[:logo].original_filename)
+      @organization.auditable_image_changed(params[:logo].original_filename)
     end
 
     if organization_params[:organization_description].present?
@@ -503,10 +504,10 @@ class OrganizationsController < ApplicationController
           redirect_to(organization_path(@organization, locale: session[:locale]),
                       flash: { notice: t('messages.model.updated', model: t('model.organization').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @organization }
+        format.json { render(:show, status: :ok, location: @organization) }
       else
-        format.html { render :edit }
-        format.json { render json: @organization.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @organization.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -514,7 +515,7 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1
   # DELETE /organizations/1.json
   def destroy
-    authorize @organization, :mod_allowed?
+    authorize(@organization, :mod_allowed?)
 
     # delete any projects associated with this org
     @organization.projects.each(&:destroy)
@@ -533,17 +534,17 @@ class OrganizationsController < ApplicationController
     @organization.destroy
     respond_to do |format|
       format.html do
-        redirect_to organizations_url,
+        redirect_to(organizations_url,
                     flash: { notice: t('messages.model.deleted',
-                                       model: t('model.organization').to_s.humanize) }
+                                       model: t('model.organization').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
   def map_aggregators
     @organizations = Organization.all
-    authorize @organizations, :view_allowed?
+    authorize(@organizations, :view_allowed?)
   end
 
   def map
@@ -554,23 +555,23 @@ class OrganizationsController < ApplicationController
       unless default_map.nil?
         case default_map.value
         when 'project'
-          redirect_to map_projects_osm_path
+          redirect_to(map_projects_osm_path)
         when 'aggregator'
-          redirect_to map_aggregators_osm_path
+          redirect_to(map_aggregators_osm_path)
         when 'endorser'
-          redirect_to map_osm_path
+          redirect_to(map_osm_path)
         end
       end
     end
 
     # If we didn't redirect, load the default map view
-    authorize @organizations, :view_allowed?
+    authorize(@organizations, :view_allowed?)
   end
 
   def map_fs
     @organizations = Organization.all
     response.set_header('Content-Security-Policy', 'frame-ancestors digitalprinciples.org')
-    authorize @organizations, :view_allowed?
+    authorize(@organizations, :view_allowed?)
   end
 
   def duplicates
@@ -580,8 +581,8 @@ class OrganizationsController < ApplicationController
       original_slug = slug_em(params[:original])
       @organizations = Organization.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize Organization, :view_allowed?
-    render json: @organizations, only: [:name]
+    authorize(Organization, :view_allowed?)
+    render(json: @organizations, only: [:name])
   end
 
   def agg_services
@@ -708,7 +709,10 @@ class OrganizationsController < ApplicationController
     @organization_description = OrganizationDescription.new if @organization_description.nil?
 
     if !@organization.nil? && @organization.is_mni
-      # operator_services_ids = @organization.aggregator_capabilities.all.select(:operator_services_id).map(&:operator_services_id).uniq
+      # operator_services_ids = @organization.aggregator_capabilities.all
+      #                                                              .select(:operator_services_id)
+      #                                                              .map(&:operator_services_id)
+      #                                                              .uniq
       # @operator_services = OperatorService.where('id in (?)', operator_services_ids)
       # Build the list of countries where they work
       # country_list = @operator_services.select(:country_id).map(&:country_id).uniq
@@ -719,8 +723,8 @@ class OrganizationsController < ApplicationController
     @owner = User.where('organization_id=?', @organization.id)
   end
 
-  def set_current_user
-    @organization.set_current_user(current_user)
+  def auditable_current_user
+    @organization.auditable_current_user(current_user)
   end
 
   def authenticate_user
@@ -742,21 +746,19 @@ class OrganizationsController < ApplicationController
   def geocode(magic_key, auth_token)
     uri_template = Addressable::Template.new("#{Rails.configuration.geocode['esri']['geocode_uri']}{?q*}")
     geocode_uri = uri_template.expand({
-                                        'q' => {
-                                          'SingleLine' => magic_key,
-                                          'magicKey' => magic_key,
-                                          'token' => auth_token,
-                                          'f' => 'json',
-                                          'forStorage' => 'false'
-                                        }
-                                      })
+      'q' => {
+        'SingleLine' => magic_key,
+        'magicKey' => magic_key,
+        'token' => auth_token,
+        'f' => 'json',
+        'forStorage' => 'false'
+      }
+    })
 
     uri = URI.parse(geocode_uri)
     response = Net::HTTP.post_form(uri, {})
 
     location_data = JSON.parse(response.body)
-    location_name = location_data['candidates'][0]['address']
-    location_slug = slug_em(location_name)
     location_x = location_data['candidates'][0]['location']['x']
     location_y = location_data['candidates'][0]['location']['y']
 
@@ -849,9 +851,9 @@ class OrganizationsController < ApplicationController
           # * http:// or https://
           # * (and the typo) http//: or https//:
           attr[:website] = attr[:website].strip
-                                         .sub(%r{^https?://}i, '')
-                                         .sub(%r{^https?//:}i, '')
-                                         .sub(%r{/$}, '')
+                                         .sub(/^https?:\/\//i, '')
+                                         .sub(/^https?\/\/:/i, '')
+                                         .sub(/\/$/, '')
         end
         attr[:when_endorsed] = Date.strptime(attr[:when_endorsed], '%m/%d/%Y') if attr[:when_endorsed].present?
         if permitted_attributes.include?(:aliases)

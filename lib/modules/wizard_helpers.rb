@@ -62,16 +62,16 @@ module Modules
       end
 
       project_list = Project.all
-      project_list = case sort_hint.to_s.downcase
-                     when 'country'
-                       project_list.joins(:countries).order('countries.name')
-                     when 'sector'
-                       project_list.joins(:sectors).order('sectors.name')
-                     when 'tag'
-                       project_list.order('tags')
-                     else
-                       project_list.order('name')
-                     end
+      case sort_hint.to_s.downcase
+      when 'country'
+        project_list = project_list.joins(:countries).order('countries.name')
+      when 'sector'
+        project_list = project_list.joins(:sectors).order('sectors.name')
+      when 'tag'
+        project_list = project_list.order('tags')
+      else
+        project_list = project_list.order('name')
+      end
 
       project_list = project_list.offset(offset_params[:offset]) unless offset_params.empty?
 
@@ -109,16 +109,16 @@ module Modules
       end
 
       product_list = Product.all
-      product_list = case sort_hint.to_s.downcase
-                     when 'country'
-                       product_list.joins(:countries).order('countries.name')
-                     when 'sector'
-                       product_list.joins(:sectors).order('sectors.name')
-                     when 'tag'
-                       product_list.order('tags')
-                     else
-                       product_list.order('name')
-                     end
+      case sort_hint.to_s.downcase
+      when 'country'
+        product_list = product_list.joins(:countries).order('countries.name')
+      when 'sector'
+        product_list = product_list.joins(:sectors).order('sectors.name')
+      when 'tag'
+        product_list = product_list.order('tags')
+      else
+        product_list = product_list.order('name')
+      end
 
       product_list = product_list.offset(offset_params[:offset]) unless offset_params.empty?
 

@@ -9,8 +9,8 @@ class DeploysController < ApplicationController
   def index; end
 
   def show
-    errorMsg = helpers.getJenkinsMessage(@deploy.product.slug, @deploy.job_id, 5)
-    @messages = errorMsg
+    error_message = helpers.fetch_jenkins_message(@deploy.product.slug, @deploy.job_id, 5)
+    @messages = error_message
     if @deploy.status == 'BUILDING'
     end
   end
@@ -23,19 +23,19 @@ class DeploysController < ApplicationController
 
   def show_messages
     @deploy = Deploy.find(params[:deploy_id])
-    @messages = helpers.getJenkinsMessage(@deploy.product.slug, @deploy.job_id, -1)
+    @messages = helpers.fetch_jenkins_message(@deploy.product.slug, @deploy.job_id, -1)
   end
 
   def add_ssh_user
     @deploy = Deploy.find(params[:deploy_id])
-    helpers.jenkinsAddSshUser(@deploy.instance_name, params[:pub_key].gsub('+', '%2B'))
+    helpers.jenkins_add_ssh_user(@deploy.instance_name, params[:pub_key].gsub('+', '%2B'))
 
     respond_to do |format|
       format.html do
-        redirect_to deploys_url(auth_token: session[:auth_token], provider: session[:provider]),
-                    notice: 'SSH Key added for this machine.'
+        redirect_to(deploys_url(auth_token: session[:auth_token], provider: session[:provider]),
+                    notice: 'SSH Key added for this machine.')
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -54,15 +54,15 @@ class DeploysController < ApplicationController
   end
 
   def destroy
-    helpers.jenkinsDeleteMachine(@deploy.instance_name)
+    helpers.jenkins_delete_machine(@deploy.instance_name)
     @deploy.destroy
 
     respond_to do |format|
       format.html do
-        redirect_to deploys_url(auth_token: session[:auth_token], provider: session[:provider]),
-                    notice: 'Deploy has successfully been deleted.'
+        redirect_to(deploys_url(auth_token: session[:auth_token], provider: session[:provider]),
+                    notice: 'Deploy has successfully been deleted.')
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -78,22 +78,22 @@ class DeploysController < ApplicationController
   end
 
   def set_list
-    @deploys = if user_signed_in?
-                 Deploy.where(user_id: current_user.id)
-               else
-                 []
-               end
+    if user_signed_in?
+      @deploys = Deploy.where(user_id: current_user.id)
+    else
+      @deploys = []
+    end
 
     @deploys.each do |deploy|
       if deploy.status == 'BUILDING'
         # Query jenkins
-        status = helpers.queryJenkinsJob(deploy.product.slug, deploy.job_id)
+        status = helpers.query_jenkins_job(deploy.product.slug, deploy.job_id)
         if status == 'SUCCESS'
           deploy.status = 'RUNNING'
           # Read the log data from Jenkins to get the machine info
-          ipAddress = helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
+          ip_address = helpers.fetch_machine_info(deploy.instance_name, deploy.provider, deploy.auth_token)
           # The product.default_url has the format - insert the correct IP address
-          deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
+          deploy.url = deploy.product.default_url.gsub('<host_ip>', ip_address)
           if deploy.url != '0.0.0.0' # If it comes back with this value, something went wrong - re-query
             # Save the deploy
             deploy.save
@@ -101,16 +101,16 @@ class DeploysController < ApplicationController
         elsif !status.nil?
           # If status is not nil or SUCCESS, then there is some kind of error
           deploy.status = 'ERROR'
-          errorMsg = helpers.getJenkinsMessage(deploy.product.slug, deploy.job_id, 3)
-          deploy.message = errorMsg
+          error_message = helpers.fetch_jenkins_message(deploy.product.slug, deploy.job_id, 3)
+          deploy.message = error_message
           deploy.save
         end
       end
       if deploy.status == 'RUNNING'
         # Verify that the instance is still alive and running
-        ipAddress = helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
-        deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
-        if ipAddress == '0.0.0.0'
+        ip_address = helpers.fetch_machine_info(deploy.instance_name, deploy.provider, deploy.auth_token)
+        deploy.url = deploy.product.default_url.gsub('<host_ip>', ip_address)
+        if ip_address == '0.0.0.0'
           # This means that the virtual machine is no longer responding. Set status to OFFLINE
           deploy.status = 'OFFLINE'
           deploy.save
@@ -119,9 +119,9 @@ class DeploysController < ApplicationController
       next unless deploy.status == 'OFFLINE'
 
       # Verify that the instance is still alive and running
-      ipAddress = helpers.getMachineInfo(deploy.instance_name, deploy.provider, deploy.auth_token)
-      deploy.url = deploy.product.default_url.gsub('<host_ip>', ipAddress)
-      next unless ipAddress != '0.0.0.0'
+      ip_address = helpers.fetch_machine_info(deploy.instance_name, deploy.provider, deploy.auth_token)
+      deploy.url = deploy.product.default_url.gsub('<host_ip>', ip_address)
+      next unless ip_address != '0.0.0.0'
 
       # This means that the virtual machine is no longer responding. Set status to OFFLINE
       deploy.status = 'RUNNING'

@@ -9,7 +9,7 @@ class UseCasesController < ApplicationController
   before_action :set_use_case, only: %i[show edit update destroy]
   before_action :set_sectors, only: %i[new edit update show]
   before_action :authenticate_user!, only: %i[new create edit update destroy]
-  before_action :set_current_user, only: %i[edit update destroy]
+  before_action :auditable_current_user, only: %i[edit update destroy]
 
   def unique_search
     record = UseCase.find_by(slug: params[:id])
@@ -23,9 +23,9 @@ class UseCasesController < ApplicationController
       format.json do
         render(json: results.to_json(UseCase.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -79,9 +79,9 @@ class UseCasesController < ApplicationController
       format.json do
         render(json: results.to_json(UseCase.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -191,9 +191,9 @@ class UseCasesController < ApplicationController
       format.json do
         render(json: results.to_json(UseCase.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -201,7 +201,7 @@ class UseCasesController < ApplicationController
   def favorite_use_case
     set_use_case
     if current_user.nil? || @use_case.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     favoriting_user = current_user
@@ -209,9 +209,9 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render :show, status: :ok }
+        format.json { render(:show, status: :ok) }
       else
-        format.json { render :show, status: :unprocessable_entity }
+        format.json { render(:show, status: :unprocessable_entity) }
       end
     end
   end
@@ -219,7 +219,7 @@ class UseCasesController < ApplicationController
   def unfavorite_use_case
     set_use_case
     if current_user.nil? || @use_case.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     favoriting_user = current_user
@@ -227,9 +227,9 @@ class UseCasesController < ApplicationController
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render :show, status: :ok }
+        format.json { render(:show, status: :ok) }
       else
-        format.json { render :show, status: :unprocessable_entity }
+        format.json { render(:show, status: :unprocessable_entity) }
       end
     end
   end
@@ -239,7 +239,7 @@ class UseCasesController < ApplicationController
   def index
     if params[:without_paging]
       @use_cases = UseCase.name_contains(params[:search])
-      authorize @use_cases, :view_allowed?
+      authorize(@use_cases, :view_allowed?)
       return
     end
 
@@ -247,14 +247,14 @@ class UseCasesController < ApplicationController
 
     @use_cases = @use_cases.where('LOWER("use_cases"."name") like LOWER(?)', "%#{params[:search]}%") if params[:search]
 
-    authorize @use_cases, :view_allowed?
+    authorize(@use_cases, :view_allowed?)
   end
 
   def count
     @use_cases = filter_use_cases
 
-    authorize @use_cases, :view_allowed?
-    render json: @use_cases.count
+    authorize(@use_cases, :view_allowed?)
+    render(json: @use_cases.count)
   end
 
   def export_data
@@ -262,10 +262,10 @@ class UseCasesController < ApplicationController
     authorize(@use_cases, :view_allowed?)
     respond_to do |format|
       format.csv do
-        render csv: @use_cases, filename: 'exported-use-case'
+        render(csv: @use_cases, filename: 'exported-use-case')
       end
       format.json do
-        render json: @use_cases.to_json(UseCase.serialization_options)
+        render(json: @use_cases.to_json(UseCase.serialization_options))
       end
     end
   end
@@ -273,7 +273,7 @@ class UseCasesController < ApplicationController
   # GET /use_cases/1
   # GET /use_cases/1.json
   def show
-    authorize @use_case, :view_allowed?
+    authorize(@use_case, :view_allowed?)
   end
 
   # GET /use_cases/new
@@ -286,7 +286,7 @@ class UseCasesController < ApplicationController
 
   # GET /use_cases/1/edit
   def edit
-    authorize @use_case, :mod_allowed?
+    authorize(@use_case, :mod_allowed?)
   end
 
   def duplicates
@@ -296,8 +296,8 @@ class UseCasesController < ApplicationController
       original_slug = slug_em(params[:original])
       @use_cases = UseCase.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize UseCase, :view_allowed?
-    render json: @use_cases, only: [:name]
+    authorize(UseCase, :view_allowed?)
+    render(json: @use_cases, only: [:name])
   end
 
   # POST /use_cases
@@ -305,9 +305,9 @@ class UseCasesController < ApplicationController
   def create
     authorize(UseCase, :create_allowed?)
     @use_case = UseCase.new(use_case_params)
-    @use_case.set_current_user(current_user)
+    @use_case.auditable_current_user(current_user)
     @uc_desc = UseCaseDescription.new
-    @uc_desc.set_current_user(current_user)
+    @uc_desc.auditable_current_user(current_user)
     @ucs_header = UseCaseHeader.new
 
     params[:selected_sdg_targets]&.keys&.each do |sdg_target_id|
@@ -340,14 +340,14 @@ class UseCasesController < ApplicationController
           @ucs_header.save
         end
         format.html do
-          redirect_to @use_case,
+          redirect_to(@use_case,
                       flash: { notice: t('messages.model.created',
-                                         model: t('model.use-case').to_s.humanize) }
+                                         model: t('model.use-case').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @use_case }
+        format.json { render(:show, status: :created, location: @use_case) }
       else
-        format.html { render :new }
-        format.json { render json: @use_case.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @use_case.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -355,7 +355,7 @@ class UseCasesController < ApplicationController
   # PATCH/PUT /use_cases/1
   # PATCH/PUT /use_cases/1.json
   def update
-    authorize @use_case, :mod_allowed?
+    authorize(@use_case, :mod_allowed?)
 
     sdg_targets = Set.new
     params[:selected_sdg_targets]&.keys&.each do |sdg_target_id|
@@ -392,14 +392,14 @@ class UseCasesController < ApplicationController
     respond_to do |format|
       if @use_case.update(use_case_params)
         format.html do
-          redirect_to use_case_path(@use_case, locale: session[:locale]),
+          redirect_to(use_case_path(@use_case, locale: session[:locale]),
                       flash: { notice: t('messages.model.updated',
-                                         model: t('model.use-case').to_s.humanize) }
+                                         model: t('model.use-case').to_s.humanize) })
         end
-        format.json { render :show, status: :ok, location: @use_case }
+        format.json { render(:show, status: :ok, location: @use_case) }
       else
-        format.html { render :edit }
-        format.json { render json: @use_case.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @use_case.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -411,10 +411,10 @@ class UseCasesController < ApplicationController
     @use_case.destroy
     respond_to do |format|
       format.html do
-        redirect_to use_cases_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.use-case').to_s.humanize) }
+        redirect_to(use_cases_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.use-case').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -422,9 +422,9 @@ class UseCasesController < ApplicationController
 
   def set_use_case
     if !params[:id].scan(/\D/).empty?
-      @use_case = UseCase.find_by(slug: params[:id]) or not_found
+      (@use_case = UseCase.find_by(slug: params[:id])) || not_found
     else
-      @use_case = UseCase.find_by(id: params[:id]) or not_found
+      (@use_case = UseCase.find_by(id: params[:id])) || not_found
     end
     @sector_name = Sector.find(@use_case.sector_id).name
     @uc_desc = UseCaseDescription.where(use_case_id: @use_case, locale: I18n.locale).first
@@ -438,9 +438,9 @@ class UseCasesController < ApplicationController
     @sectors = Sector.order(:name)
   end
 
-  def set_current_user
-    @use_case.set_current_user(current_user)
-    @uc_desc.set_current_user(current_user)
+  def auditable_current_user
+    @use_case.auditable_current_user(current_user)
+    @uc_desc.auditable_current_user(current_user)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

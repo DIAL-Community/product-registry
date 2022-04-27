@@ -73,11 +73,11 @@ module Modules
 
       # Need to do this because Ramallah doesn't have region or country.
       region = find_region(region_name, country_code, google_auth_key)
-      city = if region.nil?
-               City.find_by('(name = ? OR ? = ANY(aliases))', city_name, city_name)
-             else
-               City.find_by('(name = ? OR ? = ANY(aliases)) AND region_id = ?', city_name, city_name, region.id)
-             end
+      if region.nil?
+        city = City.find_by('(name = ? OR ? = ANY(aliases))', city_name, city_name)
+      else
+        city = City.find_by('(name = ? OR ? = ANY(aliases)) AND region_id = ?', city_name, city_name, region.id)
+      end
 
       if city.nil?
         city = City.new
@@ -115,12 +115,12 @@ module Modules
       puts "Geocoding address: #{address} in region: #{country_code}."
       uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
       geocode_uri = uri_template.expand({
-                                          'q' => {
-                                            'key' => auth_key,
-                                            'address' => address,
-                                            'region' => country_code
-                                          }
-                                        })
+        'q' => {
+          'key' => auth_key,
+          'address' => address,
+          'region' => country_code
+        }
+      })
 
       uri = URI.parse(geocode_uri)
       Net::HTTP.get(uri)
@@ -130,11 +130,11 @@ module Modules
       puts "Reverse geocoding location: (#{points[0].x.to_f}, #{points[0].y.to_f})."
       uri_template = Addressable::Template.new('https://maps.googleapis.com/maps/api/geocode/json{?q*}')
       geocode_uri = uri_template.expand({
-                                          'q' => {
-                                            'key' => auth_key,
-                                            'latlng' => "#{points[0].x.to_f}, #{points[0].y.to_f}"
-                                          }
-                                        })
+        'q' => {
+          'key' => auth_key,
+          'latlng' => "#{points[0].x.to_f}, #{points[0].y.to_f}"
+        }
+      })
 
       uri = URI.parse(geocode_uri)
       Net::HTTP.get(uri)

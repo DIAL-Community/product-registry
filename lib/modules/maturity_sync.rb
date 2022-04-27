@@ -49,18 +49,19 @@ module Modules
       logger = Logger.new($stdout)
       logger.level = Logger::INFO
 
-      product_indicators = ProductIndicator.where('product_id = ?', product_id)
-                                           .map { |indicator| { indicator.category_indicator_id.to_s => indicator.indicator_value } }
+      product_indicators = ProductIndicator
+                           .where('product_id = ?', product_id)
+                           .map { |indicator| { indicator.category_indicator_id.to_s => indicator.indicator_value } }
 
       product_indicators = product_indicators.reduce({}, :merge)
 
       product_score = { rubric_scores: [] }
 
-      maturity_rubrics = if rubric_id.nil?
-                           MaturityRubric.all
-                         else
-                           MaturityRubric.where(id: rubric_id)
-                         end
+      if rubric_id.nil?
+        maturity_rubrics = MaturityRubric.all
+      else
+        maturity_rubrics = MaturityRubric.where(id: rubric_id)
+      end
 
       maturity_rubrics.each do |maturity_rubric|
         rubric_score = {
@@ -74,23 +75,24 @@ module Modules
           overall_score: 0
         }
 
-        rubric_categories = RubricCategory.where(maturity_rubric: maturity_rubric).includes(:rubric_category_descriptions)
+        rubric_categories = RubricCategory.where(maturity_rubric: maturity_rubric)
+                                          .includes(:rubric_category_descriptions)
         rubric_categories.each do |rubric_category|
           category_description = rubric_category.rubric_category_descriptions.first
           category_score = {
             id: rubric_category.id,
             name: rubric_category.name,
             weight: rubric_category.weight,
-            description: !category_description.nil? && !category_description.description.nil? && category_description.description.gsub(
-              %r{</?[^>]*>}, ''
-            ),
+            description: !category_description.nil? && !category_description.description.nil? &&
+                         category_description.description.gsub(/<\/?[^>]*>/, ''),
             indicator_scores: [],
             # Number of indicator without score at the category level.
             missing_score: 0,
             # Overall score at the category level
             overall_score: 0
           }
-          category_indicators = CategoryIndicator.where(rubric_category: rubric_category).includes(:category_indicator_descriptions)
+          category_indicators = CategoryIndicator.where(rubric_category: rubric_category)
+                                                 .includes(:category_indicator_descriptions)
           category_indicators.each do |category_indicator|
             indicator_value = product_indicators[category_indicator.id.to_s]
             indicator_type = category_indicator.indicator_type
@@ -100,7 +102,7 @@ module Modules
               id: category_indicator.id,
               name: category_indicator.name,
               weight: category_indicator.weight,
-              description: !indicator_description.nil? && indicator_description.description.gsub(%r{</?[^>]*>}, ''),
+              description: !indicator_description.nil? && indicator_description.description.gsub(/<\/?[^>]*>/, ''),
               score: convert_to_numeric(indicator_value, indicator_type, category_indicator.weight)
             }
 

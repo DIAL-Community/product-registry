@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module ProductsHelper
-  def is_endorsed(product)
-    is_endorsed = false
+  def product_endorsed(product)
+    product_endorsed = false
     product.organizations.each do |org|
-      is_endorsed = true if org.is_endorser
+      product_endorsed = true if org.is_endorser
     end
-    is_endorsed
+    product_endorsed
   end
 
   def get_source_label(product)
@@ -33,18 +33,18 @@ module ProductsHelper
     content = "<div class=\"card-header bg-secondary text-white\">#{header}</div>"
     content += '<div>'
     images.each do |image|
-      content += if image['license']
-                   '<p class="footer-source float-right">image["value"]</p>'
-                 elsif image['maturity']
-                   '<p class="footer-source float-right">image["value"]</p>'
-                 elsif image['id']
-                   link_to(image_tag(image['filename'], class: 'popover-image',
-                                                        alt: image['tooltip'], 'title': image['tooltip']),
-                           { action: 'show', controller: image['controller'], id: image['id'] })
-                 else
-                   image_tag(image['filename'], class: 'popover-image', alt: image['tooltip'],
-                                                'title': image['tooltip'])
-                 end
+      if image['license']
+        content += '<p class="footer-source float-right">image["value"]</p>'
+      elsif image['maturity']
+        content += '<p class="footer-source float-right">image["value"]</p>'
+      elsif image['id']
+        content += link_to(image_tag(image['filename'], class: 'popover-image',
+        alt: image['tooltip'], 'title': image['tooltip']),
+        { action: 'show', controller: image['controller'], id: image['id'] })
+      else
+        content += image_tag(image['filename'], class: 'popover-image', alt: image['tooltip'],
+        'title': image['tooltip'])
+      end
     end
     content += '</div>'
     content.html_safe
@@ -60,15 +60,15 @@ module ProductsHelper
     category = 'none'
     category = 'Sustainable Development Goals' if rownum == 1
     if rownum == 2
-      category = if !product.maturity_score.nil?
-                   'Maturity Models'
-                 elsif !product.building_blocks.empty?
-                   'Building Blocks'
-                 elsif !product.interoperates_with.empty? || !product.includes.empty?
-                   'Compatibility'
-                 else
-                   'License'
-                 end
+      if !product.maturity_score.nil?
+        category = 'Maturity Models'
+      elsif !product.building_blocks.empty?
+        category = 'Building Blocks'
+      elsif !product.interoperates_with.empty? || !product.includes.empty?
+        category = 'Compatibility'
+      else
+        category = 'License'
+      end
     end
     category = 'sources' if rownum == 3
     category

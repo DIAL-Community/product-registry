@@ -1,4 +1,11 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/BlockNesting
+# rubocop:disable Style/ClassVars
+
+# TODO: Revisit this module to reduce the if nesting.
+# Disabling because of this rubocop issue:
+# - Avoid more than 3 levels of block nesting. (convention:Metrics/BlockNesting)
+# - Replace class var @@product_list with a class instance var. (convention:Style/ClassVars)
 
 require 'resolv-replace'
 require 'modules/slugger'
@@ -115,7 +122,7 @@ module Modules
       if existing_product.nil?
         existing_product = Product.new
         existing_product.name = digi_product['name']
-        existing_product.slug = slug_em digi_product['name']
+        existing_product.slug = slug_em(digi_product['name'])
         existing_product.save
         @@product_list << existing_product.name
         is_new = true
@@ -138,26 +145,25 @@ module Modules
 
       # Find maturity data if it exists and update
       digisquare_maturity.each do |ds_maturity|
-        if existing_product.name == ds_maturity['name']
-          # Get the legacy rubric
-          maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-          unless maturity_rubric.nil?
-            ds_maturity['maturity'].each do |key, value|
-              # Find the correct category and indicator
-              categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
-              category_indicator = CategoryIndicator.find_by(rubric_category: categories, name: key)
-              # Save the value in ProductIndicators
-              product_indicator = ProductIndicator.where(product_id: existing_product.id,
-                                                         category_indicator_id: category_indicator.id)
-                                                  .first || ProductIndicator.new
-              product_indicator.product_id = existing_product.id
-              product_indicator.category_indicator_id = category_indicator.id
-              product_indicator.indicator_value = value
-              product_indicator.save!
-            end
-          end
+        next if existing_product.name != ds_maturity['name']
+
+        # Get the legacy rubric
+        maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
+        next if maturity_rubric.nil?
+
+        ds_maturity['maturity'].each do |key, value|
+          # Find the correct category and indicator
+          categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
+          category_indicator = CategoryIndicator.find_by(rubric_category: categories, name: key)
+          # Save the value in ProductIndicators
+          product_indicator = ProductIndicator.where(product_id: existing_product.id,
+                                                     category_indicator_id: category_indicator.id)
+                                              .first || ProductIndicator.new
+          product_indicator.product_id = existing_product.id
+          product_indicator.category_indicator_id = category_indicator.id
+          product_indicator.indicator_value = value
+          product_indicator.save!
         end
-        existing_product
       end
 
       existing_product.endorsers << dsq_endorser unless existing_product.endorsers.include?(dsq_endorser)
@@ -329,7 +335,8 @@ module Modules
         repositories = product_data['repositories']
         repositories&.each do |curr_repo|
           repo_name = "#{prod_name} #{curr_repo['name']}"
-          product_repository = ProductRepository.find_by(slug: slug_em(repo_name)) || ProductRepository.find_by(slug: slug_em("#{prod_name} Repository"))
+          product_repository = ProductRepository.find_by(slug: slug_em(repo_name)) ||
+            ProductRepository.find_by(slug: slug_em("#{prod_name} Repository"))
           if product_repository.nil?
             puts "  Creating repository for: #{repo_name} "
             repository_attrs = {
@@ -416,12 +423,14 @@ module Modules
         begin
           new_project.start_date = Date.strptime(english_project[11], '%m/%Y')
         rescue StandardError
+          puts "Unable to parse project start date."
         end
       end
       unless english_project[12].nil?
         begin
           new_project.end_date = Date.strptime(english_project[12], '%m/%Y')
         rescue StandardError
+          puts "Unable to parse project end date."
         end
       end
       new_project.project_url = english_project[25] unless english_project[25].nil?
@@ -467,9 +476,9 @@ module Modules
 
       # Assign to SDGs
       unless english_project[24].nil?
-        sdg_list = english_project[24].sub('Peace, Justice', 'Peace Justice').sub('Reduced Inequality', 'Reduced Inequalities').sub(
-          'Industry, Innovation, and', 'Industry Innovation and'
-        )
+        sdg_list = english_project[24].sub('Peace, Justice', 'Peace Justice')
+                                      .sub('Reduced Inequality', 'Reduced Inequalities')
+                                      .sub('Industry, Innovation, and', 'Industry Innovation and')
         sdg_names = sdg_list.split(',')
         sdg_names.each do |sdg_name|
           sdg_slug = slug_em(sdg_name.strip)
@@ -526,9 +535,10 @@ module Modules
       sector_array = []
       unless sector_name.nil?
         sector_name = sector_name.strip
-        sector_slug = slug_em sector_name
+        sector_slug = slug_em(sector_name)
         existing_sector = Sector.where(
-          'slug like ? and locale = ? and is_displayable is true and parent_sector_id is null', "%#{sector_slug}%", locale
+          'slug like ? and locale = ? and is_displayable is true and parent_sector_id is null',
+          "%#{sector_slug}%", locale
         ).first
         if existing_sector.nil?
           puts 'Sector slug: ' + sector_slug
@@ -551,14 +561,16 @@ module Modules
             subsector = subsector.strip
             subsector_slug = slug_em(subsector, 64)
             existing_subsector = Sector.where(
-              'slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', "%#{subsector_slug}%", existing_sector.id, locale
+              'slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true',
+              "%#{subsector_slug}%", existing_sector.id, locale
             ).first
             if existing_subsector.nil?
               if !sector_json[subsector_slug].nil?
                 existing_subsector = Sector.where(
-                  'slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true', "%#{sector_json[subsector_slug]}%", existing_sector.id, locale
+                  'slug like ? and parent_sector_id = ? and locale = ? and is_displayable is true',
+                  "%#{sector_json[subsector_slug]}%", existing_sector.id, locale
                 ).first
-                sector_array << existing_sector.id unless existing_sector.nil?
+                sector_array << existing_subsector.id unless existing_subsector.nil?
               else
                 puts "Add sector to map: #{subsector_slug}"
               end
@@ -575,9 +587,9 @@ module Modules
       cleaned_url = ''
       unless maybe_url.blank?
         cleaned_url = maybe_url.strip
-                               .sub(%r{^https?://}i, '')
-                               .sub(%r{^https?//:}i, '')
-                               .sub(%r{/$}, '')
+                               .sub(/^https?:\/\//i, '')
+                               .sub(/^https?\/\/:/i, '')
+                               .sub(/\/$/, '')
       end
       cleaned_url
     end
@@ -609,7 +621,7 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = %r{(github.com/)(\S+)/(\S+)/?}
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
       return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
@@ -672,7 +684,7 @@ module Modules
                 " -F to=#{user.email}"\
                 " -F subject='Sync task - add product'"\
                 " -F html='#{email_body}'"
-          system cmd
+          system(cmd)
         end
         @@product_list.clear
       end
@@ -682,7 +694,7 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = %r{(github.com/)(\S+)/(\S+)/?}
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
       return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
@@ -718,7 +730,7 @@ module Modules
         prod.except!('publicgoods_name')
         puts "SECTOR LIST: #{prod['sectors']}"
         prod['name'] = publicgoods_name
-        json_string = JSON.pretty_generate prod
+        json_string = JSON.pretty_generate(prod)
         regex = /(?<content>"(?:[^\\"]|\\.)+")|(?<open>\{)\s+(?<close>\})|(?<open>\[)\s+(?<close>\])/m
         json_string = json_string.gsub(regex, '\k<open>\k<content>\k<close>')
         json_string += "\n"
@@ -777,7 +789,7 @@ module Modules
       return if product_repository.absolute_url.blank?
 
       puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = %r{(github.com/)(\S+)/(\S+)/?}
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
       return unless (match = product_repository.absolute_url.match(repo_regex))
 
       _, owner, repo = match.captures
@@ -815,3 +827,5 @@ module Modules
     end
   end
 end
+# rubocop:enable Style/ClassVars
+# rubocop:enable Metrics/BlockNesting

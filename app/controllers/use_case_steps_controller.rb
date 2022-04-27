@@ -12,9 +12,9 @@ class UseCaseStepsController < ApplicationController
 
     render(json: record.to_json(UseCaseStep.serialization_options
                                            .merge({
-                                                    item_path: request.original_url,
-                                                    include_relationships: true
-                                                  })))
+                                             item_path: request.original_url,
+                                             include_relationships: true
+                                           })))
   end
 
   def simple_search
@@ -55,9 +55,9 @@ class UseCaseStepsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(UseCaseStep.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
   end
 
   def complex_search
@@ -98,9 +98,9 @@ class UseCaseStepsController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(UseCaseStep.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
   end
 
   # GET /use_case_steps/1
@@ -112,11 +112,11 @@ class UseCaseStepsController < ApplicationController
     @use_case_step = UseCaseStep.new
     @ucs_desc = UseCaseStepDescription.new
     if params[:use_case_id]
-      @use_case = if !params[:use_case_id].scan(/\D/).empty?
-                    UseCase.find_by(slug: params[:use_case_id])
-                  else
-                    UseCase.find_by(id: params[:use_case_id])
-                  end
+      if !params[:use_case_id].scan(/\D/).empty?
+        @use_case = UseCase.find_by(slug: params[:use_case_id])
+      else
+        @use_case = UseCase.find_by(id: params[:use_case_id])
+      end
       unless @use_case.nil?
         @use_case_step.use_case = @use_case
         @use_case_step.use_case_id = @use_case.id
@@ -161,13 +161,13 @@ class UseCaseStepsController < ApplicationController
           @ucs_desc.save
         end
         format.html do
-          redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step),
-                      notice: 'Use case step was successfully created.'
+          redirect_to(use_case_use_case_step_path(@use_case_step.use_case, @use_case_step),
+                      notice: 'Use case step was successfully created.')
         end
-        format.json { render :show, status: :created, location: @use_case_step }
+        format.json { render(:show, status: :created, location: @use_case_step) }
       else
-        format.html { render :new }
-        format.json { render json: @use_case_step.errors, status: :unprocessable_entity }
+        format.html { render(:new) }
+        format.json { render(json: @use_case_step.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -204,13 +204,13 @@ class UseCaseStepsController < ApplicationController
     respond_to do |format|
       if @use_case_step.update(use_case_step_params)
         format.html do
-          redirect_to use_case_use_case_step_path(@use_case_step.use_case, @use_case_step, locale: session[:locale]),
-                      notice: 'Use case step was successfully updated.'
+          redirect_to(use_case_use_case_step_path(@use_case_step.use_case, @use_case_step, locale: session[:locale]),
+                      notice: 'Use case step was successfully updated.')
         end
-        format.json { render :show, status: :ok, location: @use_case_step }
+        format.json { render(:show, status: :ok, location: @use_case_step) }
       else
-        format.html { render :edit }
-        format.json { render json: @use_case_step.errors, status: :unprocessable_entity }
+        format.html { render(:edit) }
+        format.json { render(json: @use_case_step.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -226,8 +226,8 @@ class UseCaseStepsController < ApplicationController
     @use_case_step.products.clear
     @use_case_step.destroy
     respond_to do |format|
-      format.html { redirect_to use_case_path(use_case), notice: 'Use case step was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to(use_case_path(use_case), notice: 'Use case step was successfully destroyed.') }
+      format.json { head(:no_content) }
     end
   end
 
@@ -238,19 +238,19 @@ class UseCaseStepsController < ApplicationController
       original_slug = slug_em(params[:original])
       @use_case_steps = UseCaseStep.where(slug: current_slug).to_a if current_slug != original_slug
     end
-    authorize UseCaseStep, :view_allowed?
-    render json: @use_case_steps, only: [:name]
+    authorize(UseCaseStep, :view_allowed?)
+    render(json: @use_case_steps, only: [:name])
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_use_case_step
-    @use_case_step = if !params[:id].scan(/\D/).empty?
-                       UseCaseStep.find_by(slug: params[:id]) || not_found
-                     else
-                       UseCaseStep.find(params[:id]) || not_found
-                     end
+    if !params[:id].scan(/\D/).empty?
+      @use_case_step = UseCaseStep.find_by(slug: params[:id]) || not_found
+    else
+      @use_case_step = UseCaseStep.find(params[:id]) || not_found
+    end
     @ucs_desc = UseCaseStepDescription.where(use_case_step_id: @use_case_step, locale: I18n.locale).first
     @ucs_desc ||= UseCaseStepDescription.where(use_case_step_id: @use_case_step, locale: I18n.default_locale).first
     @ucs_desc = UseCaseStepDescription.new if @ucs_desc.nil?

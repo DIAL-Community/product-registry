@@ -12,9 +12,9 @@ class SustainableDevelopmentGoalsController < ApplicationController
 
     render(json: record.to_json(SustainableDevelopmentGoal.serialization_options
                                                           .merge({
-                                                                   item_path: request.original_url,
-                                                                   include_relationships: true
-                                                                 })))
+                                                            item_path: request.original_url,
+                                                            include_relationships: true
+                                                          })))
   end
 
   def simple_search
@@ -81,9 +81,9 @@ class SustainableDevelopmentGoalsController < ApplicationController
       format.json do
         render(json: results.to_json(SustainableDevelopmentGoal.serialization_options
                                                                .merge({
-                                                                        include_relationships: true,
-                                                                        collection_path: uri.to_s
-                                                                      })))
+                                                                 include_relationships: true,
+                                                                 collection_path: uri.to_s
+                                                               })))
       end
     end
   end
@@ -107,18 +107,18 @@ class SustainableDevelopmentGoalsController < ApplicationController
         'LOWER("sustainable_development_goals"."name") like LOWER(?)', "%#{params[:search]}%"
       )
     end
-    authorize @sustainable_development_goals, :view_allowed?
+    authorize(@sustainable_development_goals, :view_allowed?)
   end
 
   def count
     @sustainable_development_goals = filter_sdgs
 
-    authorize @sustainable_development_goals, :view_allowed?
-    render json: @sustainable_development_goals.count
+    authorize(@sustainable_development_goals, :view_allowed?)
+    render(json: @sustainable_development_goals.count)
   end
 
   def show
-    authorize @sustainable_development_goal, :view_allowed?
+    authorize(@sustainable_development_goal, :view_allowed?)
   end
 
   private

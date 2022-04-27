@@ -22,7 +22,9 @@ class SyncModuleTest < ActiveSupport::TestCase
   test 'sync_public_product should update product with aliases' do
     initial_size = Product.count
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse(
+      '{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "website": "https://opendatakit.org/"}'
+    )
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -42,7 +44,10 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.length, 0
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "SDGs": [[7, "No poverty"]], "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse(
+      '{"type": ["software"], "name": "Open Data Kit", "aliases": ["ODK"], "SDGs": [[7, "No poverty"]], ' \
+      '"website": "https://opendatakit.org/"}'
+    )
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -50,7 +55,10 @@ class SyncModuleTest < ActiveSupport::TestCase
     saved_product = Product.find_by(slug: 'odk')
     assert_equal saved_product.sustainable_development_goals.size, 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Open Data Kit", "SDGs": [[8, "No poverty"]], "website": "https://opendatakit.org/"}')
+    new_product = JSON.parse(
+      '{"type": ["software"], "name": "Open Data Kit", "SDGs": [[8, "No poverty"]], ' \
+      '"website": "https://opendatakit.org/"}'
+    )
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -63,11 +71,13 @@ class SyncModuleTest < ActiveSupport::TestCase
     initial_size = Product.count
 
     existing_product = products(:four)
-    Product.delete existing_product
+    Product.delete(existing_product)
 
     assert_equal Product.count, initial_size - 1
 
-    new_product = JSON.parse('{"type": ["software"], "name": "Product 4", "aliases": ["Prod 4"], "website": "https://me.com/"}')
+    new_product = JSON.parse(
+      '{"type": ["software"], "name": "Product 4", "aliases": ["Prod 4"], "website": "https://me.com/"}'
+    )
     capture_stdout { sync_public_product(new_product) }
 
     assert_equal Product.count, initial_size
@@ -99,7 +109,9 @@ class SyncModuleTest < ActiveSupport::TestCase
     assert_equal Product.count, initial_size
 
     # Try syncing dupes with the same alias with one of the alias.
-    new_product = JSON.parse('{"type": ["software"], "name": "Product4", "aliases": ["Prod 4"], "website": "https://me.com/"}')
+    new_product = JSON.parse(
+      '{"type": ["software"], "name": "Product4", "aliases": ["Prod 4"], "website": "https://me.com/"}'
+    )
     capture_stdout { sync_public_product(new_product) }
 
     assert_nil Product.find_by(slug: 'prod_4')
@@ -122,8 +134,9 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     odk_product = Product.find_by(slug: 'odk')
-    maturity_scores = calculate_maturity_scores(odk_product.id,
-                                                rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores]
+                      .first[:category_scores]
+                      .first[:indicator_scores]
     assert_equal maturity_scores.first[:score], 10
 
     assert_not_nil Product.find_by(slug: 'odk')
@@ -202,7 +215,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     capture_stdout { sync_osc_product(p2) }
     p1 = Product.where(name: 'Product')[0]
     assert_equal p1.organizations.size, 2
-    assert p1.organizations.include? Organization.where(name: 'Organization Again')[0]
+    assert p1.organizations.include?(Organization.where(name: 'Organization Again')[0])
   end
 
   test 'update product SDGs' do
@@ -233,7 +246,7 @@ class SyncModuleTest < ActiveSupport::TestCase
     capture_stdout { sync_osc_product(p2) }
     p1 = Product.where(name: 'Product')[0]
     assert_equal p1.sustainable_development_goals.size, 2
-    assert p1.sustainable_development_goals.include? SustainableDevelopmentGoal.where(number: 8)[0]
+    assert p1.sustainable_development_goals.include?(SustainableDevelopmentGoal.where(number: 8)[0])
   end
 
   test 'create a new product' do
@@ -265,8 +278,9 @@ class SyncModuleTest < ActiveSupport::TestCase
 
     rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     odk_product = Product.find_by(slug: 'odk')
-    maturity_scores = calculate_maturity_scores(odk_product.id,
-                                                rubric.id)[:rubric_scores].first[:category_scores].first[:indicator_scores]
+    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores]
+                      .first[:category_scores]
+                      .first[:indicator_scores]
     assert_equal maturity_scores.first[:score], 10
   end
 end

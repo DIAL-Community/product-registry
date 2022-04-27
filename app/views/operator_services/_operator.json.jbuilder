@@ -11,4 +11,4 @@ normalized_operators = {}
   normalized_operators[operator_name] = operator_ids
 end
 
-json.operators normalized_operators
+json.operators(normalized_operators)

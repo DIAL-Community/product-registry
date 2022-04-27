@@ -39,7 +39,7 @@ namespace :sync do
     dpg_data.each do |entry|
       next if search_in_ignorelist(entry, ignore_list)
 
-      prod = sync_public_product entry
+      prod = sync_public_product(entry)
       update_repository_data(entry, prod)
     end
 
@@ -49,7 +49,7 @@ namespace :sync do
     dpg_data.each do |entry|
       next if search_in_ignorelist(entry, ignore_list)
 
-      prod = sync_public_product entry
+      prod = sync_public_product(entry)
       update_repository_data(entry, prod)
     end
     puts 'Digital public good data synced ...'
@@ -82,7 +82,7 @@ namespace :sync do
     osc_data.each do |product|
       next if search_in_ignorelist(product, ignore_list)
 
-      prod = sync_osc_product product
+      prod = sync_osc_product(product)
       update_repository_data(product, prod)
     end
     send_notification
@@ -152,7 +152,7 @@ namespace :sync do
           unless curr_org_product.nil?
             puts "Deleting org product relationship: #{curr_org_product.inspect}."
             delete_statement = "delete from organizations_products where product_id=#{blacklist_product.id}"
-            results = ActiveRecord::Base.connection.execute(delete_statement)
+            ActiveRecord::Base.connection.execute(delete_statement)
           end
         end
       end
@@ -626,7 +626,7 @@ namespace :sync do
       end
 
       project['donors']&.each do |donor|
-        donor_name = org_data.select { |org| org['id'] == donor }[0]['name']
+        donor_name = org_data.select { |o| o['id'] == donor }[0]['name']
         donor_org = Organization.name_contains(donor_name)
 
         next unless !donor_org.empty? && !existing_project.organizations.include?(donor_org[0])
@@ -671,13 +671,12 @@ namespace :sync do
     mm_csv = CSV.parse(File.read('export/MMData.csv'), headers: true)
     mm_csv.each do |mm_row|
       # Find the country
-      mm_country = country_data.find { |country| country['name'].include? mm_row[0] }['id']
+      mm_country = country_data.find { |country| country['name'].include?(mm_row[0]) }['id']
 
       # Find the org
       unless mm_row[4].nil?
         mm_org = org_data.find { |org| org['name'].downcase.delete(' ') == mm_row[4].downcase.delete(' ') }
         unless mm_org.nil?
-          mm_org_id = mm_org['id']
           mm_org_name = mm_org['name']
         end
       end
@@ -706,12 +705,12 @@ namespace :sync do
         'Content-Type' => 'application/json'
       }
 
-      puts "PARAMS: #{params.to_json}"
+      puts "Parameters: #{params.to_json}"
 
       http = Net::HTTP.new(project_url.host, project_url.port)
       response = http.post(project_url.path, params.to_json, headers)
 
-      puts "RESPONSE: #{response}"
+      puts "Response: #{response}"
     end
   end
 end

@@ -9,7 +9,7 @@
           <i class="fa fa-rocket header-img mt-1" data-toggle="tooltip"
             data-placement="top" data-original-title="<%= t('view.product.index.is_deployable') %>"></i>
         <% end %>
-        <% if is_endorsed(product) %>
+        <% if product_endorsed(product) %>
           <%= image_tag("digiprins.png", class: 'header-img mt-1 ml-1',
                         alt: t('alt.el-logo', el: 'Principles for Digital Development'),
                         'title': t('view.product.index.is_endorsed'),

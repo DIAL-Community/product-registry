@@ -7,11 +7,11 @@ module Queries
     type [Types::UseCaseType], null: false
 
     def resolve(search:, mature:)
-      use_cases = if mature
-                    UseCase.where(maturity: 'MATURE').order(:name)
-                  else
-                    UseCase.order(:name)
-                  end
+      if mature
+        use_cases = UseCase.where(maturity: 'MATURE').order(:name)
+      else
+        use_cases = UseCase.order(:name)
+      end
       use_cases = use_cases.name_contains(search) unless search.blank?
       use_cases
     end

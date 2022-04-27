@@ -2,6 +2,6 @@
 
 class AddAuthorToPlaybooks < ActiveRecord::Migration[5.2]
   def change
-    add_column :playbooks, :author, :string
+    add_column(:playbooks, :author, :string)
   end
 end

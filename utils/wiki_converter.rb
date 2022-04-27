@@ -5,18 +5,21 @@ require 'cgi'
 
 class WikiConverter
   def convert_workflow_to_wiki(filename)
-    input = open(filename)
-    workflowData = input.read
+    input = File.open(filename)
+    workflow_data = input.read
 
-    workflowJson = JSON.parse(workflowData, object_class: OpenStruct)
-    workflowJson.each do |workflow|
-      outFilename = "#{workflow.name.downcase.tr(' ', '_')}.xml"
-      output = open(outFilename, 'w')
+    workflow_json = JSON.parse(workflow_data, object_class: OpenStruct)
+    workflow_json.each do |workflow|
+      out_filename = "#{workflow.name.downcase.tr(' ', '_')}.xml"
+      output = File.open(out_filename, 'w')
       output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<page xmlns=\"http://www.xwiki.org\">\n")
       output.write("<title>#{workflow.name}</title>\n")
       output.write("<syntax>xwiki/2.0</syntax>\n")
       output.write("<content>\n")
-      output.write("|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px\" %)(((\n")
+      output.write(
+        "|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted;" \
+        " border-width:1px\" %)(((\n"
+      )
       output.write("**Other names:** #{workflow.other_names}\n\n")
       output.write("**Short description:** #{workflow.short_desc}\n\n")
       output.write("**Full description:** \n\n#{workflow.full_desc}\n")
@@ -31,24 +34,29 @@ class WikiConverter
 
       # Now import into xwiki
 
-      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary \"@#{outFilename}\" -H \"Content-Type: application/xml\" http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/Workflows/pages/#{workflow.name.delete(' ')}"
+      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary \"@#{out_filename}\"" \
+            " -H \"Content-Type: application/xml\"" \
+            " http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/Workflows/pages/#{workflow.name.delete(' ')}"
       puts cmd
     end
   end
 
   def convert_bb_to_wiki(filename)
-    input = open(filename)
-    bbData = input.read
+    input = File.open(filename)
+    bb_data = input.read
 
-    bbJson = JSON.parse(bbData, object_class: OpenStruct)
-    bbJson.each do |bb|
-      outFilename = "#{bb.name.downcase.tr(' ', '_')}.xml"
-      output = open(outFilename, 'w')
+    bb_json = JSON.parse(bb_data, object_class: OpenStruct)
+    bb_json.each do |bb|
+      out_filename = "#{bb.name.downcase.tr(' ', '_')}.xml"
+      output = File.open(out_filename, 'w')
       output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<page xmlns=\"http://www.xwiki.org\">\n")
       output.write("<title>#{bb.name}</title>\n")
       output.write("<syntax>xwiki/2.0</syntax>\n")
       output.write("<content>\n")
-      output.write("|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px\" %)(((\n")
+      output.write(
+        "|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; "\
+        " border-width:1px\" %)(((\n"
+      )
       output.write("**Other names:** #{bb.other_names}\n\n")
       output.write("**Short description:** #{bb.short_desc}\n\n")
       output.write("**Full description:** \n\n#{bb.full_description}\n")
@@ -56,9 +64,18 @@ class WikiConverter
       output.write("=== Key Digital functionalities ===\n\n#{bb.digital_function}\n")
       output.write("\n\n")
       output.write("=== Examples of use in different sectors ===\n")
-      output.write("|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px; text-align:center\" %)(((\n==== Agriculture Sector ====\n)))")
-      output.write("|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px; text-align:center\" %)(((\n==== Education Sector ====\n)))")
-      output.write("|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted; border-width:1px; text-align:center\" %)(((\n==== Health Sector ====\n)))\n")
+      output.write(
+        "|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted;" \
+        " border-width:1px; text-align:center\" %)(((\n==== Agriculture Sector ====\n)))"
+      )
+      output.write(
+        "|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted;" \
+        "border-width:1px; text-align:center\" %)(((\n==== Education Sector ====\n)))"
+      )
+      output.write(
+        "|(% style=\"background-color:#eff2fa; background:#eff2fa; border-color:#cccccc; border-style:dotted;" \
+        "border-width:1px; text-align:center\" %)(((\n==== Health Sector ====\n)))\n"
+      )
       output.write("|(% style=\"width:33%\" %)(((\n")
       bb.sector_use.each do |sector|
         output.write("#{sector.description}\n") if sector.name == 'Agriculture sector'
@@ -87,14 +104,16 @@ class WikiConverter
       output.write("</content>\n")
       output.write("</page>\n")
 
-      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary \"@#{outFilename}\" -H \"Content-Type: application/xml\" http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/BuildingBlocks/pages/#{bb.name.delete(' ')}"
+      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary \"@#{out_filename}\"" \
+            " -H \"Content-Type: application/xml\"" \
+            " http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/BuildingBlocks/pages/#{bb.name.delete(' ')}"
       puts cmd
     end
   end
 
   def convert_sdg_to_wiki(filename)
-    input = open(filename)
-    sdgData = input.read
+    input = File.open(filename)
+    sdg_data = input.read
 
     sdg_bg = [
       '#ea2031;',
@@ -119,10 +138,10 @@ class WikiConverter
     first_element_style = 'border-top: 0; border-bottom: 1px dotted #ccc;'
     other_element_style = 'border-bottom: 1px dotted #ccc;'
 
-    sdgJson = JSON.parse(sdgData, object_class: OpenStruct)
-    sdgJson.each_with_index do |sdg, index|
-      outFilename = "SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, '0')}.xml"
-      output = open(outFilename, 'w')
+    sdg_json = JSON.parse(sdg_data, object_class: OpenStruct)
+    sdg_json.each_with_index do |sdg, index|
+      out_filename = "SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, '0')}.xml"
+      output = File.open(out_filename, 'w')
       output.puts('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
       output.puts('<page xmlns="http://www.xwiki.org">')
       output.puts("<title>#{sdg['description']}</title>")
@@ -142,16 +161,16 @@ class WikiConverter
                   '|(% colspan="2" rowspan="1" %)(((=== Indicators ===)))')
 
       sdg['targets'].each do |target|
-        output.puts "|(% style='width: 5%;' %){{id name='SDG" + sdg['code'].to_s.rjust(2,
-                                                                                       '0') + '-T' + target['code'].gsub(
-                                                                                         /\./, ''
-                                                                                       ) + "'/}}(((==== #{target['code']} ====)))"\
+        output.puts "|(% style='width: 5%;' %){{id name='SDG" +
+                    sdg['code'].to_s.rjust(2, '0') +
+                    '-T' + target['code'].gsub(/\./, '') +
+                    "'/}}(((==== #{target['code']} ====)))" \
                     "|(% style='width: 45%;' %)(((#{target['description']})))|"
         output.puts '(% colspan="2" rowspan="1" %)((('
-        target['indicators'].each_with_index do |indicator, index|
+        target['indicators'].each_with_index do |indicator, i|
           code = indicator['code']
           description = CGI.escapeHTML(indicator['description'])
-          if index.zero?
+          if i.zero?
             output.puts "|(% style='width: 5%; #{first_element_style}' %)(((==== #{code} ====)))"\
                         "|(% style='width: 45%; #{first_element_style}' %)(((#{description})))"
           else
@@ -165,7 +184,7 @@ class WikiConverter
       output.puts('</content>')
       output.puts('</page>')
 
-      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{outFilename}' "\
+      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{out_filename}' "\
             "-H 'Content-Type: application/xml' "\
             'http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/SDGs'\
             "/pages/SustainableDevelopmentGoals#{(index + 1).to_s.rjust(2, '0')}"
@@ -174,7 +193,7 @@ class WikiConverter
   end
 
   def convert_usecase_to_wiki(filename)
-    input = open(filename)
+    input = File.open(filename)
     usecase_data = input.read
 
     border_style = 'border-color:#cccccc; border-style:dotted; border-width:1px;'
@@ -182,8 +201,8 @@ class WikiConverter
 
     usecase_json = JSON.parse(usecase_data, object_class: OpenStruct)
     usecase_json.each_with_index do |usecase, index|
-      outFilename = "UseCase#{index + 1}.xml"
-      output = open(outFilename, 'w')
+      out_filename = "UseCase#{index + 1}.xml"
+      output = File.open(out_filename, 'w')
       output.puts('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
       output.puts('<page xmlns="http://www.xwiki.org">')
       output.puts("<title>#{usecase['name']}</title>")
@@ -207,8 +226,8 @@ class WikiConverter
 
       output.puts('===Use case steps===')
 
-      usecase['steps'].each_with_index do |step, index|
-        output.puts("**~#{index + 1}. #{step['title']} **")
+      usecase['steps'].each_with_index do |step, i|
+        output.puts("**~#{i + 1}. #{step['title']} **")
         output.puts
         output.puts((step['description']).to_s)
         output.puts
@@ -225,9 +244,9 @@ class WikiConverter
         '(((==== ICT Building Blocks ====)))'
       )
 
-      usecase['mappings'].each_with_index do |mapping, index|
+      usecase['mappings'].each_with_index do |mapping, i|
         output.write('|(% style="width: 33%" %)(((')
-        output.puts("**~#{index + 1}. #{mapping['step']['title']}**")
+        output.puts("**~#{i + 1}. #{mapping['step']['title']}**")
         output.puts
         output.puts((mapping['step']['description']).to_s)
         output.write(')))')
@@ -239,7 +258,7 @@ class WikiConverter
       output.puts('</content>')
       output.puts('</page>')
 
-      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{outFilename}' "\
+      cmd = "curl -u T4DAdmin:t4dadmin -X PUT --data-binary '@#{out_filename}' "\
             "-H 'Content-Type: application/xml' "\
             'http://159.65.239.248:8080/xwiki/rest/wikis/xwiki/spaces/UseCases'\
             "/pages/UseCases#{index + 1}"

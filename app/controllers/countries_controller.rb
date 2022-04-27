@@ -9,9 +9,9 @@ class CountriesController < ApplicationController
 
     render(json: record.as_json(Country.serialization_options
                                        .merge({
-                                                item_path: request.original_url,
-                                                include_relationships: true
-                                              })))
+                                         item_path: request.original_url,
+                                         include_relationships: true
+                                       })))
   end
 
   def simple_search
@@ -49,9 +49,9 @@ class CountriesController < ApplicationController
     uri.fragment = uri.query = nil
     render(json: results.to_json(Country.serialization_options
                                         .merge({
-                                                 collection_path: uri.to_s,
-                                                 include_relationships: true
-                                               })))
+                                          collection_path: uri.to_s,
+                                          include_relationships: true
+                                        })))
   end
 
   # GET /countries
@@ -64,15 +64,15 @@ class CountriesController < ApplicationController
       return
     end
 
-    @countries = if params[:search]
-                   Country.where(nil)
+    if params[:search]
+      @countries = Country.where(nil)
                           .name_contains(params[:search])
                           .order(:name)
                           .paginate(page: params[:page], per_page: 20)
-                 else
-                   Country.order(:name)
+    else
+      @countries = Country.order(:name)
                           .paginate(page: params[:page], per_page: 20)
-                 end
+    end
     authorize(@countries, :view_allowed?)
   end
 

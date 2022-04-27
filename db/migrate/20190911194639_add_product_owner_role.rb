@@ -2,7 +2,7 @@
 
 class AddProductOwnerRole < ActiveRecord::Migration[5.1]
   def up
-    execute <<-SQL
+    execute(<<-SQL)
       ALTER TABLE users ALTER role DROP DEFAULT;
       ALTER TYPE user_role rename TO user_role_;
       CREATE TYPE user_role AS ENUM ('admin', 'ict4sdg', 'principle', 'user', 'org_user', 'org_product_user', 'product_user');
@@ -13,7 +13,7 @@ class AddProductOwnerRole < ActiveRecord::Migration[5.1]
   end
 
   def down
-    execute <<-SQL
+    execute(<<-SQL)
     ALTER TABLE users ALTER role DROP DEFAULT;
     ALTER TYPE user_role rename TO user_role_;
     CREATE TYPE user_role AS ENUM ('admin', 'ict4sdg', 'principle', 'user', 'org_user');

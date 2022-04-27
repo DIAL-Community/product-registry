@@ -9,7 +9,7 @@ class ProductsController < ApplicationController
 
   before_action :set_product, only: %i[show edit update destroy]
   before_action :load_maturity, only: %i[show new edit create update]
-  before_action :set_current_user, only: %i[edit update destroy]
+  before_action :auditable_current_user, only: %i[edit update destroy]
 
   def owner_search
     product = Product.find_by(slug: params[:product])
@@ -40,9 +40,9 @@ class ProductsController < ApplicationController
 
     render(json: record.to_json(Product.serialization_options
                                        .merge({
-                                                item_path: request.original_url,
-                                                include_relationships: true
-                                              })))
+                                         item_path: request.original_url,
+                                         include_relationships: true
+                                       })))
   end
 
   def simple_search
@@ -102,9 +102,9 @@ class ProductsController < ApplicationController
       format.json do
         render(json: results.to_json(Product.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -248,9 +248,9 @@ class ProductsController < ApplicationController
       format.json do
         render(json: results.to_json(Product.serialization_options
                                             .merge({
-                                                     collection_path: uri.to_s,
-                                                     include_relationships: true
-                                                   })))
+                                              collection_path: uri.to_s,
+                                              include_relationships: true
+                                            })))
       end
     end
   end
@@ -264,7 +264,7 @@ class ProductsController < ApplicationController
   def favorite_product
     set_product
     if current_user.nil? || @product.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     favoriting_user = current_user
@@ -272,9 +272,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render :show, status: :ok }
+        format.json { render(:show, status: :ok) }
       else
-        format.json { render :show, status: :unprocessable_entity }
+        format.json { render(:show, status: :unprocessable_entity) }
       end
     end
   end
@@ -282,7 +282,7 @@ class ProductsController < ApplicationController
   def unfavorite_product
     set_product
     if current_user.nil? || @product.nil?
-      return respond_to { |format| format.json { render json: {}, status: :unauthorized } }
+      return respond_to { |format| format.json { render(json: {}, status: :unauthorized) } }
     end
 
     favoriting_user = current_user
@@ -290,9 +290,9 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if favoriting_user.save!
-        format.json { render :show, status: :ok }
+        format.json { render(:show, status: :ok) }
       else
-        format.json { render :show, status: :unprocessable_entity }
+        format.json { render(:show, status: :unprocessable_entity) }
       end
     end
   end
@@ -308,11 +308,11 @@ class ProductsController < ApplicationController
         case default_view.value
         when 'custom'
           session[:portal] = PortalView.where(slug: session[:org].downcase).first
-          redirect_to about_path unless session[:portal].nil?
+          !session[:portal].nil? && redirect_to(about_path)
         when 'map'
-          redirect_to map_path
+          redirect_to(map_path)
         when 'wizard'
-          redirect_to wizard_path
+          redirect_to(wizard_path)
         end
       end
     end
@@ -386,10 +386,10 @@ class ProductsController < ApplicationController
     authorize(@products, :view_allowed?)
     respond_to do |format|
       format.csv do
-        render csv: @products, filename: 'exported-product'
+        render(csv: @products, filename: 'exported-product')
       end
       format.json do
-        render json: @products.to_json(Product.serialization_options)
+        render(json: @products.to_json(Product.serialization_options))
       end
     end
   end
@@ -408,11 +408,11 @@ class ProductsController < ApplicationController
     # Right now, we are using the legacy rubric. Eventually we will change this to use
     # the default rubric - just use the 'else' part
     maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-    @maturity_scores = if !maturity_rubric.nil?
-                         calculate_maturity_scores(@product.id, maturity_rubric.id)[:rubric_scores].first
-                       else
-                         calculate_maturity_scores(@product.id, nil)[:rubric_scores].first
-                       end
+    if !maturity_rubric.nil?
+      @maturity_scores = calculate_maturity_scores(@product.id, maturity_rubric.id)[:rubric_scores].first
+    else
+      @maturity_scores = calculate_maturity_scores(@product.id, nil)[:rubric_scores].first
+    end
     @maturity_scores = @maturity_scores[:category_scores] unless @maturity_scores.nil?
   end
 
@@ -433,10 +433,10 @@ class ProductsController < ApplicationController
   def create
     authorize(Product, :create_allowed?)
     @product = Product.new(product_params)
-    @product.set_current_user(current_user)
+    @product.auditable_current_user(current_user)
     @product.manual_update = true
     @product_description = ProductDescription.new
-    @product_description.set_current_user(current_user)
+    @product_description.auditable_current_user(current_user)
 
     if params[:selected_projects].present?
       params[:selected_projects].keys.each do |project_id|
@@ -539,10 +539,10 @@ class ProductsController < ApplicationController
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @product.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
-      @product.set_image_changed(params[:logo].original_filename)
+      @product.auditable_image_changed(params[:logo].original_filename)
     end
 
     # Create a Discourse topic for this product
@@ -559,10 +559,10 @@ class ProductsController < ApplicationController
         end
 
         format.html do
-          redirect_to @product,
-                      flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) }
+          redirect_to(@product,
+                      flash: { notice: t('messages.model.created', model: t('model.product').to_s.humanize) })
         end
-        format.json { render :show, status: :created, location: @product }
+        format.json { render(:show, status: :created, location: @product) }
       else
         logger.error("Create returning errors: #{@product.errors}.")
 
@@ -570,8 +570,8 @@ class ProductsController < ApplicationController
         @product.errors.each do |_attr, err|
           error_message = err
         end
-        format.html { redirect_to new_product_url, flash: { error: error_message } }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.html { redirect_to(new_product_url, flash: { error: error_message }) }
+        format.json { render(json: @product.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -748,10 +748,10 @@ class ProductsController < ApplicationController
       uploader = LogoUploader.new(@product, params[:logo].original_filename, current_user)
       begin
         uploader.store!(params[:logo])
-      rescue StandardError => e
+      rescue StandardError
         @product.errors.add(:logo, t('errors.messages.extension_whitelist_error'))
       end
-      @product.set_image_changed(params[:logo].original_filename)
+      @product.auditable_image_changed(params[:logo].original_filename)
     end
 
     if product_params[:product_description].present?
@@ -784,10 +784,10 @@ class ProductsController < ApplicationController
     @product.destroy
     respond_to do |format|
       format.html do
-        redirect_to products_url,
-                    flash: { notice: t('messages.model.deleted', model: t('model.product').to_s.humanize) }
+        redirect_to(products_url,
+                    flash: { notice: t('messages.model.deleted', model: t('model.product').to_s.humanize) })
       end
-      format.json { head :no_content }
+      format.json { head(:no_content) }
     end
   end
 
@@ -827,22 +827,27 @@ class ProductsController < ApplicationController
       description = ProductDescription.where(product_id: product, locale: I18n.locale).first
 
       product_desc = if description.nil?
-                       ''
-                     else
-                       description.description
-                     end
+        ''
+      else
+        description.description
+      end
 
-      repositoryURL = ''
-      repositoryURL = product.repository unless product.repository.nil?
+      repository_url = ''
+      repository_url = product.repository unless product.repository.nil?
 
-      { name: product.name, description: product_desc, website: "https://#{product.website}", license: [{ spdx: product.license, licenseURL: publicgoods_licenseURL }], SDGs: sdg_list.as_json, sectors: sector_list.as_json, type: ['software'], repositoryURL: repositoryURL, organizations: org_list.as_json }
+      {
+        name: product.name, description: product_desc, website: "https://#{product.website}",
+        license: [{ spdx: product.license, licenseURL: publicgoods_licenseURL }],
+        SDGs: sdg_list.as_json, sectors: sector_list.as_json, type: ['software'],
+        repository_url: repository_url, organizations: org_list.as_json
+      }
     end
 
     curr_products.each do |prod|
       @products.push(prod) unless prod.nil?
     end
 
-    render json: @products
+    render(json: @products)
   end
 
   private
@@ -872,9 +877,9 @@ class ProductsController < ApplicationController
     @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
   end
 
-  def set_current_user
-    @product.set_current_user(current_user)
-    @product_description.set_current_user(current_user)
+  def auditable_current_user
+    @product.auditable_current_user(current_user)
+    @product_description.auditable_current_user(current_user)
   end
 
   def load_maturity
@@ -895,15 +900,15 @@ class ProductsController < ApplicationController
           # * http:// or https://
           # * (and the typo) http//: or https//:
           attr[:website] = attr[:website].strip
-                                         .sub(%r{^https?://}i, '')
-                                         .sub(%r{^https?//:}i, '')
-                                         .sub(%r{/$}, '')
+                                         .sub(/^https?:\/\//i, '')
+                                         .sub(/^https?\/\/:/i, '')
+                                         .sub(/\/$/, '')
         end
         if attr[:repository].present?
           attr[:repository] = attr[:repository].strip
-                                               .sub(%r{^https?://}i, '')
-                                               .sub(%r{^https?//:}i, '')
-                                               .sub(%r{/$}, '')
+                                               .sub(/^https?:\/\//i, '')
+                                               .sub(/^https?\/\/:/i, '')
+                                               .sub(/\/$/, '')
         end
         attr[:est_hosting] = attr[:est_hosting].to_i if attr[:est_hosting].present? && !attr[:est_hosting].nil?
         attr[:est_invested] = attr[:est_invested].to_i if attr[:est_invested].present? && !attr[:est_invested].nil?

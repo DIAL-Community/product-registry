@@ -29,7 +29,6 @@ module Types
 
     field :maturity_score, Integer, null: true
 
-    field :tags, [String], null: true
     field :main_repository, Types::ProductRepositoryType, null: true
 
     field :product_descriptions, [Types::ProductDescriptionType], null: true

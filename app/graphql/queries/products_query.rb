@@ -69,6 +69,7 @@ module Queries
     [filtered, building_block_ids]
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def filter_products(
     search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
     use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
@@ -120,11 +121,11 @@ module Queries
     user_sectors = sectors.reject { |x| x.nil? || x.empty? }
     user_sectors.each do |user_sector|
       # Find the sector record.
-      sector = if user_sector.scan(/\D/).empty?
-                 Sector.find_by(id: user_sector)
-               else
-                 Sector.find_by(name: user_sector)
-               end
+      if user_sector.scan(/\D/).empty?
+        sector = Sector.find_by(id: user_sector)
+      else
+        sector = Sector.find_by(name: user_sector)
+      end
       # Skip if we can't find any sector
       next if sector.nil?
 
@@ -171,7 +172,8 @@ module Queries
 
     products = products.where('maturity_score is not null') if with_maturity
 
-    if !product_types.include?('product_and_dataset') && !product_types.empty? && !(product_types.include?('product') && product_types.include?('dataset'))
+    if !product_types.include?('product_and_dataset') && !product_types.empty? &&
+      !(product_types.include?('product') && product_types.include?('dataset'))
       products = products.where(product_type: product_types)
     end
 
@@ -181,18 +183,19 @@ module Queries
                          .where(endorsers: { id: filtered_endorsers })
     end
 
-    products = case sort_hint.to_s.downcase
-               when 'country'
-                 products.joins(:countries).order('countries.name')
-               when 'sector'
-                 products.joins(:sectors).order('sectors.name')
-               when 'tag'
-                 products.order('products.tags')
-               else
-                 products.order('products.name')
-               end
+    case sort_hint.to_s.downcase
+    when 'country'
+      products = products.joins(:countries).order('countries.name')
+    when 'sector'
+      products = products.joins(:sectors).order('sectors.name')
+    when 'tag'
+      products = products.order('products.tags')
+    else
+      products = products.order('products.name')
+    end
     products.uniq
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def wizard_products(sectors, sub_sectors, countries, tags, building_blocks, sort_hint, offset_params = {})
     sector_ids, curr_sector = get_sector_list(sectors, sub_sectors)

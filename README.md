@@ -25,10 +25,36 @@ Please also reference the [Wiki page for the Catalog](https://solutions-catalog.
 
 ## Prerequisites
 
- * Ruby (version 2.5 or greater)
- * Rails (version 5.2)
- * PostgreSQL (version 12 or higher)
- * Redis
+ * Ruby (version 2.5 or greater). See [Installing Ruby](https://www.ruby-lang.org/en/documentation/installation/) for installation instructions.
+ * Rails (version 5.2). Once Ruby is installed, can install Rails using the following command in a terminal:
+ ```gem install rails```
+ * PostgreSQL (version 12 or higher). See [Postgres Download](https://www.postgresql.org/download/) for download and install instructions.
+ * Redis. See [Getting Started with Redis](https://redis.io/docs/getting-started/) for instruction. Please ensure that redis is set to start and run in the background automatically. This [link](https://redis.io/docs/getting-started/#installing-redis-more-properly) describes how to configure redis. 
+
+Note that PostgreSQL and Redis can be started easily using docker-compose and the sample compose file provided using the following command:
+
+ ```bash
+ docker-compose -f docker-compose-dev.yml up -d
+ ```
+
+This method does not require installing PostgreSQL or Redis manually on the system.
+
+When starting up, this approach requires an .env file in the current working directory, that defines the following variables: REDIS_PORT, REDIS_PASSWORD, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT.
+
+
+## Postgres Configuration for development
+
+Before running the application configuration for your local development environment, Postgres must be configured 
+and a user created (the username must align with the DB username specified in the setEnv.sh file)
+
+Use the username and password that you configured during Postgres installation to connect to postgres using the following
+command: ```psql postgres```
+
+Run the following commands in psql:
+```
+create user <username> with password '<password>';
+alter user <username> with superuser;
+```
 
 ## Application configuration for development
 
@@ -37,6 +63,12 @@ in the root directory of the project and set all variables for development envir
 terminal session, run the setEnv.sh script to set environment variables:
 
  * source ./setEnv.sh dev
+
+Be sure to update your setEnv.sh with the correct database username and password that were configured 
+in the step above.
+
+Note: running this command will set the environment variables for the current terminal session only. 
+If you open a new terminal window (or reboot), you will need to run this command again.
 
 To configure and run the application, navigate to project directory and run the following commands:
 

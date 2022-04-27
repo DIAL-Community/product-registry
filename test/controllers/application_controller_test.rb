@@ -7,7 +7,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'session should be empty' do
-    get '/get_filters'
+    get '/fetch_filters'
     assert_response :success
     assert_equal(body, '{}')
   end

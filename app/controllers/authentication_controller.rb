@@ -53,10 +53,17 @@ class AuthenticationController < Devise::SessionsController
 
     if user.nil?
       respond_to do |format|
-        format.json { render(json: { }, status: :ok) }
+        status = :ok
+        json = new_user_response(params['user']['email'])
+        format.json do
+          render(
+            json: json,
+            status: status
+          )
+        end
       end
     else
-      sign_in user, store: true
+      sign_in(user, store: true)
       can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
       organization = Organization.find(user.organization_id) if user.organization_id
       respond_to do |format|
@@ -186,6 +193,13 @@ class AuthenticationController < Devise::SessionsController
       canEdit: can_edit,
       roles: user.roles,
       userToken: user.authentication_token
+    }
+  end
+
+  def new_user_response(email)
+    {
+      userEmail: email,
+      userName: email
     }
   end
 end

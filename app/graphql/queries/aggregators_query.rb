@@ -66,24 +66,24 @@ module Queries
 
     filtered_services = services.reject { |x| x.nil? || x.empty? }
     unless filtered_services.empty?
-      organizations = if filtered_services.all? { |i| i.scan(/\D/).empty? }
-                        organizations.joins(:aggregator_capabilities)
+      if filtered_services.all? { |i| i.scan(/\D/).empty? }
+        organizations = organizations.joins(:aggregator_capabilities)
                                      .where(aggregator_capabilities: { id: filtered_services })
-                      else
-                        organizations.joins(:aggregator_capabilities)
+      else
+        organizations = organizations.joins(:aggregator_capabilities)
                                      .where(aggregator_capabilities: { service: filtered_services })
-                      end
+      end
     end
 
     filtered_countries = countries.reject { |x| x.nil? || x.empty? }
     unless filtered_countries.empty?
-      organizations = if filtered_countries.all? { |i| i.scan(/\D/).empty? }
-                        organizations.joins(:countries)
+      if filtered_countries.all? { |i| i.scan(/\D/).empty? }
+        organizations = organizations.joins(:countries)
                                      .where(countries: { id: filtered_countries })
-                      else
-                        organizations.joins(:countries)
+      else
+        organizations = organizations.joins(:countries)
                                      .where(countries: { name: filtered_countries })
-                      end
+      end
     end
 
     organizations = organizations.offset(offset_params[:offset]) unless offset_params.empty?
