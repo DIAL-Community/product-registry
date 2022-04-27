@@ -76,8 +76,11 @@ module Queries
       filtered_sectors += child_sectors.map(&:id)
     end
     unless filtered_sectors.empty?
-      projects = projects.joins(:sectors)
+      projects = projects.left_joins(:sectors, :products)
                          .where(sectors: { id: filtered_sectors })
+                         .or(projects.left_joins(:sectors, :products)
+                         .where(products: { id: Product.joins(:sectors)
+                         .where(sectors: { id: filtered_sectors }) }))
     end
 
     filtered_countries = countries.reject { |x| x.nil? || x.empty? }
