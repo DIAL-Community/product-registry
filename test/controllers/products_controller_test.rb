@@ -6,7 +6,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin])
+    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin], saved_products: [])
     @product = products(:one)
   end
 
@@ -193,7 +193,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     post(favorite_product_product_url(@product), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org')
+    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', saved_products: [])
 
     last_user = User.last
     assert_equal(last_user.saved_products.length, 0)
