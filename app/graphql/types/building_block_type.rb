@@ -15,6 +15,7 @@ module Types
     field :image_file, String, null: true
     field :maturity, String, null: true
     field :discourse_id, Integer, null: true
+    field :spec_url, String, null: true
 
     field :building_block_descriptions, [Types::BuildingBlockDescriptionType], null: true
     field :building_block_description, Types::BuildingBlockDescriptionType, null: true,
