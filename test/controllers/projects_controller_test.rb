@@ -6,7 +6,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, roles: [:admin])
+    sign_in FactoryBot.create(:user, roles: [:admin], saved_projects: [])
     @project = projects(:one)
   end
 
@@ -129,7 +129,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     post(favorite_project_project_url(@project), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(
+      :user, username: 'nonadmin',
+      email: 'nonadmin@digitalimpactalliance.org', saved_projects: []
+    )
 
     last_user = User.last
     assert_equal(last_user.saved_projects.length, 0)
