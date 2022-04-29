@@ -25,7 +25,7 @@ Please also reference the [Wiki page for the Catalog](https://solutions-catalog.
 
 ## Prerequisites
 
- * Ruby (version 2.5 or greater). See [Installing Ruby](https://www.ruby-lang.org/en/documentation/installation/) for installation instructions.
+ * Ruby (version 2.7 or greater). See [Installing Ruby](https://www.ruby-lang.org/en/documentation/installation/) for installation instructions.
  * Rails (version 5.2). Once Ruby is installed, can install Rails using the following command in a terminal:
  ```gem install rails```
  * PostgreSQL (version 12 or higher). See [Postgres Download](https://www.postgresql.org/download/) for download and install instructions.
@@ -80,6 +80,13 @@ To configure and run the application, navigate to project directory and run the 
 
 The application will run on localhost port 3000 by default.
 
+## Running unit tests and Rubocop
+
+In order to run unit tests, run the following command:
+ * rails test
+
+To run Rubocop (linter), use the following command:
+ * bundle exec rubocop
 
 ## Using Docker Compose
 
