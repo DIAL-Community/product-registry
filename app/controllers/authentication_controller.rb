@@ -29,6 +29,7 @@ class AuthenticationController < Devise::SessionsController
       end
     end
 
+    sign_in(user, store: true)
     respond_to do |format|
       status = :unauthorized
       json = unauthorized_response

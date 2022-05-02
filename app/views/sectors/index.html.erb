@@ -57,20 +57,14 @@
             </div>
           </td>
           <td class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">
-               <%= t('view.general.action') %>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <%= link_to t('view.general.view'), base_path + sector_path(sector), :class =>"dropdown-item" %>
-              <% if user_signed_in? && policy(sector).mod_allowed? %>
-                <%= link_to t('view.general.edit'), base_path + edit_sector_path(sector), :class =>"dropdown-item" %>
-                <div class="dropdown-divider"></div>
-                <%= link_to t('view.general.delete'), base_path + sector_path(sector), method: :delete,
-                            data: { confirm: t('view.general.delete-confirmation', model: t('model.sector')) },
-                            class: "dropdown-item" %>
-              <% end %>
-            </div>
+            <%= link_to t('view.general.view'), base_path + sector_path(sector), :class =>"dropdown-item" %>
+            <% if user_signed_in? && policy(sector).mod_allowed? %>
+              <%= link_to t('view.general.edit'), base_path + edit_sector_path(sector), :class =>"dropdown-item" %>
+              <div class="dropdown-divider"></div>
+              <%= link_to t('view.general.delete'), base_path + sector_path(sector), method: :delete,
+                          data: { confirm: t('view.general.delete-confirmation', model: t('model.sector')) },
+                          class: "dropdown-item" %>
+            <% end %>
           </td>
         </tr>
       <% end %>

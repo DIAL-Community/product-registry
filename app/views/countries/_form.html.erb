@@ -1,0 +1,12 @@
+  <%= form_with(model: @country, local: true) do |form| %>
+    <fieldset class="form-label-group">
+      <%= form.text_field :name, id: :sector_name, class: "form-control", placeholder: t('view.general.name') %>
+      <%= form.label :name, t('view.general.name') %>
+    </fieldset>
+
+    <fieldset class="float-right mt-4">
+      <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
+      <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>
+    </fieldset>
+  <% end %>
+
