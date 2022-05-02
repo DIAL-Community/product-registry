@@ -33,4 +33,17 @@ module Queries
       candidate_roles.first
     end
   end
+
+  class SearchCandidateRolesQuery < Queries::BaseQuery
+    include ActionView::Helpers::TextHelper
+
+    argument :search, String, required: true
+    type Types::CandidateRoleType.connection_type, null: false
+
+    def resolve(search:)
+      candidate_roles = CandidateRole.order(rejected: :desc).order(:email)
+      candidate_roles = candidate_roles.name_contains(search) unless search.blank?
+      candidate_roles
+    end
+  end
 end
