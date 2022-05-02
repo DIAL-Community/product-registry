@@ -232,7 +232,7 @@ Rails.application.routes.draw do
   resources :stylesheets
 
   resources :cities, only: %i[index show]
-  resources :countries, only: %i[index show]
+  resources :countries
 
   resources :locations do
     resources :organizations
