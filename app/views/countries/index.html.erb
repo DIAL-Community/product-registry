@@ -11,6 +11,8 @@
   <%= form_tag(countries_path, method: "get", id: "search-form", class: "form-inline") do %>
     <%= text_field_tag :search, params[:search], class: "form-control",
         placeholder: t('view.general.search-placeholder', model: t('model.country').to_s.pluralize) %>
+    <%= hidden_field_tag :user_email, params[:user_email] %>
+    <%= hidden_field_tag :user_token, params[:user_token] %>
     <div class="input-group-append">
       <%= submit_tag t('view.general.search'), class: "btn btn-secondary" %>
     </div>
