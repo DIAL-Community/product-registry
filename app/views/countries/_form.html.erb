@@ -1,7 +1,27 @@
   <%= form_with(model: @country, local: true) do |form| %>
     <fieldset class="form-label-group">
-      <%= form.text_field :name, id: :sector_name, class: "form-control", placeholder: t('view.general.name') %>
+      <%= form.text_field :name, id: :country_name, class: "form-control", placeholder: t('view.general.name') %>
       <%= form.label :name, t('view.general.name') %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :code, id: :country_code, class: "form-control", placeholder: t('view.general.code') %>
+      <%= form.label :name, t('view.general.code') %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.text_field :code_longer, id: :country_longcode, class: "form-control", placeholder: t('view.general.longcode'), value: ' ' %>
+      <%= form.label :name, t('view.general.longcode') %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.number_field :latitude, step: 0.01, id: :country_lat, class: "form-control", placeholder: t('view.general.latitude'), value: ' ' %>
+      <%= form.label :name, t('view.general.latitude') %>
+    </fieldset>
+
+    <fieldset class="form-label-group">
+      <%= form.number_field :longitude, step: 0.01, id: :country_long, class: "form-control", placeholder: t('view.general.longitude'), value: ' ' %>
+      <%= form.label :name, t('view.general.longcode') %>
     </fieldset>
 
     <fieldset class="float-right mt-4">

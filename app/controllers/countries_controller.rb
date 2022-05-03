@@ -80,7 +80,8 @@ class CountriesController < ApplicationController
 
   # GET /countries/1
   # GET /countries/1.json
-  def show; end
+  def show
+  end
 
   def new
     authorize(Country, :mod_allowed?)
@@ -96,33 +97,20 @@ class CountriesController < ApplicationController
   # POST /sectors
   # POST /sectors.json
   def create
-    authorize(Sector, :mod_allowed?)
-    @sector = Sector.new(sector_params)
-
-    if params[:selected_organizations].present?
-      params[:selected_organizations].keys.each do |organization_id|
-        organization = Organization.find(organization_id)
-        @sector.organizations.push(organization)
-      end
-    end
-
-    if params[:selected_use_cases].present?
-      params[:selected_use_cases].keys.each do |use_case_id|
-        use_case = UseCase.find(use_case_id)
-        @sector.use_cases.push(use_case)
-      end
-    end
+    authorize(Country, :mod_allowed?)
+    @country = Country.new(country_params)
+    @country.slug = slug_em(@country.name)
 
     respond_to do |format|
-      if @sector.save
+      if @country.save
         format.html do
-          redirect_to(@sector,
-                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) })
+          redirect_to(@country,
+                      flash: { notice: t('messages.model.created', model: t('model.country').to_s.humanize) })
         end
-        format.json { render(:show, status: :created, location: @sector) }
+        format.json { render(:show, status: :created, location: @country) }
       else
         format.html { render(:new) }
-        format.json { render(json: @sector.errors, status: :unprocessable_entity) }
+        format.json { render(json: @country.errors, status: :unprocessable_entity) }
       end
     end
   end
@@ -130,36 +118,39 @@ class CountriesController < ApplicationController
   # PATCH/PUT /sectors/1
   # PATCH/PUT /sectors/1.json
   def update
-    authorize(@sector, :mod_allowed?)
-    if params[:selected_organizations].present?
-      organizations = Set.new
-      params[:selected_organizations].keys.each do |organization_id|
-        organization = Organization.find(organization_id)
-        organizations.add(organization)
-      end
-      @sector.organizations = organizations.to_a
-    end
-
-    if params[:selected_use_cases].present?
-      use_cases = Set.new
-      params[:selected_use_cases].keys.each do |use_case_id|
-        use_case = UseCase.find(use_case_id)
-        use_cases.add(use_case)
-      end
-      @sector.use_cases = use_cases.to_a
-    end
+    authorize(@country, :mod_allowed?)
 
     respond_to do |format|
-      if @sector.update(sector_params)
+      if @country.update(country_params)
         format.html do
-          redirect_to(@sector,
-                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) })
+          redirect_to(@country,
+                      flash: { notice: t('messages.model.updated', model: t('model.country').to_s.humanize) })
         end
-        format.json { render(:show, status: :ok, location: @sector) }
+        format.json { render(:show, status: :ok, location: @country) }
       else
         format.html { render(:edit) }
-        format.json { render(json: @sector.errors, status: :unprocessable_entity) }
+        format.json { render(json: @country.errors, status: :unprocessable_entity) }
       end
+    end
+  end
+
+  def destroy
+    authorize(@country, :mod_allowed?)
+
+    respond_to do |format|
+      if @country.destroy
+        format.html do
+          redirect_to(countries_url,
+                      flash: { notice: t('messages.model.deleted', model: t('model.country').to_s.humanize) })
+        end
+      else
+        format.html do
+          redirect_to(countries_url,
+                      flash: { notice: t('messages.model.delete-failed',
+                                         model: t('model.country').to_s.humanize) })
+        end
+      end
+      format.json { head(:no_content) }
     end
   end
 
@@ -168,5 +159,20 @@ class CountriesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_country
     @country = Country.find_by(slug: params[:id])
+  end
+
+  def country_params
+    params
+      .require(:country)
+      .permit(:name, :code, :code_longer, :latitude, :longitude)
+      .tap do |attr|
+        if params[:reslug].present?
+          attr[:slug] = slug_em(attr[:name])
+          if params[:duplicate].present?
+            first_duplicate = Sector.slug_starts_with(attr[:slug]).order(slug: :desc).first
+            attr[:slug] = attr[:slug] + generate_offset(first_duplicate).to_s
+          end
+        end
+      end
   end
 end
