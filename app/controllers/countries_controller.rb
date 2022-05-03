@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CountriesController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: %i[index new create edit update destroy]
+
   before_action :set_country, only: %i[show edit update destroy]
 
   def unique_search
@@ -79,6 +81,87 @@ class CountriesController < ApplicationController
   # GET /countries/1
   # GET /countries/1.json
   def show; end
+
+  def new
+    authorize(Country, :mod_allowed?)
+    @country = Country.new
+  end
+
+  # GET /country/1/edit
+  def edit
+    authorize(@country, :mod_allowed?)
+    @country = Country.find(params[:country_id]) if params[:country_id]
+  end
+
+  # POST /sectors
+  # POST /sectors.json
+  def create
+    authorize(Sector, :mod_allowed?)
+    @sector = Sector.new(sector_params)
+
+    if params[:selected_organizations].present?
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        @sector.organizations.push(organization)
+      end
+    end
+
+    if params[:selected_use_cases].present?
+      params[:selected_use_cases].keys.each do |use_case_id|
+        use_case = UseCase.find(use_case_id)
+        @sector.use_cases.push(use_case)
+      end
+    end
+
+    respond_to do |format|
+      if @sector.save
+        format.html do
+          redirect_to(@sector,
+                      flash: { notice: t('messages.model.created', model: t('model.sector').to_s.humanize) })
+        end
+        format.json { render(:show, status: :created, location: @sector) }
+      else
+        format.html { render(:new) }
+        format.json { render(json: @sector.errors, status: :unprocessable_entity) }
+      end
+    end
+  end
+
+  # PATCH/PUT /sectors/1
+  # PATCH/PUT /sectors/1.json
+  def update
+    authorize(@sector, :mod_allowed?)
+    if params[:selected_organizations].present?
+      organizations = Set.new
+      params[:selected_organizations].keys.each do |organization_id|
+        organization = Organization.find(organization_id)
+        organizations.add(organization)
+      end
+      @sector.organizations = organizations.to_a
+    end
+
+    if params[:selected_use_cases].present?
+      use_cases = Set.new
+      params[:selected_use_cases].keys.each do |use_case_id|
+        use_case = UseCase.find(use_case_id)
+        use_cases.add(use_case)
+      end
+      @sector.use_cases = use_cases.to_a
+    end
+
+    respond_to do |format|
+      if @sector.update(sector_params)
+        format.html do
+          redirect_to(@sector,
+                      flash: { notice: t('messages.model.updated', model: t('model.sector').to_s.humanize) })
+        end
+        format.json { render(:show, status: :ok, location: @sector) }
+      else
+        format.html { render(:edit) }
+        format.json { render(json: @sector.errors, status: :unprocessable_entity) }
+      end
+    end
+  end
 
   private
 

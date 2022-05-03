@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SectorsController < ApplicationController
+  acts_as_token_authentication_handler_for User, only: %i[index search new create edit update destroy]
+
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :set_sector, only: %i[show edit update destroy]
 
@@ -145,7 +147,7 @@ class SectorsController < ApplicationController
   # GET /sectors/1/edit
   def edit
     authorize(@sector, :mod_allowed?)
-    @organization = Organization.find(params[:organization_id]) if params[:organization_id]
+    @sector = Sector.find(params[:sector_id]) if params[:sector_id]
   end
 
   # POST /sectors

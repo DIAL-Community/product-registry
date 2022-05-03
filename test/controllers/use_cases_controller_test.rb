@@ -6,7 +6,7 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin])
+    sign_in FactoryBot.create(:user, username: 'admin', roles: [:admin], saved_use_cases: [])
     @use_case = use_cases(:one)
     @sectors = Sector.order(:name)
   end
@@ -114,7 +114,10 @@ class UseCasesControllerTest < ActionDispatch::IntegrationTest
     post(favorite_use_case_use_case_url(@use_case), as: :json)
     assert_response :unauthorized
 
-    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@digitalimpactalliance.org')
+    sign_in FactoryBot.create(
+      :user, username: 'nonadmin',
+      email: 'nonadmin@digitalimpactalliance.org', saved_use_cases: []
+    )
 
     last_user = User.last
     assert_equal(last_user.saved_use_cases.length, 0)

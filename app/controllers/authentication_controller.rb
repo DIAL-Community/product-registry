@@ -29,15 +29,15 @@ class AuthenticationController < Devise::SessionsController
       end
     end
 
+    sign_in(user, store: true)
     respond_to do |format|
       status = :unauthorized
       json = unauthorized_response
       if user.update(authentication_token: Devise.friendly_token)
+        organization = Organization.find(user.organization_id) if user.organization_id
+        can_edit = user.roles.include?('admin') || user.roles.include?('content_editor')
         status = :ok
-        json = {
-          email: user.email,
-          name: user.username
-        }
+        json = ok_response(user, can_edit, organization)
       end
       format.json do
         render(
@@ -185,7 +185,7 @@ class AuthenticationController < Devise::SessionsController
   def ok_response(user, can_edit, organization)
     {
       userEmail: user.email,
-      userName: user.username,
+      name: user.username,
       own: {
         products: user.products.any? ? user.products.map(&:id) : [],
         organization: organization
