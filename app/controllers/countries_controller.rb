@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require 'modules/geocode'
 
 class CountriesController < ApplicationController
+  include Modules::Geocode
+
   acts_as_token_authentication_handler_for User, only: %i[index new create edit update destroy]
 
   before_action :set_country, only: %i[show edit update destroy]
@@ -101,6 +104,28 @@ class CountriesController < ApplicationController
     @country = Country.new(country_params)
     @country.slug = slug_em(@country.name)
 
+    country_code_or_name = @country.name
+    google_auth_key = Rails.application.secrets.google_api_key
+    country_data = JSON.parse(geocode_with_google(@country.name, @country.name, google_auth_key))
+
+    country_results = country_data['results']
+    country_results.each do |country_result|
+      address_key = country_result['types'].reject { |x| x == 'political' }
+                                           .first
+      country_result['address_components'].each do |address_component|
+        next unless address_component['types'].include?(address_key)
+
+        @country.name = address_component['long_name']
+        @country.code = address_component['short_name']
+        @country.slug = slug_em(@country.code)
+        @country.code_longer = ''
+      end
+      @country.latitude = country_result['geometry']['location']['lat']
+      @country.longitude = country_result['geometry']['location']['lng']
+    end
+
+    @country.aliases << country_code_or_name
+
     respond_to do |format|
       if @country.save
         format.html do
@@ -136,6 +161,16 @@ class CountriesController < ApplicationController
 
   def destroy
     authorize(@country, :mod_allowed?)
+
+    # Remove any aggregator/operator data that reference this country
+    capabilities = AggregatorCapability.where(country_id: @country)
+    capabilities.each(&:destroy)
+
+    services = OperatorService.where(country_id: @country)
+    services.each(&:destroy)
+
+    projects = ProjectsCountry.where(country_id: @country)
+    projects.each(&:destroy)
 
     respond_to do |format|
       if @country.destroy
