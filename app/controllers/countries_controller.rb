@@ -111,7 +111,7 @@ class CountriesController < ApplicationController
     country_results = country_data['results']
     country_results.each do |country_result|
       address_key = country_result['types'].reject { |x| x == 'political' }
-                                            .first
+                                           .first
       country_result['address_components'].each do |address_component|
         next unless address_component['types'].include?(address_key)
 
@@ -164,19 +164,13 @@ class CountriesController < ApplicationController
 
     # Remove any aggregator/operator data that reference this country
     capabilities = AggregatorCapability.where(country_id: @country)
-    capabilities.each do |capability|
-      capability.destroy
-    end
+    capabilities.each(&:destroy)
 
     services = OperatorService.where(country_id: @country)
-    services.each do |service|
-      service.destroy
-    end
+    services.each(&:destroy)
 
     projects = ProjectsCountry.where(country_id: @country)
-    projects.each do |project|
-      project.destroy
-    end
+    projects.each(&:destroy)
 
     respond_to do |format|
       if @country.destroy

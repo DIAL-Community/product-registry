@@ -2,13 +2,13 @@
 
 module Modules
   module Geocode
-    def find_country(country_code_or_name, google_auth_key)
+    def find_country(country_code_or_name, _google_auth_key)
       return if country_code_or_name.blank?
 
       puts "Processing country: #{country_code_or_name}."
       country = Country.find_by('name = ? OR code = ? OR ? = ANY(aliases)',
                                 country_code_or_name, country_code_or_name, country_code_or_name)
-      
+
       country
     end
 
