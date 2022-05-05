@@ -9,21 +9,6 @@
       <%= form.label :name, t('view.general.code') %>
     </fieldset>
 
-    <fieldset class="form-label-group">
-      <%= form.text_field :code_longer, id: :country_longcode, class: "form-control", placeholder: t('view.general.longcode'), value: ' ' %>
-      <%= form.label :name, t('view.general.longcode') %>
-    </fieldset>
-
-    <fieldset class="form-label-group">
-      <%= form.number_field :latitude, step: 0.01, id: :country_lat, class: "form-control", placeholder: t('view.general.latitude'), value: ' ' %>
-      <%= form.label :name, t('view.general.latitude') %>
-    </fieldset>
-
-    <fieldset class="form-label-group">
-      <%= form.number_field :longitude, step: 0.01, id: :country_long, class: "form-control", placeholder: t('view.general.longitude'), value: ' ' %>
-      <%= form.label :name, t('view.general.longcode') %>
-    </fieldset>
-
     <fieldset class="float-right mt-4">
       <%= form.submit t('view.general.submit'), :class => "btn btn-primary" %>
       <%= link_to t('view.general.back'), "javascript:window.history.back()", :class => 'btn btn-outline-secondary' %>

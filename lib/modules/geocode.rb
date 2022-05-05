@@ -8,29 +8,7 @@ module Modules
       puts "Processing country: #{country_code_or_name}."
       country = Country.find_by('name = ? OR code = ? OR ? = ANY(aliases)',
                                 country_code_or_name, country_code_or_name, country_code_or_name)
-      if country.nil?
-        country = Country.new
-        country_data = JSON.parse(geocode_with_google(country_code_or_name, country_code_or_name, google_auth_key))
-
-        country_results = country_data['results']
-        country_results.each do |country_result|
-          address_key = country_result['types'].reject { |x| x == 'political' }
-                                               .first
-          country_result['address_components'].each do |address_component|
-            next unless address_component['types'].include?(address_key)
-
-            country.name = address_component['long_name']
-            country.code = address_component['short_name']
-            country.slug = slug_em(country.code)
-            country.code_longer = ''
-          end
-          country.latitude = country_result['geometry']['location']['lat']
-          country.longitude = country_result['geometry']['location']['lng']
-        end
-
-        country.aliases << country_code_or_name
-        puts("Country saved: #{country.name}.") if country.save!
-      end
+      
       country
     end
 
@@ -40,10 +18,10 @@ module Modules
       puts "Processing region: #{region_name}."
       country = find_country(country_code, google_auth_key)
       region = Region.find_by('(name = ? OR ? = ANY(aliases)) AND country_id = ?',
-                              region_name, region_name, country.id)
+                              region_name, region_name, country.id) unless country.nil?
       if region.nil?
         region = Region.new
-        region.country_id = country.id
+        region.country_id = country.id unless country.nil?
 
         address = "#{region_name}, #{country_code}"
         region_data = JSON.parse(geocode_with_google(address, country_code, google_auth_key))
