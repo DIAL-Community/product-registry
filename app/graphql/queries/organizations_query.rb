@@ -38,6 +38,7 @@ module Queries
     argument :endorser_level, String, required: false, default_value: ''
     argument :aggregators, [String], required: false, default_value: []
     argument :map_view, Boolean, required: false, default_value: false
+    argument :contacts, [String], required: false, default_value: []
     type Types::OrganizationType.connection_type, null: false
 
     def resolve(
