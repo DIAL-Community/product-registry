@@ -39,5 +39,6 @@ module Types
     field :offices, [Types::OfficeType], null: true
     field :projects, [Types::ProjectType], null: false
     field :products, [Types::ProductType], null: false
+    field :contacts, [Types::ContactType], null: true
   end
 end
