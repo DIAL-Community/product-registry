@@ -6,5 +6,6 @@ FactoryBot.define do
     sequence(:name) { |name| "Organization: #{name}" }
     sequence(:slug) { |slug| "slug_#{slug}" }
     sequence(:website)
+    sequence(:countries)
   end
 end
