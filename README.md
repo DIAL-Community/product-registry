@@ -28,8 +28,8 @@ Please also reference the [Wiki page for the Catalog](https://solutions-catalog.
  * Ruby (version 2.7 or greater). See [Installing Ruby](https://www.ruby-lang.org/en/documentation/installation/) for installation instructions.
  * Rails (version 5.2). Once Ruby is installed, can install Rails using the following command in a terminal:
  ```gem install rails```
- * PostgreSQL (version 12 or higher). See [Postgres Download](https://www.postgresql.org/download/) for download and install instructions.
- * Redis. See [Getting Started with Redis](https://redis.io/docs/getting-started/) for instruction. Please ensure that redis is set to start and run in the background automatically. This [link](https://redis.io/docs/getting-started/#installing-redis-more-properly) describes how to configure redis. 
+ * PostgreSQL (version 12 or higher). See [Postgres Download](https://www.postgresql.org/download/) for download and install instructions. See below for an easier (Docker based) way of setting it up.
+ * Redis. See [Getting Started with Redis](https://redis.io/docs/getting-started/) for instruction. Please ensure that redis is set to start and run in the background automatically. This [link](https://redis.io/docs/getting-started/#installing-redis-more-properly) describes how to configure redis. See below for an easier (Docker based) way of setting it up.
 
 Note that PostgreSQL and Redis can be started easily using docker-compose and the sample compose file provided using the following command:
 
@@ -39,10 +39,11 @@ Note that PostgreSQL and Redis can be started easily using docker-compose and th
 
 This method does not require installing PostgreSQL or Redis manually on the system.
 
-When starting up, this approach requires an .env file in the current working directory, that defines the following variables: REDIS_PORT, REDIS_PASSWORD, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT.
+When starting up, this approach requires an **.env** file in the current working directory, that defines the following variables: REDIS_PORT, REDIS_PASSWORD, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_PORT. A sample .env file can be found at
+the [Confluence Onboarding Page](https://solutions-catalog.atlassian.net/wiki/spaces/SOLUTIONS/pages/196575233/New+Developer+Onboarding).
 
 
-## Postgres Configuration for development
+## Postgres Configuration for development (non-docker)
 
 Before running the application configuration for your local development environment, Postgres must be configured 
 and a user created (the username must align with the DB username specified in the setEnv.sh file)
@@ -59,8 +60,8 @@ alter user <username> with superuser;
 ## Application configuration for development
 
 Environment variables must be set prior to running the application. See the setEnv.example.sh script 
-in the root directory of the project and set all variables for development environment. In your 
-terminal session, run the setEnv.sh script to set environment variables:
+in the root directory of the project and set all variables for development environment. A sample .env file with real variables can be found at this [Onboarding Confluence Page](https://solutions-catalog.atlassian.net/wiki/spaces/SOLUTIONS/pages/196575233/New+Developer+Onboarding).
+In your terminal session, run the setEnv.sh script to set environment variables:
 
  * source ./setEnv.sh dev
 
