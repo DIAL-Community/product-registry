@@ -21,7 +21,7 @@ module Types
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
-    field :image_file, String, null: false
+    field :image_file, String, null: true
     field :website, String, null: true
 
     field :is_mni, Boolean, null: true
@@ -40,5 +40,6 @@ module Types
     field :projects, [Types::ProjectType], null: false
     field :products, [Types::ProductType], null: false
     field :contacts, [Types::ContactType], null: true
+    field :aliases, GraphQL::Types::JSON, null: true
   end
 end
