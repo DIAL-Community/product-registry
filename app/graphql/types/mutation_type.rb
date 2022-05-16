@@ -27,5 +27,7 @@ module Types
     field :create_organization, mutation: Mutations::CreateOrganization
 
     field :update_organization_country, mutation: Mutations::UpdateOrganizationCountry
+
+    field :update_organization_contacts, mutation: Mutations::UpdateOrganizationContacts
   end
 end
