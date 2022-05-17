@@ -20,6 +20,8 @@ module Types
 
     field :update_user, mutation: Mutations::UpdateUser
 
+    field :create_spreadsheet_data, mutation: Mutations::CreateSpreadsheetData
+
     field :create_product_repository, mutation: Mutations::CreateProductRepository
     field :update_product_repository, mutation: Mutations::UpdateProductRepository
     field :delete_product_repository, mutation: Mutations::DeleteProductRepository
