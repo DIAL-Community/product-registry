@@ -20,6 +20,7 @@ module Types
     field :slug, String, null: false
     field :image_file, String, null: false
     field :website, String, null: true
+    field :aliases, GraphQL::Types::JSON, null: true
     field :tags, GraphQL::Types::JSON, null: true
     field :owner, String, null: true
     field :discourse_id, Integer, null: true
