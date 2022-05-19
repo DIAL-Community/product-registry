@@ -130,7 +130,7 @@ class CountriesController < ApplicationController
     respond_to do |format|
       if @country.save
         format.html do
-          redirect_to(base_path + countries_path(@country),
+          redirect_to(base_path + countries_path,
                       flash: { notice: t('messages.model.created', model: t('model.country').to_s.humanize) })
         end
         format.json { render(:show, status: :created, location: @country) }
@@ -150,7 +150,7 @@ class CountriesController < ApplicationController
     respond_to do |format|
       if @country.update(country_params)
         format.html do
-          redirect_to(base_path + countries_path(@country),
+          redirect_to(base_path + countries_path,
                       flash: { notice: t('messages.model.updated', model: t('model.country').to_s.humanize) })
         end
         format.json { render(:show, status: :ok, location: @country) }

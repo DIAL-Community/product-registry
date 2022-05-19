@@ -6,8 +6,8 @@ entity_path = @country.new_record? ?
                   countries_path(request.query_parameters)
                 :
                 request.query_parameters.nil? ?
-                  countries_path(@country) :
-                  countries_path(@country, request.query_parameters)
+                  countries_path :
+                  countries_path(request.query_parameters)
 %>
   <%= form_with(model: @country, local: true, url: "#{base_path}#{entity_path}") do |form| %>
     <fieldset class="form-label-group">
