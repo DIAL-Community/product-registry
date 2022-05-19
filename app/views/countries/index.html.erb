@@ -33,7 +33,7 @@
         <tr>
           <td><%= country.name %></td>
           <td class="nav-item dropdown">
-            <%= link_to t('view.general.view'), country, :class =>"dropdown-item" %>
+            <%= link_to t('view.general.view'), base_path + country, :class =>"dropdown-item" %>
             <% if user_signed_in? && policy(country).mod_allowed? %>
               <%= link_to t('view.general.edit'), base_path + edit_country_path(country), :class =>"dropdown-item" %>
               <div class="dropdown-divider"></div>
