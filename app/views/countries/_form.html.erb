@@ -1,4 +1,15 @@
-  <%= form_with(model: @country, local: true) do |form| %>
+<%
+base_path = Rails.env.production? ? '/admin' : ''
+entity_path = @country.new_record? ?
+                request.query_parameters.nil? ?
+                  countries_path :
+                  countries_path(request.query_parameters)
+                :
+                request.query_parameters.nil? ?
+                  countries_path(@country) :
+                  countries_path(@country, request.query_parameters)
+%>
+  <%= form_with(model: @country, local: true, url: "#{base_path}#{entity_path}") do |form| %>
     <fieldset class="form-label-group">
       <%= form.text_field :name, id: :country_name, class: "form-control", placeholder: t('view.general.name') %>
       <%= form.label :name, t('view.general.name') %>
