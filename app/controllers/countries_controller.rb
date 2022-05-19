@@ -126,10 +126,11 @@ class CountriesController < ApplicationController
 
     @country.aliases << country_code_or_name
 
+    base_path = Rails.env.production? ? '/admin' : ''
     respond_to do |format|
       if @country.save
         format.html do
-          redirect_to(@country,
+          redirect_to(base_path + countries_path(@country),
                       flash: { notice: t('messages.model.created', model: t('model.country').to_s.humanize) })
         end
         format.json { render(:show, status: :created, location: @country) }
@@ -145,10 +146,11 @@ class CountriesController < ApplicationController
   def update
     authorize(@country, :mod_allowed?)
 
+    base_path = Rails.env.production? ? '/admin' : ''
     respond_to do |format|
       if @country.update(country_params)
         format.html do
-          redirect_to(@country,
+          redirect_to(base_path + countries_path(@country),
                       flash: { notice: t('messages.model.updated', model: t('model.country').to_s.humanize) })
         end
         format.json { render(:show, status: :ok, location: @country) }
@@ -172,15 +174,16 @@ class CountriesController < ApplicationController
     projects = ProjectsCountry.where(country_id: @country)
     projects.each(&:destroy)
 
+    base_path = Rails.env.production? ? '/admin' : ''
     respond_to do |format|
       if @country.destroy
         format.html do
-          redirect_to(countries_url,
+          redirect_to(base_path + countries_url,
                       flash: { notice: t('messages.model.deleted', model: t('model.country').to_s.humanize) })
         end
       else
         format.html do
-          redirect_to(countries_url,
+          redirect_to(base_path + countries_url,
                       flash: { notice: t('messages.model.delete-failed',
                                          model: t('model.country').to_s.humanize) })
         end
