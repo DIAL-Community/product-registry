@@ -126,7 +126,7 @@ class CountriesController < ApplicationController
 
     @country.aliases << country_code_or_name
 
-    base_path = Rails.env.production? ? '/admin' : ''
+    Rails.env.production? ? base_path = '/admin' : base_path = ''
     respond_to do |format|
       if @country.save
         format.html do
@@ -146,7 +146,7 @@ class CountriesController < ApplicationController
   def update
     authorize(@country, :mod_allowed?)
 
-    base_path = Rails.env.production? ? '/admin' : ''
+    Rails.env.production? ? base_path = '/admin' : base_path = ''
     respond_to do |format|
       if @country.update(country_params)
         format.html do
@@ -174,7 +174,7 @@ class CountriesController < ApplicationController
     projects = ProjectsCountry.where(country_id: @country)
     projects.each(&:destroy)
 
-    base_path = Rails.env.production? ? '/admin' : ''
+    Rails.env.production? ? base_path = '/admin' : base_path = ''
     respond_to do |format|
       if @country.destroy
         format.html do
