@@ -12,6 +12,5 @@ module Types
     field :snippet, String, null: true
 
     field :child_pages, [Types::HandbookSearchPageType], null: true
-    field :child_pages, [Types::HandbookSearchPageType], null: true
   end
 end
