@@ -32,5 +32,6 @@ module Types
     field :update_organization_contacts, mutation: Mutations::UpdateOrganizationContacts
     field :update_organization_products, mutation: Mutations::UpdateOrganizationProducts
     field :update_organization_sectors, mutation: Mutations::UpdateOrganizationSectors
+    field :update_organization_projects, mutation: Mutations::UpdateOrganizationProjects
   end
 end
