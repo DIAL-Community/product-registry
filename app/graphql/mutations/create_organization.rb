@@ -22,13 +22,6 @@ module Mutations
 
     def resolve(name:, slug:, aliases:, website:, is_endorser:, when_endorsed:, endorser_level:,
       is_mni:, description:, image_file: nil)
-      unless an_admin
-        return {
-          organization: nil,
-          errors: ['Must be admin to create an organization']
-        }
-      end
-
       organization = Organization.find_by(slug: slug)
 
       if organization.nil?
@@ -40,6 +33,13 @@ module Mutations
           first_duplicate = Organization.slug_starts_with(slug_em(name)).order(slug: :desc).first
           organization.slug = organization.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
+      end
+
+      unless an_admin || an_org_owner(organization.id)
+        return {
+          organization: nil,
+          errors: ['Must be admin or organization owner to create an organization']
+        }
       end
 
       # Re-slug if the name is updated (not the same with the one in the db).

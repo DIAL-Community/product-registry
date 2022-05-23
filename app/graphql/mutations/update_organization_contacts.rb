@@ -15,6 +15,13 @@ module Mutations
     def resolve(contacts:, slug:)
       organization = Organization.find_by(slug: slug)
 
+      unless an_admin || an_org_owner(organization.id)
+        return {
+          organization: nil,
+          errors: ['Must be admin or organization owner to update an organization']
+        }
+      end
+
       organization.contacts = []
       if !contacts.nil? && !contacts.empty?
         contacts.each do |contact|
