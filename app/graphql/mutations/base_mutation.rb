@@ -23,13 +23,27 @@ module Mutations
       end
     end
 
-    def a_product_owner
-      if !context[:current_user].nil?
-        User.find(context[:current_user].id)
-        # Return true to continue the mutation:
+    def a_product_owner(product_id)
+      if !context[:current_user].nil? && context[:current_user].user_products.include?(product_id)
         true
       else
-        raise GraphQL::ExecutionError, 'Only product owners can run this mutation'
+        false
+      end
+    end
+
+    def an_org_owner(organization_id)
+      if !context[:current_user].nil? && context[:current_user].organization_id.equal?(organization_id)
+        true
+      else
+        false
+      end
+    end
+
+    def a_content_editor
+      if !context[:current_user].nil? && context[:current_user].roles.include?('content_editor')
+        true
+      else
+        false
       end
     end
   end

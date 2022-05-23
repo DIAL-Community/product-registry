@@ -20,10 +20,10 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(name:, slug:, author:, tags:, overview:, audience:, outcomes:, plays:, cover: nil)
-      unless an_admin
+      unless an_admin || a_content_editor
         return {
           playbook: nil,
-          errors: ['Must be admin to create a playbook']
+          errors: ['Must be admin or content editor to create a playbook']
         }
       end
 
