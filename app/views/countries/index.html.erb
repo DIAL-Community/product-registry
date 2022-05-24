@@ -8,7 +8,7 @@
       </span>
     <% end %>
   <% end %>
-  <%= form_tag(countries_path, method: "get", id: "search-form", class: "form-inline") do %>
+  <%= form_tag(base_path + countries_path, method: "get", id: "search-form", class: "form-inline") do %>
     <%= text_field_tag :search, params[:search], class: "form-control",
         placeholder: t('view.general.search-placeholder', model: t('model.country').to_s.pluralize) %>
     <%= hidden_field_tag :user_email, params[:user_email] %>
@@ -33,7 +33,7 @@
         <tr>
           <td><%= country.name %></td>
           <td class="nav-item dropdown">
-            <%= link_to t('view.general.view'), country, :class =>"dropdown-item" %>
+            <%= link_to t('view.general.view'), base_path + country_path(country), :class =>"dropdown-item" %>
             <% if user_signed_in? && policy(country).mod_allowed? %>
               <%= link_to t('view.general.edit'), base_path + edit_country_path(country), :class =>"dropdown-item" %>
               <div class="dropdown-divider"></div>

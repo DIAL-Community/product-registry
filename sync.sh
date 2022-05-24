@@ -19,3 +19,6 @@ rake sync:update_statistics_data
 rake sync:update_language_data
 rake maturity_sync:sync_data['/product-evaluation-rubric']
 rake sync:fetch_website_data
+
+rake data_processors:process_product_spreadsheet
+rake data_processors:process_exported_json_files

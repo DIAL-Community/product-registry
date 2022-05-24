@@ -5,7 +5,8 @@ FactoryBot.define do
   factory :organization do
     sequence(:name) { |name| "Organization: #{name}" }
     sequence(:slug) { |slug| "slug_#{slug}" }
-    sequence(:website)
-    sequence(:countries)
+    sequence(:website) { |website| "www: #{website}" }
+    sequence(:countries) { |country| "country_#{country}" }
+    sequence(:sectors) { |sector| "sector_#{sector}" }
   end
 end

@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
-require 'modules/slugger'
-
 module Mutations
-  class UpdateOrganizationCountry < Mutations::BaseMutation
-    include Modules::Slugger
-
-    argument :countries_slugs, [String], required: true
+  class UpdateOrganizationSectors < Mutations::BaseMutation
+    argument :sectors_slugs, [String], required: true
     argument :slug, String, required: true
 
     field :organization, Types::OrganizationType, null: true
     field :errors, [String], null: true
 
-    def resolve(countries_slugs:, slug:)
+    def resolve(sectors_slugs:, slug:)
       organization = Organization.find_by(slug: slug)
 
       unless an_admin || an_org_owner(organization.id)
@@ -22,11 +18,13 @@ module Mutations
         }
       end
 
-      organization.countries = []
-      if !countries_slugs.nil? && !countries_slugs.empty?
-        countries_slugs.each do |country_slug|
-          current_country = Country.find_by(slug: country_slug)
-          organization.countries << current_country
+      organization.sectors = []
+      if !sectors_slugs.nil? && !sectors_slugs.empty?
+        sectors_slugs.each do |sector_slug|
+          current_sector = Sector.where("slug in (?)", sector_slug)
+          unless current_sector.nil?
+            organization.sectors << current_sector
+          end
         end
       end
 

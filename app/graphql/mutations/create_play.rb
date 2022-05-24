@@ -16,9 +16,9 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(name:, slug:, description:, tags:, playbook_slug: nil)
-      unless an_admin
+      unless an_admin || a_content_editor
         return {
-          playbook: nil,
+          play: nil,
           errors: ['Not allowed to create a play.']
         }
       end
@@ -111,7 +111,7 @@ module Mutations
     def resolve(play_slug:)
       unless an_admin
         return {
-          playbook: nil,
+          play: nil,
           errors: ['Not allowed to duplicate a play.']
         }
       end
@@ -168,7 +168,7 @@ module Mutations
     def resolve(playbook_slug:, play_slug:, operation:, distance:)
       unless an_admin
         return {
-          playbook: nil,
+          play: nil,
           errors: ['Not allowed to update playbook.']
         }
       end

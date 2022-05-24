@@ -13,7 +13,7 @@ module Types
     field :name, String, null: false
     field :slug, String, null: false
     field :tags, GraphQL::Types::JSON, null: true
-
+    field :project_url, String, null: true
     field :project_descriptions, [Types::ProjectDescriptionType], null: true
 
     field :sectors, [Types::SectorType], null: true, method: :sectors_localized
