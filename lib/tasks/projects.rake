@@ -538,5 +538,29 @@ namespace :projects do
       end
     end
   end
+
+  task update_project_slugs: :environment do |_, _params|
+    Project.all.each do |project|
+      slug_match = Project.where(slug: project.slug)
+      next unless slug_match.count > 1
+      slug_match.each_with_index do |slug_project, index|
+        next if slug_project.id == project.id
+
+        if !project.project_url.nil? && project.project_url == slug_project.project_url
+          puts "DELETING duplicate: " + slug_project.name
+          proj_descriptions = ProjectDescription.where(project_id: slug_project.id)
+          proj_descriptions.each(&:destroy!)
+          slug_project.destroy!
+        else
+          slug_project.slug = slug_em(slug_project.name, 64)
+          if slug_project.slug == project.slug
+            slug_project.slug = project.slug + "_dup" + index.to_s
+          end
+          puts "UPDATING slug to: " + slug_project.slug
+          slug_project.save!
+        end
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockNesting
