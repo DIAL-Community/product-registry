@@ -540,13 +540,13 @@ namespace :sync do
 
     dha_data['results']['projects'].each do |project|
       project_name = project['name']
-
-      existing_project = Project.find_by(name: project_name, origin_id: dha_origin.id)
+      project_slug = slug_em(project_name, 64)
+      existing_project = Project.find_by(slug: project_slug, origin_id: dha_origin.id)
 
       if existing_project.nil?
         existing_project = Project.new
         existing_project.name = project_name
-        existing_project.slug = slug_em(existing_project.name)
+        existing_project.slug = project_slug
         existing_project.origin = dha_origin
       end
 
