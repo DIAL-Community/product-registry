@@ -21,7 +21,7 @@ module Mutations
       organization.sectors = []
       if !sectors_slugs.nil? && !sectors_slugs.empty?
         sectors_slugs.each do |sector_slug|
-          current_sector = Sector.find_by(slug: sector_slug)
+          current_sector = Sector.where("slug in (?)", sector_slug)
           unless current_sector.nil?
             organization.sectors << current_sector
           end
