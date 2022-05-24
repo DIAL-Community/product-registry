@@ -415,9 +415,10 @@ module Modules
       german_sectors = []
 
       # Create new project or update existing project
-      new_project = Project.where(name: english_project[0]).first || Project.new
+      project_slug = slug_em(english_project[0], 64)
+      new_project = Project.where(slug: project_slug).first || Project.new
       new_project.name = english_project[0].force_encoding('UTF-8')
-      new_project.slug = slug_em(english_project[0])
+      new_project.slug = project_slug
       new_project.origin_id = giz_origin.id
       unless english_project[11].nil?
         begin
