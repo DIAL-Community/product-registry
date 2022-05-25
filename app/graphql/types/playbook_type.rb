@@ -30,6 +30,7 @@ module Types
     field :maturity, String, null: true
     field :image_file, String, null: true
     field :author, String, null: true
+    field :draft, Boolean, null: false
 
     field :playbook_descriptions, [Types::PlaybookDescriptionType], null: true
     field :playbook_description, Types::PlaybookDescriptionType, null: true,
