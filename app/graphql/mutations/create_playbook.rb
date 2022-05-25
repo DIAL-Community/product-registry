@@ -15,11 +15,12 @@ module Mutations
     argument :overview, String, required: true
     argument :audience, String, required: false, default_value: ''
     argument :outcomes, String, required: false, default_value: ''
+    argument :draft, Boolean, required: true, default_value: true
 
     field :playbook, Types::PlaybookType, null: true
     field :errors, [String], null: true
 
-    def resolve(name:, slug:, author:, tags:, overview:, audience:, outcomes:, plays:, cover: nil)
+    def resolve(name:, slug:, author:, tags:, overview:, audience:, outcomes:, plays:, cover: nil, draft:)
       unless an_admin || a_content_editor
         return {
           playbook: nil,
@@ -54,6 +55,7 @@ module Mutations
 
       playbook.tags = tags
       playbook.author = author
+      playbook.draft = draft
 
       if playbook.save
         unless cover.nil?
