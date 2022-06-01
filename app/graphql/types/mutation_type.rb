@@ -27,6 +27,7 @@ module Types
     field :delete_product_repository, mutation: Mutations::DeleteProductRepository
 
     field :create_organization, mutation: Mutations::CreateOrganization
+    field :delete_organization, mutation: Mutations::DeleteOrganization
 
     field :update_organization_country, mutation: Mutations::UpdateOrganizationCountry
     field :update_organization_contacts, mutation: Mutations::UpdateOrganizationContacts
