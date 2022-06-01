@@ -34,6 +34,9 @@ module Queries
     # rubocop:disable Lint/UnusedMethodArgument
     def resolve(search:, products:, tags:)
       playbooks = Playbook.all.order(:name)
+      unless an_admin || a_content_editor
+        playbooks = playbooks.where(draft: false)
+      end
       if !search.nil? && !search.to_s.strip.empty?
         name_playbooks = playbooks.name_contains(search)
         desc_playbooks = playbooks.joins(:playbook_descriptions)
