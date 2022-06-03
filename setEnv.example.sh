@@ -25,8 +25,8 @@ if [ "${user_env:0:1}" == "d" ] || [ "${user_env:0:1}" == "D" ]; then
   export JENKINS_URL=<jenkins host url>
   export JENKINS_USER=<jenkins user>
   export JENKINS_PASSWORD=<jenkins password>
-  export MAILGUN_API_KEY=<mailgun api key>
-  export MAILGUN_DOMAIN=<mailgun domain>
+  export MAIL_API_KEY=<mailer api key>
+  export MAIL_DOMAIN=<mailer domain>
   export CAPTCHA_SITE_KEY=<your captcha site key>
   export CAPTCHA_SECRET_KEY=<your captcha secret key>
   export GITHUB_USERNAME=<your github username>
@@ -51,8 +51,8 @@ if [ "${user_env:0:1}" == "t" ] || [ "${user_env:0:1}" == "T" ]; then
   export JENKINS_URL=<jenkins host url>
   export JENKINS_USER=<jenkins user>
   export JENKINS_PASSWORD=<jenkins password>
-  export MAILGUN_API_KEY=<mailgun api key>
-  export MAILGUN_DOMAIN=<mailgun domain>
+  export MAIL_API_KEY=<mailer api key>
+  export MAIL_DOMAIN=<mailer domain>
   export CAPTCHA_SITE_KEY=<your captcha site key>
   export CAPTCHA_SECRET_KEY=<your captcha secret key>
   export GITHUB_USERNAME=<your github username>
@@ -77,8 +77,8 @@ if [ "${user_env:0:1}" == "p" ] || [ "${user_env:0:1}" == "P" ]; then
   export JENKINS_URL=<jenkins host url>
   export JENKINS_USER=<jenkins user>
   export JENKINS_PASSWORD=<jenkins password>
-  export MAILGUN_API_KEY=<mailgun api key>
-  export MAILGUN_DOMAIN=<mailgun domain>
+  export MAIL_API_KEY=<mailer api key>
+  export MAIL_DOMAIN=<mailer domain>
   export CAPTCHA_SITE_KEY=<your captcha site key>
   export CAPTCHA_SECRET_KEY=<your captcha secret key>
   export GITHUB_USERNAME=<your github username>
