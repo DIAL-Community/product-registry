@@ -679,13 +679,7 @@ module Modules
         admin_users = User.where(receive_backup: true)
         email_body = "New product(s) added by the nightly sync process: <br />#{@@product_list.join('<br />')}."
         admin_users.each do |user|
-          cmd = "curl -s --user 'api:#{Rails.application.secrets.mailgun_api_key}'"\
-                " https://api.mailgun.net/v3/#{Rails.application.secrets.mailgun_domain}/messages"\
-                " -F from='Registry <backups@solutions.dial.community>'"\
-                " -F to=#{user.email}"\
-                " -F subject='Sync task - add product'"\
-                " -F html='#{email_body}'"
-          system(cmd)
+          RakeMailer.sync_product_added(user.email, email_body).deliver_now
         end
         @@product_list.clear
       end
