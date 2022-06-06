@@ -38,6 +38,8 @@ module Mutations
         end
       end
 
+      # allow user to rename product but don't re-slug it
+      product.name = name
       product.aliases = aliases
       product.website = website
 
