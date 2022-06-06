@@ -36,5 +36,7 @@ module Types
     field :update_organization_projects, mutation: Mutations::UpdateOrganizationProjects
 
     field :create_product, mutation: Mutations::CreateProduct
+
+    field :update_product_organizations, mutation: Mutations::UpdateProductOrganizations
   end
 end

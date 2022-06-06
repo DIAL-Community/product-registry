@@ -5,6 +5,6 @@ FactoryBot.define do
   factory :sector do
     sequence(:slug)
     sequence(:name)
-    sequence(:origin)
+    origin_id { FactoryBot.create(:origin).id }
   end
 end
