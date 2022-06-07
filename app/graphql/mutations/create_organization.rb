@@ -24,35 +24,27 @@ module Mutations
       is_mni:, description:, image_file: nil)
       organization = Organization.find_by(slug: slug)
 
-      if organization.nil?
-        organization = Organization.new(name: name)
-        organization.slug = slug_em(name)
-
-        if Organization.where(slug: slug_em(name)).count.positive?
-          # Check if we need to add _dup to the slug.
-          first_duplicate = Organization.slug_starts_with(slug_em(name)).order(slug: :desc).first
-          organization.slug = organization.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
-        end
-      end
-
-      unless an_admin || an_org_owner(organization.id)
+      unless an_admin || (an_org_owner(organization.id) unless organization.nil?)
         return {
           organization: nil,
           errors: ['Must be admin or organization owner to create an organization']
         }
       end
 
-      # Re-slug if the name is updated (not the same with the one in the db).
-      if organization.name != name
-        organization.name = name
+      if organization.nil?
+        organization = Organization.new(name: name)
         organization.slug = slug_em(name)
 
         if Organization.where(slug: slug_em(name)).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Organization.slug_starts_with(organization.slug).order(slug: :desc).first
-          organization.slug = organization.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+          first_duplicate = Organization.where('LOWER(organizations.slug) like LOWER(?)', "#{slug_em(name)}%")
+                                        .order(slug: :desc).first
+          organization.slug = organization.slug + generate_offset(first_duplicate)
         end
       end
+
+      # Don'r re-slug organization name
+      organization.name = name
 
       organization.aliases = aliases
       organization.website = website
@@ -94,8 +86,8 @@ module Mutations
     end
 
     def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
+      size = 0
+      if !first_duplicate.nil? && first_duplicate.slug.include?('_dup')
         size = first_duplicate.slug
                               .slice(/_dup\d+$/)
                               .delete('^0-9')

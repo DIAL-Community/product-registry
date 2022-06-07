@@ -7,5 +7,6 @@ FactoryBot.define do
     sequence(:name) { |name| "Product: #{name}" }
     sequence(:slug) { |slug| "slug_#{slug}" }
     sequence(:website)
+    sectors { [FactoryBot.create(:sector)] }
   end
 end

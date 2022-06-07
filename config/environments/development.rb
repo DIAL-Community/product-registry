@@ -35,11 +35,23 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  config.action_mailer.delivery_method = :mailgun
+  #config.action_mailer.delivery_method = :mailgun
 
-  config.action_mailer.mailgun_settings = {
-    api_key: Rails.application.secrets.mailgun_api_key,
-    domain: Rails.application.secrets.mailgun_domain
+  #config.action_mailer.mailgun_settings = {
+  #  api_key: Rails.application.secrets.mailgun_api_key,
+  #  domain: Rails.application.secrets.mailgun_domain
+  #}
+
+  config.action_mailer.default_url_options = { host: 'https://solutions.dial.community' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              Rails.application.secrets.mail_domain,
+    port:                 587,
+    domain:               'dial.community',
+    user_name:            'dial_catalog',
+    password:             Rails.application.secrets.mail_api_key,
+    #authentication:       'plain',
+    enable_starttls_auto: true
   }
 
   # Print deprecation notices to the Rails logger.
