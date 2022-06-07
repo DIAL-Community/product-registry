@@ -45,17 +45,33 @@ RSpec.describe(Mutations::CreateOrganization, type: :graphql) do
     end
   end
 
-  it 'is successful - user is logged in as organization owner' do
+  it 'is successful - organization owner can update organization name and slug remains the same' do
+    create(:organization, name: "Some name", slug: "some_name", website: "some.website.com")
     expect_any_instance_of(Mutations::CreateOrganization).to(receive(:an_org_owner).and_return(true))
 
     result = execute_graphql(
       mutation,
-      variables: { name: "Some name", slug: "some_name" },
+      variables: { name: "Some new name", slug: "some_name" },
     )
 
     aggregate_failures do
       expect(result['data']['createOrganization']['organization'])
-        .to(eq({ "name" => "Some name", "slug" => "some_name" }))
+        .to(eq({ "name" => "Some new name", "slug" => "some_name" }))
+    end
+  end
+
+  it 'is successful - admin can update organization name and slug remains the same' do
+    create(:organization, name: "Some name", slug: "some_name", website: "some.website.com")
+    expect_any_instance_of(Mutations::CreateOrganization).to(receive(:an_admin).and_return(true))
+
+    result = execute_graphql(
+      mutation,
+      variables: { name: "Some new name", slug: "some_name" },
+    )
+
+    aggregate_failures do
+      expect(result['data']['createOrganization']['organization'])
+        .to(eq({ "name" => "Some new name", "slug" => "some_name" }))
     end
   end
 
