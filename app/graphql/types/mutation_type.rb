@@ -40,5 +40,6 @@ module Types
     field :update_product_sectors, mutation: Mutations::UpdateProductSectors
     field :update_product_building_blocks, mutation: Mutations::UpdateProductBuildingBlocks
     field :update_product_organizations, mutation: Mutations::UpdateProductOrganizations
+    field :update_product_tags, mutation: Mutations::UpdateProductTags
   end
 end
