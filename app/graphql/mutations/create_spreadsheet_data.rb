@@ -104,6 +104,12 @@ module Mutations
           updated_data['format'] = changes_data[3]
         when 9
           updated_data['comments'] = changes_data[3]
+        when 10
+          updated_data['geographicCoverage'] = changes_data[3]
+        when 11
+          updated_data['timeRange'] = changes_data[3]
+        when 12
+          updated_data['visualizationUrl'] = changes_data[3]
         end
       when 'descriptions'
         product_description = updated_data['descriptions'].find { |d| d['locale'] == spreadsheet_data['locale'] }

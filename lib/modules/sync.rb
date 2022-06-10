@@ -14,10 +14,131 @@ include Modules::Slugger
 module Modules
   module Sync
     @@product_list = []
+    @@dataset_list = []
+
+    def sync_public_dataset(json_data)
+      unless json_data['type'].detect { |element| element.downcase != 'software' }.nil?
+        puts "Syncing open data: #{json_data['name']}."
+        dpga_origin = Origin.find_by(slug: 'dpga')
+
+        name_aliases = [json_data['name']]
+        json_data['aliases']&.each do |curr_alias|
+          name_aliases << curr_alias if curr_alias != ''
+        end
+
+        existing_dataset = nil
+        name_aliases.each do |name_alias|
+          # Find by name, and then by aliases and then by slug.
+          break unless existing_dataset.nil?
+
+          slug = slug_em(name_alias)
+          existing_dataset = Dataset.first_duplicate(name_alias, slug)
+          # Check to see if both just have the same alias. In this case, it's not a duplicate
+        end
+
+        is_new = false
+        if existing_dataset.nil?
+          # Mark this dataset as new one. This means we will use this import as the baseline of the data.
+          is_new = true
+
+          existing_dataset = Dataset.new
+          existing_dataset.name = name_aliases.first
+          existing_dataset.slug = slug_em(existing_dataset.name)
+          @@dataset_list << existing_dataset.name
+        end
+
+        website = cleanup_url(json_data['website'])
+        if !website.nil? && !website.empty?
+          existing_dataset.website = website
+        end
+
+        existing_dataset.dataset_type = 'ai_model' unless json_data['type'].detect { |e| e.downcase == 'aimodel' }.nil?
+        existing_dataset.dataset_type = 'content' unless json_data['type'].detect { |e| e.downcase == 'data' }.nil?
+        existing_dataset.dataset_type = 'content' unless json_data['type'].detect { |e| e.downcase == 'content' }.nil?
+        existing_dataset.dataset_type = 'standard' unless json_data['type'].detect { |e| e.downcase == 'standard' }.nil?
+        existing_dataset.dataset_type = 'dataset' unless existing_dataset.dataset_type
+
+        # Assign what's left in the alias array as aliases.
+        existing_dataset.aliases.concat(name_aliases.reject { |x| x == existing_dataset.name }).uniq!
+
+        # Set the origin to be 'DPGA'
+        if !dpga_origin.nil? && !existing_dataset.origins.exists?(id: dpga_origin.id)
+          existing_dataset.origins.push(dpga_origin)
+        end
+
+        sectors = json_data['sectors']
+        if !sectors.nil? && !sectors.empty?
+          sectors.each do |sector|
+            get_sector(sector, nil, 'en')
+            sector_obj = Sector.find_by(name: sector)
+
+            # Check to see if the sector exists already
+            if !sector_obj.nil? && !existing_dataset.sectors.include?(sector_obj)
+              puts "  Adding sector #{sector_obj.name} to dataset."
+              existing_dataset.sectors << sector_obj
+            else
+              puts "  Unable to find sector: #{sector}."
+            end
+          end
+        end
+
+        sdg_entries = json_data['SDGs']
+        if !sdg_entries.nil? && !sdg_entries.empty?
+          sdg_entries.each do |sdg_entry|
+            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg_entry['SDGNumber'])
+            next if sdg_obj.nil?
+
+            dataset_sdg = DatasetSustainableDevelopmentGoal.new
+            dataset_sdg.sustainable_development_goal_id = sdg_obj.id
+            dataset_sdg.mapping_status = DatasetSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
+
+            existing_dataset.dataset_sustainable_development_goals << dataset_sdg
+          end
+        end
+
+        organization_entries = json_data['organizations']
+        if !organization_entries.nil? && !organization_entries.empty?
+          organization_entries.each do |organization_entry|
+            organization = Organization.find_by(name: organization_entry['name'])
+            next if organization.nil?
+
+            unless is_new
+              organization_dataset = OrganizationsDataset.find_by(
+                dataset_id: existing_dataset.id,
+                organization_id: organization.id,
+                organization_type: organization_entry['org_type']
+              )
+              next unless organization_dataset.nil?
+            end
+
+            organization_dataset = OrganizationsDataset.new
+            organization_dataset.organization_id = organization.id
+            organization_dataset.organization_type = organization_entry['org_type']
+
+            existing_dataset.organizations_datasets << organization_dataset
+          end
+        end
+
+        if existing_dataset.save!
+          puts "Dataset #{existing_dataset.name} saved."
+
+          # Moving descriptions from product to dataset's description table.
+          existing_dataset_description = DatasetDescription.new
+          existing_dataset_description.description = json_data['description']
+          existing_dataset_description.locale = 'en'
+          existing_dataset_description.dataset = existing_dataset
+
+          if (is_new || !existing_dataset.manual_update) && existing_dataset_description.save!
+            puts "  Adding description for locale: #{existing_dataset_description.locale}."
+          end
+          puts "--"
+        end
+      end
+    end
 
     def sync_public_product(json_data)
-      unless json_data['type'].detect { |element| element.downcase == 'software' || element.downcase == 'data' }.nil?
-        puts "Syncing #{json_data['name']}."
+      unless json_data['type'].detect { |element| element.downcase == 'software' }.nil?
+        puts "Syncing product: #{json_data['name']}."
 
         dpga_origin = Origin.find_by(slug: 'dpga')
         dpga_endorser = Endorser.find_by(slug: 'dpga')
@@ -58,7 +179,7 @@ module Modules
         sdgs = json_data['SDGs']
         if !sdgs.nil? && !sdgs.empty?
           sdgs.each do |sdg|
-            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg.first)
+            sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg['SDGNumber'])
             assign_sdg_to_product(sdg_obj, existing_product,
                                   ProductSustainableDevelopmentGoal.mapping_status_types[:SELF_REPORTED])
           end
@@ -72,10 +193,10 @@ module Modules
 
             # Check to see if the sector exists already
             if !sector_obj.nil? && !existing_product.sectors.include?(sector_obj)
-              puts "Adding sector #{sector_obj.name} to product"
+              puts "  Adding sector #{sector_obj.name} to product"
               existing_product.sectors << sector_obj
             else
-              puts "Unable to find sector: #{sector}"
+              puts "  Unable to find sector: #{sector}"
             end
           end
         end
@@ -173,6 +294,7 @@ module Modules
         update_product_description(existing_product, digi_product['description'])
       end
       puts "Product updated: #{existing_product.name} -> #{existing_product.slug}."
+      puts "--"
       existing_product
     end
 
@@ -291,9 +413,10 @@ module Modules
     end
 
     def update_repository_data(product_data, product)
-      if product_data['type'].nil? || !product_data['type'].detect do |element|
-           element.downcase == 'software' || element.downcase == 'data'
-         end.nil?
+      # Skip if product is nil.
+      return if product.nil?
+
+      if !product_data['type'].nil? && !product_data['type'].detect { |element| element.downcase == 'software' }.nil?
         prod_name = product_data['name']
         prod_name = product.name unless product.nil?
 
@@ -542,15 +665,15 @@ module Modules
           "%#{sector_slug}%", locale
         ).first
         if existing_sector.nil?
-          puts 'Sector slug: ' + sector_slug
-          puts 'Lookup: ' + sector_json[sector_slug].to_s
+          puts '  Sector slug: ' + sector_slug
+          puts '  Lookup: ' + sector_json[sector_slug].to_s
           if !sector_json[sector_slug].nil?
             existing_sector = Sector.where(
               'slug like ? and locale = ? and is_displayable is true', "%#{sector_json[sector_slug]}%", locale
             ).first
             sector_array << existing_sector.id unless existing_sector.nil?
           else
-            puts "Add sector to map: #{sector_slug}"
+            puts "  Add sector to map: #{sector_slug}"
           end
         else
           sector_array << existing_sector.id
@@ -573,7 +696,7 @@ module Modules
                 ).first
                 sector_array << existing_subsector.id unless existing_subsector.nil?
               else
-                puts "Add sector to map: #{subsector_slug}"
+                puts "  Add sector to map: #{subsector_slug}"
               end
             else
               sector_array << existing_subsector.id
@@ -608,14 +731,14 @@ module Modules
           product_descriptions['products'].each do |pd|
             if existing_product.slug == pd['slug']
               product_description.description = pd['description']
-              puts "Assigning description from yml for: #{existing_product.slug}"
+              puts "  Assigning description from yml for: #{existing_product.slug}"
             end
           end
         end
       end
 
       product_description.save
-      puts "Product description updated: #{existing_product.name} -> #{existing_product.slug}."
+      puts "  Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
     def sync_license_information(product_repository)

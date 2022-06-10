@@ -31,25 +31,36 @@ namespace :data_processors do
     base_export_directories.each do |base_export_directory|
       Dir.glob(base_export_directory).map do |filename|
         json_representation = JSON.parse(File.read(filename))
-        generated_product = generate_product(json_representation)
+        obj_type = 'product'
+        if base_export_directory.include?('datasets')
+          obj_type = 'dataset'
+        end
+        generated_product = generate_product(json_representation, obj_type)
 
         unless generated_product.save
           puts "Unable to save: \"#{generated_product.name}\"."
           next
         end
 
-        puts "Product \"#{generated_product.name}\" saved."
+        puts "#{obj_type.humanize} with name \"#{generated_product.name}\" saved."
         next if !json_representation['descriptions'].present? || json_representation['descriptions'].empty?
 
         json_representation['descriptions'].each do |description|
           product_description = ProductDescription.find_by(
             product_id: generated_product.id,
             locale: description['locale']
-          )
+          ) if obj_type == 'product'
+
+          product_description = DatasetDescription.find_by(
+            dataset_id: generated_product.id,
+            locale: description['locale']
+          ) unless obj_type == 'product'
 
           if product_description.nil?
-            product_description = ProductDescription.new
-            product_description.product_id = generated_product.id
+            product_description = ProductDescription.new if obj_type == 'product'
+            product_description = DatasetDescription.new unless obj_type == 'product'
+            product_description.product_id = generated_product.id if obj_type == 'product'
+            product_description.dataset_id = generated_product.id unless obj_type == 'product'
             product_description.locale = description['locale']
           end
 
@@ -62,10 +73,11 @@ namespace :data_processors do
     end
   end
 
-  def generate_product(json_data)
+  def generate_product(json_data, obj_type)
     slug = slug_em(json_data['name'])
 
-    product = Product.find_by(slug: slug)
+    product = Product.find_by(slug: slug) if obj_type == 'product'
+    product = Dataset.find_by(slug: slug) unless obj_type == 'product'
     # Found existing product, return the product and skip processing the rest of the json.
     return product unless product.nil? || product.manual_update
 
@@ -98,14 +110,14 @@ namespace :data_processors do
 
     # Resolve the type of the json entry.
     product_type = 'product'
-    case json_data['type'].to_s.downcase
+    case obj_type
     when 'dataset'
       product_type = 'dataset'
     when 'content'
       product_type = 'content'
     end
 
-    Product.new(
+    product = Product.new(
       name: json_data['name'],
       aliases: valid_aliases,
       slug: slug,
@@ -117,6 +129,22 @@ namespace :data_processors do
       organizations: organizations,
       website: json_data['website'],
       product_type: product_type
-    )
+    ) if obj_type == 'product'
+
+    product = Dataset.new(
+      name: json_data['name'],
+      aliases: valid_aliases,
+      slug: slug,
+      origins: [origin],
+      sectors: sectors,
+      organizations: organizations,
+      website: json_data['website'],
+      visualization_url: json_data['visualizationUrl'],
+      time_range: json_data['timeRange'],
+      geographic_coverage: json_data['geographicCoverage'],
+      dataset_type: product_type
+    ) unless obj_type == 'product'
+
+    product
   end
 end
