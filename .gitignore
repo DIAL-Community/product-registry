@@ -97,3 +97,6 @@ lib/tasks/local_setup.rake
 
 .vscode
 .metals
+
+# .rbenv local ruby version file
+.ruby-version
