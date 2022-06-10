@@ -31,6 +31,8 @@ public/export.xls
 public/export.xlsx
 export/*
 
+exported_data
+
 public/assets/*.png
 public/assets/jquery-ui/*.png
 public/assets/organizations/fixer*

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_28_193227) do
+ActiveRecord::Schema.define(version: 2022_05_19_205858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,50 @@ ActiveRecord::Schema.define(version: 2022_04_28_193227) do
     t.string "aliases", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "dataset_descriptions", force: :cascade do |t|
+    t.bigint "dataset_id"
+    t.string "locale", null: false
+    t.string "description", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dataset_id"], name: "index_dataset_descriptions_on_dataset_id"
+  end
+
+# Could not dump table "dataset_sectors" because of following StandardError
+#   Unknown type 'mapping_status_type' for column 'mapping_status'
+
+# Could not dump table "dataset_sustainable_development_goals" because of following StandardError
+#   Unknown type 'mapping_status_type' for column 'mapping_status'
+
+  create_table "datasets", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "aliases", default: [], array: true
+    t.string "website", null: false
+    t.string "visualization_url"
+    t.string "tags", default: [], array: true
+    t.string "dataset_type", null: false
+    t.string "geographic_coverage"
+    t.string "time_range"
+    t.boolean "manual_update", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "datasets_countries", force: :cascade do |t|
+    t.bigint "dataset_id", null: false
+    t.bigint "country_id", null: false
+    t.index ["country_id"], name: "index_datasets_countries_on_country_id"
+    t.index ["dataset_id"], name: "index_datasets_countries_on_dataset_id"
+  end
+
+  create_table "datasets_origins", force: :cascade do |t|
+    t.bigint "dataset_id", null: false
+    t.bigint "origin_id", null: false
+    t.index ["dataset_id"], name: "index_datasets_origins_on_dataset_id"
+    t.index ["origin_id"], name: "index_datasets_origins_on_origin_id"
   end
 
   create_table "deploys", force: :cascade do |t|
@@ -381,6 +425,9 @@ ActiveRecord::Schema.define(version: 2022_04_28_193227) do
     t.index ["country_id"], name: "index_organizations_countries_on_country_id"
     t.index ["organization_id"], name: "index_organizations_countries_on_organization_id"
   end
+
+# Could not dump table "organizations_datasets" because of following StandardError
+#   Unknown type 'org_type' for column 'organization_type'
 
 # Could not dump table "organizations_products" because of following StandardError
 #   Unknown type 'org_type' for column 'org_type'
@@ -914,6 +961,13 @@ ActiveRecord::Schema.define(version: 2022_04_28_193227) do
   add_foreign_key "category_indicator_descriptions", "category_indicators"
   add_foreign_key "category_indicators", "rubric_categories"
   add_foreign_key "cities", "regions"
+  add_foreign_key "dataset_descriptions", "datasets"
+  add_foreign_key "dataset_sectors", "datasets"
+  add_foreign_key "dataset_sectors", "sectors"
+  add_foreign_key "datasets_countries", "countries"
+  add_foreign_key "datasets_countries", "datasets"
+  add_foreign_key "datasets_origins", "datasets"
+  add_foreign_key "datasets_origins", "origins"
   add_foreign_key "deploys", "products"
   add_foreign_key "deploys", "users"
   add_foreign_key "districts", "regions"
@@ -937,6 +991,8 @@ ActiveRecord::Schema.define(version: 2022_04_28_193227) do
   add_foreign_key "organizations_contacts", "organizations", name: "organizations_contacts_organization_fk"
   add_foreign_key "organizations_countries", "countries"
   add_foreign_key "organizations_countries", "organizations"
+  add_foreign_key "organizations_datasets", "datasets"
+  add_foreign_key "organizations_datasets", "organizations"
   add_foreign_key "organizations_products", "organizations", name: "organizations_products_organization_fk"
   add_foreign_key "organizations_products", "products", name: "organizations_products_product_fk"
   add_foreign_key "organizations_sectors", "organizations", name: "organizations_sectors_organization_fk"

@@ -39,6 +39,8 @@ namespace :sync do
     dpg_data.each do |entry|
       next if search_in_ignorelist(entry, ignore_list)
 
+      sync_public_dataset(entry)
+
       prod = sync_public_product(entry)
       update_repository_data(entry, prod)
     end
@@ -48,6 +50,8 @@ namespace :sync do
     dpg_data = JSON.parse(dpg_response)
     dpg_data.each do |entry|
       next if search_in_ignorelist(entry, ignore_list)
+
+      sync_public_dataset(entry)
 
       prod = sync_public_product(entry)
       update_repository_data(entry, prod)

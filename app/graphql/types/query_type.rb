@@ -15,6 +15,11 @@ module Types
     field :search_products, resolver: Queries::SearchProductsQuery
     field :paginated_products, resolver: Queries::PaginatedProductsQuery
 
+    field :datasets, resolver: Queries::DatasetsQuery
+    field :dataset, resolver: Queries::DatasetQuery
+    field :search_datasets, resolver: Queries::SearchDatasetsQuery
+    field :paginated_datasets, resolver: Queries::PaginatedDatasetsQuery
+
     field :spreadsheet_product, resolver: Queries::SpreadsheetProductQuery
     field :spreadsheet_dataset, resolver: Queries::SpreadsheetDatasetQuery
 
