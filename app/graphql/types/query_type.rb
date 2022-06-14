@@ -14,6 +14,7 @@ module Types
     field :product, resolver: Queries::ProductQuery
     field :search_products, resolver: Queries::SearchProductsQuery
     field :paginated_products, resolver: Queries::PaginatedProductsQuery
+    field :owned_products, resolver: Queries::OwnedProductsQuery
 
     field :datasets, resolver: Queries::DatasetsQuery
     field :dataset, resolver: Queries::DatasetQuery
