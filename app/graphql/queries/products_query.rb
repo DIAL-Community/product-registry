@@ -306,4 +306,14 @@ module Queries
       ProductRepository.find_by(slug: slug)
     end
   end
+
+  class OwnedProductsQuery < Queries::BaseQuery
+    type [Types::ProductType], null: false
+
+    def resolve
+      product_ids = context[:current_user].user_products.map(&:to_s) unless context[:current_user].nil?
+      owned_products = Product.where('id in (?)', product_ids)
+      owned_products
+    end
+  end
 end
