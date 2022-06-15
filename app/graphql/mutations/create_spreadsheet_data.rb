@@ -119,13 +119,13 @@ module Mutations
           product_description['description'] = change if column_index == 2
         when 'organizations'
           updated_data['organizations'] << { 'name': change }
-          #updated_data['organizations'].delete_if { |e| e['name'] == changes_data[2] }
+          # updated_data['organizations'].delete_if { |e| e['name'] == changes_data[2] }
         when 'sdgs'
           updated_data['sdgs'] << { 'name': change }
-          #updated_data['sdgs'].delete_if { |e| e['name'] == changes_data[2] }
+          # updated_data['sdgs'].delete_if { |e| e['name'] == changes_data[2] }
         when 'sectors'
           updated_data['sectors'] << { 'name': change }
-          #updated_data['sectors'].delete_if { |e| e['name'] == changes_data[2] }
+          # updated_data['sectors'].delete_if { |e| e['name'] == changes_data[2] }
         end
       end
 
