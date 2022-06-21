@@ -49,5 +49,7 @@ module Types
     field :update_dataset_sdgs, mutation: Mutations::UpdateDatasetSdgs
     field :update_dataset_sectors, mutation: Mutations::UpdateDatasetSectors
     field :update_dataset_tags, mutation: Mutations::UpdateDatasetTags
+
+    field :update_project_organizations, mutation: Mutations::UpdateProjectOrganizations
   end
 end
