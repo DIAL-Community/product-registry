@@ -118,13 +118,19 @@ module Mutations
           end
           product_description['description'] = change if column_index == 2
         when 'organizations'
-          updated_data['organizations'] << { 'name': change }
+          new_org = { 'name': change }
+          updated_data['organizations'] << new_org if !updated_data['organizations'].any? {|h| h['name'] == change} && column_index == 1
           # updated_data['organizations'].delete_if { |e| e['name'] == changes_data[2] }
         when 'sdgs'
-          updated_data['sdgs'] << { 'name': change }
+          if column_index == 1
+            change.split(',').each do |sdg_num|
+              updated_data['sdgs'] << { 'number': sdg_num } if !updated_data['sdgs'].any? {|h| h['number'] == sdg_num}
+            end
+          end
           # updated_data['sdgs'].delete_if { |e| e['name'] == changes_data[2] }
         when 'sectors'
-          updated_data['sectors'] << { 'name': change }
+          new_sector = { 'name': change }
+          updated_data['sectors'] << new_sector if !updated_data['sectors'].any? {|h| h['name'] == change} && column_index == 1
           # updated_data['sectors'].delete_if { |e| e['name'] == changes_data[2] }
         end
       end

@@ -108,6 +108,15 @@ namespace :data_processors do
       end
     end
 
+    # Process the sdg section of the json.
+    sdgs = []
+    if json_data['sdgs'].present? && !json_data['sdgs'].empty?
+      json_data['sdgs'].split(',').each do |sdg_num|
+        sdg = SustainableDevelopmentGoal.find_by(number: sdg_num)
+        sdgs << sdg unless sdg.nil?
+      end
+    end
+
     # Resolve the type of the json entry.
     product_type = 'product'
     case obj_type
@@ -127,6 +136,7 @@ namespace :data_processors do
       origins: [origin],
       sectors: sectors,
       organizations: organizations,
+      sdgs: sdgs,
       website: json_data['website'],
       product_type: product_type
     ) if obj_type == 'product'
@@ -138,6 +148,7 @@ namespace :data_processors do
       origins: [origin],
       sectors: sectors,
       organizations: organizations,
+      sdgs: sdgs,
       website: json_data['website'],
       visualization_url: json_data['visualizationUrl'],
       time_range: json_data['timeRange'],
