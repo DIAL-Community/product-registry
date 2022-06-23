@@ -140,7 +140,7 @@ module Mutations
           if column_index == 2
             product_description = updated_data['descriptions'].find { |d| d['locale'] == spreadsheet_data['locale'] }
             if product_description.nil?
-              product_description = { 'locale': spreadsheet_data['locale']  }
+              product_description = { 'locale': spreadsheet_data['locale'] }
             end
             product_description['description'] = change
             updated_data['descriptions'] << product_description
