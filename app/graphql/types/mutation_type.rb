@@ -52,5 +52,6 @@ module Types
 
     field :update_project_organizations, mutation: Mutations::UpdateProjectOrganizations
     field :update_project_sectors, mutation: Mutations::UpdateProjectSectors
+    field :update_project_countries, mutation: Mutations::UpdateProjectCountries
   end
 end
