@@ -9,16 +9,42 @@ module Mutations
     argument :spreadsheet_data, GraphQL::Types::JSON, required: false, default_value: []
     argument :spreadsheet_type, String, required: true
     argument :assoc, String, required: false, default_value: ''
+    argument :row_index, Int, required: false
 
     field :dial_spreadsheet_data, Types::DialSpreadsheetDataType, null: true
     field :errors, [String], null: false
 
-    def resolve(spreadsheet_data:, spreadsheet_type:, assoc:)
+    def resolve(spreadsheet_data:, spreadsheet_type:, assoc:, row_index:)
       unless an_admin
         return {
           dial_spreadsheet_data: nil,
           errors: ['Not allowed to create a spreadsheet data.']
         }
+      end
+
+      if row_index == 0
+        case assoc.downcase
+        when 'descriptions'
+          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
+            spreadsheet_record.spreadsheet_data['descriptions'] = []
+            spreadsheet_record.save!
+          end
+        when 'organizations'
+          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
+            spreadsheet_record.spreadsheet_data['organizations'] = []
+            spreadsheet_record.save!
+          end
+        when 'sdgs'
+          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
+            spreadsheet_record.spreadsheet_data['sdgs'] = []
+            spreadsheet_record.save!
+          end
+        when 'sectors'
+          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
+            spreadsheet_record.spreadsheet_data['sectors'] = []
+            spreadsheet_record.save!
+          end
+        end
       end
 
       slug = slug_em(spreadsheet_data['name'])
@@ -111,12 +137,14 @@ module Mutations
             updated_data['visualizationUrl'] = change
           end
         when 'descriptions'
-          product_description = updated_data['descriptions'].find { |d| d['locale'] == spreadsheet_data['locale'] }
-          if product_description.nil? && column_index == 2
-            product_description = { 'locale': spreadsheet_data['locale'] }
+          if column_index == 2
+            product_description = updated_data['descriptions'].find { |d| d['locale'] == spreadsheet_data['locale'] }
+            if product_description.nil?
+              product_description = { 'locale': spreadsheet_data['locale']  }
+            end
+            product_description['description'] = change
             updated_data['descriptions'] << product_description
           end
-          product_description['description'] = change if column_index == 2
         when 'organizations'
           new_org = { 'name': change }
           updated_data['organizations'] << new_org if !updated_data['organizations'].any? do |h|
