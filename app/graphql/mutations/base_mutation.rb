@@ -31,12 +31,32 @@ module Mutations
       end
     end
 
+    def product_owner_check_for_project(project)
+      products = project.products
+      products.each do |product|
+        if a_product_owner(product.id)
+          return true
+        end
+      end
+      false
+    end
+
     def an_org_owner(organization_id)
       if !context[:current_user].nil? && context[:current_user].organization_id.equal?(organization_id)
         true
       else
         false
       end
+    end
+
+    def org_owner_check_for_project(project)
+      organizations = project.organizations
+      organizations.each do |organization|
+        if an_org_owner(organization.id)
+          return true
+        end
+      end
+      false
     end
 
     def a_content_editor
