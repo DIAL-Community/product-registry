@@ -31,6 +31,8 @@ public/export.xls
 public/export.xlsx
 export/*
 
+exported_data
+
 public/assets/*.png
 public/assets/jquery-ui/*.png
 public/assets/organizations/fixer*
@@ -97,3 +99,6 @@ lib/tasks/local_setup.rake
 
 .vscode
 .metals
+
+# .rbenv local ruby version file
+.ruby-version

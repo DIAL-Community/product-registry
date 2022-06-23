@@ -5,6 +5,7 @@ FactoryBot.define do
   factory :project do
     sequence(:name) { |name| "Project: #{name}" }
     sequence(:slug) { |slug| "slug_#{slug}" }
-    sequence(:origin) { |origin| "origin_#{origin}" }
+    origin { FactoryBot.create(:origin) }
+    products { [FactoryBot.create(:product)] }
   end
 end

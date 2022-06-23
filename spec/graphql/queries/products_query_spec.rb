@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'graph_helpers'
+require 'rails_helper'
 
 RSpec.describe(Queries::ProductsQuery, type: :graphql) do
   let(:query) do
@@ -112,5 +113,45 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
     )
 
     expect(result['data']['searchProducts']['totalCount']).to(eq(0))
+  end
+end
+
+RSpec.describe(Queries::OwnedProductsQuery, type: :graphql) do
+  let(:query) do
+    <<~GQL
+      query {
+        ownedProducts {
+          id
+          slug
+          name
+        }
+      }
+    GQL
+  end
+
+  it 'pulls owned products for logged used' do
+    controller.stub(:current_user) { mock_model("User", user_products => [1, 2]) }
+
+    result = execute_graphql(
+      query
+    )
+
+    aggregate_failures do
+      expect(result['data']['ownedProducts'].count)
+        .to(eq(2))
+    end
+  end
+
+  it 'pulls empty array for not logged user' do
+    controller.stub(:current_user) { mock_model("User", user_products => [1, 2]) }
+
+    result = execute_graphql(
+      query
+    )
+
+    aggregate_failures do
+      expect(result['data']['ownedProducts'].count)
+        .to(eq(0))
+    end
   end
 end

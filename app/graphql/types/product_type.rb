@@ -46,6 +46,8 @@ module Types
       argument :first, Integer, required: false
     end
 
+    field :projects, [Types::ProjectType], null: true
+
     field :building_blocks, [Types::BuildingBlockType], null: true
     field :sustainable_development_goals, [Types::SustainableDevelopmentGoalType], null: true
 
