@@ -64,7 +64,7 @@ module Mutations
       record.spreadsheet_type = spreadsheet_type
       record.spreadsheet_data = update_spreadsheet_data(record.spreadsheet_data, spreadsheet_data, assoc)
 
-      if record.save
+      if record.save!
         # Successful creation, return the created object with no errors
         {
           dial_spreadsheet_data: record,

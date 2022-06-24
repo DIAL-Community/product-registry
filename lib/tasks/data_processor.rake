@@ -136,7 +136,7 @@ namespace :data_processors do
       origins: [origin],
       sectors: sectors,
       organizations: organizations,
-      sdgs: sdgs,
+      sustainable_development_goals: sdgs,
       website: json_data['website'],
       product_type: product_type
     ) if obj_type == 'product'
@@ -148,7 +148,7 @@ namespace :data_processors do
       origins: [origin],
       sectors: sectors,
       organizations: organizations,
-      sdgs: sdgs,
+      sustainable_development_goals: sdgs,
       website: json_data['website'],
       visualization_url: json_data['visualizationUrl'],
       time_range: json_data['timeRange'],
