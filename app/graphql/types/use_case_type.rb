@@ -20,10 +20,10 @@ module Types
     field :name, String, null: false
     field :slug, String, null: false
     field :image_file, String, null: true
-    field :maturity, String, null: true
+    field :maturity, String, null: false
 
     field :use_case_descriptions, [Types::UseCaseDescriptionType], null: true
-    field :use_case_description, Types::UseCaseDescriptionType, null: true,
+    field :use_case_description, Types::UseCaseDescriptionType, null: false,
                                                                 method: :use_case_description_localized
 
     field :use_case_steps, [Types::UseCaseStepType], null: true
@@ -33,5 +33,7 @@ module Types
     field :sdg_targets, [Types::SustainableDevelopmentGoalTargetType], null: false
     field :building_blocks, [Types::BuildingBlockType], null: true
     field :workflows, [Types::WorkflowType], null: true
+    field :tags, GraphQL::Types::JSON, null: true
+    field :sector, Types::SectorType, null: false
   end
 end
