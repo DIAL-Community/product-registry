@@ -27,11 +27,11 @@ class Project < ApplicationRecord
   end
 
   def project_description_localized
-    description = project_descriptions.order('LENGTH(description) DESC')
-                                      .find_by(locale: I18n.locale)
+    description = project_descriptions
+                  .find_by(locale: I18n.locale)
     if description.nil?
-      description = project_descriptions.order('LENGTH(description) DESC')
-                                        .find_by(locale: 'en')
+      description = project_descriptions
+                    .find_by(locale: 'en')
     end
     description
   end

@@ -23,10 +23,10 @@ class Workflow < ApplicationRecord
   end
 
   def workflow_description_localized
-    description = workflow_descriptions.order('LENGTH(description) DESC')
+    description = workflow_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                        .find_by(locale: I18n.locale)
     if description.nil?
-      description = workflow_descriptions.order('LENGTH(description) DESC')
+      description = workflow_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                          .find_by(locale: 'en')
     end
     description

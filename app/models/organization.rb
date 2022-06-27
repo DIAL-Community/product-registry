@@ -65,11 +65,11 @@ class Organization < ApplicationRecord
   end
 
   def organization_description_localized
-    description = organization_descriptions.order('LENGTH(description) DESC')
-                                           .find_by(locale: I18n.locale)
+    description = organization_descriptions
+                  .find_by(locale: I18n.locale)
     if description.nil?
-      description = organization_descriptions.order('LENGTH(description) DESC')
-                                             .find_by(locale: 'en')
+      description = organization_descriptions
+                    .find_by(locale: 'en')
     end
     description
   end

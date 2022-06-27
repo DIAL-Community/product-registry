@@ -13,6 +13,9 @@ module Mutations
     argument :visualization_url, String, required: false
     argument :geographic_coverage, String, required: false
     argument :time_range, String, required: false
+    argument :license, String, required: false
+    argument :languages, String, required: false
+    argument :data_format, String, required: false
     argument :dataset_type, String, required: true
     argument :description, String, required: true
 
@@ -20,7 +23,7 @@ module Mutations
     field :errors, [String], null: true
 
     def resolve(name:, slug:, aliases:, website:, visualization_url:, geographic_coverage:,
-      time_range:, dataset_type:, description:)
+      time_range:, dataset_type:, license:, languages:, data_format:, description:)
       dataset = Dataset.find_by(slug: slug)
 
       if dataset.nil?
@@ -47,6 +50,9 @@ module Mutations
       dataset.visualization_url = visualization_url
       dataset.geographic_coverage = geographic_coverage
       dataset.time_range = time_range
+      dataset.license = license
+      dataset.languages = languages
+      dataset.data_format = data_format
 
       if dataset.save!
         dataset_desc = DatasetDescription.find_by(dataset_id: dataset.id, locale: I18n.locale)
