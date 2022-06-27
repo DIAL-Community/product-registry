@@ -50,6 +50,8 @@ module Types
     field :update_dataset_sectors, mutation: Mutations::UpdateDatasetSectors
     field :update_dataset_tags, mutation: Mutations::UpdateDatasetTags
 
+    field :create_project, mutation: Mutations::CreateProject
+
     field :update_project_organizations, mutation: Mutations::UpdateProjectOrganizations
     field :update_project_sectors, mutation: Mutations::UpdateProjectSectors
     field :update_project_countries, mutation: Mutations::UpdateProjectCountries
