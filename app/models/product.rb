@@ -101,11 +101,11 @@ class Product < ApplicationRecord
   end
 
   def product_description_localized
-    description = product_descriptions.order('LENGTH(description) DESC')
-                                      .find_by(locale: I18n.locale)
+    description = product_descriptions
+                  .find_by(locale: I18n.locale)
     if description.nil?
-      description = product_descriptions.order('LENGTH(description) DESC')
-                                        .find_by(locale: 'en')
+      description = product_descriptions
+                    .find_by(locale: 'en')
     end
     description
   end

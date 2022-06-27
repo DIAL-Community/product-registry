@@ -12,6 +12,8 @@ module Types
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
+    field :start_date, GraphQL::Types::ISO8601Date, null: true
+    field :end_date, GraphQL::Types::ISO8601Date, null: true
     field :tags, GraphQL::Types::JSON, null: true
     field :project_url, String, null: true
     field :project_descriptions, [Types::ProjectDescriptionType], null: true

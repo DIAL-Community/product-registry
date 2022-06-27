@@ -7,10 +7,10 @@ class PlayMove < ApplicationRecord
   scope :slug_starts_with, ->(slug) { where('LOWER(slug) like LOWER(?)', "#{slug}\\_%") }
 
   def move_description_localized
-    description = move_descriptions.order('LENGTH(description) DESC')
+    description = move_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                    .find_by(locale: I18n.locale)
     if description.nil?
-      description = move_descriptions.order('LENGTH(description) DESC')
+      description = move_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                      .find_by(locale: 'en')
     end
     description

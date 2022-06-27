@@ -61,6 +61,8 @@ module Modules
         # Assign what's left in the alias array as aliases.
         existing_dataset.aliases.concat(name_aliases.reject { |x| x == existing_dataset.name }).uniq!
 
+        existing_dataset.license = json_data['license'][0]['spdx'] unless json_data['license'].nil?
+
         # Set the origin to be 'DPGA'
         if !dpga_origin.nil? && !existing_dataset.origins.exists?(id: dpga_origin.id)
           existing_dataset.origins.push(dpga_origin)

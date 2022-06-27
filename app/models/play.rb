@@ -17,10 +17,10 @@ class Play < ApplicationRecord
   end
 
   def play_description_localized
-    description = play_descriptions.order('LENGTH(description) DESC')
+    description = play_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                    .find_by(locale: I18n.locale)
     if description.nil?
-      description = play_descriptions.order('LENGTH(description) DESC')
+      description = play_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                      .find_by(locale: 'en')
     end
     description

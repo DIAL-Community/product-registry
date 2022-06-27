@@ -135,6 +135,8 @@ module Mutations
             updated_data['timeRange'] = change
           when 12
             updated_data['visualizationUrl'] = change
+          when 13
+            updated_data['languages'] = change
           end
         when 'descriptions'
           if column_index == 2

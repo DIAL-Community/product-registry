@@ -58,11 +58,11 @@ class Dataset < ApplicationRecord
   end
 
   def dataset_description_localized
-    description = dataset_descriptions.order('LENGTH(description) DESC')
-                                      .find_by(locale: I18n.locale)
+    description = dataset_descriptions
+                  .find_by(locale: I18n.locale)
     if description.nil?
-      description = dataset_descriptions.order('LENGTH(description) DESC')
-                                        .find_by(locale: 'en')
+      description = dataset_descriptions
+                    .find_by(locale: 'en')
     end
     description
   end

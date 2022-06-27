@@ -31,10 +31,10 @@ class UseCase < ApplicationRecord
   end
 
   def use_case_description_localized
-    description = use_case_descriptions.order('LENGTH(description) DESC')
+    description = use_case_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                        .find_by(locale: I18n.locale)
     if description.nil?
-      description = use_case_descriptions.order('LENGTH(description) DESC')
+      description = use_case_descriptions.order(Arel.sql('LENGTH(description) DESC'))
                                          .find_by(locale: 'en')
     end
     description
