@@ -17,6 +17,9 @@ module Types
     field :visualization_url, String, null: true
     field :geographic_coverage, String, null: true
     field :time_range, String, null: true
+    field :license, String, null: true
+    field :languages, String, null: true
+    field :data_format, String, null: true
     field :aliases, GraphQL::Types::JSON, null: true
     field :tags, GraphQL::Types::JSON, null: true
     field :dataset_type, String, null: false
