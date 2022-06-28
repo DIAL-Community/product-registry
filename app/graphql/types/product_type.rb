@@ -49,7 +49,11 @@ module Types
     field :projects, [Types::ProjectType], null: true
 
     field :building_blocks, [Types::BuildingBlockType], null: true
+    field :building_blocks_mapping_status, String,
+      method: :building_blocks_mapping_status
     field :sustainable_development_goals, [Types::SustainableDevelopmentGoalType], null: true
+    field :sustainable_development_goals_mapping_status, String,
+      method: :sustainable_development_goals_mapping_status
 
     field :interoperates_with, [Types::ProductType], null: true
     field :includes, [Types::ProductType], null: true

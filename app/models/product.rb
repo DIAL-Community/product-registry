@@ -204,4 +204,24 @@ class Product < ApplicationRecord
       }
     }
   end
+
+  def sustainable_development_goals_mapping_status
+    return nil if sustainable_development_goals.nil? || sustainable_development_goals.empty?
+
+    product_sustainable_development_goals.each do |sustainable_development_goal|
+      mapping_status = sustainable_development_goal.mapping_status
+      return mapping_status unless mapping_status.nil?
+    end
+    nil
+  end
+
+  def building_blocks_mapping_status
+    return nil if building_blocks.nil? || building_blocks.empty?
+
+    product_building_blocks.each do |building_block|
+      mapping_status = building_block.mapping_status
+      return mapping_status unless mapping_status.nil?
+    end
+    nil
+  end
 end
