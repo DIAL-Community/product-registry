@@ -42,6 +42,7 @@ module Types
     field :update_product_organizations, mutation: Mutations::UpdateProductOrganizations
     field :update_product_projects, mutation: Mutations::UpdateProductProjects
     field :update_product_tags, mutation: Mutations::UpdateProductTags
+    field :update_product_sdgs, mutation: Mutations::UpdateProductSdgs
 
     field :create_dataset, mutation: Mutations::CreateDataset
     field :update_dataset_countries, mutation: Mutations::UpdateDatasetCountries
@@ -53,6 +54,7 @@ module Types
     field :create_project, mutation: Mutations::CreateProject
 
     field :update_project_organizations, mutation: Mutations::UpdateProjectOrganizations
+    field :update_project_products, mutation: Mutations::UpdateProjectProducts
     field :update_project_sectors, mutation: Mutations::UpdateProjectSectors
     field :update_project_countries, mutation: Mutations::UpdateProjectCountries
     field :update_project_tags, mutation: Mutations::UpdateProjectTags
