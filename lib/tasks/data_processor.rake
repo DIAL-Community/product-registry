@@ -111,8 +111,8 @@ namespace :data_processors do
     # Process the sdg section of the json.
     sdgs = []
     if json_data['sdgs'].present? && !json_data['sdgs'].empty?
-      json_data['sdgs'].split(',').each do |sdg_num|
-        sdg = SustainableDevelopmentGoal.find_by(number: sdg_num)
+      json_data['sdgs'].each do |sdg_num|
+        sdg = SustainableDevelopmentGoal.find_by(number: sdg_num['number'].to_i)
         sdgs << sdg unless sdg.nil?
       end
     end
@@ -165,5 +165,42 @@ namespace :data_processors do
     ) unless obj_type == 'product'
 
     product
+  end
+
+  desc 'Process list of product json files and assign sdgs.'
+  task process_sdgs_from_json_files: :environment do
+    base_export_directories = ['./exported_data/products/*.json', './exported_data/datasets/*.json']
+    base_export_directories.each do |base_export_directory|
+      Dir.glob(base_export_directory).map do |filename|
+        json_data = JSON.parse(File.read(filename))
+        obj_type = 'product'
+        if base_export_directory.include?('datasets')
+          obj_type = 'dataset'
+        end
+
+        slug = slug_em(json_data['name'])
+
+        product = Product.find_by(slug: slug) if obj_type == 'product'
+        product = Dataset.find_by(slug: slug) unless obj_type == 'product'
+        # Found existing product, return the product and skip processing the rest of the json.
+        next if product.nil?
+
+        # Process the sdg section of the json.
+        sdgs = []
+        if json_data['sdgs'].present? && !json_data['sdgs'].empty?
+          json_data['sdgs'].each do |sdg_num|
+            sdg = SustainableDevelopmentGoal.find_by(number: sdg_num['number'].to_i)
+            sdgs << sdg unless sdg.nil?
+          end
+        end
+
+        product.sustainable_development_goals = sdgs
+
+        unless product.save
+          puts "Unable to save: \"#{generated_product.name}\"."
+          next
+        end
+      end
+    end
   end
 end
