@@ -1,62 +1,90 @@
 products:
   - name: OpenCRVS
-    description: OpenCRVS is an open source software product that supports civil registration (CR) and vital statistics (VS) services in low-resource countries and is interoperable with other systems.
+    description: OpenCRVS is an open source digital public good to help achieve universal civil registration and evidence-based decision-making in all country contexts. OpenCRVS has been designed specially to meet the needs and capabilities of low-resource settings.
     website: www.opencrvs.org
     organizations: [{"name":"Plan International","website":"plan-international.org","org_type":"owner"}, {"name":"Jembi","website":"jembi.org","org_type":"owner"}]
     SDGs: [16]
     license: MPL-2.0
     repositoryURL: https://github.com/opencrvs/opencrvs-core
   - name: Open Concept Lab
-    description: An open-source, cloud-based toolset for open and collaborative terminology, indicator, and core dataset management and development to accelerate convergence on best practices for data and data dictionary harmonization, information exchange, and reuse of analytics tools and approaches.
+    description: The Open Concept Lab (OCL) is an open source terminology management system to help collaboratively manage, publish, and use metadata in the cloud alongside the global community. Imagine GitHub for indicators, terminology, and metadata—a one- stop shop to access international standards, create and publish your own definitions, or browse country and global indicators with mappings to diagnoses, procedures, and other data definitions used to calculate them. 
     website: openconceptlab.org
     organizations: [{"name":"Open Concept Lab","website":"openconceptlab.org","org_type":"owner"}]
     SDGs: [3]
     license: MPL-2.0
     repositoryURL: https://github.com/OpenConceptLab/oclapi
   - name: CommCare
-    description: Mobile data collection platform to improve the quality and efficiency of services in the most remote corners of the world.
+    description: CommCare is an open source digital data collection and service delivery platform designed to improve the quality of frontline service delivery. With CommCare, non-developers can rapidly build and adapt mobile applications, web applications, and short message service (SMS) interactions and workflows for offline settings. This flexibility enables frontline programs to harness CommCare for everything from simple surveys to complex national health systems supporting multiple disease verticals.
     website: www.dimagi.com/commcare
     organizations: [{"name":"Dimagi","website":"dimagi.com","org_type":"owner"}]
     SDGs: [3,6,10]
     license: APL-2.0
     repositoryURL: https://github.com/dimagi/commcare-hq
-  - name: Medic Mobile
-    description: Medic Mobile Community Health Toolkit provides a collection of open source technologies and open access design, technical, and implementer resources that help you build and deploy digital tools for community health. 
+  - name: Community Health Toolkit
+    description: The Community Health Toolkit (CHT) is a collection of open source technologies, open access design, technical and implementer resources, and a community of practice for digitally supported health care delivery. It is designed to support community health systems and teams delivering care in the hardest- to-reach communities.
     website: communityhealthtoolkit.org
     organizations: [{"name":"Medic Mobile","website":"medicmobile.org","org_type":"owner"}]
     SDGs: [3,6,10]
     license: AGPL-3.0
     repositoryURL: https://github.com/medic/cht-core
   - name: OpenHIM
-    description: A middleware component designed to ease interoperability between disparate information systems, connecting health systems simply, securely and safely.
+    description: Instant OpenHIE aims to reduce the costs and skills required for software developers to rapidly deploy an Open Health Information Exchange architecture for quicker initial solution testing and a starting point for faster production implementation and customization. Instant OpenHIE provides a simple way for technical persons to install and see a complex system working against a real-world use case, allowing them to illustrate how interoperability can help solve health challenges and demonstrate how an interoperability architecture could be created using open source tools and standards.
     website: openhim.org
     organizations: [{"name":"Jembi","website":"jembi.org","org_type":"owner"}]
     SDGs: [3]
     license: MPL-2.0
     repositoryURL: https://github.com/jembi/openhim-core-js
+  - name: Instant OpenHIE
+    description: The Open Health Information Mediator (OpenHIM) is an open-source middleware component designed to ease interoperability between disparate information systems. It provides secure communications and data governance as well as support for routing, orchestrating, and translating requests as they flow between systems.
+    website: https://openhie.github.io/instant/
+    organizations: [{"name":"Jembi","website":"jembi.org","org_type":"owner"}]
+    SDGs: [3]
+    license: MPL-2.0
+    repositoryURL: https://github.com/openhie/instant
+  - name: OpenFn
+    description: OpenFn is an integration Platform as a Service (iPaaS) and a suite of open source extract, transform, and load, data-integration, and interoperability tools used to automate workflows and the exchange of information across and within systems in a secure, stable, and scalable manner.
+    website: https://www.openfn.org
+    organizations: [{"name":"OpenFn","website":"openfn.org","org_type":"owner"}]
+    SDGs: [3]
+    license: MPL-2.0
+    repositoryURL: https://github.com/OpenFn/core
   - name: Bahmni
-    description: Open Source Hospital Management System built on top of OpenMRS, OpenELIS and OpenERP.
+    description: Bahmni is an easy-to-use hospital information system and electronic medical record (EMR) system developed in the global south to meet the needs of low-resource environments. Bahmni is a distribution of the Open Medical Record System (OpenMRS) medical record platform, with a user interface built from the ground up. It also supports Odoo (formerly open enterprise resource planning [OpenERP]), open electronic- level laboratory information system (OpenELIS), and dcm4chee (an image manager), providing an integrated, robust solution that manages patient information in a flexible fashion throughout the care cycle, including registration, various points of care, investigations, laboratory orders and results management, picture archiving and communication systems, and billing.
     website: bahmni.org
     organizations: [{"name":"Bahmni","website":"bahmni.org","org_type":"owner"}]
     SDGs: [3]
     license: AGPL-3.0
     repositoryURL: https://github.com/Bahmni/bahmni-core
+  - name: Everwell Hub
+    description: The Everwell Hub is an open source platform that supports real-time, end-to-end case management for public health diseases. Founded in 2015, Everwell Health Solutions private limited company spin-out from Microsoft Research to champion innovations in public health. Based on initial work, Everwell Hub was developed as an open-source module-based platform to digitize the patient journey.
+    website: https://www.everwell.org/
+    organizations: [{"name":"Everwell","website":"everwell.org","org_type":"owner"}]
+    SDGs: [3]
+    license: AGPL-3.0
+    repositoryURL: hhttps://gitlab.com/everwell/hub-foss
   - name: OpenMRS
-    description: Software platform and reference application which enables design of a customized medical records system with no programming knowledge.
+    description: OpenMRS is a software platform and a reference application that enables design of a customized medical records system (MRS). It is a common platform upon which health informatics and eHealth efforts in low- income countries can be built. Since the system is based on a conceptual database structure that is not dependent on the actual types of medical information required to be collected or on particular data collection forms, it can be customized for different uses. Both the platform and the new front-end reference application (OpenMRS 3.x) are designed to be modular, making it extremely extensible by allowing customizations to be added or removed to meet local needs. OpenMRS is based on the principle that information should be stored in a way that makes it easy to summarize and analyze (i.e., minimal use of free text and maximum use of coded information). At its core, it is a concept dictionary that stores all diagnoses, tests, procedures, drugs, and other general questions and potential answers.
     website: openmrs.org
     organizations: [{"name":"OpenMRS","website":"openmrs.org","org_type","owner"}]
     SDGs: [3]
     license: MPL-2.0 
     repositoryURL: https://github.com/openmrs/openmrs-core
   - name: OpenSRP
-    description: Open source mobile health platform that allows frontline health workers to electronically register and track the health of their entire client population
+    description: Open Smart Register Platform (OpenSRP) is an open source mobile digital global goods platform whose primary users are frontline health workers. The tool empowers health workers by allowing them to digitally record the services they render at community- and health-facility levels, while simultaneously providing program managers and policymakers with current data for improved decision-making.
     website: smartregister.org
     organizations: [{"name":"OpenSRP","website":"smartregister.org","org_type","owner"}]
     SDGs: [3]
     license: APL-2.0
     repositoryURL: https://github.com/OpenSRP/opensrp-client-core
+  - name: Global Open Facility Registry
+    description: The Global Open Facility Registry (GOFR) lets health data administrators analyze, de-duplicate, and curate lists of facilities. By reconciling data sets maintained by multiple sources, it helps health officials develop registries of all the unique health facilities in a country.
+    website: https://www.facilitymatch.net/
+    organizations: [{"name":"IntreHealth","website":"intrahealth.org","org_type","owner"}]
+    SDGs: [3]
+    license: AGPL-3.0
+    repositoryURL: https://github.com/intrahealth/gofr
   - name: OpenIMIS
-    description: OpenIMIS is open source software that manages social (health) protection schemes. It links beneficiary, provider and payer data.
+    description: Open Insurance Management Information System (openIMIS) is the first and only open source software for managing health financing schemes. It electronically links and processes beneficiary, provider, and payer data. The system is designed to manage various social protection systems, including health insurance schemes—from enrolling beneficiaries to transmitting and processing claims and calculating reimbursements. Free and ready to download, openIMIS offers a flexible solution that can be adjusted to the needs of different schemes and countries. The adaptable modular design covers health financing business processes in a user-friendly manner.
     website: openimis.org
     organizations: [{"name":"OpenIMIS","website":"openimis.org","org_type","owner"}]
     SDGs: [3]
@@ -64,28 +92,49 @@ products:
     repositoryURL: https://github.com/openimis/web_app_vb
   - name: DHIS2
     aliases: ["DHIS"]
-    description: A health management data platform for reporting, analysis and dissemination of data for all health programs, developed on open source Java technologies.
+    description: District Health Information Software 2 (DHIS2) is an open source, web-based Health Management Information System (HMIS) platform. DHIS2 supports the collection, analysis, visualization, and sharing of both aggregate and individual-level data, including mobile and offline data collection using the DHIS2 Android app. The core DHIS2 software development is managed by the Health Information Systems Program (HISP) at the University of Oslo. HISP is a global network of 15 in-country and regional organizations, providing daily direct support to ministries of health and local implementers of DHIS2
     website: dhis2.org
     organizations: [{"name":"DHIS2","website":"dhis2.org","org_type":"owner"}]
     SDGs: [3]
     license: BSD-3-Clause
     repositoryURL: https://github.com/dhis2/dhis2-core
+  - name: Global Healthsites Mapping Project
+    description: The Global Healthsites Mapping Project is building a global commons of health facility data by making OpenStreetMap useful to the medical community and humanitarian sector. This open data approach invites organizations to share health facility data and collaborate to establish an accessible global baseline of health facility data. The project supports individual facility updates and publishes national shapefiles of downloadable health facility data. The API allows regional analysis. The project is part of the Global Open Facility Registry solution and is linked to the Design and Analysis Toolkit for Inventory and Monitoring (DATIM) project.
+    website: https://healthsites.io/
+    organizations: [{"name":"Healthsites.io","website":"healthsites.io","org_type":"owner"}]
+    SDGs: [3]
+    license: BSD-3-Clause
+    repositoryURL: https://github.com/healthsites/healthsites
   - name: iHRIS
-    description: Open Source software that helps countries around the world track and manage their health workforce data to improve access to services.
+    description: Many countries experience critical shortages of health workers and struggle to meet the health care needs of their people. The COVID-19 pandemic has exacerbated this problem, making it more difficult for health workers to deliver lifesaving, people-centered care. Effective health workforce management is crucial for countries to address these gaps. Human resources managers and other decision-makers require up-to- date and accurate data on the current number of health workers, where they are deployed, their skill sets, and information on vacant posts and migration. Yet many countries lack this information in a central database, making it difficult to locate employee records or aggregate data for analysis. iHRIS is a free and open source software solution that has been used by ministries of health, district health offices, and health care facilities in over 30 countries to more easily collect, maintain, analyze, and manage health workforce data and resources.
     website: ihris.org
     organizations: [{"name":"Intrahealth International","website":"intrahealth.org","org_type":"owner"}]
     SDGs: [3]
     license: GPL-3.0
     repositoryURL: https://github.com/iHRIS/iHRIS
+  - name: Project Catalog Management Tool
+    description: The Project Catalog Management Tool (PCMT) connects product catalogs to show a clear journey from manufacturer to patient. It establishes master data that include GS1 identifiers, global categories, and mappings to local identifiers. This enables end-to-end visibility, allows shipments to flow between systems, and helps supply chains perform.
+    website: https://productcatalog.io
+    organizations: [{"name":"VillageReach","website":"villagereach.org","org_type":"owner"}]
+    SDGs: [3]
+    license: GPL-3.0
+    repositoryURL: https://gitlab.com/pcmt
+  - name: Pharmadex
+    description: Pharmadex is a web-based tool that helps national medicines regulatory authorities (NMRAs) streamline and track medicine registrations to ensure they have the most updated medicines available and approved for prescribing and use. 
+    website: https://mtapsprogram.org/resources/pharmadex
+    organizations: [{"name":"Management Sciences for Health","website":"msh.org","org_type":"owner"}]
+    SDGs: [3]
+    license: GPL-3.0
+    repositoryURL: https://github.com/MSH/Pharmadex
   - name: Child Growth Monitor
-    description: CGM uses mobile technology (augmented reality and arti cial intelligence) to capture body scans of children as anthropometric data to deduce levels and variations in malnutrition. This allows e cient measurement, early diagnosis, and rapid emergency response to the early symptoms and e ects of malnutrition.
+    description: Malnutrition is one of the leading causes of death in children, especially in the most remote regions of the world. Malnutrition is extremely complex to monitor, as traditional measuring tools are often too expensive, prone to human error, inaccurate, and costly to deploy. Child Growth Monitor (CGM) uses mobile technology (augmented reality and artificial intelligence) to capture body scans of children as anthropometric data to deduce levels and variations in malnutrition. This allows efficient measurement, early diagnosis, and rapid emergency response to the early symptoms and effects of malnutrition.
     website: childgrowthmonitor.org
     organizations: [{"name":"welthungerhilfe","website":"welthungerhilfe.org","org_type":"owner"}]
     SDGs: [3]
     license: GPL-3.0
     repositoryURL: https://github.com/Welthungerhilfe/cgm-scanner
   - name: OpenLMIS
-    description: Cloud-based electronic logistics management information system (LMIS) purpose-built to manage health commodity distribution in low- and middle-income countries.
+    description: OpenLMIS is a powerful, open source, cloud-based electronic logistics management information system (LMIS) purpose-built to manage health commodity supply chains. OpenLMIS automates LMIS business processes throughout the entire supply chain, reducing the burden on health workers while improving data accuracy, data timeliness, and data visibility.
     website: openlmis.org
     organizations: [{"name":"OpenLMIS","website":"openlmis.org","org_type":"owner"}]
     SDGs: [3,9]
@@ -93,15 +142,15 @@ products:
     repositoryURL: https://github.com/OpenLMIS/openlmis-ref-distro
   - name: Reveal
     aliases: ["mSpray", "Reveal (formerly mSpray)"]
-    description: Tool for enumeration, targeting and monitoring of Indoor Residual Spraying (IRS) for malaria interventions.
-    website: akros.com/mspray
+    description: Without an accurate and comprehensive understanding of the size and distribution of a population, it is challenging to optimize service delivery and ensure interventions reach recommended coverage thresholds. Reveal is an open source platform and digital global good that uses geospatial data and technology, including high-resolution satellite imagery, machine learning risk models, and front-end mobile tools to efficiently and effectively deliver lifesaving interventions. Reveal, formerly known as mSpray, was conceptualized in 2010 and has since been developed in collaboration with country governments and implementing partners to support public health interventions.
+    website: https://revealprecision.com
     organizations: [{"name":"Akros","website":"akros.com","org_type":"owner"}]
     SDGs: [3]
     license: Apache-2.0
-    repositoryURL: https://github.com/onaio/mspray
+    repositoryURL: https://github.com/akrosinc/reveal-server
   - name: SORMAS
     aliases: ["Surveillance, Outbreak Response Management and Analysis System"]
-    description: An open source eHealth system - consisting of separate web and mobile apps - that is geared towards optimizing the processes used in monitoring the spread of infectious diseases and responding to outbreak situations.
+    description: The Surveillance Outbreak Response Management and Analysis System (SORMAS) is an open source mobile eHealth software that is designed to organize and facilitate disease control and outbreak management procedures in addition to disease surveillance and epidemiological analysis for all administrative levels of the public health system. Its mission is to improve prevention and control of communicable diseases. SORMAS is free of charge and adheres to the highest data protection standards, good scientific practice, and open access policy. SORMAS is characterized by the following features - digitalized notification at the health facility level, multi-directional information flow, offline functionality, contact follow-up management, event management, laboratory functionality, analytics, and user-centered design.
     website: sormas.org
     organizations: [{"name":"Helmholtz Centre for Infection Research","website":"www.helmholtz-hzi.de","org_type":"owner"}]
     SDGs: [3,16,17]
@@ -115,14 +164,14 @@ products:
     license: BSD-3-Clause
     repositoryURL: https://github.com/jembi/hearth
   - name: OpenBoxes
-    description: OpenBoxes is an open-source supply chain management system used to manage supplies and medications for healthcare facilities and disaster relief efforts. This ensures that health workers have the right quantities at the right time to save lives. Beyond supply chain management, OpenBoxes has diversified its functionality to include the ability to track cold chain items. This includes icons that flag an item as cold chain and the ability to indicate temperature requirements and create bin locations, which are pivotal features in the effective delivery of COVID-19 vaccines.
+    description: OpenBoxes is an open source logistics management information system (LMIS) designed to serve the supply chain management demands of public health systems. OpenBoxes enables real-time monitoring of inventory levels, expiry dates, and incoming and outgoing quantities at multiple facilities within a health system. OpenBoxes also transforms consumption and requisition data into a demand signal, facilitating purchasing decisions based on real need rather than past availability. OpenBoxes is a web-based system that can be deployed to the cloud or on-premises.
     website: https://openboxes.com
     organizations: [{"name":"OpenBoxes","website":"openboxes.com","org_type":"owner"}]
     SDGs: [3]
     license: Eclipse-1.0
     repositoryURL: https://github.com/openboxes/openboxes
   - name: Tamanu
-    description: Tamanu is a patient-level electronic medical record system for desktop and mobile. It allows health workers to track individual patients, providing clinical support and supporting consistent, long-term management of patient conditions.
+    description: Tamanu is a free and open source patient-level electronic medical record (EMR) system for desktop and mobile. It allows health workers to track individual patients and provide clinical support.
     website: https://tamanu.io
     organizations: [{"name":"Tamanu","website":"tamanu.io","org_type":"owner"}]
     SDGs: [3]
@@ -142,3 +191,38 @@ products:
     SDGs: [3]
     license: APL-2.0
     repositoryURL: https://github.com/santedb/client-registry
+  - name: OpenCR
+    description: Open Client Registry (OpenCR) is an open source and standards-based client registry. Client registries use sophisticated record linkage processes to uniquely identify patients across multiple health information systems in facilities, pharmacies, lab systems, and elsewhere. As a critical component of an interoperable health information exchange (HIE), it allows patients to be tracked across facilities and decreases instances of duplicate and incomplete records, as well as interruptions in treatment. It is a necessary tool in public health to help manage patient safety and care coordination, monitoring, reporting, surveillance, and medical research.
+    website: https://openclientregistry.com
+    organizations: [{"name":"Intrahealth","website":"intrahealth.org","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/intrahealth/client-registry
+  - name: Digital Health Atlas
+    description: The Digital Health Atlas (DHA) is a global web platform overseen by the World Health Organization that supports Ministry of Health (MOH) leadership teams, financial and technical investors, and technology partners to inventory and assess digital health projects globally. The data in the DHA are of critical importance to inform technology decisions. These technologies include tools that facilitate planning, surveillance, testing, contact tracing, quarantine, and more. The DHA is essential to address global health challenges and ensure the World Health Organization’s vision of a global strategy on digital health is fulfilled. By enabling global data exchange, the DHA accelerates the deployment and uptake of digital health technologies and strengthens public health preparedness. The DHA is made more effective by the contributions made to it; when more data are contributed, more information is available to all, and everyone benefits.
+    website: www.digitalhealthatlas.org
+    organizations: [{"name":"World Health Organization","website":"who.int","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/pulilab/digital-health-atlas
+  - name: OpenELIS
+    description: The Open Enterprise Laboratory Information System (OpenELIS) global software is an enterprise-level laboratory information system built on open source, web-based technologies that has been tailored for low- and middle-income country public health laboratories. The software serves as both an effective laboratory software solution and business process framework. It supports the efficient functioning of public health laboratories for best laboratory practice and accreditation.
+    website: https://openelis-global.org
+    organizations: [{"name":"University of Washington","website":"uw.edu","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/I-TECH-UW/OpenELIS-Global-2
+  - name: mHero
+    description: mHero is a two-way, mobile phone-based communication system that connects ministries of health and health workers. mHero brings together existing health information systems with locally popular communication platforms to facilitate the exchange of important health information. It reduces the barriers that can exist between health workers and their support systems, playing a critical role in ensuring effective and efficient responses, particularly in a crisis.
+    website: https://www.mhero.org/
+    organizations: [{"name":"IntraHealth","website":"intrahealth.org","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/intrahealth/emNutt
+  - name: OpenLabConnect
+    description: OpenLabConnect is a decoupled mediator that transports and transforms data and commands between laboratory test instruments and laboratory information systems (LIS). Collecting data from laboratory analyzer instruments can be time consuming and highly subject to error due to manual transcription between the order, the machine, and the results report. Additionally, precise algorithms and rules for quality assurance and validation are often haphazardly followed by staff. Historically, much of the digital interfacing with instruments has been custom and tightly coupled to its software through point-to-point programming. OpenLabConnect can be used as a generalized solution to bridge the LIS and the laboratory analyzer exchange to mitigate these issues.
+    website: https://github.com/OpenLabConnect/OpenLabConnect
+    organizations: [{"name":"University of Washington","website":"uw.edu","org_type":"owner"}]
+    SDGs: [3]
+    license: APL-2.0
+    repositoryURL: https://github.com/OpenLabConnect/OpenLabConnect

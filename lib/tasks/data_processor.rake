@@ -203,4 +203,35 @@ namespace :data_processors do
       end
     end
   end
+
+  desc 'Process list of product json files and assign tags.'
+  task process_tags_from_json_files: :environment do
+    base_export_directories = ['./exported_data/products/*.json', './exported_data/datasets/*.json']
+    base_export_directories.each do |base_export_directory|
+      Dir.glob(base_export_directory).map do |filename|
+        json_data = JSON.parse(File.read(filename))
+        obj_type = 'product'
+        if base_export_directory.include?('datasets')
+          obj_type = 'dataset'
+        end
+
+        slug = slug_em(json_data['name'])
+
+        product = Product.find_by(slug: slug) if obj_type == 'product'
+        product = Dataset.find_by(slug: slug) unless obj_type == 'product'
+        # Found existing product, return the product and skip processing the rest of the json.
+        next if product.nil?
+
+        # Process the sdg section of the json.
+        if json_data['tags'].present? && !json_data['tags'].empty?
+          product.tags = json_data['tags'].split(/\s*,\s*/)
+        end
+
+        unless product.save
+          puts "Unable to save: \"#{generated_product.name}\"."
+          next
+        end
+      end
+    end
+  end
 end
