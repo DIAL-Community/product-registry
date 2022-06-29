@@ -183,7 +183,7 @@ namespace :data_processors do
         product = Product.find_by(slug: slug) if obj_type == 'product'
         product = Dataset.find_by(slug: slug) unless obj_type == 'product'
         # Found existing product, return the product and skip processing the rest of the json.
-        return if product.nil?
+        next if product.nil?
 
         # Process the sdg section of the json.
         sdgs = []
