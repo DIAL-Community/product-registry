@@ -77,6 +77,8 @@ module Types
     field :sdg, resolver: Queries::SustainableDevelopmentGoalQuery
     field :search_sdgs, resolver: Queries::SearchSustainableDevelopmentGoalsQuery
 
+    field :sdg_targets, resolver: Queries::SustainableDevelopmentGoalTargetsQuery
+
     field :tags, resolver: Queries::TagsQuery
 
     field :wizard, resolver: Queries::WizardQuery
