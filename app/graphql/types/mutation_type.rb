@@ -59,6 +59,8 @@ module Types
     field :update_project_countries, mutation: Mutations::UpdateProjectCountries
     field :update_project_tags, mutation: Mutations::UpdateProjectTags
 
+    field :create_use_case, mutation: Mutations::CreateUseCase
+
     field :update_use_case_sdg_targets, mutation: Mutations::UpdateUseCaseSdgTargets
   end
 end
