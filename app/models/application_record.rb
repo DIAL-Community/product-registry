@@ -6,6 +6,8 @@ class ApplicationRecord < ActiveRecord::Base
 
   before_save :generate_slug, if: :auditable_association_object
 
+  scope :slug_simple_starts_with, ->(slug) { where('LOWER(slug) like LOWER(?)', "#{slug}%") }
+
   def auditable_association_object
     belongs_to = self.class.reflect_on_all_associations(:belongs_to)
     has_many = self.class.reflect_on_all_associations(:has_many)

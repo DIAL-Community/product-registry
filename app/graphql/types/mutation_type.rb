@@ -64,6 +64,8 @@ module Types
     field :update_use_case_sdg_targets, mutation: Mutations::UpdateUseCaseSdgTargets
     field :update_use_case_tags, mutation: Mutations::UpdateUseCaseTags
 
+    field :create_use_case_step, mutation: Mutations::CreateUseCaseStep
+
     field :update_use_case_step_workflows, mutation: Mutations::UpdateUseCaseStepWorkflows
   end
 end
