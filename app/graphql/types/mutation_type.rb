@@ -70,5 +70,7 @@ module Types
     field :update_use_case_step_products, mutation: Mutations::UpdateUseCaseStepProducts
 
     field :create_building_block, mutation: Mutations::CreateBuildingBlock
+
+    field :update_building_block_workflows, mutation: Mutations::UpdateBuildingBlockWorkflows
   end
 end
