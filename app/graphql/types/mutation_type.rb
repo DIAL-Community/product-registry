@@ -73,5 +73,6 @@ module Types
     field :create_building_block, mutation: Mutations::CreateBuildingBlock
 
     field :update_building_block_workflows, mutation: Mutations::UpdateBuildingBlockWorkflows
+    field :update_building_block_products, mutation: Mutations::UpdateBuildingBlockProducts
   end
 end

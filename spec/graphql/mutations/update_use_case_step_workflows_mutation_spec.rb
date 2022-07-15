@@ -84,7 +84,7 @@ RSpec.describe(Mutations::UpdateUseCaseStepWorkflows, type: :graphql) do
       expect(result['data']['updateUseCaseStepWorkflows']['useCaseStep'])
         .to(eq(nil))
       expect(result['data']['updateUseCaseStepWorkflows']['errors'])
-        .to(eq(['Must be an admin or content editor to update use case step']))
+        .to(eq(['Must be admin or content editor to update an use case step']))
     end
   end
 
@@ -103,7 +103,7 @@ RSpec.describe(Mutations::UpdateUseCaseStepWorkflows, type: :graphql) do
       expect(result['data']['updateUseCaseStepWorkflows']['useCaseStep'])
         .to(eq(nil))
       expect(result['data']['updateUseCaseStepWorkflows']['errors'])
-        .to(eq(['Must be an admin or content editor to update use case step']))
+        .to(eq(['Must be admin or content editor to update an use case step']))
     end
   end
 end
