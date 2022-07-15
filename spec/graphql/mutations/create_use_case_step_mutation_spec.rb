@@ -99,20 +99,20 @@ RSpec.describe(Mutations::CreateUseCaseStep, type: :graphql) do
 
   it 'generate offset for new use case with duplicated name' do
     expect_any_instance_of(Mutations::CreateUseCaseStep).to(receive(:an_admin).and_return(true))
-    create(:use_case, id: 3)
+    create(:use_case, id: 5)
     create(:use_case_step, name: "Some name", slug: "some_name", step_number: 5)
 
     result = execute_graphql(
       mutation,
       variables: { name: "Some name", slug: "", description: "some description", stepNumber: 5,
-                   useCaseId: 3 },
+                   useCaseId: 5 },
     )
 
     aggregate_failures do
       expect(result['data']['createUseCaseStep']['useCaseStep'])
         .to(eq({ "name" => "Some name", "slug" => "some_name_dup0",
                  "useCaseStepDescription" => { "description" => "some description" },
-                 "stepNumber" => 5, "useCase" => { "id" => "3" } }))
+                 "stepNumber" => 5, "useCase" => { "id" => "5" } }))
       expect(result['data']['createUseCaseStep']['errors'])
         .to(eq([]))
     end
