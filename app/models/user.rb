@@ -64,6 +64,10 @@ class User < ApplicationRecord
     end
   end
 
+  def confirmed_user
+    !confirmed_at.nil?
+  end
+
   def password_expire?
     logger.info('Checking if user record is expired!')
     return true if expired && !reset_password_token.nil?
