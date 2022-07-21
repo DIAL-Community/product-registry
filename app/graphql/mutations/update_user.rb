@@ -15,6 +15,13 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(email:, roles:, username:, organizations:, products:, confirmed:)
+      unless an_admin
+        return {
+          user: nil,
+          errors: ['Must be an admin to update user data.']
+        }
+      end
+
       user = User.find_by(email: email)
       if user.nil?
         {
