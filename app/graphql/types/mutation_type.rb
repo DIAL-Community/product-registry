@@ -34,6 +34,7 @@ module Types
     field :update_organization_products, mutation: Mutations::UpdateOrganizationProducts
     field :update_organization_sectors, mutation: Mutations::UpdateOrganizationSectors
     field :update_organization_projects, mutation: Mutations::UpdateOrganizationProjects
+    field :update_organization_offices, mutation: Mutations::UpdateOrganizationOffices
 
     field :create_product, mutation: Mutations::CreateProduct
 
@@ -59,6 +60,22 @@ module Types
     field :update_project_countries, mutation: Mutations::UpdateProjectCountries
     field :update_project_tags, mutation: Mutations::UpdateProjectTags
 
+    field :create_use_case, mutation: Mutations::CreateUseCase
+
     field :update_use_case_sdg_targets, mutation: Mutations::UpdateUseCaseSdgTargets
+    field :update_use_case_tags, mutation: Mutations::UpdateUseCaseTags
+
+    field :create_use_case_step, mutation: Mutations::CreateUseCaseStep
+
+    field :update_use_case_step_workflows, mutation: Mutations::UpdateUseCaseStepWorkflows
+    field :update_use_case_step_products, mutation: Mutations::UpdateUseCaseStepProducts
+    field :update_use_case_step_building_blocks, mutation: Mutations::UpdateUseCaseStepBuildingBlocks
+
+    field :create_building_block, mutation: Mutations::CreateBuildingBlock
+
+    field :update_building_block_workflows, mutation: Mutations::UpdateBuildingBlockWorkflows
+    field :update_building_block_products, mutation: Mutations::UpdateBuildingBlockProducts
+
+    field :create_workflow, mutation: Mutations::CreateWorkflow
   end
 end

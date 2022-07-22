@@ -6,8 +6,10 @@ module Queries
     type [Types::UserType], null: false
 
     def resolve(search:)
-      use_cases = use_cases.name_contains(search) unless search.blank?
-      use_cases
+      return [] if context[:current_user].nil? || !context[:current_user].roles.include?('admin')
+
+      users = User.name_contains(search) unless search.blank?
+      users
     end
   end
 
@@ -16,6 +18,8 @@ module Queries
     type Types::UserType, null: false
 
     def resolve(user_id:)
+      return nil if context[:current_user].nil? || !context[:current_user].roles.include?('admin')
+
       User.find(user_id)
     end
   end
@@ -27,6 +31,8 @@ module Queries
     type Types::UserType.connection_type, null: false
 
     def resolve(search:)
+      return [] if context[:current_user].nil? || !context[:current_user].roles.include?('admin')
+
       users = User.order(:email)
       users = users.name_contains(search) unless search.blank?
 

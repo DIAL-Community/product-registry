@@ -9,17 +9,29 @@ module Mutations
     argument :username, String, required: true
     argument :organizations, GraphQL::Types::JSON, required: true, default_value: []
     argument :products, GraphQL::Types::JSON, required: false, default_value: []
+    argument :confirmed, Boolean, required: false
 
     field :user, Types::UserType, null: false
     field :errors, [String], null: false
 
-    def resolve(email:, roles:, username:, organizations:, products:)
+    def resolve(email:, roles:, username:, organizations:, products:, confirmed:)
+      unless an_admin
+        return {
+          user: nil,
+          errors: ['Must be an admin to update user data.']
+        }
+      end
+
       user = User.find_by(email: email)
       if user.nil?
         {
           user: nil,
           errors: 'User not found'
         }
+      end
+
+      if user.confirmed_at.nil? && confirmed
+        user.confirmed_at = Time.now
       end
 
       user.username = username

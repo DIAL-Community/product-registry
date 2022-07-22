@@ -10,6 +10,7 @@ module Types
 
   class OfficeType < Types::BaseObject
     field :id, ID, null: false
+    field :slug, String, null: false
     field :name, String, null: false
     field :latitude, String, null: false
     field :longitude, String, null: false

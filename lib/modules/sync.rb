@@ -90,6 +90,14 @@ module Modules
             sdg_obj = SustainableDevelopmentGoal.find_by(number: sdg_entry['SDGNumber'])
             next if sdg_obj.nil?
 
+            unless existing_dataset.id.nil?
+              dataset_sdg = DatasetSustainableDevelopmentGoal.find_by(
+                dataset_id: existing_dataset.id,
+                sustainable_development_goal_id: sdg_obj.id
+              )
+              next unless dataset_sdg.nil?
+            end
+
             dataset_sdg = DatasetSustainableDevelopmentGoal.new
             dataset_sdg.sustainable_development_goal_id = sdg_obj.id
             dataset_sdg.mapping_status = DatasetSustainableDevelopmentGoal.mapping_status_types[:VALIDATED]
