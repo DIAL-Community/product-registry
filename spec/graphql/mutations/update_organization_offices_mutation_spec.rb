@@ -31,8 +31,8 @@ RSpec.describe(Mutations::UpdateOrganizationOffices, type: :graphql) do
 
   it 'is successful - user is logged in as admin' do
     create(:organization, name: 'Some Name', slug: 'some_name', offices: [])
-    create(:country, name: "Country 1", id: 1)
-    create(:country, name: "Country 2", id: 2)
+    create(:country, name: "Country 1", code_longer: "C1", id: 1)
+    create(:country, name: "Country 2", code_longer: "C2", id: 2)
     expect_any_instance_of(Mutations::UpdateOrganizationOffices).to(receive(:an_admin)
                                                                 .and_return(true))
 
@@ -59,8 +59,8 @@ RSpec.describe(Mutations::UpdateOrganizationOffices, type: :graphql) do
 
   it 'is successful - user is logged in as organization owner' do
     create(:organization, name: 'Some Name', slug: 'some_name', offices: [])
-    create(:country, name: "Country 1", id: 1)
-    create(:country, name: "Country 2", id: 2)
+    create(:country, name: "Country 1", code_longer: "C1", id: 1)
+    create(:country, name: "Country 2", code_longer: "C2", id: 2)
     expect_any_instance_of(Mutations::UpdateOrganizationOffices).to(receive(:an_org_owner)
                                                                 .and_return(true))
 
@@ -108,8 +108,8 @@ RSpec.describe(Mutations::UpdateOrganizationOffices, type: :graphql) do
 
   it 'is fails - user has not proper rigths' do
     create(:organization, name: 'Some Name', slug: 'some_name', offices: [])
-    create(:country, name: "Country 1", id: 1)
-    create(:country, name: "Country 2", id: 2)
+    create(:country, name: "Country 1", code_longer: "C1", id: 1)
+    create(:country, name: "Country 2", code_longer: "C2", id: 2)
     expect_any_instance_of(Mutations::UpdateOrganizationOffices).to(receive(:an_admin)
                                                                 .and_return(false))
     expect_any_instance_of(Mutations::UpdateOrganizationOffices).to(receive(:an_org_owner)
