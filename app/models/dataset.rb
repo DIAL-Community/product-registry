@@ -24,6 +24,9 @@ class Dataset < ApplicationRecord
   has_many :sectors, through: :dataset_sectors,
                      after_add: :association_add, before_remove: :association_remove
 
+  has_and_belongs_to_many :countries, join_table: :datasets_countries,
+                     dependent: :delete_all
+
   has_and_belongs_to_many :origins, join_table: :datasets_origins,
                                     dependent: :delete_all,
                                     after_add: :association_add, before_remove: :association_remove
