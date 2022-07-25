@@ -37,11 +37,6 @@ namespace :data_processors do
         end
         generated_product = generate_product(json_representation, obj_type)
 
-        unless generated_product.save
-          puts "Unable to save: \"#{generated_product.name}\"."
-          next
-        end
-
         puts "#{obj_type.humanize} with name \"#{generated_product.name}\" saved."
         next if !json_representation['descriptions'].present? || json_representation['descriptions'].empty?
 
@@ -79,7 +74,9 @@ namespace :data_processors do
     product = Product.find_by(slug: slug) if obj_type == 'product'
     product = Dataset.find_by(slug: slug) unless obj_type == 'product'
     # Found existing product, return the product and skip processing the rest of the json.
-    return product unless product.nil? || product.manual_update
+    # return product unless product.nil? || product.manual_update
+    product = Product.new if obj_type == 'product' && product.nil?
+    product = Dataset.new if obj_type == 'dataset' && product.nil?
 
     # Process the origin of the product.
     origin = Origin.find_by(name: json_data['origin'])
@@ -93,9 +90,11 @@ namespace :data_processors do
     # Process the sector section of the json.
     sectors = []
     if json_data['sectors'].present? && !json_data['sectors'].empty?
-      json_data['sectors'].each do |sector|
-        sector = Sector.find_by(name: sector['name'])
-        sectors << sector unless sector.nil?
+      json_data['sectors'].each do |sector_list|
+        sector_list['name'].split(';').each do |curr_sector|
+          sector = Sector.find_by(slug: slug_em(curr_sector.strip), locale: 'en')
+          sectors << sector unless sector.nil?
+        end
       end
     end
 
@@ -117,6 +116,14 @@ namespace :data_processors do
       end
     end
 
+    countries = []
+    if json_data['geographicCoverage'].present? && !json_data['geographicCoverage'].empty?
+      json_data['geographicCoverage'].split(',').each do |curr_country|
+        country = Country.find_by(name: curr_country.strip)
+        countries << country unless country.nil?
+      end
+    end
+
     # Resolve the type of the json entry.
     product_type = 'product'
     case obj_type
@@ -130,7 +137,11 @@ namespace :data_processors do
       product_type = 'ai_model'
     end
 
-    product = Product.new(
+    website = json_data['website'].delete_prefix("https://") unless json_data['website'].nil?
+    tags = nil if json_data['tags'].nil?
+    tags = json_data['tags'].split(/\s*,\s*/) unless json_data['tags'].nil?
+
+    product.update(
       name: json_data['name'],
       aliases: valid_aliases,
       slug: slug,
@@ -141,11 +152,11 @@ namespace :data_processors do
       sectors: sectors,
       organizations: organizations,
       sustainable_development_goals: sdgs,
-      website: json_data['website'],
+      website: website,
       product_type: product_type
     ) if obj_type == 'product'
 
-    product = Dataset.new(
+    product.update(
       name: json_data['name'],
       aliases: valid_aliases,
       slug: slug,
@@ -153,14 +164,15 @@ namespace :data_processors do
       sectors: sectors,
       organizations: organizations,
       sustainable_development_goals: sdgs,
-      website: json_data['website'],
+      website: website,
       visualization_url: json_data['visualizationUrl'],
       time_range: json_data['timeRange'],
+      countries: countries,
       geographic_coverage: json_data['geographicCoverage'],
       license: json_data['license'],
       languages: json_data['languages'],
-      data_format: json_data['data_format'],
-      tags: json_data['tags'].split(/\s*,\s*/),
+      data_format: json_data['format'],
+      tags: tags,
       dataset_type: product_type
     ) unless obj_type == 'product'
 

@@ -56,7 +56,7 @@ module Mutations
       new_office.longitude = office['longitude']
       new_office.city = office['cityName']
 
-      country = Country.find_by(name: office['countryName'])
+      country = Country.find_by(code_longer: office['countryCode'])
 
       region = Region.find_by(name: office['regionName'])
       if region.nil?
