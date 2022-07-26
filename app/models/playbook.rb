@@ -29,10 +29,10 @@ class Playbook < ApplicationRecord
   end
 
   def playbook_description_localized
-    description = playbook_descriptions.order('LENGTH(overview) DESC')
+    description = playbook_descriptions.order(Arel.sql('LENGTH(overview) DESC'))
                                        .find_by(locale: I18n.locale)
     if description.nil?
-      description = playbook_descriptions.order('LENGTH(overview) DESC')
+      description = playbook_descriptions.order(Arel.sql('LENGTH(overview) DESC'))
                                          .find_by(locale: 'en')
     end
     description

@@ -24,25 +24,20 @@ RSpec.describe(Mutations::UpdateOrganizationProducts, type: :graphql) do
   end
 
   it 'is successful' do
-    country1 = create(:country, slug: 'c1', name: 'country1', code: 'cc1', code_longer: 'ccl1', latitude: 35.5,
-    longitude: 41.1)
+    first = create(:product, slug: 'first_product', name: 'First Product')
+    second = create(:product, slug: 'second_product', name: 'Second Product')
 
-    product3 = create(:product, slug: 'p3', name: 'product3')
-
-    create(:product, slug: 'p2', name: 'product2')
-    create(:product, slug: 'p1', name: 'product1')
-
-    organization = create(:organization, slug: 'org1', name: 'organization1', products: [product3],
-      countries: [country1])
+    organization = create(:organization, name: 'Graph Organization', slug: 'graph_organization')
+    expect_any_instance_of(Mutations::UpdateOrganizationProducts).to(receive(:an_admin).and_return(true))
 
     result = execute_graphql(
       mutation,
-      variables: { productsSlugs: ['p1', 'p2'], slug: organization.slug },
+      variables: { productsSlugs: [first.slug, second.slug], slug: organization.slug },
     )
 
     aggregate_failures do
       expect(result['data']['updateOrganizationProducts']['organization'])
-        .to(eq({ "products" => [{ "slug" => "p1" }, { "slug" => "p2" }], "slug" => "org1" }))
+        .to(eq({ "products" => [{ "slug" => first.slug }, { "slug" => second.slug }], "slug" => organization.slug }))
     end
   end
 end

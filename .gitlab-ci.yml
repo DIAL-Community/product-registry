@@ -40,5 +40,6 @@ lintandtest:
     - until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_test" -c '\q'; do sleep 2s; done
     - RAILS_ENV=test bundle exec rake db:create db:migrate
     - RAILS_ENV=test bundle exec rails test
+    - RAILS_ENV=test bundle exec rspec spec
 
     

@@ -93,4 +93,25 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+  # Silencing output of the rspec tests.
+  config.before(:all, &:supress_puts)
+  config.after(:all,  &:allow_puts)
+end
+
+public
+
+# Redirects stderr and stout to /dev/null.txt
+def supress_puts
+  @original_stderr = $stderr
+  @original_stdout = $stdout
+  $stderr = File.new(File::NULL, 'w')
+  $stdout = File.new(File::NULL, 'w')
+end
+
+def allow_puts
+  $stderr = @original_stderr
+  $stdout = @original_stdout
+  @original_stderr = nil
+  @original_stdout = nil
 end

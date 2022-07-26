@@ -39,8 +39,9 @@ module Types
     field :search_building_blocks, resolver: Queries::SearchBuildingBlocksQuery
 
     field :sectors, resolver: Queries::SectorsQuery
-    field :sectorsWithSubs, resolver: Queries::SectorsWithSubsQuery
+    field :sector, resolver: Queries::SectorQuery
     field :search_sectors, resolver: Queries::SearchSectorsQuery
+    field :sectors_with_subs, resolver: Queries::SectorsWithSubsQuery
 
     field :origins, resolver: Queries::OriginsQuery
     field :search_origins, resolver: Queries::SearchOriginsQuery

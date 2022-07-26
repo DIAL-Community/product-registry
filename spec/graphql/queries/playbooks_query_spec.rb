@@ -18,6 +18,11 @@ RSpec.describe(Queries::PlaybooksQuery, type: :graphql) do
   end
 
   it 'pulling playbooks is successful' do
+    create(:playbook, name: 'Some Draft Playbook')
+    create(:playbook, name: 'Some Published Playbook')
+    create(:playbook, name: 'Some More Published Playbook')
+    create(:playbook, name: 'Another Published Playbook')
+
     result = execute_graphql(
       query
     )
