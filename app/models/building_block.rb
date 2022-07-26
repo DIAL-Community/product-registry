@@ -15,6 +15,9 @@ class BuildingBlock < ApplicationRecord
 
   has_and_belongs_to_many :workflows, join_table: :workflows_building_blocks,
                                       after_add: :association_add, before_remove: :association_remove
+  has_and_belongs_to_many :use_case_steps, join_table: :use_case_steps_building_blocks,
+                                           after_add: :association_add,
+                                           before_remove: :association_remove
 
   has_many :building_block_descriptions, dependent: :destroy
 
