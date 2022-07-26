@@ -54,8 +54,9 @@ class SectorsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should destroy sector' do
     # Should not delete because it is referenced by a use case
-    assert_difference('Sector.count', 0) do
-      delete sector_url(@sector)
+    deleted_sector = sectors(:two)
+    assert_difference('Sector.count', -1) do
+      delete sector_url(deleted_sector)
     end
 
     assert_difference('Sector.count', -1) do

@@ -55,7 +55,6 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
             name
             slug
             imageFile
-            license
             isLaunchable
             maturityScore
             productType
@@ -130,11 +129,11 @@ RSpec.describe(Queries::OwnedProductsQuery, type: :graphql) do
   end
 
   it 'pulls owned products for logged used' do
-    controller.stub(:current_user) { mock_model("User", user_products => [1, 2]) }
+    first = create(:product, slug: 'first_product', name: 'First Product', id: 1)
+    second = create(:product, slug: 'second_product', name: 'Second Product', id: 2)
 
-    result = execute_graphql(
-      query
-    )
+    user = create(:user, email: 'user@gmail.com', user_products: [first.id, second.id])
+    result = execute_graphql_as_user(user, query)
 
     aggregate_failures do
       expect(result['data']['ownedProducts'].count)
@@ -143,8 +142,6 @@ RSpec.describe(Queries::OwnedProductsQuery, type: :graphql) do
   end
 
   it 'pulls empty array for not logged user' do
-    controller.stub(:current_user) { mock_model("User", user_products => [1, 2]) }
-
     result = execute_graphql(
       query
     )

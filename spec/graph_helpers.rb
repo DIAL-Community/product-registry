@@ -15,6 +15,13 @@ module GraphHelpers
       { context: { controller: controller } }.merge(kwargs)
     )
   end
+
+  def execute_graphql_as_user(user, query, **kwargs)
+    RegistrySchema.execute(
+      query,
+      { context: { controller: controller, current_user: user } }.merge(kwargs)
+    )
+  end
 end
 
 RSpec.configure do |config|
