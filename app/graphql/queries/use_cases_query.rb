@@ -87,19 +87,7 @@ module Queries
     type Types::UseCaseStepType, null: false
 
     def resolve(slug:)
-      use_case_step = UseCaseStep.find_by(slug: slug)
-
-      unless use_case_step.nil?
-        building_blocks = []
-        if use_case_step&.workflows && !use_case_step.workflows.empty?
-          use_case_step.workflows.each do |workflow|
-            building_blocks |= workflow.building_blocks
-          end
-        end
-        use_case_step.building_blocks = building_blocks.sort_by { |b| b.name.downcase }
-      end
-
-      use_case_step
+      UseCaseStep.find_by(slug: slug)
     end
   end
 end
