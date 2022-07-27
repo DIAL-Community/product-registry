@@ -80,7 +80,9 @@ module Types
     field :delete_sector, mutation: Mutations::DeleteSector
 
     field :create_workflow, mutation: Mutations::CreateWorkflow
-
     field :update_workflow_building_blocks, mutation: Mutations::UpdateWorkflowBuildingBlocks
+
+    field :create_tag, mutation: Mutations::CreateTag
+    field :delete_tag, mutation: Mutations::DeleteTag
   end
 end

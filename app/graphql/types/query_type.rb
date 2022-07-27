@@ -81,6 +81,8 @@ module Types
     field :sdg_targets, resolver: Queries::SustainableDevelopmentGoalTargetsQuery
 
     field :tags, resolver: Queries::TagsQuery
+    field :tag, resolver: Queries::TagQuery
+    field :search_tags, resolver: Queries::SearchTagsQuery
 
     field :wizard, resolver: Queries::WizardQuery
 
