@@ -8,7 +8,7 @@ module Mutations
 
     argument :name, String, required: true
     argument :slug, String, required: true
-    argument :description, String, required: true
+    argument :description, String, required: false
 
     field :tag, Types::TagType, null: true
     field :errors, [String], null: true
