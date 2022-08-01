@@ -82,6 +82,9 @@ module Types
     field :create_workflow, mutation: Mutations::CreateWorkflow
     field :update_workflow_building_blocks, mutation: Mutations::UpdateWorkflowBuildingBlocks
 
+    field :create_country, mutation: Mutations::CreateCountry
+    field :delete_country, mutation: Mutations::DeleteCountry
+
     field :create_tag, mutation: Mutations::CreateTag
     field :delete_tag, mutation: Mutations::DeleteTag
   end
