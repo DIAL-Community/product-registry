@@ -25,7 +25,6 @@ module Mutations
       organization.contacts = []
       if !contacts.nil? && !contacts.empty?
         contacts.each do |contact|
-          puts contact
           current_contact = Contact.find_by(name: contact['name'], title: contact['title'], email: contact['email'])
           if current_contact.nil?
             current_contact = create_new_contact(contact['name'], contact['email'], contact['title'])

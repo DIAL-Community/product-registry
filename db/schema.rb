@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_12_054023) do
+ActiveRecord::Schema.define(version: 2022_07_22_063623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -839,6 +839,13 @@ ActiveRecord::Schema.define(version: 2022_07_12_054023) do
     t.index ["use_case_id"], name: "index_use_case_steps_on_use_case_id"
   end
 
+  create_table "use_case_steps_building_blocks", force: :cascade do |t|
+    t.bigint "use_case_step_id", null: false
+    t.bigint "building_block_id", null: false
+    t.index ["building_block_id", "use_case_step_id"], name: "building_blocks_use_case_steps_idx", unique: true
+    t.index ["use_case_step_id", "building_block_id"], name: "use_case_steps_building_blocks_idx", unique: true
+  end
+
   create_table "use_case_steps_products", force: :cascade do |t|
     t.bigint "use_case_step_id", null: false
     t.bigint "product_id", null: false
@@ -1022,6 +1029,8 @@ ActiveRecord::Schema.define(version: 2022_07_12_054023) do
   add_foreign_key "use_case_headers", "use_cases"
   add_foreign_key "use_case_step_descriptions", "use_case_steps"
   add_foreign_key "use_case_steps", "use_cases"
+  add_foreign_key "use_case_steps_building_blocks", "building_blocks", name: "use_case_steps_building_blocks_block_fk"
+  add_foreign_key "use_case_steps_building_blocks", "use_case_steps", name: "use_case_steps_building_blocks_step_fk"
   add_foreign_key "use_case_steps_products", "products", name: "use_case_steps_products_product_fk"
   add_foreign_key "use_case_steps_products", "use_case_steps", name: "use_case_steps_products_step_fk"
   add_foreign_key "use_case_steps_workflows", "use_case_steps", name: "use_case_steps_workflows_step_fk"

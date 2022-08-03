@@ -13,6 +13,15 @@ module Queries
     end
   end
 
+  class SectorQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::SectorType, null: false
+
+    def resolve(slug:)
+      Sector.find_by(slug: slug)
+    end
+  end
+
   class SectorsWithSubsQuery < Queries::BaseQuery
     argument :locale, String, required: false, default_value: 'en'
     type [Types::SectorType], null: false

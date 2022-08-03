@@ -17,13 +17,18 @@ RSpec.describe(Queries::PlaysQuery, type: :graphql) do
   end
 
   it 'pulling plays is successful' do
+    create(:play, name: 'Some Play')
+    create(:play, name: 'Some More Play')
+    create(:play, name: 'Yet More Play')
+    create(:play, name: 'Another Play')
+
     result = execute_graphql(
       query
     )
 
     aggregate_failures do
       expect(result['data']['plays'].count)
-        .to(eq(17))
+        .to(eq(4))
     end
   end
 end

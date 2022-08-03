@@ -3,11 +3,11 @@
 require 'graph_helpers'
 require 'rails_helper'
 
-RSpec.describe(Mutations::UpdateOrganizationCountry, type: :graphql) do
+RSpec.describe(Mutations::UpdateOrganizationContacts, type: :graphql) do
   let(:mutation) do
     <<~GQL
       mutation($contacts: JSON!, $slug: String!) {
-        updateOrganizationCountry(
+        updateOrganizationContacts(
           contacts: $contacts
           slug: $slug
         ) {
@@ -24,17 +24,24 @@ RSpec.describe(Mutations::UpdateOrganizationCountry, type: :graphql) do
   end
 
   it 'is successful' do
-    contact2 = create(:contact, slug: 'c2', name: 'contact2', title: 'con2', email: null)
-    contact1 = create(:contact, slug: 'c1', name: 'contact1', title: null, email: 'econ1')
+    first = create(:contact, name: 'First Person', slug: 'first_person')
+    second = create(:contact, name: 'Second Person', slug: 'second_person')
 
+    organization = create(:organization, name: 'Graph Organization', slug: 'graph_organization')
+
+    expect_any_instance_of(Mutations::UpdateOrganizationContacts).to(receive(:an_admin).and_return(true))
     result = execute_graphql(
       mutation,
-      variables: { contacts: [contact1, contact2], slug: 'o1' },
+      variables: { contacts: [first, second], slug: organization.slug },
     )
 
     aggregate_failures do
-      expect(result['data']['updateOrganizationCountry']['organization'])
-        .to(eq({ "contacts" => [{ "slug" => "c1" }, { "slug" => "c2" }], "slug" => "o1" }))
+      expect(result['data']['updateOrganizationContacts']['organization'])
+        .to(eq({ "contacts" => [{ "slug" => first.slug }, { "slug" => second.slug }], "slug" => organization.slug }))
     end
   end
+
+  # TODO: Probably going to need to add more spec here.
+  # * Test for organization owner.
+  # * Test for unathorized users trying to do graph modification.
 end

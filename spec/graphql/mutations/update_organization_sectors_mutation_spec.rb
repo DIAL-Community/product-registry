@@ -24,28 +24,20 @@ RSpec.describe(Mutations::UpdateOrganizationSectors, type: :graphql) do
   end
 
   it 'is successful' do
-    country1 = create(:country, slug: 'c1', name: 'country1', code: 'cc1', code_longer: 'ccl1', latitude: 35.5,
-    longitude: 41.1)
+    first = create(:sector, slug: 'first_sector', name: 'First Sector')
+    second = create(:sector, slug: 'second_sector', name: 'Second Sector')
 
-    origin3 = create(:origin, slug: 'o3')
-    origin2 = create(:origin, slug: 'o2')
-    origin1 = create(:origin, slug: 'o1')
-
-    sector3 = create(:sector, slug: 's3', name: 'sector3', origin: origin3)
-
-    create(:sector, slug: 's2', name: 'sector2', origin: origin2)
-    create(:sector, slug: 's1', name: 'sector1', origin: origin1)
-
-    organization = create(:organization, slug: 'org1', name: 'organization1', sectors: [sector3], countries: [country1])
+    organization = create(:organization, name: 'Graph Organization', slug: 'graph_organization')
+    expect_any_instance_of(Mutations::UpdateOrganizationSectors).to(receive(:an_admin).and_return(true))
 
     result = execute_graphql(
       mutation,
-      variables: { sectorsSlugs: ['s1', 's2'], slug: organization.slug },
+      variables: { sectorsSlugs: [first.slug, second.slug], slug: organization.slug },
     )
 
     aggregate_failures do
       expect(result['data']['updateOrganizationSectors']['organization'])
-        .to(eq({ "sectors" => [{ "slug" => "s2" }, { "slug" => "s1" }], "slug" => "org1" }))
+        .to(eq({ "sectors" => [{ "slug" => first.slug }, { "slug" => second.slug }], "slug" => organization.slug }))
     end
   end
 end

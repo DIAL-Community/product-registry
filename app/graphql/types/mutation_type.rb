@@ -76,6 +76,16 @@ module Types
     field :update_building_block_workflows, mutation: Mutations::UpdateBuildingBlockWorkflows
     field :update_building_block_products, mutation: Mutations::UpdateBuildingBlockProducts
 
+    field :create_sector, mutation: Mutations::CreateSector
+    field :delete_sector, mutation: Mutations::DeleteSector
+
     field :create_workflow, mutation: Mutations::CreateWorkflow
+    field :update_workflow_building_blocks, mutation: Mutations::UpdateWorkflowBuildingBlocks
+
+    field :create_country, mutation: Mutations::CreateCountry
+    field :delete_country, mutation: Mutations::DeleteCountry
+
+    field :create_tag, mutation: Mutations::CreateTag
+    field :delete_tag, mutation: Mutations::DeleteTag
   end
 end

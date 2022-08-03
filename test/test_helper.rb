@@ -10,17 +10,5 @@ module ActiveSupport
   class TestCase
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
-
-    # Add more helper methods to be used by all tests here...
-    FactoryBot.define do
-      factory :user do
-        email { 'usertest@digitalimpactalliance.org' }
-        username { 'some-default-username' }
-        password { 'password' }
-        password_confirmation { 'password' }
-        confirmed_at { Date.today }
-        roles { [:user] }
-      end
-    end
   end
 end

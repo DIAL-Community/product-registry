@@ -202,7 +202,7 @@ module Queries
     unless sector_ids.empty?
       sector_products = ProductSector.where(sector_id: sector_ids).map(&:product_id)
       if sector_products.empty? && !curr_sector.parent_sector_id.nil?
-        sector_products = ProductsSector.where(sector_id: curr_sector.parent_sector_id).map(&:product_id)
+        sector_products = ProductSector.where(sector_id: curr_sector.parent_sector_id).map(&:product_id)
       end
     end
 
