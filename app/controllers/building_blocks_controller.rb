@@ -462,7 +462,7 @@ class BuildingBlocksController < ApplicationController
               'products and sites related to an organization or activity.' },
       { name: 'eLearning', status: 'future',
         desc: 'Supports facilitated or remote learning through digital interaction between educators and students.' },
-      { name: 'eMarketplace', status: 'working',
+      { name: 'eMarketplace', status: 'future',
         desc: 'Provides a digital marketing space where provider entities can electronically advertise & sell '\
               'products & services to other entities (B2B) or end-customers (B2C).' },
       { name: 'Geographic Information Services (GIS)', status: 'future',
