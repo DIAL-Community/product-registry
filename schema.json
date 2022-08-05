@@ -7161,15 +7161,11 @@
                   "name": "originId",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "Int",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
                   },
-                  "defaultValue": null,
+                  "defaultValue": "null",
                   "isDeprecated": false,
                   "deprecationReason": null
                 },
@@ -7181,7 +7177,7 @@
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null,
+                  "defaultValue": "null",
                   "isDeprecated": false,
                   "deprecationReason": null
                 },

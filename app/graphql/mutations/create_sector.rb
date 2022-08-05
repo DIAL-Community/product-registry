@@ -8,8 +8,8 @@ module Mutations
 
     argument :name, String, required: true
     argument :slug, String, required: true
-    argument :origin_id, Integer, required: true
-    argument :parent_sector_id, Integer, required: false
+    argument :origin_id, Integer, required: false, default_value: nil
+    argument :parent_sector_id, Integer, required: false, default_value: nil
     argument :is_displayable, Boolean, required: true
 
     field :sector, Types::SectorType, null: true
@@ -34,10 +34,17 @@ module Mutations
         end
       end
 
+      sector_origin_id = origin_id
+      if sector_origin_id.nil?
+        # This origin is added through seeds.rb.
+        origin = Origin.find_by(slug: 'manually_entered')
+        sector_origin_id = origin.id
+      end
+
       # Update field of the sector object
       sector.name = name
       sector.locale = I18n.locale
-      sector.origin_id = origin_id
+      sector.origin_id = sector_origin_id
       sector.parent_sector_id = parent_sector_id
       sector.is_displayable = is_displayable
 

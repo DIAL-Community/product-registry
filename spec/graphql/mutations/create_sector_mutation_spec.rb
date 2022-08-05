@@ -10,7 +10,7 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
         $name: String!,
         $slug: String!,
         $isDisplayable: Boolean!,
-        $originId: Int!,
+        $originId: Int,
         $parentSectorId: Int
       ) {
         createSector(
@@ -32,6 +32,18 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
     GQL
   end
 
+  let(:sector_query) do
+    <<~GQL
+      query Sector($slug: String!) {
+        sector(slug: $slug) {
+          name
+          slug
+          originId
+        }
+      }
+    GQL
+  end
+
   it 'is successful - user is logged in as admin' do
     origin = create(:origin, name: "Example Origin", slug: "example_origin")
     expect_any_instance_of(Mutations::CreateSector).to(receive(:an_admin).and_return(true))
@@ -50,6 +62,38 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
     aggregate_failures do
       expect(result['data']['createSector']['sector'])
         .to(eq({ "name" => "Some name", "slug" => "some_name", "locale" => "en", "isDisplayable" => false }))
+    end
+  end
+
+  it 'is successful - setting the origin to default value of manually entered' do
+    origin = create(:origin, name: "Manually Entered", slug: "manually_entered")
+    expect_any_instance_of(Mutations::CreateSector).to(receive(:an_admin).and_return(true))
+
+    # Creating new sector using only required fields.
+    result = execute_graphql(
+      mutation,
+      variables: {
+        name: "Some name",
+        slug: "some_name",
+        isDisplayable: false
+      }
+    )
+
+    aggregate_failures do
+      expect(result['data']['createSector']['sector'])
+        .to(eq({ "name" => "Some name", "slug" => "some_name", "locale" => "en", "isDisplayable" => false }))
+    end
+
+    query_result = execute_graphql(
+      sector_query,
+      variables: {
+        slug: "some_name"
+      }
+    )
+
+    aggregate_failures do
+      expect(query_result['data']['sector'])
+        .to(eq({ "name" => "Some name", "slug" => "some_name", "originId" => origin.id }))
     end
   end
 
@@ -110,7 +154,7 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
         isDisplayable: false,
         originId: origin.id,
         parentSectorId: nil
-      },
+      }
     )
 
     aggregate_failures do
@@ -128,7 +172,7 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
         isDisplayable: false,
         originId: 1,
         parentSectorId: nil
-      },
+      }
     )
 
     aggregate_failures do
