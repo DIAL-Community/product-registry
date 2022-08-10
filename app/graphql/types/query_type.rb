@@ -58,6 +58,7 @@ module Types
     field :search_users, resolver: Queries::SearchUsersQuery
 
     field :countries, resolver: Queries::CountriesQuery
+    field :country, resolver: Queries::CountryQuery
     field :search_countries, resolver: Queries::SearchCountriesQuery
 
     field :organizations, resolver: Queries::OrganizationsQuery

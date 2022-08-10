@@ -1231,6 +1231,7 @@ type Query {
   capabilities(aggregatorIds: [Int!] = [], capabilities: [String!] = [], countryIds: [Int!] = [], search: String = "", services: [String!] = []): [Capability!]!
   capabilityOnly(search: String = ""): [Capability!]!
   countries(search: String = ""): [Country!]!
+  country(slug: String!): Country!
   counts: Count!
   dataset(slug: String!): Dataset!
   datasets(search: String = ""): [Dataset!]!

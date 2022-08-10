@@ -12,6 +12,15 @@ module Queries
     end
   end
 
+  class CountryQuery < Queries::BaseQuery
+    argument :slug, String, required: true
+    type Types::CountryType, null: false
+
+    def resolve(slug:)
+      Country.find_by(slug: slug)
+    end
+  end
+
   class SearchCountriesQuery < Queries::BaseQuery
     include ActionView::Helpers::TextHelper
 
