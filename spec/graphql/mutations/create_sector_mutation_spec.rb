@@ -11,14 +11,16 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
         $slug: String!,
         $isDisplayable: Boolean!,
         $originId: Int,
-        $parentSectorId: Int
+        $parentSectorId: Int,
+        $locale: String
       ) {
         createSector(
           name: $name,
           slug: $slug,
           isDisplayable: $isDisplayable,
           originId: $originId,
-          parentSectorId: $parentSectorId
+          parentSectorId: $parentSectorId,
+          locale: $locale
         ) {
             sector {
               name
@@ -62,6 +64,101 @@ RSpec.describe(Mutations::CreateSector, type: :graphql) do
     aggregate_failures do
       expect(result['data']['createSector']['sector'])
         .to(eq({ "name" => "Some name", "slug" => "some_name", "locale" => "en", "isDisplayable" => false }))
+    end
+  end
+
+  it 'is successful - missing locale will store the correct with current locale value' do
+    create(:origin, name: "Manually Entered", slug: "manually_entered")
+    expect_any_instance_of(Mutations::CreateSector).to(receive(:an_admin).and_return(true))
+
+    # Creating new sector using random origin id
+    result = execute_graphql(
+      mutation,
+      variables: {
+        name: "Without Locale",
+        slug: "without_locale",
+        isDisplayable: false
+      }
+    )
+
+    aggregate_failures do
+      expect(result['data']['createSector']['sector'])
+        .to(eq({ "name" => "Without Locale", "slug" => "without_locale", "locale" => "en", "isDisplayable" => false }))
+    end
+  end
+
+  it 'is successful - valid locale will store the correct value' do
+    create(:origin, name: "Manually Entered", slug: "manually_entered")
+    expect_any_instance_of(Mutations::CreateSector).to(receive(:an_admin).and_return(true))
+
+    # Creating new sector using random origin id
+    result = execute_graphql(
+      mutation,
+      variables: {
+        name: "DE Locale",
+        slug: "de_locale",
+        isDisplayable: false,
+        locale: 'de'
+      }
+    )
+
+    aggregate_failures do
+      expect(result['data']['createSector']['sector'])
+        .to(eq({ "name" => "DE Locale", "slug" => "de_locale", "locale" => "de", "isDisplayable" => false }))
+    end
+  end
+
+  it 'is successful - random locale will be replaced with current locale value' do
+    create(:origin, name: "Manually Entered", slug: "manually_entered")
+    expect_any_instance_of(Mutations::CreateSector).to(receive(:an_admin).and_return(true))
+
+    # Creating new sector using random origin id
+    result = execute_graphql(
+      mutation,
+      variables: {
+        name: "Random Locale",
+        slug: "random_locale",
+        isDisplayable: false,
+        locale: 'some-non-locale-value'
+      }
+    )
+
+    aggregate_failures do
+      expect(result['data']['createSector']['sector'])
+        .to(eq({ "name" => "Random Locale", "slug" => "random_locale", "locale" => "en", "isDisplayable" => false }))
+    end
+  end
+
+  it 'is successful - setting the origin to default when value is random' do
+    origin = create(:origin, name: "Manually Entered", slug: "manually_entered")
+    expect_any_instance_of(Mutations::CreateSector).to(receive(:an_admin).and_return(true))
+
+    # Creating new sector using random origin id
+    result = execute_graphql(
+      mutation,
+      variables: {
+        name: "Random Origin",
+        slug: "random_origin",
+        isDisplayable: false,
+        originId: origin.id + 99
+      }
+    )
+
+    aggregate_failures do
+      expect(result['data']['createSector']['sector'])
+        .to(eq({ "name" => "Random Origin", "slug" => "random_origin", "locale" => "en", "isDisplayable" => false }))
+    end
+
+    query_result = execute_graphql(
+      sector_query,
+      variables: {
+        slug: "random_origin"
+      }
+    )
+
+    aggregate_failures do
+      expect(query_result['data']['sector'])
+        .to(eq({ "name" => "Random Origin", "slug" => "random_origin", "originId" => origin.id }))
     end
   end
 
