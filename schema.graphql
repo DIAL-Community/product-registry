@@ -721,7 +721,7 @@ type Mutation {
   createProductRepository(absoluteUrl: String!, description: String!, mainRepository: Boolean!, name: String!, slug: String!): CreateProductRepositoryPayload
   createProject(description: String!, endDate: ISO8601Date, name: String!, organizationId: Int, productId: Int, projectUrl: String, slug: String!, startDate: ISO8601Date): CreateProjectPayload
   createResource(description: String!, index: Int!, moveSlug: String, name: String!, playSlug: String!, url: String!): CreateResourcePayload
-  createSector(isDisplayable: Boolean!, name: String!, originId: Int = null, parentSectorId: Int = null, slug: String!): CreateSectorPayload
+  createSector(isDisplayable: Boolean!, locale: String = null, name: String!, originId: Int = null, parentSectorId: Int = null, slug: String!): CreateSectorPayload
   createSpreadsheetData(assoc: String = "", rowIndex: Int, spreadsheetData: JSON = [], spreadsheetType: String!): CreateSpreadsheetDataPayload
   createTag(description: String, name: String!, slug: String!): CreateTagPayload
   createUseCase(description: String!, imageFile: Upload, maturity: String!, name: String!, sectorSlug: String!, slug: String!): CreateUseCasePayload
