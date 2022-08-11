@@ -1794,12 +1794,14 @@ type Query {
     Returns the first _n_ elements from the list.
     """
     first: Int
+    isDisplayable: Boolean = null
 
     """
     Returns the last _n_ elements from the list.
     """
     last: Int
-    locale: String = "en"
+    locale: String = null
+    parentSectorId: Int = null
     search: String = ""
   ): SectorConnection!
   searchTags(

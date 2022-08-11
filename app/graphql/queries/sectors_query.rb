@@ -35,12 +35,20 @@ module Queries
     include ActionView::Helpers::TextHelper
 
     argument :search, String, required: false, default_value: ''
-    argument :locale, String, required: false, default_value: 'en'
+
+    argument :locale, String, required: false, default_value: nil
+    argument :parent_sector_id, Integer, required: false, default_value: nil
+    argument :is_displayable, Boolean, required: false, default_value: nil
 
     type Types::SectorType.connection_type, null: false
 
-    def resolve(search:, locale:)
-      sectors = Sector.where(is_displayable: true, locale: locale, parent_sector_id: nil).order(:name)
+    def resolve(search:, locale:, parent_sector_id:, is_displayable:)
+      sectors = Sector.order(:name)
+
+      sectors = sectors.where(locale: locale) unless locale.nil?
+      sectors = sectors.where(parent_sector_id: parent_sector_id) unless parent_sector_id.nil?
+      sectors = sectors.where(is_displayable: is_displayable) unless is_displayable.nil?
+
       sectors = sectors.name_contains(search) unless search.blank?
       sectors
     end
