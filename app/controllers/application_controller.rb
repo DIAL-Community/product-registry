@@ -46,16 +46,15 @@ class ApplicationController < ActionController::Base
     if session[:default_identifier].nil?
       session[:default_identifier] = SecureRandom.uuid
 
-      user_event = UserEvent.new
-      user_event.identifier = session[:default_identifier]
       if request.path_info.include?('/api/v1/')
-        user_event.event_type = UserEvent.event_types[:api_request]
-      else
-        user_event.event_type = UserEvent.event_types[:initial_load]
-      end
-      user_event.event_datetime = Time.now
+        user_event = UserEvent.new
+        user_event.identifier = session[:default_identifier]
 
-      logger.info("User event '#{user_event.event_type}' for #{user_event.identifier} saved.") if user_event.save!
+        user_event.event_type = UserEvent.event_types[:api_request]
+        user_event.event_datetime = Time.now
+
+        logger.info("User event '#{user_event.event_type}' for #{user_event.identifier} saved.") if user_event.save!
+      end
     end
   end
 

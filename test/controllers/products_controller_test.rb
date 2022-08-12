@@ -530,19 +530,4 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     # * Mapping changes (optional)
     assert_equal(created_audit.audit_changes.length, 1)
   end
-
-  test 'opening product page should generate event record' do
-    delete(destroy_user_session_url)
-    sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['content_writer'])
-
-    number_of_user_events = UserEvent.count
-    get product_url(@product)
-    assert_equal(UserEvent.count, number_of_user_events + 2)
-
-    last_user_event = UserEvent.last
-
-    assert_equal(last_user_event.email, 'nonadmin@abba.org')
-    assert_equal(last_user_event.extended_data['slug'], @product.slug)
-    assert_equal(last_user_event.extended_data['name'], @product.name)
-  end
 end

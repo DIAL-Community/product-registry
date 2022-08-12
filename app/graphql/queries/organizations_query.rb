@@ -59,7 +59,8 @@ module Queries
         name_orgs = organizations.name_contains(search)
         desc_orgs = organizations.joins(:organization_descriptions)
                                  .where('LOWER(description) like LOWER(?)', "%#{search}%")
-        organizations = organizations.where(id: (name_orgs + desc_orgs).uniq)
+        alias_orgs = organizations.where("LOWER(array_to_string(aliases,',')) like LOWER(?)", "%#{search}%")
+        organizations = organizations.where(id: (name_orgs + desc_orgs + alias_orgs).uniq)
       end
 
       filtered_sectors = []

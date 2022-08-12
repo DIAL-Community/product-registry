@@ -24,8 +24,8 @@ RSpec.describe(Mutations::UpdateOrganizationSectors, type: :graphql) do
   end
 
   it 'is successful' do
-    first = create(:sector, slug: 'first_sector', name: 'First Sector')
-    second = create(:sector, slug: 'second_sector', name: 'Second Sector')
+    first = create(:sector, slug: 'first_sector', name: 'First Sector', is_displayable: true)
+    second = create(:sector, slug: 'second_sector', name: 'Second Sector', is_displayable: true)
 
     organization = create(:organization, name: 'Graph Organization', slug: 'graph_organization')
     expect_any_instance_of(Mutations::UpdateOrganizationSectors).to(receive(:an_admin).and_return(true))
