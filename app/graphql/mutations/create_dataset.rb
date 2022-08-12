@@ -44,6 +44,7 @@ module Mutations
         }
       end
 
+      dataset.name = name
       dataset.aliases = aliases
       dataset.website = website
       dataset.dataset_type = dataset_type
