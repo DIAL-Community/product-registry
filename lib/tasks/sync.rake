@@ -92,44 +92,51 @@ namespace :sync do
     send_notification
   end
 
-  task :purge_removed_products, [:path] => :environment do |_, params|
+  task :purge_removed_products, [:path] => :environment do |_, _params|
     puts 'Pulling data from digital public good ...'
 
-    unicef_origin = Origin.find_by(slug: 'unicef')
-    unicef_list = []
-    Dir.entries(params[:path]).select { |item| item.include?('.json') }.each do |entry|
-      entry_data = File.read(File.join(params[:path], entry))
+    dpg_uri = URI.parse('https://api.digitalpublicgoods.net/dpgs/')
+    dpg_response = Net::HTTP.get(dpg_uri)
+    dpg_data = JSON.parse(dpg_response)
 
-      begin
-        json_data = JSON.parse(entry_data)
-      rescue JSON::ParserError
-        puts "Skipping unparseable json file: #{entry}"
-        next
+    dpg_uri = URI.parse('https://api.digitalpublicgoods.net/nominees/')
+    dpg_response = Net::HTTP.get(dpg_uri)
+    nominee_data = JSON.parse(dpg_response)
+
+    dpga_origin = Origin.find_by(slug: 'dpga')
+    manual_origin = Origin.find_by(slug: 'manually_entered')
+    dpga_list = []
+
+    all_dpgs_nominees = dpg_data + nominee_data
+    all_dpgs_nominees.each do |json_data|
+      name_aliases = [json_data['name']]
+      json_data['aliases']&.each do |curr_alias|
+        name_aliases << curr_alias if curr_alias != ''
       end
 
-      if !json_data.key?('type') && !json_data.key?('name')
-        puts "Skipping unrecognized json file: #{entry}"
-        next
+      existing_product = nil
+      name_aliases.each do |name_alias|
+        # Find by name, and then by aliases and then by slug.
+        break unless existing_product.nil?
+
+        slug = slug_em(name_alias)
+        existing_product = Product.first_duplicate(name_alias, slug)
+        # Check to see if both just have the same alias. In this case, it's not a duplicate
       end
 
-      unicef_list.push(json_data['name'])
-      unicef_list.push(json_data['initialism']) if json_data.key?('initialism')
+      dpga_list.push(existing_product.id) unless existing_product.nil?
     end
-    unicef_products = Product.all.joins(:products_origins).where('origin_id=?', unicef_origin.id)
 
-    removed_products = []
-    unicef_products.each do |product|
-      next unless product.origins.count == 1
+    puts "Current DPGA products: " + dpga_list.to_s
 
-      # the product's only origin is Unicef
-      removed_products << product.name unless unicef_list.include?(product.name)
-    end
-    # Send email to admin to remove this product
-    msg_string = 'Products no longer in the Unicef list. Please remove from catalog. <br />'\
-                 "#{removed_products.join('<br />')}"
-    users = User.where(receive_backup: true)
-    users.each do |user|
-      RakeMailer.sync_product_removed(user.email, msg_string).deliver_now
+    remove_products = Product.all.joins(:products_origins).where('origin_id=? and product_id not in (?)',
+dpga_origin.id, dpga_list)
+    puts "Products to be removed: " + remove_products.map(&:name).to_s
+
+    remove_products.each do |prod|
+      prod.origins.delete(dpga_origin)
+      prod.origins << manual_origin
+      prod.save!
     end
   end
 
