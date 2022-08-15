@@ -92,7 +92,7 @@ namespace :sync do
     send_notification
   end
 
-  task :purge_removed_products, [:path] => :environment do |_, params|
+  task :purge_removed_products, [:path] => :environment do |_, _params|
     puts 'Pulling data from digital public good ...'
 
     dpg_uri = URI.parse('https://api.digitalpublicgoods.net/dpgs/')
@@ -105,7 +105,6 @@ namespace :sync do
 
     dpga_origin = Origin.find_by(slug: 'dpga')
     manual_origin = Origin.find_by(slug: 'manually_entered')
-    dpga_endorser = Endorser.find_by(slug: 'dpga')
     dpga_list = []
 
     all_dpgs_nominees = dpg_data + nominee_data
@@ -130,7 +129,8 @@ namespace :sync do
 
     puts "Current DPGA products: " + dpga_list.to_s
 
-    remove_products = Product.all.joins(:products_origins).where('origin_id=? and product_id not in (?)', dpga_origin.id, dpga_list)
+    remove_products = Product.all.joins(:products_origins).where('origin_id=? and product_id not in (?)',
+dpga_origin.id, dpga_list)
     puts "Products to be removed: " + remove_products.map(&:name).to_s
 
     remove_products.each do |prod|
