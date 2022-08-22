@@ -31,7 +31,7 @@ lintandtest:
   tags:
     - rails
   stage: lint
-  timeout: 15m
+  timeout: 20m
   script:
     - curl -sL https://deb.nodesource.com/setup_16.x | bash -
     - apt-get update -yy && apt-get install build-essential libpq-dev postgresql postgresql-contrib cmake nodejs -y
