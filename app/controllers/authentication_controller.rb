@@ -184,6 +184,7 @@ class AuthenticationController < Devise::SessionsController
 
   def ok_response(user, can_edit, organization)
     {
+      id: user.id,
       userEmail: user.email,
       name: user.username,
       own: {
