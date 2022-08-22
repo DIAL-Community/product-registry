@@ -1,5 +1,5 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HOME=/root
 
-0 23 * * * certbot renew >> /var/log/cron.log 2>&1
-5 23 * * * nginx -s reload >> /var/log/cron.log 2>&1
+0 23 * * * root certbot renew --quiet --nginx >> /var/log/cron.log 2>&1
+5 23 * * * root nginx -s reload >> /var/log/cron.log 2>&1
