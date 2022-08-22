@@ -31,12 +31,15 @@ lintandtest:
   tags:
     - rails
   stage: lint
+  cache:
+    paths:
+    - /cache
   timeout: 30m
   script:
     - curl -sL https://deb.nodesource.com/setup_16.x | bash -
     - apt-get update -yy && apt-get install build-essential libpq-dev postgresql postgresql-contrib cmake nodejs -y
     - gem install bundler -v 2.2.13
-    - bundle install
+    - bundle install --path=/cache
     - bundle exec rubocop --config .rubocop.yml
     - cp config/database.yml.gitlab config/database.yml
     - until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_test" -c '\q'; do sleep 2s; done
