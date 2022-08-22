@@ -28,6 +28,8 @@ cache:
     - "vendor/bundle"
 
 lintandtest:
+  tags:
+    - rails
   stage: lint
   timeout: 15m
   script:
