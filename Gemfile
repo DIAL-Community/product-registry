@@ -35,16 +35,19 @@ gem 'cookies_eu'
 gem 'Dhalang', github: 'conradsp/Dhalang', branch: 'master'
 gem 'haml'
 
-gem 'licensee'
-
+# Used to sync maturity data from github.
 gem 'kramdown', '~> 2.3.1'
 
+# Used for captcha in the registration and some others.
 gem 'recaptcha'
 
 gem 'minitest-reporters'
 
+# Used for sync license information from github repo.
+gem 'licensee'
 gem 'rubysl-open3'
 
+# Used for health check the rails app.
 gem 'okcomputer'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -89,18 +92,10 @@ gem 'pdfkit'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
-
-  gem 'teaspoon-mocha'
 
   gem 'factory_bot'
   gem 'factory_bot_rails'
   gem 'rails-controller-testing'
-
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
-  gem 'poltergeist'
 
   gem 'rspec-rails'
   gem 'rswag-specs'
@@ -109,6 +104,8 @@ group :development, :test do
   gem 'rubocop-graphql'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+
+  gem 'graphiql-rails'
 
   # Seed data generator
   gem 'faker'
@@ -133,8 +130,6 @@ gem 'jwt'
 
 # Use Mailgun API to send confirmation emails
 gem 'mailgun-ruby'
-
-gem 'graphiql-rails', group: :development
 
 # Throttling, blocking, etc.
 gem 'rack-attack'
