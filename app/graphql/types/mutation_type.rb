@@ -87,5 +87,7 @@ module Types
 
     field :create_tag, mutation: Mutations::CreateTag
     field :delete_tag, mutation: Mutations::DeleteTag
+
+    field :create_comment, mutation: Mutations::CreateComment
   end
 end
