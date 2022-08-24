@@ -80,6 +80,7 @@ module Mutations
         country.code_longer = country_yml['country_code']
       end
 
+      country.name = name
       if country.save
         # Successful creation, return the created object with no errors
         {
