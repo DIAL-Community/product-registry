@@ -149,7 +149,7 @@ RSpec.describe(Mutations::CreateCountry, type: :graphql) do
     # Returned data will be updated with data from the geocode result.
     aggregate_failures do
       expect(result['data']['createCountry']['country'])
-        .to(eq({ "name" => "Republic of Kenya", "slug" => "ke", "code" => "KE", "codeLonger" => "KEN" }))
+        .to(eq({ "name" => "Kenya", "slug" => "ke", "code" => "KE", "codeLonger" => "KEN" }))
     end
   end
 
