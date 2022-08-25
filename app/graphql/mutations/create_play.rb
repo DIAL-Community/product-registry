@@ -87,17 +87,6 @@ module Mutations
         }
       end
     end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
-    end
   end
 
   class DuplicatePlay < Mutations::BaseMutation
@@ -142,17 +131,6 @@ module Mutations
           errors: "Unable to create duplicate play record. Message: #{duplicate_play.errors.full_messages}."
         }
       end
-    end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 

@@ -84,16 +84,5 @@ module Mutations
         }
       end
     end
-
-    def generate_offset(first_duplicate)
-      size = 0
-      if !first_duplicate.nil? && first_duplicate.slug.include?('_dup')
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
-    end
   end
 end
