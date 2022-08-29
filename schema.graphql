@@ -206,12 +206,17 @@ type Capability {
 
 type Comment {
   author: JSON
+  avatarUrl: String!
+  comId: String!
   commentId: String!
   commentObjectId: Int!
   commentObjectType: String!
+  fullName: String!
   id: ID!
   parentCommentId: String
+  replies: [Comment!]
   text: String
+  userId: String!
 }
 
 type Contact {
@@ -1249,6 +1254,8 @@ type Query {
   candidateRoles(organizationId: String!, productId: String!): [CandidateRole!]!
   capabilities(aggregatorIds: [Int!] = [], capabilities: [String!] = [], countryIds: [Int!] = [], search: String = "", services: [String!] = []): [Capability!]!
   capabilityOnly(search: String = ""): [Capability!]!
+  comments(commentObjectId: Int!, commentObjectType: String!): [Comment!]!
+  countComments(commentObjectId: Int!, commentObjectType: String!): Int!
   countries(search: String = ""): [Country!]!
   country(slug: String!): Country!
   counts: Count!

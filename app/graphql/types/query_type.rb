@@ -118,5 +118,8 @@ module Types
     field :search_moves, resolver: Queries::SearchMovesQuery
 
     field :me, resolver: Queries::MeQuery
+
+    field :comments, resolver: Queries::CommentsQuery
+    field :count_comments, resolver: Queries::CountCommentsQuery
   end
 end
