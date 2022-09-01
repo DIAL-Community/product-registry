@@ -30,7 +30,7 @@ module Mutations
 
         if Play.where(slug: play.slug).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
+          first_duplicate = Play.slug_simple_starts_with(play.slug).order(slug: :desc).first
           play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
       end
@@ -42,7 +42,7 @@ module Mutations
 
         if Play.where(slug: play.slug).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
+          first_duplicate = Play.slug_simple_starts_with(play.slug).order(slug: :desc).first
           play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
       end
@@ -117,7 +117,7 @@ module Mutations
       duplicate_play = base_play.dup
 
       # Update the slug to the new slug value ($slug + '_dupX').
-      first_duplicate = Play.slug_starts_with(base_play.slug).order(slug: :desc).first
+      first_duplicate = Play.slug_simple_starts_with(base_play.slug).order(slug: :desc).first
       duplicate_play.slug = duplicate_play.slug + generate_offset(first_duplicate)
 
       if duplicate_play.save

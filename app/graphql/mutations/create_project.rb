@@ -21,7 +21,6 @@ module Mutations
     def resolve(name:, slug:, start_date: nil, end_date: nil, project_url: nil, description:,
       product_id: nil, organization_id: nil)
       project = Project.find_by(slug: slug)
-
       check = false
       if project.nil?
         check = an_admin || (a_product_owner(product_id) unless product_id.nil?) ||
@@ -43,7 +42,7 @@ module Mutations
 
         if Project.where(slug: slug_em(name)).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Project.where('LOWER(projects.slug) like LOWER(?)', "#{slug_em(name)}%")
+          first_duplicate = Project.slug_simple_starts_with(slug_em(name))
                                    .order(slug: :desc).first
           project.slug = project.slug + generate_offset(first_duplicate)
         end

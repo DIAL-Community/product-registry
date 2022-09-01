@@ -36,7 +36,7 @@ module Mutations
 
         if Playbook.where(slug: slug_em(name)).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Playbook.slug_starts_with(slug_em(name)).order(slug: :desc).first
+          first_duplicate = Playbook.slug_simple_starts_with(slug_em(name)).order(slug: :desc).first
           playbook.slug = playbook.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
       end
@@ -48,7 +48,7 @@ module Mutations
 
         if Playbook.where(slug: slug_em(name)).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Playbook.slug_starts_with(playbook.slug).order(slug: :desc).first
+          first_duplicate = Playbook.slug_simple_starts_with(playbook.slug).order(slug: :desc).first
           playbook.slug = playbook.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
       end

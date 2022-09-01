@@ -37,7 +37,7 @@ module Mutations
 
         if Organization.where(slug: slug_em(name)).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Organization.where('LOWER(organizations.slug) like LOWER(?)', "#{slug_em(name)}%")
+          first_duplicate = Organization.slug_simple_starts_with(slug_em(name))
                                         .order(slug: :desc).first
           organization.slug = organization.slug + generate_offset(first_duplicate)
         end
