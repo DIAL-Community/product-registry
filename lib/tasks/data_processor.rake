@@ -164,8 +164,12 @@ namespace :data_processors do
     end
 
     website = json_data['website'].delete_prefix("https://") unless json_data['website'].nil?
-    tags = nil if json_data['tags'].nil?
-    tags = json_data['tags'].split(/\s*,\s*/) unless json_data['tags'].nil?
+
+    tags = []
+    json_data['tags'].to_s.split(',').each do |tag_name|
+      tag = Tag.find_by('name ILIKE ?', tag_name.strip)
+      tags << tag.name unless tag.nil?
+    end
 
     product.update(
       name: json_data['name'],
@@ -186,7 +190,8 @@ namespace :data_processors do
       pricing_model: json_data['pricingModel'],
       pricing_details: json_data['pricingDetails'],
       pricing_date: json_data['pricingDate'].blank? ? nil : Date.strptime(json_data['pricingDate'], "%m/%d/%Y"),
-      pricing_url: json_data['pricingUrl']
+      pricing_url: json_data['pricingUrl'],
+      tags: tags
     ) if obj_type == 'product'
 
     product.update(
