@@ -48,7 +48,7 @@ RSpec.describe(Queries::SectorsQuery, type: :graphql) do
     )
 
     aggregate_failures do
-      # 2 sectors from here, 2 more from test/fixtures/sectors.yml
+      # 2 sectors from here, 2 from fixtures
       expect(result['data']['searchSectors']['totalCount']).to(eq(4))
     end
 

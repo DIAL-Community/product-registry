@@ -2070,6 +2070,8 @@ type Tag {
   id: ID!
   name: String!
   slug: String!
+  tagDescription: TagDescription
+  tagDescriptions: [TagDescription!]
 }
 
 """
@@ -2091,6 +2093,13 @@ type TagConnection {
   """
   pageInfo: PageInfo!
   totalCount: Int!
+}
+
+type TagDescription {
+  description: String!
+  id: ID!
+  locale: String!
+  tagId: Int
 }
 
 """
