@@ -30,7 +30,7 @@ module Mutations
 
         if Play.where(slug: play.slug).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
+          first_duplicate = Play.slug_simple_starts_with(play.slug).order(slug: :desc).first
           play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
       end
@@ -42,7 +42,7 @@ module Mutations
 
         if Play.where(slug: play.slug).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Play.slug_starts_with(play.slug).order(slug: :desc).first
+          first_duplicate = Play.slug_simple_starts_with(play.slug).order(slug: :desc).first
           play.slug = play.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
         end
       end
@@ -87,17 +87,6 @@ module Mutations
         }
       end
     end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
-    end
   end
 
   class DuplicatePlay < Mutations::BaseMutation
@@ -128,7 +117,7 @@ module Mutations
       duplicate_play = base_play.dup
 
       # Update the slug to the new slug value ($slug + '_dupX').
-      first_duplicate = Play.slug_starts_with(base_play.slug).order(slug: :desc).first
+      first_duplicate = Play.slug_simple_starts_with(base_play.slug).order(slug: :desc).first
       duplicate_play.slug = duplicate_play.slug + generate_offset(first_duplicate)
 
       if duplicate_play.save
@@ -142,17 +131,6 @@ module Mutations
           errors: "Unable to create duplicate play record. Message: #{duplicate_play.errors.full_messages}."
         }
       end
-    end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 

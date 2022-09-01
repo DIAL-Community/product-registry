@@ -73,7 +73,7 @@ module Queries
   def filter_products(
     search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
     use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
-    sort_hint, _offset_params = {}
+    sort_hint, license_types, _offset_params = {}
   )
     products = Product.all
     if !search.nil? && !search.to_s.strip.empty?
@@ -169,8 +169,13 @@ module Queries
                          .where(sustainable_development_goals: { id: filtered_sdgs })
     end
 
-    products = products.where(is_launchable: product_deployable) if product_deployable
+    if (license_types - ['oss_only']).empty? && (['oss_only'] - license_types).empty?
+      products = products.where(commercial_product: false)
+    elsif (license_types - ['commercial_only']).empty? && (['commercial_only'] - license_types).empty?
+      products = products.where(commercial_product: true)
+    end
 
+    products = products.where(is_launchable: product_deployable) if product_deployable
     products = products.where('maturity_score is not null') if with_maturity
 
     if !product_types.include?('product_and_dataset') && !product_types.empty? &&
@@ -241,6 +246,7 @@ module Queries
     argument :endorsers, [String], required: false, default_value: []
     argument :with_maturity, Boolean, required: false, default_value: false
     argument :product_deployable, Boolean, required: false, default_value: false
+    argument :license_types, [String], required: false, default_value: []
 
     argument :product_sort_hint, String, required: false, default_value: 'name'
     type Types::ProductType.connection_type, null: false
@@ -248,12 +254,12 @@ module Queries
     def resolve(
       search:, origins:, sectors:, sub_sectors:, countries:, organizations:, sdgs:, tags:, endorsers:,
       use_cases:, workflows:, building_blocks:, with_maturity:, product_deployable:, product_types:,
-      product_sort_hint:
+      product_sort_hint:, license_types:
     )
       products = filter_products(
         search, origins, sectors, sub_sectors, countries, organizations, sdgs, tags, endorsers,
         use_cases, workflows, building_blocks, with_maturity, product_deployable, product_types,
-        product_sort_hint
+        product_sort_hint, license_types
       )
       products.uniq
     end

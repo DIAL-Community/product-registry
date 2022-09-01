@@ -27,7 +27,7 @@ module Mutations
 
       candidate_products = CandidateProduct.where(slug: candidate_product_params[:slug])
       unless candidate_products.empty?
-        first_duplicate = CandidateProduct.slug_starts_with(candidate_product_params[:slug])
+        first_duplicate = CandidateProduct.slug_simple_starts_with(candidate_product_params[:slug])
                                           .order(slug: :desc).first
         candidate_product_params[:slug] = candidate_product_params[:slug] + generate_offset(first_duplicate).to_s
       end
@@ -43,17 +43,6 @@ module Mutations
         candidate_product.slug
       end
       response
-    end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 end

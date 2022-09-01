@@ -76,7 +76,7 @@ module Queries
         end
       end
 
-      building_blocks = building_blocks.where(maturity: BuildingBlock.entity_status_types[:MATURE]) if show_mature
+      building_blocks = building_blocks.where(maturity: BuildingBlock.entity_status_types[:PUBLISHED]) if show_mature
 
       building_blocks.distinct
     end

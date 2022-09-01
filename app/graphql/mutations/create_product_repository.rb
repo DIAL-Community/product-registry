@@ -25,7 +25,7 @@ module Mutations
 
       product_repositorys = ProductRepository.where(slug: repository_params[:slug])
       unless product_repositorys.empty?
-        first_duplicate = ProductRepository.slug_starts_with(repository_params[:slug])
+        first_duplicate = ProductRepository.slug_simple_starts_with(repository_params[:slug])
                                            .order(slug: :desc).first
         repository_params[:slug] = repository_params[:slug] + generate_offset(first_duplicate).to_s
       end
@@ -50,17 +50,6 @@ module Mutations
         end
       end
       response
-    end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 

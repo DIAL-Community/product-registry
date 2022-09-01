@@ -32,7 +32,7 @@ module Mutations
 
         if Product.where(slug: slug_em(name)).count.positive?
           # Check if we need to add _dup to the slug.
-          first_duplicate = Product.where('LOWER(products.slug) like LOWER(?)', "#{slug_em(name)}%")
+          first_duplicate = Product.slug_simple_starts_with(slug_em(name))
                                    .order(slug: :desc).first
           product.slug = product.slug + generate_offset(first_duplicate)
         end
@@ -73,17 +73,6 @@ module Mutations
           errors: product.errors.full_messages
         }
       end
-    end
-
-    def generate_offset(first_duplicate)
-      size = 0
-      if !first_duplicate.nil? && first_duplicate.slug.include?('_dup')
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 end

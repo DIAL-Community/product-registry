@@ -6,45 +6,19 @@ module Mutations
   class CreateSpreadsheetData < Mutations::BaseMutation
     include Modules::Slugger
 
-    argument :spreadsheet_data, GraphQL::Types::JSON, required: false, default_value: []
+    argument :spreadsheet_data, GraphQL::Types::JSON, required: false, default_value: {}
     argument :spreadsheet_type, String, required: true
     argument :assoc, String, required: false, default_value: ''
-    argument :row_index, Int, required: false
 
     field :dial_spreadsheet_data, Types::DialSpreadsheetDataType, null: true
     field :errors, [String], null: false
 
-    def resolve(spreadsheet_data:, spreadsheet_type:, assoc:, row_index:)
+    def resolve(spreadsheet_data:, spreadsheet_type:, assoc:)
       unless an_admin
         return {
           dial_spreadsheet_data: nil,
           errors: ['Not allowed to create a spreadsheet data.']
         }
-      end
-
-      if row_index == 0
-        case assoc.downcase
-        when 'descriptions'
-          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
-            spreadsheet_record.spreadsheet_data['descriptions'] = []
-            spreadsheet_record.save!
-          end
-        when 'organizations'
-          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
-            spreadsheet_record.spreadsheet_data['organizations'] = []
-            spreadsheet_record.save!
-          end
-        when 'sdgs'
-          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
-            spreadsheet_record.spreadsheet_data['sdgs'] = []
-            spreadsheet_record.save!
-          end
-        when 'sectors'
-          DialSpreadsheetData.where(spreadsheet_type: spreadsheet_type).each do |spreadsheet_record|
-            spreadsheet_record.spreadsheet_data['sectors'] = []
-            spreadsheet_record.save!
-          end
-        end
       end
 
       slug = slug_em(spreadsheet_data['name'])
@@ -59,6 +33,12 @@ module Mutations
 
       if record.nil?
         record = DialSpreadsheetData.new(slug: slug)
+
+        # Check if we need to add _dup to the slug.
+        first_duplicate = DialSpreadsheetData.slug_simple_starts_with(record.slug).order(slug: :desc).first
+        unless first_duplicate.nil?
+          record.slug = record.slug + generate_offset(first_duplicate)
+        end
       end
 
       record.spreadsheet_type = spreadsheet_type
@@ -79,110 +59,102 @@ module Mutations
       end
     end
 
+    # Column field is starting from the second field on the spreadsheet. The first column always going to be the
+    # name of the object (product name or dataset name).
+    DESCRIPTION_FIELDS = ['assoc-name', 'locale', 'description']
+
+    PRICING_FIELDS = ['assoc-name', 'hostingModel', 'pricingModel', 'pricingDetails', 'pricingDatetime', 'pricingUrl']
+
+    PRODUCT_FIELDS = ['name', 'aliases', 'website', 'license', 'tags', 'submitterName', 'submitterEmail']
+    DATASET_FIELDS = [
+      'name', 'aliases', 'website', 'origins', 'endorsers', 'license', 'tags', 'format', 'comments',
+      'geographicCoverage', 'timeRange', 'visualizationUrl', 'languages'
+    ]
+
+    MULTI_VALUE_SEPARATOR = ';'
+
     def update_spreadsheet_data(existing_data, spreadsheet_data, assoc)
       updated_data = existing_data
-
-      if updated_data.nil? || updated_data.empty?
-        updated_data = { 'descriptions': [], 'organizations': [], 'sdgs': [], 'sectors': [] }
-      end
-
       changes_data = spreadsheet_data['changes']
 
-      changes_data.each_with_index do |change, column_index|
-        case assoc.downcase
-        when 'products'
-          updated_data['name'] = spreadsheet_data['name']
-          case column_index
-          when 1
-            updated_data['aliases'] = change
-          when 2
-            updated_data['website'] = change
-          when 3
-            updated_data['license'] = change
-          when 4
-            updated_data['type'] = change
-          when 5
-            updated_data['tags'] = change
-          when 6
-            updated_data['submitterName'] = change
-          when 7
-            updated_data['submitterEmail'] = change
+      case assoc
+      # Association coming from 'Product Pricing' sheet.
+      when 'productPricing'
+        # Skip if the update is from the first column of the pricing.
+        pricing_column_index = changes_data[1].to_i
+        updated_data[PRICING_FIELDS[pricing_column_index]] = changes_data[3] if pricing_column_index > 0
+      # Association is products / coming from 'Products' sheet.
+      when 'products'
+        changes_data.each_with_index do |change, column_index|
+          # Special handling because the field is a boolean one.
+          if column_index == PRODUCT_FIELDS.length
+            updated_data['commercialProduct'] = change.to_s == 'true'
+          else
+            updated_data[PRODUCT_FIELDS[column_index]] = change
           end
-        when 'datasets'
-          updated_data['name'] = spreadsheet_data['name']
-          case column_index
-          when 1
-            updated_data['aliases'] = change
-          when 2
-            updated_data['website'] = change
-          when 3
-            updated_data['origins'] = change
-          when 4
-            updated_data['endorsers'] = change
-          when 5
-            updated_data['license'] = change
-          when 6
-            updated_data['type'] = change
-          when 7
-            updated_data['tags'] = change
-          when 8
-            updated_data['format'] = change
-          when 9
-            updated_data['comments'] = change
-          when 10
-            updated_data['geographicCoverage'] = change
-          when 11
-            updated_data['timeRange'] = change
-          when 12
-            updated_data['visualizationUrl'] = change
-          when 13
-            updated_data['languages'] = change
-          end
-        when 'descriptions'
-          if column_index == 2
-            product_description = updated_data['descriptions'].find { |d| d['locale'] == spreadsheet_data['locale'] }
-            if product_description.nil?
-              product_description = { 'locale': spreadsheet_data['locale'] }
-            end
-            product_description['description'] = change
-            updated_data['descriptions'] << product_description
-          end
-        when 'organizations'
-          new_org = { 'name': change }
-          updated_data['organizations'] << new_org if !updated_data['organizations'].any? do |h|
-                                                        h['name'] == change
-                                                      end && column_index == 1
-          # updated_data['organizations'].delete_if { |e| e['name'] == changes_data[2] }
-        when 'sdgs'
-          if column_index == 1
-            change.split(',').each do |sdg_num|
-              updated_data['sdgs'] << { 'number': sdg_num } unless updated_data['sdgs'].any? do |h|
-                                                                     h['number'] == sdg_num
-                                                                   end
-            end
-          end
-          # updated_data['sdgs'].delete_if { |e| e['name'] == changes_data[2] }
-        when 'sectors'
-          new_sector = { 'name': change }
-          updated_data['sectors'] << new_sector if !updated_data['sectors'].any? do |h|
-                                                     h['name'] == change
-                                                   end && column_index == 1
-          # updated_data['sectors'].delete_if { |e| e['name'] == changes_data[2] }
         end
+      # Association is dataset / coming from 'Datasets' sheet.
+      when 'datasets'
+        changes_data.each_with_index do |change, column_index|
+          updated_data[DATASET_FIELDS[column_index]] = change
+        end
+      when 'descriptions'
+        column_index = changes_data[1].to_i
+        previous_value = changes_data[2]
+        current_value = changes_data[3]
+
+        if existing_data[assoc].nil?
+          # Initialize if we don't have the association yet.
+          existing_data[assoc] = []
+        end
+
+        field_name = DESCRIPTION_FIELDS[column_index]
+        existing_assoc = existing_data['descriptions'].find { |entry| entry[field_name].to_s == previous_value.to_s }
+        if existing_assoc.nil?
+          existing_data['descriptions'] << { "#{field_name}": current_value.strip }
+        else
+          existing_assoc[field_name] = current_value
+        end
+      when 'sdgs'
+        process_relationship_data(updated_data, spreadsheet_data, assoc, 'number')
+      when 'organizations', 'sectors', 'buildingBlocks', 'useCasesSteps'
+        process_relationship_data(updated_data, spreadsheet_data, assoc, 'name')
       end
 
       updated_data
     end
 
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
+    # Process the rest of the association ('organizations', 'sdgs', 'sectors')
+    def process_relationship_data(existing_data, spreadsheet_data, assoc, field_name)
+      if existing_data[assoc].nil?
+        # Initialize if we don't have the association yet.
+        existing_data[assoc] = []
       end
-      "_dup#{size}"
+
+      changes_data = spreadsheet_data['changes']
+      current_value = changes_data[3]
+      if current_value.to_s.include?(MULTI_VALUE_SEPARATOR)
+        current_value.to_s.split(MULTI_VALUE_SEPARATOR).each do |current_value_el|
+          # Skip if the value is already in the array.
+          next if current_value_el.blank?
+          next if existing_data[assoc].any? { |o| o[field_name] == current_value_el.strip }
+
+          existing_data[assoc] << { "#{field_name}": current_value_el.strip }
+        end
+      else
+        unless current_value.is_a?(Integer)
+          # Strip the value just in case it is a string with a lot of spaces!!
+          current_value = current_value.strip
+        end
+
+        previous_value = changes_data[2]
+        existing_assoc = existing_data[assoc].find { |entry| entry[field_name].to_s == previous_value.to_s }
+        if existing_assoc.nil?
+          existing_data[assoc] << { "#{field_name}": current_value }
+        else
+          existing_assoc[field_name] = current_value
+        end
+      end
     end
   end
 end

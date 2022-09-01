@@ -5,7 +5,9 @@ services:
   - redis:latest
 
 stages:
+  - build
   - lint
+  - test
 
 variables:
   BUNDLE_PATH: vendor/bundle
@@ -22,24 +24,47 @@ variables:
   RAILS_ENV: test
   REDIS_HOST: redis
   REDIS_PORT: 6379
-  
+
 cache:
+  key:
+    files:
+      - Gemfile.lock
   paths:
     - "vendor/bundle"
 
-lintandtest:
-  stage: lint
-  timeout: 15m
+build_rails:
+  tags:
+    - rails
+  stage: build
+  timeout: 30m
   script:
-    - curl -sL https://deb.nodesource.com/setup_16.x | bash -
-    - apt-get update -yy && apt-get install build-essential libpq-dev postgresql postgresql-contrib cmake nodejs -y
+    - apt-get update -yy && apt-get install build-essential libpq-dev postgresql postgresql-contrib cmake -y
     - gem install bundler -v 2.2.13
-    - bundle install
+    - bundle install -j $(nproc) --path vendor/bundle
+
+lint_rails:
+  tags:
+    - rails
+  stage: lint
+  timeout: 10m
+  before_script:
+    - bundle check || bundle install -j $(nproc) --path vendor/bundle
+  script:
     - bundle exec rubocop --config .rubocop.yml
+
+test_rails:
+  tags:
+    - rails
+  stage: test
+  timeout: 10m
+  before_script:
+    - curl -sL https://deb.nodesource.com/setup_16.x | bash -
+    - apt-get update -yy && apt-get install postgresql postgresql-contrib nodejs -y
+    - bundle check || bundle install -j $(nproc) --path vendor/bundle
     - cp config/database.yml.gitlab config/database.yml
     - until PGPASSWORD=Password!1 psql -h "postgres" -U "registry" -d "registry_test" -c '\q'; do sleep 2s; done
     - RAILS_ENV=test bundle exec rake db:create db:migrate
+  script:
     - RAILS_ENV=test bundle exec rails test
     - RAILS_ENV=test bundle exec rspec spec
 
-    

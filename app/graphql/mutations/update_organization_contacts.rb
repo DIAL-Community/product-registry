@@ -54,22 +54,11 @@ module Mutations
 
       if Contact.where(slug: slug_em(name)).count.positive?
         # Check if we need to add _dup to the slug.
-        first_duplicate = Contact.slug_starts_with(slug_em(name)).order(slug: :desc).first
+        first_duplicate = Contact.slug_simple_starts_with(slug_em(name)).order(slug: :desc).first
         contact.slug = contact.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
       end
 
       contact
-    end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 end

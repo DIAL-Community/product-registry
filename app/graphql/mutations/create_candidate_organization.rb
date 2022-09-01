@@ -22,7 +22,7 @@ module Mutations
 
       candidate_organizations = CandidateOrganization.where(slug: candidate_params[:slug])
       unless candidate_organizations.empty?
-        first_duplicate = CandidateOrganization.slug_starts_with(candidate_params[:slug])
+        first_duplicate = CandidateOrganization.slug_simple_starts_with(candidate_params[:slug])
                                                .order(slug: :desc).first
         candidate_params[:slug] = candidate_params[:slug] + generate_offset(first_duplicate).to_s
       end
@@ -35,7 +35,7 @@ module Mutations
 
         contacts = Contact.where(slug: contact_params[:slug])
         unless contacts.empty?
-          first_duplicate = Contact.slug_starts_with(contact_params[:slug]).order(slug: :desc).first
+          first_duplicate = Contact.slug_simple_starts_with(contact_params[:slug]).order(slug: :desc).first
           contact[:slug] = contact[:slug] + generate_offset(first_duplicate).to_s
         end
         candidate_organization.contacts << Contact.new(contact_params)
@@ -50,17 +50,6 @@ module Mutations
         candidate_organization.slug
       end
       response
-    end
-
-    def generate_offset(first_duplicate)
-      size = 1
-      unless first_duplicate.nil?
-        size = first_duplicate.slug
-                              .slice(/_dup\d+$/)
-                              .delete('^0-9')
-                              .to_i + 1
-      end
-      "_dup#{size}"
     end
   end
 end
