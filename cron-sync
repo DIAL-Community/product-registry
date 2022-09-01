@@ -19,4 +19,5 @@ RAILS_ENV=production
 0 7 1 * *   source /t4d/setEnv.sh prod && cd /t4d && rake sync:update_tco_data >> /var/log/cron.log 2>&1
 0 7 15 * *   source /t4d/setEnv.sh prod && cd /t4d && rake sync:sync_digital_health_atlas_data >> /var/log/cron.log 2>&1
 0 3 15 * *   source /t4d/setEnv.sh prod && cd /t4d && rake sync:sync_giz_projects >> /var/log/cron.log 2>&1
+0 2 * * *   source /t4d/setEnv.sh prod && rake notifier:daily_comment_digest >> /var/log/cron.log 2>&1
 0 3 1 * * /snap/bin/docker system prune -f

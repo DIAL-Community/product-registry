@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require 'modules/slugger'
+require 'modules/notifier'
 
 module Mutations
   class CreateComment < Mutations::BaseMutation
     include Modules::Slugger
+    include Modules::Notifier
 
     argument :comment_id, String, required: false
     argument :comment_object_type, String, required: true
@@ -33,6 +35,9 @@ module Mutations
       comment.text = text
 
       if comment.save
+        # Notify original commenter if someone has replied to their comment
+        notify_commenter(comment) unless parent_comment_id.nil?
+
         # Successful creation, return the created object with no errors
         {
           comment: comment,
