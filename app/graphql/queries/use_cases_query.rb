@@ -72,6 +72,17 @@ module Queries
     end
   end
 
+  class UseCasesStepsQuery < Queries::BaseQuery
+    argument :search, String, required: false, default_value: ''
+    type [Types::UseCaseStepType], null: false
+
+    def resolve(search:)
+      use_cases_steps = UseCaseStep.order(:name)
+      use_cases_steps = use_cases_steps.name_contains(search) unless search.blank?
+      use_cases_steps
+    end
+  end
+
   class UseCaseStepsQuery < Queries::BaseQuery
     argument :slug, String, required: true
     type [Types::UseCaseStepType], null: false

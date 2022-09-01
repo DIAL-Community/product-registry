@@ -99,6 +99,32 @@ namespace :data_processors do
     end
 
     # Process the organization section of the json.
+    product_building_blocks = []
+    if json_data['buildingBlocks'].present? && !json_data['buildingBlocks'].empty?
+      json_data['buildingBlocks'].each do |maybe_building_block|
+        building_block = BuildingBlock.find_by(name: maybe_building_block['name'])
+
+        # Go to the next one if the building block is fake one.
+        next if building_block.nil?
+
+        product_building_block = ProductBuildingBlock.new
+        product_building_block.building_block = building_block
+        product_building_block.product = product
+        product_building_block.mapping_status = ProductBuildingBlock.mapping_status_types[:BETA]
+        product_building_blocks << product_building_block unless product_building_block.nil?
+      end
+    end
+
+    # Process the organization section of the json.
+    use_case_steps = []
+    if json_data['useCasesSteps'].present? && !json_data['useCasesSteps'].empty?
+      json_data['useCasesSteps'].each do |maybe_use_case_step|
+        use_case_step = UseCaseStep.find_by(name: maybe_use_case_step['name'])
+        use_case_steps << use_case_step unless use_case_step.nil?
+      end
+    end
+
+    # Process the organization section of the json.
     organizations = []
     if json_data['organizations'].present? && !json_data['organizations'].empty?
       json_data['organizations'].each do |organization|
@@ -150,10 +176,17 @@ namespace :data_processors do
       # repository_url: json_data['repositoryUrl'],
       origins: [origin],
       sectors: sectors,
+      product_building_blocks: product_building_blocks,
       organizations: organizations,
       sustainable_development_goals: sdgs,
       website: website,
-      product_type: product_type
+      product_type: product_type,
+      commercial_product: json_data['commercialProduct'].to_s == 'true',
+      hosting_model: json_data['hostingModel'],
+      pricing_model: json_data['pricingModel'],
+      pricing_details: json_data['pricingDetails'],
+      pricing_date: json_data['pricingDate'].blank? ? nil : Date.strptime(json_data['pricingDate'], "%m/%d/%Y"),
+      pricing_url: json_data['pricingUrl']
     ) if obj_type == 'product'
 
     product.update(
