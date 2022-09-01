@@ -12,6 +12,16 @@ class Tag < ApplicationRecord
     slug
   end
 
+  def tag_description_localized
+    description = tag_descriptions.order(Arel.sql('LENGTH(description) DESC'))
+                                  .find_by(locale: I18n.locale)
+    if description.nil?
+      description = tag_descriptions.order(Arel.sql('LENGTH(description) DESC'))
+                                    .find_by(locale: 'en')
+    end
+    description
+  end
+
   def self.serialization_options
     {
       except: %i[created_at updated_at]
