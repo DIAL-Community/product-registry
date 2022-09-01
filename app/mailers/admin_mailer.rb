@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class AdminMailer < ApplicationMailer
-  def send_mail_from_client(mail_from, mail_to, email_subject, email_body)
+  def send_mail_from_client(mail_from, mail_to, email_subject, email_body, content_type = 'text/plain')
     # issues@solutions.dial.community
 
     mail(from: mail_from,
          to: mail_to,
          subject: email_subject,
-         body: email_body)
+         body: email_body,
+         content_type: content_type)
   end
 
   def notify_product_owner_request

@@ -57,6 +57,7 @@ RSpec.describe(Mutations::CreateComment, type: :graphql) do
 
   it 'creates reply' do
     create(:user, id: 1, username: "username")
+    create(:product, id: 1, name: "test", slug: "test")
     create(:comment, id: 5, comment_id: "be01ea21-a13a-4d97-8218-250c2ab9ef40", comment_object_type: 'PRODUCT',
                      comment_object_id: 1, text: 'Some comment',
                      author: { "id": 1, "username": "username" })
