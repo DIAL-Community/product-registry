@@ -6,7 +6,7 @@ require 'rails_helper'
 RSpec.describe(Queries::ProductsQuery, type: :graphql) do
   let(:query) do
     <<~GQL
-      query SearchProducts(
+      query SearchProducts (
         $first: Int,
         $after: String,
         $origins: [String!],
@@ -22,9 +22,10 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
         $endorsers: [String!],
         $productDeployable: Boolean,
         $withMaturity: Boolean,
+        $licenseTypes: [String!],
         $search: String!
-        ) {
-        searchProducts(
+      ) {
+        searchProducts (
           first: $first,
           after: $after,
           origins: $origins,
@@ -40,6 +41,7 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
           endorsers: $endorsers,
           productDeployable: $productDeployable,
           withMaturity: $withMaturity,
+          licenseTypes: $licenseTypes,
           search: $search
         ) {
           __typename
@@ -59,6 +61,7 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
             maturityScore
             productType
             tags
+            commercialProduct
             endorsers {
               name
               slug
@@ -112,6 +115,28 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
     )
 
     expect(result['data']['searchProducts']['totalCount']).to(eq(0))
+  end
+
+  it 'filter and return only commercial products when flag is true.' do
+    create(:product, name: 'Commercial Product', commercial_product: true)
+    create(:product, name: 'Non Commercial Product', commercial_product: false)
+
+    result = execute_graphql(
+      query,
+      variables: { search: '' }
+    )
+
+    # Return all products. There are 2 products from here and 4 from test/fixtures/products.yml.
+    expect(result['data']['searchProducts']['totalCount']).to(eq(6))
+
+    result = execute_graphql(
+      query,
+      variables: { search: '', licenseTypes: ['commercial_only'] }
+    )
+
+    # Return only commercial products when flag is true.
+    expect(result['data']['searchProducts']['totalCount']).to(eq(1))
+    expect(result['data']['searchProducts']['nodes'][0]['name']).to(eq('Commercial Product'))
   end
 end
 

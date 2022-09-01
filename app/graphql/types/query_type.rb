@@ -50,6 +50,7 @@ module Types
     field :use_case, resolver: Queries::UseCaseQuery
     field :search_use_cases, resolver: Queries::SearchUseCasesQuery
 
+    field :use_cases_steps, resolver: Queries::UseCasesStepsQuery
     field :use_case_steps, resolver: Queries::UseCaseStepsQuery
     field :use_case_step, resolver: Queries::UseCaseStepQuery
 

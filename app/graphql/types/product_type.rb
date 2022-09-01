@@ -59,5 +59,10 @@ module Types
     field :includes, [Types::ProductType], null: true
     field :maturity_scores, GraphQL::Types::JSON, null: true
     field :manual_update, Boolean, null: false
+
+    field :commercial_product, Boolean, null: false
+    field :pricing_model, String, null: true
+    field :pricing_details, String, null: true
+    field :hosting_model, String, null: true
   end
 end
