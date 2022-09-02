@@ -90,5 +90,6 @@ module Types
     field :delete_tag, mutation: Mutations::DeleteTag
 
     field :create_comment, mutation: Mutations::CreateComment
+    field :delete_comment, mutation: Mutations::DeleteComment
   end
 end
