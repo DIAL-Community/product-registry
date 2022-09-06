@@ -15,7 +15,7 @@ module Types
     field :start_date, GraphQL::Types::ISO8601Date, null: true
     field :end_date, GraphQL::Types::ISO8601Date, null: true
     field :tags, GraphQL::Types::JSON, null: true
-    field :project_url, String, null: true
+    field :project_website, String, null: true, method: :project_website_decoded
     field :project_descriptions, [Types::ProjectDescriptionType], null: true
 
     field :sectors, [Types::SectorType], null: true, method: :sectors_localized
