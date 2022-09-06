@@ -4,10 +4,8 @@ one:
   name: Category1
   slug: category1
   weight: 1
-  maturity_rubric: one
 
 two:
   name: Category2
   slug: Category2
   weight: 1
-  maturity_rubric: two

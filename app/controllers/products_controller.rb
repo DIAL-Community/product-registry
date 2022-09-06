@@ -405,14 +405,7 @@ class ProductsController < ApplicationController
 
     record_user_event(UserEvent.event_types[:product_view])
 
-    # Right now, we are using the legacy rubric. Eventually we will change this to use
-    # the default rubric - just use the 'else' part
-    maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-    if !maturity_rubric.nil?
-      @maturity_scores = calculate_maturity_scores(@product.id, maturity_rubric.id)[:rubric_scores].first
-    else
-      @maturity_scores = calculate_maturity_scores(@product.id, nil)[:rubric_scores].first
-    end
+    @maturity_scores = calculate_maturity_scores(@product.id)[:rubric_scores].first
     @maturity_scores = @maturity_scores[:category_scores] unless @maturity_scores.nil?
   end
 

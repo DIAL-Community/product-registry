@@ -3,7 +3,6 @@
 class RubricCategory < ApplicationRecord
   attr_accessor :rc_desc
 
-  belongs_to :maturity_rubric
   has_many :category_indicators
 
   has_many :rubric_category_descriptions, dependent: :destroy
