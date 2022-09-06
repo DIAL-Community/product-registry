@@ -13803,7 +13803,7 @@
               "deprecationReason": null
             },
             {
-              "name": "projectUrl",
+              "name": "projectWebsite",
               "description": null,
               "args": [
 

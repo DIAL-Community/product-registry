@@ -1213,7 +1213,7 @@ type Project {
   products: [Product!]
   projectDescription: ProjectDescription
   projectDescriptions: [ProjectDescription!]
-  projectUrl: String
+  projectWebsite: String
   sectors: [Sector!]
   slug: String!
   startDate: ISO8601Date
