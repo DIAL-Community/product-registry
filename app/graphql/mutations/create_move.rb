@@ -35,18 +35,24 @@ module Mutations
       if play_move.nil?
         play_move = PlayMove.new(name: name)
         play_move.slug = slug_em(name)
+
+        if PlayMove.where(slug: play_move.slug).count.positive?
+          # Check if we need to add _dup to the slug.
+          first_duplicate = PlayMove.slug_simple_starts_with(play_move.slug).order(slug: :desc).first
+          play_move.slug = play_move.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        end
       end
 
       # Re-slug if the name is updated (not the same with the one in the db).
       if play_move.name != name
         play_move.name = name
         play_move.slug = slug_em(name)
-      end
 
-      if PlayMove.where(slug: play_move.slug).count.positive?
-        # Check if we need to add _dup to the slug.
-        first_duplicate = PlayMove.slug_simple_starts_with(play_move.slug).order(slug: :desc).first
-        play_move.slug = play_move.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        if PlayMove.where(slug: play_move.slug).count.positive?
+          # Check if we need to add _dup to the slug.
+          first_duplicate = PlayMove.slug_simple_starts_with(play_move.slug).order(slug: :desc).first
+          play_move.slug = play_move.slug + generate_offset(first_duplicate) unless first_duplicate.nil?
+        end
       end
 
       play_move.play = play
