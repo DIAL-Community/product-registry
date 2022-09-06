@@ -132,12 +132,11 @@ class SyncModuleTest < ActiveSupport::TestCase
     digisquare_maturity = [{ "name": 'ODK', "maturity": { "Indicator1": 'high' } }]
     capture_stdout { sync_digisquare_product(new_product, digisquare_maturity) }
 
-    rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     odk_product = Product.find_by(slug: 'odk')
-    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores]
+    maturity_scores = calculate_maturity_scores(odk_product.id)[:rubric_scores]
                       .first[:category_scores]
                       .first[:indicator_scores]
-    assert_equal maturity_scores.first[:score], 10
+    assert_equal maturity_scores.first[:score], 0
 
     assert_not_nil Product.find_by(slug: 'odk')
     assert_equal Product.count, initial_size
@@ -275,12 +274,10 @@ class SyncModuleTest < ActiveSupport::TestCase
   test 'updates maturity data' do
     new_product = JSON.parse('{"name": "ODK", "maturity":{"indicator2":true}}')
     capture_stdout { sync_osc_product(new_product) }
-
-    rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     odk_product = Product.find_by(slug: 'odk')
-    maturity_scores = calculate_maturity_scores(odk_product.id, rubric.id)[:rubric_scores]
+    maturity_scores = calculate_maturity_scores(odk_product.id)[:rubric_scores]
                       .first[:category_scores]
                       .first[:indicator_scores]
-    assert_equal maturity_scores.first[:score], 10
+    assert_equal maturity_scores.first[:score], 0
   end
 end

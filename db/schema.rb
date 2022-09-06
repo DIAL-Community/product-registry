@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_17_062227) do
+ActiveRecord::Schema.define(version: 2022_09_02_075138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -320,27 +320,56 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.string "pdf_url"
   end
 
-  create_table "maturity_rubric_descriptions", force: :cascade do |t|
-    t.bigint "maturity_rubric_id", null: false
-    t.string "locale", null: false
-    t.string "description", default: "", null: false
-    t.index ["maturity_rubric_id"], name: "index_maturity_rubric_descriptions_on_maturity_rubric_id"
-  end
-
-  create_table "maturity_rubrics", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "move_descriptions", force: :cascade do |t|
+  create_table "move_descriptions", id: :bigint, default: -> { "nextval('task_descriptions_id_seq'::regclass)" }, force: :cascade do |t|
     t.bigint "play_move_id"
     t.string "locale", null: false
     t.string "description", null: false
     t.string "prerequisites", default: "", null: false
     t.string "outcomes", default: "", null: false
     t.index ["play_move_id"], name: "index_move_descriptions_on_play_move_id"
+    t.index ["play_move_id"], name: "index_task_descriptions_on_play_task_id"
+  end
+
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.integer "expires_in", null: false
+    t.text "redirect_uri", null: false
+    t.datetime "created_at", null: false
+    t.datetime "revoked_at"
+    t.string "scopes", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
+  end
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.bigint "resource_owner_id"
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.string "refresh_token"
+    t.integer "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
+    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
+    t.text "redirect_uri", null: false
+    t.string "scopes", default: "", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
   create_table "offices", force: :cascade do |t|
@@ -439,7 +468,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.index ["play_id"], name: "index_play_descriptions_on_play_id"
   end
 
-  create_table "play_moves", force: :cascade do |t|
+  create_table "play_moves", id: :bigint, default: -> { "nextval('play_tasks_id_seq'::regclass)" }, force: :cascade do |t|
     t.bigint "play_id"
     t.string "name", null: false
     t.string "slug", null: false
@@ -448,6 +477,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["play_id"], name: "index_play_moves_on_play_id"
+    t.index ["play_id"], name: "index_play_tasks_on_play_id"
   end
 
   create_table "playbook_descriptions", force: :cascade do |t|
@@ -477,13 +507,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.datetime "updated_at", null: false
     t.boolean "draft", default: true, null: false
     t.string "author"
-  end
-
-  create_table "playbooks_sectors", id: false, force: :cascade do |t|
-    t.bigint "playbook_id", null: false
-    t.bigint "sector_id", null: false
-    t.index ["playbook_id", "sector_id"], name: "playbooks_sectors_idx", unique: true
-    t.index ["sector_id", "playbook_id"], name: "sectors_playbooks_idx", unique: true
   end
 
   create_table "plays", force: :cascade do |t|
@@ -568,6 +591,8 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.bigint "product_id", null: false
     t.bigint "category_indicator_id", null: false
     t.string "indicator_value", null: false
+    t.datetime "updated_at"
+    t.string "script_name"
     t.index ["category_indicator_id"], name: "index_product_indicators_on_category_indicator_id"
     t.index ["product_id"], name: "index_product_indicators_on_product_id"
   end
@@ -709,10 +734,8 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.string "name", null: false
     t.string "slug", null: false
     t.decimal "weight", default: "0.0", null: false
-    t.bigint "maturity_rubric_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["maturity_rubric_id"], name: "index_rubric_categories_on_maturity_rubric_id"
   end
 
   create_table "rubric_category_descriptions", force: :cascade do |t|
@@ -951,8 +974,12 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
   add_foreign_key "handbook_pages", "handbook_pages", column: "parent_page_id"
   add_foreign_key "handbook_pages", "handbook_questions", column: "handbook_questions_id"
   add_foreign_key "handbook_pages", "handbooks"
-  add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
   add_foreign_key "move_descriptions", "play_moves"
+  add_foreign_key "move_descriptions", "play_moves"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "offices", "countries"
   add_foreign_key "offices", "organizations"
   add_foreign_key "offices", "regions"
@@ -973,11 +1000,10 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
   add_foreign_key "page_contents", "handbook_pages"
   add_foreign_key "play_descriptions", "plays"
   add_foreign_key "play_moves", "plays"
+  add_foreign_key "play_moves", "plays"
   add_foreign_key "playbook_descriptions", "playbooks"
   add_foreign_key "playbook_plays", "playbooks"
   add_foreign_key "playbook_plays", "plays"
-  add_foreign_key "playbooks_sectors", "playbooks", name: "playbooks_sectors_playbook_fk"
-  add_foreign_key "playbooks_sectors", "sectors", name: "playbooks_sectors_sector_fk"
   add_foreign_key "plays_building_blocks", "building_blocks"
   add_foreign_key "plays_building_blocks", "building_blocks", name: "bbs_plays_bb_fk"
   add_foreign_key "plays_building_blocks", "plays"
@@ -1022,7 +1048,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
   add_foreign_key "regions", "countries"
-  add_foreign_key "rubric_categories", "maturity_rubrics"
   add_foreign_key "rubric_category_descriptions", "rubric_categories"
   add_foreign_key "sectors", "origins"
   add_foreign_key "sectors", "sectors", column: "parent_sector_id"
