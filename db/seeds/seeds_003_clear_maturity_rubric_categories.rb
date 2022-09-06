@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-rubric_categories = RubricCategory.where.not(maturity_rubric_id: 1)
+rubric_categories = RubricCategory.where("slug in (?)",
+"'financial_sustainability', 'licensing','product_design','compliance','utility_and_impact'," \
+"'product_quality','community_health','dependency_and_risk','knowledge_management','governance'")
 rubric_categories.each do |rubric_category|
   puts "Removing rubric category: #{rubric_category.name}."
 
