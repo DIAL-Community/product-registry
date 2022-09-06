@@ -9,7 +9,7 @@ class CategoryIndicatorsController < ApplicationController
   def index
     if params[:rubric_category_id]
       rubric_category = RubricCategory.find(params[:rubric_category_id])
-      redirect_to(maturity_rubric_rubric_category_path(rubric_category.maturity_rubric, rubric_category))
+      redirect_to(rubric_category_path(rubric_category))
     else
       redirect_to(rubric_categories_path)
     end
@@ -58,8 +58,7 @@ class CategoryIndicatorsController < ApplicationController
         end
         format.html do
           rubric_category = @category_indicator.rubric_category
-          maturity_rubric = rubric_category.maturity_rubric
-          redirect_to(maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
+          redirect_to(rubric_category_category_indicator_path(rubric_category,
                                                                               @category_indicator),
                       notice: t('messages.model.created', model: t('model.category-indicator').to_s.humanize))
         end
@@ -88,8 +87,7 @@ class CategoryIndicatorsController < ApplicationController
       if @category_indicator.update(category_indicator_params)
         format.html do
           rubric_category = @category_indicator.rubric_category
-          maturity_rubric = rubric_category.maturity_rubric
-          redirect_to(maturity_rubric_rubric_category_category_indicator_path(maturity_rubric, rubric_category,
+          redirect_to(rubric_category_category_indicator_path(rubric_category,
                                                                               @category_indicator),
                       notice: t('messages.model.updated', model: t('model.category-indicator').to_s.humanize))
         end
@@ -109,7 +107,7 @@ class CategoryIndicatorsController < ApplicationController
     @category_indicator.destroy
     respond_to do |format|
       format.html do
-        redirect_to(maturity_rubric_rubric_category_path(rubric_category.maturity_rubric, rubric_category),
+        redirect_to(rubric_category_path(rubric_category),
                     notice: t('messages.model.deleted', model: t('model.category-indicator').to_s.humanize))
       end
       format.json { head(:no_content) }

@@ -122,5 +122,7 @@ module Types
 
     field :comments, resolver: Queries::CommentsQuery
     field :count_comments, resolver: Queries::CountCommentsQuery
+
+    field :rubric_categories, resolver: Queries::RubricCategoriesQuery
   end
 end

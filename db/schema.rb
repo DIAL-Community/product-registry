@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_17_062227) do
+ActiveRecord::Schema.define(version: 2022_09_02_075138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -320,20 +320,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.string "pdf_url"
   end
 
-  create_table "maturity_rubric_descriptions", force: :cascade do |t|
-    t.bigint "maturity_rubric_id", null: false
-    t.string "locale", null: false
-    t.string "description", default: "", null: false
-    t.index ["maturity_rubric_id"], name: "index_maturity_rubric_descriptions_on_maturity_rubric_id"
-  end
-
-  create_table "maturity_rubrics", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "move_descriptions", force: :cascade do |t|
     t.bigint "play_move_id"
     t.string "locale", null: false
@@ -568,6 +554,8 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.bigint "product_id", null: false
     t.bigint "category_indicator_id", null: false
     t.string "indicator_value", null: false
+    t.datetime "updated_at"
+    t.string "script_name"
     t.index ["category_indicator_id"], name: "index_product_indicators_on_category_indicator_id"
     t.index ["product_id"], name: "index_product_indicators_on_product_id"
   end
@@ -709,10 +697,8 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
     t.string "name", null: false
     t.string "slug", null: false
     t.decimal "weight", default: "0.0", null: false
-    t.bigint "maturity_rubric_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["maturity_rubric_id"], name: "index_rubric_categories_on_maturity_rubric_id"
   end
 
   create_table "rubric_category_descriptions", force: :cascade do |t|
@@ -951,7 +937,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
   add_foreign_key "handbook_pages", "handbook_pages", column: "parent_page_id"
   add_foreign_key "handbook_pages", "handbook_questions", column: "handbook_questions_id"
   add_foreign_key "handbook_pages", "handbooks"
-  add_foreign_key "maturity_rubric_descriptions", "maturity_rubrics"
   add_foreign_key "move_descriptions", "play_moves"
   add_foreign_key "offices", "countries"
   add_foreign_key "offices", "organizations"
@@ -1022,7 +1007,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_062227) do
   add_foreign_key "projects_sectors", "projects", name: "projects_sectors_project_fk"
   add_foreign_key "projects_sectors", "sectors", name: "projects_sectors_sector_fk"
   add_foreign_key "regions", "countries"
-  add_foreign_key "rubric_categories", "maturity_rubrics"
   add_foreign_key "rubric_category_descriptions", "rubric_categories"
   add_foreign_key "sectors", "origins"
   add_foreign_key "sectors", "sectors", column: "parent_sector_id"

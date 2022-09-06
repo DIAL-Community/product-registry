@@ -278,13 +278,9 @@ module Modules
       digisquare_maturity.each do |ds_maturity|
         next if existing_product.name != ds_maturity['name']
 
-        # Get the legacy rubric
-        maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-        next if maturity_rubric.nil?
-
         ds_maturity['maturity'].each do |key, value|
           # Find the correct category and indicator
-          categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
+          categories = RubricCategory.all.map(&:id)
           category_indicator = CategoryIndicator.find_by(rubric_category: categories, name: key)
           # Save the value in ProductIndicators
           product_indicator = ProductIndicator.where(product_id: existing_product.id,
@@ -353,27 +349,6 @@ module Modules
           sdg_obj = SustainableDevelopmentGoal.where(number: sdg)[0]
           assign_sdg_to_product(sdg_obj, sync_product,
                                 ProductSustainableDevelopmentGoal.mapping_status_types[:VALIDATED])
-        end
-      end
-
-      maturity = product['maturity']
-      unless maturity.nil?
-        # Get the legacy rubric
-        maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
-        unless maturity_rubric.nil?
-          maturity.each do |key, value|
-            # Find the correct category and indicator
-            categories = RubricCategory.where(maturity_rubric_id: maturity_rubric.id).map(&:id)
-            category_indicator = CategoryIndicator.find_by(rubric_category: categories, slug: key)
-            # Save the value in ProductIndicators
-            product_indicator = ProductIndicator.where(product_id: sync_product.id,
-                                                       category_indicator_id: category_indicator.id)
-                                                .first || ProductIndicator.new
-            product_indicator.product_id = sync_product.id
-            product_indicator.category_indicator_id = category_indicator.id
-            product_indicator.indicator_value = value
-            product_indicator.save!
-          end
         end
       end
 

@@ -2,13 +2,12 @@
 
 module Modules
   module MaturitySync
-    def create_category(cat_name, maturity_rubric)
+    def create_category(cat_name)
       category_slug = slug_em(cat_name)
-      rubric_category = RubricCategory.where(maturity_rubric_id: maturity_rubric.id, slug: category_slug)
+      rubric_category = RubricCategory.where(slug: category_slug)
                                       .first || RubricCategory.new
       rubric_category.name = cat_name
       rubric_category.slug = category_slug
-      rubric_category.maturity_rubric = maturity_rubric
       rubric_category.weight = 1.0
       rubric_category.save!
 
@@ -45,7 +44,7 @@ module Modules
       category_indicator_desc.save
     end
 
-    def calculate_maturity_scores(product_id, rubric_id = nil)
+    def calculate_maturity_scores(product_id)
       logger = Logger.new($stdout)
       logger.level = Logger::INFO
 
@@ -57,82 +56,71 @@ module Modules
 
       product_score = { rubric_scores: [] }
 
-      if rubric_id.nil?
-        maturity_rubrics = MaturityRubric.all
-      else
-        maturity_rubrics = MaturityRubric.where(id: rubric_id)
-      end
+      rubric_score = {
+        category_scores: [],
+        indicator_count: 0,
+        # Number of indicator without score at the rubric level.
+        missing_score: 0,
+        # Overall score at the rubric level
+        overall_score: 0
+      }
 
-      maturity_rubrics.each do |maturity_rubric|
-        rubric_score = {
-          id: maturity_rubric.id,
-          name: maturity_rubric.name,
-          category_scores: [],
-          indicator_count: 0,
-          # Number of indicator without score at the rubric level.
+      rubric_categories = RubricCategory.all.includes(:rubric_category_descriptions)
+      rubric_categories.each do |rubric_category|
+        category_description = rubric_category.rubric_category_descriptions.first
+        category_score = {
+          id: rubric_category.id,
+          name: rubric_category.name,
+          weight: rubric_category.weight,
+          description: !category_description.nil? && !category_description.description.nil? &&
+                        category_description.description.gsub(/<\/?[^>]*>/, ''),
+          indicator_scores: [],
+          # Number of indicator without score at the category level.
           missing_score: 0,
-          # Overall score at the rubric level
+          # Overall score at the category level
           overall_score: 0
         }
+        category_indicators = CategoryIndicator.where(rubric_category: rubric_category)
+                                               .includes(:category_indicator_descriptions)
+        category_indicators.each do |category_indicator|
+          indicator_value = product_indicators[category_indicator.id.to_s]
+          indicator_type = category_indicator.indicator_type
+          indicator_description = category_indicator.category_indicator_descriptions.first
 
-        rubric_categories = RubricCategory.where(maturity_rubric: maturity_rubric)
-                                          .includes(:rubric_category_descriptions)
-        rubric_categories.each do |rubric_category|
-          category_description = rubric_category.rubric_category_descriptions.first
-          category_score = {
-            id: rubric_category.id,
-            name: rubric_category.name,
-            weight: rubric_category.weight,
-            description: !category_description.nil? && !category_description.description.nil? &&
-                         category_description.description.gsub(/<\/?[^>]*>/, ''),
-            indicator_scores: [],
-            # Number of indicator without score at the category level.
-            missing_score: 0,
-            # Overall score at the category level
-            overall_score: 0
+          indicator_score = {
+            id: category_indicator.id,
+            name: category_indicator.name,
+            weight: category_indicator.weight,
+            description: !indicator_description.nil? && indicator_description.description.gsub(/<\/?[^>]*>/, ''),
+            score: convert_to_numeric(indicator_value, indicator_type, category_indicator.weight)
           }
-          category_indicators = CategoryIndicator.where(rubric_category: rubric_category)
-                                                 .includes(:category_indicator_descriptions)
-          category_indicators.each do |category_indicator|
-            indicator_value = product_indicators[category_indicator.id.to_s]
-            indicator_type = category_indicator.indicator_type
-            indicator_description = category_indicator.category_indicator_descriptions.first
 
-            indicator_score = {
-              id: category_indicator.id,
-              name: category_indicator.name,
-              weight: category_indicator.weight,
-              description: !indicator_description.nil? && indicator_description.description.gsub(/<\/?[^>]*>/, ''),
-              score: convert_to_numeric(indicator_value, indicator_type, category_indicator.weight)
-            }
-
-            if indicator_score[:score].nil?
-              category_score[:missing_score] += 1
-            else
-              category_score[:overall_score] += indicator_score[:score]
-            end
-            category_score[:indicator_scores] << indicator_score
+          if indicator_score[:score].nil?
+            category_score[:missing_score] += 1
+          else
+            category_score[:overall_score] += indicator_score[:score]
           end
-
-          # Occasionally, rounding errors can lead to a score > 10
-          category_score[:overall_score] = 10.0 if category_score[:overall_score] > 10
-          rubric_score[:indicator_count] += category_score[:indicator_scores].count
-          rubric_score[:missing_score] += category_score[:missing_score]
-          rubric_score[:overall_score] += category_score[:overall_score]
-          rubric_score[:category_scores] << category_score
+          category_score[:indicator_scores] << indicator_score
         end
 
-        # Now do final score calculation
-        total_categories = 0
-        rubric_score[:category_scores].each do |category|
-          total_categories += 1 if (category[:overall_score]).positive?
-        end
-        if total_categories.positive?
-          rubric_score[:overall_score] =
-            rubric_score[:overall_score] * 10 / total_categories
-        end
-        product_score[:rubric_scores] << rubric_score
+        # Occasionally, rounding errors can lead to a score > 10
+        category_score[:overall_score] = 10.0 if category_score[:overall_score] > 10
+        rubric_score[:indicator_count] += category_score[:indicator_scores].count
+        rubric_score[:missing_score] += category_score[:missing_score]
+        rubric_score[:overall_score] += category_score[:overall_score]
+        rubric_score[:category_scores] << category_score
       end
+
+      # Now do final score calculation
+      total_categories = 0
+      rubric_score[:category_scores].each do |category|
+        total_categories += 1 if (category[:overall_score]).positive?
+      end
+      if total_categories.positive?
+        rubric_score[:overall_score] =
+          rubric_score[:overall_score] * 10 / total_categories
+      end
+      product_score[:rubric_scores] << rubric_score
 
       logger.debug("Rubric score for product: #{product_id} is: #{product_score.to_json}")
       product_score

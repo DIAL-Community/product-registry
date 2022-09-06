@@ -4,17 +4,6 @@ class RubricCategoriesController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :set_rubric_category, only: %i[show edit update destroy]
 
-  # GET /rubric_categories
-  # GET /rubric_categories.json
-  def index
-    if params[:maturity_rubric_id]
-      @maturity_rubric = MaturityRubric.find(params[:maturity_rubric_id])
-      redirect_to(@maturity_rubric)
-    else
-      redirect_to(maturity_rubrics_path)
-    end
-  end
-
   # GET /rubric_categories/1
   # GET /rubric_categories/1.json
   def show
@@ -24,10 +13,6 @@ class RubricCategoriesController < ApplicationController
   # GET /rubric_categories/new
   def new
     @rubric_category = RubricCategory.new
-    if params[:maturity_rubric_id]
-      @maturity_rubric = MaturityRubric.find_by(slug: params[:maturity_rubric_id])
-      @rubric_category.maturity_rubric = @maturity_rubric
-    end
     authorize(@rubric_category, :mod_allowed?)
   end
 
@@ -43,11 +28,6 @@ class RubricCategoriesController < ApplicationController
     @rubric_category = RubricCategory.new(rubric_category_params)
     @rubric_category_desc = RubricCategoryDescription.new
 
-    if params[:maturity_rubric_id]
-      @maturity_rubric = MaturityRubric.find(params[:maturity_rubric_id])
-      @rubric_category.maturity_rubric = @maturity_rubric
-    end
-
     respond_to do |format|
       if @rubric_category.save
         if rubric_category_params[:rc_desc].present?
@@ -57,7 +37,7 @@ class RubricCategoriesController < ApplicationController
           @rubric_category_desc.save
         end
         format.html do
-          redirect_to(maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric, @rubric_category),
+          redirect_to(rubric_category_path(@rubric_category),
                       notice: t('messages.model.created', model: t('model.rubric-category').to_s.humanize))
         end
         format.json { render(:show, status: :created, location: @rubric_category) }
@@ -84,7 +64,7 @@ class RubricCategoriesController < ApplicationController
     respond_to do |format|
       if @rubric_category.update(rubric_category_params)
         format.html do
-          redirect_to(maturity_rubric_rubric_category_path(@rubric_category.maturity_rubric, @rubric_category),
+          redirect_to(rubric_category_path(@rubric_category),
                       notice: t('messages.model.updated', model: t('model.rubric-category').to_s.humanize))
         end
         format.json { render(:show, status: :ok, location: @rubric_category) }
@@ -99,12 +79,10 @@ class RubricCategoriesController < ApplicationController
   # DELETE /rubric_categories/1.json
   def destroy
     authorize(@rubric_category, :mod_allowed?)
-    maturity_rubric = @rubric_category.maturity_rubric
     @rubric_category.destroy
     respond_to do |format|
       format.html do
-        redirect_to(maturity_rubric,
-                    notice: t('messages.model.deleted', model: t('model.rubric-category').to_s.humanize))
+        redirect_to(notice: t('messages.model.deleted', model: t('model.rubric-category').to_s.humanize))
       end
       format.json { head(:no_content) }
     end
@@ -138,7 +116,7 @@ class RubricCategoriesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def rubric_category_params
     params.require(:rubric_category)
-          .permit(:name, :slug, :weight, :maturity_rubric_id, :rc_desc)
+          .permit(:name, :slug, :weight, :rc_desc)
           .tap do |attr|
             if params[:reslug].present?
               attr[:slug] = slug_em(attr[:name])

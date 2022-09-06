@@ -36,6 +36,10 @@ class Project < ApplicationRecord
     description
   end
 
+  def project_website_decoded
+    project_url
+  end
+
   def to_param
     slug
   end

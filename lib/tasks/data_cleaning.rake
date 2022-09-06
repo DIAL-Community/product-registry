@@ -190,16 +190,6 @@ namespace :data do
       end
     end
 
-    MaturityRubric.all.each do |rubric|
-      puts "RUBRIC: #{rubric.name}"
-      rubric_description = MaturityRubricDescription.where(maturity_rubric_id: rubric, locale: I18n.locale)
-                                                    .first
-      unless rubric_description.nil?
-        rubric_description.description = rubric_description.description_html
-        rubric_description.save
-      end
-    end
-
     RubricCategory.all.each do |category|
       puts "Category: #{category.name}"
       category_description = RubricCategoryDescription.where(rubric_category_id: category, locale: I18n.locale)
