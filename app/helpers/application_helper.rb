@@ -8,7 +8,7 @@ module ApplicationHelper
   include Modules::Constants
 
   ADMIN_NAV_CONTROLLERS = %w[contacts users sectors candidate_organizations use_cases_steps tags
-                             operator_services settings glossaries portal_views maturity_rubrics
+                             operator_services settings glossaries portal_views
                              rubric_categories cities countries task_trackers candidate_roles audits
                              candidate_products].freeze
 
@@ -59,12 +59,6 @@ module ApplicationHelper
     when 'users'
       breadcrumbs << { path: 'users', label: t('model.user').titlecase.pluralize }
     when 'rubric_categories', 'category_indicators'
-      breadcrumbs << { path: 'maturity_rubrics', label: t('model.maturity-rubric').titlecase.pluralize }
-      if params[:maturity_rubric_id].present?
-        mr_path = "maturity_rubrics/#{params[:maturity_rubric_id]}"
-        mr_name = MaturityRubric.find_by(slug: params[:maturity_rubric_id]).name
-        breadcrumbs << { path: mr_path, label: mr_name }
-      end
       if params[:rubric_category_id].present?
         rc_path = "#{breadcrumbs[-1][:path]}/rubric_categories/#{params[:rubric_category_id]}"
         rc_name = RubricCategory.find_by(slug: params[:rubric_category_id]).name

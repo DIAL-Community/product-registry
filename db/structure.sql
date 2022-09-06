@@ -1187,70 +1187,6 @@ CREATE SEQUENCE public.handbooks_id_seq
 
 ALTER SEQUENCE public.handbooks_id_seq OWNED BY public.handbooks.id;
 
-
---
--- Name: maturity_rubric_descriptions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.maturity_rubric_descriptions (
-    id bigint NOT NULL,
-    maturity_rubric_id bigint NOT NULL,
-    locale character varying NOT NULL,
-    description character varying DEFAULT ''::character varying NOT NULL
-);
-
-
---
--- Name: maturity_rubric_descriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.maturity_rubric_descriptions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: maturity_rubric_descriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.maturity_rubric_descriptions_id_seq OWNED BY public.maturity_rubric_descriptions.id;
-
-
---
--- Name: maturity_rubrics; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.maturity_rubrics (
-    id bigint NOT NULL,
-    name character varying NOT NULL,
-    slug character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: maturity_rubrics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.maturity_rubrics_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: maturity_rubrics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.maturity_rubrics_id_seq OWNED BY public.maturity_rubrics.id;
-
-
 --
 -- Name: move_descriptions; Type: TABLE; Schema: public; Owner: -
 --
@@ -2609,7 +2545,6 @@ CREATE TABLE public.rubric_categories (
     name character varying NOT NULL,
     slug character varying NOT NULL,
     weight numeric DEFAULT 0 NOT NULL,
-    maturity_rubric_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -3577,20 +3512,6 @@ ALTER TABLE ONLY public.handbooks ALTER COLUMN id SET DEFAULT nextval('public.ha
 
 
 --
--- Name: maturity_rubric_descriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.maturity_rubric_descriptions ALTER COLUMN id SET DEFAULT nextval('public.maturity_rubric_descriptions_id_seq'::regclass);
-
-
---
--- Name: maturity_rubrics id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.maturity_rubrics ALTER COLUMN id SET DEFAULT nextval('public.maturity_rubrics_id_seq'::regclass);
-
-
---
 -- Name: move_descriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -4216,22 +4137,6 @@ ALTER TABLE ONLY public.handbook_questions
 
 ALTER TABLE ONLY public.handbooks
     ADD CONSTRAINT handbooks_pkey PRIMARY KEY (id);
-
-
---
--- Name: maturity_rubric_descriptions maturity_rubric_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.maturity_rubric_descriptions
-    ADD CONSTRAINT maturity_rubric_descriptions_pkey PRIMARY KEY (id);
-
-
---
--- Name: maturity_rubrics maturity_rubrics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.maturity_rubrics
-    ADD CONSTRAINT maturity_rubrics_pkey PRIMARY KEY (id);
 
 
 --
@@ -4975,13 +4880,6 @@ CREATE INDEX index_handbook_questions_on_handbook_page_id ON public.handbook_que
 
 
 --
--- Name: index_maturity_rubric_descriptions_on_maturity_rubric_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_maturity_rubric_descriptions_on_maturity_rubric_id ON public.maturity_rubric_descriptions USING btree (maturity_rubric_id);
-
-
---
 -- Name: index_move_descriptions_on_play_move_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5280,13 +5178,6 @@ CREATE INDEX index_projects_on_origin_id ON public.projects USING btree (origin_
 --
 
 CREATE INDEX index_regions_on_country_id ON public.regions USING btree (country_id);
-
-
---
--- Name: index_rubric_categories_on_maturity_rubric_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_rubric_categories_on_maturity_rubric_id ON public.rubric_categories USING btree (maturity_rubric_id);
 
 
 --
@@ -5772,14 +5663,6 @@ ALTER TABLE ONLY public.use_case_steps
 
 
 --
--- Name: maturity_rubric_descriptions fk_rails_1c75e9f6a4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.maturity_rubric_descriptions
-    ADD CONSTRAINT fk_rails_1c75e9f6a4 FOREIGN KEY (maturity_rubric_id) REFERENCES public.maturity_rubrics(id);
-
-
---
 -- Name: candidate_roles fk_rails_1c91ae1dbd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5889,14 +5772,6 @@ ALTER TABLE ONLY public.projects
 
 ALTER TABLE ONLY public.tag_descriptions
     ADD CONSTRAINT fk_rails_46e6dc893e FOREIGN KEY (tag_id) REFERENCES public.tags(id);
-
-
---
--- Name: rubric_categories fk_rails_49a0635e83; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.rubric_categories
-    ADD CONSTRAINT fk_rails_49a0635e83 FOREIGN KEY (maturity_rubric_id) REFERENCES public.maturity_rubrics(id);
 
 
 --

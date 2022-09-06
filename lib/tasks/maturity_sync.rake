@@ -15,38 +15,6 @@ namespace :maturity_sync do
     logger = Logger.new($stdout)
     logger.level = Logger::DEBUG
 
-    if MaturityRubric.default_maturity_rubric.nil?
-      logger.debug('Default maturity rubric configuration is not found. Please run db:seed first.')
-      next
-    end
-
-    data = File.read(File.join(params[:path], 'README.md'))
-    html_md = Kramdown::Document.new(data).to_html
-    html_fragment = Nokogiri::HTML.fragment(html_md)
-
-    document_header = html_fragment.at_css('h1')
-    logger.debug("Rubric Header: #{document_header.inner_html}")
-
-    maturity_rubric = MaturityRubric.find_by(slug: MaturityRubric.default_maturity_rubric) || MaturityRubric.new
-    maturity_rubric.name = document_header.inner_html
-    maturity_rubric.slug = MaturityRubric.default_maturity_rubric
-    maturity_rubric.save!
-
-    description = ''
-    current_node = document_header.next_sibling
-    until current_node.nil?
-      description += current_node.to_html
-      description += '<br />' unless current_node.to_html.blank?
-      current_node = current_node.next_sibling
-    end
-
-    maturity_rubric_desc = MaturityRubricDescription.where(maturity_rubric_id: maturity_rubric.id, locale: I18n.locale)
-                                                    .first || MaturityRubricDescription.new
-    maturity_rubric_desc.maturity_rubric_id = maturity_rubric.id
-    maturity_rubric_desc.locale = I18n.locale
-    maturity_rubric_desc.description = description
-    maturity_rubric_desc.save!
-
     Dir.glob("#{params[:path]}/categories/*.md").each do |category_page|
       next if category_page.include?('sources')
 
@@ -66,36 +34,28 @@ namespace :maturity_sync do
       rubric_category = nil
       if duplicate_categories.count.positive?
         first_duplicate = duplicate_categories.first
-        if first_duplicate.maturity_rubric_id == maturity_rubric.id
-          # It's not a duplicate, so we should update this record.
-          rubric_category = first_duplicate
-          rubric_category.name = category_name
-          logger.debug("Existing category found: #{rubric_category.slug}.")
-        else
-          # It's a duplicate because it's belong to a separate rubric.
-          # Calculate the offset.
-          dupe = RubricCategory.slug_starts_with(category_slug)
-                               .order(slug: :desc)
-                               .first
-          size = 1
-          unless dupe.nil?
-            size = dupe.slug
-                       .slice(/_dup\d+$/)
-                       .delete('^0-9')
-                       .to_i + 1
-          end
-          rubric_category = RubricCategory.new
-          rubric_category.name = category_name
-          rubric_category.slug = "#{category_slug}_dup#{size}"
-          logger.debug("Creating duplicate category: #{rubric_category.slug}.")
+        # It's a duplicate because it's belong to a separate rubric.
+        # Calculate the offset.
+        dupe = RubricCategory.slug_starts_with(category_slug)
+                             .order(slug: :desc)
+                             .first
+        size = 1
+        unless dupe.nil?
+          size = dupe.slug
+                     .slice(/_dup\d+$/)
+                     .delete('^0-9')
+                     .to_i + 1
         end
+        rubric_category = RubricCategory.new
+        rubric_category.name = category_name
+        rubric_category.slug = "#{category_slug}_dup#{size}"
+        logger.debug("Creating duplicate category: #{rubric_category.slug}.")
       else
         rubric_category = RubricCategory.new
         rubric_category.name = category_name
         rubric_category.slug = category_slug
         logger.debug("Creating new category: #{rubric_category.slug}.")
       end
-      rubric_category.maturity_rubric = maturity_rubric
       rubric_category.weight = 1.0
       rubric_category.save!
 
@@ -187,22 +147,9 @@ namespace :maturity_sync do
   end
 
   task :sync_legacy, [:path] => :environment do |_, _params|
-    maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric') || MaturityRubric.new
-    maturity_rubric.name = 'Legacy Rubric'
-    maturity_rubric.slug = 'legacy_rubric'
-    maturity_rubric.save!
-
-    maturity_rubric_desc = MaturityRubricDescription.where(maturity_rubric_id: maturity_rubric.id, locale: I18n.locale)
-                                                    .first || MaturityRubricDescription.new
-    maturity_rubric_desc.maturity_rubric_id = maturity_rubric.id
-    maturity_rubric_desc.locale = I18n.locale
-    maturity_rubric_desc.description =
-      '<p>The legacy rubric tracks maturity data from OSC and Digital Square data sources.</p>'
-    maturity_rubric_desc.save!
-
     digisquare_maturity = YAML.load_file('config/maturity_digisquare.yml')
     digisquare_maturity.each do |digi_category|
-      rubric_category = create_category(digi_category['core'], maturity_rubric)
+      rubric_category = create_category(digi_category['core'])
 
       category_count = digi_category['sub-indicators'].count
       digi_category['sub-indicators'].each do |indicator|
@@ -214,7 +161,7 @@ namespace :maturity_sync do
 
     osc_maturity = YAML.load_file('config/maturity_osc.yml')
     osc_maturity.each do |osc_category|
-      rubric_category = create_category(osc_category['header'], maturity_rubric)
+      rubric_category = create_category(osc_category['header'])
 
       category_count = osc_category['items'].count
       osc_category['items'].each do |indicator|
@@ -226,15 +173,12 @@ namespace :maturity_sync do
   end
 
   task :update_maturity_scores, [:path] => :environment do |_, _params|
-    # Note, we are going to use the legacy rubric for now. Eventually, we will want to set this
-    # to the default rubric
-    maturity_rubric = MaturityRubric.find_by(slug: 'legacy_rubric')
     Product.all.each do |product|
       product_indicators = ProductIndicator.where(product_id: product.id)
       next unless product_indicators.any?
 
       puts "UPDATING SCORE FOR: #{product.name}"
-      maturity_score = calculate_maturity_scores(product.id, maturity_rubric.id)
+      maturity_score = calculate_maturity_scores(product.id)
       overall_score = maturity_score[:rubric_scores][0][:overall_score].to_i
       puts "OVERALL SCORE: #{overall_score}"
       product.maturity_score = overall_score
