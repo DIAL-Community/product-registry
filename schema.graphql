@@ -1416,6 +1416,27 @@ type Query {
   products(search: String = ""): [Product!]!
   project(slug: String!): Project!
   projects(search: String = ""): [Project!]!
+  rubricCategories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): RubricCategoryConnection!
   sdg(slug: String!): SustainableDevelopmentGoal!
   sdgTargets(search: String = ""): [SustainableDevelopmentGoalTarget!]!
   sdgs(search: String = ""): [SustainableDevelopmentGoal!]!
@@ -1970,6 +1991,48 @@ type Resources {
   link: String!
   name: String!
   phase: String!
+}
+
+type RubricCategory {
+  name: String!
+  slug: String!
+  weight: Float!
+}
+
+"""
+The connection type for RubricCategory.
+"""
+type RubricCategoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [RubricCategoryEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [RubricCategory]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type RubricCategoryEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: RubricCategory
 }
 
 type Sector {
