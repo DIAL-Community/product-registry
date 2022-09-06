@@ -51,7 +51,7 @@ module Mutations
 
       play_move.play = play
       play_move.order = play.play_moves.count
-      play_move.resources = resources
+      play_move.resources = resources.reject { |resource| resource['name'].blank? || resource['url'].blank? }
       if play_move.save
         move_desc = MoveDescription.find_by(play_move_id: play_move, locale: I18n.locale)
         if move_desc.nil?
