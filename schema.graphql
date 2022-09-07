@@ -204,6 +204,25 @@ type Capability {
   service: String!
 }
 
+type CategoryIndicator {
+  categoryIndicatorDescription: CategoryIndicatorDescription
+  categoryIndicatorDescriptions: [CategoryIndicatorDescription!]
+  dataSource: String
+  indicatorType: String
+  name: String!
+  rubricCategoryId: Int
+  slug: String!
+  sourceIndicator: String
+  weight: Float!
+}
+
+type CategoryIndicatorDescription {
+  categoryIndicatorId: Int
+  description: String!
+  id: ID!
+  locale: String!
+}
+
 type Comment {
   author: JSON
   avatarUrl: String!
@@ -1436,7 +1455,9 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+    search: String
   ): RubricCategoryConnection!
+  rubricCategory(slug: String!): RubricCategory
   sdg(slug: String!): SustainableDevelopmentGoal!
   sdgTargets(search: String = ""): [SustainableDevelopmentGoalTarget!]!
   sdgs(search: String = ""): [SustainableDevelopmentGoal!]!
@@ -1994,7 +2015,11 @@ type Resources {
 }
 
 type RubricCategory {
+  categoryIndicators: [CategoryIndicator!]
+  id: ID!
   name: String!
+  rubricCategoryDescription: RubricCategoryDescription
+  rubricCategoryDescriptions: [RubricCategoryDescription!]
   slug: String!
   weight: Float!
 }
@@ -2018,6 +2043,13 @@ type RubricCategoryConnection {
   """
   pageInfo: PageInfo!
   totalCount: Int!
+}
+
+type RubricCategoryDescription {
+  description: String!
+  id: ID!
+  locale: String!
+  rubricCategoryId: Int
 }
 
 """
