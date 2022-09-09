@@ -15,4 +15,14 @@ class CategoryIndicator < ApplicationRecord
   def to_param
     slug
   end
+
+  def category_indicator_description_localized
+    description = category_indicator_descriptions
+                  .find_by(locale: I18n.locale)
+    if description.nil?
+      description = category_indicator_descriptions
+                    .find_by(locale: 'en')
+    end
+    description
+  end
 end

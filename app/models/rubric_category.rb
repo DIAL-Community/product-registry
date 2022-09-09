@@ -14,4 +14,14 @@ class RubricCategory < ApplicationRecord
   def to_param
     slug
   end
+
+  def rubric_category_description_localized
+    description = rubric_category_descriptions
+                  .find_by(locale: I18n.locale)
+    if description.nil?
+      description = rubric_category_descriptions
+                    .find_by(locale: 'en')
+    end
+    description
+  end
 end
