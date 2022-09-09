@@ -34,6 +34,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
   #config.action_mailer.delivery_method = :mailgun
 
@@ -42,7 +43,6 @@ Rails.application.configure do
   #  domain: Rails.application.secrets.mailgun_domain
   #}
 
-  config.action_mailer.default_url_options = { host: 'https://solutions.dial.community' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              Rails.application.secrets.mail_domain,
