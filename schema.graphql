@@ -211,6 +211,7 @@ type CategoryIndicator {
   indicatorType: String
   name: String!
   rubricCategoryId: Int
+  scriptName: String
   slug: String!
   sourceIndicator: String
   weight: Float!
@@ -1295,6 +1296,7 @@ type Query {
   candidateRoles(organizationId: String!, productId: String!): [CandidateRole!]!
   capabilities(aggregatorIds: [Int!] = [], capabilities: [String!] = [], countryIds: [Int!] = [], search: String = "", services: [String!] = []): [Capability!]!
   capabilityOnly(search: String = ""): [Capability!]!
+  categoryIndicator(slug: String!): CategoryIndicator
   comments(commentObjectId: Int!, commentObjectType: String!): [Comment!]!
   countComments(commentObjectId: Int!, commentObjectType: String!): Int!
   countries(search: String = ""): [Country!]!

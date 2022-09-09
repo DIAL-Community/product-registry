@@ -16,6 +16,7 @@ module Types
     field :rubric_category_id, Integer, null: true
     field :data_source, String, null: true
     field :source_indicator, String, null: true
+    field :script_name, String, null: true
 
     field :category_indicator_descriptions, [Types::CategoryIndicatorDescriptionType], null: true
     field :category_indicator_description, Types::CategoryIndicatorDescriptionType, null: true,
