@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_02_075138) do
+ActiveRecord::Schema.define(version: 2022_09_09_073617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -555,7 +555,6 @@ ActiveRecord::Schema.define(version: 2022_09_02_075138) do
     t.bigint "category_indicator_id", null: false
     t.string "indicator_value", null: false
     t.datetime "updated_at"
-    t.string "script_name"
     t.index ["category_indicator_id"], name: "index_product_indicators_on_category_indicator_id"
     t.index ["product_id"], name: "index_product_indicators_on_product_id"
   end
