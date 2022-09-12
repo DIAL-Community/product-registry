@@ -48,8 +48,8 @@ RSpec.describe(Queries::SectorsQuery, type: :graphql) do
     )
 
     aggregate_failures do
-      # 2 sectors from here, 2 from fixtures
-      expect(result['data']['searchSectors']['totalCount']).to(eq(4))
+      # 2 sectors from here
+      expect(result['data']['searchSectors']['totalCount']).to(eq(2))
     end
 
     # Passing parameter to search will filter search result.

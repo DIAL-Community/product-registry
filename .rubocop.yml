@@ -5,6 +5,7 @@ AllCops:
     - 'node_modules/**/*'
     - 'config/**/*'
   DisabledByDefault: true
+  SuggestExtensions: false
   StyleGuideBaseURL: https://shopify.github.io/ruby-style-guide/
 
 Metrics/BlockLength:
@@ -77,7 +78,7 @@ Style/BlockDelimiters:
   - let!
   - subject
   - watch
-  IgnoredMethods:
+  AllowedMethods:
   - lambda
   - proc
   - it
@@ -262,7 +263,7 @@ Style/NonNilCheck:
 Style/MethodCallWithArgsParentheses:
   Enabled: true
   IgnoreMacros: true
-  IgnoredMethods:
+  AllowedMethods:
   - require
   - require_relative
   - require_dependency
@@ -515,7 +516,7 @@ Layout/LineLength:
   - http
   - https
   IgnoreCopDirectives: false
-  IgnoredPatterns:
+  AllowedPatterns:
   - '\A\s*(remote_)?test(_\w+)?\s.*(do|->)(\s|\Z)'
 
 Metrics/ParameterLists:
