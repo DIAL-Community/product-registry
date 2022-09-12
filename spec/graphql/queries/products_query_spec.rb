@@ -126,8 +126,7 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
       variables: { search: '' }
     )
 
-    # Return all products. There are 2 products from here and 4 from test/fixtures/products.yml.
-    expect(result['data']['searchProducts']['totalCount']).to(eq(6))
+    expect(result['data']['searchProducts']['totalCount']).to(eq(2))
 
     result = execute_graphql(
       query,

@@ -10,7 +10,8 @@ class UpdateCommentObjectType < ActiveRecord::Migration[5.2]
   end
 
   def down
-    execute("ALTER TYPE comment_object_type DROP VALUE 'ORGANIZATION';")
-    execute("ALTER TYPE comment_object_type DROP VALUE 'OPEN_DATA';")
+    execute("DELETE FROM pg_enum WHERE enumlabel = 'ORGANIZATION' AND enumtypid = " \
+      "(SELECT oid FROM pg_type WHERE typname = 'comment_object_type');")
+    execute("ALTER TYPE comment_object_type RENAME VALUE 'OPEN_DATA' to 'DATASET';")
   end
 end

@@ -8,7 +8,7 @@ class AuthenticationController < Devise::SessionsController
   def sign_up_ux
     user = User.new(user_params)
     respond_to do |format|
-      if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && user.save
+      if user.save
         format.json { render(json: {}, status: :created) }
       else
         format.json { render(json: user.errors, status: :unprocessable_entity) }

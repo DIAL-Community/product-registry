@@ -19,9 +19,6 @@ class Organization < ApplicationRecord
   has_and_belongs_to_many :states, join_table: :organizations_states,
                                    after_add: :association_add,
                                    before_remove: :association_remove
-  has_and_belongs_to_many :contacts, join_table: :organizations_contacts,
-                                     after_add: :association_add,
-                                     before_remove: :association_remove
   has_and_belongs_to_many :sectors, join_table: :organizations_sectors,
                                     after_add: :association_add,
                                     before_remove: :association_remove

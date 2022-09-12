@@ -45,7 +45,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create product' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     assert_difference('Product.count') do
       post products_url, params: { product: { name: @product.name, website: @product.website },
                                    duplicate: true, reslug: true, logo: uploaded_file }
@@ -65,7 +65,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update product' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     patch product_url(@product), params: { product: { name: @product.name, slug: @product.slug,
                                                       website: @product.website },
                                            logo: uploaded_file }
@@ -254,7 +254,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     delete(destroy_user_session_url)
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'nonadmin@abba.org', roles: ['content_writer'])
 
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
 
     building_block = building_blocks(:one)
     organization = organizations(:one)
@@ -279,7 +279,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'content writer user shoud not be able to remove mappings' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
 
     building_block = building_blocks(:one)
     organization = organizations(:one)
@@ -402,7 +402,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     delete(destroy_user_session_url)
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'content_editor@abba.org', roles: ['content_editor'])
 
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
 
     building_block = building_blocks(:one)
     organization = organizations(:one)

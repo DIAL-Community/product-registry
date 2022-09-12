@@ -7,6 +7,7 @@ class AddPublishedToEntityStatusType < ActiveRecord::Migration[5.2]
   end
 
   def down
-    execute("ALTER TYPE entity_status_type DROP VALUE 'PUBLISHED';")
+    execute("DELETE FROM pg_enum WHERE enumlabel = 'PUBLISHED' AND enumtypid = " \
+      "(SELECT oid FROM pg_type WHERE typname = 'entity_status_type');")
   end
 end
