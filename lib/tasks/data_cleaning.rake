@@ -255,44 +255,6 @@ namespace :data do
     File.write('export/sectors.json', json_out.to_json)
   end
 
-  task add_discourse_topics: :environment do
-    products = Product.where('id in (select product_id from products_endorsers)')
-    products.each do |product|
-      next unless product.discourse_id.nil?
-
-      topic_id = create_discourse_topic(product, 'Products')
-      puts "Topic: #{topic_id}"
-      product.discourse_id = topic_id
-      product.save
-    end
-
-    # building_blocks = BuildingBlock.all
-    # building_blocs.each do |bb|
-    # bb = BuildingBlock.all.first
-    #  if bb.discourse_id.nil?
-    #    topic_id = create_discourse_topic(bb, 'Building Blocks')
-    #    puts "Topic: " + topic_id.to_s
-    #    bb.discourse_id = topic_id
-    #    bb.save
-    #  end
-    # end
-  end
-
-  task sync_discourse_ids: :environment do
-    discourse_ids = []
-    ActiveRecord.with_db('sync-production') do
-      discourse_ids = ActiveRecord::Base.connection.exec_query(
-        'SELECT name, slug, discourse_id FROM products where discourse_id IS NOT null'
-      )
-    end
-    puts "DISCOURSE_IDs: #{discourse_ids.rows.inspect}"
-    discourse_ids.rows.each do |prod|
-      dev_prod = Product.find_by(slug: prod[1])
-      dev_prod.discourse_id = prod[2]
-      dev_prod.save
-    end
-  end
-
   task add_usernames: :environment do
     users = User.all
     users.each do |user|
