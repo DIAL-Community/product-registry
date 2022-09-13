@@ -1,7 +1,6 @@
 type BuildingBlock {
   buildingBlockDescription: BuildingBlockDescription
   buildingBlockDescriptions: [BuildingBlockDescription!]
-  discourseId: Int
   id: ID!
   imageFile: String
   maturity: String
@@ -1146,7 +1145,6 @@ type Product {
   buildingBlocksMappingStatus: String
   commercialProduct: Boolean!
   currentProjects(first: Int): [Project!]
-  discourseId: Int
   endorsers: [Endorser!]
   hostingModel: String
   id: ID!

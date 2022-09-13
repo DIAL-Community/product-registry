@@ -417,7 +417,6 @@ CREATE TABLE public.building_blocks (
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
     maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL,
-    discourse_id bigint
 );
 
 
@@ -2230,7 +2229,6 @@ CREATE TABLE public.products (
     tags character varying[] DEFAULT '{}'::character varying[],
     maturity_score integer,
     product_type public.product_type_save DEFAULT 'product'::public.product_type_save,
-    discourse_id bigint,
     manual_update boolean DEFAULT false
 );
 
