@@ -41,7 +41,7 @@ module Mutations
       end
 
       country_data['results'].each do |country_result|
-      address_component = country_result['address_components'].first
+        address_component = country_result['address_components'].first
         # We're only reading the country name and country name type will always political.
         next unless address_component['types'].include?('political')
 
