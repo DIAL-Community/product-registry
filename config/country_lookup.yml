@@ -955,6 +955,10 @@ countries:
   country_code_short: VU
   country_code: VUT
   country_code_numeric: 548
+- country_name: Vatican City
+  country_code_short: VA
+  country_code: VAT
+  country_code_numeric: 379
 - country_name: Venezuela (Bolivarian Republic of)
   country_code_short: VE
   country_code: VEN
