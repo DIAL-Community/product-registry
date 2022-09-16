@@ -1,0 +1,122 @@
+- category: Repository Info
+  indicators:
+    - name: Releases
+      low:
+        - operator: equalTo
+          value: 0
+      medium:
+        - operator: equalTo
+          value: 1
+      high:
+        - operator: greaterThan
+          value: 1
+    - name: Contributors
+      low:
+        - operator: lessThan
+          value: 2
+      medium:
+        - operator: greaterThan
+          value: 1
+        - operator: lessThan
+          value: 10
+      high:
+        - operator: greaterThan
+          value: 9
+    - name: Downloads
+      low:
+        - operator: equalTo
+          value: 0
+      medium:
+        - operator: greaterThan
+          value: 0
+        - operator: lessThan
+          value: 10
+      high:
+        - operator: greaterThan
+          value: 9
+    - name: Stars
+      low:
+        - operator: lessThan
+          value: 6
+      medium:
+        - operator: greaterThan
+          value: 5
+        - operator: lessThan
+          value: 50
+      high:
+        - operator: greaterThan
+          value: 49
+    - name: Forks
+      low:
+        - operator: lessThan
+          value: 6
+      medium:
+        - operator: greaterThan
+          value: 5
+        - operator: lessThan
+          value: 50
+      high:
+        - operator: greaterThan
+          value: 49
+    - name: Open PRs
+      low:
+        - operator: lessThan
+          value: 3
+      medium:
+        - operator: greaterThan
+          value: 2
+        - operator: lessThan
+          value: 20
+      high:
+        - operator: greaterThan
+          value: 19
+    - name: Closed PRs
+      low:
+        - operator: lessThan
+          value: 50
+      medium:
+        - operator: greaterThan
+          value: 50
+        - operator: lessThan
+          value: 250
+      high:
+        - operator: greaterThan
+          value: 250
+    - name: Open Issues
+      low:
+        - operator: lessThan
+          value: 3
+      medium:
+        - operator: greaterThan
+          value: 2
+        - operator: lessThan
+          value: 20
+      high:
+        - operator: greaterThan
+          value: 19
+    - name: Closed Issues
+      low:
+        - operator: lessThan
+          value: 3
+      medium:
+        - operator: greaterThan
+          value: 2
+        - operator: lessThan
+          value: 20
+      high:
+        - operator: greaterThan
+          value: 19
+    - name: Last Repository Activity
+      low:
+        - operator: greaterThan
+          value: 365
+      medium:
+        - operator: greaterThan
+          value: 30
+        - operator: lessThan
+          value: 365
+      high:
+        - operator: lessThan
+          value: 30
+
+      

@@ -928,6 +928,41 @@ module Modules
       '  }'\
       '}'\
     end
+
+    def read_indicator_config(category_name, indicator_name)
+      indicator_config = YAML.load_file('config/indicator_config.yml')
+      indicator_config.each do |category|
+        next if category['category'] != category_name
+
+        category['indicators'].each do |indicator|
+          next if indicator['name'] != indicator_name
+
+          low_calculations = []
+          indicator['low'].each do |calculation|
+            low_calculations << { 'operator': calculation['operator'], 'value': calculation['value'] }
+          end
+
+          medium_calculations = []
+          indicator['medium'].each do |calculation|
+            medium_calculations << { 'operator': calculation['operator'], 'value': calculation['value'] }
+          end
+
+          high_calculations = []
+          indicator['high'].each do |calculation|
+            high_calculations << { 'operator': calculation['operator'], 'value': calculation['value'] }
+          end
+
+          return {
+            'name': indicator['name'],
+            'low': low_calculations,
+            'medium': medium_calculations,
+            'high': high_calculations
+          }
+        end
+      end
+
+      { 'error': 'Indicator not found' }
+    end
   end
 end
 # rubocop:enable Style/ClassVars
