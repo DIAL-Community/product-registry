@@ -718,4 +718,9 @@ dpga_origin.id, dpga_list)
       puts "Response: #{response}"
     end
   end
+
+  task :test_indicator_config, [] => :environment do
+    calc = read_indicator_config("Repository Info", "Contributors")
+    puts calc.to_s
+  end
 end
