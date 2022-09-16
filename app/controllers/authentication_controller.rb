@@ -18,7 +18,7 @@ class AuthenticationController < Devise::SessionsController
 
   def sign_in_ux
     user = User.find_by(email: params['user']['email'])
-    unless user.valid_password?(params['user']['password'])
+    if user.nil? || !user.valid_password?(params['user']['password'])
       respond_to do |format|
         format.json do
           render(
@@ -143,7 +143,7 @@ class AuthenticationController < Devise::SessionsController
   end
 
   def invalidate_token
-    user = User.find_by(email: request.headers['X-User-Email'])
+    user = User.find_by(email: request.headers['X-User-Email'], authentication_token: request.headers['X-User-Token'])
     if user.nil?
       respond_to do |format|
         format.json { render(json: { userToken: nil }, status: :ok) }
