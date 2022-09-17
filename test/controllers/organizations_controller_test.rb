@@ -169,7 +169,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     fourth_user = users(:four)
     fourth_user.roles = [User.user_roles[:org_product_user]]
-    fourth_user.products = [products(:one)]
+    fourth_user.user_products = [1]
     fourth_user.organization_id = organization.id
     fourth_user.save!
 

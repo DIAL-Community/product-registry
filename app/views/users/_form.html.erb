@@ -86,7 +86,7 @@
 
     <% if role == User.user_roles[:product_user] %>
       $('#user-product-selector').show();
-      <% user.products.order("name").each do |product| %>
+      <% user.user_products.order("name").each do |product| %>
         addProduct('<%= product.id %>', '<%= product.name %>');
       <% end %>
     <% end %>

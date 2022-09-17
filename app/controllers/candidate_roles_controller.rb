@@ -29,21 +29,18 @@ class CandidateRolesController < ApplicationController
 
     unless @candidate_role.product_id.nil?
       product = Product.find_by(id: @candidate_role.product_id)
-      user.products << product unless product.nil?
+      user.user_products << product.id unless product.nil? || user.user_products.include?(product.id)
       user.save
     end
 
     respond_to do |format|
       # Don't re-approve approved candidate.
+      format.html { render(nothing: true, status: 200) }
       if (@candidate_role.rejected.nil? || @candidate_role.rejected) &&
-         user.save && @candidate_role.update(rejected: false, approved_date: Time.now,
-                                             approved_by_id: current_user.id)
-        format.html { redirect_to(candidate_role_url(@candidate_role), notice: 'Request for elevated role approved.') }
-        format.json { render(:show, status: :ok, location: @candidate_role) }
-      else
-        format.html { redirect_to(candidate_roles_url, flash: { error: 'Unable to approve request.' }) }
-        format.json { head(:no_content) }
+               user.save && @candidate_role.update(rejected: false, approved_date: Time.now,
+                                                   approved_by_id: current_user.id)
       end
+      format.json { render(json: { candidate_role: @candidate_role.id }, status: :ok) }
     end
   end
 

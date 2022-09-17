@@ -292,7 +292,7 @@ class ProjectsController < ApplicationController
     @project.origin = Origin.find_by(slug: 'manually_entered')
 
     unless current_user.nil?
-      current_user.products.each do |product|
+      current_user.user_products.each do |product|
         @project.products.push(product)
       end
 

@@ -44,11 +44,11 @@ module Mutations
         user.organization_id = nil
       end
 
-      user.products = []
+      user.user_products = []
       if !products.nil? && !products.empty?
         products.each do |prod|
           curr_prod = Product.find_by(slug: prod['slug'])
-          user.products << curr_prod
+          user.user_products << curr_prod.id
         end
       end
 
