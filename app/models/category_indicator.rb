@@ -7,6 +7,7 @@ class CategoryIndicator < ApplicationRecord
 
   belongs_to :rubric_category
   has_many :category_indicator_descriptions, dependent: :destroy
+  has_many :product_indicators, dependent: :destroy
 
   scope :name_contains, ->(name) { where('LOWER(name) like LOWER(?)', "%#{name}%") }
   scope :slug_starts_with, ->(slug) { where('LOWER(slug) like LOWER(?)', "#{slug}\\_%") }
