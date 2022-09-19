@@ -416,7 +416,7 @@ CREATE TABLE public.building_blocks (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description jsonb DEFAULT '{}'::jsonb NOT NULL,
-    maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL,
+    maturity public.entity_status_type DEFAULT 'BETA'::public.entity_status_type NOT NULL
 );
 
 
