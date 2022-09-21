@@ -111,8 +111,10 @@ class Product < ApplicationRecord
   end
 
   def owner
-    owner = User.joins(:products).where(products: { id: id })
-    owner.first.id unless owner.empty?
+    owner_id = nil
+    owners = User.where('? = ANY(user_products)', id)
+    owner_id = owners.first.id unless owners.empty?
+    owner_id
   end
 
   def main_repository
