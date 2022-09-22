@@ -145,5 +145,139 @@ module Modules
       end
       numeric_value
     end
+
+    def sync_product_statistics(product_repository)
+      return if product_repository.absolute_url.blank?
+
+      puts "Processing: #{product_repository.absolute_url}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product_repository.absolute_url.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      github_uri = URI.parse('https://api.github.com/graphql')
+      http = Net::HTTP.new(github_uri.host, github_uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(github_uri.path)
+      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
+      request.body = { 'query' => graph_ql_statistics(owner, repo) }.to_json
+
+      response = http.request(request)
+      product_repository.statistical_data = JSON.parse(response.body)
+
+      puts "Repository statistical data for #{product_repository.name} saved." if product_repository.save!
+    end
+
+    def graph_ql_statistics(owner, repo)
+      '{'\
+      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
+      '    stargazers {'\
+      '      totalCount'\
+      '    },'\
+      '    watchers {'\
+      '      totalCount'\
+      '    },'\
+      '    forkCount,'\
+      '    isFork,'\
+      '    createdAt,'\
+      '    updatedAt,'\
+      '    pushedAt,'\
+      '    closedPullRequestCount: pullRequests(states: CLOSED) {'\
+      '      totalCount'\
+      '    },'\
+      '    openPullRequestCount: pullRequests(states: OPEN) {'\
+      '      totalCount'\
+      '    },'\
+      '    mergedPullRequestCount: pullRequests(states: MERGED) {'\
+      '      totalCount'\
+      '    },'\
+      '    releases(last: 1) {'\
+      '      totalCount,'\
+      '      edges {'\
+      '        node {'\
+      '          name,'\
+      '          createdAt,'\
+      '          description,'\
+      '          url,'\
+      '          releaseAssets (last: 1) {'\
+      '            edges {'\
+      '              node {'\
+      '                downloadCount'\
+      '              }'\
+      '            }'\
+      '          }'\
+      '        }'\
+      '      }'\
+      '    }'\
+      '  }'\
+      '}'\
+    end
+
+    def sync_license_information(product_repository)
+      return if product_repository.absolute_url.blank?
+
+      puts "Processing: #{product_repository.absolute_url}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product_repository.absolute_url.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      command = "OCTOKIT_ACCESS_TOKEN=#{ENV['GITHUB_PERSONAL_TOKEN']} licensee detect --remote #{owner}/#{repo}"
+      stdout, = Open3.capture3(command)
+
+      return if stdout.blank?
+
+      license_data = stdout
+      license = stdout.lines.first.split(/\s+/)[1]
+
+      if license != 'NOASSERTION'
+        product_repository.license_data = license_data
+        product_repository.license = license
+
+        puts "Repository license data for #{product_repository.name} saved." if product_repository.save!
+      end
+    end
+
+    def sync_product_languages(product_repository)
+      return if product_repository.absolute_url.blank?
+
+      puts "Processing: #{product_repository.absolute_url}"
+      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
+      return unless (match = product_repository.absolute_url.match(repo_regex))
+
+      _, owner, repo = match.captures
+
+      github_uri = URI.parse('https://api.github.com/graphql')
+      http = Net::HTTP.new(github_uri.host, github_uri.port)
+      http.use_ssl = true
+
+      request = Net::HTTP::Post.new(github_uri.path)
+      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
+      request.body = { 'query' => graph_ql_languages(owner, repo) }.to_json
+
+      response = http.request(request)
+      product_repository.language_data = JSON.parse(response.body)
+
+      puts "Repository language data for '#{product_repository.name}' saved." if product_repository.save!
+    end
+
+    def graph_ql_languages(owner, repo)
+      '{'\
+      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
+      '    languages(first: 20, orderBy: {field: SIZE, direction: DESC}) {'\
+      '      totalCount'\
+      '      totalSize'\
+      '      edges {'\
+      '        size'\
+      '        node {'\
+      '          name'\
+      '          color'\
+      '        }'\
+      '      }'\
+      '    }'\
+      '  }'\
+      '}'\
+    end
   end
 end
