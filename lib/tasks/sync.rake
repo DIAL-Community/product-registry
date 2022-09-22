@@ -429,35 +429,11 @@ dpga_origin.id, dpga_list)
     end
   end
 
-  task :update_license_data, [] => :environment do
-    puts 'Starting to pull license data ...'
-
-    ProductRepository.all.each do |product_repository|
-      sync_license_information(product_repository)
-    end
-  end
-
-  task :update_statistics_data, [] => :environment do
-    puts 'Starting to pull statistic data ...'
-
-    ProductRepository.all.each do |product_repository|
-      sync_product_statistics(product_repository)
-    end
-  end
-
   task :update_tco_data, [] => :environment do
     puts 'Updating TCO data for products.'
 
     ProductRepository.all.each do |product_repository|
       update_tco_data(product_repository)
-    end
-  end
-
-  task :update_language_data, [] => :environment do
-    puts 'Updating language data for products.'
-
-    ProductRepository.all.each do |product_repository|
-      sync_product_languages(product_repository)
     end
   end
 
