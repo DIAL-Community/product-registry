@@ -6,5 +6,6 @@ FactoryBot.define do
     sequence(:name)
     sequence(:slug)
     sequence(:weight)
+    sequence(:rubric_category_id)
   end
 end
