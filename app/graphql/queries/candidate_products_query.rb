@@ -6,6 +6,8 @@ module Queries
     type [Types::CandidateProductType], null: false
 
     def resolve(search:)
+      return [] if context[:current_user].nil? || !context[:current_user].roles.include?('admin')
+
       candidate_products = CandidateProduct.order(:name)
       candidate_products = candidate_products.name_contains(search) unless search.blank?
       candidate_products
@@ -17,6 +19,8 @@ module Queries
     type Types::CandidateProductType, null: false
 
     def resolve(slug:)
+      return nil if context[:current_user].nil? || !context[:current_user].roles.include?('admin')
+
       CandidateProduct.find_by(slug: slug)
     end
   end
@@ -28,6 +32,8 @@ module Queries
     type Types::CandidateProductType.connection_type, null: false
 
     def resolve(search:)
+      return [] if context[:current_user].nil? || !context[:current_user].roles.include?('admin')
+
       candidate_products = CandidateProduct.order(rejected: :desc).order(:slug)
       candidate_products = candidate_products.name_contains(search) unless search.blank?
       candidate_products
