@@ -867,7 +867,6 @@ class ProductsController < ApplicationController
     @product_description ||= ProductDescription.where(product_id: @product, locale: I18n.default_locale)
                                                .first
     @product_description = ProductDescription.new if @product_description.nil?
-    @owner = User.joins(:products).find_by(products: { id: @product.id }) if @product&.id
   end
 
   def auditable_current_user

@@ -75,7 +75,7 @@ To configure and run the application, navigate to project directory and run the 
 
  * bundle install (requires bundler 2)
  * rails db:create
- * rails db:migrate
+ * rails db:schema:load
  * rails db:seed
  * rails server
 
