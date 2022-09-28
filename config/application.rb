@@ -25,5 +25,7 @@ module Registry
     config.settings = config_for(:settings)
 
     config.exceptions_app = routes
+
+    config.active_record.schema_format = :sql
   end
 end

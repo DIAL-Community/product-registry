@@ -63,7 +63,7 @@ class CandidateOrganizationsController < ApplicationController
     end
 
     respond_to do |format|
-      if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && @candidate_organization.save!
+      if @candidate_organization.save!
         format.html { redirect_to(@candidate_organization, notice: t('view.candidate-organization.form.created')) }
         format.json { render(:show, status: :created, location: @candidate_organization) }
       else

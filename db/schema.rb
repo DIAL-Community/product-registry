@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_09_073617) do
+ActiveRecord::Schema.define(version: 2022_09_16_115012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -871,13 +871,6 @@ ActiveRecord::Schema.define(version: 2022_09_09_073617) do
 # Could not dump table "users" because of following StandardError
 #   Unknown type 'user_role' for column 'role'
 
-  create_table "users_products", id: false, force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "product_id", null: false
-    t.index ["product_id", "user_id"], name: "products_users_idx", unique: true
-    t.index ["user_id", "product_id"], name: "users_products_idx", unique: true
-  end
-
   create_table "workflow_descriptions", force: :cascade do |t|
     t.bigint "workflow_id", null: false
     t.string "locale", null: false
@@ -1025,8 +1018,6 @@ ActiveRecord::Schema.define(version: 2022_09_09_073617) do
   add_foreign_key "use_cases_sdg_targets", "sdg_targets", name: "usecases_sdgs_sdg_fk"
   add_foreign_key "use_cases_sdg_targets", "use_cases", name: "usecases_sdgs_usecase_fk"
   add_foreign_key "users", "organizations", name: "user_organization_fk"
-  add_foreign_key "users_products", "products", name: "users_products_product_fk"
-  add_foreign_key "users_products", "users", name: "users_products_user_fk"
   add_foreign_key "workflow_descriptions", "workflows"
   add_foreign_key "workflows_building_blocks", "building_blocks", name: "workflows_bbs_bb_fk"
   add_foreign_key "workflows_building_blocks", "workflows", name: "workflows_bbs_workflow_fk"

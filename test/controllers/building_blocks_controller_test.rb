@@ -46,7 +46,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create building_block' do
     assert_difference('BuildingBlock.count') do
-      uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+      uploaded_file = fixture_file_upload('logo.png', 'image/png')
       post building_blocks_url, params: { building_block: { name: 'Another BB', slug: 'another_bb', maturity: 'BETA' },
                                           logo: uploaded_file }
     end
@@ -65,7 +65,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update building_block' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     patch(
       building_block_url(@building_block),
       params: { building_block: { name: @building_block.name, slug: @building_block.slug }, logo: uploaded_file }
@@ -131,7 +131,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'content writer user shoud not be able to remove mappings' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
 
     product = products(:one)
     workflow = workflows(:one)
@@ -212,7 +212,7 @@ class BuildingBlocksControllerTest < ActionDispatch::IntegrationTest
     delete(destroy_user_session_url)
     sign_in FactoryBot.create(:user, username: 'nonadmin', email: 'content_editor@abba.org', roles: ['content_editor'])
 
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
 
     product = products(:one)
     workflow = workflows(:one)

@@ -47,7 +47,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should slug digits' do
     digit_org_name = '1234-56-789 011'
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     post organizations_url,
          params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, logo: uploaded_file }
@@ -55,7 +55,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal saved_organization.slug, '123456789_011'
 
     digit_org_name = '1234 56 789 011'
-    uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('another-logo.png', 'image/png')
     post organizations_url,
          params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, logo: uploaded_file }
@@ -65,7 +65,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should append counter to duplicate slugs' do
     digit_org_name = 'ABCD 56 789 011'
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     post organizations_url,
          params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, logo: uploaded_file }
@@ -73,7 +73,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal saved_organization.slug, 'abcd_56_789_011'
 
     digit_org_name = 'ABCD?$% 56 789 011'
-    uploaded_file = fixture_file_upload('files/another-logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('another-logo.png', 'image/png')
     post organizations_url,
          params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, duplicate: true, logo: uploaded_file }
@@ -81,7 +81,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal saved_organization.slug, 'abcd_56_789_011_dup1'
 
     digit_org_name = 'ABCD?$% 56 789 011'
-    uploaded_file = fixture_file_upload('files/other-logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('other-logo.png', 'image/png')
     post organizations_url,
          params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, duplicate: true, logo: uploaded_file }
@@ -89,7 +89,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal saved_organization.slug, 'abcd_56_789_011_dup2'
 
     digit_org_name = 'ABCD?$% 56 789 011'
-    uploaded_file = fixture_file_upload('files/more-logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('more-logo.png', 'image/png')
     post organizations_url,
          params: { organization: { name: digit_org_name, website: 'aaa.com', when_endorsed: '11/16/2018' },
                    reslug: true, duplicate: true, logo: uploaded_file }
@@ -98,7 +98,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create organization' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     assert_difference('Organization.count') do
       post organizations_url,
            params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name,
@@ -126,7 +126,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update organization' do
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
     patch organization_url(@organization),
           params: { organization: { is_endorser: @organization.is_endorser, name: @organization.name,
                                     slug: @organization.slug, website: @organization.website,
@@ -169,7 +169,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     fourth_user = users(:four)
     fourth_user.roles = [User.user_roles[:org_product_user]]
-    fourth_user.products = [products(:one)]
+    fourth_user.user_products = [1]
     fourth_user.organization_id = organization.id
     fourth_user.save!
 
@@ -367,7 +367,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     delete(destroy_user_session_url)
     sign_in FactoryBot.create(:user, username: 'admin', email: 'admin@abba.org', roles: ['admin'])
 
-    uploaded_file = fixture_file_upload('files/logo.png', 'image/png')
+    uploaded_file = fixture_file_upload('logo.png', 'image/png')
 
     country = countries(:one)
     product = products(:one)

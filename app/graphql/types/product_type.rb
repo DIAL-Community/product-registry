@@ -23,7 +23,6 @@ module Types
     field :aliases, GraphQL::Types::JSON, null: true
     field :tags, GraphQL::Types::JSON, null: true
     field :owner, String, null: true
-    field :discourse_id, Integer, null: true
 
     field :is_launchable, Boolean, null: true
     field :product_type, String, null: false

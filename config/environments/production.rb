@@ -26,7 +26,7 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  # config.assets.js_compressor = Uglifier.new(harmony: true)
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -108,6 +108,8 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+
+  config.active_storage.service = :local
 
   if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new($stdout)

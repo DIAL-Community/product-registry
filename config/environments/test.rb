@@ -45,4 +45,6 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   config.active_record.schema_format = :sql
   config.active_record.dump_schema_after_migration = false
+
+  config.active_storage.service = :test
 end

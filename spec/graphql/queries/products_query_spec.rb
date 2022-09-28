@@ -126,8 +126,7 @@ RSpec.describe(Queries::ProductsQuery, type: :graphql) do
       variables: { search: '' }
     )
 
-    # Return all products. There are 2 products from here and 4 from test/fixtures/products.yml.
-    expect(result['data']['searchProducts']['totalCount']).to(eq(6))
+    expect(result['data']['searchProducts']['totalCount']).to(eq(2))
 
     result = execute_graphql(
       query,
@@ -153,6 +152,19 @@ RSpec.describe(Queries::OwnedProductsQuery, type: :graphql) do
     GQL
   end
 
+  let(:product_query) do
+    <<~GQL
+      query Product($slug: String!) {
+        product(slug: $slug) {
+          id
+          slug
+          name
+          owner
+        }
+      }
+    GQL
+  end
+
   it 'pulls owned products for logged used' do
     first = create(:product, slug: 'first_product', name: 'First Product', id: 1)
     second = create(:product, slug: 'second_product', name: 'Second Product', id: 2)
@@ -163,6 +175,11 @@ RSpec.describe(Queries::OwnedProductsQuery, type: :graphql) do
     aggregate_failures do
       expect(result['data']['ownedProducts'].count)
         .to(eq(2))
+    end
+
+    product_query_result = execute_graphql_as_user(user, product_query, variables: { slug: 'first_product' })
+    aggregate_failures do
+      expect(product_query_result['data']['product']['owner']).to(eq(user.id.to_s))
     end
   end
 

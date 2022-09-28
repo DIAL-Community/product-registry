@@ -726,31 +726,6 @@ module Modules
       puts "  Product description updated: #{existing_product.name} -> #{existing_product.slug}."
     end
 
-    def sync_license_information(product_repository)
-      return if product_repository.absolute_url.blank?
-
-      puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product_repository.absolute_url.match(repo_regex))
-
-      _, owner, repo = match.captures
-
-      command = "OCTOKIT_ACCESS_TOKEN=#{ENV['GITHUB_PERSONAL_TOKEN']} licensee detect --remote #{owner}/#{repo}"
-      stdout, = Open3.capture3(command)
-
-      return if stdout.blank?
-
-      license_data = stdout
-      license = stdout.lines.first.split(/\s+/)[1]
-
-      if license != 'NOASSERTION'
-        product_repository.license_data = license_data
-        product_repository.license = license
-
-        puts "Repository license data for #{product_repository.name} saved." if product_repository.save!
-      end
-    end
-
     def update_tco_data(product_repository)
       return if product_repository.absolute_url.blank?
 
@@ -793,29 +768,6 @@ module Modules
       end
     end
 
-    def sync_product_statistics(product_repository)
-      return if product_repository.absolute_url.blank?
-
-      puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product_repository.absolute_url.match(repo_regex))
-
-      _, owner, repo = match.captures
-
-      github_uri = URI.parse('https://api.github.com/graphql')
-      http = Net::HTTP.new(github_uri.host, github_uri.port)
-      http.use_ssl = true
-
-      request = Net::HTTP::Post.new(github_uri.path)
-      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
-      request.body = { 'query' => graph_ql_statistics(owner, repo) }.to_json
-
-      response = http.request(request)
-      product_repository.statistical_data = JSON.parse(response.body)
-
-      puts "Repository statistical data for #{product_repository.name} saved." if product_repository.save!
-    end
-
     def export_products(source)
       # session = ActionDispatch::Integration::Session.new(Rails.application)
       # session.get "/productlist?source="+source
@@ -843,90 +795,39 @@ module Modules
       end
     end
 
-    def graph_ql_statistics(owner, repo)
-      '{'\
-      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
-      '    stargazers {'\
-      '      totalCount'\
-      '    },'\
-      '    watchers {'\
-      '      totalCount'\
-      '    },'\
-      '    forkCount,'\
-      '    isFork,'\
-      '    createdAt,'\
-      '    updatedAt,'\
-      '    pushedAt,'\
-      '    closedPullRequestCount: pullRequests(states: CLOSED) {'\
-      '      totalCount'\
-      '    },'\
-      '    openPullRequestCount: pullRequests(states: OPEN) {'\
-      '      totalCount'\
-      '    },'\
-      '    mergedPullRequestCount: pullRequests(states: MERGED) {'\
-      '      totalCount'\
-      '    },'\
-      '    releases(last: 1) {'\
-      '      totalCount,'\
-      '      edges {'\
-      '        node {'\
-      '          name,'\
-      '          createdAt,'\
-      '          description,'\
-      '          url,'\
-      '          releaseAssets (last: 1) {'\
-      '            edges {'\
-      '              node {'\
-      '                downloadCount'\
-      '              }'\
-      '            }'\
-      '          }'\
-      '        }'\
-      '      }'\
-      '    }'\
-      '  }'\
-      '}'\
-    end
+    def read_indicator_config(category_name, indicator_name)
+      indicator_config = YAML.load_file('config/indicator_config.yml')
+      indicator_config.each do |category|
+        next if category['category'] != category_name
 
-    def sync_product_languages(product_repository)
-      return if product_repository.absolute_url.blank?
+        category['indicators'].each do |indicator|
+          next if indicator['name'] != indicator_name
 
-      puts "Processing: #{product_repository.absolute_url}"
-      repo_regex = /(github.com\/)(\S+)\/(\S+)\/?/
-      return unless (match = product_repository.absolute_url.match(repo_regex))
+          low_calculations = []
+          indicator['low'].each do |calculation|
+            low_calculations << { 'operator': calculation['operator'], 'value': calculation['value'] }
+          end
 
-      _, owner, repo = match.captures
+          medium_calculations = []
+          indicator['medium'].each do |calculation|
+            medium_calculations << { 'operator': calculation['operator'], 'value': calculation['value'] }
+          end
 
-      github_uri = URI.parse('https://api.github.com/graphql')
-      http = Net::HTTP.new(github_uri.host, github_uri.port)
-      http.use_ssl = true
+          high_calculations = []
+          indicator['high'].each do |calculation|
+            high_calculations << { 'operator': calculation['operator'], 'value': calculation['value'] }
+          end
 
-      request = Net::HTTP::Post.new(github_uri.path)
-      request.basic_auth(ENV['GITHUB_USERNAME'], ENV['GITHUB_PERSONAL_TOKEN'])
-      request.body = { 'query' => graph_ql_languages(owner, repo) }.to_json
+          return {
+            'name': indicator['name'],
+            'low': low_calculations,
+            'medium': medium_calculations,
+            'high': high_calculations
+          }
+        end
+      end
 
-      response = http.request(request)
-      product_repository.language_data = JSON.parse(response.body)
-
-      puts "Repository language data for '#{product_repository.name}' saved." if product_repository.save!
-    end
-
-    def graph_ql_languages(owner, repo)
-      '{'\
-      '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
-      '    languages(first: 20, orderBy: {field: SIZE, direction: DESC}) {'\
-      '      totalCount'\
-      '      totalSize'\
-      '      edges {'\
-      '        size'\
-      '        node {'\
-      '          name'\
-      '          color'\
-      '        }'\
-      '      }'\
-      '    }'\
-      '  }'\
-      '}'\
+      { 'error': 'Indicator not found' }
     end
   end
 end

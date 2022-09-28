@@ -8,7 +8,7 @@ class AuthenticationController < Devise::SessionsController
   def sign_up_ux
     user = User.new(user_params)
     respond_to do |format|
-      if verify_recaptcha(secret_key: Rails.application.secrets.captcha_secret_key) && user.save
+      if user.save
         format.json { render(json: {}, status: :created) }
       else
         format.json { render(json: user.errors, status: :unprocessable_entity) }
@@ -18,7 +18,7 @@ class AuthenticationController < Devise::SessionsController
 
   def sign_in_ux
     user = User.find_by(email: params['user']['email'])
-    unless user.valid_password?(params['user']['password'])
+    if user.nil? || !user.valid_password?(params['user']['password'])
       respond_to do |format|
         format.json do
           render(
@@ -143,7 +143,7 @@ class AuthenticationController < Devise::SessionsController
   end
 
   def invalidate_token
-    user = User.find_by(email: request.headers['X-User-Email'])
+    user = User.find_by(email: request.headers['X-User-Email'], authentication_token: request.headers['X-User-Token'])
     if user.nil?
       respond_to do |format|
         format.json { render(json: { userToken: nil }, status: :ok) }
@@ -188,7 +188,7 @@ class AuthenticationController < Devise::SessionsController
       userEmail: user.email,
       name: user.username,
       own: {
-        products: user.products.any? ? user.products.map(&:id) : [],
+        products: user.user_products.any? ? user.user_products.map : [],
         organization: organization
       },
       canEdit: can_edit,

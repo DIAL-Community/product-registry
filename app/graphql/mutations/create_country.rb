@@ -41,26 +41,25 @@ module Mutations
       end
 
       country_data['results'].each do |country_result|
-        country_result['address_components'].each do |address_component|
-          # We're only reading the country name and country name type will always political.
-          next unless address_component['types'].include?('political')
+        address_component = country_result['address_components'].first
+        # We're only reading the country name and country name type will always political.
+        next unless address_component['types'].include?('political')
 
-          # Country name and the 2 character country code from geocode result.
-          # See geocode data example below.
-          country_name = address_component['long_name']
-          country_code = address_component['short_name']
-          next if country_code.nil?
+        # Country name and the 2 character country code from geocode result.
+        # See geocode data example below.
+        country_name = address_component['long_name']
+        country_code = address_component['short_name']
+        next if country_code.nil?
 
-          # Create new country if we can't find country by the name or slug.
-          country = Country.new(slug: slug_em(country_code)) if country.nil?
-          # Always override the name and country code with value from geocode result.
-          country.name = country_name
-          country.code = country_code
+        # Create new country if we can't find country by the name or slug.
+        country = Country.new(slug: slug_em(country_code)) if country.nil?
+        # Always override the name and country code with value from geocode result.
+        country.name = country_name
+        country.code = country_code
 
-          unless country.nil?
-            country.latitude = country_result['geometry']['location']['lat']
-            country.longitude = country_result['geometry']['location']['lng']
-          end
+        unless country.nil?
+          country.latitude = country_result['geometry']['location']['lat']
+          country.longitude = country_result['geometry']['location']['lng']
         end
       end
 

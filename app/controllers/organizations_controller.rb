@@ -522,7 +522,7 @@ class OrganizationsController < ApplicationController
 
     users = User.where(organization_id: @organization.id)
     users.each do |user|
-      if user.products.empty?
+      if user.user_products.empty?
         user.destroy
       else
         user.organization_id = nil

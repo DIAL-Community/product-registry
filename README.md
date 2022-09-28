@@ -75,11 +75,16 @@ To configure and run the application, navigate to project directory and run the 
 
  * bundle install (requires bundler 2)
  * rails db:create
- * rails db:migrate
+ * rails db:schema:load
  * rails db:seed
  * rails server
 
 The application will run on localhost port 3000 by default.
+
+## Creating graphQL schema dump
+
+To create graphQL schema dump, run the following command:
+ * rails graphql:schema:dump
 
 ## Running unit tests and Rubocop
 

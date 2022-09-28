@@ -28,7 +28,7 @@ module Types
     field :username, String, null: true
 
     field :organization, Types::OrganizationType, null: true
-    field :products, [Types::ProductType], null: true
+    field :products, [Types::ProductType], null: true, method: :user_products_full
 
     field :all_roles, GraphQL::Types::JSON, null: true
   end
