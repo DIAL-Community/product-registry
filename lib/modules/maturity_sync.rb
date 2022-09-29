@@ -172,6 +172,20 @@ module Modules
     def graph_ql_statistics(owner, repo)
       '{'\
       '  repository(name: "' + repo + '", owner: "' + owner + '") {'\
+      '    commitsOnMasterBranch: object(expression: "master") {'\
+      '      ... on Commit {'\
+      '        history {'\
+      '           totalCount'\
+      '        }'\
+      '      }'\
+      '    }'\
+      '    commitsOnMainBranch: object(expression: "main") {'\
+      '      ... on Commit {'\
+      '        history {'\
+      '           totalCount'\
+      '        }'\
+      '      }'\
+      '    }'\
       '    stargazers {'\
       '      totalCount'\
       '    },'\
@@ -190,6 +204,12 @@ module Modules
       '      totalCount'\
       '    },'\
       '    mergedPullRequestCount: pullRequests(states: MERGED) {'\
+      '      totalCount'\
+      '    },'\
+      '    closedIssues: issues(states: CLOSED) {'\
+      '      totalCount'\
+      '    },'\
+      '    openIssues: issues(states: OPEN) {'\
       '      totalCount'\
       '    },'\
       '    releases(last: 1) {'\
