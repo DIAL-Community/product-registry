@@ -250,7 +250,7 @@ GEM
     okcomputer (1.18.4)
     orm_adapter (0.5.0)
     os (1.1.1)
-    pdfkit (0.8.5)
+    pdfkit (0.8.7.2)
     pg (1.2.3)
     pg (1.2.3-x64-mingw32)
     pg (1.2.3-x86-mingw32)
